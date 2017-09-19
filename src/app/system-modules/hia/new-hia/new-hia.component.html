@@ -1,0 +1,283 @@
+<section class="content">
+    <div class="row">
+        <section class="box">
+            <div class="col-xs-12 col-sm-8 no-padding">
+
+            </div>
+            <div class="col-xs-12 col-sm-4 no-padding">
+                <a class="btn btn-default border-gray btn-flat text-gray pull-right" routerLink="/modules/hia/hias">
+                    <i class="fa fa-times"></i> CANCEL
+                </a>
+            </div>
+        </section>
+    </div>
+    <div class="row pad-up">
+        <section class="box border-top">
+            <div class="col-xs-12">
+                <form [formGroup]="hiaFormGroup" novalidate>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Employer name</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="employerName" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.employerName.valid || hiaFormGroup.controls.employerName.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Address</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="address" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.address.valid || hiaFormGroup.controls.address.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Neighbourhood</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="neighbourhood" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.neighbourhood.valid || hiaFormGroup.controls.neighbourhood.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Phone number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="phone" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.phone.valid || hiaFormGroup.controls.phone.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Business Contact name</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="businessContactName" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactName.valid || hiaFormGroup.controls.businessContactName.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label pad-left-2">- Contact number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="businessContactNumber" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactNumber.valid || hiaFormGroup.controls.businessContactNumber.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label pad-left-2">- Contact position</label>
+                            <div class="col-sm-8">
+                                <select formControlName="businessContactPosition" class="form-control">
+                                    <option value="" selected>Select Position</option>
+                                    <option *ngFor="let position of hiaPositions" [ngValue]="position">{{ position.name }}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactPosition.valid || hiaFormGroup.controls.businessContactPosition.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label pad-left-2">- Contact email</label>
+                            <div class="col-sm-8">
+                                <input type="email" formControlName="businessContactEmail" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactEmail.valid || hiaFormGroup.controls.businessContactEmail.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">IT Contact name</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="iTContactName" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactName.valid || hiaFormGroup.controls.iTContactName.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label pad-left-2">- Contact number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="iTContactNumber" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactNumber.valid || hiaFormGroup.controls.iTContactNumber.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label pad-left-2">- Contact position</label>
+                            <div class="col-sm-8">
+                                <select formControlName="iTContactPosition" class="form-control">
+                                    <option value="" selected>Select Position</option>
+                                    <option *ngFor="let position of hiaPositions" [ngValue]="position">{{ position.name }}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactPosition.valid || hiaFormGroup.controls.iTContactPosition.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label pad-left-2">- Contact email</label>
+                            <div class="col-sm-8">
+                                <input type="email" formControlName="iTContactEmail" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactEmail.valid || hiaFormGroup.controls.iTContactEmail.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Type</label>
+                            <div class="col-sm-8">
+                                <select formControlName="type" class="form-control">
+                                    <option value="" selected>Select Type</option>
+                                    <option *ngFor="let type of hiaTypes" [ngValue]="type">{{ type.name }}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.type.valid || hiaFormGroup.controls.type.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Bank account name</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="bankAccName" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.bankAccName.valid || hiaFormGroup.controls.bankAccName.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Bank account number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="bankAccNumber" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.bankAccNumber.valid || hiaFormGroup.controls.bankAccNumber.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Plans</label>
+                            <div class="col-sm-8">
+                                <select formControlName="plan" class="form-control">
+                                    <option value="" selected>Select Plans</option>
+                                    <option *ngFor="let hiaPlan of hiaPlans" [ngValue]="hiaPlan">{{ hiaPlan.name }}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.plan.valid || hiaFormGroup.controls.plan.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <select formControlName="plan2" class="form-control">
+                                    <option value="State Health Plan" selected>State Health Plan</option>
+                                </select>
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.plan2.valid || hiaFormGroup.controls.plan2.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <select formControlName="plan3" class="form-control">
+                                    <option value="Private Medical Insurance" selected>Private Medical Insurance</option>
+                                </select>
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.plan3.valid || hiaFormGroup.controls.plan3.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">NHIS number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="nhisNumber" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.nhisNumber.valid || hiaFormGroup.controls.nhisNumber.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">CIN number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="cinNumber" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.cinNumber.valid || hiaFormGroup.controls.cinNumber.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Registration Date</label>
+                            <div class="col-sm-8">
+                                <input type="date" formControlName="registrationDate" class="form-control">
+                                <small class="alert-label" [hidden]="hiaFormGroup.controls.registrationDate.valid || hiaFormGroup.controls.registrationDate.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Photos</label>
+                            <div class="col-sm-8">
+                                <button class="btn btn-default btn-flat border-brand text-brand">Search Photo</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-xs-12 pad-all">
+                    <label class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                        <button class="btn btn-primary btn-flat" [disabled]="!hiaFormGroup.valid" (click)="onClickSaveHia(hiaFormGroup.value, hiaFormGroup.valid);" [innerHtml]="saveBtn"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

@@ -1,0 +1,138 @@
+@import "../../styles.scss";
+#header {
+    background-color: $white;
+    position: relative;
+    height: 100px;
+    padding: 10px 0;
+    z-index: 800; //1030;
+    .navbar-top {
+        height: 100%;
+        width: 100%;
+        .sidebar-toggle-box {
+            height: 100%;
+            width: 50px;
+            float: left;
+            padding: 15px;
+            .sidebar-toggle {
+                background-color: transparent;
+                border: none;
+                color: $brand-primary;
+                .menu-text {
+                    font-size: 8px;
+                }
+            }
+        }
+        .logo {
+            background-color: transparent;
+            display: block;
+            color: $brand-secondary;
+            float: left;
+            font-family: $font-family;
+            height: 100%;
+            line-height: 50px;
+            text-align: center;
+            width: 100px;
+            overflow: hidden;
+            padding: 15px 15px;
+            img {
+                height: 65px;
+                width: 70px;
+            }
+            @include breakpoint(max-width $screen-xs-max) {
+                // background-color: darken($brand-primary, 5%);
+                // border-bottom: 0 solid transparent;
+                // float: none;
+                // width: 100%;
+            }
+        }
+        .navbar-top-left {
+            height: 85px;
+            padding: 15px 15px;
+        }
+    }
+    .navbar-bottom {
+        background-color: $brand-primary;
+        height: 50px;
+        padding: 5px 0;
+        width: 100%;
+        .navbar-bottom-left {
+            height: 40px;
+            width: $sidebar-width;
+            float: left;
+            @include breakpoint(max-width $screen-xs-max) {
+                display: none;
+            }
+        }
+        .navbar-bottom-right {
+            -webkit-transition: transform $transition-speed $transition-fn, margin $transition-speed $transition-fn;
+            transition: transform $transition-speed $transition-fn, margin $transition-speed $transition-fn;
+            height: 40px;
+            margin-left: $sidebar-width;
+            // Content Header
+            .content-header {
+                background: transparent;
+                position: relative;
+                padding: 15px 15px 0 15px;
+                // Header Text
+                >h1 {
+                    color: $white; // #444;
+                    margin: 0;
+                    font-size: 24px;
+                    >small {
+                        color: $white; // #444;
+                        font-size: 15px;
+                        display: inline-block;
+                        padding-left: 4px;
+                        font-weight: 300;
+                    }
+                }
+                >.breadcrumb {
+                    float: right;
+                    background: transparent;
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    font-size: 12px;
+                    padding: 7px 5px;
+                    position: absolute;
+                    top: 15px;
+                    right: 10px;
+                    //.border-radius(2px);
+                    >li>a {
+                        color: $white; // #444;
+                        text-decoration: none;
+                        display: inline-block;
+                        >.fa,
+                        >.glyphicon,
+                        >.ion {
+                            margin-right: 5px;
+                        }
+                    }
+                    >li+li:before {
+                        content: '>\00a0';
+                    }
+                }
+                @include breakpoint(max-width $screen-xs-max) {
+                    >.breadcrumb {
+                        display: none;
+                        position: relative;
+                        margin-top: 5px;
+                        top: 0;
+                        right: 0;
+                        float: none;
+                        //background: $gray-light;
+                        padding-left: 10px;
+                        li:before {
+                            color: darken($gray-light, 20%);
+                        }
+                    }
+                }
+            }
+            @include breakpoint(max-width $screen-xs-max) {
+                margin-left: 0px;
+            }
+        }
+        @include breakpoint(max-width $screen-xs-max) {
+            //height: 80px;
+        }
+    }
+}
