@@ -1,0 +1,22 @@
+export interface Employer {
+    name: string,
+    email: string,
+    contactPhoneNo: string,
+    contactFullName: string,
+    contactPositionId: string,
+    industryTypeId: string,
+    hiaId: any,
+    hiaRegistrationDate?: string,
+    logo?: string,
+    logoObject?: any,
+    isLshma?: boolean,
+    address?: any,
+    departments? : any,
+    bankDetails: any,
+    isLshmConfirm?: boolean,
+    verificationToken?:string,
+    isTokenVerified?: string,
+    description?: string,
+    cacNumber: string,
+    cinNumber: string
+}

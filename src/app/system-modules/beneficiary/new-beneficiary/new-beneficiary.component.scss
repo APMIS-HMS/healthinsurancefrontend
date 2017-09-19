@@ -1,0 +1,15 @@
+@import "../../../../styles.scss";
+.box-content-header {
+    padding: 10px;
+}
+
+.box-body {
+    .img-box {
+        img {
+            display: block;
+            margin: 0 auto;
+            height: 125px;
+            width: 125px;
+        }
+    }
+}

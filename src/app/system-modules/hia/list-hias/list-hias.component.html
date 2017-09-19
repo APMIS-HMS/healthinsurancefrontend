@@ -1,0 +1,98 @@
+<section class="content">
+    <div class="row">
+        <section class="box">
+            <div class="col-xs-12 col-sm-8 no-padding">
+                <div class="form-group">
+                    <label class="col-sm-2 no-padding control-label">Search: </label>
+                    <div class="col-sm-10 no-padding">
+                        <div class="input-group">
+                            <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
+                            <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 no-padding">
+                <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/hia/new-hia">
+                    <i class="fa fa-plus-circle"></i> ADD
+                    <br> HEALTH INSURANCE AGENT
+                </a>
+            </div>
+        </section>
+    </div>
+    <div class="row">
+        <section class="box">
+            <div class="filter-box">
+                <h5>Filters:</h5>
+                <div class="row no-margin-right">
+                    <div class="form-group col-sm-6 col-md-4 no-padding">
+                        <label class="col-xs-12 control-label">Grading: </label>
+                        <div class="col-xs-12">
+                            <select class="form-control">
+                                <option value="all">ALL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 no-padding">
+                        <label class="col-xs-12 control-label">Type: </label>
+                        <div class="col-xs-12">
+                            <select class="form-control">
+                                <option value="all">ALL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 no-padding">
+                        <label class="col-xs-12 control-label">Status: </label>
+                        <div class="col-xs-12 no-padding-left">
+                            <div class="col-xs-9">
+                                <select class="form-control">
+                                    <option value="all">ALL</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3 no-padding">
+                                <button type="" class="btn btn-default btn-flat text-brand border-brand">RESET</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-gray text-white">
+                            <th>Name HIA</th>
+                            <th>Type</th>
+                            <th>Contact Person</th>
+                            <th>Phone number</th>
+                            <th>Grade</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="hias.length === 0">
+                            <td class="text-center" colspan="7">No data available in table</td>
+                        </tr>
+                        <tr class="tr-link" routerLink="/modules/hia/hias/{{ hia._id }}" *ngFor="let hia of hias">
+                            <td>{{ hia.employerName }}</td>
+                            <td>Health Care Insurance</td>
+                            <td>{{ hia.businessContact.name }}</td>
+                            <td>{{ hia.businessContact.phone }}</td>
+                            <td>A</td>
+                            <td>
+                                <span class="text-red">INACTIVE</span>
+                                <!--<span class="text-success">Active</span>-->
+                            </td>
+                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 text-center">
+                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+            </div>
+        </section>
+    </div>
+</section>
