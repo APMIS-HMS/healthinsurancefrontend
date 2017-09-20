@@ -10,8 +10,8 @@ import { Injectable } from '@angular/core';
 const rx = require('feathers-reactive');
 const RxJS = require('rxjs');
 
-const HOST = 'http://40.68.100.29:3030'; // Live
-// const HOST = 'http://localhost:3030'; // Your base server URL here
+// const HOST = 'http://40.68.100.29:3030'; // Live
+const HOST = 'http://localhost:3030'; // Your base server URL here
 
 
 @Injectable()
@@ -35,8 +35,8 @@ export class SocketService {
     }
     loginIntoApp(query: any) {
         return this._app.authenticate({
-            type: 'local',
-            'email': query.email,
+            strategy: 'local',
+            'userName': query.email,
             'password': query.password
         });
     }
@@ -48,19 +48,21 @@ export class SocketService {
 const superagent = require('superagent');
 @Injectable()
 export class RestService {
-    private _app: any;
+    public _app: any;
     logOut() {
         this.locker.clear();
     }
     constructor(
         private locker: CoolLocalStorage
     ) {
+        console.log('check')
         if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
+            console.log('its here')
             const auth: any = this.locker.getObject('auth')
             this._app = feathers()
                 .configure(rest(HOST).superagent(superagent,
                     {
-                        headers: { 'authorization': 'Bearer ' + auth.token }
+                        headers: { 'authorization': 'Bearer ' + auth.accessToken }
                     }
                 )) // Fire up rest
                 .configure(rx(RxJS, { listStrategy: 'always' }))
@@ -70,17 +72,27 @@ export class RestService {
             this._app = feathers() // Initialize feathers
                 .configure(rest(HOST).superagent(superagent)) // Fire up rest
                 .configure(hooks())
-                .configure(authentication()); // Configure feathers-hooks
+                .configure(authentication({ storage: window.localStorage })); // Configure feathers-hooks
         }
     }
-    loginIntoApp() {
+    loginIntoApp(query) {
         return this._app.authenticate({
-            type: 'local',
-            'email': 'info@uch.com',
-            'password': 'admin'
+            strategy: 'local',
+            'email': query.email,
+            'password': query.password
         });
     }
     getService(value: any) {
+        const auth: any = this.locker.getObject('auth')
+        this._app = feathers()
+            .configure(rest(HOST).superagent(superagent,
+                {
+                    headers: { 'authorization': 'Bearer ' + auth.accessToken }
+                }
+            )) // Fire up rest
+            .configure(rx(RxJS, { listStrategy: 'always' }))
+            .configure(hooks())
+            .configure(authentication());
         return this._app.service(value);
     }
     getHost() {
