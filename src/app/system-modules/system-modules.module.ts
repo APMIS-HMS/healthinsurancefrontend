@@ -8,7 +8,6 @@ import { systemModulesRoutes } from './system-modules.route';
 
 import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
 
-
 @NgModule({
     declarations: [
         SystemModulesComponent

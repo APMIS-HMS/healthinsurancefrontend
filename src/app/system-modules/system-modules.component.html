@@ -72,6 +72,19 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-4'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-4');" class="sidemenu-4">
+                        <i class="fa fa-bookmark-o"></i>
+                        <span class="sidemenu-4">Manage Platforms</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class=""><a routerLink="/modules/platform/platforms"><i class="fa fa-circle-o"></i> Platforms</a></li>
+                        <li class=""><a routerLink="/modules/platform/new-platform"><i class="fa fa-circle-o"></i> New Platform</a></li>
+                    </ul>
+                </li>
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-1'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-1');" class="sidemenu-1">
                         <i class="fa fa-meh-o"></i>

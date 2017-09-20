@@ -20,6 +20,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
             {
                 path: 'hia',
                 loadChildren: './hia/hia.module#HiaModule'
+            },
+            {
+                path: 'platform',
+                loadChildren: './platform-owner/platform-owner.module#PlatformOwnerModule'
             }
         ]
     }

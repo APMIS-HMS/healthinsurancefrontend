@@ -1417,3 +1417,17 @@
             }
         }
     }
+
+    .profileImg-wrap{
+        width: 45px;
+        border-radius: 100%;
+        margin-right: 5px;
+        height: 45px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .profileImg-wrap img{
+        width: 100%;
+    }
