@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth.service';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Bootstrap
@@ -17,7 +18,7 @@ import { SignupComponent } from './signup/signup.component';
     ],
     exports: [],
     imports: [NgbModule, ReactiveFormsModule, authModulesRoutes],
-    providers: []
+    providers: [AuthService]
 })
 
 export class AuthModule {
