@@ -759,6 +759,7 @@
     body {
         background-color: $brand-primary;
         font-family: $font-family;
+        font-size: 0.8rem;
         margin: -20px 0;
     }
     
@@ -1489,6 +1490,7 @@
     .profileImg-wrap img {
         width: 100%;
     }
+    
     .shadow {
         -webkit-box-shadow: 0 8px 6px -6px black;
         -moz-box-shadow: 0 8px 6px -6px black;
