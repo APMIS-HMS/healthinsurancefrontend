@@ -18,13 +18,16 @@
 .inner-content-area{
     padding: 10px;
     box-sizing: border-box;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background: #fff;
 }
 .field-wrap{
     display: flex;
 }
 .field-label{
-    margin-right: 5px;
-    color: #003c6b;
+    margin-right: 10px;
+    color: $brand-primary;
     font-size: 12px;
     font-style: italic;
 }
@@ -34,4 +37,52 @@
 }
 .field-group{
     margin-bottom: 10px;
+}
+
+.stat-wrap .inner-content-area{
+    //margin: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.stat-wrap {
+    // display: flex;
+    // justify-content: space-around;
+    //margin-bottom: 20px;
+}
+.stat-wrap .inner-content-area:hover{
+    background: #ccd8e1;
+}
+.stat-ico-wrap{
+    border: 1px solid $brand-primary;
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    background: $brand-primary;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.stat-ico {
+    font-size: 30px;
+    color: #fff;
+}
+.stat-val {
+    font-size: 26px;
+    color: #ff2500;
+    letter-spacing: 4px;
+    text-align: right;
+}
+.stat-label {
+    text-align: right;
+    font-size: 16px;
+    color: $brand-primary;
+}
+.tbl-title {
+    color: #000;
+    text-decoration: underline;
+    line-height: 1.5;
+    font-weight: bold;
+    font-size: 12px;
 }

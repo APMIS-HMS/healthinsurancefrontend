@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { AuthService } from './../auth/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
@@ -15,7 +17,9 @@ export class SystemModulesComponent implements OnInit {
 	sideMenuId: String = '';
 
 	constructor(
-		private _headerEventEmitter: HeaderEventEmitterService
+		private _headerEventEmitter: HeaderEventEmitterService,
+		private _authService:AuthService,
+		private _router:Router
 	) { }
 
 	ngOnInit() {
@@ -39,6 +43,11 @@ export class SystemModulesComponent implements OnInit {
 		} else {
 			this.sideMenuDropdown = !this.sideMenuDropdown;
 		}
+	}
+
+	signOut(){
+		this._authService.checkAuth();
+		this._router.navigate(['/auth']);
 	}
 
 }

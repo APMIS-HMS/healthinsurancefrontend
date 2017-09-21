@@ -1,3 +1,4 @@
+import { AuthService } from './auth/services/auth.service';
 import { UserTypeService } from './services/api-services/setup/user-type.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -35,7 +36,7 @@ import { AppComponent } from './app.component';
     SetupService.MaritalStatusService,
     SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
     SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
-    SetupService.CorporateFacilityService, SetupService.IndustryTypesService, UserTypeService],
+    SetupService.CorporateFacilityService, SetupService.IndustryTypesService, UserTypeService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

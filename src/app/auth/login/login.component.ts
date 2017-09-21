@@ -32,7 +32,8 @@ export class LoginComponent implements OnInit {
 			email: ['', [<any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
-		this.getUserTypes();
+		this._authService.checkAuth();
+		// this.getUserTypes();
 	}
 	getUserTypes() {
 		this._userTypeService.findAll().then(payload => {
@@ -41,15 +42,21 @@ export class LoginComponent implements OnInit {
 	}
 
 	onClickLogin(value: any, valid: boolean) {
-		if (this._authService.checkAuth()) {
-			this.getUserTypes();
-		} else {
+		// this.getUserTypes();
+
+		if (valid) {
+			this.loginBtnText = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
 				console.log(payload);
-				this.getUserTypes();
+				// this.getUserTypes();
+				this.toastr.success('You have successfully logged in!', 'Success!');
+				this._router.navigate(['/modules/beneficiary/beneficiaries']);
+
 			})
 		}
+
 
 		// if (valid) {
 		// 	this.loginBtnText = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
