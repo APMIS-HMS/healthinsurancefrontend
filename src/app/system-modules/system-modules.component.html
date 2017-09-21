@@ -12,6 +12,8 @@
     <!-- Place favicon.ico in the root directory -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
     <!--<link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
@@ -71,6 +73,19 @@
                         <i class="fa fa-dashboard"></i>
                         <span>Dashboard</span>
                     </a>
+                </li>
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-4'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-4');" class="sidemenu-4">
+                        <i class="fa fa-bookmark-o"></i>
+                        <span class="sidemenu-4">Manage Users</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class=""><a routerLink="/modules/user-management/users"><i class="fa fa-circle-o"></i> Users</a></li>
+                        <li class=""><a routerLink="/modules/user-management/new-user"><i class="fa fa-circle-o"></i> New User</a></li>
+                    </ul>
                 </li>
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-4'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-4');" class="sidemenu-4">

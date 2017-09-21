@@ -1,0 +1,175 @@
+<section class="content">
+    <div class="row">
+        <section class="box">
+            <div class="col-xs-12 col-sm-8 no-padding">
+                <div class="form-group">
+                    <label class="col-sm-2 no-padding control-label">Search: </label>
+                    <div class="col-sm-10 no-padding">
+                        <div class="input-group">
+                            <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
+                            <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 no-padding">
+                <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/user-management/new-user">
+                    <i class="fa fa-plus-circle"></i> New User
+                </a>
+            </div>
+        </section>
+    </div>
+    <div class="row">
+        <section class="box">
+            <div class="filter-box">
+                <h5>Filters:</h5>
+                <div class="row no-margin-right">
+                    <div class="form-group col-sm-6 col-md-4 no-padding">
+                        <label class="col-xs-12 control-label">Grading: </label>
+                        <div class="col-xs-12">
+                            <select class="form-control">
+                                <option value="all">ALL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 no-padding">
+                        <label class="col-xs-12 control-label">Type: </label>
+                        <div class="col-xs-12">
+                            <select class="form-control">
+                                <option value="all">ALL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4 no-padding">
+                        <label class="col-xs-12 control-label">Status: </label>
+                        <div class="col-xs-12 no-padding-left">
+                            <div class="col-xs-9">
+                                <select class="form-control">
+                                    <option value="all">ALL</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3 no-padding">
+                                <button type="" class="btn btn-default btn-flat text-brand border-brand">RESET</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-gray text-white">
+                            <th>S/N</th>
+                            <th>User</th>
+                            <th>User Type</th>
+                            <th>Reg Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngIf="users.length === 0 && !loading">
+                            <td class="text-center" colspan="7">No data available in table</td>
+                        </tr>
+                        <tr *ngIf="users.length === 0 && loading">
+                            <td class="text-center" colspan="7">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </td>
+                        </tr>
+                        <tr class="tr-link" routerLink="/modules/user-management/users/{{ user._id }}" *ngFor="let user of users">
+                            <td>{{ '1' }}</td>
+                            <td>{{ 'user.employerName' }}</td>
+                            <td>Health Care Insurance</td>
+                            <td>{{ 'user.businessContact.name' }}</td>
+                            <td>{{ 'user.businessContact.phone' }}</td>
+                            <td>A</td>
+                            <td>
+                                <span class="text-red">INACTIVE</span>
+                            </td>
+                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr> -->
+                        <tr class="tr-link">
+                            <td>{{ '1' }}</td>
+                            <td>{{ 'Chisimdi Damian Ezeanieto' }}</td>
+                            <td>{{ 'Benefiaciary' }}</td>
+                            <td>{{ '30/10/2017' }}</td>
+                            <td>
+                                <label class="switch">
+                                  <input type="checkbox" value="" class="input-action-leader-board"/>
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-smaller">Edit Role</button>
+                            </td>
+                        </tr>
+                        <tr class="tr-link">
+                            <td>{{ '2' }}</td>
+                            <td>{{ 'Ademoyegun Abimbola' }}</td>
+                            <td>{{ 'Benefiaciary' }}</td>
+                            <td>{{ '30/10/2017' }}</td>
+                            <td>
+                                <label class="switch">
+                                  <input type="checkbox" value="" class="input-action-leader-board"/>
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-smaller" (click)="open(content)">Edit Role</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 text-center">
+                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+            </div>
+        </section>
+    </div>
+    <!-- <modal #modal>
+        <modal-header [show-close]="true">
+            <h4 class="modal-title">I'm a modal!</h4>
+        </modal-header>
+        <modal-body>
+            Hello World!
+        </modal-body>
+        <modal-footer [show-default-buttons]="true"></modal-footer>
+    </modal> -->
+    <!-- <div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pull-left">{{title}}</h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+                </div>
+                <div class="modal-body">
+                    <ng-content select=".modal-body"> </ng-content>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="pull-left">
+                        <button class="btn btn-default" (click)="hide()"> Cancel </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">Modal title</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+        </div>
+        <div class="modal-body">
+            <p>One fine body&hellip;</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        </div>
+    </ng-template>
+</section>
