@@ -114,8 +114,13 @@
 
           <div class="row">
             <div *ngIf="showEmp" class="tbl-wrap col-xs-12">
-              <div class="tbl-title">{{platform}} Table of Employees</div>
-              <div class="table-responsive">
+              <div class="cont-sect-subhead col-xs-12 no-padding">
+                <div class="tbl-title">{{platform}} Table of Employees</div>
+                <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/platform/platforms">
+                  <i class="fa fa-plus"></i> New Employee
+                </button>
+              </div>
+              <div class="">
                   <table class="table table-striped" cellspacing="0" width="100%">
                       <thead>
                           <tr class="bg-gray text-white">
@@ -154,8 +159,13 @@
             </div>
 
             <div *ngIf="showProviders" class="tbl-wrap col-xs-12">
-              <div class="tbl-title">{{platform}} Table of Care Providers</div>
-              <div class="table-responsive">
+              <div class="cont-sect-subhead col-xs-12 no-padding">
+                <div class="tbl-title">{{platform}} Table of Care Providers</div>
+                <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/care-provider/new-provider">
+                  <i class="fa fa-plus"></i> New Care Provider
+                </button>
+              </div>
+              <div class="">
                   <table class="table table-striped" cellspacing="0" width="100%">
                       <thead>
                           <tr class="bg-gray text-white">
@@ -203,8 +213,13 @@
             </div>
 
             <div *ngIf="showEmployers" class="tbl-wrap col-xs-12">
-              <div class="tbl-title">{{platform}} Table of Care Employers</div>
-              <div class="table-responsive">
+              <div class="cont-sect-subhead col-xs-12 no-padding">
+                <div class="tbl-title">{{platform}} Table of Employers</div>
+                <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/employer/new-employer">
+                  <i class="fa fa-plus"></i> New Employer
+                </button>
+              </div>
+              <div class="">
                   <table class="table table-striped" cellspacing="0" width="100%">
                       <thead>
                           <tr class="bg-gray text-white">
@@ -242,40 +257,45 @@
             </div>
 
             <div *ngIf="showHias" class="tbl-wrap col-xs-12">
-                <div class="tbl-title">{{platform}} Table of Care HIAs</div>
-                <div class="table-responsive">
-                    <table class="table table-striped" cellspacing="0" width="100%">
-                        <thead>
-                            <tr class="bg-gray text-white">
-                                <th>Name HIA</th>
-                                <th>Type</th>
-                                <th>Contact Person</th>
-                                <th>Phone number</th>
-                                <th>Grade</th>
-                                <th>Status</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="tr-link" routerLink="/modules/hia/hias/33223333">
-                                <td>Sharzar Insurance</td>
-                                <td>Health Care Insurance</td>
-                                <td>Jenna Bricks</td>
-                                <td>08088777766</td>
-                                <td>A</td>
-                                <td>
-                                    <span class="text-red">INACTIVE</span>
-                                    <!--<span class="text-success">Active</span>-->
-                                </td>
-                                <td><i class="fa fa-chevron-right"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-xs-12 text-center">
-                    <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-                </div>
+              <div class="cont-sect-subhead col-xs-12 no-padding">
+                <div class="tbl-title">{{platform}} Table of HIAs</div>
+                <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/hia/new-hia">
+                  <i class="fa fa-plus"></i> New HIA
+                </button>
               </div>
+              <div class="">
+                  <table class="table table-striped" cellspacing="0" width="100%">
+                      <thead>
+                          <tr class="bg-gray text-white">
+                              <th>Name HIA</th>
+                              <th>Type</th>
+                              <th>Contact Person</th>
+                              <th>Phone number</th>
+                              <th>Grade</th>
+                              <th>Status</th>
+                              <th></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr class="tr-link" routerLink="/modules/hia/hias/33223333">
+                              <td>Sharzar Insurance</td>
+                              <td>Health Care Insurance</td>
+                              <td>Jenna Bricks</td>
+                              <td>08088777766</td>
+                              <td>A</td>
+                              <td>
+                                  <span class="text-red">INACTIVE</span>
+                                  <!--<span class="text-success">Active</span>-->
+                              </td>
+                              <td><i class="fa fa-chevron-right"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="col-xs-12 text-center">
+                  <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+              </div>
+            </div>
           </div>
       </div>
   </div>
