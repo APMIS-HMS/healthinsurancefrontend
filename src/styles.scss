@@ -1410,7 +1410,8 @@
                         cursor: pointer;
                         color: $white;
                         display: block;
-                        font-size: 14px;
+                        font-size: 12px;
+                        border-left: 5px solid $brand-primary;
                         >.fa,
                         >.glyphicon,
                         >.ion {
