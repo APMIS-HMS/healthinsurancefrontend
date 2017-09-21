@@ -1269,6 +1269,8 @@
         .user-panel {
             position: relative;
             width: 100%;
+            height: auto;
+            min-height: 100px;
             padding: 10px 10px 10px 10px;
             overflow: hidden;
             &:before,
@@ -1283,6 +1285,7 @@
                 width: 100%;
                 max-width: 50px;
                 height: 50px;
+                border-radius: 50%;
             }
             >.info {
                 padding: 5px 5px 5px 15px;
@@ -1292,6 +1295,9 @@
                 >p {
                     font-weight: 600;
                     margin-bottom: 9px;
+                }
+                >.role {
+                    color: $gray-light-3;
                 }
                 >a {
                     text-decoration: none;
