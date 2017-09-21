@@ -27,6 +27,7 @@ export class NewPlatformComponent implements OnInit {
   
       this.platformFormGroup = this._fb.group({
         platformName: ['', [<any>Validators.required]],
+        shortName: ['', [<any>Validators.required]],
         email:  ['', [<any>Validators.required, <any>Validators.pattern('^([a-z0-9_\.-]+)@([\da-z\.-]+)(com|org|CO.UK|co.uk|net|mil|edu|ng|COM|ORG|NET|MIL|EDU|NG)$')]],
         website: ['', [<any>Validators.required]],
         address: ['', [<any>Validators.required]],
@@ -42,12 +43,6 @@ export class NewPlatformComponent implements OnInit {
         it_position: ['', [<any>Validators.required]],
         it_email:  ['', [<any>Validators.required, <any>Validators.pattern('^([a-z0-9_\.-]+)@([\da-z\.-]+)(com|org|CO.UK|co.uk|net|mil|edu|ng|COM|ORG|NET|MIL|EDU|NG)$')]],        
         it_phone: ['', [<any>Validators.required]],
-        plan: ['', [<any>Validators.required]],
-        // plan2: ['', [<any>Validators.required]],
-        // plan3: ['', [<any>Validators.required]],
-        nhisNumber: ['', [<any>Validators.required]],
-        cinNumber: ['', [<any>Validators.required]],
-        registrationDate: ['', [<any>Validators.required]]
       });
     }
   }
