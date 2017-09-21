@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 const rx = require('feathers-reactive');
 const RxJS = require('rxjs');
 
-// const HOST = 'http://40.68.100.29:3030'; // Live
+// const HOST = 'http://40.68.100.29:3031'; // Live
 const HOST = 'http://localhost:3031'; // Your base server URL here
 
 

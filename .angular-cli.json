@@ -18,15 +18,14 @@
         "testTsconfig": "tsconfig.spec.json",
         "prefix": "app",
         "styles": [
-            "../node_modules/bootstrap/dist/css/bootstrap.css",
+            "../node_modules/bootstrap/dist/css/bootstrap.min.css",
             "../node_modules/font-awesome/scss/font-awesome.scss",
             "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
             "styles.scss"
         ],
         "scripts": [
-            "../node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js",
-            "../node_modules/tether/dist/js/tether.js",
-            "../node_modules/ng2-toastr/bundles/ng2-toastr.min.js"
+            "../node_modules/systemjs/dist/system.src.js",
+            "../node_modules/tether/dist/js/tether.js"
         ],
         "environmentSource": "environments/environment.ts",
         "environments": {

@@ -43,6 +43,7 @@
     "socket.io-client": "^2.0.1",
     "superagent": "^3.5.2",
     "susy": "^2.2.12",
+    "systemjs": "^0.20.19",
     "tether": "^1.4.0",
     "zone.js": "^0.8.14"
   },
