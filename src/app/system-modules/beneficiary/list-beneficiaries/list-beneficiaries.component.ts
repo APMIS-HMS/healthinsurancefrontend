@@ -1,3 +1,4 @@
+import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 //import * from '../../../rxjs/rxjs.extentions';
@@ -16,20 +17,22 @@ export class ListBeneficiariesComponent implements OnInit {
 
 	constructor(
 		private _router: Router,
-		private _headerEventEmitter: HeaderEventEmitterService
+		private _headerEventEmitter: HeaderEventEmitterService,
+		private _userTypeService:UserTypeService
 	) {
 		this._router.events
 			.filter(event => event instanceof NavigationEnd)
 			.subscribe(e => {
-				console.log('previous:', e);
-				console.log('prev:', this.previousUrl);
-				//this.previousUrl = e.url;
 			});
 	 }
 
 	ngOnInit() {
 		this._headerEventEmitter.setRouteUrl('Beneficiary List');
 		this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
+		this._userTypeService.findAll()
+		.then(payload =>{
+			console.log(payload)
+		})
 	}
 
 }

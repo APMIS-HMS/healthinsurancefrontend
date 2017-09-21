@@ -9,20 +9,23 @@ export class UserTypeService {
   constructor(
     private _socketService: SocketService,
     private _restService: RestService,
-    private _locker:CoolLocalStorage
+    private _locker: CoolLocalStorage
   ) {
+    // this._socket = this._socketService.authenticateUser('user-types');
     this._rest = _restService.getService('user-types');
-    this._socket = _socketService.getService('user-types');
+    // this._socket = _socketService.getService('user-types');
   }
 
   find(query: any) {
-    return this._rest.find(query);
+    return this._socket.find(query);
   }
 
   findAll() {
-    // const auth: any = this._locker.getObject('auth')
-    // this._restService._app.authenticate({ strategy: 'local', accessToken: auth.accessToken })
-    return this._rest.find();
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
+        return socket.find();
+      }))
+    });
   }
   get(id: string, query: any) {
     return this._rest.get(id, query);

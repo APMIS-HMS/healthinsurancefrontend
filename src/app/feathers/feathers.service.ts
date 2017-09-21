@@ -17,7 +17,9 @@ const HOST = 'http://localhost:3030'; // Your base server URL here
 @Injectable()
 export class SocketService {
     public socket: any;
-    private _app: any;
+    public _app: any;
+
+
     constructor(
         private locker: CoolLocalStorage
     ) {
@@ -30,19 +32,69 @@ export class SocketService {
             .configure(authentication({ storage: window.localStorage }));
     }
     logOut() {
-        this._app.logout();
         this.locker.clear();
+        this._app.logout();
     }
     loginIntoApp(query: any) {
         return this._app.authenticate({
             strategy: 'local',
-            'userName': query.email,
+            'email': query.email,
             'password': query.password
         });
     }
     getService(value: any) {
-        return this._app.service(value);
+        if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
+            let token = this.locker.getItem('auth');
+            const copyInvestigation = JSON.parse(token);
+            this._app.authenticate({ strategy: 'jwt', accessToken: copyInvestigation.accessToken })
+            // return new Promise((resolve, reject) => {
+
+            //     let token = this.locker.getItem('auth');
+            //     const copyInvestigation = JSON.parse(token);
+            //     console.log(copyInvestigation.accessToken)
+            //     resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyInvestigation.accessToken }).then(payload => {
+            //         console.log(payload)
+            //         // return Promise.resolve(data);
+            //         return resolve(this._app.service(value));
+            //     }, error => {
+            //         console.log(error)
+            //     }));
+
+
+
+
+            // });
+
+
+            // console.log('authenticate again')
+            // let token = this.locker.getItem('auth');
+            // const copyInvestigation = JSON.parse(token);
+            // console.log(copyInvestigation.accessToken)
+            // Promise.resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyInvestigation.accessToken }).then(payload => {
+            //     console.log(payload)
+            //     // return Promise.resolve(data);
+            //     return Promise.resolve(this._app.service(value));
+            // }, error => {
+            //     console.log(error)
+            // }));
+        }
+        return this._app.service(value)
     }
+    authenticateUser(service) {
+        if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
+          return new Promise((resolve, reject) => {
+            let token = this.locker.getItem('auth');
+            const copyToken = JSON.parse(token);
+            resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyToken.accessToken }).then(payload => {
+              this.socket = this.getService(service);
+              return Promise.resolve(this.socket);
+            }, error => {
+              console.log(error)
+            }));
+    
+          });
+        }
+      }
 }
 
 const superagent = require('superagent');
@@ -55,9 +107,7 @@ export class RestService {
     constructor(
         private locker: CoolLocalStorage
     ) {
-        console.log('check')
         if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
-            console.log('its here')
             const auth: any = this.locker.getObject('auth')
             this._app = feathers()
                 .configure(rest(HOST).superagent(superagent,
@@ -83,16 +133,19 @@ export class RestService {
         });
     }
     getService(value: any) {
-        const auth: any = this.locker.getObject('auth')
-        this._app = feathers()
-            .configure(rest(HOST).superagent(superagent,
-                {
-                    headers: { 'authorization': 'Bearer ' + auth.accessToken }
-                }
-            )) // Fire up rest
-            .configure(rx(RxJS, { listStrategy: 'always' }))
-            .configure(hooks())
-            .configure(authentication());
+        if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
+            const auth: any = this.locker.getObject('auth')
+            this._app = feathers()
+                .configure(rest(HOST).superagent(superagent,
+                    {
+                        headers: { 'authorization': 'Bearer ' + auth.accessToken }
+                    }
+                )) // Fire up rest
+                .configure(rx(RxJS, { listStrategy: 'always' }))
+                .configure(hooks())
+                .configure(authentication());
+        }
+
         return this._app.service(value);
     }
     getHost() {

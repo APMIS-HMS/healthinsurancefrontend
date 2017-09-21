@@ -1,3 +1,4 @@
+import { UserTypeService } from './../../services/api-services/setup/user-type.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +20,7 @@ import { DetailsBeneficiaryComponent } from './details-beneficiary/details-benef
         ReactiveFormsModule,
         beneficiaryRoutes
     ],
-    providers: []
+    providers: [UserTypeService]
 })
 
 export class BeneficiaryModule {

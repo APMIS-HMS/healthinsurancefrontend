@@ -33,7 +33,7 @@ export class AuthService {
     this._socketService.logOut();
   }
   login(query: any) {
-    return this._restService.loginIntoApp(query);
+    return this._socketService.loginIntoApp(query);
     //return this._restLogin.create(query);
   }
 
@@ -48,11 +48,12 @@ export class AuthService {
     return this._socket.get(id, query);
   }
   checkAuth(){
+    this._restService._app.logout();
+    this.logOut();
     if (this._locker.getItem('auth') !== undefined && this._locker.getItem('auth') != null) {
       let auth:any = this._locker.getItem('auth');
-      // console.log(auth);
-      // let rev = this._restService._app.passport.payloadIsValid(auth.accessToken);
-      // console.log(rev);
+      this._restService._app.passport.logout();
+      this.logOut();
       return true;
     }
     return false;
