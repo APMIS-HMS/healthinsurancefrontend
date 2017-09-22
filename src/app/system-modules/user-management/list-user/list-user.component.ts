@@ -21,7 +21,7 @@ export class ListUserComponent implements OnInit {
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('List Users');
-    this._toastr.success('Beneficiary has been created successfully!', 'Success!');
+    // this._toastr.success('Beneficiary has been created successfully!', 'Success!');
   }
 
   open(content) {

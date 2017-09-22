@@ -125,45 +125,16 @@
             </div>
         </section>
     </div>
-    <!-- <modal #modal>
-        <modal-header [show-close]="true">
-            <h4 class="modal-title">I'm a modal!</h4>
-        </modal-header>
-        <modal-body>
-            Hello World!
-        </modal-body>
-        <modal-footer [show-default-buttons]="true"></modal-footer>
-    </modal> -->
-    <!-- <div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{title}}</h4>
-                    <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-                </div>
-                <div class="modal-body">
-                    <ng-content select=".modal-body"> </ng-content>
-                </div>
 
-                <div class="modal-footer">
-                    <div class="pull-left">
-                        <button class="btn btn-default" (click)="hide()"> Cancel </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <ng-template #content let-c="close" let-d="dismiss">
         <div class="modal-header">
-            <h4 class="modal-title">Modal title</h4>
+            <h4 class="modal-title">Add Role</h4>
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
         </div>
         <div class="modal-body">
-            <p>One fine body&hellip;</p>
+            <p></p>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>

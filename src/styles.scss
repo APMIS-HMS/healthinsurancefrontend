@@ -1183,6 +1183,104 @@
             padding: 15px 15px 15px 15px;
             margin-right: auto;
             margin-left: auto;
+            .info-box {
+                display: block;
+                min-height: 90px;
+                background-color: $white;
+                width: 100%;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+                border-radius: 2px;
+                margin-bottom: 15px;
+                .info-box-icon {
+                    border-top-left-radius: 2px;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                    border-bottom-left-radius: 2px;
+                    display: block;
+                    float: left;
+                    color: $white;
+                    margin-top: 15px;
+                    margin-left: 10px;
+                    height: 60px;
+                    width: 60px;
+                    border-radius: 50%;
+                    text-align: center;
+                    font-size: 36px;
+                    line-height: 1.8;
+                    background: rgba(0, 0, 0, 0.2);
+                }
+                .info-box-content {
+                    padding: 5px 10px;
+                    margin-left: 70px;
+                    .info-box-text {
+                        text-transform: uppercase;
+                        display: block;
+                        font-size: 16px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    .info-box-number {
+                        display: block;
+                        font-weight: bold;
+                        font-size: 20px;
+                    }
+                }
+            }
+            .box {
+                background: $white;
+                border-radius: 3px;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+                border-top: 3px solid #d2d6de;
+                margin-bottom: 20px;
+                width: 100%;
+                position: relative;
+                .box-header {
+                    color: #444;
+                    display: block;
+                    padding: 10px;
+                    position: relative;
+                    &.with-border {
+                        border-bottom: 1px solid #f4f4f4;
+                    }
+                    >.box-title {
+                        display: inline-block;
+                        font-size: 18px;
+                        margin: 0;
+                        line-height: 1;
+                    }
+                    >.box-tools {
+                        position: absolute;
+                        right: 10px;
+                        top: 5px;
+                    }
+                }
+                &.box-info {
+                    border-top-color: $brand-info;
+                }
+                &.box-danger {
+                    border-top-color: $brand-danger;
+                }
+                &.box-danger {
+                    border-top-color: $brand-danger;
+                }
+                .box-body {
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 3px;
+                    border-bottom-left-radius: 3px;
+                    padding: 10px;
+                }
+                .box-footer {
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 3px;
+                    border-bottom-left-radius: 3px;
+                    border-top: 1px solid #f4f4f4;
+                    padding: 10px;
+                    background-color: #fff;
+                }
+            }
             /* The switch - the box around the slider */
             .switch {
                 position: relative;
