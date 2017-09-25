@@ -124,8 +124,8 @@
         <div class="modal-header">
             <h4 class="modal-title">Add Role</h4>
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
             <div class="row">
@@ -144,7 +144,7 @@
                 </div>
                 <div class="col-12 text-right">
                     <div class="col">
-                        <button class="btn btn-primary btn-flat" [innerHtml]="addBtnText"></button>
+                        <button class="btn btn-primary btn-flat" (click)="createRole(roleFormGroup.valid, roleFormGroup.value);" [innerHtml]="addBtnText"></button>
                     </div>
                 </div>
             </div>

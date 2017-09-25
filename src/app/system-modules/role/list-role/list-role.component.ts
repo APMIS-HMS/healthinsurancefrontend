@@ -3,9 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
-import {
-  FacilityTypesService, FacilitiesService
-} from '../../../services/api-services/index';
+import { RoleService } from '../../../services/auth/role/role.service';
 import { Facility } from '../../../models/index';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
@@ -26,6 +24,7 @@ export class ListRoleComponent implements OnInit {
     private _toastr: ToastsManager,
     private modalService: NgbModal,
     private _headerEventEmitter: HeaderEventEmitterService,
+    private _roleService: RoleService
   ) { }
 
   ngOnInit() {
@@ -35,6 +34,8 @@ export class ListRoleComponent implements OnInit {
     this.roleFormGroup = this._fb.group({
       role: ['', [<any>Validators.required]]
     });
+
+    this._getRoles();
   }
 
   open(content) {
@@ -54,6 +55,17 @@ export class ListRoleComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  createRole(valid: Boolean, value: any) {
+    console.log(value);
+  }
+
+  private _getRoles() {
+    this._roleService.findAll().then((res: any) => {
+      console.log(res);
+      this.roles = res.data;
+    }).catch(err => console.log(err));
   }
 
 }
