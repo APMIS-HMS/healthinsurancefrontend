@@ -24,6 +24,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
             {
                 path: 'platform',
                 loadChildren: './platform-owner/platform-owner.module#PlatformOwnerModule'
+            },
+            {
+                path: 'plan',
+                loadChildren: './plan/plan.module#PlanModule'
             }
         ]
     }

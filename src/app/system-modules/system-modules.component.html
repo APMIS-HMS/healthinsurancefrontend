@@ -98,6 +98,7 @@
                         <li class=""><a routerLink="/modules/beneficiary/new-beneficiary"><i class="fa fa-circle-o"></i> New Beneficiary</a></li>
                     </ul>
                 </li>
+                
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-2'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-2');" class="sidemenu-2">
                         <i class="fa fa-handshake-o"></i>
@@ -135,6 +136,19 @@
                     <ul class="treeview-menu">
                         <li class=""><a routerLink="/modules/hia/hias"><i class="fa fa-circle-o"></i> HIAs</a></li>
                         <li class=""><a routerLink="/modules/hia/new-hia"><i class="fa fa-circle-o"></i> New HIA</a></li>
+                    </ul>
+                </li>
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-5'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-5');" class="sidemenu-5">
+                        <i class="fa fa-meh-o"></i>
+                        <span class="sidemenu-5">Manage Plans</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class=""><a routerLink="/modules/plan/plans"><i class="fa fa-circle-o"></i> Plans</a></li>
+                        <li class=""><a routerLink="/modules/plan/new-plan"><i class="fa fa-circle-o"></i> New Plan</a></li>
                     </ul>
                 </li>
                 <!--<li class="header">ACCOUNT NAVIGATION</li>
