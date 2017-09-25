@@ -1,43 +1,41 @@
 <section class="content">
-  <div class="row pad-all">
-      <div class="col-xs-12 no-padding">
-          <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/plan/plans">
+    <div class="row pad-all">
+        <div class="col-12 no-padding">
+            <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/plan/plans">
       <i class="fa fa-chevron-left"></i> BACK TO HEALTHPLAN MANAGEMENT
     </button>
-      </div>
-  </div>
+        </div>
+    </div>
 
-  <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#home">HIAS</a></li>
-      <li><a data-toggle="tab" href="#menu1">Drugs</a></li>
-      <li><a data-toggle="tab" href="#menu2">Tests</a></li>
-      <li><a data-toggle="tab" href="#menu3">Procedures</a></li>
-      <li><a data-toggle="tab" href="#menu4">Diagnosis</a></li>
-      <!-- <li><a data-toggle="tab" href="#menu5">Payment History</a></li>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">HIAS</a></li>
+        <li><a data-toggle="tab" href="#menu1">Drugs</a></li>
+        <li><a data-toggle="tab" href="#menu2">Tests</a></li>
+        <li><a data-toggle="tab" href="#menu3">Procedures</a></li>
+        <li><a data-toggle="tab" href="#menu4">Diagnosis</a></li>
+        <!-- <li><a data-toggle="tab" href="#menu5">Payment History</a></li>
       <li><a data-toggle="tab" href="#menu6">Claims</a></li>
       <li><a data-toggle="tab" href="#menu7">Complaints</a></li>
       <li><a data-toggle="tab" href="#menu8">Referrals</a></li>-->
-  </ul>
+    </ul>
 
-  <div class="box tab-content">
-      <div id="home" class="tab-pane fade in active">
-          <div class="row">
-            <div class="content-top-bar">
-              <img src="../../../../assets/img/lagos-state-logo.jpg">
-              <div>Lagos State Health Plan</div>
-              <div>Type: Formal Sector</div>
-              <div>Premium-Week: 15 NGN</div>
-              <div>Month: 50 NGN</div>
-              <div>Year: 550 NGN</div>
-              <div>Status: <span class="status">Active</span></div>
-            </div>
+    <div class="box tab-content">
+        <div id="home" class="tab-pane fade show active">
+            <div class="row">
+                <div class="content-top-bar">
+                    <img src="../../../../assets/img/lagos-state-logo.jpg">
+                    <div>Lagos State Health Plan</div>
+                    <div>Type: Formal Sector</div>
+                    <div>Premium-Week: 15 NGN</div>
+                    <div>Month: 50 NGN</div>
+                    <div>Year: 550 NGN</div>
+                    <div>Status: <span class="status">Active</span></div>
+                </div>
 
-            <section class="content">
-                <div class="row">
-                    <section class="box">
-                        <div class="col-xs-12 col-sm-8 no-padding">
+                <section class="content">
+                    <div class="row">
+                        <div class="col-12 col-sm-8 no-padding">
                             <div class="form-group">
-                                <label class="col-sm-2 no-padding control-label">Search: </label>
                                 <div class="col-sm-10 no-padding">
                                     <div class="input-group">
                                         <input type="search" class="form-control" placeholder="Name of Health Insurance Agent" aria-describedby="basic-addon2">
@@ -46,50 +44,49 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-4 no-padding">
+                        <div class="col-12 col-sm-4 no-padding">
                             <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/hia/new-hia">
                                 <i class="fa fa-plus-circle"></i> ADD HIA
                             </a>
                         </div>
-                    </section>
-                </div>
-                <div class="row">
-                    <section class="col-xs-12">
-                        <div class="table-responsive">
-                            <table class="table table-striped" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr class="bg-gray text-white">
-                                        <th>Health Insurance Agent</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="tr-link">
-                                        <td>Healthcare Security Limited</td>
-                                        <td><i class="fa fa-trash"></i></td>
-                                    </tr>
-                                    <tr class="tr-link">
-                                        <td>Multi Shield Nigeria Limited</td>
-                                        <td><i class="fa fa-trash"></i></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-xs-12 text-center">
-                            <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-                        </div>
-                    </section>
-                </div>
-            </section>
-          </div>
-      </div>
-      <div id="menu1" class="tab-pane fade">
-          <h3>Menu 1</h3>
-          <p>Some content in menu 1.</p>
-      </div>
-      <div id="menu2" class="tab-pane fade">
-          <h3>Menu 2</h3>
-          <p>Some content in menu 2.</p>
-      </div>
-  </div>
+                    </div>
+                    <div class="row">
+                        <section class="col-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr class="bg-gray text-white">
+                                            <th>Health Insurance Agent</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="tr-link">
+                                            <td>Healthcare Security Limited</td>
+                                            <td><i class="fa fa-trash"></i></td>
+                                        </tr>
+                                        <tr class="tr-link">
+                                            <td>Multi Shield Nigeria Limited</td>
+                                            <td><i class="fa fa-trash"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-12 text-center">
+                                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <h3>Menu 1</h3>
+            <p>Some content in menu 1.</p>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <h3>Menu 2</h3>
+            <p>Some content in menu 2.</p>
+        </div>
+    </div>
 </section>

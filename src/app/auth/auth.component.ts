@@ -7,28 +7,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-	tabActive: boolean = false;
-	tabId: string = '';
+	tabActive: Boolean = false;
+	tabId: String = '';
 
 	constructor(private _router: Router) { }
 
 	ngOnInit() {
-		let page: string = this._router.url;
+		const page: string = this._router.url;
 		this.checkPageUrl(page);
 	}
 
 	onClickTab(tab) {
 		this.tabActive = true;
 
-		if(tab === "login") {
+		console.log(tab);
+		if (tab === 'login') {
 			this.tabId = 'login';
-		} else if(tab === "register") {
+		} else if (tab === 'register') {
 			this.tabId = 'register';
 		}
 	}
 	private checkPageUrl(param: string) {
 		this.tabActive = true;
-		if(param.includes('login')) {
+		if (param.includes('login')) {
 			this.tabId = 'login';
 		} else {
 			this.tabId = 'register';
