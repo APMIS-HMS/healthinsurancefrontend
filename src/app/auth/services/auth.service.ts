@@ -48,7 +48,7 @@ export class AuthService {
     return this._socket.get(id, query);
   }
   checkAuth(){
-    this._restService._app.logout();
+    // this._restService._app.logout();
     this.logOut();
     if (this._locker.getItem('auth') !== undefined && this._locker.getItem('auth') != null) {
       let auth:any = this._locker.getItem('auth');

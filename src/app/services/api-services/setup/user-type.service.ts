@@ -16,8 +16,12 @@ export class UserTypeService {
     // this._socket = _socketService.getService('user-types');
   }
 
-  find(query: any) {
-    return this._socket.find(query);
+  find(query?: any) {
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
+        return this._socket.find(query);
+      }))
+    });
   }
 
   findAll() {
