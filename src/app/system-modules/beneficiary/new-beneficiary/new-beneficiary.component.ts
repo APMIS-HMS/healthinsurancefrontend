@@ -171,6 +171,8 @@ export class NewBeneficiaryComponent implements OnInit {
 			homeAddress: <Address> {
 				street: this.stepOneFormGroup.controls['streetName'].value,
 				lga: this.stepOneFormGroup.controls['lga'].value,
+				city:'',
+				neighbourhood:'',
 				state: this.stateId,
 				country: this.countryId,
 			},

@@ -1,3 +1,4 @@
+import { BankService } from './../../services/common/bank.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,6 +9,7 @@ import { PlatformOwnerComponent } from './platform-owner.component';
 import { NewPlatformComponent } from './new-platform/new-platform.component';
 import { ListPlatformComponent } from './list-platform/list-platform.component';
 import { DetailsPlatformComponent } from './details-platform/details-platform.component';
+import { PlatformOwnerService } from '../../services/index';
 
 @NgModule({
     declarations: [
@@ -23,7 +25,7 @@ import { DetailsPlatformComponent } from './details-platform/details-platform.co
         ReactiveFormsModule,
         platformRoutes
     ],
-    providers: []
+    providers: [PlatformOwnerService, BankService]
 })
 
 export class PlatformOwnerModule {

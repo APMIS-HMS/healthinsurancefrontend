@@ -87,7 +87,7 @@
                             <div class="col-sm-8">
                                 <select formControlName="businessContactPosition" class="form-control">
                                     <option value="" selected>Select Position</option>
-                                    <option *ngFor="let position of hiaPositions" [ngValue]="position">{{ position.name }}</option>
+                                    <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                                 </select>
                                 <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactPosition.valid || hiaFormGroup.controls.businessContactPosition.pristine">
                                     This is a required field.
@@ -134,7 +134,7 @@
                             <div class="col-sm-8">
                                 <select formControlName="iTContactPosition" class="form-control">
                                     <option value="" selected>Select Position</option>
-                                    <option *ngFor="let position of hiaPositions" [ngValue]="position">{{ position.name }}</option>
+                                    <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                                 </select>
                                 <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactPosition.valid || hiaFormGroup.controls.iTContactPosition.pristine">
                                     This is a required field.
@@ -159,7 +159,7 @@
                             <div class="col-sm-8">
                                 <select formControlName="type" class="form-control">
                                     <option value="" selected>Select Type</option>
-                                    <option *ngFor="let type of hiaTypes" [ngValue]="type">{{ type.name }}</option>
+                                    <option *ngFor="let type of userTypes" [ngValue]="type">{{ type.name }}</option>
                                 </select>
                                 <small class="alert-label" [hidden]="hiaFormGroup.controls.type.valid || hiaFormGroup.controls.type.pristine">
                                     This is a required field.
