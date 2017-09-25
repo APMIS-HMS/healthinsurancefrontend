@@ -69,9 +69,9 @@ export class NewHiaComponent implements OnInit {
 			// plan3: ['', [<any>Validators.required]],
 			nhisNumber: ['', [<any>Validators.required]],
 			cinNumber: ['', [<any>Validators.required]],
-			registrationDate: ['', [<any>Validators.required]]
+			registrationDate: [new Date('dd/mm/yyyy'), [<any>Validators.required]]
 		});
-		this.hiaFormGroup.controls['registrationDate'].setValue(new Date());
+		// this.hiaFormGroup.controls['registrationDate'].setValue(new Date());
 
 	}
 
