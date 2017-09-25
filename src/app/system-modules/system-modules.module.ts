@@ -7,6 +7,7 @@ import { SystemModulesComponent } from './system-modules.component';
 import { systemModulesRoutes } from './system-modules.route';
 
 import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
+import { ContactPositionService } from '../services/index';
 
 @NgModule({
     declarations: [
@@ -14,7 +15,7 @@ import { HeaderEventEmitterService } from '../services/event-emitters/header-eve
     ],
     exports: [],
     imports: [NgbModule, systemModulesRoutes],
-    providers: [HeaderEventEmitterService]
+    providers: [HeaderEventEmitterService, ContactPositionService]
 })
 
 export class SystemModules {

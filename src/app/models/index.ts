@@ -1,5 +1,5 @@
-export * from './setup/address';
-export * from './setup/facility';
+// export * from './setup/address';
+// export * from './setup/facility';
 export * from './setup/gender';
 export * from './setup/title';
 export * from './setup/maritalstatus';
@@ -18,4 +18,13 @@ export * from './setup/facilityservice';
 export * from './setup/beneficiary';
 export * from './setup/hia';
 export * from './setup/care-provider';
-export * from './setup/employer';
+// export * from './setup/employer';
+
+
+export * from './organisation/address';
+export * from './organisation/bank-detail';
+export * from './organisation/contact';
+export * from './organisation/employer';
+export * from './organisation/facility';
+export * from './organisation/hia';
+export * from './organisation/provider';
