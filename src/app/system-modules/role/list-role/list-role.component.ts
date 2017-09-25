@@ -1,7 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+
+import {
+  FacilityTypesService, FacilitiesService
+} from '../../../services/api-services/index';
+import { Facility } from '../../../models/index';
+import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-list-role',
@@ -9,17 +15,26 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
   styleUrls: ['./list-role.component.scss']
 })
 export class ListRoleComponent implements OnInit {
+  roleFormGroup: FormGroup;
   roles: any = <any>[];
   loading: Boolean = true;
   closeResult: String;
+  addBtnText: String = '<i class="fa fa-plus"></i> Add Role';
 
   constructor(
+    private _fb: FormBuilder,
     private _toastr: ToastsManager,
     private modalService: NgbModal,
     private _headerEventEmitter: HeaderEventEmitterService,
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Manage Role');
+    this._headerEventEmitter.setMinorRouteUrl('');
+
+    this.roleFormGroup = this._fb.group({
+      role: ['', [<any>Validators.required]]
+    });
   }
 
   open(content) {

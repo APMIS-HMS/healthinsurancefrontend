@@ -24,8 +24,7 @@ const FLOATING_REGIX = /^[-+]?[0-9]+\.[0-9]+$/
   styleUrls: ['./new-platform.component.scss']
 })
 export class NewPlatformComponent implements OnInit {
-
-  saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+  saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   platformFormGroup: FormGroup;
   hiaPlans: any[] = [];
   contactPositions: any[] = [];
