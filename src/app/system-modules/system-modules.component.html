@@ -93,7 +93,20 @@
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-2'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-2');" class="sidemenu-2">
                         <i class="fa fa-bookmark-o"></i>
-                        <span class="sidemenu-2">Manage Platforms</span>
+                        <span class="sidemenu-2">Manage Role</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class=""><a routerLink="/modules/role/roles"><i class="fa fa-circle-o"></i> Roles</a></li>
+                        <!-- <li class=""><a routerLink="/modules/role/new-role"><i class="fa fa-circle-o"></i> New Role</a></li> -->
+                    </ul>
+                </li>
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-3'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-3');" class="sidemenu-3">
+                        <i class="fa fa-bookmark-o"></i>
+                        <span class="sidemenu-3">Manage Platforms</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -103,10 +116,10 @@
                         <li class=""><a routerLink="/modules/platform/new-platform"><i class="fa fa-circle-o"></i> New Platform</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-3'">
-                    <a (click)="onClickSideMenu($event, 'sidemenu-3');" class="sidemenu-3">
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-4'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-4');" class="sidemenu-4">
                         <i class="fa fa-meh-o"></i>
-                        <span class="sidemenu-3">Manage Beneficiaries</span>
+                        <span class="sidemenu-4">Manage Beneficiaries</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -117,10 +130,10 @@
                     </ul>
                 </li>
 
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-4'">
-                    <a (click)="onClickSideMenu($event, 'sidemenu-4');" class="sidemenu-4">
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-5'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-5');" class="sidemenu-5">
                         <i class="fa fa-handshake-o"></i>
-                        <span class="sidemenu-4">Manage Employers</span>
+                        <span class="sidemenu-5">Manage Employers</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -130,10 +143,10 @@
                         <li class=""><a routerLink="/modules/employer/new-employer"><i class="fa fa-circle-o"></i> New Employer</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-5'">
-                    <a (click)="onClickSideMenu($event, 'sidemenu-5');" class="sidemenu-5">
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-6'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-6');" class="sidemenu-6">
                         <i class="fa fa-bullseye"></i>
-                        <span class="sidemenu-5">Manage Providers</span>
+                        <span class="sidemenu-6">Manage Providers</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -143,10 +156,10 @@
                         <li class=""><a routerLink="/modules/care-provider/new-provider"><i class="fa fa-circle-o"></i> New Provider</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-6'">
-                    <a (click)="onClickSideMenu($event, 'sidemenu-6');" class="sidemenu-6">
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-7'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-7');" class="sidemenu-7">
                         <i class="fa fa-bookmark-o"></i>
-                        <span class="sidemenu-6">Manage HIAs</span>
+                        <span class="sidemenu-7">Manage HIAs</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -156,10 +169,10 @@
                         <li class=""><a routerLink="/modules/hia/new-hia"><i class="fa fa-circle-o"></i> New HIA</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-7'">
-                    <a (click)="onClickSideMenu($event, 'sidemenu-7');" class="sidemenu-7">
+                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-8'">
+                    <a (click)="onClickSideMenu($event, 'sidemenu-8');" class="sidemenu-8">
                         <i class="fa fa-meh-o"></i>
-                        <span class="sidemenu-7">Manage Plans</span>
+                        <span class="sidemenu-8">Manage Plans</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>

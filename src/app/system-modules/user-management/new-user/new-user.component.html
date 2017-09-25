@@ -1,3 +1,37 @@
-<p>
-  new-user works!
-</p>
+<section class="content">
+    <div class="row">
+        <div class="col-12 col-sm-8">
+
+        </div>
+        <div class="col-12 col-sm-4">
+            <a class="btn btn-default border-gray btn-flat text-gray pull-right" routerLink="/modules/role/roles">
+                <i class="fa fa-times"></i> CANCEL
+            </a>
+        </div>
+    </div>
+    <div class="row pad-up">
+        <section class="box border-top">
+            <div class="col-12">
+                <form [formGroup]="userFormGroup" novalidate>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Provider name</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="role" class="form-control">
+                                <small class="alert-label" [hidden]="userFormGroup.controls.role.valid || userFormGroup.controls.role.pristine">
+                                  This is a required field (minimum 3 and max of 50 characters).
+                              </small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-12 pad-all">
+                    <label class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                        <button class="btn btn-primary btn-flat" (click)="onClickSaveNewUser(userFormGroup.value, userFormGroup.valid);" [innerHtml]="saveBtn"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
