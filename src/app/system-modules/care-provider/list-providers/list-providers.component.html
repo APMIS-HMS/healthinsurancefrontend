@@ -7,55 +7,52 @@
 </section>-->
 <section class="content">
     <div class="row">
-        <section class="box">
-            <div class="col-xs-12 col-sm-8 no-padding">
-                <div class="form-group">
-                    <label class="col-sm-2 no-padding control-label">Search: </label>
-                    <div class="col-sm-10 no-padding">
-                        <div class="input-group">
-                            <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
-                            <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
-                        </div>
+        <div class="col-12 col-sm-8">
+            <div class="form-group">
+                <div class="col-12 no-padding">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
+                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-4 no-padding">
-                <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/care-provider/new-provider">
-                    <i class="fa fa-plus-circle"></i> ADD PROVIDER
-                </a>
-            </div>
-        </section>
+        </div>
+        <div class="col-12 col-sm-4">
+            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/care-provider/new-provider">
+                <i class="fa fa-plus-circle"></i> ADD PROVIDER
+            </a>
+        </div>
     </div>
     <div class="row">
-        <section class="box">
+        <section class="col-12">
             <div class="filter-box">
                 <h5>Filters:</h5>
                 <div class="row no-margin-right">
                     <div class="form-group col-sm-6 col-md-4 no-padding">
-                        <label class="col-xs-12 control-label">Classification: </label>
-                        <div class="col-xs-12">
+                        <label class="col-12 control-label">Classification: </label>
+                        <div class="col-12">
                             <select class="form-control">
                                 <option value="all">ALL</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-md-4 no-padding">
-                        <label class="col-xs-12 control-label">Status: </label>
-                        <div class="col-xs-12">
+                        <label class="col-12 control-label">Status: </label>
+                        <div class="col-12">
                             <select class="form-control">
                                 <option value="all">ALL</option>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-sm-6 col-md-4 no-padding">
-                        <label class="col-xs-12 control-label">L.G.A: </label>
-                        <div class="col-xs-12 no-padding-left">
-                            <div class="col-xs-9">
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label class="col-12 no-padding control-label">L.G.A: </label>
+                        <div class="row no-margin-left no-margin-right">
+                            <div class="col-8 no-padding">
                                 <select class="form-control">
                                     <option value="all">ALL</option>
                                 </select>
                             </div>
-                            <div class="col-xs-3 no-padding">
+                            <div class="col-4 no-padding">
                                 <button type="" class="btn btn-default btn-flat text-brand border-brand">RESET</button>
                             </div>
                         </div>
@@ -63,7 +60,7 @@
                 </div>
             </div>
         </section>
-        <section class="col-xs-12">
+        <section class="col-12">
             <div class="table-responsive">
                 <table class="table table-striped" cellspacing="0" width="100%">
                     <thead>
@@ -112,7 +109,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-xs-12 text-center">
+            <div class="col-12 text-center">
                 <button class="btn bg-yellow btn-flat">LOAD MORE</button>
             </div>
         </section>
