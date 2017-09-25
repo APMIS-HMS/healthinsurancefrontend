@@ -1,0 +1,143 @@
+<section class="content">
+    <div class="row">
+        <div class="col-12 col-sm-8">
+            <div class="form-group">
+                <div class="col no-padding">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
+                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4">
+            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/user-management/new-user">
+                <i class="fa fa-plus-circle"></i> New User
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <section class="col-12">
+            <div class="filter-box">
+                <h5>Filters:</h5>
+                <div class="row no-margin-right">
+                    <div class="form-group col-sm-6 col-md-6 col-lg-4 no-padding">
+                        <label class="col-12 control-label">Grading: </label>
+                        <div class="col-12">
+                            <select class="form-control">
+                                <option value="all">ALL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6 col-lg-4 no-padding">
+                        <label class="col-12 control-label">Type: </label>
+                        <div class="col-12">
+                            <select class="form-control">
+                                <option value="all">ALL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-12 col-lg-4">
+                        <label class="col-12 no-padding control-label">Status: </label>
+                        <div class="row no-margin-left no-margin-right">
+                            <div class="col-8 col-sm-6 no-padding">
+                                <select class="form-control">
+                                    <option value="all">ALL</option>
+                                  </select>
+                            </div>
+                            <div class="col-4 col-sm-6 no-padding">
+                                <button type="" class="btn btn-default btn-flat text-brand border-brand pull-right">RESET</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="col-12">
+            <div class="table-responsive">
+                <table class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-gray text-white">
+                            <th>S/N</th>
+                            <th>User</th>
+                            <th>User Type</th>
+                            <th>Reg Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr *ngIf="users.length === 0 && !loading">
+                            <td class="text-center" colspan="7">No data available in table</td>
+                        </tr>
+                        <tr *ngIf="users.length === 0 && loading">
+                            <td class="text-center" colspan="7">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </td>
+                        </tr>
+                        <tr class="tr-link" routerLink="/modules/user-management/users/{{ user._id }}" *ngFor="let user of users">
+                            <td>{{ '1' }}</td>
+                            <td>{{ 'user.employerName' }}</td>
+                            <td>Health Care Insurance</td>
+                            <td>{{ 'user.businessContact.name' }}</td>
+                            <td>{{ 'user.businessContact.phone' }}</td>
+                            <td>A</td>
+                            <td>
+                                <span class="text-red">INACTIVE</span>
+                            </td>
+                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr> -->
+                        <tr class="tr-link">
+                            <td>{{ '1' }}</td>
+                            <td>{{ 'Chisimdi Damian Ezeanieto' }}</td>
+                            <td>{{ 'Benefiaciary' }}</td>
+                            <td>{{ '30/10/2017' }}</td>
+                            <td>
+                                <label class="switch">
+                                  <input type="checkbox" value="" class="input-action-leader-board"/>
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-smaller">Edit Role</button>
+                            </td>
+                        </tr>
+                        <tr class="tr-link">
+                            <td>{{ '2' }}</td>
+                            <td>{{ 'Ademoyegun Abimbola' }}</td>
+                            <td>{{ 'Benefiaciary' }}</td>
+                            <td>{{ '30/10/2017' }}</td>
+                            <td>
+                                <label class="switch">
+                                  <input type="checkbox" value="" class="input-action-leader-board"/>
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-smaller" (click)="open(content)">Edit Role</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 text-center">
+                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+            </div>
+        </section>
+    </div>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">Add Role</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+        </div>
+        <div class="modal-body">
+            <p></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        </div>
+    </ng-template>
+</section>

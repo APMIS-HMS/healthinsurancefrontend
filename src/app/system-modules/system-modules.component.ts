@@ -10,11 +10,11 @@ import { HeaderEventEmitterService } from '../services/event-emitters/header-eve
   styleUrls: ['./system-modules.component.scss']
 })
 export class SystemModulesComponent implements OnInit {
-	pageInView: string = "";
-	minorPageInView: string = "";
-	sideToggle: boolean = false;
-	sideMenuDropdown: boolean = false;
-	sideMenuId: string = "";
+	pageInView: String = '';
+	minorPageInView: String = '';
+	sideToggle: Boolean = false;
+	sideMenuDropdown: Boolean = false;
+	sideMenuId: String = '';
 
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
@@ -34,11 +34,11 @@ export class SystemModulesComponent implements OnInit {
 	onClickSideToggle() {
 		this.sideToggle = !this.sideToggle;
 	}
-	
+
 	onClickSideMenu(event, identifier) {
-		var target = event.target || event.srcElement || event.currentTarget;
+		let target = event.target || event.srcElement || event.currentTarget;
 		this.sideMenuId = target.className;
-		if(this.sideMenuDropdown && this.sideMenuId == identifier) {
+		if (this.sideMenuDropdown && this.sideMenuId === identifier) {
 			this.sideMenuDropdown = !this.sideMenuDropdown;
 		} else {
 			this.sideMenuDropdown = !this.sideMenuDropdown;

@@ -1,302 +1,344 @@
 <section class="content">
-  <div class="row pad-all">
-    <div class="cont-sect-subhead col-xs-12 no-padding">
-      <div class="pg-subtitle-wrap">
-        <div class="profileImg-wrap"><img alt="" src="assets/img/lagos-state-logo.jpg"></div>
-        <div class="pg-subtitle">Lagos State Health Management Agency <span>(LASHMA)</span></div>
-      </div>
-      <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/platform/platforms">
-        <i class="fa fa-chevron-left"></i> BACK TO PLATFORMS
-      </button>
+    <div class="row pad-all">
+        <div class="col-12 col-sm-7 pg-subtitle-wrap">
+            <div class="profileImg-wrap"><img alt="" src="assets/img/lagos-state-logo.jpg"></div>
+            <div class="pg-subtitle">Lagos State Health Management Agency <span>(LASHMA)</span></div>
+        </div>
+        <div class="col-12 col-sm-5">
+            <button class="btn btn-default text-brand border-brand pull-right" routerLink="/modules/platform/platforms">
+                <i class="fa fa-chevron-left"></i> BACK TO PLATFORMS
+            </button>
+        </div>
     </div>
-  </div>
 
-  <div class="tab-content">
-      <div id="home" class="tab-pane fade in active">
-          <div class="row  pad-all">
-            <div class="inner-content-area shadow">
-              <div class="field-group col-sm-12 col-md-4">
+    <div class="row pad-all">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div class="box pad-all bg-green">
                 <div class="field-wrap">
-                  <div class="field-label">Email Address</div>
-                  <div class="field-val">admin@lashma.com</div>
+                    <div class="field-label">Email Address</div>
+                    <div class="field-val">admin@lashma.com</div>
                 </div>
 
                 <div class="field-wrap">
-                  <div class="field-label">Website</div>
-                  <div class="field-val">www.lashma.com</div>
+                    <div class="field-label">Website</div>
+                    <div class="field-val">www.lashma.com</div>
                 </div>
 
                 <div class="field-wrap">
-                  <div class="field-label">Email Address</div>
-                  <div class="field-val">admin@lashma.com</div>
+                    <div class="field-label">Email Address</div>
+                    <div class="field-val">admin@lashma.com</div>
                 </div>
 
                 <div class="field-wrap">
-                  <div class="field-label">Address</div>
-                  <div class="field-val">No. 10 Jobi Fele WAy, Alausa, Ikeja, Lagos Nigeria.</div>
+                    <div class="field-label">Address</div>
+                    <div class="field-val">No. 10 Jobi Fele WAy, Alausa, Ikeja, Lagos Nigeria.</div>
                 </div>
-              </div>
+            </div>
+        </div>
 
-              <div class="field-group col-sm-12 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div class="box pad-all">
                 <div class="field-wrap">
-                  <div class="field-label">Business Contact Name</div>
-                  <div class="field-val">Johnny John</div>
-                </div>
-
-                <div class="field-wrap">
-                  <div class="field-label">Business Contact Phone No.</div>
-                  <div class="field-val">08099889900</div>
+                    <div class="field-label">Business Contact Name</div>
+                    <div class="field-val">Johnny John</div>
                 </div>
 
                 <div class="field-wrap">
-                  <div class="field-label">Business Contact Email</div>
-                  <div class="field-val">johnny.john@lashma.com</div>
+                    <div class="field-label">Business Contact Phone No.</div>
+                    <div class="field-val">08099889900</div>
                 </div>
-              </div>
 
-              <div class="field-group col-sm-12 col-md-4">
                 <div class="field-wrap">
-                  <div class="field-label">IT Contact Name</div>
-                  <div class="field-val">Sammy John</div>
+                    <div class="field-label">Business Contact Email</div>
+                    <div class="field-val">johnny.john@lashma.com</div>
                 </div>
-  
-                <div class="field-wrap">
-                  <div class="field-label">IT Contact Phone No.</div>
-                  <div class="field-val">08099889900</div>
-                </div>
-  
-                <div class="field-wrap">
-                  <div class="field-label">IT Contact Email</div>
-                  <div class="field-val">sammy.john@lashma.com</div>
-                </div>
-              </div>
-            </div>              
-          </div>
+            </div>
+        </div>
 
-          <div class="row  pad-all stat-wrap">
-              <div class="col-xs-12 col-sm-6 col-md-3">
-                <div (click)="hias_show()" class="inner-content-area shadow">
-                    <div class="stat-ico-wrap"><i class="stat-ico fa fa-ambulance" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="stat-val">200</div>
-                        <div class="stat-label">HIAs</div>
-                    </div>
+        <div class="col-12 col-sm-12 col-md-4">
+            <div class="box pad-all">
+                <div class="field-wrap">
+                    <div class="field-label">IT Contact Name</div>
+                    <div class="field-val">Sammy John</div>
                 </div>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-3">
-                <div (click)="employers_show()" class="inner-content-area shadow">
-                    <div class="stat-ico-wrap"><i class="stat-ico fa fa-building" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="stat-val">600</div>
-                        <div class="stat-label">Employers</div>
-                    </div>
-                </div>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-3">
-                <div (click)="providers_show()" class="inner-content-area shadow">
-                    <div class="stat-ico-wrap"><i class="stat-ico fa fa-heartbeat" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="stat-val">200</div>
-                        <div class="stat-label">Providers</div>
-                    </div>
-                </div>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-3">
-                <div (click)="employees_show()" class="inner-content-area shadow">
-                    <div class="stat-ico-wrap"><i class="stat-ico fa fa-users" aria-hidden="true"></i></div>
-                    <div>
-                        <div class="stat-val">100</div>
-                        <div class="stat-label">Employees</div>
-                    </div>
-                </div>
-              </div>
-          </div>
 
-          <div class="row">
-            <div *ngIf="showEmp" class="tbl-wrap col-xs-12">
-              <div class="cont-sect-subhead col-xs-12 no-padding">
+                <div class="field-wrap">
+                    <div class="field-label">IT Contact Phone No.</div>
+                    <div class="field-val">08099889900</div>
+                </div>
+
+                <div class="field-wrap">
+                    <div class="field-label">IT Contact Email</div>
+                    <div class="field-val">sammy.john@lashma.com</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pad-all">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-brand"><i class="fa fa-ambulance"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">HIA</span>
+                    <span class="info-box-number">1000</span>
+                    <a href="" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-bed"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Providers</span>
+                    <span class="info-box-number">1000</span>
+                    <a href="" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-heartbeat"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Employers</span>
+                    <span class="info-box-number">1000</span>
+                    <a href="" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="fa fa-users"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Beneficiaries</span>
+                    <span class="info-box-number">1000</span>
+                    <a href="" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pad-all">
+        <div class="col-12 col-sm-6 col-md-3">
+            <div (click)="hias_show()" class="inner-content-area shadow">
+                <div class="stat-ico-wrap"><i class="stat-ico fa fa-ambulance" aria-hidden="true"></i></div>
+                <div>
+                    <div class="stat-val">200</div>
+                    <div class="stat-label">HIAs</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div (click)="employers_show()" class="inner-content-area shadow">
+                <div class="stat-ico-wrap"><i class="stat-ico fa fa-building" aria-hidden="true"></i></div>
+                <div>
+                    <div class="stat-val">600</div>
+                    <div class="stat-label">Employers</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div (click)="providers_show()" class="inner-content-area shadow">
+                <div class="stat-ico-wrap"><i class="stat-ico fa fa-heartbeat" aria-hidden="true"></i></div>
+                <div>
+                    <div class="stat-val">200</div>
+                    <div class="stat-label">Providers</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div (click)="employees_show()" class="inner-content-area shadow">
+                <div class="stat-ico-wrap"><i class="stat-ico fa fa-users" aria-hidden="true"></i></div>
+                <div>
+                    <div class="stat-val">100</div>
+                    <div class="stat-label">Employees</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pad-all">
+        <div *ngIf="showEmp" class="tbl-wrap col-12">
+            <div class="cont-sect-subhead col-12 no-padding">
                 <div class="tbl-title">{{platform}} Table of Employees</div>
                 <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/platform/platforms">
                   <i class="fa fa-plus"></i> New Employee
                 </button>
-              </div>
-              <div class="">
-                  <table class="table table-striped" cellspacing="0" width="100%">
-                      <thead>
-                          <tr class="bg-gray text-white">
-                              <th>Name</th>
-                              <th>Gender</th>
-                              <th>LASHMA ID</th>
-                              <th>DOB</th>
-                              <th>Role</th>
-                              <th>L.G.A</th>
-                              <th>HIA</th>
-                              <th>Status</th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <!--<tr>
+            </div>
+            <div class="">
+                <table class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-gray text-white">
+                            <th>Name</th>
+                            <th>Gender</th>
+                            <th>LASHMA ID</th>
+                            <th>DOB</th>
+                            <th>Role</th>
+                            <th>L.G.A</th>
+                            <th>HIA</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--<tr>
                               <td class="text-center" colspan="9">No data available in table</td>
                           </tr>-->
-                          <tr class="tr-link" routerLink="/modules/beneficiary/beneficiaries/09493093489034">
-                              <td>Prof. Rose Nwangwu</td>
-                              <td>F</td>
-                              <td>134.912.092.00</td>
-                              <td>12-12-1979 (30)</td>
-                              <td><span class="badge">P</span> +4</td>
-                              <td>Alimosho</td>
-                              <td>Name of HIA</td>
-                              <td class="text-success">Active</td>
-                              <td><i class="fa fa-chevron-right"></i></td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-              <div class="col-xs-12 text-center">
-                  <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-              </div>
+                        <tr class="tr-link" routerLink="/modules/beneficiary/beneficiaries/09493093489034">
+                            <td>Prof. Rose Nwangwu</td>
+                            <td>F</td>
+                            <td>134.912.092.00</td>
+                            <td>12-12-1979 (30)</td>
+                            <td><span class="badge">P</span> +4</td>
+                            <td>Alimosho</td>
+                            <td>Name of HIA</td>
+                            <td class="text-success">Active</td>
+                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            <div class="col-12 text-center">
+                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+            </div>
+        </div>
 
-            <div *ngIf="showProviders" class="tbl-wrap col-xs-12">
-              <div class="cont-sect-subhead col-xs-12 no-padding">
+        <div *ngIf="showProviders" class="tbl-wrap col-12">
+            <div class="cont-sect-subhead col-12 no-padding">
                 <div class="tbl-title">{{platform}} Table of Care Providers</div>
                 <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/care-provider/new-provider">
                   <i class="fa fa-plus"></i> New Care Provider
                 </button>
-              </div>
-              <div class="">
-                  <table class="table table-striped" cellspacing="0" width="100%">
-                      <thead>
-                          <tr class="bg-gray text-white">
-                              <th>Name Provider</th>
-                              <th>L.G.A</th>
-                              <th>Contact Person</th>
-                              <th>Phone number</th>
-                              <th>Primary</th>
-                              <th>Secondary</th>
-                              <th>Tertiary</th>
-                              <th>Grade</th>
-                              <th>Status</th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr class="tr-link" routerLink="/modules/care-provider/providers/223322212">
-                              <td>Lagoon Hospital</td>
-                              <td>Ikeja</td>
-                              <td>Jonathan Phils</td>
-                              <td>08099889900</td>
-                              <td class="text-center">
-                                  <input type="checkbox">
-                              </td>
-                              <td class="text-center">
-                                  <input type="checkbox">
-                              </td>
-                              <td class="text-center">
-                                  <input type="checkbox">
-                              </td>
-                              <td>A</td>
-                              <td>
-                                  <span class="text-success"> 
+            </div>
+            <div class="">
+                <table class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-gray text-white">
+                            <th>Name Provider</th>
+                            <th>L.G.A</th>
+                            <th>Contact Person</th>
+                            <th>Phone number</th>
+                            <th>Primary</th>
+                            <th>Secondary</th>
+                            <th>Tertiary</th>
+                            <th>Grade</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-link" routerLink="/modules/care-provider/providers/223322212">
+                            <td>Lagoon Hospital</td>
+                            <td>Ikeja</td>
+                            <td>Jonathan Phils</td>
+                            <td>08099889900</td>
+                            <td class="text-center">
+                                <input type="checkbox">
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox">
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox">
+                            </td>
+                            <td>A</td>
+                            <td>
+                                <span class="text-success"> 
                                       Active
                                   </span>
-                              </td>
-                              <td><i class="fa fa-chevron-right"></i></td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-              <div class="col-xs-12 text-center">
-                  <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-              </div>
+                            </td>
+                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            <div class="col-12 text-center">
+                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+            </div>
+        </div>
 
-            <div *ngIf="showEmployers" class="tbl-wrap col-xs-12">
-              <div class="cont-sect-subhead col-xs-12 no-padding">
+        <div *ngIf="showEmployers" class="tbl-wrap col-12">
+            <div class="cont-sect-subhead col-12 no-padding">
                 <div class="tbl-title">{{platform}} Table of Employers</div>
                 <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/employer/new-employer">
                   <i class="fa fa-plus"></i> New Employer
                 </button>
-              </div>
-              <div class="">
-                  <table class="table table-striped" cellspacing="0" width="100%">
-                      <thead>
-                          <tr class="bg-gray text-white">
-                              <th>Name</th>
-                              <th>Contact Person</th>
-                              <th>Phone number</th>
-                              <th>No. of Employers</th>
-                              <th>Industry Type</th>
-                              <th>CAC number</th>
-                              <th>CIN number</th>
-                              <th>Status</th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr class="tr-link" routerLink="/modules/employer/employers/5444555">
-                              <td>Zenith Bank PLC.</td>
-                              <td>Joel Jade</td>
-                              <td>08099889988</td>
-                              <td class="text-right">08099009009</td>
-                              <td>Information Technology</td>
-                              <td>RC10098</td>
-                              <td>B21AD</td>
-                              <td>
-                                  <span class="text-success"> Active</span>
-                              </td>
-                              <td><i class="fa fa-chevron-right"></i></td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-              <div class="col-xs-12 text-center">
-                  <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-              </div>
             </div>
+            <div class="">
+                <table class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-gray text-white">
+                            <th>Name</th>
+                            <th>Contact Person</th>
+                            <th>Phone number</th>
+                            <th>No. of Employers</th>
+                            <th>Industry Type</th>
+                            <th>CAC number</th>
+                            <th>CIN number</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-link" routerLink="/modules/employer/employers/5444555">
+                            <td>Zenith Bank PLC.</td>
+                            <td>Joel Jade</td>
+                            <td>08099889988</td>
+                            <td class="text-right">08099009009</td>
+                            <td>Information Technology</td>
+                            <td>RC10098</td>
+                            <td>B21AD</td>
+                            <td>
+                                <span class="text-success"> Active</span>
+                            </td>
+                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 text-center">
+                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+            </div>
+        </div>
 
-            <div *ngIf="showHias" class="tbl-wrap col-xs-12">
-              <div class="cont-sect-subhead col-xs-12 no-padding">
+        <div *ngIf="showHias" class="tbl-wrap col-12">
+            <div class="cont-sect-subhead col-12 no-padding">
                 <div class="tbl-title">{{platform}} Table of HIAs</div>
                 <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/hia/new-hia">
                   <i class="fa fa-plus"></i> New HIA
                 </button>
-              </div>
-              <div class="">
-                  <table class="table table-striped" cellspacing="0" width="100%">
-                      <thead>
-                          <tr class="bg-gray text-white">
-                              <th>Name HIA</th>
-                              <th>Type</th>
-                              <th>Contact Person</th>
-                              <th>Phone number</th>
-                              <th>Grade</th>
-                              <th>Status</th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr class="tr-link" routerLink="/modules/hia/hias/33223333">
-                              <td>Sharzar Insurance</td>
-                              <td>Health Care Insurance</td>
-                              <td>Jenna Bricks</td>
-                              <td>08088777766</td>
-                              <td>A</td>
-                              <td>
-                                  <span class="text-red">INACTIVE</span>
-                                  <!--<span class="text-success">Active</span>-->
-                              </td>
-                              <td><i class="fa fa-chevron-right"></i></td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-              <div class="col-xs-12 text-center">
-                  <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-              </div>
             </div>
-          </div>
-      </div>
-  </div>
+            <div class="">
+                <table class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="bg-gray text-white">
+                            <th>Name HIA</th>
+                            <th>Type</th>
+                            <th>Contact Person</th>
+                            <th>Phone number</th>
+                            <th>Grade</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-link" routerLink="/modules/hia/hias/33223333">
+                            <td>Sharzar Insurance</td>
+                            <td>Health Care Insurance</td>
+                            <td>Jenna Bricks</td>
+                            <td>08088777766</td>
+                            <td>A</td>
+                            <td>
+                                <span class="text-red">INACTIVE</span>
+                                <!--<span class="text-success">Active</span>-->
+                            </td>
+                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 text-center">
+                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+            </div>
+        </div>
+    </div>
 </section>

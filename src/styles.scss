@@ -759,6 +759,7 @@
     body {
         background-color: $brand-primary;
         font-family: $font-family;
+        font-size: 0.8rem;
         margin: -20px 0;
     }
     
@@ -903,6 +904,10 @@
         padding: 3px 6px !important;
     }
     
+    .btn-smaller {
+        padding: 2px 4px !important;
+    }
+    
     .btn {
         border-radius: 3px;
         -webkit-box-shadow: none;
@@ -919,6 +924,7 @@
     
     .box {
         padding: 15px;
+        width: 100%;
     }
     
     // Css colors
@@ -1177,6 +1183,156 @@
             padding: 15px 15px 15px 15px;
             margin-right: auto;
             margin-left: auto;
+            .info-box {
+                display: block;
+                min-height: 90px;
+                background-color: $white;
+                width: 100%;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+                border-radius: 2px;
+                margin-bottom: 15px;
+                .info-box-icon {
+                    border-top-left-radius: 2px;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                    border-bottom-left-radius: 2px;
+                    display: block;
+                    float: left;
+                    color: $white;
+                    margin-top: 15px;
+                    margin-left: 10px;
+                    height: 60px;
+                    width: 60px;
+                    border-radius: 50%;
+                    text-align: center;
+                    font-size: 36px;
+                    line-height: 1.8;
+                    background: rgba(0, 0, 0, 0.2);
+                }
+                .info-box-content {
+                    padding: 5px 10px;
+                    margin-left: 70px;
+                    .info-box-text {
+                        text-transform: uppercase;
+                        display: block;
+                        font-size: 16px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    .info-box-number {
+                        display: block;
+                        font-weight: bold;
+                        font-size: 20px;
+                    }
+                }
+            }
+            .box {
+                background: $white;
+                border-radius: 3px;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+                border-top: 3px solid #d2d6de;
+                margin-bottom: 20px;
+                width: 100%;
+                position: relative;
+                .box-header {
+                    color: #444;
+                    display: block;
+                    padding: 10px;
+                    position: relative;
+                    &.with-border {
+                        border-bottom: 1px solid #f4f4f4;
+                    }
+                    >.box-title {
+                        display: inline-block;
+                        font-size: 18px;
+                        margin: 0;
+                        line-height: 1;
+                    }
+                    >.box-tools {
+                        position: absolute;
+                        right: 10px;
+                        top: 5px;
+                    }
+                }
+                &.box-info {
+                    border-top-color: $brand-info;
+                }
+                &.box-danger {
+                    border-top-color: $brand-danger;
+                }
+                &.box-danger {
+                    border-top-color: $brand-danger;
+                }
+                .box-body {
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 3px;
+                    border-bottom-left-radius: 3px;
+                    padding: 10px;
+                }
+                .box-footer {
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 3px;
+                    border-bottom-left-radius: 3px;
+                    border-top: 1px solid #f4f4f4;
+                    padding: 10px;
+                    background-color: #fff;
+                }
+            }
+            /* The switch - the box around the slider */
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 30px;
+                height: 17px;
+                /* Hide default HTML checkbox */
+                >input {
+                    display: none;
+                }
+                /* The slider */
+                .slider {
+                    position: absolute;
+                    cursor: pointer;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: #ccc;
+                    -webkit-transition: .4s;
+                    transition: .4s;
+                    &:before {
+                        position: absolute;
+                        content: "";
+                        height: 13px;
+                        width: 13px;
+                        left: 4px;
+                        bottom: 2px;
+                        background-color: white;
+                        -webkit-transition: .4s;
+                        transition: .4s;
+                    }
+                    /* Rounded sliders */
+                    &.round {
+                        border-radius: 34px;
+                        &:before {
+                            border-radius: 50%;
+                        }
+                    }
+                }
+                input:checked+.slider {
+                    background-color: $brand-primary; //#2196F3;
+                }
+                input:focus+.slider {
+                    box-shadow: 0 0 1px $brand-primary;
+                }
+                input:checked+.slider:before {
+                    -webkit-transform: translateX(10px);
+                    -ms-transform: translateX(10px);
+                    transform: translateX(10px);
+                }
+            }
         }
         @include breakpoint(max-width $screen-xs-max) {
             margin-left: 0;
@@ -1211,6 +1367,8 @@
         .user-panel {
             position: relative;
             width: 100%;
+            height: auto;
+            min-height: 100px;
             padding: 10px 10px 10px 10px;
             overflow: hidden;
             &:before,
@@ -1225,6 +1383,7 @@
                 width: 100%;
                 max-width: 50px;
                 height: 50px;
+                border-radius: 50%;
             }
             >.info {
                 padding: 5px 5px 5px 15px;
@@ -1234,6 +1393,9 @@
                 >p {
                     font-weight: 600;
                     margin-bottom: 9px;
+                }
+                >.role {
+                    color: $gray-light-3;
                 }
                 >a {
                     text-decoration: none;
@@ -1346,7 +1508,8 @@
                         cursor: pointer;
                         color: $white;
                         display: block;
-                        font-size: 14px;
+                        font-size: 12px;
+                        border-left: 5px solid $brand-primary;
                         >.fa,
                         >.glyphicon,
                         >.ion {
@@ -1417,8 +1580,8 @@
             }
         }
     }
-
-    .profileImg-wrap{
+    
+    .profileImg-wrap {
         width: 45px;
         border-radius: 100%;
         margin-right: 5px;
@@ -1428,9 +1591,11 @@
         justify-content: center;
         align-items: center;
     }
-    .profileImg-wrap img{
+    
+    .profileImg-wrap img {
         width: 100%;
     }
+    
     .shadow {
         -webkit-box-shadow: 0 8px 6px -6px black;
         -moz-box-shadow: 0 8px 6px -6px black;
