@@ -29,6 +29,9 @@ export class ListRoleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Manage Role');
+    this._headerEventEmitter.setMinorRouteUrl('');
+
     this.roleFormGroup = this._fb.group({
       role: ['', [<any>Validators.required]]
     });
