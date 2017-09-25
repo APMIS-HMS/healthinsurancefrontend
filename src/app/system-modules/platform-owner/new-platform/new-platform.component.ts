@@ -24,10 +24,10 @@ const FLOATING_REGIX = /^[-+]?[0-9]+\.[0-9]+$/
   styleUrls: ['./new-platform.component.scss']
 })
 export class NewPlatformComponent implements OnInit {
-
-  saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+  saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   platformFormGroup: FormGroup;
-  
+  contactPositions: any = <any>[];
+  banks: any = <any>[];
     constructor(
       private _fb: FormBuilder,
       private _toastr: ToastsManager,
@@ -57,6 +57,10 @@ export class NewPlatformComponent implements OnInit {
         it_email:  ['', [<any>Validators.required, <any>Validators.pattern('^([a-z0-9_\.-]+)@([\da-z\.-]+)(com|org|CO.UK|co.uk|net|mil|edu|ng|COM|ORG|NET|MIL|EDU|NG)$')]],        
         it_phone: ['', [<any>Validators.required]],
       });
+    }
+
+    onClickSaveNewPlatform(valid: Boolean, value: any) {
+      console.log(value);
     }
   
 }

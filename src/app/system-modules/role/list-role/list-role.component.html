@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="col-12 col-sm-4">
-            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/user-management/new-user">
+            <a class="btn btn-primary btn-flat text-white pull-right" (click)="open(content)">
                 <i class="fa fa-plus-circle"></i> New Role
             </a>
         </div>
@@ -114,7 +114,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-xs-12 text-center">
+            <div class="col-12 text-center">
                 <button class="btn bg-yellow btn-flat">LOAD MORE</button>
             </div>
         </section>
@@ -128,16 +128,24 @@
     </button>
         </div>
         <div class="modal-body">
-            <div class="col">
-                <div class="check-box-container">
-                    <label for="squaredTwo">
-                        <input type="checkbox" class="check-box" checked />Administration Officer
-                    </label>
+            <div class="row">
+                <div class="col-12">
+                    <form [formGroup]="roleFormGroup" novalidate>
+                        <div class="form-group col-12">
+                            <label class="col-12 no-padding control-label">Role Name: </label>
+                            <div class="col-12 no-padding">
+                                <input type="text" formControlName="role" placeholder="Administration Officer" class="form-control">
+                                <small class="alert-label" [hidden]="roleFormGroup.controls.role.valid || roleFormGroup.controls.role.pristine">
+                            This is a required field (minimum 3 and max of 50 characters).
+                        </small>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="check-box-container">
-                    <label for="squaredTwo">
-                        <input type="checkbox" class="check-box" />Registration Officer
-                    </label>
+                <div class="col-12 text-right">
+                    <div class="col">
+                        <button class="btn btn-primary btn-flat" [innerHtml]="addBtnText"></button>
+                    </div>
                 </div>
             </div>
         </div>
