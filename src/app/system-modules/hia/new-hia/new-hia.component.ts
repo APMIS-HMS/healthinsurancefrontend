@@ -24,9 +24,13 @@ export class NewHiaComponent implements OnInit {
 	contactPositions: any = [];
 	plans: any = [];
 	userTypes: any[] = [];
+	countries: any[] = [];
+	states: any[] = [];
+	lgs: any[] = [];
+	cities: any[] = [];
 	saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
 
-	selectedUserType:any;
+	selectedUserType: any;
 
 	constructor(
 		private _fb: FormBuilder,
@@ -37,7 +41,7 @@ export class NewHiaComponent implements OnInit {
 		private _hiaPlanService: HiaPlanService,
 		private _hiaPositionService: HiaPositionService,
 		private _userTypeService: UserTypeService,
-		private _contactPositionService:ContactPositionService
+		private _contactPositionService: ContactPositionService
 	) { }
 
 	ngOnInit() {
@@ -69,10 +73,8 @@ export class NewHiaComponent implements OnInit {
 			// plan3: ['', [<any>Validators.required]],
 			nhisNumber: ['', [<any>Validators.required]],
 			cinNumber: ['', [<any>Validators.required]],
-			registrationDate: [new Date('dd/mm/yyyy'), [<any>Validators.required]]
+			registrationDate: ['', [<any>Validators.required]]
 		});
-		// this.hiaFormGroup.controls['registrationDate'].setValue(new Date());
-
 	}
 
 	onClickSaveHia(value: any, valid: boolean) {
@@ -133,21 +135,21 @@ export class NewHiaComponent implements OnInit {
 	_getUserTypes() {
 		this._userTypeService.findAll().then((payload: any) => {
 			if (payload.data.length > 0) {
-			  console.log(payload.data)
-			  this.userTypes = payload.data;
-			  const index = payload.data.findIndex(x => x.name === 'Health Insurance Agent');
-			  if (index > -1) {
-				this.selectedUserType = payload.data[index];
-				this.hiaFormGroup.controls['type'].setValue(this.selectedUserType);
-			  } else {
-				this.selectedUserType = undefined;
-				this.hiaFormGroup.controls['type'].reset();
-			  }
-			  console.log(this.selectedUserType);
+				console.log(payload.data)
+				this.userTypes = payload.data;
+				const index = payload.data.findIndex(x => x.name === 'Health Insurance Agent');
+				if (index > -1) {
+					this.selectedUserType = payload.data[index];
+					this.hiaFormGroup.controls['type'].setValue(this.selectedUserType);
+				} else {
+					this.selectedUserType = undefined;
+					this.hiaFormGroup.controls['type'].reset();
+				}
+				console.log(this.selectedUserType);
 			}
-		  }, error => {
-	  
-		  })
+		}, error => {
+
+		})
 	}
 
 	_getHiaPlans() {
