@@ -1,0 +1,72 @@
+@import "../../../../styles.scss";
+.box-content-header {
+    background-color: $brand-primary;
+    color: $white;
+    padding: 10px;
+}
+.box{
+    padding: 0 15px;
+}
+
+// .nav-tabs>li.active>a,
+// .nav-tabs>li.active>a:hover,
+// .nav-tabs>li.active>a:focus {
+//     color: #555;
+//     cursor: default;
+//     background-color: #fff;
+//     border-bottom-color: transparent;
+// }
+.nav-tabs {
+    border-bottom: 1px solid $brand-primary;
+    >li {
+        background-color: $white;
+        color: #337ab7;
+        >a {
+            margin-right: 0px;
+            border: 1px solid #337ab7;
+            border-radius: 0px;
+            background: transparent;
+        }
+        &.active {
+            >a {
+                color: $white;
+            }
+            background: lighten($brand-primary, 7%);
+            color: $white;
+        }
+    }
+}
+.tr-link td i{
+    color: lighten($brand-primary, 7%);
+}
+
+.tab-content {
+    background-color: $white;
+}
+.content-top-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 10px;
+    background: lighten($brand-primary, 7%);
+    color: lighten($brand-primary, 70%);
+}
+.content-top-bar img{
+    width: 68px;
+}
+
+.box-body {
+    .img-box {
+        .badge {
+            position: absolute;
+            left: 30px;
+            top: 10px;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+            height: 125px;
+            width: 125px;
+        }
+    }
+}

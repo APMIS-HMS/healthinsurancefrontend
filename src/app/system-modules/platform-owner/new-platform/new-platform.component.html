@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Platform ShortName</label>
+                            <label class="col-sm-4 control-label">Platform Short Name</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="shortName" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.shortName.valid || platformFormGroup.controls.shortName.pristine">
@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label pad-left-2">Email</label>
+                            <label class="col-sm-4 control-label">Platform Email</label>
                             <div class="col-sm-8">
                                 <input type="email" formControlName="email" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.email.valid || platformFormGroup.controls.email.pristine">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label pad-left-2">Website</label>
+                            <label class="col-sm-4 control-label">Platform Website</label>
                             <div class="col-sm-8">
                                 <input type="email" formControlName="website" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.website.valid || platformFormGroup.controls.website.pristine">
@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label pad-left-2">Address</label>
+                            <label class="col-sm-4 control-label">Platform Address</label>
                             <div class="col-sm-8">
                                 <input type="email" formControlName="address" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.address.valid || platformFormGroup.controls.address.pristine">
@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Business Contact's Last Name</label>
+                            <label class="col-sm-4 control-label pad-left-2">Business Contact's Last Name</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="bc_lname" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.bc_lname.valid || platformFormGroup.controls.bc_lname.pristine">
@@ -155,7 +155,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Business Contact's Phone number</label>
+                            <label class="col-sm-4 control-label pad-left-2">Business Contact's Phone number</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="bc_phone" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.bc_phone.valid || platformFormGroup.controls.bc_phone.pristine">
@@ -177,7 +177,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">IT Contact's Last Name</label>
+                            <label class="col-sm-4 control-label pad-left-2">IT Contact's Last Name</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="it_lname" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.it_lname.valid || platformFormGroup.controls.it_lname.pristine">
@@ -213,7 +213,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">IT Contact's Phone number</label>
+                            <label class="col-sm-4 control-label pad-left-2">IT Contact's Phone number</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="it_phone" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.it_phone.valid || platformFormGroup.controls.it_phone.pristine">
@@ -225,82 +225,9 @@
                     
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Plans</label>
+                            <label class="col-sm-4 control-label">Upload Logo</label>
                             <div class="col-sm-8">
-                                <select formControlName="plan" class="form-control">
-                                    <option value="" selected>Select Plans</option>
-                                    <option *ngFor="let hiaPlan of hiaPlans" [ngValue]="hiaPlan">{{ hiaPlan.name }}</option>
-                                </select>
-                                <small class="alert-label" [hidden]="platformFormGroup.controls.plan.valid || platformFormGroup.controls.plan.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <!--<div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8">
-                                <select formControlName="plan2" class="form-control">
-                                    <option value="State Health Plan" selected>State Health Plan</option>
-                                </select>
-                                <small class="alert-label" [hidden]="platformFormGroup.controls.plan2.valid || platformFormGroup.controls.plan2.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8">
-                                <select formControlName="plan3" class="form-control">
-                                    <option value="Private Medical Insurance" selected>Private Medical Insurance</option>
-                                </select>
-                                <small class="alert-label" [hidden]="platformFormGroup.controls.plan3.valid || platformFormGroup.controls.plan3.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>-->
-                    <div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">NHIS number</label>
-                            <div class="col-sm-8">
-                                <input type="text" formControlName="nhisNumber" class="form-control">
-                                <small class="alert-label" [hidden]="platformFormGroup.controls.nhisNumber.valid || platformFormGroup.controls.nhisNumber.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">CIN number</label>
-                            <div class="col-sm-8">
-                                <input type="text" formControlName="cinNumber" class="form-control">
-                                <small class="alert-label" [hidden]="platformFormGroup.controls.cinNumber.valid || platformFormGroup.controls.cinNumber.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Registration Date</label>
-                            <div class="col-sm-8">
-                                <input type="date" formControlName="registrationDate" class="form-control">
-                                <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Photos</label>
-                            <div class="col-sm-8">
-                                <button class="btn btn-default btn-flat border-brand text-brand">Search Photo</button>
+                                <button class="btn btn-default btn-flat border-brand text-brand">Select Photo</button>
                             </div>
                         </div>
                     </div>
@@ -308,7 +235,7 @@
                 <div class="col-xs-12 pad-all">
                     <label class="col-sm-4 control-label"></label>
                     <div class="col-sm-8">
-                        <button (click)="save()" class="btn btn-primary btn-flat" [disabled]="!platformFormGroup.valid" [innerHtml]="saveBtn"></button>
+                        <button class="btn btn-primary btn-flat" [disabled]="!platformFormGroup.valid" (click)="onClickSaveHia(platformFormGroup.value, platformFormGroup.valid);" [innerHtml]="saveBtn"></button>
                     </div>
                 </div>
             </div>
