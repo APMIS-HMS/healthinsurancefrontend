@@ -14,7 +14,9 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 })
 export class NewPlanComponent implements OnInit {
 
-  providerFormGroup: FormGroup;
+  planDetailFormGroup: FormGroup;
+  planPremiumFormGroup: FormGroup;
+
 	positions: any = [];
 	lgas: any = [];
 	countryId: string = "";
@@ -23,7 +25,15 @@ export class NewPlanComponent implements OnInit {
 	grades: any = GRADES;
 	ownerships: any = [];
 	HEFAMAA_STATUSES: any = HEFAMAA_STATUSES;
-	saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+  saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+  
+  tab_details = true;
+  tab_premium = false;
+  tab_drugs = false;
+  tab_tests = false;
+  tab_procedures = false;
+  tab_diagnosis = false;
+  tab_confirm = false;
 
 	constructor(
 		private _fb: FormBuilder,
@@ -40,128 +50,81 @@ export class NewPlanComponent implements OnInit {
 		this._headerEventEmitter.setRouteUrl('New Plan');
     this._headerEventEmitter.setMinorRouteUrl('');
 
-		this.getPositions();
-		this.getCountries();
-		this.getFacilityTypes();
-		this.getOwnerships();
-
-		this.providerFormGroup = this._fb.group({
-			providerName: ['', [<any>Validators.required]],
-			address: ['', [<any>Validators.required]],
-			neighbourhood: ['', [<any>Validators.required]],
-			phone: ['', [<any>Validators.required]],
-			contactName: ['', [<any>Validators.required]],
-			contactNumber: ['', [<any>Validators.required]],
-			contactPosition: ['', [<any>Validators.required]],
-			contactEmail:  ['', [<any>Validators.required, <any>Validators.pattern('^([a-z0-9_\.-]+)@([\da-z\.-]+)(com|org|CO.UK|co.uk|net|mil|edu|ng|COM|ORG|NET|MIL|EDU|NG)$')]],
-			type: ['', [<any>Validators.required]],
-			lga: ['', [<any>Validators.required]],
-			lasrraId: ['', [<any>Validators.required]],
-			hefeemaNumber: ['', [<any>Validators.required]],
-			hefeemaStatus: ['', [<any>Validators.required]],
-			bankAccName: ['', [<any>Validators.required]],
-			bankAccNumber: ['', [<any>Validators.required]],
-			classification: ['', [<any>Validators.required]],
-			grade: ['', [<any>Validators.required]],
-			ownership: ['', [<any>Validators.required]],
-			comment: ['', [<any>Validators.required]]
-		});
-	}
-
-	onClickSaveProvider(value: any, valid: boolean) {
-		//if(valid) {
-			console.log(value);
-			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
-
-			let bankDetails = {
-				name: this.providerFormGroup.controls['bankAccName'].value,
-				accountNo: this.providerFormGroup.controls['bankAccNumber'].value,
-			}
-
-			let address = {
-				street: this.providerFormGroup.controls['address'].value,
-				lga: this.providerFormGroup.controls['lga'].value._id,
-				state: this.stateId,
-				country: this.countryId,
-			}
-
-			let careProvider = <CareProvider> {
-		  		name: this.providerFormGroup.controls['providerName'].value,
-				email: this.providerFormGroup.controls['contactEmail'].value,
-				contactPhoneNo: this.providerFormGroup.controls['contactNumber'].value,
-				contactFullName: this.providerFormGroup.controls['contactName'].value,
-				facilityTypeId: this.providerFormGroup.controls['type'].value._id,
-				lshmClassification: this.providerFormGroup.controls['classification'].value,
-				bankDetails: bankDetails,
-				address: address,
-				isTokenVerified: false,
-    			isLshma: true,
-				//logo: this.providerFormGroup.controls['providerName'].value,
-				//logoObject: this.providerFormGroup.controls['providerName'].value,
-				lasrraId: this.providerFormGroup.controls['lasrraId'].value,
-				hefeemaNo: this.providerFormGroup.controls['hefeemaNumber'].value,
-				hefeemaStatus: this.providerFormGroup.controls['hefeemaStatus'].value,
-				gradeId: this.providerFormGroup.controls['grade'].value,
-				facilityOwnershipId: this.providerFormGroup.controls['ownership'].value._id
-        	}
-
-			console.log(careProvider);
-
-			this._facilityService.create(careProvider).then(payload => {
-				console.log(payload);
-				this.providerFormGroup.reset();
-				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-				this._toastr.success('Care Provider has been created successfully!', 'Success!');
-			}).catch(err => {
-				console.log(err);
-				if(err == "Error: This email already exist") {
-					this._toastr.error('This email alreay exist!', 'Email exists!');
-				} else {
-					this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
-				}
-			});
-
-		// } else {
-		// 	this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
-		// }
-	}
-
-	getPositions() {
-		this._positionService.findAll().then((payload: any) => {
-			this.positions = payload.data;
-		});
-	}
-	
-	getCountries() {
-		this._countryService.findAll().then((payload: any) => {
-			for(var i=0; i<payload.data.length; i++) {
-				let country = payload.data[i];
-				if(country.name === "Nigeria") {
-					this.countryId = country._id;
-					for(let j = 0; j < country.states.length; j++) {
-						let state = country.states[j];
-						if(state.name === "Lagos") {
-							this.stateId = state._id;
-							this.lgas = state.lgs;
-							return;
-						}
-					}
-					return;
-				}
-			}
-		});
-	}
-	
-	getFacilityTypes() {
-		this._facilityTypeService.findAll().then((payload: any) => {
-			this.facilityTypes = payload.data;
-		});
-	}
-	
-	getOwnerships() {
-		this._ownershipService.findAll().then((payload: any) => {
-			this.ownerships = payload.data;
-		});
-	}
-
+		this.planDetailFormGroup = this._fb.group({
+			planName: ['', [<any>Validators.required]],
+			planType: ['', [<any>Validators.required]],
+			planCreatedBy: ['', [<any>Validators.required]],
+			planStatus: ['', [<any>Validators.required]]
+    });
+    
+    this.planPremiumFormGroup = this._fb.group({
+			planDuration: ['', [<any>Validators.required]],
+			planAmount: ['', [<any>Validators.required]],
+			planUnit: ['', [<any>Validators.required]]
+    });
+  }
+  
+  tabDetails_click(){
+    this.tab_details = true;
+    this.tab_premium = false;
+    this.tab_drugs = false;
+    this.tab_tests = false;
+    this.tab_procedures = false;
+    this.tab_diagnosis = false;
+    this.tab_confirm = false;
+  }
+  tabPremium_click(){
+    this.tab_details = false;
+    this.tab_premium = true;
+    this.tab_drugs = false;
+    this.tab_tests = false;
+    this.tab_procedures = false;
+    this.tab_diagnosis = false;
+    this.tab_confirm = false;
+  }
+  tabDrugs_click(){
+    this.tab_details = false;
+    this.tab_premium = false;
+    this.tab_drugs = true;
+    this.tab_tests = false;
+    this.tab_procedures = false;
+    this.tab_diagnosis = false;
+    this.tab_confirm = false;
+  }
+  tabTests_click(){
+    this.tab_details = false;
+    this.tab_premium = false;
+    this.tab_drugs = false;
+    this.tab_tests = true;
+    this.tab_procedures = false;
+    this.tab_diagnosis = false;
+    this.tab_confirm = false;
+  }
+  tabProcedures_click(){
+    this.tab_details = false;
+    this.tab_premium = false;
+    this.tab_drugs = false;
+    this.tab_tests = false;
+    this.tab_procedures = true;
+    this.tab_diagnosis = false;
+    this.tab_confirm = false;
+  }
+  tabDiagnosis_click(){
+    this.tab_details = false;
+    this.tab_premium = false;
+    this.tab_drugs = false;
+    this.tab_tests = false;
+    this.tab_procedures = false;
+    this.tab_diagnosis = true;
+    this.tab_confirm = false;
+  }
+  tabConfirm_click(){
+    this.tab_details = false;
+    this.tab_premium = false;
+    this.tab_drugs = false;
+    this.tab_tests = false;
+    this.tab_procedures = false;
+    this.tab_diagnosis = false;
+    this.tab_confirm = true;
+  }
 }

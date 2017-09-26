@@ -913,6 +913,7 @@
         -webkit-box-shadow: none;
         box-shadow: none;
         border: 1px solid transparent;
+        cursor: pointer;
     }
     
     .btn-box-tool {
@@ -1600,4 +1601,112 @@
         -webkit-box-shadow: 0 8px 6px -6px black;
         -moz-box-shadow: 0 8px 6px -6px black;
         box-shadow: 0 8px 6px -6px black;
+    }
+
+    .inpage-tabs {
+        display: flex;
+        justify-content: flex-start;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .inpage-tabs li{
+        list-style: none;
+        border: 1px solid #004f8f;
+        padding: 10px;
+        cursor: pointer;    
+        font-size: 14px;
+        color: #004f8f;
+    }
+    .tab-active, .inpage-tabs li:hover{
+        color: #fff !important;
+        background: #004f8f;
+    }
+    .nut-tab-topSect-wrap{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 20px 0;
+        border-bottom: 1px solid #DADADA;
+        padding-bottom: 30px;
+    }
+    .nutTabs-wrap{
+        width: 100%;
+        display: flex;
+    }
+    .btn-wrap{
+        width: 150px;
+    }
+    .nutTab-wrap{
+        cursor: pointer;
+        position: relative;
+        width: 16.7%;
+        display: flex;
+        justify-content: center;
+    }
+    .active-nut .nut-label{
+        color: #004f8f !important;
+    }
+    .active-nut .nut-inner{
+        display: block !important;
+    }
+    .nutTab-wrap:hover{
+        .nut-label{
+            color: #004f8f !important;
+        }
+        .nut-inner{
+            display: block !important;
+        }
+    }
+    .nut-outer{
+        width: 25px;
+        height: 25px;
+        border-radius: 100%;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #004f8f;
+        z-index: 1;
+    }
+    .nut-inner{
+        display: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        background: #004f8f;
+    }
+    .nut-stroke{
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        top: 50%;
+        display: flex;
+        z-index: 0;
+    }
+    .stroke-1, .stroke-2{
+        width: 50%;
+        background: #004f8f;
+    }
+    .nut-label {
+        position: absolute;
+        margin-top: 29px;
+        color: #A8A8A8;
+    }
+    .td-icos{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 18px;
+        color: #777;
+    }
+    .td-icos i{
+        padding: 5px;
+        display: inline-block;
+        margin-right: 5px;
+    }
+    .td-icos i:hover{
+        color: #007bff;
     }

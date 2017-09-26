@@ -58,5 +58,4 @@ export class NewPlatformComponent implements OnInit {
         it_phone: ['', [<any>Validators.required]],
       });
     }
-  
 }
