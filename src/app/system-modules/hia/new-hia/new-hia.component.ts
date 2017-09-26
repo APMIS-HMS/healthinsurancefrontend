@@ -73,12 +73,12 @@ export class NewHiaComponent implements OnInit {
 			neighbourhood: ['', [<any>Validators.required]],
 			phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
 			businessContactName: ['', [<any>Validators.required]],
-			businessContactFirstName:['', [<any>Validators.required]],
+			businessContactFirstName: ['', [<any>Validators.required]],
 			businessContactNumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
 			businessContactPosition: ['', [<any>Validators.required]],
 			businessContactEmail: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
 			iTContactName: ['', [<any>Validators.required]],
-			iTContactFirstName:['', [<any>Validators.required]],
+			iTContactFirstName: ['', [<any>Validators.required]],
 			iTContactNumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
 			iTContactPosition: ['', [<any>Validators.required]],
 			iTContactEmail: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
@@ -102,7 +102,7 @@ export class NewHiaComponent implements OnInit {
 		this.hiaFormGroup.controls['state'].valueChanges.subscribe(value => {
 			console.log(value)
 			this._getLgaAndCities(this.selectedCountry._id, value);
-		  })
+		})
 	}
 
 	_getCountries() {
@@ -214,11 +214,11 @@ export class NewHiaComponent implements OnInit {
 		address.street = this.hiaFormGroup.controls['address'].value;
 		return address;
 	}
-	_extractHIA(hia?:HIA){
+	_extractHIA(hia?: HIA) {
 		if (hia === undefined) {
 			hia = <HIA>{};
 		}
-		hia.nhisNumber =this.hiaFormGroup.controls['nhisNumber'].value;
+		hia.nhisNumber = this.hiaFormGroup.controls['nhisNumber'].value;
 		hia.cin = this.hiaFormGroup.controls['cinNumber'].value;
 		hia.registrationDate = this.hiaFormGroup.controls['registrationDate'].value;
 		return hia;

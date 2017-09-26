@@ -2,7 +2,7 @@ export interface Provider {
     facilityOwnership: any;
     facilityType: any;
     facilityClass: any;
-    hefeemaNo: any;
+    hefeemaNumber: any;
     hefeemaStatus: any;
     lasrraId: any;
 }

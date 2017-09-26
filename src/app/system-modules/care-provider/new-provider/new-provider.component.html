@@ -17,7 +17,7 @@
                 <form [formGroup]="providerFormGroup" novalidate>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Provider name</label>
+                            <label class="col-sm-4 control-label">Provider's Name</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="providerName" class="form-control">
                                 <small class="alert-label" [hidden]="providerFormGroup.controls.providerName.valid || providerFormGroup.controls.providerName.pristine">
@@ -112,76 +112,131 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 pad-all">
+                    <div class="col-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Contact name</label>
+                            <label class="col-sm-4 control-label">Business Contact's First Name</label>
                             <div class="col-sm-8">
-                                <input type="text" formControlName="contactName" class="form-control">
-                                <small class="alert-label" [hidden]="providerFormGroup.controls.contactName.valid || providerFormGroup.controls.contactName.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label pad-left-2">- Contact number</label>
-                            <div class="col-sm-8">
-                                <input type="text" formControlName="contactNumber" class="form-control">
-                                <small class="alert-label" [hidden]="providerFormGroup.controls.contactNumber.valid || providerFormGroup.controls.contactNumber.pristine">
+                                <input type="text" formControlName="bc_fname" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.bc_fname.valid || providerFormGroup.controls.bc_fname.pristine">
                                     This is a required field (minimum 3 and max of 50 characters).
                                 </small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 pad-all">
+                    <div class="col-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label pad-left-2">- Contact position</label>
+                            <label class="col-sm-4 control-label">Business Contact's Last Name</label>
                             <div class="col-sm-8">
-                                <select formControlName="contactPosition" class="form-control">
+                                <input type="text" formControlName="bc_lname" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.bc_lname.valid || providerFormGroup.controls.bc_lname.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Business Contact's position</label>
+                            <div class="col-sm-8">
+                                <select formControlName="bc_position" class="form-control">
                                     <option value="" selected>Select Position</option>
-                                    <option *ngFor="let position of positions" [ngValue]="position">{{ position.name }}</option>
+                                    <option *ngFor="let position of contactPositions" [value]="position" selected>{{position.name}}</option>
                                 </select>
-                                <small class="alert-label" [hidden]="providerFormGroup.controls.contactPosition.valid || providerFormGroup.controls.contactPosition.pristine">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.bc_position.valid || providerFormGroup.controls.bc_position.pristine">
                                     This is a required field.
                                 </small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 pad-all">
+                    <div class="col-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label pad-left-2">- Contact email</label>
+                            <label class="col-sm-4 control-label">Business Contact's Email Address</label>
                             <div class="col-sm-8">
-                                <input type="email" formControlName="contactEmail" class="form-control">
-                                <small class="alert-label" [hidden]="providerFormGroup.controls.contactEmail.valid || providerFormGroup.controls.contactEmail.pristine">
+                                <input type="email" formControlName="bc_email" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.bc_email.valid || providerFormGroup.controls.bc_email.pristine">
                                     This is a required field.
                                 </small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 pad-all">
+                    <div class="col-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Type of center</label>
+                            <label class="col-sm-4 control-label">Business Contact's Phone number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="bc_phone" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.bc_phone.valid || providerFormGroup.controls.bc_phone.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">IT Contact's First Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="it_fname" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.it_fname.valid || providerFormGroup.controls.it_fname.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">IT Contact's Last Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="it_lname" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.it_lname.valid || providerFormGroup.controls.it_lname.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">IT Contact's position</label>
+                            <div class="col-sm-8">
+                                <select formControlName="it_position" class="form-control">
+                                    <option value="" selected>Select Position</option>
+                                    <option *ngFor="let position of contactPositions" [value]="position" selected>{{position.name}}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.it_position.valid || providerFormGroup.controls.it_position.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">IT Contact's Email Address</label>
+                            <div class="col-sm-8">
+                                <input type="email" formControlName="it_email" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.it_email.valid || providerFormGroup.controls.it_email.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">IT Contact's Phone number</label>
+                            <div class="col-sm-8">
+                                <input type="text" formControlName="it_phone" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.it_phone.valid || providerFormGroup.controls.it_phone.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Type of Center</label>
                             <div class="col-sm-8">
                                 <select formControlName="type" class="form-control">
                                     <option value="" selected>Select Type</option>
                                     <option *ngFor="let category of facilityCategories" [ngValue]="category">{{ category.name }}</option>
                                 </select>
                                 <small class="alert-label" [hidden]="providerFormGroup.controls.type.valid || providerFormGroup.controls.type.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 pad-all">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">L.G.A</label>
-                            <div class="col-sm-8">
-                                <select formControlName="lga" class="form-control">
-                                    <option value="" selected>Select L.G.A</option>
-                                    <option *ngFor="let lga of lgas" [ngValue]="lga">{{ lga.name }}</option>
-                                </select>
-                                <small class="alert-label" [hidden]="providerFormGroup.controls.lga.valid || providerFormGroup.controls.lga.pristine">
                                     This is a required field.
                                 </small>
                             </div>
@@ -211,7 +266,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">HEFAMAA status</label>
+                            <label class="col-sm-4 control-label">HEFAMAA Status</label>
                             <div class="col-sm-8">
                                 <select formControlName="hefeemaStatus" class="form-control">
                                     <option value="" selected>Select Status</option>
@@ -224,8 +279,23 @@
                         </div>
                     </div>
                     <div class="col-xs-12 pad-all">
+                            <div class="form-group">
+
+                            </div>
+                        <label class="col-sm-4 control-label">Banker</label>
+                        <div class="col-sm-8">
+                            <select formControlName="bank" class="form-control">
+                                <option value="" selected>Select Bank</option>
+                                <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
+                            </select>
+                            <small class="alert-label" [hidden]="providerFormGroup.controls.bank.valid || providerFormGroup.controls.bank.pristine">
+                                This is a required field.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Bank account name</label>
+                            <label class="col-sm-4 control-label">Bank Account Name</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="bankAccName" class="form-control">
                                 <small class="alert-label" [hidden]="providerFormGroup.controls.bankAccName.valid || providerFormGroup.controls.bankAccName.pristine">
@@ -236,7 +306,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Bank account number</label>
+                            <label class="col-sm-4 control-label">Bank Account Number</label>
                             <div class="col-sm-8">
                                 <input type="text" formControlName="bankAccNumber" class="form-control">
                                 <small class="alert-label" [hidden]="providerFormGroup.controls.bankAccNumber.valid || providerFormGroup.controls.bankAccNumber.pristine">
@@ -279,7 +349,7 @@
                     </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Ownership center</label>
+                            <label class="col-sm-4 control-label">Ownership Center</label>
                             <div class="col-sm-8">
                                 <select formControlName="ownership" class="form-control">
                                     <option value="" selected>Select Ownership</option>
@@ -311,7 +381,7 @@
                 <div class="col-xs-12 pad-all">
                     <label class="col-sm-4 control-label"></label>
                     <div class="col-sm-8">
-                        <button class="btn btn-primary btn-flat" (click)="onClickSaveProvider(providerFormGroup.value, providerFormGroup.valid);" [innerHtml]="saveBtn"></button>
+                        <button class="btn btn-primary btn-flat" (click)="onClickSaveProvider(providerFormGroup, providerFormGroup.valid);" [innerHtml]="saveBtn"></button>
                     </div>
                 </div>
             </div>

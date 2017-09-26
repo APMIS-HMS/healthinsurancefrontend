@@ -1,3 +1,4 @@
+import { FacilityOwnershipService } from './../../services/common/facility-ownership.service';
 import { FacilityCategoryService } from './../../services/common/facility-category.service';
 import { CountryService } from './../../services/common/country.service';
 import { BankService } from './../../services/common/bank.service';
@@ -27,7 +28,7 @@ import { NewRequestComponent } from './new-request/new-request.component';
         ReactiveFormsModule,
         careProviderRoutes
     ],
-    providers: [BankService, CountryService, FacilityCategoryService]
+    providers: [BankService, CountryService, FacilityCategoryService, FacilityOwnershipService]
 })
 
 export class CareProviderModule {
