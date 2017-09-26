@@ -15,10 +15,10 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
   styleUrls: ['./new-beneficiary.component.scss']
 })
 export class NewBeneficiaryComponent implements OnInit {
-	stepOneView: boolean = true;
-	stepTwoView: boolean = false;
-	stepThreeView: boolean = false;
-	stepFourView: boolean = false;
+	stepOneView: Boolean = true;
+	stepTwoView: Boolean = false;
+	stepThreeView: Boolean = false;
+	stepFourView: Boolean = false;
 	stepOneFormGroup: FormGroup;
 	stepTwoFormGroup: FormGroup;
 	stepThreeFormGroup: FormGroup;
@@ -30,14 +30,14 @@ export class NewBeneficiaryComponent implements OnInit {
 	cities: any[] = [];
 	lgas: any[] = [];
 	selectedLgas: any[] = [];
-	selectedStateId: string = "";
+	selectedStateId: String = '';
 	maritalStatuses: MaritalStatus[] = [];
 	providers: any[] = [];
 	hias: any[] = [];
 	beneficiary: any = <Beneficiary>{};
-	countryId: string = "";
-	stateId: string = "";
-	saveBtn: string = "&nbsp;&nbsp; SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+	countryId: String = '';
+	stateId: String = '';
+	saveBtn: String = '&nbsp;&nbsp; SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
 
 	constructor(
 		private _toastr: ToastsManager,
@@ -202,7 +202,7 @@ export class NewBeneficiaryComponent implements OnInit {
 			// spouseMiddleName: [''],
 			// spouseLastName: ['', [<any>Validators.required]],
 			// spouseDob: ['', [<any>Validators.required]],
-			//spouseLassraId: [''],
+			// spouseLassraId: [''],
 				// patientId: ,
 				// relationshipId: ,
 				// lasrraId:  ,

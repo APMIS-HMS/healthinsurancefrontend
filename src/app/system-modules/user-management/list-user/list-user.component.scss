@@ -6,55 +6,91 @@
     margin-bottom: -15px;
 }
 
-.modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1050;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    outline: 0;
-}
-
-.fade {
-    opacity: 0;
-    -webkit-transition: opacity .15s linear;
-    -o-transition: opacity .15s linear;
-    transition: opacity .15s linear;
-}
-
-.fade.in {
-    opacity: 1;
-}
-
-.modal-dialog {
-    position: relative;
-    width: auto;
-    margin: 10px;
-}
-
-.modal.in .modal-dialog {
-    -webkit-transform: translate(0, 0);
-    -ms-transform: translate(0, 0);
-    -o-transform: translate(0, 0);
-    transform: translate(0, 0);
-}
-
-.modal.fade .modal-dialog {
-    -webkit-transition: -webkit-transform .3s ease-out;
-    -o-transition: -o-transform .3s ease-out;
-    transition: transform .3s ease-out;
-    -webkit-transform: translate(0, -25%);
-    -ms-transform: translate(0, -25%);
-    -o-transform: translate(0, -25%);
-    transform: translate(0, -25%);
-}
-
-@media (min-width: 768px) {
-    .modal-dialog {
-        width: 600px;
-        margin: 30px auto;
-    }
-}
+// .modal {
+//     position: fixed;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     left: 0;
+//     z-index: 1050;
+//     overflow: hidden;
+//     -webkit-overflow-scrolling: touch;
+//     outline: 0;
+// }
+// .fade {
+//     opacity: 0;
+//     -webkit-transition: opacity .15s linear;
+//     -o-transition: opacity .15s linear;
+//     transition: opacity .15s linear;
+// }
+// .fade.in {
+//     opacity: 1;
+// }
+// .modal-dialog {
+//     position: relative;
+//     width: auto;
+//     margin: 10px;
+// }
+// .modal.in .modal-dialog {
+//     -webkit-transform: translate(0, 0);
+//     -ms-transform: translate(0, 0);
+//     -o-transform: translate(0, 0);
+//     transform: translate(0, 0);
+// }
+// .modal.fade .modal-dialog {
+//     -webkit-transition: -webkit-transform .3s ease-out;
+//     -o-transition: -o-transform .3s ease-out;
+//     transition: transform .3s ease-out;
+//     -webkit-transform: translate(0, -25%);
+//     -ms-transform: translate(0, -25%);
+//     -o-transform: translate(0, -25%);
+//     transform: translate(0, -25%);
+// }
+// .squaredTwo {
+//     width: 28px;
+//     height: 28px;
+//     position: relative;
+//     margin: 20px auto;
+//     background: #fcfff4;
+//     //background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+//     box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
+//     label {
+//         width: 20px;
+//         height: 20px;
+//         cursor: pointer;
+//         position: absolute;
+//         left: 4px;
+//         top: 4px;
+//         //background: linear-gradient(top, #222 0%, #45484d 100%);
+//         box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 1);
+//         &:after {
+//             content: '';
+//             width: 9px;
+//             height: 5px;
+//             position: absolute;
+//             top: 4px;
+//             left: 4px;
+//             border: 3px solid #fcfff4;
+//             border-top: none;
+//             border-right: none;
+//             background: transparent;
+//             opacity: 0;
+//             transform: rotate(-45deg);
+//         }
+//         &:hover::after {
+//             opacity: 0.3;
+//         }
+//     }
+//     input[type=checkbox] {
+//         visibility: hidden;
+//         &:checked+label:after {
+//             opacity: 1;
+//         }
+//     }
+// }
+// @media (min-width: 768px) {
+//     .modal-dialog {
+//         width: 600px;
+//         margin: 30px auto;
+//     }
+// }
