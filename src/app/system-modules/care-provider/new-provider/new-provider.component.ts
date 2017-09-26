@@ -1,3 +1,11 @@
+import { BankDetail } from './../../../models/organisation/bank-detail';
+import { Address } from './../../../models/organisation/address';
+import { HIA } from './../../../models/organisation/hia';
+import { Contact } from './../../../models/organisation/contact';
+import { CountryService } from './../../../services/common/country.service';
+import { BankService } from './../../../services/common/bank.service';
+import { ContactPositionService } from './../../../services/common/contact-position.service';
+import { Facility } from './../../../models/organisation/facility';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -7,6 +15,11 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GRADES, HEFAMAA_STATUSES } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ///^[a-zA-Z0-9.!#$%&â€™*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
+// const PHONE_REGEX = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
+const NUMERIC_REGEX = /^[0-9]+$/;
 @Component({
   selector: 'app-new-provider',
   templateUrl: './new-provider.component.html',
@@ -21,9 +34,16 @@ export class NewProviderComponent implements OnInit {
 	facilityTypes: any = [];
 	grades: any = GRADES;
 	ownerships: any = [];
+	countries: any[] = [];
+	states: any[] = [];
+	lgs: any[] = [];
+	cities: any[] = [];
+	banks: any[] = [];
 	HEFAMAA_STATUSES: any = HEFAMAA_STATUSES;
 	saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
 
+	selectedUserType: any;
+	selectedCountry: any;
 	constructor(
 		private _fb: FormBuilder,
 		private _toastr: ToastsManager,
@@ -32,7 +52,11 @@ export class NewProviderComponent implements OnInit {
 		private _countryService: CountriesService,
 		private _facilityTypeService: FacilityTypesService,
 		private _headerEventEmitter: HeaderEventEmitterService,
-		private _ownershipService: OwnershipService
+		private _ownershipService: OwnershipService,
+		private _contactPositionService: ContactPositionService,
+		// private _platformOwnerService: FacilityService,
+		private _bankService: BankService,
+		private _countriesService: CountryService
 	) { }
 
 	ngOnInit() {
@@ -46,7 +70,11 @@ export class NewProviderComponent implements OnInit {
 
 		this.providerFormGroup = this._fb.group({
 			providerName: ['', [<any>Validators.required]],
+			email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
 			address: ['', [<any>Validators.required]],
+			state: ['', [<any>Validators.required]],
+			lga: ['', [<any>Validators.required]],
+			city: ['', [<any>Validators.required]],
 			neighbourhood: ['', [<any>Validators.required]],
 			phone: ['', [<any>Validators.required]],
 			contactName: ['', [<any>Validators.required]],
@@ -54,7 +82,6 @@ export class NewProviderComponent implements OnInit {
 			contactPosition: ['', [<any>Validators.required]],
 			contactEmail:  ['', [<any>Validators.required, <any>Validators.pattern('^([a-z0-9_\.-]+)@([\da-z\.-]+)(com|org|CO.UK|co.uk|net|mil|edu|ng|COM|ORG|NET|MIL|EDU|NG)$')]],
 			type: ['', [<any>Validators.required]],
-			lga: ['', [<any>Validators.required]],
 			lasrraId: ['', [<any>Validators.required]],
 			hefeemaNumber: ['', [<any>Validators.required]],
 			hefeemaStatus: ['', [<any>Validators.required]],
@@ -65,6 +92,149 @@ export class NewProviderComponent implements OnInit {
 			ownership: ['', [<any>Validators.required]],
 			comment: ['', [<any>Validators.required]]
 		});
+	}
+
+	
+	_getCountries() {
+		this._countriesService.find({
+			query: {
+				$limit: 200,
+				$select: { "states": 0 }
+			}
+		}).then((payload: any) => {
+			this.countries = payload.data;
+			console.log(payload)
+			const index = this.countries.findIndex(x => x.name === 'Nigeria');
+			console.log(index)
+			if (index > -1) {
+				this.selectedCountry = this.countries[index];
+				this._getStates(this.selectedCountry._id);
+			}
+		})
+	}
+	_getStates(_id) {
+		this._countriesService.find({
+			query: {
+				_id: _id,
+				$limit: 200,
+				$select: { "states.cities": 0, "states.lgs": 0 }
+			}
+		}).then((payload: any) => {
+			console.log(payload.data)
+			if (payload.data.length > 0) {
+				this.states = payload.data[0].states;
+			}
+
+		}).catch(error => {
+
+		})
+	}
+
+	_getLgaAndCities(_id, state) {
+		this._countriesService.find({
+			query: {
+				_id: _id,
+				"states.name": state.name,
+				$select: { 'states.$': 1 }
+			}
+		}).then((payload: any) => {
+			if (payload.data.length > 0) {
+				const states = payload.data[0].states;
+				if (states.length > 0) {
+					this.cities = states[0].cities;
+					this.lgs = states[0].lgs;
+				}
+			}
+
+		}).catch(error => {
+
+		})
+	}
+	_getBanks() {
+		this._bankService.find({
+			query: {
+				$limit: 200
+			}
+		}).then((payload: any) => {
+			this.banks = payload.data;
+			console.log(this.banks)
+		})
+	}
+
+	_extractBusinessContact(businessContact?: Contact) {
+		if (businessContact === undefined) {
+			businessContact = <Contact>{};
+		}
+		businessContact.lastName = this.providerFormGroup.controls['businessContactName'].value;
+		businessContact.firstName = this.providerFormGroup.controls['businessContactFirstName'].value;
+		businessContact.email = this.providerFormGroup.controls['businessContactEmail'].value;
+		businessContact.phoneNumber = this.providerFormGroup.controls['businessContactNumber'].value;
+		businessContact.position = this.providerFormGroup.controls['businessContactPosition'].value;
+		return businessContact;
+	}
+	_extractITContact(itContact?: Contact) {
+		if (itContact === undefined) {
+			itContact = <Contact>{};
+		}
+		itContact.lastName = this.providerFormGroup.controls['iTContactName'].value;
+		itContact.firstName = this.providerFormGroup.controls['iTContactFirstName'].value;
+		itContact.email = this.providerFormGroup.controls['iTContactName'].value;
+		itContact.phoneNumber = this.providerFormGroup.controls['iTContactNumber'].value;
+		itContact.position = this.providerFormGroup.controls['iTContactPosition'].value;
+		return itContact;
+	}
+	_extractBankDetail(bankDetail?: BankDetail) {
+		if (bankDetail === undefined) {
+			bankDetail = <BankDetail>{};
+		}
+		bankDetail.accountNumber = this.providerFormGroup.controls['bankAccNumber'].value;
+		bankDetail.bank = this.providerFormGroup.controls['bank'].value;
+		bankDetail.name = this.providerFormGroup.controls['bankAccName'].value;
+		return bankDetail;
+	}
+
+	_extractAddress(address?: Address) {
+		if (address === undefined) {
+			address = <Address>{};
+		}
+		address.city = this.providerFormGroup.controls['city'].value;
+		address.lga = this.providerFormGroup.controls['lga'].value;
+		address.neighbourhood = this.providerFormGroup.controls['neighbourhood'].value;
+		address.state = this.providerFormGroup.controls['state'].value;
+		address.street = this.providerFormGroup.controls['address'].value;
+		return address;
+	}
+	_extractHIA(hia?:HIA){
+		if (hia === undefined) {
+			hia = <HIA>{};
+		}
+		hia.nhisNumber =this.providerFormGroup.controls['nhisNumber'].value;
+		hia.cin = this.providerFormGroup.controls['cinNumber'].value;
+		hia.registrationDate = this.providerFormGroup.controls['registrationDate'].value;
+		return hia;
+	}
+
+	_extractFacility(facility?: Facility) {
+		const businessContact = this._extractBusinessContact();
+		const itContact = this._extractITContact();
+		const bankDetails = this._extractBankDetail();
+		const address = this._extractAddress();
+		const hia = this._extractHIA();
+
+		if (facility === undefined) {
+			facility = <Facility>{};
+		}
+		facility.address = address;
+		facility.bankDetails = bankDetails;
+		facility.businessContact = businessContact;
+		facility.itContact = itContact;
+		facility.hia = hia;
+		facility.email = this.providerFormGroup.controls['email'].value;
+		// facility.website = this.providerFormGroup.controls['website'].value;
+		// facility.shortName = this.providerFormGroup.controls['shortName'].value;
+		facility.facilityType = this.selectedUserType;
+
+		return facility;
 	}
 
 	onClickSaveProvider(value: any, valid: boolean) {
