@@ -6,6 +6,36 @@
     margin-bottom: -15px;
 }
 
+.check-box-container {
+    label {
+        // display: block;
+        // width: 15px;
+        // height: 15px;
+        // border-radius: 100px;
+        // transition: all .5s ease;
+        // cursor: pointer;
+        // position: absolute;
+        // top: 5px;
+        // left: 5px;
+        // z-index: 1;
+        // background: #333;
+        // box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    .check-box {
+        width: 15px;
+        height: 15px;
+        background: #ddd;
+        margin-right: 10px;
+        margin-bottom: 5px;
+        border-radius: 100%;
+        position: relative;
+        //box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    input[type=checkbox]:checked+label {
+        background: #26ca28;
+    }
+}
+
 // .modal {
 //     position: fixed;
 //     top: 0;
@@ -45,48 +75,6 @@
 //     -ms-transform: translate(0, -25%);
 //     -o-transform: translate(0, -25%);
 //     transform: translate(0, -25%);
-// }
-// .squaredTwo {
-//     width: 28px;
-//     height: 28px;
-//     position: relative;
-//     margin: 20px auto;
-//     background: #fcfff4;
-//     //background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-//     box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5);
-//     label {
-//         width: 20px;
-//         height: 20px;
-//         cursor: pointer;
-//         position: absolute;
-//         left: 4px;
-//         top: 4px;
-//         //background: linear-gradient(top, #222 0%, #45484d 100%);
-//         box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 1);
-//         &:after {
-//             content: '';
-//             width: 9px;
-//             height: 5px;
-//             position: absolute;
-//             top: 4px;
-//             left: 4px;
-//             border: 3px solid #fcfff4;
-//             border-top: none;
-//             border-right: none;
-//             background: transparent;
-//             opacity: 0;
-//             transform: rotate(-45deg);
-//         }
-//         &:hover::after {
-//             opacity: 0.3;
-//         }
-//     }
-//     input[type=checkbox] {
-//         visibility: hidden;
-//         &:checked+label:after {
-//             opacity: 1;
-//         }
-//     }
 // }
 // @media (min-width: 768px) {
 //     .modal-dialog {

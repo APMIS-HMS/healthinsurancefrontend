@@ -1,17 +1,17 @@
 <section class="content">
     <div class="row">
         <div class="col-12 col-sm-8">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class="col no-padding">
                     <div class="input-group">
                         <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
                         <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="col-12 col-sm-4">
-            <a class="btn btn-primary btn-flat text-white pull-right" (click)="open(content)">
+            <a class="btn btn-primary btn-flat text-white pull-right" (click)="open(content, {})">
                 <i class="fa fa-plus-circle"></i> New Role
             </a>
         </div>
@@ -21,28 +21,20 @@
             <div class="filter-box">
                 <h5>Filters:</h5>
                 <div class="row no-margin-right">
-                    <div class="form-group col-sm-6 col-md-6 col-lg-4 no-padding">
-                        <label class="col-12 control-label">Grading: </label>
+                    <div class="form-group col-sm-6 col-md-6 no-padding">
+                        <label class="col-12 control-label">Role: </label>
                         <div class="col-12">
-                            <select class="form-control">
-                                <option value="all">ALL</option>
-                            </select>
+                            <input type="search" class="form-control" placeholder="Role" aria-describedby="basic-addon2">
                         </div>
                     </div>
-                    <div class="form-group col-sm-6 col-md-6 col-lg-4 no-padding">
-                        <label class="col-12 control-label">Type: </label>
-                        <div class="col-12">
-                            <select class="form-control">
-                                <option value="all">ALL</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6 col-md-12 col-lg-4">
+                    <div class="form-group col-sm-6 col-md-6">
                         <label class="col-12 no-padding control-label">Status: </label>
                         <div class="row no-margin-left no-margin-right">
                             <div class="col-8 col-sm-6 no-padding">
                                 <select class="form-control">
-                                    <option value="all">ALL</option>
+                                    <option value="All">ALL</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
                                   </select>
                             </div>
                             <div class="col-4 col-sm-6 no-padding">
@@ -60,55 +52,32 @@
                         <tr class="bg-gray text-white">
                             <th>S/N</th>
                             <th>Role</th>
+                            <th>Assigned Module</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr *ngIf="users.length === 0 && !loading">
-                            <td class="text-center" colspan="7">No data available in table</td>
+                        <tr *ngIf="roles.length === 0 && !loading">
+                            <td class="text-center" colspan="5">No data available in table</td>
                         </tr>
-                        <tr *ngIf="users.length === 0 && loading">
-                            <td class="text-center" colspan="7">
+                        <tr *ngIf="roles.length === 0 && loading">
+                            <td class="text-center" colspan="5">
                                 <i class="fa fa-spinner fa-spin"></i>
                             </td>
                         </tr>
-                        <tr class="tr-link" routerLink="/modules/user-management/users/{{ user._id }}" *ngFor="let user of users">
-                            <td>{{ '1' }}</td>
-                            <td>{{ 'user.employerName' }}</td>
-                            <td>Health Care Insurance</td>
-                            <td>{{ 'user.businessContact.name' }}</td>
-                            <td>{{ 'user.businessContact.phone' }}</td>
-                            <td>A</td>
-                            <td>
-                                <span class="text-red">INACTIVE</span>
-                            </td>
-                            <td><i class="fa fa-chevron-right"></i></td>
-                        </tr> -->
-                        <tr class="tr-link">
-                            <td>{{ '1' }}</td>
-                            <td>{{ 'Chisimdi Damian Ezeanieto' }}</td>
+                        <tr class="tr-link" *ngFor="let role of roles; let i = index;">
+                            <td>{{ i+1 }}</td>
+                            <td>{{ role.name }}</td>
+                            <td>{{ role.module.name }}</td>
                             <td>
                                 <label class="switch">
-                                  <input type="checkbox" value="" class="input-action-leader-board"/>
+                                  <input type="checkbox" [attr.checked]="role.isActive ? true : null" (change)="onClickActivate(role);" class="input-action-leader-board"/>
                                   <div class="slider round"></div>
                                 </label>
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-flat btn-smaller">Edit Role</button>
-                            </td>
-                        </tr>
-                        <tr class="tr-link">
-                            <td>{{ '2' }}</td>
-                            <td>{{ 'Ademoyegun Abimbola' }}</td>
-                            <td>
-                                <label class="switch">
-                                  <input type="checkbox" value="" class="input-action-leader-board"/>
-                                  <div class="slider round"></div>
-                                </label>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-flat btn-smaller" (click)="open(content)">Edit Role</button>
+                                <button class="btn btn-primary btn-flat btn-smaller" (click)="open(content, role)">Edit</button>
                             </td>
                         </tr>
                     </tbody>
@@ -124,15 +93,15 @@
         <div class="modal-header">
             <h4 class="modal-title">Add Role</h4>
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
             <div class="row">
                 <div class="col-12">
                     <form [formGroup]="roleFormGroup" novalidate>
                         <div class="form-group col-12">
-                            <label class="col-12 no-padding control-label">Role Name: </label>
+                            <label class="col-12 no-padding control-label">Role Name <span class="text-red">*</span>: </label>
                             <div class="col-12 no-padding">
                                 <input type="text" formControlName="role" placeholder="Administration Officer" class="form-control">
                                 <small class="alert-label" [hidden]="roleFormGroup.controls.role.valid || roleFormGroup.controls.role.pristine">
@@ -140,17 +109,27 @@
                         </small>
                             </div>
                         </div>
+                        <div class="form-group col-12">
+                            <label class="col-12 no-padding control-label">Access Module <span class="text-red">*</span>: </label>
+                            <select formControlName="module" class="form-control" [(ngModel)]="selectedModule.name">
+                                <option value=" " disabled selected>Select Module</option>
+                                <option *ngFor="let module of modules" [selected]="module.name === selectedModule.name" [ngValue]="module">{{module.name}}</option>
+                            </select>
+                            <small class="alert-label " [hidden]="roleFormGroup.controls.module.valid || roleFormGroup.controls.module.pristine">
+                                This is a required field.
+                            </small>
+                        </div>
                     </form>
                 </div>
-                <div class="col-12 text-right">
-                    <div class="col">
-                        <button class="btn btn-primary btn-flat" [innerHtml]="addBtnText"></button>
+                <div class="col-12 text-right ">
+                    <div class="col ">
+                        <button class="btn btn-primary btn-flat " [disabled]="!roleFormGroup.valid || disableAddBtn " (click)="createRole(roleFormGroup.valid, roleFormGroup.value); " [innerHtml]="addBtnText "></button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        <div class="modal-footer ">
+            <button type="button " class="btn btn-outline-dark " (click)="c( 'Close click') ">Close</button>
         </div>
     </ng-template>
 </section>
