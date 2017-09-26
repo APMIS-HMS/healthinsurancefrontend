@@ -1,3 +1,5 @@
+import { CountryService } from './../../services/common/country.service';
+import { CountriesService } from './../../services/api-services/setup/countries.service';
 import { BankService } from './../../services/common/bank.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -25,7 +27,7 @@ import { PlatformOwnerService } from '../../services/index';
         ReactiveFormsModule,
         platformRoutes
     ],
-    providers: [PlatformOwnerService, BankService]
+    providers: [PlatformOwnerService, BankService, CountryService]
 })
 
 export class PlatformOwnerModule {

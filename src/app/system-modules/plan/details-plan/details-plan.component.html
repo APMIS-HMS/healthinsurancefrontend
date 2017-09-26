@@ -1,38 +1,36 @@
 <section class="content">
-    <div class="row pad-all">
+    <div class="row" style="padding:10px 0;">
         <div class="col-12 no-padding">
-            <button class="btn btn-default text-brand border-brand" style="margin-left: 5px;" routerLink="/modules/plan/plans">
-      <i class="fa fa-chevron-left"></i> BACK TO HEALTHPLAN MANAGEMENT
-    </button>
+            <button class="btn btn-default text-brand border-brand" routerLink="/modules/plan/plans">
+              <i class="fa fa-chevron-left"></i> BACK TO HEALTHPLAN MANAGEMENT
+            </button>
         </div>
     </div>
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">HIAS</a></li>
-        <li><a data-toggle="tab" href="#menu1">Drugs</a></li>
-        <li><a data-toggle="tab" href="#menu2">Tests</a></li>
-        <li><a data-toggle="tab" href="#menu3">Procedures</a></li>
-        <li><a data-toggle="tab" href="#menu4">Diagnosis</a></li>
+    <ul class="inpage-tabs">
+        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">HIAS</li>
+        <li (click)="tabPremiums_click()" [class.tab-active]="tab_premiums">Premiums</li>
+        <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
+        <li (click)="tabTests_click()" [class.tab-active]="tab_tests">Tests</li>
+        <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
+        <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
         <!-- <li><a data-toggle="tab" href="#menu5">Payment History</a></li>
       <li><a data-toggle="tab" href="#menu6">Claims</a></li>
       <li><a data-toggle="tab" href="#menu7">Complaints</a></li>
       <li><a data-toggle="tab" href="#menu8">Referrals</a></li>-->
     </ul>
 
-    <div class="box tab-content">
-        <div id="home" class="tab-pane fade show active">
+    <div class="tab-content">
+        <div *ngIf="tab_hias" class="tab-pane fade show active">
             <div class="row">
                 <div class="content-top-bar">
                     <img src="../../../../assets/img/lagos-state-logo.jpg">
                     <div>Lagos State Health Plan</div>
                     <div>Type: Formal Sector</div>
-                    <div>Premium-Week: 15 NGN</div>
-                    <div>Month: 50 NGN</div>
-                    <div>Year: 550 NGN</div>
                     <div>Status: <span class="status">Active</span></div>
                 </div>
 
-                <section class="content">
+                <section class="tab-cont content">
                     <div class="row">
                         <div class="col-12 col-sm-8 no-padding">
                             <div class="form-group">
@@ -45,8 +43,8 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-4 no-padding">
-                            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/hia/new-hia">
-                                <i class="fa fa-plus-circle"></i> ADD HIA
+                            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/plan/new-plan">
+                                <i class="fa fa-plus-circle"></i> ADD PLAN
                             </a>
                         </div>
                     </div>
@@ -80,13 +78,84 @@
                 </section>
             </div>
         </div>
-        <div id="menu1" class="tab-pane fade">
-            <h3>Menu 1</h3>
-            <p>Some content in menu 1.</p>
-        </div>
-        <div id="menu2" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p>
+        <div *ngIf="tab_premiums" class="tab-pane fade show active">
+            <div class="row">
+                <div class="content-top-bar">
+                    <img src="../../../../assets/img/lagos-state-logo.jpg">
+                    <div>Lagos State Health Plan</div>
+                    <div>Type: Formal Sector</div>
+                    <div>Status: <span class="status">Active</span></div>
+                </div>
+
+                <section class="tab-cont content">
+                    <div class="row">
+                        <div class="col-12 col-sm-8 no-padding">
+                            <div class="form-group">
+                                <div class="col-sm-10 no-padding">
+                                    <div class="input-group">
+                                        <input type="search" class="form-control" placeholder="Name of Health Insurance Agent" aria-describedby="basic-addon2">
+                                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 no-padding">
+                            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/plan/new-plan">
+                                <i class="fa fa-plus-circle"></i> ADD PREMIUM
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 no-padding">
+                          <div class="table-responsive">
+                              <table class="table table-striped" cellspacing="0" width="100%">
+                                  <thead>
+                                      <tr class="bg-gray text-white">
+                                          <th>Amount</th>
+                                          <th>Duration</th>
+                                          <th></th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td>20.000</td>
+                                          <td>Monthly</td>
+                                          <td class="td-icos">
+                                            <i class="fa fa-edit"></i>
+                                            <i class="fa fa-trash"></i> 
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td>5.000</td>
+                                          <td>Weekly</td>
+                                          <td class="td-icos">
+                                            <i class="fa fa-edit"></i>
+                                            <i class="fa fa-trash"></i> 
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td>20.000</td>
+                                          <td>Monthly</td>
+                                          <td class="td-icos">
+                                            <i class="fa fa-edit"></i>
+                                            <i class="fa fa-trash"></i> 
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td>20.000</td>
+                                          <td>Monthly</td>
+                                          <td class="td-icos">
+                                            <i class="fa fa-edit"></i>
+                                            <i class="fa fa-trash"></i> 
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 </section>

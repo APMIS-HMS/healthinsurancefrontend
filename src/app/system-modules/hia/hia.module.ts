@@ -1,3 +1,7 @@
+import { FacilityService } from './../../services/common/facility.service';
+import { UserTypeService } from './../../services/api-services/setup/user-type.service';
+import { BankService } from './../../services/common/bank.service';
+import { CountryService } from './../../services/common/country.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +29,7 @@ import { NewRequestComponent } from './new-request/new-request.component';
         ReactiveFormsModule,
         hiaRoutes
     ],
-    providers: []
+    providers: [CountryService, BankService, UserTypeService,FacilityService]
 })
 
 export class HiaModule {

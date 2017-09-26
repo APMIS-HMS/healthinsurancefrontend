@@ -1,3 +1,4 @@
+import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
 import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
 import { Address } from './../../../models/organisation/address';
@@ -16,7 +17,6 @@ const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
 // const PHONE_REGEX = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
 const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
 const NUMERIC_REGEX = /^[0-9]+$/;
-const FLOATING_REGIX = /^[-+]?[0-9]+\.[0-9]+$/
 
 @Component({
   selector: 'app-new-platform',
@@ -30,11 +30,12 @@ export class NewPlatformComponent implements OnInit {
   contactPositions: any[] = [];
   banks: any[] = [];
   countries: any[] = [];
-	states: any[] = [];
-	lgs: any[] = [];
-	cities: any[] = [];
+  states: any[] = [];
+  lgs: any[] = [];
+  cities: any[] = [];
 
   selectedUserType: any;
+  selectedCountry: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -43,7 +44,8 @@ export class NewPlatformComponent implements OnInit {
     private _contactPositionService: ContactPositionService,
     private _platformOwnerService: PlatformOwnerService,
     private _userTypeService: UserTypeService,
-    private _bankService: BankService
+    private _bankService: BankService,
+    private _countriesService: CountryService
   ) { }
 
   ngOnInit() {
@@ -72,7 +74,7 @@ export class NewPlatformComponent implements OnInit {
       it_position: ['', [<any>Validators.required]],
       it_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      plan: ['', []],
+      // plan: ['', []],
       // plan2: ['', [<any>Validators.required]],
       // plan3: ['', [<any>Validators.required]],
       nhisNumber: ['', [<any>Validators.required]],
@@ -80,14 +82,83 @@ export class NewPlatformComponent implements OnInit {
       registrationDate: ['', [<any>Validators.required]]
     });
 
+
     this._getContactPositions();
     this._getUserTypes();
     this._getBanks();
+    this._getCountries();
+
+    this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
+      console.log(value)
+      this._getLgaAndCities(this.selectedCountry._id, value);
+    })
+  }
+  _getCountries() {
+    this._countriesService.find({
+      query: {
+        $limit: 200,
+        $select: { "states": 0 }
+      }
+    }).then((payload: any) => {
+      this.countries = payload.data;
+      console.log(payload)
+      const index = this.countries.findIndex(x => x.name === 'Nigeria');
+      console.log(index)
+      if (index > -1) {
+        this.selectedCountry = this.countries[index];
+        this._getStates(this.selectedCountry._id);
+      }
+    })
+  }
+  _getStates(_id) {
+    this._countriesService.find({
+      query: {
+        _id: _id,
+        $limit: 200,
+        $select: { "states.cities": 0, "states.lgs": 0 }
+      }
+    }).then((payload: any) => {
+      console.log(payload.data)
+      if (payload.data.length > 0) {
+        this.states = payload.data[0].states;
+      }
+
+    }).catch(error => {
+
+    })
+  }
+
+  _getLgaAndCities(_id, state) {
+    // console.log(_id);
+    // console.log(state)
+    this._countriesService.find({
+      query: {
+        _id: _id,
+        "states.name": state.name,
+        $select: { 'states.$': 1 }
+
+
+      }
+    }).then((payload: any) => {
+      console.log(payload)
+      if (payload.data.length > 0) {
+        const states = payload.data[0].states;
+        if (states.length > 0) {
+          this.cities = states[0].cities;
+          this.lgs = states[0].lgs;
+        }
+      }
+
+    }).catch(error => {
+
+    })
   }
   _getBanks() {
-    this._bankService.find({query:{
-      $limit: 200
-    }}).then((payload:any)=>{
+    this._bankService.find({
+      query: {
+        $limit: 200
+      }
+    }).then((payload: any) => {
       this.banks = payload.data;
       console.log(this.banks)
     })
@@ -151,10 +222,10 @@ export class NewPlatformComponent implements OnInit {
     if (address === undefined) {
       address = <Address>{};
     }
-    address.city = '';
-    address.lga = '';
+    address.city = this.platformFormGroup.controls['city'].value;
+    address.lga = this.platformFormGroup.controls['lga'].value;
     address.neighbourhood = '';
-    address.state = '';
+    address.state = this.platformFormGroup.controls['state'].value;
     address.street = this.platformFormGroup.controls['address'].value;
     return address;
   }
@@ -171,7 +242,7 @@ export class NewPlatformComponent implements OnInit {
     facility.address = address;
     facility.bankDetails = bankDetails;
     facility.businessContact = businessContact;
-    facility.itContact = itContact; 
+    facility.itContact = itContact;
     facility.email = this.platformFormGroup.controls['email'].value;
     facility.website = this.platformFormGroup.controls['website'].value;
     facility.shortName = this.platformFormGroup.controls['shortName'].value;
@@ -180,8 +251,10 @@ export class NewPlatformComponent implements OnInit {
     return facility;
   }
 
-  save() {
-    console.log(this.platformFormGroup.value);
+  save(valid, value) {
+    // console.log(valid);
+    // console.log(value);
+    // console.log(this.platformFormGroup.value);
     console.log(this._extractFacility());
 
   }
