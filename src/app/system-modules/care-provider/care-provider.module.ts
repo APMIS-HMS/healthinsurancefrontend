@@ -1,3 +1,6 @@
+import { FacilityCategoryService } from './../../services/common/facility-category.service';
+import { CountryService } from './../../services/common/country.service';
+import { BankService } from './../../services/common/bank.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,7 +27,7 @@ import { NewRequestComponent } from './new-request/new-request.component';
         ReactiveFormsModule,
         careProviderRoutes
     ],
-    providers: []
+    providers: [BankService, CountryService, FacilityCategoryService]
 })
 
 export class CareProviderModule {

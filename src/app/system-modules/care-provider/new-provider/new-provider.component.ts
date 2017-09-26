@@ -1,3 +1,5 @@
+import { FacilityCategoryService } from './../../../services/common/facility-category.service';
+import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
 import { BankDetail } from './../../../models/organisation/bank-detail';
 import { Address } from './../../../models/organisation/address';
 import { HIA } from './../../../models/organisation/hia';
@@ -21,9 +23,9 @@ const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
 const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
 const NUMERIC_REGEX = /^[0-9]+$/;
 @Component({
-  selector: 'app-new-provider',
-  templateUrl: './new-provider.component.html',
-  styleUrls: ['./new-provider.component.scss']
+	selector: 'app-new-provider',
+	templateUrl: './new-provider.component.html',
+	styleUrls: ['./new-provider.component.scss']
 })
 export class NewProviderComponent implements OnInit {
 	providerFormGroup: FormGroup;
@@ -31,7 +33,7 @@ export class NewProviderComponent implements OnInit {
 	lgas: any = [];
 	countryId: string = "";
 	stateId: string = "";
-	facilityTypes: any = [];
+	facilityCategories: any = [];
 	grades: any = GRADES;
 	ownerships: any = [];
 	countries: any[] = [];
@@ -39,6 +41,7 @@ export class NewProviderComponent implements OnInit {
 	lgs: any[] = [];
 	cities: any[] = [];
 	banks: any[] = [];
+	userTypes: any[] = [];
 	HEFAMAA_STATUSES: any = HEFAMAA_STATUSES;
 	saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
 
@@ -53,19 +56,22 @@ export class NewProviderComponent implements OnInit {
 		private _facilityTypeService: FacilityTypesService,
 		private _headerEventEmitter: HeaderEventEmitterService,
 		private _ownershipService: OwnershipService,
+		private _userTypeService: UserTypeService,
 		private _contactPositionService: ContactPositionService,
 		// private _platformOwnerService: FacilityService,
 		private _bankService: BankService,
-		private _countriesService: CountryService
+		private _countriesService: CountryService,
+		private _facilityCategoryService:FacilityCategoryService
 	) { }
 
 	ngOnInit() {
 		this._headerEventEmitter.setRouteUrl('New Provider');
-    	this._headerEventEmitter.setMinorRouteUrl('');
+		this._headerEventEmitter.setMinorRouteUrl('');
 
-		this.getPositions();
-		this.getCountries();
-		this.getFacilityTypes();
+		// this.getPositions();
+		this._getCountries();
+		this._getBanks();
+		this._getFacilityCategories();
 		this.getOwnerships();
 
 		this.providerFormGroup = this._fb.group({
@@ -80,7 +86,7 @@ export class NewProviderComponent implements OnInit {
 			contactName: ['', [<any>Validators.required]],
 			contactNumber: ['', [<any>Validators.required]],
 			contactPosition: ['', [<any>Validators.required]],
-			contactEmail:  ['', [<any>Validators.required, <any>Validators.pattern('^([a-z0-9_\.-]+)@([\da-z\.-]+)(com|org|CO.UK|co.uk|net|mil|edu|ng|COM|ORG|NET|MIL|EDU|NG)$')]],
+			contactEmail: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
 			type: ['', [<any>Validators.required]],
 			lasrraId: ['', [<any>Validators.required]],
 			hefeemaNumber: ['', [<any>Validators.required]],
@@ -94,7 +100,25 @@ export class NewProviderComponent implements OnInit {
 		});
 	}
 
-	
+	_getUserTypes() {
+		this._userTypeService.findAll().then((payload: any) => {
+			if (payload.data.length > 0) {
+				console.log(payload.data)
+				this.userTypes = payload.data;
+				const index = payload.data.findIndex(x => x.name === 'Health Insurance Agent');
+				if (index > -1) {
+					this.selectedUserType = payload.data[index];
+					this.providerFormGroup.controls['type'].setValue(this.selectedUserType);
+				} else {
+					this.selectedUserType = undefined;
+					this.providerFormGroup.controls['type'].reset();
+				}
+				console.log(this.selectedUserType);
+			}
+		}, error => {
+
+		})
+	}
 	_getCountries() {
 		this._countriesService.find({
 			query: {
@@ -204,11 +228,11 @@ export class NewProviderComponent implements OnInit {
 		address.street = this.providerFormGroup.controls['address'].value;
 		return address;
 	}
-	_extractHIA(hia?:HIA){
+	_extractHIA(hia?: HIA) {
 		if (hia === undefined) {
 			hia = <HIA>{};
 		}
-		hia.nhisNumber =this.providerFormGroup.controls['nhisNumber'].value;
+		hia.nhisNumber = this.providerFormGroup.controls['nhisNumber'].value;
 		hia.cin = this.providerFormGroup.controls['cinNumber'].value;
 		hia.registrationDate = this.providerFormGroup.controls['registrationDate'].value;
 		return hia;
@@ -239,56 +263,56 @@ export class NewProviderComponent implements OnInit {
 
 	onClickSaveProvider(value: any, valid: boolean) {
 		//if(valid) {
-			console.log(value);
-			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+		console.log(value);
+		this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
 
-			let bankDetails = {
-				name: this.providerFormGroup.controls['bankAccName'].value,
-				accountNo: this.providerFormGroup.controls['bankAccNumber'].value,
+		let bankDetails = {
+			name: this.providerFormGroup.controls['bankAccName'].value,
+			accountNo: this.providerFormGroup.controls['bankAccNumber'].value,
+		}
+
+		let address = {
+			street: this.providerFormGroup.controls['address'].value,
+			lga: this.providerFormGroup.controls['lga'].value._id,
+			state: this.stateId,
+			country: this.countryId,
+		}
+
+		let careProvider = <CareProvider>{
+			name: this.providerFormGroup.controls['providerName'].value,
+			email: this.providerFormGroup.controls['contactEmail'].value,
+			contactPhoneNo: this.providerFormGroup.controls['contactNumber'].value,
+			contactFullName: this.providerFormGroup.controls['contactName'].value,
+			facilityTypeId: this.providerFormGroup.controls['type'].value._id,
+			lshmClassification: this.providerFormGroup.controls['classification'].value,
+			bankDetails: bankDetails,
+			address: address,
+			isTokenVerified: false,
+			isLshma: true,
+			//logo: this.providerFormGroup.controls['providerName'].value,
+			//logoObject: this.providerFormGroup.controls['providerName'].value,
+			lasrraId: this.providerFormGroup.controls['lasrraId'].value,
+			hefeemaNo: this.providerFormGroup.controls['hefeemaNumber'].value,
+			hefeemaStatus: this.providerFormGroup.controls['hefeemaStatus'].value,
+			gradeId: this.providerFormGroup.controls['grade'].value,
+			facilityOwnershipId: this.providerFormGroup.controls['ownership'].value._id
+		}
+
+		console.log(careProvider);
+
+		this._facilityService.create(careProvider).then(payload => {
+			console.log(payload);
+			this.providerFormGroup.reset();
+			this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+			this._toastr.success('Care Provider has been created successfully!', 'Success!');
+		}).catch(err => {
+			console.log(err);
+			if (err == "Error: This email already exist") {
+				this._toastr.error('This email alreay exist!', 'Email exists!');
+			} else {
+				this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
 			}
-
-			let address = {
-				street: this.providerFormGroup.controls['address'].value,
-				lga: this.providerFormGroup.controls['lga'].value._id,
-				state: this.stateId,
-				country: this.countryId,
-			}
-
-			let careProvider = <CareProvider> {
-		  		name: this.providerFormGroup.controls['providerName'].value,
-				email: this.providerFormGroup.controls['contactEmail'].value,
-				contactPhoneNo: this.providerFormGroup.controls['contactNumber'].value,
-				contactFullName: this.providerFormGroup.controls['contactName'].value,
-				facilityTypeId: this.providerFormGroup.controls['type'].value._id,
-				lshmClassification: this.providerFormGroup.controls['classification'].value,
-				bankDetails: bankDetails,
-				address: address,
-				isTokenVerified: false,
-    			isLshma: true,
-				//logo: this.providerFormGroup.controls['providerName'].value,
-				//logoObject: this.providerFormGroup.controls['providerName'].value,
-				lasrraId: this.providerFormGroup.controls['lasrraId'].value,
-				hefeemaNo: this.providerFormGroup.controls['hefeemaNumber'].value,
-				hefeemaStatus: this.providerFormGroup.controls['hefeemaStatus'].value,
-				gradeId: this.providerFormGroup.controls['grade'].value,
-				facilityOwnershipId: this.providerFormGroup.controls['ownership'].value._id
-        	}
-
-			console.log(careProvider);
-
-			this._facilityService.create(careProvider).then(payload => {
-				console.log(payload);
-				this.providerFormGroup.reset();
-				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-				this._toastr.success('Care Provider has been created successfully!', 'Success!');
-			}).catch(err => {
-				console.log(err);
-				if(err == "Error: This email already exist") {
-					this._toastr.error('This email alreay exist!', 'Email exists!');
-				} else {
-					this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
-				}
-			});
+		});
 
 		// } else {
 		// 	this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
@@ -300,16 +324,16 @@ export class NewProviderComponent implements OnInit {
 			this.positions = payload.data;
 		});
 	}
-	
+
 	getCountries() {
 		this._countryService.findAll().then((payload: any) => {
-			for(var i=0; i<payload.data.length; i++) {
+			for (var i = 0; i < payload.data.length; i++) {
 				let country = payload.data[i];
-				if(country.name === "Nigeria") {
+				if (country.name === "Nigeria") {
 					this.countryId = country._id;
-					for(let j = 0; j < country.states.length; j++) {
+					for (let j = 0; j < country.states.length; j++) {
 						let state = country.states[j];
-						if(state.name === "Lagos") {
+						if (state.name === "Lagos") {
 							this.stateId = state._id;
 							this.lgas = state.lgs;
 							return;
@@ -320,13 +344,13 @@ export class NewProviderComponent implements OnInit {
 			}
 		});
 	}
-	
-	getFacilityTypes() {
-		this._facilityTypeService.findAll().then((payload: any) => {
-			this.facilityTypes = payload.data;
+
+	_getFacilityCategories() {
+		this._facilityCategoryService.find({}).then((payload: any) => {
+			this.facilityCategories = payload.data;
 		});
 	}
-	
+
 	getOwnerships() {
 		this._ownershipService.findAll().then((payload: any) => {
 			this.ownerships = payload.data;
