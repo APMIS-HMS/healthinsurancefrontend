@@ -1,5 +1,5 @@
 <section class="content">
-    <div class="row">
+    <div class="row pad-all">
         <div class="col-12 col-sm-8">
 
         </div>
@@ -17,7 +17,7 @@
                         <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">Platform Name <span class="text-red">*</span></label>
                             <div class="col-12 no-padding">
-                                <input type="text" formControlName="platformName" placeholder="Full Name" class="form-control">
+                                <input type="text" formControlName="platformName" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.platformName.valid || platformFormGroup.controls.platformName.pristine">
                                         This is a required field (minimum 3 and max of 50 characters).
                                     </small>
@@ -26,7 +26,7 @@
                         <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">Platform ShortName <span class="text-red">*</span></label>
                             <div class="col-12 no-padding">
-                                <input type="text" formControlName="shortName" placeholder="Short Name" class="form-control">
+                                <input type="text" formControlName="shortName" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.shortName.valid || platformFormGroup.controls.shortName.pristine">
                                     This is a required field (minimum 3 and max of 50 characters).
                                 </small>
@@ -39,7 +39,7 @@
                         <div class="col-12 col-md-6 form-group">
                             <label class="col-12 no-padding control-label">Email <span class="text-red">*</span></label>
                             <div class="col-12 no-padding">
-                                <input type="email" formControlName="email" placeholder="Email" class="form-control">
+                                <input type="email" formControlName="email" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.email.valid || platformFormGroup.controls.email.pristine">
                                     This is a required field.
                                 </small>
@@ -48,7 +48,7 @@
                         <div class="col-12 col-md-6 form-group">
                             <label class="col-12 no-padding control-label">Website <span class="text-red">*</span></label>
                             <div class="col-12 no-padding">
-                                <input type="email" formControlName="website" placeholder="Website" class="form-control">
+                                <input type="email" formControlName="website" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.website.valid || platformFormGroup.controls.website.pristine">
                                     This is a required field.
                                 </small>
@@ -61,7 +61,7 @@
                         <div class="col-12 col-md-6 form-group">
                             <label class="col-12 no-padding control-label">Address (Street) <span class="text-red">*</span></label>
                             <div class="col-12 no-padding">
-                                <input type="email" formControlName="address" placeholder="Address (Street)" class="form-control">
+                                <input type="email" formControlName="address" class="form-control">
                                 <small class="alert-label" [hidden]="platformFormGroup.controls.address.valid || platformFormGroup.controls.address.pristine">
                                     This is a required field.
                                 </small>
