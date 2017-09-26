@@ -26,13 +26,66 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Email</label>
+                            <div class="col-sm-8">
+                                <input type="email" formControlName="email" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.email.valid || providerFormGroup.controls.email.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Address (Street)</label>
+                            <div class="col-sm-8">
+                                <input type="email" formControlName="address" class="form-control">
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.address.valid || providerFormGroup.controls.address.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">States</label>
+                            <div class="col-sm-8">
+                                <select formControlName="state" class="form-control">
+                                    <option value="" selected>Select State</option>
+                                    <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.state.valid || providerFormGroup.controls.state.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-xs-12 pad-all">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Address</label>
+                            <label class="col-sm-4 control-label">Local Governments</label>
                             <div class="col-sm-8">
-                                <input type="text" formControlName="address" class="form-control">
-                                <small class="alert-label" [hidden]="providerFormGroup.controls.address.valid || providerFormGroup.controls.address.pristine">
-                                    This is a required field (minimum 3 and max of 50 characters).
+                                <select formControlName="lga" class="form-control">
+                                    <option value="" selected>Select Local Government</option>
+                                    <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.lga.valid || providerFormGroup.controls.lga.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pad-all">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Cities</label>
+                            <div class="col-sm-8">
+                                <select formControlName="city" class="form-control">
+                                    <option value="" selected>Select City</option>
+                                    <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="providerFormGroup.controls.city.valid || providerFormGroup.controls.city.pristine">
+                                    This is a required field.
                                 </small>
                             </div>
                         </div>
