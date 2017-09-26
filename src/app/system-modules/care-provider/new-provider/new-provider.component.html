@@ -165,7 +165,7 @@
                             <div class="col-sm-8">
                                 <select formControlName="type" class="form-control">
                                     <option value="" selected>Select Type</option>
-                                    <option *ngFor="let facility of facilityTypes" [ngValue]="facility">{{ facility.name }}</option>
+                                    <option *ngFor="let category of facilityCategories" [ngValue]="category">{{ category.name }}</option>
                                 </select>
                                 <small class="alert-label" [hidden]="providerFormGroup.controls.type.valid || providerFormGroup.controls.type.pristine">
                                     This is a required field.
