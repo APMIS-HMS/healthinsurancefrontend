@@ -23,6 +23,11 @@ export class NewBeneficiaryComponent implements OnInit {
 	stepTwoFormGroup: FormGroup;
 	stepThreeFormGroup: FormGroup;
 
+	tab_personalData = true;
+	tab_dependants= false;
+	tab_program = false;
+	tab_confirm = false;
+
 	selectedFacility: any[] = [];
 	states: any[] = [];
 	titles: Title[] = [];
@@ -114,6 +119,31 @@ export class NewBeneficiaryComponent implements OnInit {
 			programName: ['', [<any>Validators.required]],
 			providerName: ['', [<any>Validators.required]]
 		});
+	}
+
+	tabConfirm_click(){
+		this.tab_personalData = false;
+		this.tab_dependants= false;
+		this.tab_program = false;
+		this.tab_confirm = true;
+	}
+	tabProgram_click(){
+		this.tab_personalData = false;
+		this.tab_dependants= false;
+		this.tab_program = true;
+		this.tab_confirm = false;
+	}
+	tabDependants_click(){
+		this.tab_personalData = false;
+		this.tab_dependants= true;
+		this.tab_program = false;
+		this.tab_confirm = false;
+	}
+	tabPersonalData_click(){
+		this.tab_personalData = true;
+		this.tab_dependants= false;
+		this.tab_program = false;
+		this.tab_confirm = false;
 	}
 
 	populateStepFour() {

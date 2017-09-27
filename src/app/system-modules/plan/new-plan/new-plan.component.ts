@@ -13,19 +13,18 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
   styleUrls: ['./new-plan.component.scss']
 })
 export class NewPlanComponent implements OnInit {
-
   planDetailFormGroup: FormGroup;
   planPremiumFormGroup: FormGroup;
 
 	positions: any = [];
 	lgas: any = [];
-	countryId: string = "";
-	stateId: string = "";
+	countryId: String = '';
+	stateId: String = '';
 	facilityTypes: any = [];
 	grades: any = GRADES;
 	ownerships: any = [];
 	HEFAMAA_STATUSES: any = HEFAMAA_STATUSES;
-  saveBtn: string = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+  saveBtn: String = 'SAVE <i class="fa fa-check" aria-hidden="true"></i>';
   
   tab_details = true;
   tab_premium = false;
@@ -63,19 +62,25 @@ export class NewPlanComponent implements OnInit {
 			planUnit: ['', [<any>Validators.required]]
     });
   }
+
+  onClickAddPlan(valid: Boolean, value: any) {
+    if (valid) {
+      this.tab_details = false;
+      this.tab_premium = true;
+      this.tab_drugs = false;
+      this.tab_tests = false;
+      this.tab_procedures = false;
+      this.tab_diagnosis = false;
+      this.tab_confirm = false;
+    } else {
+      console.log('Not valid');
+    }
+  }
+
   
   tabDetails_click(){
     this.tab_details = true;
     this.tab_premium = false;
-    this.tab_drugs = false;
-    this.tab_tests = false;
-    this.tab_procedures = false;
-    this.tab_diagnosis = false;
-    this.tab_confirm = false;
-  }
-  tabPremium_click(){
-    this.tab_details = false;
-    this.tab_premium = true;
     this.tab_drugs = false;
     this.tab_tests = false;
     this.tab_procedures = false;
