@@ -27,7 +27,7 @@ export class DetailsEmployerComponent implements OnInit {
 			console.log(params);
 			this.routeId = params.id;
 		});
-
+		
 		this._getEmployerDetails();
 	}
 
