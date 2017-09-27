@@ -5,4 +5,5 @@ export interface Provider {
     hefeemaNumber: any;
     hefeemaStatus: any;
     lasrraId: any;
+    comment?:any;
 }

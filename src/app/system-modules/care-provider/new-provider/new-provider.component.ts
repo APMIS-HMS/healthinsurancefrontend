@@ -12,6 +12,7 @@ import { ContactPositionService } from './../../../services/common/contact-posit
 import { Facility } from './../../../models/organisation/facility';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FacilityService } from './../../../services/common/facility.service';
 
 import { CountriesService, FacilityTypesService, FacilitiesService, HiaPositionService, OwnershipService } from '../../../services/api-services/index';
 import { CareProvider } from '../../../models/index';
@@ -53,7 +54,6 @@ export class NewProviderComponent implements OnInit {
 	constructor(
 		private _fb: FormBuilder,
 		private _toastr: ToastsManager,
-		private _facilityService: FacilitiesService,
 		private _positionService: HiaPositionService,
 		private _countryService: CountriesService,
 		private _facilityTypeService: FacilityTypesService,
@@ -61,7 +61,7 @@ export class NewProviderComponent implements OnInit {
 		private _ownershipService: OwnershipService,
 		private _userTypeService: UserTypeService,
 		private _contactPositionService: ContactPositionService,
-		// private _platformOwnerService: FacilityService,
+		private _facilityService: FacilityService,
 		private _bankService: BankService,
 		private _countriesService: CountryService,
 		private _facilityCategoryService: FacilityCategoryService,
@@ -72,13 +72,6 @@ export class NewProviderComponent implements OnInit {
 		this._headerEventEmitter.setRouteUrl('New Provider');
 		this._headerEventEmitter.setMinorRouteUrl('');
 
-		this._getContactPositions();
-		this._getCountries();
-		this._getBanks();
-		this._getFacilityCategories();
-		this._getFacilityOwnerships();
-		this._getUserTypes();
-
 		this.providerFormGroup = this._fb.group({
 			providerName: ['', [<any>Validators.required]],
 			email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
@@ -87,7 +80,7 @@ export class NewProviderComponent implements OnInit {
 			lga: ['', [<any>Validators.required]],
 			city: ['', [<any>Validators.required]],
 			neighbourhood: ['', [<any>Validators.required]],
-			phone: ['', [<any>Validators.required]],
+			phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
 			bc_fname: ['', [<any>Validators.required]],
 			bc_lname: ['', [<any>Validators.required]],
 			bc_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
@@ -102,18 +95,26 @@ export class NewProviderComponent implements OnInit {
 			lasrraId: ['', [<any>Validators.required]],
 			hefeemaNumber: ['', [<any>Validators.required]],
 			hefeemaStatus: ['', [<any>Validators.required]],
-			bank: [ [<any>Validators.required]],
+			bank: ['', [<any>Validators.required]],
 			bankAccName: ['', [<any>Validators.required]],
-			bankAccNumber: ['', [<any>Validators.required]],
+			bankAccNumber: ['', [<any>Validators.required,<any>Validators.pattern(NUMERIC_REGEX)]],
 			classification: ['', [<any>Validators.required]],
 			grade: ['', [<any>Validators.required]],
 			ownership: ['', [<any>Validators.required]],
 			comment: ['', [<any>Validators.required]]
 		});
 
+		this._getContactPositions();
+		this._getCountries();
+		this._getBanks();
+		this._getFacilityCategories();
+		this._getFacilityOwnerships();
+		this._getUserTypes();
+
 		this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
-			console.log(value)
-			this._getLgaAndCities(this.selectedCountry._id, value);
+			if (value !== null) {
+				this._getLgaAndCities(this.selectedCountry._id, value);
+			}
 		});
 		this.providerFormGroup.controls['classification'].setValue('primary');
 
@@ -263,6 +264,7 @@ export class NewProviderComponent implements OnInit {
 		provider.hefeemaNumber = this.providerFormGroup.controls['hefeemaNumber'].value;
 		provider.hefeemaStatus = this.providerFormGroup.controls['hefeemaStatus'].value;
 		provider.lasrraId = this.providerFormGroup.controls['lasrraId'].value;
+		provider.comment = this.providerFormGroup.controls['comment'].value;
 		return provider;
 	}
 
@@ -282,8 +284,8 @@ export class NewProviderComponent implements OnInit {
 		facility.itContact = itContact;
 		facility.provider = provider;
 		facility.email = this.providerFormGroup.controls['email'].value;
-		// facility.website = this.providerFormGroup.controls['website'].value;
-		// facility.shortName = this.providerFormGroup.controls['shortName'].value;
+		facility.name = this.providerFormGroup.controls['providerName'].value;
+		facility.phoneNumber = this.providerFormGroup.controls['phone'].value;
 		facility.facilityType = this.selectedUserType;
 
 		return facility;
@@ -302,62 +304,28 @@ export class NewProviderComponent implements OnInit {
 	}
 
 	onClickSaveProvider(value: any, valid: boolean) {
-		//if(valid) {
-		console.log(value);
-		console.log(this._extractFacility());
-		this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+		if (valid) {
+			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+			let facility = this._extractFacility();
 
-		// let bankDetails = {
-		// 	name: this.providerFormGroup.controls['bankAccName'].value,
-		// 	accountNo: this.providerFormGroup.controls['bankAccNumber'].value,
-		// }
+			this._facilityService.create(facility).then(payload => {
+				console.log(payload);
+				this.providerFormGroup.reset();
+				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+				this._toastr.success('Care Provider has been created successfully!', 'Success!');
+				this.providerFormGroup.controls['classification'].setValue('primary');
+			}).catch(err => {
+				console.log(err);
+				if (err == "Error: This email already exist") {
+					this._toastr.error('This email alreay exist!', 'Email exists!');
+				} else {
+					this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+				}
+			});
 
-		// let address = {
-		// 	street: this.providerFormGroup.controls['address'].value,
-		// 	lga: this.providerFormGroup.controls['lga'].value._id,
-		// 	state: this.stateId,
-		// 	country: this.countryId,
-		// }
-
-		// let careProvider = <CareProvider>{
-		// 	name: this.providerFormGroup.controls['providerName'].value,
-		// 	email: this.providerFormGroup.controls['contactEmail'].value,
-		// 	contactPhoneNo: this.providerFormGroup.controls['contactNumber'].value,
-		// 	contactFullName: this.providerFormGroup.controls['contactName'].value,
-		// 	facilityTypeId: this.providerFormGroup.controls['type'].value._id,
-		// 	lshmClassification: this.providerFormGroup.controls['classification'].value,
-		// 	bankDetails: bankDetails,
-		// 	address: address,
-		// 	isTokenVerified: false,
-		// 	isLshma: true,
-		// 	//logo: this.providerFormGroup.controls['providerName'].value,
-		// 	//logoObject: this.providerFormGroup.controls['providerName'].value,
-		// 	lasrraId: this.providerFormGroup.controls['lasrraId'].value,
-		// 	hefeemaNo: this.providerFormGroup.controls['hefeemaNumber'].value,
-		// 	hefeemaStatus: this.providerFormGroup.controls['hefeemaStatus'].value,
-		// 	gradeId: this.providerFormGroup.controls['grade'].value,
-		// 	facilityOwnershipId: this.providerFormGroup.controls['ownership'].value._id
-		// }
-
-		// console.log(careProvider);
-
-		// this._facilityService.create(careProvider).then(payload => {
-		// 	console.log(payload);
-		// 	this.providerFormGroup.reset();
-		// 	this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-		// 	this._toastr.success('Care Provider has been created successfully!', 'Success!');
-		// }).catch(err => {
-		// 	console.log(err);
-		// 	if (err == "Error: This email already exist") {
-		// 		this._toastr.error('This email alreay exist!', 'Email exists!');
-		// 	} else {
-		// 		this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
-		// 	}
-		// });
-
-		// } else {
-		// 	this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
-		// }
+		} else {
+			this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+		}
 	}
 
 }

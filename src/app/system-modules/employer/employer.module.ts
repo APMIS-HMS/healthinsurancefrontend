@@ -1,3 +1,8 @@
+import { IndustryService } from './../../services/common/industry.service';
+import { IndustryTypesService } from './../../services/api-services/setup/industry-type.service';
+import { UserTypeService } from './../../services/api-services/setup/user-type.service';
+import { CountryService } from './../../services/common/country.service';
+import { BankService } from './../../services/common/bank.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +30,7 @@ import { NewRequestComponent } from './new-request/new-request.component';
         ReactiveFormsModule,
         employerRoutes
     ],
-    providers: []
+    providers: [BankService, CountryService, UserTypeService, IndustryService]
 })
 
 export class EmployerModule {

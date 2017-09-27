@@ -8,6 +8,7 @@ import { Contact } from './contact';
 export interface Facility {
     _id: string;
     name: string;
+    phoneNumber: string;
     email: string;
     businessContact: Contact;
     itContact: Contact;
@@ -15,12 +16,12 @@ export interface Facility {
     hia?: HIA;
     employer?: Employer;
     logo?: any;
-    address?:Address;
-    bankDetails?:BankDetail;
-    facilityType?:any;
+    address?: Address;
+    bankDetails?: BankDetail;
+    facilityType?: any;
     website: string;
     lasraaId: string;
-    shortName:string;
+    shortName: string;
     verificationToken: string;
     isTokenVerified: boolean;
 }
