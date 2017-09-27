@@ -63,7 +63,6 @@ export class NewPlanComponent implements OnInit {
 
   onClickAddPlan(valid: Boolean, value: any) {
     if (valid) {
-      console.log(value);
       this.tab_details = false;
       this.tab_premium = true;
       this.tab_drugs = false;
@@ -79,7 +78,6 @@ export class NewPlanComponent implements OnInit {
         isActive: value.planStatus,
         premiums: []
       }
-      console.log(this.plan);
     } else {
       console.log('Not valid');
     }
@@ -88,7 +86,6 @@ export class NewPlanComponent implements OnInit {
   
   onClickAddPremium(valid: Boolean, value: any) {
     if (valid) {
-      console.log(value);
       const premium = <PlanPremium> {
         amount: value.planAmount,
         duration: value.planDuration,
@@ -97,20 +94,19 @@ export class NewPlanComponent implements OnInit {
       };
       this.plan.premiums.push(premium);
       this.premiums.push(premium);
-      console.log(this.plan);
     } else {
       console.log('Not valid');
     }
   }
 
   onClickPremiumNext() {
-    console.log(this.plan);
     if (!!this.plan.name) {
       this.disablePremiumNextBtn = true;
       this.premiumNextBtn = 'Saving Plan... <i class="fa fa-spinner fa-spin"></i>';
       // Save plan
       this._planService.create(this.plan).then(res => {
         console.log(res);
+        this._toastr.success('Plan has been created successfully.', 'Success');
         this.premiumNextBtn = 'Save <i class="fa fa-check" aria-hidden="true"></i>';
         this.disablePremiumNextBtn = false;
         this.planDetailFormGroup.reset();
@@ -125,7 +121,6 @@ export class NewPlanComponent implements OnInit {
 
   private _getPlanTypes() {
     this._planTypeService.findAll().then((res: any) => {
-      console.log(res);
       if (res.data.length > 0) {
         this.planTypes = res.data;
       }

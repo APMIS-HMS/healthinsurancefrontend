@@ -78,18 +78,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="tr-link" routerLink="/modules/plan/plans/223344">
-                            <td>Formal Sector Plan</td>
-                            <td>Formal Sector</td>
-                            <td>45</td>
-                            <td>Lashma</td>
-                            <td>10 NGN</td>
-                            <td>35 NGN</td>
-                            <td class="text-center">400 NGN</td>
-                            <td>
-                                <span class="text-success"> Active</span>
+                        <tr *ngIf="plans.length === 0 && !loading">
+                            <td class="text-center" colspan="9">No data available in table</td>
+                        </tr>
+                        <tr *ngIf="plans.length === 0 && loading">
+                            <td class="text-center" colspan="9">
+                                <i class="fa fa-spinner fa-spin"></i>
                             </td>
-                            <td><i class="fa fa-chevron-right"></i></td>
+                        </tr>
+                        <tr class="tr-link" *ngFor="let plan of plans; let i = index;">
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.name }}</td>
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.planType.name }}</td>
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ 'Number of HIAs' }}</td>
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.planOwner }}</td>
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}">10 NGN</td>
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}">35 NGN</td>
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}" class="text-center">400 NGN</td>
+                            <td>
+                                <label class="switch">
+                                  <input type="checkbox" [attr.checked]="plan.isActive ? true : null" (change)="onClickActivate(plan);" class="input-action-leader-board"/>
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}"><i class="fa fa-chevron-right"></i></td>
                         </tr>
                     </tbody>
                 </table>
