@@ -2,7 +2,7 @@ import { HIA } from './../../../models/organisation/hia';
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
 import { ContactPositionService } from './../../../services/common/contact-position.service';
-import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { FacilityService } from './../../../services/common/facility.service';

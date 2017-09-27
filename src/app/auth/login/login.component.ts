@@ -1,5 +1,5 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { UserTypeService } from './../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../services/common/user-type.service';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';

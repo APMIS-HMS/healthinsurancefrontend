@@ -1,4 +1,4 @@
-import { UserTypeService } from './../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../services/common/user-type.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

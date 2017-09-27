@@ -1,6 +1,6 @@
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
-import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
 import { Address } from './../../../models/organisation/address';
 import { Facility } from './../../../models/organisation/facility';
 import { BankDetail } from './../../../models/organisation/bank-detail';

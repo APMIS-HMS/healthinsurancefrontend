@@ -1,5 +1,5 @@
+import { UserTypeService } from './services/common/user-type.service';
 import { AuthService } from './auth/services/auth.service';
-import { UserTypeService } from './services/api-services/setup/user-type.service';
 import { FacilityService } from './services/common/facility.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -37,7 +37,7 @@ import { AppComponent } from './app.component';
     SetupService.MaritalStatusService,
     SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
     SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
-    SetupService.CorporateFacilityService, SetupService.IndustryTypesService, UserTypeService, AuthService, FacilityService],
+    SetupService.CorporateFacilityService, SetupService.IndustryTypesService, AuthService, FacilityService, UserTypeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

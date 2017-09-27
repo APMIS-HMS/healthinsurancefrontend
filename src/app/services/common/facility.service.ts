@@ -22,6 +22,7 @@ export class FacilityService {
   find(query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
+        console.log(query);
         return socket.find(query);
       }))
     });

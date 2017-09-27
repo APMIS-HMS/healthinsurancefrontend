@@ -1,3 +1,5 @@
+
+import { ActivatedRoute } from '@angular/router';
 import { FacilityService } from './../../../services/common/facility.service';
 import { IndustryService } from './../../../services/common/industry.service';
 import { Employer } from './../../../models/organisation/employer';
@@ -7,7 +9,7 @@ import { Contact } from './../../../models/organisation/contact';
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
 import { ContactPositionService } from './../../../services/common/contact-position.service';
-import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
 import { OwnershipService } from './../../../services/api-services/setup/ownership.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -46,6 +48,7 @@ export class NewEmployerComponent implements OnInit {
 
 	selectedUserType: any;
 	selectedCountry: any;
+	facility: any;
 
 	constructor(
 		private _fb: FormBuilder,
@@ -59,7 +62,7 @@ export class NewEmployerComponent implements OnInit {
 		private _facilityService: FacilityService,
 		private _bankService: BankService,
 		private _countriesService: CountryService,
-
+		private _route: ActivatedRoute
 	) { }
 
 	ngOnInit() {
@@ -74,7 +77,7 @@ export class NewEmployerComponent implements OnInit {
 		this._getUserTypes();
 
 		this.employerFormGroup = this._fb.group({
-			employerName: ['', [<any>Validators.required]],
+			employerName: [this.facility!= null?this.facility.name :'', [<any>Validators.required]],
 			address: ['', [<any>Validators.required]],
 			email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
 			state: ['', [<any>Validators.required]],
@@ -105,6 +108,49 @@ export class NewEmployerComponent implements OnInit {
 				this._getLgaAndCities(this.selectedCountry._id, value);
 			}
 		});
+
+		this._route.params.subscribe(param => {
+			if (param.id !== null) {
+				this._getEmployerDetails(param.id);
+				
+			}
+		})
+	}
+
+	_getEmployerDetails(routeId) {
+		this._facilityService.get(routeId, {})
+			.then((res: Facility) => {
+				this.facility = res;
+				console.log(this.facility);
+
+				
+		this.employerFormGroup = this._fb.group({
+			employerName: [this.facility!= null?this.facility.name :'', [<any>Validators.required]],
+			address: ['', [<any>Validators.required]],
+			email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+			state: ['', [<any>Validators.required]],
+			city: ['', [<any>Validators.required]],
+			lga: ['', [<any>Validators.required]],
+			neighbourhood: ['', [<any>Validators.required]],
+			phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+			bc_lname: ['', [<any>Validators.required]],
+			bc_fname: ['', [<any>Validators.required]],
+			bc_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+			bc_position: ['', [<any>Validators.required]],
+			bc_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+			it_lname: ['', [<any>Validators.required]],
+			it_fname: ['', [<any>Validators.required]],
+			it_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+			it_position: ['', [<any>Validators.required]],
+			it_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+			type: ['', [<any>Validators.required]],
+			bank: ['', [<any>Validators.required]],
+			bankAccName: ['', [<any>Validators.required]],
+			bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
+			cacNumber: ['', [<any>Validators.required]],
+			cinNumber: ['', [<any>Validators.required]]
+		});
+			});
 	}
 
 	_getContactPositions() {

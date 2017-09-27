@@ -1,5 +1,5 @@
 import { FacilityService } from './../../services/common/facility.service';
-import { UserTypeService } from './../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../services/common/user-type.service';
 import { BankService } from './../../services/common/bank.service';
 import { CountryService } from './../../services/common/country.service';
 import { NgModule } from '@angular/core';
