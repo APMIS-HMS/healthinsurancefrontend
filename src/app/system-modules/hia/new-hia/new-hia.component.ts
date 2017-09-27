@@ -1,12 +1,11 @@
 import { HIA } from './../../../models/organisation/hia';
-import { FacilityService } from './../../../models/setup/facilityservice';
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
 import { ContactPositionService } from './../../../services/common/contact-position.service';
 import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-
+import { FacilityService } from './../../../services/common/facility.service';
 import {
 	CountriesService, FacilityTypesService, FacilitiesService, GenderService, PersonService, TitleService, UserService,
 	MaritalStatusService, HiaService, HiaNameService, HiaProgramService, HiaPlanService, HiaPositionService
@@ -48,13 +47,9 @@ export class NewHiaComponent implements OnInit {
 		private _fb: FormBuilder,
 		private _toastr: ToastsManager,
 		private _headerEventEmitter: HeaderEventEmitterService,
-		private _hiaService: HiaService,
-		private _hiaProgramService: HiaProgramService,
-		private _hiaPlanService: HiaPlanService,
-		private _hiaPositionService: HiaPositionService,
 		private _userTypeService: UserTypeService,
 		private _contactPositionService: ContactPositionService,
-		// private _platformOwnerService: FacilityService,
+		private _facilityService: FacilityService,
 		private _bankService: BankService,
 		private _countriesService: CountryService
 	) { }
@@ -85,10 +80,7 @@ export class NewHiaComponent implements OnInit {
 			type: ['', [<any>Validators.required]],
 			bank: ['', [<any>Validators.required]],
 			bankAccName: ['', [<any>Validators.required]],
-			bankAccNumber: ['', [<any>Validators.required]],
-			// plan: ['', [<any>Validators.required]],
-			// plan2: ['', [<any>Validators.required]],
-			// plan3: ['', [<any>Validators.required]],
+			bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
 			nhisNumber: ['', [<any>Validators.required]],
 			cinNumber: ['', [<any>Validators.required]],
 			registrationDate: ['', [<any>Validators.required]]
@@ -100,8 +92,9 @@ export class NewHiaComponent implements OnInit {
 		this._getCountries();
 
 		this.hiaFormGroup.controls['state'].valueChanges.subscribe(value => {
-			console.log(value)
-			this._getLgaAndCities(this.selectedCountry._id, value);
+			if (value !== null) {
+				this._getLgaAndCities(this.selectedCountry._id, value);
+			}
 		})
 	}
 
@@ -240,8 +233,8 @@ export class NewHiaComponent implements OnInit {
 		facility.itContact = itContact;
 		facility.hia = hia;
 		facility.email = this.hiaFormGroup.controls['email'].value;
-		// facility.website = this.hiaFormGroup.controls['website'].value;
-		// facility.shortName = this.hiaFormGroup.controls['shortName'].value;
+		facility.name = this.hiaFormGroup.controls['agentName'].value;
+		facility.phoneNumber = this.hiaFormGroup.controls['phone'].value;
 		facility.facilityType = this.selectedUserType;
 
 		return facility;
@@ -251,52 +244,16 @@ export class NewHiaComponent implements OnInit {
 		console.log(value);
 		if (valid) {
 			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
-			console.log(this._extractFacility());
-			// let businessContact = {
-			// 	name: this.hiaFormGroup.controls['businessContactName'].value,
-			// 	phone: this.hiaFormGroup.controls['businessContactNumber'].value,
-			// 	positionId: this.hiaFormGroup.controls['businessContactPosition'].value._id,
-			// 	email: this.hiaFormGroup.controls['businessContactEmail'].value,
-			// }
+			let facility = this._extractFacility();
 
-			// let iTContact = {
-			// 	name: this.hiaFormGroup.controls['iTContactName'].value,
-			// 	phone: this.hiaFormGroup.controls['iTContactNumber'].value,
-			// 	positionId: this.hiaFormGroup.controls['iTContactPosition'].value._id,
-			// 	email: this.hiaFormGroup.controls['iTContactEmail'].value,
-			// }
-			// let bankDetails = {
-			// 	name: this.hiaFormGroup.controls['bankAccName'].value,
-			// 	accountNo: this.hiaFormGroup.controls['bankAccNumber'].value,
-			// }
 
-			// let plan = {
-			// 	planId: this.hiaFormGroup.controls['plan'].value._id
-			// };
-			// this.plans.push(plan);
-
-			// let hia = <Hia>{
-			// 	agentName: this.hiaFormGroup.controls['agentName'].value,
-			// 	address: this.hiaFormGroup.controls['address'].value,
-			// 	neighbourhood: this.hiaFormGroup.controls['neighbourhood'].value,
-			// 	phoneNumber: this.hiaFormGroup.controls['phone'].value,
-			// 	businessContact: businessContact,
-			// 	itContact: iTContact,
-			// 	hiaTypeId: this.hiaFormGroup.controls['type'].value._id,
-			// 	bankDetails: bankDetails,
-			// 	hiaPlanIds: this.plans,
-			// 	nhisNo: this.hiaFormGroup.controls['nhisNumber'].value,
-			// 	cinNo: this.hiaFormGroup.controls['cinNumber'].value,
-			// 	registrationDate: this.hiaFormGroup.controls['registrationDate'].value
-			// }
-
-			// this._hiaService.create(hia).then(payload => {
-			// 	this.hiaFormGroup.reset();
-			// 	this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-			// 	this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-			// }).catch(err => {
-			// 	console.log(err);
-			// });
+			this._facilityService.create(facility).then(payload => {
+				this.hiaFormGroup.reset();
+				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+				this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+			}).catch(err => {
+				console.log(err);
+			});
 
 		} else {
 			this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
@@ -306,7 +263,6 @@ export class NewHiaComponent implements OnInit {
 	_getUserTypes() {
 		this._userTypeService.findAll().then((payload: any) => {
 			if (payload.data.length > 0) {
-				console.log(payload.data)
 				this.userTypes = payload.data;
 				const index = payload.data.findIndex(x => x.name === 'Health Insurance Agent');
 				if (index > -1) {
@@ -316,23 +272,15 @@ export class NewHiaComponent implements OnInit {
 					this.selectedUserType = undefined;
 					this.hiaFormGroup.controls['type'].reset();
 				}
-				console.log(this.selectedUserType);
 			}
 		}, error => {
 
 		})
 	}
 
-	_getHiaPlans() {
-		this._hiaPlanService.findAll().then((payload: any) => {
-			this.hiaPlans = payload.data;
-		});
-	}
-
 	_getContactPositions() {
 		this._contactPositionService.find({}).then((payload: any) => {
 			this.contactPositions = payload.data;
-			console.log(payload)
 		});
 	}
 }
