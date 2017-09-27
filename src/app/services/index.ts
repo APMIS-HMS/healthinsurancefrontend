@@ -5,3 +5,5 @@ export * from './auth/role/role.service';
 export * from './common/country.service';
 export * from './common/facility-category.service';
 export * from './common/facility-ownership.service';
+export * from './common/plan-type.service';
+export * from './plan/plan.service';

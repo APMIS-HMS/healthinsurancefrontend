@@ -28,3 +28,4 @@ export * from './organisation/employer';
 export * from './organisation/facility';
 export * from './organisation/hia';
 export * from './organisation/provider';
+export * from './plan/Plan';
