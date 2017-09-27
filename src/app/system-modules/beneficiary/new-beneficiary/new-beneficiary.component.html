@@ -353,6 +353,72 @@
                     </div>
                 </form>
             </div>
+
+            <div *ngIf="tab_program">
+                <form [formGroup]="frmProgram" novalidate>
+                    <div class="frm-inner-title">Health Insurance Agent</div>
+
+                    <div class="col-12 pad-all">
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">HIA Name</label>
+                            <div class="col-sm-8">
+                                <select formControlName="hiaName" class="form-control">
+                                        <option  value="" selected>this time HIA</option>
+                                        <option  value="">that season HIA</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="frm-inner-title">Program</div>
+
+                    <div class="col-12 pad-all">
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">Type</label>
+                            <div class="col-sm-8">
+                                <select formControlName="programType" class="form-control">
+                                        <option  value="" selected>this time HIA</option>
+                                        <option  value="">that season HIA</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pad-all">
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">Name</label>
+                            <div class="col-sm-8">
+                                <select formControlName="programName" class="form-control">
+                                        <option  value="" selected>this time HIA</option>
+                                        <option  value="">that season HIA</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="frm-inner-title">Primary Health Care Provider</div>
+
+                    <div class="col-12 pad-all">
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label">Provider Name</label>
+                            <div class="col-sm-8">
+                                <select formControlName="providerName" class="form-control">
+                                        <option  value="" selected>this time HIA</option>
+                                        <option  value="">that season HIA</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 pad-all">
+                        <label class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                            <button class="btn bg-brand btn-flat border-brand text-white" (click)="onClickStepOne(stepOneFormGroup.value, stepOneFormGroup.valid);">
+                                    NEXT &nbsp; <i class="fa fa-chevron-right"></i>
+                                </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
    
