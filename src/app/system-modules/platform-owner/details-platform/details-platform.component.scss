@@ -86,3 +86,12 @@
     font-weight: bold;
     font-size: 12px;
 }
+.small-box-footer{
+    cursor: pointer;
+    color: #777;
+    width: 100%;
+}
+.small-box-footer:hover{
+    color: #007bff;
+    text-decoration: underline;
+}

@@ -20,8 +20,8 @@ export class NewBeneficiaryComponent implements OnInit {
 	stepThreeView: Boolean = false;
 	stepFourView: Boolean = false;
 	stepOneFormGroup: FormGroup;
-	stepTwoFormGroup: FormGroup;
-	stepThreeFormGroup: FormGroup;
+	frmDependants: FormGroup;
+	frmProgram: FormGroup;
 
 	tab_personalData = true;
 	tab_dependants= false;
@@ -89,31 +89,16 @@ export class NewBeneficiaryComponent implements OnInit {
 			phonenumber: ['', [<any>Validators.required]],
 			secondaryPhone: [''],
 		});
-		this.stepTwoFormGroup = this._fb.group({
-			spouseFirstName: ['', [<any>Validators.required]],
-			spouseMiddleName: [''],
-			spouseLastName: ['', [<any>Validators.required]],
-			spouseDob: ['', [<any>Validators.required]],
-			spouseLassraId: [''],
-			child_1_gender: ['', [<any>Validators.required]],
-			child_1_firstName: ['', [<any>Validators.required]],
-			child_1_middleName: ['', [<any>Validators.required]],
-			child_1_lastName: ['', [<any>Validators.required]],
-			child_1_dob: ['', [<any>Validators.required]],
-			child_2_gender: ['', [<any>Validators.required]],
-			child_2_firstName: ['', [<any>Validators.required]],
-			child_2_middleName: [''],
-			child_2_lastName: ['', [<any>Validators.required]],
-			child_2_dob: ['', [<any>Validators.required]],
-			dependant_1_gender: ['', [<any>Validators.required]],
-			dependant_1_firstName: ['', [<any>Validators.required]],
-			dependant_1_middleName: [''],
-			dependant_1_lastName: ['', [<any>Validators.required]],
-			dependant_1_dob: ['', [<any>Validators.required]],
-			dependant_1_lassraId: [''],
-			dependant_1_relationship: ['', [<any>Validators.required]],
+		this.frmDependants = this._fb.group({
+			firstName: ['', [<any>Validators.required]],
+			middleName: [''],
+			lastName: ['', [<any>Validators.required]],
+			dob: ['', [<any>Validators.required]],
+			gender: ['', [<any>Validators.required]],
+			relationship: ['', [<any>Validators.required]],
+			lasrraId: ['', [<any>Validators.required]]
 		});
-		this.stepThreeFormGroup = this._fb.group({
+		this.frmProgram = this._fb.group({
 			hiaName: [''],
 			programType: ['', [<any>Validators.required]],
 			programName: ['', [<any>Validators.required]],
@@ -157,36 +142,36 @@ export class NewBeneficiaryComponent implements OnInit {
 		this.beneficiary.gender = this.stepOneFormGroup.get('gender').value;
 		this.beneficiary.lasrraId = this.stepOneFormGroup.get('lasrraId').value;
 
-		this.beneficiary.spouseFullName =  this.stepTwoFormGroup.get('spouseFirstName').value
-									 + " " + this.stepTwoFormGroup.get('spouseMiddleName').value
-									 + " " + this.stepTwoFormGroup.get('spouseLastName').value;
-		this.beneficiary.spouseDob = this.stepTwoFormGroup.get('spouseDob').value;
-		this.beneficiary.spouseLassraId = this.stepTwoFormGroup.get('spouseLassraId').value;
+		this.beneficiary.spouseFullName =  this.frmDependants.get('spouseFirstName').value
+									 + " " + this.frmDependants.get('spouseMiddleName').value
+									 + " " + this.frmDependants.get('spouseLastName').value;
+		this.beneficiary.spouseDob = this.frmDependants.get('spouseDob').value;
+		this.beneficiary.spouseLassraId = this.frmDependants.get('spouseLassraId').value;
 
-		this.beneficiary.child_1_gender = this.stepTwoFormGroup.get('child_1_gender').value;
-		this.beneficiary.child_1_fullName =  this.stepTwoFormGroup.get('child_1_firstName').value
-									 + " " + this.stepTwoFormGroup.get('child_1_middleName').value
-									 + " " + this.stepTwoFormGroup.get('child_1_lastName').value;
-		this.beneficiary.child_1_dob = this.stepTwoFormGroup.get('child_1_dob').value;
+		this.beneficiary.child_1_gender = this.frmDependants.get('child_1_gender').value;
+		this.beneficiary.child_1_fullName =  this.frmDependants.get('child_1_firstName').value
+									 + " " + this.frmDependants.get('child_1_middleName').value
+									 + " " + this.frmDependants.get('child_1_lastName').value;
+		this.beneficiary.child_1_dob = this.frmDependants.get('child_1_dob').value;
 
-		this.beneficiary.child_2_gender = this.stepTwoFormGroup.get('child_2_gender').value;
-		this.beneficiary.child_2_fullName =  this.stepTwoFormGroup.get('child_2_firstName').value
-									 + " " + this.stepTwoFormGroup.get('child_2_middleName').value
-									 + " " + this.stepTwoFormGroup.get('child_2_lastName').value;
-		this.beneficiary.child_2_dob = this.stepTwoFormGroup.get('child_2_dob').value;
+		this.beneficiary.child_2_gender = this.frmDependants.get('child_2_gender').value;
+		this.beneficiary.child_2_fullName =  this.frmDependants.get('child_2_firstName').value
+									 + " " + this.frmDependants.get('child_2_middleName').value
+									 + " " + this.frmDependants.get('child_2_lastName').value;
+		this.beneficiary.child_2_dob = this.frmDependants.get('child_2_dob').value;
 
-		this.beneficiary.dependant_1_gender = this.stepTwoFormGroup.get('dependant_1_gender').value;
-		this.beneficiary.dependant_1_fullName =  this.stepTwoFormGroup.get('dependant_1_firstName').value
-									 + " " + this.stepTwoFormGroup.get('dependant_1_middleName').value
-									 + " " + this.stepTwoFormGroup.get('dependant_1_lastName').value;
-		this.beneficiary.dependant_1_dob = this.stepTwoFormGroup.get('dependant_1_dob').value;
-		this.beneficiary.dependant_1_lassraId = this.stepTwoFormGroup.get('dependant_1_lassraId').value;
-		this.beneficiary.dependant_1_relationship = this.stepTwoFormGroup.get('dependant_1_relationship').value;
+		this.beneficiary.dependant_1_gender = this.frmDependants.get('dependant_1_gender').value;
+		this.beneficiary.dependant_1_fullName =  this.frmDependants.get('dependant_1_firstName').value
+									 + " " + this.frmDependants.get('dependant_1_middleName').value
+									 + " " + this.frmDependants.get('dependant_1_lastName').value;
+		this.beneficiary.dependant_1_dob = this.frmDependants.get('dependant_1_dob').value;
+		this.beneficiary.dependant_1_lassraId = this.frmDependants.get('dependant_1_lassraId').value;
+		this.beneficiary.dependant_1_relationship = this.frmDependants.get('dependant_1_relationship').value;
 
-		this.beneficiary.hiaName = this.stepThreeFormGroup.get('hiaName').value;
-		this.beneficiary.programType = this.stepThreeFormGroup.get('programType').value;
-		this.beneficiary.programName = this.stepThreeFormGroup.get('programName').value;
-		this.beneficiary.providerName = this.stepThreeFormGroup.get('providerName').value;
+		this.beneficiary.hiaName = this.frmProgram.get('hiaName').value;
+		this.beneficiary.programType = this.frmProgram.get('programType').value;
+		this.beneficiary.programName = this.frmProgram.get('programName').value;
+		this.beneficiary.providerName = this.frmProgram.get('providerName').value;
 
 		console.log(this.beneficiary);
 		console.log(this.stepOneFormGroup.get('title'));
@@ -216,16 +201,16 @@ export class NewBeneficiaryComponent implements OnInit {
 
 		let patient = {
 			personId: "personId",
-			facilityId: this.stepThreeFormGroup.get('providerName').value,
+			facilityId: this.frmProgram.get('providerName').value,
 			isActive: false,
 			orders:[],
 			tags:[]
 		}
 
 		let beneficiary = {
-			facilityId: this.stepThreeFormGroup.get('providerName').value,  
+			facilityId: this.frmProgram.get('providerName').value,  
 			patientId: "patientId",
-			lasrraId: this.stepThreeFormGroup.get('lasrraId').value,
+			lasrraId: this.frmProgram.get('lasrraId').value,
 			noOfChildrenUnder18: this.stepOneFormGroup.get('noOfChildrenU18').value,
 			spouse: {
 			// 	spouseFirstName: ['', [<any>Validators.required]],
@@ -237,10 +222,10 @@ export class NewBeneficiaryComponent implements OnInit {
 				// relationshipId: ,
 				// lasrraId:  ,
 			},
-			hiaId: this.stepThreeFormGroup.get('hiaName').value,
-			hiaProgramTypeId: this.stepThreeFormGroup.get('programType').value,
-			hiaNameId: this.stepThreeFormGroup.get('programName').value,
-			phcpId: this.stepThreeFormGroup.get('providerName').value,
+			hiaId: this.frmProgram.get('hiaName').value,
+			hiaProgramTypeId: this.frmProgram.get('programType').value,
+			hiaNameId: this.frmProgram.get('programName').value,
+			phcpId: this.frmProgram.get('providerName').value,
 			dependants: [ 
 				// {
 				// 	patientId: ,
@@ -386,7 +371,7 @@ export class NewBeneficiaryComponent implements OnInit {
 		
 		console.log(value);
 		console.log(valid);
-		this.stepThreeFormGroup.get('providerName').value;
+		this.frmProgram.get('providerName').value;
 		//if(valid) {
 			this.stepOneView = false;
 			this.stepTwoView = false;
