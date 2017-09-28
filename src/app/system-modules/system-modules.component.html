@@ -22,7 +22,6 @@
 
 <body [class.sidebar-collapse]="sideToggle">
     <header id="header">
-        <ngx-loading-bar></ngx-loading-bar>
         <div class="navbar-top">
             <div class="sidebar-toggle-box">
                 <button class="sidebar-toggle" (click)="onClickSideToggle();" data-toggle="offcanvas" role="button">
@@ -78,7 +77,7 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-1'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-1'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-1');" class="sidemenu-1">
                         <i class="fa fa-bookmark-o"></i>
                         <span class="sidemenu-1">Users</span>
@@ -87,11 +86,11 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('user-management/users')" class=""><a><i class="fa fa-circle-o"></i> Users</a></li>
-                        <li (click)="loadroutes('user-management/new')" class=""><a><i class="fa fa-circle-o"></i> New User</a></li>
+                        <li class=""><a routerLink="/modules/user-management/users"><i class="fa fa-circle-o"></i> Users</a></li>
+                        <li class=""><a routerLink="/modules/user-management/new-user"><i class="fa fa-circle-o"></i> New User</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-2'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-2'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-2');" class="sidemenu-2">
                         <i class="fa fa-bookmark-o"></i>
                         <span class="sidemenu-2">Role</span>
@@ -100,11 +99,11 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('role/roles')" class=""><a><i class="fa fa-circle-o"></i> Roles</a></li>
+                        <li class=""><a routerLink="/modules/role/roles"><i class="fa fa-circle-o"></i> Roles</a></li>
                         <!-- <li class=""><a routerLink="/modules/role/new-role"><i class="fa fa-circle-o"></i> New Role</a></li> -->
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-3'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-3'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-3');" class="sidemenu-3">
                         <i class="fa fa-bookmark-o"></i>
                         <span class="sidemenu-3">Platforms</span>
@@ -113,11 +112,11 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('platform/platforms')" class=""><a><i class="fa fa-circle-o"></i> Platforms</a></li>
-                        <li (click)="loadroutes('platform/new')" class=""><a><i class="fa fa-circle-o"></i> New Platform</a></li>
+                        <li class=""><a routerLink="/modules/platform/platforms"><i class="fa fa-circle-o"></i> Platforms</a></li>
+                        <li class=""><a routerLink="/modules/platform/new-platform"><i class="fa fa-circle-o"></i> New Platform</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-4'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-4'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-4');" class="sidemenu-4">
                         <i class="fa fa-meh-o"></i>
                         <span class="sidemenu-4">Beneficiaries</span>
@@ -126,12 +125,12 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('beneficiary/beneficiaries')" class=""><a><i class="fa fa-circle-o"></i> Beneficiaries</a></li>
-                        <li (click)="loadroutes('beneficiary/new')" class=""><a><i class="fa fa-circle-o"></i> New Beneficiary</a></li>
+                        <li class=""><a routerLink="/modules/beneficiary/beneficiaries"><i class="fa fa-circle-o"></i> Beneficiaries</a></li>
+                        <li class=""><a routerLink="/modules/beneficiary/new-beneficiary"><i class="fa fa-circle-o"></i> New Beneficiary</a></li>
                     </ul>
                 </li>
 
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-5'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-5'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-5');" class="sidemenu-5">
                         <i class="fa fa-handshake-o"></i>
                         <span class="sidemenu-5">Employers</span>
@@ -140,11 +139,11 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('employer/employers')" class=""><a><i class="fa fa-circle-o"></i> Employers</a></li>
-                        <li (click)="loadroutes('employer/new')" class=""><a><i class="fa fa-circle-o"></i> New Employer</a></li>
+                        <li class=""><a routerLink="/modules/employer/employers"><i class="fa fa-circle-o"></i> Employers</a></li>
+                        <li class=""><a routerLink="/modules/employer/new-employer"><i class="fa fa-circle-o"></i> New Employer</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-6'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-6'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-6');" class="sidemenu-6">
                         <i class="fa fa-bullseye"></i>
                         <span class="sidemenu-6">Providers</span>
@@ -153,11 +152,11 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('care-provider/providers')" class=""><a><i class="fa fa-circle-o"></i> Providers</a></li>
-                        <li (click)="loadroutes('care-provider/new')" class=""><a><i class="fa fa-circle-o"></i> New Provider</a></li>
+                        <li class=""><a routerLink="/modules/care-provider/providers"><i class="fa fa-circle-o"></i> Providers</a></li>
+                        <li class=""><a routerLink="/modules/care-provider/new-provider"><i class="fa fa-circle-o"></i> New Provider</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-7'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-7'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-7');" class="sidemenu-7">
                         <i class="fa fa-bookmark-o"></i>
                         <span class="sidemenu-7">HIAs</span>
@@ -166,11 +165,11 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('care-provider/hias')" class=""><a><i class="fa fa-circle-o"></i> HIAs</a></li>
-                        <li (click)="loadroutes('hia/new')" class=""><a><i class="fa fa-circle-o"></i> New HIA</a></li>
+                        <li class=""><a routerLink="/modules/hia/hias"><i class="fa fa-circle-o"></i> HIAs</a></li>
+                        <li class=""><a routerLink="/modules/hia/new-hia"><i class="fa fa-circle-o"></i> New HIA</a></li>
                     </ul>
                 </li>
-                <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-8'">
+                <li class="treeview" [class.active]="sideMenuId === 'sidemenu-8'">
                     <a (click)="onClickSideMenu($event, 'sidemenu-8');" class="sidemenu-8">
                         <i class="fa fa-meh-o"></i>
                         <span class="sidemenu-8">Plans</span>
@@ -179,8 +178,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li (click)="loadroutes('plan/plans')" class=""><a><i class="fa fa-circle-o"></i> Plans</a></li>
-                        <li (click)="loadroutes('plan/new')" class=""><a><i class="fa fa-circle-o"></i> New Plan</a></li>
+                        <li class=""><a routerLink="/modules/plan/plans"><i class="fa fa-circle-o"></i> Plans</a></li>
+                        <li class=""><a routerLink="/modules/plan/new-plan"><i class="fa fa-circle-o"></i> New Plan</a></li>
                     </ul>
                 </li>
                 <!--<li class="header">ACCOUNT NAVIGATION</li>

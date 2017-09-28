@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import {
   CountriesService, FacilityTypesService, FacilitiesService
 } from '../../../services/api-services/index';
-import { Facility } from '../../../models/index';
+import { Facility, Person } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
@@ -35,6 +35,7 @@ export class NewUserComponent implements OnInit {
       firstName: ['', [<any>Validators.required]],
       otherName: ['', [<any>Validators.required]],
       email: ['', [<any>Validators.required]],
+      phoneNumber: ['', [<any>Validators.required]],
     });
   }
 

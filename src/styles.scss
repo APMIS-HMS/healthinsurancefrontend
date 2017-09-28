@@ -1538,7 +1538,7 @@
             padding-top: 100px;
         }
         @include breakpoint(max-width $screen-xs-max) {
-            padding-top: 100px;
+            //padding-top: 100px;
             -webkit-transform: translate(-$sidebar-width, 0);
             -ms-transform: translate(-$sidebar-width, 0); // IE9 only
             transform: translate(-$sidebar-width, 0);
@@ -1551,6 +1551,12 @@
                 -webkit-transform: translate(-$sidebar-width, 0);
                 -ms-transform: translate(-$sidebar-width, 0); // IE9 only
                 transform: translate(-$sidebar-width, 0);
+            }
+            @include breakpoint(max-width $screen-xs-max) {
+                //padding-top: 100px;
+                -webkit-transform: translate(0, 0);
+                -ms-transform: translate(0, 0); // IE9 only
+                transform: translate(0, 0);
             }
         }
         #content-wrapper,

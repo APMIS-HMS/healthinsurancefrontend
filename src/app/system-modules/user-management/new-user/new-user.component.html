@@ -18,23 +18,16 @@
                             <label class="col-12 no-padding control-label">Gender</label>
                             <div class="col-12 no-padding">
                                 <label for="bene-male">
-                                    <input type="radio" formControlName="gender" name="gender" id="bene-male" value="male" checked>Male &nbsp;
+                                    <input type="radio" formControlName="gender" name="gender" id="bene-male" value="male" checked>&nbsp;Male&nbsp;&nbsp;&nbsp;
                                 </label>
                                 <label for="bene-female">
-                                    <input type="radio" formControlName="gender" name="gender" id="bene-female" value="female" checked>Female &nbsp;
+                                    <input type="radio" formControlName="gender" name="gender" id="bene-female" value="female" checked>&nbsp;Female &nbsp;
                                 </label>
                                 <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
                                     This is a required field.
                                 </small>
                             </div>
                         </div>
-                        <div class="col-12 form-group col-md-6">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row">
                         <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">Last Name</label>
                             <div class="col-12 no-padding">
@@ -44,6 +37,10 @@
                                 </small>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
                         <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">First Name</label>
                             <div class="col-12 no-padding">
@@ -53,10 +50,6 @@
                                 </small>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row">
                         <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">Other Names</label>
                             <div class="col-12 no-padding">
@@ -66,11 +59,24 @@
                                 </small>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
                         <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">Email</label>
                             <div class="col-12 no-padding">
                                 <input type="email" formControlName="email" class="form-control">
                                 <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-12 form-group col-md-6">
+                            <label class="col-12 no-padding control-label">Phone Number</label>
+                            <div class="col-12 no-padding">
+                                <input type="email" formControlName="phoneNumber" class="form-control">
+                                <small class="alert-label" [hidden]="userFormGroup.controls.phoneNumber.valid || userFormGroup.controls.phoneNumber.pristine">
                                     This is a required field.
                                 </small>
                             </div>

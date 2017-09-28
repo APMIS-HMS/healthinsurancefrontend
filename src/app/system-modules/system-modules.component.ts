@@ -33,7 +33,7 @@ export class SystemModulesComponent implements OnInit {
 			}else{
 				this.loadingService.endLoading();
 			}
-		  })
+		  });
 		this._headerEventEmitter.announcedUrl.subscribe(url => {
 			this.pageInView = url;
 		});
@@ -52,19 +52,21 @@ export class SystemModulesComponent implements OnInit {
 		this._router.navigate([this.baseRoute + route]).then(res => {
 			this.loadingService.endLoading();
 		}).catch(err => {
-			console.log(err)
+			console.log(err);
 			this.loadingService.endLoading();
 		});
 	}
 
 	onClickSideMenu(event, identifier) {
-		let target = event.target || event.srcElement || event.currentTarget;
-		this.sideMenuId = target.className;
-		if (this.sideMenuDropdown && this.sideMenuId === identifier) {
-			this.sideMenuDropdown = !this.sideMenuDropdown;
-		} else {
-			this.sideMenuDropdown = !this.sideMenuDropdown;
-		}
+		this.sideMenuId = identifier;
+		// let target = event.target || event.srcElement || event.currentTarget;
+		// this.sideMenuId = target.className;
+		// console.log(this.sideMenuId);
+		// if (this.sideMenuDropdown && this.sideMenuId === identifier) {
+		// 	this.sideMenuDropdown = !this.sideMenuDropdown;
+		// } else {
+		// 	this.sideMenuDropdown = !this.sideMenuDropdown;
+		// }
 	}
 
 	signOut() {
