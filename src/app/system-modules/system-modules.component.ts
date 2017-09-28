@@ -3,7 +3,6 @@ import { AuthService } from './../auth/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
-
 @Component({
   selector: 'app-system-modules',
   templateUrl: './system-modules.component.html',

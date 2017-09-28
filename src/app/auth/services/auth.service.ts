@@ -49,7 +49,7 @@ export class AuthService {
   }
   checkAuth(){
     // this._restService._app.logout();
-    this.logOut();
+    // this.logOut();
     if (this._locker.getItem('auth') !== undefined && this._locker.getItem('auth') != null) {
       let auth:any = this._locker.getItem('auth');
       this._restService._app.passport.logout();

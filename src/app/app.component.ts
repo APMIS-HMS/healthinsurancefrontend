@@ -13,5 +13,4 @@ export class AppComponent {
 		public toastr: ToastsManager, vcr: ViewContainerRef) {
 		this.toastr.setRootViewContainerRef(vcr);
 	}
-
 }

@@ -42,18 +42,19 @@ export class LoginComponent implements OnInit {
 	}
 
 	onClickLogin(value: any, valid: boolean) {
-		// this.getUserTypes();
-
 		if (valid) {
 			this.loginBtnText = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
 
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
 				console.log(payload);
-				// this.getUserTypes();
 				this.toastr.success('You have successfully logged in!', 'Success!');
 				this._router.navigate(['/modules/beneficiary/beneficiaries']);
 
+			}).catch(err => {
+				console.log(err);
+				this.loginFormGroup.controls['password'].reset();
+				this.loginBtnText = "LOG IN &nbsp; <i class='fa fa-sign-in'></i>";
 			})
 		}
 
