@@ -38,7 +38,6 @@ export class DetailsPlatformComponent implements OnInit {
   _getPlatform(id) {
     this._systemService.on();
     this._facilityService.get(id, {}).then(platform => {
-      console.log(platform)
       this.selectedPlaform = platform;
       this._systemService.off();
     }).catch(err => {

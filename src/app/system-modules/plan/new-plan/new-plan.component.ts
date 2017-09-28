@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -37,7 +38,8 @@ export class NewPlanComponent implements OnInit {
 		private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _planService: PlanService,
-    private _planTypeService: PlanTypeService
+    private _planTypeService: PlanTypeService,
+    private _systemService:SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -104,8 +106,9 @@ export class NewPlanComponent implements OnInit {
       this.disablePremiumNextBtn = true;
       this.premiumNextBtn = 'Saving Plan... <i class="fa fa-spinner fa-spin"></i>';
       // Save plan
+      this._systemService.on();
       this._planService.create(this.plan).then(res => {
-        console.log(res);
+        this._systemService.off();
         this._toastr.success('Plan has been created successfully.', 'Success');
         this.premiumNextBtn = 'Save <i class="fa fa-check" aria-hidden="true"></i>';
         this.disablePremiumNextBtn = false;
@@ -113,18 +116,24 @@ export class NewPlanComponent implements OnInit {
         this.planPremiumFormGroup.reset();
         this.planDetailFormGroup.controls['planStatus'].setValue(true);
         this.tabDetails_click();
-      }).catch(err => console.log(err));
+      }).catch(err =>{
+        this._systemService.off();
+      });
     } else {
       console.log('Plan Does not exist.');
     }
   }
 
   private _getPlanTypes() {
+    this._systemService.on();
     this._planTypeService.findAll().then((res: any) => {
+      this._systemService.off();
       if (res.data.length > 0) {
         this.planTypes = res.data;
       }
-    }).catch(err => console.log(err));
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
   
   tabPremium_click(){

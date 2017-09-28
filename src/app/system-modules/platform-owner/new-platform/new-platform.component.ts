@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
 import { UserTypeService } from './../../../services/common/user-type.service';
@@ -48,6 +49,7 @@ export class NewPlatformComponent implements OnInit {
     private _bankService: BankService,
     private _countriesService: CountryService,
     private _facilityService: FacilityService,
+    private _systemService: SystemModuleService
   ) { }
 
   ngOnInit() {
@@ -63,7 +65,7 @@ export class NewPlatformComponent implements OnInit {
       state: ['', [<any>Validators.required]],
       lga: ['', [<any>Validators.required]],
       city: ['', [<any>Validators.required]],
-      neighbourhood:['', [<any>Validators.required]],
+      neighbourhood: ['', [<any>Validators.required]],
       bank: ['', [<any>Validators.required]],
       bankAccName: ['', [<any>Validators.required]],
       bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
@@ -87,12 +89,13 @@ export class NewPlatformComponent implements OnInit {
     this._getCountries();
 
     this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
-     if(value !== null){
-      this._getLgaAndCities(this.selectedCountry._id, value);
-     }
+      if (value !== null) {
+        this._getLgaAndCities(this.selectedCountry._id, value);
+      }
     })
   }
   _getCountries() {
+    this._systemService.on();
     this._countriesService.find({
       query: {
         $limit: 200,
@@ -100,16 +103,18 @@ export class NewPlatformComponent implements OnInit {
       }
     }).then((payload: any) => {
       this.countries = payload.data;
-      console.log(payload)
+      this._systemService.off();
       const index = this.countries.findIndex(x => x.name === 'Nigeria');
-      console.log(index)
       if (index > -1) {
         this.selectedCountry = this.countries[index];
         this._getStates(this.selectedCountry._id);
       }
+    }).catch(err => {
+      this._systemService.off();
     })
   }
   _getStates(_id) {
+    this._systemService.on();
     this._countriesService.find({
       query: {
         _id: _id,
@@ -117,19 +122,18 @@ export class NewPlatformComponent implements OnInit {
         $select: { "states.cities": 0, "states.lgs": 0 }
       }
     }).then((payload: any) => {
-      console.log(payload.data)
+      this._systemService.off();
       if (payload.data.length > 0) {
         this.states = payload.data[0].states;
       }
 
     }).catch(error => {
-
+      this._systemService.off();
     })
   }
 
   _getLgaAndCities(_id, state) {
-    // console.log(_id);
-    // console.log(state)
+    this._systemService.on();
     this._countriesService.find({
       query: {
         _id: _id,
@@ -139,7 +143,7 @@ export class NewPlatformComponent implements OnInit {
 
       }
     }).then((payload: any) => {
-      console.log(payload)
+      this._systemService.off();
       if (payload.data.length > 0) {
         const states = payload.data[0].states;
         if (states.length > 0) {
@@ -149,40 +153,46 @@ export class NewPlatformComponent implements OnInit {
       }
 
     }).catch(error => {
-
+      this._systemService.off();
     })
   }
   _getBanks() {
+    this._systemService.on();
     this._bankService.find({
       query: {
         $limit: 200
       }
     }).then((payload: any) => {
       this.banks = payload.data;
-      console.log(this.banks)
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
     })
   }
   _getUserTypes() {
+    this._systemService.on();
     this._userTypeService.findAll().then((payload: any) => {
       if (payload.data.length > 0) {
-        console.log(payload.data)
         const index = payload.data.findIndex(x => x.name === 'Platform Owner');
         if (index > -1) {
           this.selectedUserType = payload.data[index];
         } else {
           this.selectedUserType = undefined;
         }
-        console.log(this.selectedUserType);
+        this._systemService.off();
       }
     }, error => {
-
+      this._systemService.off();
     })
   }
 
   _getContactPositions() {
+    this._systemService.on();
     this._contactPositionService.find({}).then((payload: any) => {
       this.contactPositions = payload.data;
-      console.log(this.contactPositions)
+       this._systemService.off();
+    }).catch(err =>{
+      this._systemService.off();
     })
   }
   _extractBusinessContact(businessContact?: Contact) {
@@ -253,25 +263,24 @@ export class NewPlatformComponent implements OnInit {
   }
 
   save(valid, value) {
-    // console.log(valid);
-    // console.log(value);
-    // console.log(this.platformFormGroup.value);
     if (valid) {
-			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
-			let facility = this._extractFacility();
+      this._systemService.on();
+      this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+      let facility = this._extractFacility();
 
+      this._facilityService.create(facility).then(payload => {
+        this._systemService.off();
+        this.platformFormGroup.reset();
+        this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+        this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+      }).catch(err => {
+        this._systemService.off();
+      });
 
-			this._facilityService.create(facility).then(payload => {
-				this.platformFormGroup.reset();
-				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-				this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-			}).catch(err => {
-				console.log(err);
-			});
-
-		} else {
-			this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
-		}
+    } else {
+      this._systemService.off();
+      this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+    }
 
   }
 }

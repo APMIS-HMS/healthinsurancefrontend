@@ -29,9 +29,6 @@ export class ListPlatformComponent implements OnInit {
     this._router.events
       .filter(event => event instanceof NavigationEnd)
       .subscribe(e => {
-        // console.log('previous:', e);
-        // console.log('prev:', this.previousUrl);
-        //this.previousUrl = e.url;
       });
   }
 

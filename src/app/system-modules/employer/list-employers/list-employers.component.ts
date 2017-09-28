@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { UserTypeService } from './../../../services/common/user-type.service';
 import { FacilityService } from './../../../services/common/facility.service';
 import { Component, OnInit } from '@angular/core';
@@ -19,7 +20,8 @@ export class ListEmployersComponent implements OnInit {
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
 		private _facilityService: FacilityService,
-		private _userTypeService:UserTypeService
+		private _userTypeService:UserTypeService,
+		private _systemService:SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -30,7 +32,9 @@ export class ListEmployersComponent implements OnInit {
 	}
 
 	_getUserTypes() {
+		this._systemService.on();
 		this._userTypeService.findAll().then((payload: any) => {
+			this._systemService.off();
 		  if (payload.data.length > 0) {
 			const index = payload.data.findIndex(x => x.name === 'Employer');
 			if (index > -1) {
@@ -41,13 +45,14 @@ export class ListEmployersComponent implements OnInit {
 			}
 		  }
 		}, error => {
-	
+			this._systemService.off();
 		})
 	  }
 	_getEmployers() {
 		this.loading = true;
+		this._systemService.on();
 		this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id } }).then((res: any) => {
-			console.log(res);
+			this._systemService.off();
 			if (res.data.length !== 0) {
 				this.loading = false;
 				this.employers = res.data;
@@ -57,7 +62,7 @@ export class ListEmployersComponent implements OnInit {
 			}
 		})
 			.catch(err => {
-				console.log(err);
+				this._systemService.off();
 			});
 	}
 
