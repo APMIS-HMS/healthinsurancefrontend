@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { FacilityService } from './../../../services/common/facility.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,7 +17,8 @@ export class DetailsEmployerComponent implements OnInit {
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
 		private _facilityService: FacilityService,
-		private _route: ActivatedRoute
+		private _route: ActivatedRoute,
+		private _systemService:SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -24,19 +26,20 @@ export class DetailsEmployerComponent implements OnInit {
     	this._headerEventEmitter.setMinorRouteUrl('');
 
 		this._route.params.subscribe( params => {
-			console.log(params);
 			this.routeId = params.id;
+			this._getEmployerDetails();
 		});
-		
-		this._getEmployerDetails();
 	}
 
 	_getEmployerDetails() {
+		this._systemService.on();
 		this._facilityService.get(this.routeId, {})
 			.then(res => {
 				this.employerDetails = res;
-				console.log(this.employerDetails);
-			});
+				this._systemService.off();
+			}).catch(err =>{
+				this._systemService.off();
+			})
 	}
 
 }

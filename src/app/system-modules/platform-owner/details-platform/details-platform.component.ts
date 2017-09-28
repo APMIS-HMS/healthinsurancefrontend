@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { FacilityService } from './../../../services/common/facility.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -22,7 +23,8 @@ export class DetailsPlatformComponent implements OnInit {
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
-    private _facilityService: FacilityService
+    private _facilityService: FacilityService,
+    private _systemService: SystemModuleService
   ) { }
 
   ngOnInit() {
@@ -34,11 +36,12 @@ export class DetailsPlatformComponent implements OnInit {
     })
   }
   _getPlatform(id) {
+    this._systemService.on();
     this._facilityService.get(id, {}).then(platform => {
-      console.log(platform)
       this.selectedPlaform = platform;
+      this._systemService.off();
     }).catch(err => {
-
+      this._systemService.off();
     });
   }
   hias_show() {

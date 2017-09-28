@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 
 import { ActivatedRoute } from '@angular/router';
 import { FacilityService } from './../../../services/common/facility.service';
@@ -63,7 +64,8 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 		private _facilityService: FacilityService,
 		private _bankService: BankService,
 		private _countriesService: CountryService,
-		private _route: ActivatedRoute
+		private _route: ActivatedRoute,
+		private _systemService: SystemModuleService
 	) { }
 	ngAfterViewInit() {
 		this._route.params.subscribe(param => {
@@ -164,11 +166,15 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 	}
 
 	_getEmployerDetails(routeId) {
+		this._systemService.on();
 		this._facilityService.get(routeId, {})
 			.then((res: Facility) => {
+				this._systemService.off();
 				this.facility = res;
 				this._initialiseFormGroup();
-			});
+			}).catch(err => {
+				this._systemService.off();
+			})
 
 	}
 	compareState(s1: any, s2: any) {
@@ -187,16 +193,22 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 		return l1._id === l2._id;
 	}
 	_getContactPositions() {
+		this._systemService.on();
 		this._contactPositionService.find({}).then((payload: any) => {
+			this._systemService.off();
 			this.contactPositions = payload.data;
 			if (this.facility !== undefined) {
 				this.employerFormGroup.controls['bc_position'].setValue(this.facility.businessContact.position);
 				this.employerFormGroup.controls['it_position'].setValue(this.facility.itContact.position);
 			}
+		}).catch(err =>{
+			this._systemService.off();
 		})
 	}
 	_getUserTypes() {
+		this._systemService.on();
 		this._userTypeService.findAll().then((payload: any) => {
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				this.userTypes = payload.data;
 				const index = payload.data.findIndex(x => x.name === 'Employer');
@@ -209,16 +221,18 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 				}
 			}
 		}, error => {
-
+			this._systemService.off();
 		})
 	}
 	_getCountries() {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				$limit: 200,
 				$select: { "states": 0 }
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			this.countries = payload.data;
 			const index = this.countries.findIndex(x => x.name === 'Nigeria');
 			if (index > -1) {
@@ -228,9 +242,12 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 					this._getLgaAndCities(this.selectedCountry._id, this.selectedState);
 				}
 			}
+		}).catch(err =>{
+			this._systemService.off();
 		})
 	}
 	_getStates(_id) {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				_id: _id,
@@ -238,16 +255,18 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 				$select: { "states.cities": 0, "states.lgs": 0 }
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				this.states = payload.data[0].states;
 			}
 
 		}).catch(error => {
-
+			this._systemService.off();
 		})
 	}
 
 	_getLgaAndCities(_id, state) {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				_id: _id,
@@ -255,6 +274,7 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 				$select: { 'states.$': 1 }
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				const states = payload.data[0].states;
 				if (states.length > 0) {
@@ -264,16 +284,20 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 			}
 
 		}).catch(error => {
-
+			this._systemService.off();
 		})
 	}
 	_getBanks() {
+		this._systemService.on();
 		this._bankService.find({
 			query: {
 				$limit: 200
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			this.banks = payload.data;
+		}).catch(err =>{
+			this._systemService.off();
 		})
 	}
 
@@ -356,13 +380,16 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 
 	onClickSaveEmployer(value: any, valid: boolean) {
 		if (valid) {
+			this._systemService.on();
 			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
 			let facility = this._extractFacility();
 			this._facilityService.create(facility).then(payload => {
 				this.employerFormGroup.reset();
+				this._systemService.off();
 				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
 				this._toastr.success('Employer has been created successfully!', 'Success!');
 			}).catch(err => {
+				this._systemService.off();
 			});
 
 		} else {
@@ -371,14 +398,18 @@ export class NewEmployerComponent implements OnInit, AfterViewInit {
 	}
 
 	_getIndustries() {
+		this._systemService.on();
 		this._industryService.find({}).then((payload: any) => {
+			this._systemService.off();
 			this.industries = payload.data;
 			if (this.facility !== undefined) {
 				console.log('indus')
 				console.log(this.facility.employer.industry)
 				this.employerFormGroup.controls['type'].setValue(this.facility.employer.industry);
 			}
-		});
+		}).catch(err =>{
+			this._systemService.off();
+		})
 	}
 
 }

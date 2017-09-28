@@ -1,3 +1,4 @@
+import { SystemModuleService } from './services/common/system-module.service';
 import { UserTypeService } from './services/common/user-type.service';
 import { AuthService } from './auth/services/auth.service';
 import { FacilityService } from './services/common/facility.service';
@@ -38,7 +39,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
     SetupService.MaritalStatusService,
     SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
     SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
-    SetupService.CorporateFacilityService, SetupService.IndustryTypesService, AuthService, FacilityService, UserTypeService],
+    SetupService.CorporateFacilityService, SetupService.IndustryTypesService, AuthService, FacilityService, UserTypeService,SystemModuleService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

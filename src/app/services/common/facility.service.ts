@@ -1,3 +1,4 @@
+import { SystemModuleService } from './system-module.service';
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -13,7 +14,8 @@ export class FacilityService {
   constructor(
     private _socketService: SocketService,
     private _restService: RestService,
-    private locker: CoolLocalStorage
+    private locker: CoolLocalStorage,
+    private _systmeService: SystemModuleService
   ) {
     this._rest = _restService.getService('facilities');
     this._socket = _socketService.getService('facilities');
@@ -22,7 +24,6 @@ export class FacilityService {
   find(query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
-        console.log(query);
         return socket.find(query);
       }))
     });

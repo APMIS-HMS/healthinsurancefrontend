@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 //import * from '../../../rxjs/rxjs.extentions';
@@ -22,14 +23,12 @@ export class ListPlatformComponent implements OnInit {
     private _router: Router,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
-    private _headerEventEmitter: HeaderEventEmitterService
+    private _headerEventEmitter: HeaderEventEmitterService,
+    private _systemService: SystemModuleService
   ) {
     this._router.events
       .filter(event => event instanceof NavigationEnd)
       .subscribe(e => {
-        // console.log('previous:', e);
-        // console.log('prev:', this.previousUrl);
-        //this.previousUrl = e.url;
       });
   }
 
@@ -40,15 +39,20 @@ export class ListPlatformComponent implements OnInit {
     this._getUserTypes();
   }
   _getPlatformOwners() {
+    this._systemService.on();
     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id } }).then((payload: any) => {
       this.owners = payload.data;
+      this._systemService.off();
     }).catch(error => {
       console.log(error);
+      this._systemService.off();
     })
   }
 
   _getUserTypes() {
+    this._systemService.on();
     this._userTypeService.findAll().then((payload: any) => {
+      this._systemService.off();
       if (payload.data.length > 0) {
         const index = payload.data.findIndex(x => x.name === 'Platform Owner');
         if (index > -1) {
@@ -59,7 +63,7 @@ export class ListPlatformComponent implements OnInit {
         }
       }
     }, error => {
-
+      this._systemService.off();
     })
   }
 }

@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
@@ -15,7 +16,8 @@ export class DetailsProviderComponent implements OnInit {
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
 		private _facilityService: FacilityService,
-		private _route: ActivatedRoute
+		private _route: ActivatedRoute,
+		private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -30,10 +32,13 @@ export class DetailsProviderComponent implements OnInit {
 		this._getProviderDetails();
 	}
 	_getProviderDetails() {
+		this._systemService.on();
 		this._facilityService.get(this.routeId, {})
 			.then(res => {
+				this._systemService.off();
 				this.providerDetails = res;
-				console.log(this.providerDetails);
-			});
+			}).catch(err => {
+				this._systemService.off();
+			})
 	}
 }
