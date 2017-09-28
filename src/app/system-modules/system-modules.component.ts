@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../services/common/system-module.service';
 import { Router } from '@angular/router';
 import { AuthService } from './../auth/services/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -22,10 +23,17 @@ export class SystemModulesComponent implements OnInit {
 		private _authService: AuthService,
 		private _router: Router,
 		private loadingService: LoadingBarService,
+		private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {
-
+		this._systemService.notificationAnnounced$.subscribe((value: any) => {
+			if (value.status === 'On') {
+			  this.loadingService.startLoading();
+			}else{
+				this.loadingService.endLoading();
+			}
+		  })
 		this._headerEventEmitter.announcedUrl.subscribe(url => {
 			this.pageInView = url;
 		});

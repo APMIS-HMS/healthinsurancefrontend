@@ -30,6 +30,20 @@ export class SocketService {
             .configure(rx(RxJS, { listStrategy: 'always' }))
             .configure(hooks())
             .configure(authentication({ storage: window.localStorage }));
+
+        // console.log(this.socket)
+        this.socket.on('reconnect', (value) => {
+            console.log(value)
+        })
+        this.socket.on('disconnect', (value)=>{
+            console.log(value)
+        })
+        this.socket.on('connect', (value) => {
+            console.log(value)
+        })
+        this.socket.on('connecting', (value)=>{
+            console.log(value)
+        })
     }
     logOut() {
         this.locker.clear();
@@ -82,19 +96,19 @@ export class SocketService {
     }
     authenticateUser(service) {
         if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
-          return new Promise((resolve, reject) => {
-            let token = this.locker.getItem('auth');
-            const copyToken = JSON.parse(token);
-            resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyToken.accessToken }).then(payload => {
-              this.socket = this.getService(service);
-              return Promise.resolve(this.socket);
-            }, error => {
-              console.log(error)
-            }));
-    
-          });
+            return new Promise((resolve, reject) => {
+                let token = this.locker.getItem('auth');
+                const copyToken = JSON.parse(token);
+                resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyToken.accessToken }).then(payload => {
+                    this.socket = this.getService(service);
+                    return Promise.resolve(this.socket);
+                }, error => {
+                    console.log(error)
+                }));
+
+            });
         }
-      }
+    }
 }
 
 const superagent = require('superagent');
