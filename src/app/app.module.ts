@@ -15,7 +15,6 @@ import * as SetupService from './services/api-services/index';
 
 import { appRouter } from './app.route';
 import { AppComponent } from './app.component';
-import { NgLoadingBarModule } from 'ng-loading-bar';
 @NgModule({
   declarations: [
     AppComponent
@@ -29,8 +28,7 @@ import { NgLoadingBarModule } from 'ng-loading-bar';
     ReactiveFormsModule,
     HttpModule,
     appRouter,
-    CoolStorageModule,
-    NgLoadingBarModule.forRoot()
+    CoolStorageModule
   ],
   providers: [SocketService, RestService, SetupService.FacilitiesService, SetupService.FacilityTypesService,
     SetupService.CountriesService, SetupService.GenderService, SetupService.TitleService,
