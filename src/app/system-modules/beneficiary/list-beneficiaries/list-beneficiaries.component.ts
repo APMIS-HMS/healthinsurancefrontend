@@ -1,4 +1,4 @@
-import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 //import * from '../../../rxjs/rxjs.extentions';

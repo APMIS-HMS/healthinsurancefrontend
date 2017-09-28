@@ -3,11 +3,11 @@ import { AuthService } from './../auth/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
-
+import { LoadingBarService } from '@ngx-loading-bar/core';
 @Component({
-  selector: 'app-system-modules',
-  templateUrl: './system-modules.component.html',
-  styleUrls: ['./system-modules.component.scss']
+	selector: 'app-system-modules',
+	templateUrl: './system-modules.component.html',
+	styleUrls: ['./system-modules.component.scss']
 })
 export class SystemModulesComponent implements OnInit {
 	pageInView: String = '';
@@ -16,13 +16,16 @@ export class SystemModulesComponent implements OnInit {
 	sideMenuDropdown: Boolean = false;
 	sideMenuId: String = '';
 
+	baseRoute: any = '/modules/';
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
-		private _authService:AuthService,
-		private _router:Router
+		private _authService: AuthService,
+		private _router: Router,
+		private loadingService: LoadingBarService,
 	) { }
 
 	ngOnInit() {
+
 		this._headerEventEmitter.announcedUrl.subscribe(url => {
 			this.pageInView = url;
 		});
@@ -35,6 +38,17 @@ export class SystemModulesComponent implements OnInit {
 		this.sideToggle = !this.sideToggle;
 	}
 
+	loadroutes(route: any) {
+		console.log(route);
+		this.loadingService.startLoading();
+		this._router.navigate([this.baseRoute + route]).then(res => {
+			this.loadingService.endLoading();
+		}).catch(err => {
+			console.log(err)
+			this.loadingService.endLoading();
+		});
+	}
+
 	onClickSideMenu(event, identifier) {
 		let target = event.target || event.srcElement || event.currentTarget;
 		this.sideMenuId = target.className;
@@ -45,7 +59,7 @@ export class SystemModulesComponent implements OnInit {
 		}
 	}
 
-	signOut(){
+	signOut() {
 		this._authService.checkAuth();
 		this._router.navigate(['/auth']);
 	}

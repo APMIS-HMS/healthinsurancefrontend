@@ -4,7 +4,7 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 
 
 @Injectable()
-export class FacilityService {
+export class SystemModuleService {
   public listner;
   public _socket;
   private _rest;

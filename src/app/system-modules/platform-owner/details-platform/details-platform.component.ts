@@ -1,3 +1,5 @@
+import { FacilityService } from './../../../services/common/facility.service';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
@@ -14,36 +16,50 @@ export class DetailsPlatformComponent implements OnInit {
   showEmployers = false;
   showHias = true;
 
-  platform= "LASHMA";
+  platform = "LASHMA";
+  selectedPlaform: any;
 
   constructor(
-		private _headerEventEmitter: HeaderEventEmitterService
-	) { }
+    private _headerEventEmitter: HeaderEventEmitterService,
+    private _route: ActivatedRoute,
+    private _facilityService: FacilityService
+  ) { }
 
-	ngOnInit() {
-		this._headerEventEmitter.setRouteUrl('Platform Details');
-    	this._headerEventEmitter.setMinorRouteUrl('');	
+  ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Platform Details');
+    this._headerEventEmitter.setMinorRouteUrl('');
+    this._route.params.subscribe(value => {
+      console.log(value)
+      this._getPlatform(value.id);
+    })
   }
-  
-  hias_show(){
+  _getPlatform(id) {
+    this._facilityService.get(id, {}).then(platform => {
+      console.log(platform)
+      this.selectedPlaform = platform;
+    }).catch(err => {
+
+    });
+  }
+  hias_show() {
     this.showEmp = false;
     this.showEmployers = false;
     this.showHias = true;
     this.showProviders = false;
   }
-  employees_show(){
+  employees_show() {
     this.showEmp = true;
     this.showEmployers = false;
     this.showHias = false;
     this.showProviders = false;
   }
-  employers_show(){
+  employers_show() {
     this.showEmp = false;
     this.showEmployers = true;
     this.showHias = false;
     this.showProviders = false;
   }
-  providers_show(){
+  providers_show() {
     this.showEmp = false;
     this.showEmployers = false;
     this.showHias = false;

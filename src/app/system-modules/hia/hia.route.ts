@@ -13,7 +13,7 @@ const HIA_ROUTES: Routes = [
             { path: 'hias', component: ListHiasComponent },
             { path: 'hias/:id', component: DetailsHiaComponent },
             { path: 'hias/:id/request', component: NewRequestComponent },
-            { path: 'new-hia', component: NewHiaComponent }
+            { path: 'new', component: NewHiaComponent }
         ]
     }
 ];

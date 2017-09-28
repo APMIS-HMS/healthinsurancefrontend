@@ -1,6 +1,6 @@
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
-import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
 import { Address } from './../../../models/organisation/address';
 import { Facility } from './../../../models/organisation/facility';
 import { BankDetail } from './../../../models/organisation/bank-detail';
@@ -8,6 +8,7 @@ import { Contact } from './../../../models/organisation/contact';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { FacilityService } from './../../../services/common/facility.service';
 
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { ContactPositionService, PlatformOwnerService } from '../../../services/index';
@@ -45,7 +46,8 @@ export class NewPlatformComponent implements OnInit {
     private _platformOwnerService: PlatformOwnerService,
     private _userTypeService: UserTypeService,
     private _bankService: BankService,
-    private _countriesService: CountryService
+    private _countriesService: CountryService,
+    private _facilityService: FacilityService,
   ) { }
 
   ngOnInit() {
@@ -61,9 +63,10 @@ export class NewPlatformComponent implements OnInit {
       state: ['', [<any>Validators.required]],
       lga: ['', [<any>Validators.required]],
       city: ['', [<any>Validators.required]],
+      neighbourhood:['', [<any>Validators.required]],
       bank: ['', [<any>Validators.required]],
       bankAccName: ['', [<any>Validators.required]],
-      bankAccNumber: ['', [<any>Validators.required]],
+      bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       bc_fname: ['', [<any>Validators.required]],
       bc_lname: ['', [<any>Validators.required]],
       bc_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
@@ -74,11 +77,6 @@ export class NewPlatformComponent implements OnInit {
       it_position: ['', [<any>Validators.required]],
       it_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      // plan: ['', []],
-      // plan2: ['', [<any>Validators.required]],
-      // plan3: ['', [<any>Validators.required]],
-      nhisNumber: ['', [<any>Validators.required]],
-      cinNumber: ['', [<any>Validators.required]],
       registrationDate: ['', [<any>Validators.required]]
     });
 
@@ -89,8 +87,9 @@ export class NewPlatformComponent implements OnInit {
     this._getCountries();
 
     this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
-      console.log(value)
+     if(value !== null){
       this._getLgaAndCities(this.selectedCountry._id, value);
+     }
     })
   }
   _getCountries() {
@@ -224,7 +223,7 @@ export class NewPlatformComponent implements OnInit {
     }
     address.city = this.platformFormGroup.controls['city'].value;
     address.lga = this.platformFormGroup.controls['lga'].value;
-    address.neighbourhood = '';
+    address.neighbourhood = this.platformFormGroup.controls['neighbourhood'].value;
     address.state = this.platformFormGroup.controls['state'].value;
     address.street = this.platformFormGroup.controls['address'].value;
     return address;
@@ -246,6 +245,8 @@ export class NewPlatformComponent implements OnInit {
     facility.email = this.platformFormGroup.controls['email'].value;
     facility.website = this.platformFormGroup.controls['website'].value;
     facility.shortName = this.platformFormGroup.controls['shortName'].value;
+    facility.name = this.platformFormGroup.controls['platformName'].value;
+    facility.phoneNumber = businessContact.phoneNumber;
     facility.facilityType = this.selectedUserType;
 
     return facility;
@@ -255,7 +256,22 @@ export class NewPlatformComponent implements OnInit {
     // console.log(valid);
     // console.log(value);
     // console.log(this.platformFormGroup.value);
-    console.log(this._extractFacility());
+    if (valid) {
+			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+			let facility = this._extractFacility();
+
+
+			this._facilityService.create(facility).then(payload => {
+				this.platformFormGroup.reset();
+				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+				this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+			}).catch(err => {
+				console.log(err);
+			});
+
+		} else {
+			this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+		}
 
   }
 }

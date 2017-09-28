@@ -13,7 +13,7 @@ const CARE_PROVIDER_ROUTES: Routes = [
             { path: 'providers', component: ListProvidersComponent },
             { path: 'providers/:id', component: DetailsProviderComponent },
             { path: 'providers/:id/request', component: NewRequestComponent },
-            { path: 'new-provider', component: NewProviderComponent }
+            { path: 'new', component: NewProviderComponent }
         ]
     }
 ];

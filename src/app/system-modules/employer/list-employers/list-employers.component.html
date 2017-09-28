@@ -78,20 +78,20 @@
                         <tr *ngIf="employers.length === 0 && !loading">
                             <td class="text-center" colspan="9">No data available in table</td>
                         </tr>
-                        <tr class="tr-link" routerLink="/modules/employer/employers/{{ employer._id }}" *ngFor="let employer of employers">
+                        <tr class="tr-link" *ngFor="let employer of employers">
                             <td>{{ employer.name }}</td>
-                            <td>{{ employer.contactFullName }}</td>
-                            <td>{{ employer.contactPhoneNo }}</td>
-                            <td class="text-right">{{ employer.contactPhoneNo }}</td>
+                            <td>{{ employer.businessContact.lastName }} {{ employer.businessContact.firstName }}</td>
+                            <td>{{ employer.businessContact.phoneNumber }}</td>
+                            <td class="text-right">{{ employer.businessContact.contactPhoneNo }}</td>
                             <td>Information Technology</td>
-                            <td>{{ employer.cacNumber }}</td>
-                            <td>{{ employer.cinNumber }}</td>
+                            <td>{{ employer.employer.cacNumber }}</td>
+                            <td>{{ employer.employer.cin }}</td>
                             <td>
-                                <span class="{{ employer.isLshmConfirm ? 'text-success': 'text-red' }}"> 
-                                    {{ employer.isLshmConfirm ? 'Active': 'Inactive' }}
+                                <span class="{{ employer.isTokenVerified ? 'text-success': 'text-red' }}"> 
+                                    {{ employer.isTokenVerified ? 'Active': 'Inactive' }}
                                 </span>
                             </td>
-                            <td><i class="fa fa-chevron-right"></i></td>
+                            <td><i class="fa fa-chevron-right" routerLink="/modules/employer/employers/{{ employer._id }}"></i></td>
                         </tr>
                     </tbody>
                 </table>

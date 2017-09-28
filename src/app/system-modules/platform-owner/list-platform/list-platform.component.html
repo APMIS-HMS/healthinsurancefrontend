@@ -67,16 +67,20 @@
                         <!--<tr>
                           <td class="text-center" colspan="9">No data available in table</td>
                       </tr>-->
-                        <tr class="tr-link" routerLink="/modules/platform/platforms/09493093489034">
-                            <td>Lagos State Health Management Agency</td>
-                            <td>LASHMA</td>
-                            <td>www.lashma.com</td>
-                            <td>info@lashma.com</td>
-                            <td>John Doe</td>
-                            <td>08032310909</td>
-                            <td>john.doe@lashma.com</td>
-                            <td class="text-success">Active</td>
-                            <td><i class="fa fa-chevron-right"></i></td>
+                        <tr *ngFor="let owner of owners" class="tr-link">
+                            <td>{{owner.name}}</td>
+                            <td>{{owner.shortName}}</td>
+                            <td><a href="{{owner.website}}" target="_blank">{{owner.shortName}} website</a></td>
+                            <td>{{owner.email}}</td>
+                            <td>{{owner.businessContact.lastName}} {{owner.businessContact.firstName}}</td>
+                            <td>{{owner.businessContact.phoneNumber}}</td>
+                            <td>{{owner.businessContact.email}}</td>
+                            <td>
+                                <span class="{{ owner.isTokenVerified ? 'text-success': 'text-red' }}"> 
+                                            {{ owner.isTokenVerified ? 'Active': 'Inactive' }}
+                                        </span>
+                            </td>
+                            <td routerLink="/modules/platform/platforms/{{owner._id}}"><i class="fa fa-chevron-right"></i></td>
                         </tr>
                     </tbody>
                 </table>

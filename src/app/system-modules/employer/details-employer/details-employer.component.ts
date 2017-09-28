@@ -1,3 +1,4 @@
+import { FacilityService } from './../../../services/common/facility.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -14,7 +15,7 @@ export class DetailsEmployerComponent implements OnInit {
 	employerDetails: any = {};
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
-		private _employerService: CorporateFacilityService,
+		private _facilityService: FacilityService,
 		private _route: ActivatedRoute
 	) { }
 
@@ -26,12 +27,12 @@ export class DetailsEmployerComponent implements OnInit {
 			console.log(params);
 			this.routeId = params.id;
 		});
-
-		this.getEmployerDetails();
+		
+		this._getEmployerDetails();
 	}
 
-	getEmployerDetails() {
-		this._employerService.get(this.routeId, {})
+	_getEmployerDetails() {
+		this._facilityService.get(this.routeId, {})
 			.then(res => {
 				this.employerDetails = res;
 				console.log(this.employerDetails);

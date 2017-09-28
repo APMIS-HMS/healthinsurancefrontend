@@ -1,7 +1,7 @@
 import { Provider } from './../../../models/organisation/provider';
 import { FacilityOwnershipService } from './../../../services/common/facility-ownership.service';
 import { FacilityCategoryService } from './../../../services/common/facility-category.service';
-import { UserTypeService } from './../../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
 import { BankDetail } from './../../../models/organisation/bank-detail';
 import { Address } from './../../../models/organisation/address';
 import { HIA } from './../../../models/organisation/hia';

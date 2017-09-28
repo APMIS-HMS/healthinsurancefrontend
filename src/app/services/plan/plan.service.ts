@@ -2,9 +2,8 @@ import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 
-
 @Injectable()
-export class FacilityService {
+export class PlanService {
   public listner;
   public _socket;
   private _rest;
@@ -15,46 +14,52 @@ export class FacilityService {
     private _restService: RestService,
     private locker: CoolLocalStorage
   ) {
-    this._rest = _restService.getService('facilities');
-    this._socket = _socketService.getService('facilities');
+    this._rest = _restService.getService('plans');
+    this._socket = _socketService.getService('plans');
+  }
+
+  findAll() {
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('plans').then((socket: any) => {
+        return socket.find();
+      }));
+    });
   }
 
   find(query: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
-        console.log(query);
+      resolve(this._socketService.authenticateUser('plans').then((socket: any) => {
         return socket.find(query);
-      }))
+      }));
     });
   }
 
   get(id: string, query: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('plans').then((socket: any) => {
         return this._socket.get(id, query);
-      }))
+      }));
     });
   }
   create(param: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('plans').then((socket: any) => {
         return this._socket.create(param);
-      }))
+      }));
     });
   }
   update(param: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('plans').then((socket: any) => {
         return this._socket.update(param._id, param);
-      }))
+      }));
     });
   }
   remove(id: string, query: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('plans').then((socket: any) => {
         return this._socket.remove(id, query);
-      }))
+      }));
     });
   }
-
 }

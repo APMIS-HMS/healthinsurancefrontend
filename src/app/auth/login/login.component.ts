@@ -1,5 +1,5 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { UserTypeService } from './../../services/api-services/setup/user-type.service';
+import { UserTypeService } from './../../services/common/user-type.service';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -42,18 +42,19 @@ export class LoginComponent implements OnInit {
 	}
 
 	onClickLogin(value: any, valid: boolean) {
-		// this.getUserTypes();
-
 		if (valid) {
 			this.loginBtnText = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
 
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
 				console.log(payload);
-				// this.getUserTypes();
 				this.toastr.success('You have successfully logged in!', 'Success!');
 				this._router.navigate(['/modules/beneficiary/beneficiaries']);
 
+			}).catch(err => {
+				console.log(err);
+				this.loginFormGroup.controls['password'].reset();
+				this.loginBtnText = "LOG IN &nbsp; <i class='fa fa-sign-in'></i>";
 			})
 		}
 

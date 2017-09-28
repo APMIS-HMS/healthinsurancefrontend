@@ -8,13 +8,13 @@ import { systemModulesRoutes } from './system-modules.route';
 
 import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
 import { ContactPositionService } from '../services/index';
-
+import { LoadingBarModule } from '@ngx-loading-bar/core';
 @NgModule({
     declarations: [
         SystemModulesComponent
     ],
     exports: [],
-    imports: [NgbModule, systemModulesRoutes],
+    imports: [NgbModule, systemModulesRoutes, LoadingBarModule.forRoot()],
     providers: [HeaderEventEmitterService, ContactPositionService]
 })
 
