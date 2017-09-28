@@ -15,7 +15,9 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 })
 export class NewUserComponent implements OnInit {
   userFormGroup: FormGroup;
-  saveBtn: String = '&nbsp;&nbsp; SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+  disableSaveBtn: Boolean = false;
+  saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+
   constructor(
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -28,11 +30,15 @@ export class NewUserComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('');
 
     this.userFormGroup = this._fb.group({
-      role: ['', [<any>Validators.required]]
+      gender: ['', [<any>Validators.required]],
+      lastName: ['', [<any>Validators.required]],
+      firstName: ['', [<any>Validators.required]],
+      otherName: ['', [<any>Validators.required]],
+      email: ['', [<any>Validators.required]],
     });
   }
 
-    // tslint:disable-next-line:indent
+
     onClickSaveNewUser(valid: Boolean, value: any) {
       console.log(value);
     }

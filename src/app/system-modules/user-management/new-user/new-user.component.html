@@ -15,6 +15,27 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 form-group col-md-6">
+                            <label class="col-12 no-padding control-label">Gender</label>
+                            <div class="col-12 no-padding">
+                                <label for="bene-male">
+                                    <input type="radio" formControlName="gender" name="gender" id="bene-male" value="male" checked>Male &nbsp;
+                                </label>
+                                <label for="bene-female">
+                                    <input type="radio" formControlName="gender" name="gender" id="bene-female" value="female" checked>Female &nbsp;
+                                </label>
+                                <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
+                                    This is a required field.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-12 form-group col-md-6">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">Last Name</label>
                             <div class="col-12 no-padding">
                                 <input type="text" formControlName="lastName" class="form-control">
@@ -56,11 +77,11 @@
                         </div>
                     </div>
                 </div>
+
             </form>
             <div class="col-12 pad-all">
-                <label class="col-sm-4 control-label"></label>
-                <div class="col-sm-8">
-                    <button class="btn btn-primary btn-flat" (click)="onClickSaveNewUser(userFormGroup.value, userFormGroup.valid);" [innerHtml]="saveBtn"></button>
+                <div class="col-12 text-center">
+                    <button [disabled]="!userFormGroup.valid || disableSaveBtn" class="btn btn-primary btn-flat" (click)="onClickSaveNewUser(userFormGroup.value, userFormGroup.valid);" [innerHtml]="saveBtn"></button>
                 </div>
             </div>
         </div>
