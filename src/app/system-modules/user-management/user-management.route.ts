@@ -10,7 +10,7 @@ const USERMANAGEMENT_ROUTES: Routes = [
             { path: '', redirectTo: 'users', pathMatch: 'full' },
             { path: 'users', component: ListUserComponent },
             { path: 'users/:id', component: EditUserComponent },
-            { path: 'new-user', component: NewUserComponent }
+            { path: 'new', component: NewUserComponent }
         ]
     }
 ];

@@ -22,6 +22,7 @@
 
 <body [class.sidebar-collapse]="sideToggle">
     <header id="header">
+        <ngx-loading-bar></ngx-loading-bar>
         <div class="navbar-top">
             <div class="sidebar-toggle-box">
                 <button class="sidebar-toggle" (click)="onClickSideToggle();" data-toggle="offcanvas" role="button">
@@ -86,8 +87,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/user-management/users"><i class="fa fa-circle-o"></i> Users</a></li>
-                        <li class=""><a routerLink="/modules/user-management/new-user"><i class="fa fa-circle-o"></i> New User</a></li>
+                        <li (click)="loadroutes('user-management/users')" class=""><a><i class="fa fa-circle-o"></i> Users</a></li>
+                        <li (click)="loadroutes('user-management/new')" class=""><a><i class="fa fa-circle-o"></i> New User</a></li>
                     </ul>
                 </li>
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-2'">
@@ -99,7 +100,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/role/roles"><i class="fa fa-circle-o"></i> Roles</a></li>
+                        <li (click)="loadroutes('role/roles')" class=""><a><i class="fa fa-circle-o"></i> Roles</a></li>
                         <!-- <li class=""><a routerLink="/modules/role/new-role"><i class="fa fa-circle-o"></i> New Role</a></li> -->
                     </ul>
                 </li>
@@ -112,8 +113,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/platform/platforms"><i class="fa fa-circle-o"></i> Platforms</a></li>
-                        <li class=""><a routerLink="/modules/platform/new-platform"><i class="fa fa-circle-o"></i> New Platform</a></li>
+                        <li (click)="loadroutes('platform/platforms')" class=""><a><i class="fa fa-circle-o"></i> Platforms</a></li>
+                        <li (click)="loadroutes('platform/new')" class=""><a><i class="fa fa-circle-o"></i> New Platform</a></li>
                     </ul>
                 </li>
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-4'">
@@ -125,8 +126,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/beneficiary/beneficiaries"><i class="fa fa-circle-o"></i> Beneficiaries</a></li>
-                        <li class=""><a routerLink="/modules/beneficiary/new-beneficiary"><i class="fa fa-circle-o"></i> New Beneficiary</a></li>
+                        <li (click)="loadroutes('beneficiary/beneficiaries')" class=""><a><i class="fa fa-circle-o"></i> Beneficiaries</a></li>
+                        <li (click)="loadroutes('beneficiary/new')" class=""><a><i class="fa fa-circle-o"></i> New Beneficiary</a></li>
                     </ul>
                 </li>
 
@@ -139,8 +140,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/employer/employers"><i class="fa fa-circle-o"></i> Employers</a></li>
-                        <li class=""><a routerLink="/modules/employer/new-employer"><i class="fa fa-circle-o"></i> New Employer</a></li>
+                        <li (click)="loadroutes('employer/employers')" class=""><a><i class="fa fa-circle-o"></i> Employers</a></li>
+                        <li (click)="loadroutes('employer/new')" class=""><a><i class="fa fa-circle-o"></i> New Employer</a></li>
                     </ul>
                 </li>
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-6'">
@@ -152,8 +153,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/care-provider/providers"><i class="fa fa-circle-o"></i> Providers</a></li>
-                        <li class=""><a routerLink="/modules/care-provider/new-provider"><i class="fa fa-circle-o"></i> New Provider</a></li>
+                        <li (click)="loadroutes('care-provider/providers')" class=""><a><i class="fa fa-circle-o"></i> Providers</a></li>
+                        <li (click)="loadroutes('care-provider/new')" class=""><a><i class="fa fa-circle-o"></i> New Provider</a></li>
                     </ul>
                 </li>
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-7'">
@@ -165,8 +166,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/hia/hias"><i class="fa fa-circle-o"></i> HIAs</a></li>
-                        <li class=""><a routerLink="/modules/hia/new-hia"><i class="fa fa-circle-o"></i> New HIA</a></li>
+                        <li (click)="loadroutes('care-provider/hias')" class=""><a><i class="fa fa-circle-o"></i> HIAs</a></li>
+                        <li (click)="loadroutes('hia/new')" class=""><a><i class="fa fa-circle-o"></i> New HIA</a></li>
                     </ul>
                 </li>
                 <li class="treeview" [class.active]="sideMenuDropdown && sideMenuId === 'sidemenu-8'">
@@ -178,8 +179,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class=""><a routerLink="/modules/plan/plans"><i class="fa fa-circle-o"></i> Plans</a></li>
-                        <li class=""><a routerLink="/modules/plan/new-plan"><i class="fa fa-circle-o"></i> New Plan</a></li>
+                        <li (click)="loadroutes('plan/plans')" class=""><a><i class="fa fa-circle-o"></i> Plans</a></li>
+                        <li (click)="loadroutes('plan/new')" class=""><a><i class="fa fa-circle-o"></i> New Plan</a></li>
                     </ul>
                 </li>
                 <!--<li class="header">ACCOUNT NAVIGATION</li>

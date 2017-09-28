@@ -11,7 +11,7 @@ const BENEFICIARY_ROUTES: Routes = [
             { path: '', redirectTo: "beneficiaries", pathMatch: 'full' },
             { path: 'beneficiaries', component: ListBeneficiariesComponent },
             { path: 'beneficiaries/:id', component: DetailsBeneficiaryComponent },
-            { path: 'new-beneficiary', component: NewBeneficiaryComponent }
+            { path: 'new', component: NewBeneficiaryComponent }
         ]
     }
 ];

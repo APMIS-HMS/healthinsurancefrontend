@@ -1,6 +1,5 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { LoadingBarService } from '@ngx-loading-bar/core';
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -10,8 +9,8 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 export class AppComponent {
 	title = 'app works!';
 	constructor(
-		public toastr: ToastsManager, vcr: ViewContainerRef, private loadingService: LoadingBarService) {
+		public toastr: ToastsManager, vcr: ViewContainerRef) {
 		this.toastr.setRootViewContainerRef(vcr);
-		this.loadingService.startLoading();
+
 	}
 }

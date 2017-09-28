@@ -13,7 +13,7 @@ const EMPLOYER_ROUTES: Routes = [
             { path: 'employers', component: ListEmployersComponent },
             { path: 'employers/:id', component: DetailsEmployerComponent },
             { path: 'employers/:id/request', component: NewRequestComponent },
-            { path: 'new-employer', component: NewEmployerComponent },
+            { path: 'new', component: NewEmployerComponent },
             { path: 'edit-employer/:id', component: NewEmployerComponent },
         ]
     }
