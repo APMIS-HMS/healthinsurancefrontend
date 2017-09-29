@@ -20,7 +20,7 @@ export class ListPlansComponent implements OnInit {
 		private _toastr: ToastsManager,
 		private _planService: PlanService,
 		private _headerEventEmitter: HeaderEventEmitterService,
-		private _systemService:SystemModuleService
+		private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { SystemModuleService } from './../../../services/common/system-module.service';
 
 import {
-  CountriesService, FacilityTypesService, FacilitiesService
+  PersonService
 } from '../../../services/api-services/index';
 import { Facility, Person } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -22,7 +23,8 @@ export class NewUserComponent implements OnInit {
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _fb: FormBuilder,
-    private _facilityService: FacilitiesService,
+    private _personService: PersonService,
+    private _systemService: SystemModuleService
   ) { }
 
   ngOnInit() {
@@ -33,15 +35,39 @@ export class NewUserComponent implements OnInit {
       gender: ['', [<any>Validators.required]],
       lastName: ['', [<any>Validators.required]],
       firstName: ['', [<any>Validators.required]],
-      otherName: ['', [<any>Validators.required]],
+      otherName: [''],
       email: ['', [<any>Validators.required]],
       phoneNumber: ['', [<any>Validators.required]],
+      mothersMaidenName: ['', [<any>Validators.required]],
+      dob: ['', [<any>Validators.required]],
     });
   }
 
 
     onClickSaveNewUser(valid: Boolean, value: any) {
-      console.log(value);
-    }
+      if (valid) {
+        this.disableSaveBtn = true;
+        this.saveBtn = 'Saving... <i class="fa fa-spinner fa-spin"></i>';
+        const person = {
+          lastName: value.lastName,
+          firstName: value.firstName,
+          otherNames: value.otherName,
+          gender: value.gender,
+          email: value.email,
+          phoneNumber: value.phoneNumber,
+          mothersMaidenName: value.mothersMaidenName,
+          dateOfBirth: value.dob
+        };
 
+        this._personService.create(person).then((res: any) => {
+          console.log(res);
+          this.disableSaveBtn = false;
+          this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+          this.userFormGroup.reset();
+          this._toastr.success('User has been created successfully!', 'Success!');
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+    }
 }

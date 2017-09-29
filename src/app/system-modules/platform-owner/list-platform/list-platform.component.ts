@@ -1,7 +1,7 @@
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-//import * from '../../../rxjs/rxjs.extentions';
+// import * from '../../../rxjs/rxjs.extentions';
 import 'rxjs/add/operator/filter';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { FacilityService } from './../../../services/common/facility.service';
@@ -13,11 +13,10 @@ import { UserTypeService } from '../../../services/common/user-type.service';
   styleUrls: ['./list-platform.component.scss']
 })
 export class ListPlatformComponent implements OnInit {
-
-  previousUrl: string = "";
-
+  previousUrl: String = '';
   selectedUserType: any;
   owners: any[] = [];
+  loading: Boolean = true;
 
   constructor(
     private _router: Router,
@@ -41,6 +40,7 @@ export class ListPlatformComponent implements OnInit {
   _getPlatformOwners() {
     this._systemService.on();
     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id } }).then((payload: any) => {
+      this.loading = false;
       this.owners = payload.data;
       this._systemService.off();
     }).catch(error => {
