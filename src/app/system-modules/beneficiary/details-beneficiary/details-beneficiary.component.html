@@ -7,35 +7,29 @@
         </div>
     </div>
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">Beneficiary Details</a></li>
-        <!--<li><a data-toggle="tab" href="#menu1">Pre-Authorization</a></li>
-        <li><a data-toggle="tab" href="#menu2">List of Plans</a></li>
-        <li><a data-toggle="tab" href="#menu3">Beneficiaries</a></li>-->
-        <!--<li><a data-toggle="tab" href="#menu4">Employers</a></li>
-        <li><a data-toggle="tab" href="#menu5">Payment History</a></li>
-        <li><a data-toggle="tab" href="#menu6">Claims</a></li>
-        <li><a data-toggle="tab" href="#menu7">Complaints</a></li>
-        <li><a data-toggle="tab" href="#menu8">Referrals</a></li>-->
+    <ul class="inpage-tabs">
+        <li (click)="tabDetail_click()" [class.tab-active]="tab_details">Personal Details</li>
+        <li (click)="tabPayment_click()" [class.tab-active]="tab_payment">Payment History</li>
+        <li (click)="tabClaims_click()" [class.tab-active]="tab_claims">Claims</li>
+        <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+        <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li>
     </ul>
 
     <div class="tab-content">
-        <div id="home" class="tab-pane fade show active">
+        <div *ngIf="tab_details" class="tab-pane fade show active">
             <div class="row pad-all">
                     <div class="col-sm-3 no-padding">
                         <div class="box-content-header">
-                            <span>HouseHold ID: 329.2894.092</span>
+                            <span>Household ID: 223:45:67</span>
                         </div>
                         <div class="box-body">
                             <div class="row pad-all">
                                 <div class="col-12">
-                                    <div class="col-10 no-padding">
+                                    <div class="col-10 no-padding person-wrap">
                                         <div class="img-box">
                                             <span class="badge">P</span>
-                                            <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-thumbnail img-responsive img-circle">
+                                            <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-responsive img-circle">
                                         </div>
-                                    </div>
-                                    <div class="col-2 no-padding">
                                         <button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button>
                                     </div>
                                 </div>
@@ -55,18 +49,16 @@
                     </div>
                     <div class="col-sm-3 no-padding">
                         <div class="box-content-header">
-                            <span>Registered by: LASHMA</span>
+                            <span>Registered by: Lashma </span>
                         </div>
                         <div class="box-body">
                             <div class="row pad-all">
                                 <div class="col-12">
-                                    <div class="col-10 no-padding">
+                                    <div class="col-10 no-padding person-wrap">
                                         <div class="img-box">
                                             <span class="badge bg-gray-light-4">D</span>
-                                            <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-thumbnail img-responsive img-circle">
+                                            <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-responsive img-circle">
                                         </div>
-                                    </div>
-                                    <div class="col-2 no-padding">
                                         <button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button>
                                     </div>
                                 </div>
@@ -85,91 +77,81 @@
                         </div>
                     </div>
                     <div class="col-sm-3 no-padding">
-                        <div class="box-content-header">
-                            <span>Program: Formal sector plan</span>
-                        </div>
-                        <div class="box-body">
-                            <div class="row pad-all">
-                                <div class="col-12">
-                                    <div class="col-10">
-                                        <div class="img-box">
-                                            <span class="badge bg-gray-light-4">D</span>
-                                            <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-thumbnail img-responsive img-circle">
+                            <div class="box-content-header">
+                                <span>Program: Formal sector plan</span>
+                            </div>
+                            <div class="box-body">
+                                <div class="row pad-all">
+                                    <div class="col-12">
+                                        <div class="col-10 no-padding person-wrap">
+                                            <div class="img-box">
+                                                <span class="badge bg-gray-light-4">D</span>
+                                                <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-responsive img-circle">
+                                            </div>
+                                            <button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button>
                                         </div>
                                     </div>
-                                    <div class="col-2 no-padding">
-                                        <button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button>
+                                </div>
+                                <div class="row pad-all">
+                                    <div class="col-12">
+                                        <span><b>D.O.B: </b> 23-12-1986</span><br>
+                                        <span><b>LASRRA ID: </b> 23-12-1986</span><br>
+                                        <span><b>LASHMA ID: </b> 23-12-1986</span><br>
+                                        <span><b>CIN: </b> 23-12-1986</span><br>
                                     </div>
-                                </div>
-                                <div class="col-12">
-                                    <span><b>Children under 18</b></span><br><br>
-                                </div>
-                                <div class="col-12 pad-up">
-                                    <span><b>D.O.B: </b> 23-12-1986</span><br>
-                                    <span><b>LASRRA ID: </b> 23-12-1986</span><br>
-                                    <span><b>LASHMA ID: </b> 23-12-1986</span>
-                                </div>
-                                <div class="col-12 pad-up">
-                                    <span><b>D.O.B: </b> 23-12-1986</span><br>
-                                    <span><b>LASRRA ID: </b> 23-12-1986</span><br>
-                                    <span><b>LASHMA ID: </b> 23-12-1986</span>
-                                </div>
-                                <div class="col-12 pad-up">
-                                    <button class="btn bg-brand btn-round text-white"><i class="fa fa-plus"></i></button>
-                                </div>
-                                <div class="col-12 pad-up">
-                                    <b>Other Dependants</b>
-                                </div>
-                                <div class="col-12 pad-up">
-                                    <span>None</span>
-                                </div>
-                                <div class="col-12 pad-up">
-                                    <button class="btn bg-brand btn-round text-white"><i class="fa fa-plus"></i></button>
+                                    <div class="col-12 pad-up">
+                                        <span>Professor Chisimdi Damian Ezeanieto<br> +234 8093802990</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <div class="col-sm-3 no-padding">
                         <div class="box-content-header">
                             <small>Premium paid until 23-08-2018</small>
-                            <i class="fa fa-edit-circle pull-right"></i>
+                            <i 
+                                style="
+                                    width:25px;
+                                    height:25px;
+                                    border-radius:100%;
+                                    display:flex;
+                                    justify-content:center;
+                                    align-items:center;
+                                    border:2px solid #fff;
+                                    margin-top:-3px;
+                                " 
+                                class="fa fa-pencil pull-right">
+                            </i>
                         </div>
                         <div class="box-body">
                             <div class="row pad-all">
                                 <div class="col-12">
-                                    <div class="col-10 no-padding">
+                                    <div class="comp-wrap col-10 no-padding">
                                         <b>Employer:</b><br>
                                         <span>Heptamile Global Limited</span><br>
                                         <span>Block A, Suit 99 Sura Shopping Complex, Sura Street, Lagos Island, Lagos.</span><br>
                                         <button class="btn border-brand text-brand btn-flat btn-small">To details <i class="fa fa-chevron-right"></i></button>
-                                    </div>
-                                    <div class="col-2 no-padding">
                                         <button class="btn bg-brand btn-round text-white"><i class="fa fa-trash"></i></button>
                                     </div>
                                     <div class="col-12 pad-up border-bottom"></div>
                                 </div>
                                 <div class="col-12 pad-up">
                                     <img src="assets/img/bridgeclinicbanner.jpg" class="img-responsive img-thumbnail" alt="">
-                                    <div class="col-10 no-padding-left no-padding-right pad-up">
+                                    <div class="comp-wrap col-10 no-padding-left no-padding-right pad-up">
                                         <b>Primary Health Care Provider:</b><br>
                                         <span>Heptamile Global Limited</span><br>
                                         <span>Block A, Suit 99 Sura Shopping Complex, Sura Street, Lagos Island, Lagos.</span><br>
                                         <button class="btn border-brand text-brand btn-flat btn-small">To details <i class="fa fa-chevron-right"></i></button>
-                                    </div>
-                                    <div class="col-2 no-padding-left no-padding-right pad-up">
                                         <button class="btn bg-brand btn-round text-white"><i class="fa fa-trash"></i></button>
                                     </div>
                                     <div class="col-12 pad-up border-bottom"></div>
                                 </div>
                                 <div class="col-12 pad-up">
                                     <img src="assets/img/bridgeclinicbanner.jpg" class="img-responsive img-thumbnail" alt="">
-                                    <div class="col-10 no-padding-left no-padding-right pad-up">
+                                    <div class="comp-wrap col-10 no-padding-left no-padding-right pad-up">
                                         <b>Health Insurance Agent:</b><br>
                                         <span>Heptamile Global Limited</span><br>
                                         <span>Block A, Suit 99 Sura Shopping Complex, Sura Street, Lagos Island, Lagos.</span><br>
                                         <button class="btn border-brand text-brand btn-flat btn-small">To details <i class="fa fa-chevron-right"></i></button>
-                                    </div>
-                                    <div class="col-2 no-padding-left no-padding-right pad-up">
                                         <button class="btn bg-brand btn-round text-white"><i class="fa fa-trash"></i></button>
                                     </div>
                                 </div>
@@ -177,14 +159,6 @@
                         </div>
                     </div>
             </div>
-        </div>
-        <div id="menu1" class="tab-pane fade">
-            <h3>Menu 1</h3>
-            <p>Some content in menu 1.</p>
-        </div>
-        <div id="menu2" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p>
         </div>
     </div>
 </section>
