@@ -3,7 +3,7 @@
         <div class="col-12 col-sm-7 pg-subtitle-wrap">
             <div class="placehold-wrap">
                 <div *ngIf="selectedPlaform?.logo === undefined" class="profileImg-wrap"><img alt="" src="assets/img/lagos-state-logo.jpg"></div>
-                <div *ngIf="selectedPlaform?.logo !== undefined" class="upload-wrap"> <img [src]="_systemService.transform(selectedPlaform?.logo?.thumbnail)"></div>
+                <div *ngIf="selectedPlaform?.logo !== undefined" class="upload-wrap"> <img [src]="_uploadService.transform(selectedPlaform?.logo?.thumbnail)"></div>
             </div>
             <div class="pg-subtitle">{{selectedPlaform?.name}} <span>({{selectedPlaform?.shortName}})</span></div>
         </div>

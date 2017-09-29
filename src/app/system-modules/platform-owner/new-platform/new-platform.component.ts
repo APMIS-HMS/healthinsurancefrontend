@@ -1,3 +1,4 @@
+import { UploadService } from './../../../services/common/upload.service';
 import { Router } from '@angular/router';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { CountryService } from './../../../services/common/country.service';
@@ -54,6 +55,7 @@ export class NewPlatformComponent implements OnInit {
     private _countriesService: CountryService,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
+    private _uploadService:UploadService,
     private _router: Router
   ) { }
 
@@ -340,7 +342,7 @@ export class NewPlatformComponent implements OnInit {
       const formData = new FormData();
       formData.append("platform", fileBrowser.files[0]);
       return new Promise((resolve, reject) => {
-        resolve(this._systemService.upload(formData, this.selectedUserType._id));
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
 
 

@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../services/common/system-module.service';
 const feathers = require('feathers/client');
 const socketio = require('feathers-socketio/client');
 const io = require('socket.io-client');
@@ -18,10 +19,10 @@ const HOST = 'http://localhost:3031'; // Your base server URL here
 export class SocketService {
     public socket: any;
     public _app: any;
-
+    public onlineStatus = false;
 
     constructor(
-        private locker: CoolLocalStorage
+        private locker: CoolLocalStorage, private _systemService:SystemModuleService
     ) {
         this.socket = io(HOST);
 
@@ -34,19 +35,26 @@ export class SocketService {
         console.log(this.socket)
         this.socket.on('reconnect', (value) => {
             console.log(value)
+            this.onlineStatus = true;
+            this._systemService.onlineStatusBroadCast({status:'On'});
         })
         this.socket.on('disconnect', (value)=>{
-            console.log(value)
+            console.log(value);
+            this.onlineStatus = false;
+            this._systemService.onlineStatusBroadCast({status:'Off'});
         })
         this.socket.on('connect', () => {
             console.log('connected');
-            
+            this.onlineStatus = true;
+            this._systemService.onlineStatusBroadCast({status:'On'});
         })
         this.socket.on('connecting', (value)=>{
             console.log(value)
         })
         this.socket.on('reauthentication-error', (value)=>{
             console.log(value)
+            this.onlineStatus = false;
+            this._systemService.onlineStatusBroadCast({status:'Off'});
         })
         this.socket.on('logout', (value) => {
             console.log(value)
