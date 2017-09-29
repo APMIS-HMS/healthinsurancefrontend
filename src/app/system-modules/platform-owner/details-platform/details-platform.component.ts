@@ -1,3 +1,4 @@
+import { UploadService } from './../../../services/common/upload.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { FacilityService } from './../../../services/common/facility.service';
 import { ActivatedRoute } from '@angular/router';
@@ -24,7 +25,8 @@ export class DetailsPlatformComponent implements OnInit {
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private _uploadService:UploadService
   ) { }
 
   ngOnInit() {

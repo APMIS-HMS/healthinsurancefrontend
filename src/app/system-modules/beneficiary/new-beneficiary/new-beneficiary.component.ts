@@ -178,26 +178,26 @@ export class NewBeneficiaryComponent implements OnInit {
 	}
 
 	onClickConfirm() {
-		let person = <Person>{
-			titleId: this.stepOneFormGroup.controls['title'].value._id,
-			firstName: this.stepOneFormGroup.controls['firstName'].value,
-			lastName: this.stepOneFormGroup.controls['lastName'].value,
-			genderId: this.stepOneFormGroup.controls['gender'].value,
-			homeAddress: <Address> {
-				street: this.stepOneFormGroup.controls['streetName'].value,
-				lga: this.stepOneFormGroup.controls['lga'].value,
-				city:'',
-				neighbourhood:'',
-				state: this.stateId,
-				country: this.countryId,
-			},
-			phoneNumber: this.stepOneFormGroup.controls['phonenumber'].value,
-			lgaOfOriginId: this.stepOneFormGroup.controls['lgaOfOrigin'].value,
-			nationalityId: this.countryId,
-			stateOfOriginId: this.stepOneFormGroup.controls['stateOfOrigin'].value,
-			email: this.stepOneFormGroup.controls['email'].value,
-			maritalStatusId: this.stepOneFormGroup.controls['maritalStatus'].value
-		};
+		// let person = <Person>{
+		// 	titleId: this.stepOneFormGroup.controls['title'].value._id,
+		// 	firstName: this.stepOneFormGroup.controls['firstName'].value,
+		// 	lastName: this.stepOneFormGroup.controls['lastName'].value,
+		// 	genderId: this.stepOneFormGroup.controls['gender'].value,
+		// 	homeAddress: <Address> {
+		// 		street: this.stepOneFormGroup.controls['streetName'].value,
+		// 		lga: this.stepOneFormGroup.controls['lga'].value,
+		// 		city:'',
+		// 		neighbourhood:'',
+		// 		state: this.stateId,
+		// 		country: this.countryId,
+		// 	},
+		// 	phoneNumber: this.stepOneFormGroup.controls['phonenumber'].value,
+		// 	lgaOfOriginId: this.stepOneFormGroup.controls['lgaOfOrigin'].value,
+		// 	nationalityId: this.countryId,
+		// 	stateOfOriginId: this.stepOneFormGroup.controls['stateOfOrigin'].value,
+		// 	email: this.stepOneFormGroup.controls['email'].value,
+		// 	maritalStatusId: this.stepOneFormGroup.controls['maritalStatus'].value
+		// };
 
 		let patient = {
 			personId: "personId",
@@ -240,7 +240,7 @@ export class NewBeneficiaryComponent implements OnInit {
 			],
 		}
 
-		console.log(person);
+		// console.log(person);
 		console.log(patient);
 		console.log(beneficiary);
 
