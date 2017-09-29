@@ -9,6 +9,7 @@ export interface Person {
     otherNames: String;
     email: String;
     phoneNumber: String;
+    mothersMaidenName: String;
     title: any;
     profileImageObject: Image;
     homeAddress: Address;
@@ -20,4 +21,5 @@ export interface Person {
     maritalStatus: any;
     nextOfKin: NextOfKin[];
     organisations: any[];
+    isActive: Boolean;
 }

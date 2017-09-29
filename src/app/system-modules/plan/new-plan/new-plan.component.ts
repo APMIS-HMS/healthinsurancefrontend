@@ -1,4 +1,3 @@
-import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -6,6 +5,7 @@ import { PlanService, PlanTypeService } from '../../../services/index';
 import { Plan, PlanPremium } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { DURATIONS } from '../../../services/globals/config';
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -39,7 +39,7 @@ export class NewPlanComponent implements OnInit {
     private _headerEventEmitter: HeaderEventEmitterService,
     private _planService: PlanService,
     private _planTypeService: PlanTypeService,
-    private _systemService:SystemModuleService
+    private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -48,7 +48,7 @@ export class NewPlanComponent implements OnInit {
 
     this._getPlanTypes();
 
-    this.planOwner = "LASHMA";
+    this.planOwner = 'LASHMA';
 
 		this.planDetailFormGroup = this._fb.group({
 			planName: ['', [<any>Validators.required]],

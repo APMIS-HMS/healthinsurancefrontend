@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="col-12 col-sm-4">
-            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/user-management/new-user">
+            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/user/new">
                 <i class="fa fa-plus-circle"></i> New User
             </a>
         </div>
@@ -67,54 +67,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr *ngIf="users.length === 0 && !loading">
-                            <td class="text-center" colspan="7">No data available in table</td>
+                        <tr *ngIf="users.length === 0 && !loading">
+                            <td class="text-center" colspan="6">No data available in table</td>
                         </tr>
                         <tr *ngIf="users.length === 0 && loading">
-                            <td class="text-center" colspan="7">
+                            <td class="text-center" colspan="6">
                                 <i class="fa fa-spinner fa-spin"></i>
                             </td>
                         </tr>
-                        <tr class="tr-link" routerLink="/modules/user-management/users/{{ user._id }}" *ngFor="let user of users">
-                            <td>{{ '1' }}</td>
-                            <td>{{ 'user.employerName' }}</td>
-                            <td>Health Care Insurance</td>
-                            <td>{{ 'user.businessContact.name' }}</td>
-                            <td>{{ 'user.businessContact.phone' }}</td>
-                            <td>A</td>
-                            <td>
-                                <span class="text-red">INACTIVE</span>
-                            </td>
-                            <td><i class="fa fa-chevron-right"></i></td>
-                        </tr> -->
-                        <tr class="tr-link">
-                            <td>{{ '1' }}</td>
-                            <td>{{ 'Chisimdi Damian Ezeanieto' }}</td>
-                            <td>{{ 'Benefiaciary' }}</td>
-                            <td>{{ '30/10/2017' }}</td>
+                        <tr class="tr-link" *ngFor="let user of users; let i = index;">
+                            <td>{{ i+1 }}</td>
+                            <td>{{ user?.firstName }} {{ user?.otherNames }} {{ user.lastName }}</td>
+                            <td>{{ 'user.type' }}</td>
+                            <td>{{ user.createdAt }}</td>
                             <td>
                                 <label class="switch">
-                                  <input type="checkbox" value="" class="input-action-leader-board"/>
+                                  <input type="checkbox" [attr.checked]="user.isActive ? true : null" (change)="onClickActivate(user);" class="input-action-leader-board"/>
                                   <div class="slider round"></div>
                                 </label>
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-flat btn-smaller">Edit Role</button>
-                            </td>
-                        </tr>
-                        <tr class="tr-link">
-                            <td>{{ '2' }}</td>
-                            <td>{{ 'Ademoyegun Abimbola' }}</td>
-                            <td>{{ 'Benefiaciary' }}</td>
-                            <td>{{ '30/10/2017' }}</td>
-                            <td>
-                                <label class="switch">
-                                  <input type="checkbox" value="" class="input-action-leader-board"/>
-                                  <div class="slider round"></div>
-                                </label>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-flat btn-smaller" (click)="open(content)">Edit Role</button>
+                                <button class="btn btn-primary btn-flat btn-smaller" (click)="open(content, user)">Add Role</button>
                             </td>
                         </tr>
                     </tbody>
@@ -140,17 +113,23 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col">
+                <!-- <form [formGroup]="addRoleForm"> -->
+                <div class="col-12" *ngFor="let role of roles">
                     <div class="check-box-container">
-                        <label>
-                            <input type="checkbox" class="check-box" checked />Administration Officer
-                        </label>
+                        <label class="switch">
+                                <input type="checkbox"  [attr.checked]="selectedUser.isActive ? true : null" class="input-action-leader-board"/>
+                                <div class="slider round"></div>{{ role.name }}
+                            </label>
+                        <!-- <label>
+                                <input type="checkbox" formControlName="role"  class="check-box"/>{{ role.name }}
+                            </label> -->
                     </div>
-                    <div class="check-box-container">
-                        <label>
-                            <input type="checkbox" class="check-box" />Registration Officer
-                        </label>
-                    </div>
+                </div>
+                <!-- </form> -->
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-flat" (click)="onClickAddRole();">Add Selected</button>
                 </div>
             </div>
         </div>
