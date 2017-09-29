@@ -43,17 +43,49 @@
 }
 
 .box-body {
+    position: relative;
     .img-box {
         .badge {
             position: absolute;
-            left: 30px;
+            left: 0;
             top: 10px;
+            background: #777;
         }
         img {
-            display: block;
-            margin: 0 auto;
-            height: 125px;
-            width: 125px;
+            height: 100%;
+            width: 100%;
         }
     }
+}
+.img-box {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.inpage-tabs {
+    border-bottom: 1px solid #004f8f;
+}
+
+.inpage-tabs li {
+    margin-bottom: -1px;
+}
+
+.tab-active {
+    color: #004f8f !important;
+    background: #fff!important;
+    border-bottom: 1px solid #fff!important;
+}
+.person-wrap button{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.comp-wrap .btn-round{
+    position: absolute;
+    top: 0;
+    right: -40px;
 }
