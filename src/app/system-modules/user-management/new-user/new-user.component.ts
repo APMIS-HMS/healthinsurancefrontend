@@ -3,11 +3,12 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { SystemModuleService } from './../../../services/common/system-module.service';
 
 import {
-  PersonService
+  PersonService, OwnershipService
 } from '../../../services/api-services/index';
 import { Facility, Person } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 
 @Component({
   selector: 'app-new-user',
@@ -17,21 +18,31 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 export class NewUserComponent implements OnInit {
   userFormGroup: FormGroup;
   disableSaveBtn: boolean = false;
+
+  owners: any = <any>[];
+  user: any = <any>{};
   saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
 
   constructor(
+    private _locker: CoolLocalStorage,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _fb: FormBuilder,
     private _personService: PersonService,
+    private _ownershipService: OwnershipService,
     private _systemService: SystemModuleService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New User');
     this._headerEventEmitter.setMinorRouteUrl('');
+    this.user = this._locker.getObject('auth');
+    console.log(this.user.user);
+
+    this._getPlatformOwners();
 
     this.userFormGroup = this._fb.group({
+      platformOwner: [''],
       gender: ['', [<any>Validators.required]],
       lastName: ['', [<any>Validators.required]],
       firstName: ['', [<any>Validators.required]],
@@ -69,5 +80,19 @@ export class NewUserComponent implements OnInit {
           console.log(err);
         });
       }
+    }
+
+    private _getPlatformOwners() {
+      this._systemService.on();
+      this._ownershipService.findAll().then((res: any) => {
+        console.log(res);
+        this._systemService.off();
+        if (res.data.length > 0) {
+          console.log(res);
+          this.owners = res.data;
+        }
+      }).catch(err => {
+        this._systemService.off();
+      });
     }
 }
