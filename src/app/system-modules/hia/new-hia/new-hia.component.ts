@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { HIA } from './../../../models/organisation/hia';
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
@@ -51,7 +52,8 @@ export class NewHiaComponent implements OnInit {
 		private _contactPositionService: ContactPositionService,
 		private _facilityService: FacilityService,
 		private _bankService: BankService,
-		private _countriesService: CountryService
+		private _countriesService: CountryService,
+		private _systemService:SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -99,23 +101,26 @@ export class NewHiaComponent implements OnInit {
 	}
 
 	_getCountries() {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				$limit: 200,
 				$select: { "states": 0 }
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			this.countries = payload.data;
-			console.log(payload)
 			const index = this.countries.findIndex(x => x.name === 'Nigeria');
-			console.log(index)
 			if (index > -1) {
 				this.selectedCountry = this.countries[index];
 				this._getStates(this.selectedCountry._id);
 			}
+		}).catch(err =>{
+			this._systemService.off();
 		})
 	}
 	_getStates(_id) {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				_id: _id,
@@ -123,17 +128,18 @@ export class NewHiaComponent implements OnInit {
 				$select: { "states.cities": 0, "states.lgs": 0 }
 			}
 		}).then((payload: any) => {
-			console.log(payload.data)
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				this.states = payload.data[0].states;
 			}
 
 		}).catch(error => {
-
+			this._systemService.off();
 		})
 	}
 
 	_getLgaAndCities(_id, state) {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				_id: _id,
@@ -141,6 +147,7 @@ export class NewHiaComponent implements OnInit {
 				$select: { 'states.$': 1 }
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				const states = payload.data[0].states;
 				if (states.length > 0) {
@@ -150,17 +157,20 @@ export class NewHiaComponent implements OnInit {
 			}
 
 		}).catch(error => {
-
+			this._systemService.off();
 		})
 	}
 	_getBanks() {
+		this._systemService.on();
 		this._bankService.find({
 			query: {
 				$limit: 200
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			this.banks = payload.data;
-			console.log(this.banks)
+		}).catch(err =>{
+			this._systemService.off();
 		})
 	}
 
@@ -241,18 +251,18 @@ export class NewHiaComponent implements OnInit {
 	}
 
 	onClickSaveHia(value: any, valid: boolean) {
-		console.log(value);
 		if (valid) {
+			this._systemService.on();
 			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
 			let facility = this._extractFacility();
 
-
 			this._facilityService.create(facility).then(payload => {
+				this._systemService.off();
 				this.hiaFormGroup.reset();
 				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
 				this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
 			}).catch(err => {
-				console.log(err);
+				this._systemService.off();
 			});
 
 		} else {
@@ -261,7 +271,9 @@ export class NewHiaComponent implements OnInit {
 	}
 
 	_getUserTypes() {
+		this._systemService.on();
 		this._userTypeService.findAll().then((payload: any) => {
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				this.userTypes = payload.data;
 				const index = payload.data.findIndex(x => x.name === 'Health Insurance Agent');
@@ -274,13 +286,17 @@ export class NewHiaComponent implements OnInit {
 				}
 			}
 		}, error => {
-
+			this._systemService.off();
 		})
 	}
 
 	_getContactPositions() {
+		this._systemService.on();
 		this._contactPositionService.find({}).then((payload: any) => {
+			this._systemService.off();
 			this.contactPositions = payload.data;
-		});
+		}).catch(err =>{
+			this._systemService.off();
+		})
 	}
 }

@@ -48,11 +48,14 @@ export class LoginComponent implements OnInit {
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
 				console.log(payload);
+				
 				this.toastr.success('You have successfully logged in!', 'Success!');
-				this._router.navigate(['/modules/beneficiary/beneficiaries']);
+				this._router.navigate(['/modules/beneficiary/beneficiaries']).then(res => {
+					this._authService.announceMission({ status: 'On' });
+				 })
 
 			}).catch(err => {
-				console.log(err);
+				// console.log(err);
 				this.loginFormGroup.controls['password'].reset();
 				this.loginBtnText = "LOG IN &nbsp; <i class='fa fa-sign-in'></i>";
 			})

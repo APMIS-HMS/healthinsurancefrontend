@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -18,7 +19,8 @@ export class ListPlansComponent implements OnInit {
   constructor(
 		private _toastr: ToastsManager,
 		private _planService: PlanService,
-		private _headerEventEmitter: HeaderEventEmitterService
+		private _headerEventEmitter: HeaderEventEmitterService,
+		private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -40,12 +42,16 @@ export class ListPlansComponent implements OnInit {
 	}
 
 	private _getPlans() {
+		this._systemService.on();
 		this._planService.findAll().then((res: any) => {
+			this._systemService.off();
 			this.loading = false;
 			console.log(res);
 			if (res.data.length > 0) {
 				this.plans = res.data;
 			}
-		}).catch(err => console.log(err));
+		}).catch(err => {
+			this._systemService.off();
+		});
 	}
 }

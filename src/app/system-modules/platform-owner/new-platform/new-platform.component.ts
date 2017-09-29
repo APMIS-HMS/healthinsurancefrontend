@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
 import { UserTypeService } from './../../../services/common/user-type.service';
@@ -5,7 +7,7 @@ import { Address } from './../../../models/organisation/address';
 import { Facility } from './../../../models/organisation/facility';
 import { BankDetail } from './../../../models/organisation/bank-detail';
 import { Contact } from './../../../models/organisation/contact';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService } from './../../../services/common/facility.service';
@@ -25,6 +27,8 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-platform.component.scss']
 })
 export class NewPlatformComponent implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('blah') blah: ElementRef;
   saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   platformFormGroup: FormGroup;
   hiaPlans: any[] = [];
@@ -37,6 +41,7 @@ export class NewPlatformComponent implements OnInit {
 
   selectedUserType: any;
   selectedCountry: any;
+  canAddImage = true;
 
   constructor(
     private _fb: FormBuilder,
@@ -48,6 +53,8 @@ export class NewPlatformComponent implements OnInit {
     private _bankService: BankService,
     private _countriesService: CountryService,
     private _facilityService: FacilityService,
+    private _systemService: SystemModuleService,
+    private _router: Router
   ) { }
 
   ngOnInit() {
@@ -63,7 +70,7 @@ export class NewPlatformComponent implements OnInit {
       state: ['', [<any>Validators.required]],
       lga: ['', [<any>Validators.required]],
       city: ['', [<any>Validators.required]],
-      neighbourhood:['', [<any>Validators.required]],
+      neighbourhood: ['', [<any>Validators.required]],
       bank: ['', [<any>Validators.required]],
       bankAccName: ['', [<any>Validators.required]],
       bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
@@ -87,12 +94,13 @@ export class NewPlatformComponent implements OnInit {
     this._getCountries();
 
     this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
-     if(value !== null){
-      this._getLgaAndCities(this.selectedCountry._id, value);
-     }
+      if (value !== null) {
+        this._getLgaAndCities(this.selectedCountry._id, value);
+      }
     })
   }
   _getCountries() {
+    this._systemService.on();
     this._countriesService.find({
       query: {
         $limit: 200,
@@ -100,16 +108,18 @@ export class NewPlatformComponent implements OnInit {
       }
     }).then((payload: any) => {
       this.countries = payload.data;
-      console.log(payload)
+      this._systemService.off();
       const index = this.countries.findIndex(x => x.name === 'Nigeria');
-      console.log(index)
       if (index > -1) {
         this.selectedCountry = this.countries[index];
         this._getStates(this.selectedCountry._id);
       }
+    }).catch(err => {
+      this._systemService.off();
     })
   }
   _getStates(_id) {
+    this._systemService.on();
     this._countriesService.find({
       query: {
         _id: _id,
@@ -117,19 +127,18 @@ export class NewPlatformComponent implements OnInit {
         $select: { "states.cities": 0, "states.lgs": 0 }
       }
     }).then((payload: any) => {
-      console.log(payload.data)
+      this._systemService.off();
       if (payload.data.length > 0) {
         this.states = payload.data[0].states;
       }
 
     }).catch(error => {
-
+      this._systemService.off();
     })
   }
 
   _getLgaAndCities(_id, state) {
-    // console.log(_id);
-    // console.log(state)
+    this._systemService.on();
     this._countriesService.find({
       query: {
         _id: _id,
@@ -139,7 +148,7 @@ export class NewPlatformComponent implements OnInit {
 
       }
     }).then((payload: any) => {
-      console.log(payload)
+      this._systemService.off();
       if (payload.data.length > 0) {
         const states = payload.data[0].states;
         if (states.length > 0) {
@@ -149,40 +158,46 @@ export class NewPlatformComponent implements OnInit {
       }
 
     }).catch(error => {
-
+      this._systemService.off();
     })
   }
   _getBanks() {
+    this._systemService.on();
     this._bankService.find({
       query: {
         $limit: 200
       }
     }).then((payload: any) => {
       this.banks = payload.data;
-      console.log(this.banks)
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
     })
   }
   _getUserTypes() {
+    this._systemService.on();
     this._userTypeService.findAll().then((payload: any) => {
       if (payload.data.length > 0) {
-        console.log(payload.data)
         const index = payload.data.findIndex(x => x.name === 'Platform Owner');
         if (index > -1) {
           this.selectedUserType = payload.data[index];
         } else {
           this.selectedUserType = undefined;
         }
-        console.log(this.selectedUserType);
+        this._systemService.off();
       }
     }, error => {
-
+      this._systemService.off();
     })
   }
 
   _getContactPositions() {
+    this._systemService.on();
     this._contactPositionService.find({}).then((payload: any) => {
       this.contactPositions = payload.data;
-      console.log(this.contactPositions)
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
     })
   }
   _extractBusinessContact(businessContact?: Contact) {
@@ -253,25 +268,94 @@ export class NewPlatformComponent implements OnInit {
   }
 
   save(valid, value) {
-    // console.log(valid);
-    // console.log(value);
-    // console.log(this.platformFormGroup.value);
+    valid = true;
     if (valid) {
-			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
-			let facility = this._extractFacility();
+      this._systemService.on();
+      this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+      let facility = this._extractFacility();
+
+      let fileBrowser = this.fileInput.nativeElement;
+      if (fileBrowser.files && fileBrowser.files[0]) {
+        this.upload().then((result: any) => {
+          if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+            console.log(result.body[0].file)
+            facility.logo = result.body[0].file;
+            this._facilityService.create(facility).then((payload: Facility) => {
+              this._systemService.off();
+              this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+              this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+              this.platformFormGroup.reset();
+              this._router.navigate(['/modules/platform/platforms', payload._id]);
+            }).catch(err => {
+              this._systemService.off();
+            });
+          }
+        }).catch(err => {
+          this._systemService.off();
+        })
 
 
-			this._facilityService.create(facility).then(payload => {
-				this.platformFormGroup.reset();
-				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-				this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-			}).catch(err => {
-				console.log(err);
-			});
+      } else {
+        this._facilityService.create(facility).then((payload: Facility) => {
+          this._systemService.off();
+          // this.platformFormGroup.reset();
+          this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+          this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+          this._router.navigate(['/modules/platform/platforms', payload._id]);
+        }).catch(err => {
+          this._systemService.off();
+        });
+      }
 
-		} else {
-			this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
-		}
+
+
+    } else {
+      this._systemService.off();
+      this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+    }
 
   }
+  showImageBrowseDlg() {
+    this.fileInput.nativeElement.click()
+  }
+  readURL(input) {
+    this._systemService.on();
+    input = this.fileInput.nativeElement;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      let that = this;
+      reader.onload = function (e: any) {
+        that.blah.nativeElement.src = e.target.result;
+        that._systemService.off();
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  upload() {
+    // this._systemService.on();
+    let fileBrowser = this.fileInput.nativeElement;
+    if (fileBrowser.files && fileBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", fileBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._systemService.upload(formData, this.selectedUserType._id));
+      });
+
+
+
+
+      // this._systemService.upload(formData, this.selectedUserType._id).then(res => {
+      //   this._systemService.off();
+      //   console.log(res);
+      //   let enrolleeList: any[] = [];
+      //   if (res.body !== undefined && res.body.error_code === 0) {
+      //   }
+      // }).catch(err => {
+      //   this._systemService.off();
+      // })
+    }
+  }
+
 }

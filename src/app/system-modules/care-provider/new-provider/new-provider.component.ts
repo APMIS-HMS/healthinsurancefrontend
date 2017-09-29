@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Provider } from './../../../models/organisation/provider';
 import { FacilityOwnershipService } from './../../../services/common/facility-ownership.service';
 import { FacilityCategoryService } from './../../../services/common/facility-category.service';
@@ -65,7 +66,8 @@ export class NewProviderComponent implements OnInit {
 		private _bankService: BankService,
 		private _countriesService: CountryService,
 		private _facilityCategoryService: FacilityCategoryService,
-		private _facilityOwnershipService: FacilityOwnershipService
+		private _facilityOwnershipService: FacilityOwnershipService,
+		private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -97,7 +99,7 @@ export class NewProviderComponent implements OnInit {
 			hefeemaStatus: ['', [<any>Validators.required]],
 			bank: ['', [<any>Validators.required]],
 			bankAccName: ['', [<any>Validators.required]],
-			bankAccNumber: ['', [<any>Validators.required,<any>Validators.pattern(NUMERIC_REGEX)]],
+			bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
 			classification: ['', [<any>Validators.required]],
 			grade: ['', [<any>Validators.required]],
 			ownership: ['', [<any>Validators.required]],
@@ -120,15 +122,19 @@ export class NewProviderComponent implements OnInit {
 
 	}
 	_getContactPositions() {
+		this._systemService.on();
 		this._contactPositionService.find({}).then((payload: any) => {
 			this.contactPositions = payload.data;
-			console.log(this.contactPositions)
+			this._systemService.off();
+		}).catch(err => {
+			this._systemService.off();
 		})
 	}
 	_getUserTypes() {
+		this._systemService.on();
 		this._userTypeService.findAll().then((payload: any) => {
+			this._systemService.off();
 			if (payload.data.length > 0) {
-				console.log(payload.data)
 				this.userTypes = payload.data;
 				const index = payload.data.findIndex(x => x.name === 'Provider');
 				if (index > -1) {
@@ -138,30 +144,32 @@ export class NewProviderComponent implements OnInit {
 					this.selectedUserType = undefined;
 					this.providerFormGroup.controls['type'].reset();
 				}
-				console.log(this.selectedUserType);
 			}
 		}, error => {
-
+			this._systemService.off();
 		})
 	}
 	_getCountries() {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				$limit: 200,
 				$select: { "states": 0 }
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			this.countries = payload.data;
-			console.log(payload)
 			const index = this.countries.findIndex(x => x.name === 'Nigeria');
-			console.log(index)
 			if (index > -1) {
 				this.selectedCountry = this.countries[index];
 				this._getStates(this.selectedCountry._id);
 			}
+		}).catch(err => {
+			this._systemService.off();
 		})
 	}
 	_getStates(_id) {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				_id: _id,
@@ -169,17 +177,18 @@ export class NewProviderComponent implements OnInit {
 				$select: { "states.cities": 0, "states.lgs": 0 }
 			}
 		}).then((payload: any) => {
-			console.log(payload.data)
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				this.states = payload.data[0].states;
 			}
 
 		}).catch(error => {
-
+			this._systemService.off();
 		})
 	}
 
 	_getLgaAndCities(_id, state) {
+		this._systemService.on();
 		this._countriesService.find({
 			query: {
 				_id: _id,
@@ -187,6 +196,7 @@ export class NewProviderComponent implements OnInit {
 				$select: { 'states.$': 1 }
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			if (payload.data.length > 0) {
 				const states = payload.data[0].states;
 				if (states.length > 0) {
@@ -196,17 +206,20 @@ export class NewProviderComponent implements OnInit {
 			}
 
 		}).catch(error => {
-
+			this._systemService.off();
 		})
 	}
 	_getBanks() {
+		this._systemService.on();
 		this._bankService.find({
 			query: {
 				$limit: 200
 			}
 		}).then((payload: any) => {
+			this._systemService.off();
 			this.banks = payload.data;
-			console.log(this.banks)
+		}).catch(err => {
+			this._systemService.off();
 		})
 	}
 
@@ -292,30 +305,39 @@ export class NewProviderComponent implements OnInit {
 	}
 
 	_getFacilityCategories() {
+		this._systemService.on();
 		this._facilityCategoryService.find({}).then((payload: any) => {
 			this.facilityCategories = payload.data;
+			this._systemService.off();
+		}).catch(err => {
+			this._systemService.off();
 		});
 	}
 
 	_getFacilityOwnerships() {
+		this._systemService.on();
 		this._facilityOwnershipService.find({}).then((payload: any) => {
 			this.ownerships = payload.data;
-		});
+			this._systemService.off();
+		}).catch(err => {
+			this._systemService.off();
+		})
 	}
 
 	onClickSaveProvider(value: any, valid: boolean) {
 		if (valid) {
+			this._systemService.on();
 			this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
 			let facility = this._extractFacility();
 
 			this._facilityService.create(facility).then(payload => {
-				console.log(payload);
+				this._systemService.off();
 				this.providerFormGroup.reset();
 				this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
 				this._toastr.success('Care Provider has been created successfully!', 'Success!');
 				this.providerFormGroup.controls['classification'].setValue('primary');
 			}).catch(err => {
-				console.log(err);
+				this._systemService.off();
 				if (err == "Error: This email already exist") {
 					this._toastr.error('This email alreay exist!', 'Email exists!');
 				} else {
@@ -324,6 +346,7 @@ export class NewProviderComponent implements OnInit {
 			});
 
 		} else {
+			this._systemService.off();
 			this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
 		}
 	}

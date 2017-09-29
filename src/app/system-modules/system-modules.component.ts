@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../services/common/system-module.service';
 import { Router } from '@angular/router';
 import { AuthService } from './../auth/services/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -22,10 +23,17 @@ export class SystemModulesComponent implements OnInit {
 		private _authService: AuthService,
 		private _router: Router,
 		private loadingService: LoadingBarService,
+		private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {
-
+		this._systemService.notificationAnnounced$.subscribe((value: any) => {
+			if (value.status === 'On') {
+			  this.loadingService.startLoading();
+			}else{
+				this.loadingService.endLoading();
+			}
+		  });
 		this._headerEventEmitter.announcedUrl.subscribe(url => {
 			this.pageInView = url;
 		});
@@ -38,25 +46,27 @@ export class SystemModulesComponent implements OnInit {
 		this.sideToggle = !this.sideToggle;
 	}
 
-	loadroutes(route: any) {
+	loadRoutes(route: any) {
 		console.log(route);
 		this.loadingService.startLoading();
 		this._router.navigate([this.baseRoute + route]).then(res => {
 			this.loadingService.endLoading();
 		}).catch(err => {
-			console.log(err)
+			console.log(err);
 			this.loadingService.endLoading();
 		});
 	}
 
 	onClickSideMenu(event, identifier) {
-		let target = event.target || event.srcElement || event.currentTarget;
-		this.sideMenuId = target.className;
-		if (this.sideMenuDropdown && this.sideMenuId === identifier) {
-			this.sideMenuDropdown = !this.sideMenuDropdown;
-		} else {
-			this.sideMenuDropdown = !this.sideMenuDropdown;
-		}
+		this.sideMenuId = identifier;
+		// let target = event.target || event.srcElement || event.currentTarget;
+		// this.sideMenuId = target.className;
+		// console.log(this.sideMenuId);
+		// if (this.sideMenuDropdown && this.sideMenuId === identifier) {
+		// 	this.sideMenuDropdown = !this.sideMenuDropdown;
+		// } else {
+		// 	this.sideMenuDropdown = !this.sideMenuDropdown;
+		// }
 	}
 
 	signOut() {

@@ -30,7 +30,7 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 loadChildren: './plan/plan.module#PlanModule'
             },
             {
-                path: 'user-management',
+                path: 'user',
                 loadChildren: './user-management/user-management.module#UserManagementModule'
             },
             {

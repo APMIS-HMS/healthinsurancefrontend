@@ -5,6 +5,7 @@ import { PlanService, PlanTypeService } from '../../../services/index';
 import { Plan, PlanPremium } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { DURATIONS } from '../../../services/globals/config';
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -37,7 +38,8 @@ export class NewPlanComponent implements OnInit {
 		private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _planService: PlanService,
-    private _planTypeService: PlanTypeService
+    private _planTypeService: PlanTypeService,
+    private _systemService: SystemModuleService
 	) { }
 
 	ngOnInit() {
@@ -46,7 +48,7 @@ export class NewPlanComponent implements OnInit {
 
     this._getPlanTypes();
 
-    this.planOwner = "LASHMA";
+    this.planOwner = 'LASHMA';
 
 		this.planDetailFormGroup = this._fb.group({
 			planName: ['', [<any>Validators.required]],
@@ -104,8 +106,9 @@ export class NewPlanComponent implements OnInit {
       this.disablePremiumNextBtn = true;
       this.premiumNextBtn = 'Saving Plan... <i class="fa fa-spinner fa-spin"></i>';
       // Save plan
+      this._systemService.on();
       this._planService.create(this.plan).then(res => {
-        console.log(res);
+        this._systemService.off();
         this._toastr.success('Plan has been created successfully.', 'Success');
         this.premiumNextBtn = 'Save <i class="fa fa-check" aria-hidden="true"></i>';
         this.disablePremiumNextBtn = false;
@@ -113,18 +116,24 @@ export class NewPlanComponent implements OnInit {
         this.planPremiumFormGroup.reset();
         this.planDetailFormGroup.controls['planStatus'].setValue(true);
         this.tabDetails_click();
-      }).catch(err => console.log(err));
+      }).catch(err =>{
+        this._systemService.off();
+      });
     } else {
       console.log('Plan Does not exist.');
     }
   }
 
   private _getPlanTypes() {
+    this._systemService.on();
     this._planTypeService.findAll().then((res: any) => {
+      this._systemService.off();
       if (res.data.length > 0) {
         this.planTypes = res.data;
       }
-    }).catch(err => console.log(err));
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
   
   tabPremium_click(){

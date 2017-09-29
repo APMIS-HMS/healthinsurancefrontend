@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Bootstrap
@@ -14,7 +15,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
         SystemModulesComponent
     ],
     exports: [],
-    imports: [NgbModule, systemModulesRoutes, LoadingBarModule.forRoot()],
+    imports: [NgbModule, systemModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
     providers: [HeaderEventEmitterService, ContactPositionService]
 })
 
