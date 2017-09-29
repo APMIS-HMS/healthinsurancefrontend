@@ -10,7 +10,7 @@ export class AuthService {
   private _rest;
   private _restLogin;
   isLoggedIn = false;
-  private missionAnnouncedSource = new Subject<string>();
+  private missionAnnouncedSource = new Subject<Object>();
   missionAnnounced$ = this.missionAnnouncedSource.asObservable();
   constructor(
     private _socketService: SocketService,
@@ -25,7 +25,8 @@ export class AuthService {
     this._socket.on('created', function (user) {
     });
   }
-  announceMission(mission: string) {
+  announceMission(mission: Object) {
+    console.log(mission)
     this.missionAnnouncedSource.next(mission);
   }
 
@@ -34,7 +35,6 @@ export class AuthService {
   }
   login(query: any) {
     return this._socketService.loginIntoApp(query);
-    //return this._restLogin.create(query);
   }
 
   find(query: any) {

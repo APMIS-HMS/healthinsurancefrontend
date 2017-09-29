@@ -40,7 +40,7 @@ export class ListPlatformComponent implements OnInit {
   }
   _getPlatformOwners() {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id } }).then((payload: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit:200 } }).then((payload: any) => {
       this.owners = payload.data;
       this._systemService.off();
     }).catch(error => {

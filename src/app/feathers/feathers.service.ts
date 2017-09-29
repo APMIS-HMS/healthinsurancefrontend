@@ -31,17 +31,30 @@ export class SocketService {
             .configure(hooks())
             .configure(authentication({ storage: window.localStorage }));
 
-        // console.log(this.socket)
+        console.log(this.socket)
         this.socket.on('reconnect', (value) => {
             console.log(value)
         })
         this.socket.on('disconnect', (value)=>{
             console.log(value)
         })
-        this.socket.on('connect', (value) => {
-            console.log(value)
+        this.socket.on('connect', () => {
+            console.log('connected');
+            
         })
         this.socket.on('connecting', (value)=>{
+            console.log(value)
+        })
+        this.socket.on('reauthentication-error', (value)=>{
+            console.log(value)
+        })
+        this.socket.on('logout', (value) => {
+            console.log(value)
+        })
+        this.socket.on('reconnected', (value)=>{
+            console.log(value)
+        })
+        this.socket.on('disconnected', (value)=>{
             console.log(value)
         })
     }
@@ -61,36 +74,6 @@ export class SocketService {
             let token = this.locker.getItem('auth');
             const copyInvestigation = JSON.parse(token);
             this._app.authenticate({ strategy: 'jwt', accessToken: copyInvestigation.accessToken })
-            // return new Promise((resolve, reject) => {
-
-            //     let token = this.locker.getItem('auth');
-            //     const copyInvestigation = JSON.parse(token);
-            //     console.log(copyInvestigation.accessToken)
-            //     resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyInvestigation.accessToken }).then(payload => {
-            //         console.log(payload)
-            //         // return Promise.resolve(data);
-            //         return resolve(this._app.service(value));
-            //     }, error => {
-            //         console.log(error)
-            //     }));
-
-
-
-
-            // });
-
-
-            // console.log('authenticate again')
-            // let token = this.locker.getItem('auth');
-            // const copyInvestigation = JSON.parse(token);
-            // console.log(copyInvestigation.accessToken)
-            // Promise.resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyInvestigation.accessToken }).then(payload => {
-            //     console.log(payload)
-            //     // return Promise.resolve(data);
-            //     return Promise.resolve(this._app.service(value));
-            // }, error => {
-            //     console.log(error)
-            // }));
         }
         return this._app.service(value)
     }
@@ -103,7 +86,9 @@ export class SocketService {
                     this.socket = this.getService(service);
                     return Promise.resolve(this.socket);
                 }, error => {
-                    console.log(error)
+                    // console.log(error)
+                }).catch(err =>{
+                    console.log(err)
                 }));
 
             });

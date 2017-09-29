@@ -46,7 +46,7 @@ export class SystemModulesComponent implements OnInit {
 		this.sideToggle = !this.sideToggle;
 	}
 
-	loadroutes(route: any) {
+	loadRoutes(route: any) {
 		console.log(route);
 		this.loadingService.startLoading();
 		this._router.navigate([this.baseRoute + route]).then(res => {

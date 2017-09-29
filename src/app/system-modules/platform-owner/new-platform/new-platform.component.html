@@ -121,7 +121,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-6 form-group">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -370,11 +370,34 @@
                             </div>
                         </div>
                     </div>-->
+                <div *ngIf="canAddImage" class="col-12">
+                    <div class="row">
+                        <div class="col-12 form-group col-md-6">
+                            <label class="col-12 no-padding control-label">Photos</label>
+                            <div class="row upload-wrap">
+                                <div class="col-12 col-md-6">
+                                    <button (click)="showImageBrowseDlg()" class="btn btn-default btn-flat border-brand text-brand">Search Photo</button>
+                                    <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this)">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="placehold-wrap">
+                                        <img #blah id="blah" src="http://placehold.it/180" alt="your image" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
             </form>
             <div class="col-12 pad-all">
                 <div class="col-12 text-center">
-                    <button class="btn btn-primary btn-flat" [disabled]="!platformFormGroup.valid" (click)="save(platformFormGroup.valid, platformFormGroup.value)"
+                    <button class="btn btn-primary btn-flat" [disabled]="!platformFormGroup.valid || (fileInput == undefined || fileInput.nativeElement.files.length < 1)" (click)="save(platformFormGroup.valid, platformFormGroup.value)"
                         [innerHtml]="saveBtn"></button>
+                    <button [disabled]="fileInput == undefined || fileInput.nativeElement.files.length < 1" *ngIf="canAddImage" class="btn btn-primary btn-flat" (click)="save(platformFormGroup.valid, platformFormGroup.value)">Upload</button>
                 </div>
             </div>
         </div>

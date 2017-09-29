@@ -1,7 +1,10 @@
 <section class="content">
     <div class="row pad-all">
         <div class="col-12 col-sm-7 pg-subtitle-wrap">
-            <div class="profileImg-wrap"><img alt="" src="assets/img/lagos-state-logo.jpg"></div>
+            <div class="placehold-wrap">
+                <div *ngIf="selectedPlaform?.logo === undefined" class="profileImg-wrap"><img alt="" src="assets/img/lagos-state-logo.jpg"></div>
+                <div *ngIf="selectedPlaform?.logo !== undefined" class="upload-wrap"> <img [src]="_systemService.transform(selectedPlaform?.logo?.thumbnail)"></div>
+            </div>
             <div class="pg-subtitle">{{selectedPlaform?.name}} <span>({{selectedPlaform?.shortName}})</span></div>
         </div>
         <div class="col-12 col-sm-5">
@@ -31,7 +34,8 @@
 
                 <div class="field-wrap">
                     <div class="field-label">Address</div>
-                    <div class="field-val">{{selectedPlaform?.address.street}}, {{selectedPlaform?.address.neighbourhood}}, {{selectedPlaform?.address.lga.name}}, {{selectedPlaform?.address.state.name}} Nigeria.</div>
+                    <div class="field-val">{{selectedPlaform?.address.street}}, {{selectedPlaform?.address.neighbourhood}}, {{selectedPlaform?.address.lga.name}},
+                        {{selectedPlaform?.address.state.name}} Nigeria.</div>
                     <!-- <div class="field-val">No. 10 Jobi Fele WAy, Alausa, Ikeja, Lagos Nigeria.</div> -->
                 </div>
             </div>
