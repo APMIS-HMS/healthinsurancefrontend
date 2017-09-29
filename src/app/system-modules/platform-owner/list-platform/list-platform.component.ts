@@ -39,7 +39,9 @@ export class ListPlatformComponent implements OnInit {
   }
   _getPlatformOwners() {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit:200 } }).then((payload: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
+      this.loading = false;
+      console.log(payload);
       this.owners = payload.data;
       this._systemService.off();
     }).catch(error => {
@@ -52,6 +54,7 @@ export class ListPlatformComponent implements OnInit {
     this._systemService.on();
     this._userTypeService.findAll().then((payload: any) => {
       this._systemService.off();
+      console.log(payload);
       if (payload.data.length > 0) {
         const index = payload.data.findIndex(x => x.name === 'Platform Owner');
         if (index > -1) {
