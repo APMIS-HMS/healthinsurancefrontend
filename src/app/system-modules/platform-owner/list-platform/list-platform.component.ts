@@ -50,7 +50,7 @@ export class ListPlatformComponent implements OnInit {
     })
   }
 
-  _getUserTypes() {
+  private _getUserTypes() {
     this._systemService.on();
     this._userTypeService.findAll().then((payload: any) => {
       this._systemService.off();
