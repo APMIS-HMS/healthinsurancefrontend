@@ -17,7 +17,8 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 })
 export class NewUserComponent implements OnInit {
   userFormGroup: FormGroup;
-  disableSaveBtn: Boolean = false;
+  disableSaveBtn: boolean = false;
+
   owners: any = <any>[];
   user: any = <any>{};
   saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
@@ -54,7 +55,7 @@ export class NewUserComponent implements OnInit {
   }
 
 
-    onClickSaveNewUser(valid: Boolean, value: any) {
+    onClickSaveNewUser(valid: boolean, value: any) {
       if (valid) {
         this.disableSaveBtn = true;
         this.saveBtn = 'Saving... <i class="fa fa-spinner fa-spin"></i>';
