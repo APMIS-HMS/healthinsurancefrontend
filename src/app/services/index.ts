@@ -8,3 +8,4 @@ export * from './common/facility-ownership.service';
 export * from './common/plan-type.service';
 export * from './plan/plan.service';
 export * from './person/person.service';
+export * from './common/premium-type.service';

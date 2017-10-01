@@ -1,3 +1,4 @@
+import { PremiumTypeService } from './services/common/premium-type.service';
 import { UploadService } from './services/common/upload.service';
 import { SystemModuleService } from './services/common/system-module.service';
 import { UserTypeService } from './services/common/user-type.service';
@@ -41,7 +42,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
     SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
     SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
     SetupService.CorporateFacilityService, SetupService.IndustryTypesService, AuthService, FacilityService,
-    UserTypeService, SystemModuleService, UploadService],
+    UserTypeService, SystemModuleService, UploadService, PremiumTypeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
