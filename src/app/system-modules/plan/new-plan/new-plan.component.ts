@@ -60,6 +60,7 @@ export class NewPlanComponent implements OnInit {
     });
     
     this.planPremiumFormGroup = this._fb.group({
+      planCategory: [1, [<any>Validators.required]],
 			planDuration: [1, [<any>Validators.required]],
 			planAmount: [0, [<any>Validators.required]],
 			planUnit: ['', [<any>Validators.required]]
@@ -100,6 +101,7 @@ export class NewPlanComponent implements OnInit {
   onClickAddPremium(valid: Boolean, value: any) {
     if (valid) {
       const premium = <PlanPremium> {
+        category: value.planCategory,
         amount: value.planAmount,
         duration: value.planDuration,
         unit: value.planUnit.name,
