@@ -9,3 +9,6 @@ export * from './common/plan-type.service';
 export * from './plan/plan.service';
 export * from './person/person.service';
 export * from './common/premium-type.service';
+export * from './common/titles.service';
+export * from './common/gender.service';
+export * from './common/marital-status.service';
