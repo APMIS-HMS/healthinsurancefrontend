@@ -167,10 +167,10 @@
                                         <label class="col-12 no-padding">Category</label>
                                         <div class="col-12 no-padding">
                                             <select formControlName="planCategory" class="form-control">
-                                                    <option value="" disabled selected>Select Category</option>
-                                                    <option value="individual">Individual</option>
-                                                    <option value="group">Group</option>
-                                                </select>
+                                                <option value="" disabled selected>Select Category</option>
+                                                <option value="individual">Individual</option>
+                                                <option value="group">Group</option>
+                                            </select>
                                             <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planCategory.valid || planPremiumFormGroup.controls.planCategory.pristine">
                                                     This is a required field.
                                                 </small>
@@ -198,9 +198,9 @@
                                         <label class="col-12 no-padding">Unit</label>
                                         <div class="col-12 no-padding">
                                             <select formControlName="planUnit" class="form-control">
-                                                        <option value="" disabled selected>Select Unit</option>
-                                                        <option [ngValue]="duration" *ngFor="let duration of durations;">{{ duration.name }}</option>
-                                                    </select>
+                                                <option value="" disabled selected>Select Unit</option>
+                                                <option [ngValue]="duration" *ngFor="let duration of durations;">{{ duration.name }}</option>
+                                            </select>
                                             <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planUnit.valid || planPremiumFormGroup.controls.planUnit.pristine">
                                                         This is a required field.
                                                     </small>
@@ -257,14 +257,13 @@
                         <div class="col-12 text-right">
                             <button [disabled]="disablePremiumNextBtn" (click)="onClickPremiumNext()" class="btn btn-success btn-flat" [innerHtml]="premiumNextBtn"></button>
                         </div>
-
                     </div>
                 </div>
-                <div class="col-12 no-padding">
+                <!-- <div class="col-12 no-padding">
                     <div class="col-12 text-right">
                         <button [disabled]="disablePremiumNextBtn" (click)="onClickPremiumNext()" class="btn btn-success btn-flat" [innerHtml]="premiumNextBtn"></button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
