@@ -118,7 +118,8 @@ export class NewPlanComponent implements OnInit {
         this.planPremiumFormGroup.reset();
         this.planDetailFormGroup.controls['planStatus'].setValue(true);
         this.tabDetails_click();
-      }).catch(err =>{
+      }).catch(err => {
+        console.log(err);
         this._systemService.off();
       });
     } else {

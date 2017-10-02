@@ -12,13 +12,13 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 	styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-	showLoginTab: boolean = false;
-	showRegTab: boolean = false;
+	showLoginTab: Boolean = false;
+	showRegTab: Boolean = false;
 	loginFormGroup: FormGroup;
-	loginBtnText: string = "LOG IN &nbsp; <i class='fa fa-sign-in'></i>";
+	loginBtnText: String = 'LOG IN &nbsp; <i class="fa fa-sign-in"></i>';
 
 	constructor(
-		private toastr: ToastsManager,
+		private _toastr: ToastsManager,
 		private _fb: FormBuilder,
 		private _router: Router,
 		private _authService: AuthService,
@@ -38,27 +38,28 @@ export class LoginComponent implements OnInit {
 	getUserTypes() {
 		this._userTypeService.findAll().then(payload => {
 			console.log(payload);
-		})
+		});
 	}
 
 	onClickLogin(value: any, valid: boolean) {
 		if (valid) {
-			this.loginBtnText = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+			this.loginBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
 
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
 				console.log(payload);
-				
-				this.toastr.success('You have successfully logged in!', 'Success!');
+
 				this._router.navigate(['/modules/beneficiary/beneficiaries']).then(res => {
 					this._authService.announceMission({ status: 'On' });
-				 })
-
+				});
+				setTimeout(e => {
+					this._toastr.success('You have successfully logged in!', 'Success!');
+				}, 1000);
 			}).catch(err => {
 				// console.log(err);
 				this.loginFormGroup.controls['password'].reset();
-				this.loginBtnText = "LOG IN &nbsp; <i class='fa fa-sign-in'></i>";
-			})
+				this.loginBtnText = 'LOG IN &nbsp; <i class="fa fa-sign-in"></i>';
+			});
 		}
 
 
@@ -73,7 +74,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	onClickTab(tab) {
-		if (tab === "login") {
+		if (tab === 'login') {
 			this.showLoginTab = !this.showLoginTab;
 		} else {
 			this.showRegTab = !this.showRegTab;

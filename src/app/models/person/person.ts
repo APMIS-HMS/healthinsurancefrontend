@@ -4,6 +4,7 @@ import { Address } from '../organisation/address';
 
 export interface Person {
     platformOnwerId: String;
+    platformId: String;
     firstName: String;
     lastName: String;
     otherNames: String;
