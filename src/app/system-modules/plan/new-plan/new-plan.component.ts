@@ -50,6 +50,7 @@ export class NewPlanComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('');
 
     this._getPlanTypes();
+    this._getPremiumTypes();
 
     this.planOwner = 'LASHMA';
 
@@ -67,11 +68,11 @@ export class NewPlanComponent implements OnInit {
     });
   }
 
-  _premiumTypes(){
+  _getPremiumTypes(){
     this._premiumTypeService.find({}).then((payload:any) =>{
       this.premiumTypes = payload.data;
+      console.log(this.premiumTypes)
     }).catch(err =>{
-
     })
   }
 

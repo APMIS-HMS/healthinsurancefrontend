@@ -1,18 +1,19 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
+import { MaritalStatusService } from './../../../services/common/marital-status.service';
+import { TitleService } from './../../../services/common/titles.service';
+import { GenderService } from './../../../services/common/gender.service';
+import { CountryService } from './../../../services/common/country.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-
-import {
-  CountriesService, FacilityTypesService, FacilitiesService, GenderService,
-  PersonService, TitleService, UserService, MaritalStatusService, HiaService
-} from '../../../services/api-services/index';
 import { Address, Facility, Gender, Title, MaritalStatus, Person, Beneficiary } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import { FacilityService } from '../../../services/common/facility.service';
 
 @Component({
-  selector: 'app-new-beneficiary',
-  templateUrl: './new-beneficiary.component.html',
-  styleUrls: ['./new-beneficiary.component.scss']
+	selector: 'app-new-beneficiary',
+	templateUrl: './new-beneficiary.component.html',
+	styleUrls: ['./new-beneficiary.component.scss']
 })
 export class NewBeneficiaryComponent implements OnInit {
 	stepOneView: Boolean = true;
@@ -24,7 +25,7 @@ export class NewBeneficiaryComponent implements OnInit {
 	frmProgram: FormGroup;
 
 	tab_personalData = true;
-	tab_dependants= false;
+	tab_dependants = false;
 	tab_program = false;
 	tab_confirm = false;
 
@@ -33,7 +34,8 @@ export class NewBeneficiaryComponent implements OnInit {
 	titles: Title[] = [];
 	genders: Gender[] = [];
 	cities: any[] = [];
-	lgas: any[] = [];
+	lgs: any[] = [];
+	countries: any[] = [];
 	selectedLgas: any[] = [];
 	selectedStateId: String = '';
 	maritalStatuses: MaritalStatus[] = [];
@@ -43,24 +45,26 @@ export class NewBeneficiaryComponent implements OnInit {
 	countryId: String = '';
 	stateId: String = '';
 	saveBtn: String = '&nbsp;&nbsp; SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+	selectedCountry: any;
+	selectedState: any;
 
 	constructor(
 		private _toastr: ToastsManager,
 		private _headerEventEmitter: HeaderEventEmitterService,
 		private _fb: FormBuilder,
-		private _countriesService: CountriesService,
+		private _countriesService: CountryService,
 		private _genderService: GenderService,
 		private _titleService: TitleService,
 		private _maritalStatusService: MaritalStatusService,
-		private _userService: UserService,
-		private _personService: PersonService,
-		private _facilityService: FacilitiesService,
-		private _hiaService: HiaService
+		private _systemService: SystemModuleService,
+		// private _personService: PersonService,
+		private _facilityService: FacilityService,
+		// private _hiaService: HiaService
 	) { }
 
 	ngOnInit() {
 		this._headerEventEmitter.setRouteUrl('New Beneficiary');
-    	this._headerEventEmitter.setMinorRouteUrl('');
+		this._headerEventEmitter.setMinorRouteUrl('');
 
 		// this.getCountries();
 		// this.getTitles();
@@ -68,6 +72,11 @@ export class NewBeneficiaryComponent implements OnInit {
 		// this.getMaritalStatus();
 		// this.getAllProviders();
 		// this.getAllHias();
+
+		this._getCountries();
+		this._getTitles();
+		this._getGender();
+		this._getMaritalStatus();
 
 		this.stepOneFormGroup = this._fb.group({
 			gender: [''],
@@ -106,64 +115,150 @@ export class NewBeneficiaryComponent implements OnInit {
 		});
 	}
 
-	tabConfirm_click(){
+	_getGender() {
+		this._genderService.find({}).then((payload: any) => {
+			this.genders = payload.data;
+		}).catch(err => {
+
+		})
+	}
+
+	_getTitles() {
+		this._titleService.find({}).then((payload: any) => {
+			this.titles = payload.data;
+		})
+	}
+
+	_getMaritalStatus() {
+		this._maritalStatusService.find({}).then((payload:any) => {
+			this.maritalStatuses = payload.data;
+		}).catch(err => {
+
+		})
+	}
+
+	_getCountries() {
+		this._systemService.on();
+		this._countriesService.find({
+			query: {
+				$limit: 200,
+				$select: { "states": 0 }
+			}
+		}).then((payload: any) => {
+			this._systemService.off();
+			this.countries = payload.data;
+			const index = this.countries.findIndex(x => x.name === 'Nigeria');
+			if (index > -1) {
+				this.selectedCountry = this.countries[index];
+				this._getStates(this.selectedCountry._id);
+				if (this.selectedState !== undefined) {
+					this._getLgaAndCities(this.selectedCountry._id, this.selectedState);
+				}
+			}
+		}).catch(err => {
+			this._systemService.off();
+		})
+	}
+	_getStates(_id) {
+		this._systemService.on();
+		this._countriesService.find({
+			query: {
+				_id: _id,
+				$limit: 200,
+				$select: { "states.cities": 0, "states.lgs": 0 }
+			}
+		}).then((payload: any) => {
+			this._systemService.off();
+			if (payload.data.length > 0) {
+				this.states = payload.data[0].states;
+			}
+
+		}).catch(error => {
+			this._systemService.off();
+		})
+	}
+
+	_getLgaAndCities(_id, state) {
+		this._systemService.on();
+		this._countriesService.find({
+			query: {
+				_id: _id,
+				"states.name": state.name,
+				$select: { 'states.$': 1 }
+			}
+		}).then((payload: any) => {
+			this._systemService.off();
+			if (payload.data.length > 0) {
+				const states = payload.data[0].states;
+				if (states.length > 0) {
+					this.cities = states[0].cities;
+					this.lgs = states[0].lgs;
+				}
+			}
+
+		}).catch(error => {
+			this._systemService.off();
+		})
+	}
+
+	tabConfirm_click() {
 		this.tab_personalData = false;
-		this.tab_dependants= false;
+		this.tab_dependants = false;
 		this.tab_program = false;
 		this.tab_confirm = true;
 	}
-	tabProgram_click(){
+	tabProgram_click() {
 		this.tab_personalData = false;
-		this.tab_dependants= false;
+		this.tab_dependants = false;
 		this.tab_program = true;
 		this.tab_confirm = false;
 	}
-	tabDependants_click(){
+	tabDependants_click() {
 		this.tab_personalData = false;
-		this.tab_dependants= true;
+		this.tab_dependants = true;
 		this.tab_program = false;
 		this.tab_confirm = false;
 	}
-	tabPersonalData_click(){
+	tabPersonalData_click() {
 		this.tab_personalData = true;
-		this.tab_dependants= false;
+		this.tab_dependants = false;
 		this.tab_program = false;
 		this.tab_confirm = false;
 	}
 
 	populateStepFour() {
-		this.beneficiary.fullName =  this.stepOneFormGroup.controls['title'].value.name
-									+ " " + this.stepOneFormGroup.get('firstName').value
-									 + " " + this.stepOneFormGroup.get('middleName').value
-									 + " " + this.stepOneFormGroup.get('lastName').value;
+		this.beneficiary.fullName = this.stepOneFormGroup.controls['title'].value.name
+			+ " " + this.stepOneFormGroup.get('firstName').value
+			+ " " + this.stepOneFormGroup.get('middleName').value
+			+ " " + this.stepOneFormGroup.get('lastName').value;
 		this.beneficiary.phonenumber = this.stepOneFormGroup.get('phonenumber').value;
 		this.beneficiary.dob = this.stepOneFormGroup.get('dob').value;
 		this.beneficiary.lga = this.stepOneFormGroup.get('lga').value.name;
 		this.beneficiary.gender = this.stepOneFormGroup.get('gender').value;
 		this.beneficiary.lasrraId = this.stepOneFormGroup.get('lasrraId').value;
 
-		this.beneficiary.spouseFullName =  this.frmDependants.get('spouseFirstName').value
-									 + " " + this.frmDependants.get('spouseMiddleName').value
-									 + " " + this.frmDependants.get('spouseLastName').value;
+		this.beneficiary.spouseFullName = this.frmDependants.get('spouseFirstName').value
+			+ " " + this.frmDependants.get('spouseMiddleName').value
+			+ " " + this.frmDependants.get('spouseLastName').value;
 		this.beneficiary.spouseDob = this.frmDependants.get('spouseDob').value;
 		this.beneficiary.spouseLassraId = this.frmDependants.get('spouseLassraId').value;
 
 		this.beneficiary.child_1_gender = this.frmDependants.get('child_1_gender').value;
-		this.beneficiary.child_1_fullName =  this.frmDependants.get('child_1_firstName').value
-									 + " " + this.frmDependants.get('child_1_middleName').value
-									 + " " + this.frmDependants.get('child_1_lastName').value;
+		this.beneficiary.child_1_fullName = this.frmDependants.get('child_1_firstName').value
+			+ " " + this.frmDependants.get('child_1_middleName').value
+			+ " " + this.frmDependants.get('child_1_lastName').value;
 		this.beneficiary.child_1_dob = this.frmDependants.get('child_1_dob').value;
 
 		this.beneficiary.child_2_gender = this.frmDependants.get('child_2_gender').value;
-		this.beneficiary.child_2_fullName =  this.frmDependants.get('child_2_firstName').value
-									 + " " + this.frmDependants.get('child_2_middleName').value
-									 + " " + this.frmDependants.get('child_2_lastName').value;
+		this.beneficiary.child_2_fullName = this.frmDependants.get('child_2_firstName').value
+			+ " " + this.frmDependants.get('child_2_middleName').value
+			+ " " + this.frmDependants.get('child_2_lastName').value;
 		this.beneficiary.child_2_dob = this.frmDependants.get('child_2_dob').value;
 
 		this.beneficiary.dependant_1_gender = this.frmDependants.get('dependant_1_gender').value;
-		this.beneficiary.dependant_1_fullName =  this.frmDependants.get('dependant_1_firstName').value
-									 + " " + this.frmDependants.get('dependant_1_middleName').value
-									 + " " + this.frmDependants.get('dependant_1_lastName').value;
+		this.beneficiary.dependant_1_fullName = this.frmDependants.get('dependant_1_firstName').value
+			+ " " + this.frmDependants.get('dependant_1_middleName').value
+			+ " " + this.frmDependants.get('dependant_1_lastName').value;
 		this.beneficiary.dependant_1_dob = this.frmDependants.get('dependant_1_dob').value;
 		this.beneficiary.dependant_1_lassraId = this.frmDependants.get('dependant_1_lassraId').value;
 		this.beneficiary.dependant_1_relationship = this.frmDependants.get('dependant_1_relationship').value;
@@ -203,21 +298,21 @@ export class NewBeneficiaryComponent implements OnInit {
 			personId: "personId",
 			facilityId: this.frmProgram.get('providerName').value,
 			isActive: false,
-			orders:[],
-			tags:[]
+			orders: [],
+			tags: []
 		}
 
 		let beneficiary = {
-			facilityId: this.frmProgram.get('providerName').value,  
+			facilityId: this.frmProgram.get('providerName').value,
 			patientId: "patientId",
 			lasrraId: this.frmProgram.get('lasrraId').value,
 			noOfChildrenUnder18: this.stepOneFormGroup.get('noOfChildrenU18').value,
 			spouse: {
-			// 	spouseFirstName: ['', [<any>Validators.required]],
-			// spouseMiddleName: [''],
-			// spouseLastName: ['', [<any>Validators.required]],
-			// spouseDob: ['', [<any>Validators.required]],
-			// spouseLassraId: [''],
+				// 	spouseFirstName: ['', [<any>Validators.required]],
+				// spouseMiddleName: [''],
+				// spouseLastName: ['', [<any>Validators.required]],
+				// spouseDob: ['', [<any>Validators.required]],
+				// spouseLassraId: [''],
 				// patientId: ,
 				// relationshipId: ,
 				// lasrraId:  ,
@@ -226,7 +321,7 @@ export class NewBeneficiaryComponent implements OnInit {
 			hiaProgramTypeId: this.frmProgram.get('programType').value,
 			hiaNameId: this.frmProgram.get('programName').value,
 			phcpId: this.frmProgram.get('providerName').value,
-			dependants: [ 
+			dependants: [
 				// {
 				// 	patientId: ,
 				// 	relationshipId: ,
@@ -266,17 +361,17 @@ export class NewBeneficiaryComponent implements OnInit {
 	}
 
 	getCountries() {
-		this._countriesService.findAll().then((payload) => {
-			for(let i=0; i<payload.data.length; i++) {
+		this._countriesService.find({}).then((payload:any) => {
+			for (let i = 0; i < payload.data.length; i++) {
 				let country = payload.data[i];
-				if(country.name === "Nigeria") {
+				if (country.name === "Nigeria") {
 					this.countryId = country._id;
 					this.states = country.states;
-					for(let j = 0; j < country.states.length; j++) {
+					for (let j = 0; j < country.states.length; j++) {
 						let state = country.states[j];
-						if(state.name === "Lagos") {
+						if (state.name === "Lagos") {
 							this.stateId = state._id;
-							this.lgas = state.lgs;
+							this.lgs = state.lgs;
 							return;
 						}
 					}
@@ -286,45 +381,45 @@ export class NewBeneficiaryComponent implements OnInit {
 		});
 	}
 	getGenders() {
-		this._genderService.findAll().then((payload) => {
+		this._genderService.find({}).then((payload:any) => {
 			this.genders = payload.data;
 		})
 	}
 
 	getTitles() {
-		this._titleService.findAll().then((payload: any) => {
+		this._titleService.find({}).then((payload: any) => {
 			this.titles = payload.data;
 		})
 	}
 
 	getMaritalStatus() {
-		this._maritalStatusService.findAll().then((payload: any) => {
+		this._maritalStatusService.find({}).then((payload: any) => {
 			this.maritalStatuses = payload.data;
 		})
 	}
-	
+
 	getAllProviders() {
-		this._facilityService.findAll().then(payload => {
+		this._facilityService.find({}).then((payload:any) => {
 			console.log(payload);
 			this.providers = payload.data;
 		});
 	}
-	
+
 	getAllHias() {
-		this._hiaService.findAll().then(payload => {
-			console.log(payload);
-			this.hias = payload.data;
-		});
+		// this._hiaService.findAll().then(payload => {
+		// 	console.log(payload);
+		// 	this.hias = payload.data;
+		// });
 	}
 
 	onChangeStateOfOrigin(value: any) {
-		this._countriesService.findAll().then((payload) => {
-			for(let i=0; i<payload.data.length; i++) {
+		this._countriesService.find({}).then((payload:any) => {
+			for (let i = 0; i < payload.data.length; i++) {
 				let country = payload.data[i];
-				if(country.name === "Nigeria") {
-					for(let j = 0; j < country.states.length; j++) {
+				if (country.name === "Nigeria") {
+					for (let j = 0; j < country.states.length; j++) {
 						let state = country.states[j];
-						if(state._id === value) {
+						if (state._id === value) {
 							this.selectedStateId = state._id;
 							this.selectedLgas = state.lgs;
 							return;
@@ -336,48 +431,48 @@ export class NewBeneficiaryComponent implements OnInit {
 		});
 	}
 
-	onClickStepOne(value: any, valid: boolean){
+	onClickStepOne(value: any, valid: boolean) {
 		event.preventDefault();
-		
+
 		console.log(value);
 		console.log(valid);
 		//if(valid) {
-			this.stepOneView = false;
-			this.stepTwoView = true;
-			this.stepThreeView = false;
-			this.stepFourView = false;
+		this.stepOneView = false;
+		this.stepTwoView = true;
+		this.stepThreeView = false;
+		this.stepFourView = false;
 		// } else {
 		// 	this.toastr.error('You have successfully logged in!', 'Success!');
 		// }
 	}
-		
-	onClickStepTwo(value: any, valid: boolean){
+
+	onClickStepTwo(value: any, valid: boolean) {
 		event.preventDefault();
-		
+
 		console.log(value);
 		console.log(valid);
 		//if(valid) {
-			this.stepOneView = false;
-			this.stepTwoView = false;
-			this.stepThreeView = true;
-			this.stepFourView = false;
+		this.stepOneView = false;
+		this.stepTwoView = false;
+		this.stepThreeView = true;
+		this.stepFourView = false;
 		// } else {
 		// 	this.toastr.error('You have successfully logged in!', 'Success!');
 		// }
 	}
-	
-	onClickStepThree(value: any, valid: boolean){
+
+	onClickStepThree(value: any, valid: boolean) {
 		event.preventDefault();
-		
+
 		console.log(value);
 		console.log(valid);
 		this.frmProgram.get('providerName').value;
 		//if(valid) {
-			this.stepOneView = false;
-			this.stepTwoView = false;
-			this.stepThreeView = false;
-			this.stepFourView = true;
-			this.populateStepFour();
+		this.stepOneView = false;
+		this.stepTwoView = false;
+		this.stepThreeView = false;
+		this.stepFourView = true;
+		this.populateStepFour();
 		// } else {
 		// 	this.toastr.error('You have successfully logged in!', 'Success!');
 		// }
@@ -390,7 +485,7 @@ export class NewBeneficiaryComponent implements OnInit {
 		this.stepThreeView = false;
 		this.stepFourView = false;
 	}
-	
+
 	onClickPrevStepTwo() {
 		event.preventDefault();
 		this.stepOneView = false;
@@ -398,7 +493,7 @@ export class NewBeneficiaryComponent implements OnInit {
 		this.stepThreeView = false;
 		this.stepFourView = false;
 	}
-	
+
 	onClickPrevStepThree() {
 		event.preventDefault();
 		this.stepOneView = false;

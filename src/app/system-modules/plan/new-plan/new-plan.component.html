@@ -1,263 +1,271 @@
 <section class="content">
-
-    <div class="nut-tab-topSect-wrap">
-        <div class="nutTabs-wrap">
-
-            <div (click)="tabDetails_click()" [class.active-nut]="tab_details" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1" style="background:transparent;"></div>
-                        <div class="stroke-2"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Details</div>
-            </div>
-
-            <div (click)="tabPremium_click()" [class.active-nut]="tab_premium" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Premium Payment</div>
-            </div>
-
-            <div (click)="tabDrugs_click()" [class.active-nut]="tab_drugs" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Drugs</div>
-            </div>
-
-            <div (click)="tabTests_click()" [class.active-nut]="tab_tests" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Tests</div>
-            </div>
-
-            <div (click)="tabProcedures_click()" [class.active-nut]="tab_procedures" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Procedures</div>
-            </div>
-
-            <div (click)="tabDiagnosis_click()" [class.active-nut]="tab_diagnosis" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Diagnosis</div>
-            </div>
-
-            <div (click)="tabConfirm_click()" [class.active-nut]="tab_confirm" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2" style="display:none;"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Confirm</div>
-            </div>
-        </div>
-
-        <div class="btn-wrap">
-            <a class="btn btn-default border-gray btn-flat text-gray pull-right" routerLink="/modules/plan/plans">
-                <i class="fa fa-times"></i> CANCEL
-            </a>
-        </div>
-    </div>
-    <div class="row pad-up">
-        <div class="col-12">
-            <div *ngIf="tab_details" class="pad-all">
-                <form [formGroup]="planDetailFormGroup" novalidate>
-                    <div class="col-12 pad-up">
-                        <div class="form-group row pad-all">
-                            <label class="col-12 col-sm-4 no-padding control-label">Name of Health Plan</label>
-                            <div class="col-12 col-sm-8 no-padding">
-                                <input type="text" formControlName="planName" class="form-control">
-                                <small class="alert-label" [hidden]="planDetailFormGroup.controls.planName.valid || planDetailFormGroup.controls.planName.pristine">
-                                    This is a required field (minimum 3 and max of 50 characters).
-                                </small>
-                            </div>
+    
+        <div class="nut-tab-topSect-wrap">
+            <div class="nutTabs-wrap">
+    
+                <div (click)="tabDetails_click()" [class.active-nut]="tab_details" class="nutTab-wrap">
+                    <div class="nut-outer">
+                        <div class="nut-inner"></div>
+                        <div class="nut-stroke">
+                            <div class="stroke-1" style="background:transparent;"></div>
+                            <div class="stroke-2"></div>
                         </div>
                     </div>
-                    <div class="col-12 pad-up">
-                        <div class="form-group row pad-all ">
-                            <label class="col-12 col-sm-4  no-padding control-label">Type</label>
-                            <div class="col-12 col-sm-8 no-padding">
-                                <select formControlName="planType" class="form-control">
-                                    <option value="" disabled selected>Select Plan Type</option>
-                                    <option [ngValue]="planType" *ngFor="let planType of planTypes;">{{ planType.name }}</option>
-                                </select>
-                                <small class="alert-label" [hidden]="planDetailFormGroup.controls.planType.valid || planDetailFormGroup.controls.planType.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
+                    <div class="nut-label">Details</div>
+                </div>
+    
+                <div (click)="tabPremium_click()" [class.active-nut]="tab_premium" class="nutTab-wrap">
+                    <div class="nut-outer">
+                        <div class="nut-inner"></div>
+                        <div class="nut-stroke">
+                            <div class="stroke-1"></div>
+                            <div class="stroke-2"></div>
                         </div>
                     </div>
-                    <!-- <div class="col-12 pad-up">
-                        <div class="form-group row pad-all">
-                            <label class="col-12 col-sm-4 no-padding control-label">Created By</label>
-                            <div class="col-12 col-sm-8 no-padding">
-                                <select formControlName="planCreatedBy" class="form-control">
-                                    <option value="" selected>Select</option>
-                                </select>
-                                <small class="alert-label" [hidden]="planDetailFormGroup.controls.planCreatedBy.valid || planDetailFormGroup.controls.planCreatedBy.pristine">
-                                    This is a required field.
-                                </small>
+                    <div class="nut-label">Premium Payment</div>
+                </div>
+    
+                <div (click)="tabDrugs_click()" [class.active-nut]="tab_drugs" class="nutTab-wrap">
+                    <div class="nut-outer">
+                        <div class="nut-inner"></div>
+                        <div class="nut-stroke">
+                            <div class="stroke-1"></div>
+                            <div class="stroke-2"></div>
+                        </div>
+                    </div>
+                    <div class="nut-label">Drugs</div>
+                </div>
+    
+                <div (click)="tabTests_click()" [class.active-nut]="tab_tests" class="nutTab-wrap">
+                    <div class="nut-outer">
+                        <div class="nut-inner"></div>
+                        <div class="nut-stroke">
+                            <div class="stroke-1"></div>
+                            <div class="stroke-2"></div>
+                        </div>
+                    </div>
+                    <div class="nut-label">Tests</div>
+                </div>
+    
+                <div (click)="tabProcedures_click()" [class.active-nut]="tab_procedures" class="nutTab-wrap">
+                    <div class="nut-outer">
+                        <div class="nut-inner"></div>
+                        <div class="nut-stroke">
+                            <div class="stroke-1"></div>
+                            <div class="stroke-2"></div>
+                        </div>
+                    </div>
+                    <div class="nut-label">Procedures</div>
+                </div>
+    
+                <div (click)="tabDiagnosis_click()" [class.active-nut]="tab_diagnosis" class="nutTab-wrap">
+                    <div class="nut-outer">
+                        <div class="nut-inner"></div>
+                        <div class="nut-stroke">
+                            <div class="stroke-1"></div>
+                            <div class="stroke-2"></div>
+                        </div>
+                    </div>
+                    <div class="nut-label">Diagnosis</div>
+                </div>
+    
+                <div (click)="tabConfirm_click()" [class.active-nut]="tab_confirm" class="nutTab-wrap">
+                    <div class="nut-outer">
+                        <div class="nut-inner"></div>
+                        <div class="nut-stroke">
+                            <div class="stroke-1"></div>
+                            <div class="stroke-2" style="display:none;"></div>
+                        </div>
+                    </div>
+                    <div class="nut-label">Confirm</div>
+                </div>
+            </div>
+    
+            <div class="btn-wrap">
+                <a class="btn btn-default border-gray btn-flat text-gray pull-right" routerLink="/modules/plan/plans">
+                    <i class="fa fa-times"></i> CANCEL
+                </a>
+            </div>
+        </div>
+        <div class="row pad-up">
+            <div class="col-12">
+                <div *ngIf="tab_details" class="pad-all">
+                    <form [formGroup]="planDetailFormGroup" novalidate>
+                        <div class="col-12 pad-up">
+                            <div class="form-group row pad-all">
+                                <label class="col-12 col-sm-4 no-padding control-label">Name of Health Plan</label>
+                                <div class="col-12 col-sm-8 no-padding">
+                                    <input type="text" formControlName="planName" class="form-control">
+                                    <small class="alert-label" [hidden]="planDetailFormGroup.controls.planName.valid || planDetailFormGroup.controls.planName.pristine">
+                                        This is a required field (minimum 3 and max of 50 characters).
+                                    </small>
+                                </div>
                             </div>
+                        </div>
+                        <div class="col-12 pad-up">
+                            <div class="form-group row pad-all ">
+                                <label class="col-12 col-sm-4  no-padding control-label">Type</label>
+                                <div class="col-12 col-sm-8 no-padding">
+                                    <select formControlName="planType" class="form-control">
+                                        <option value="" disabled selected>Select Plan Type</option>
+                                        <option [ngValue]="planType" *ngFor="let planType of planTypes;">{{ planType.name }}</option>
+                                    </select>
+                                    <small class="alert-label" [hidden]="planDetailFormGroup.controls.planType.valid || planDetailFormGroup.controls.planType.pristine">
+                                        This is a required field.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-12 pad-up">
+                            <div class="form-group row pad-all">
+                                <label class="col-12 col-sm-4 no-padding control-label">Created By</label>
+                                <div class="col-12 col-sm-8 no-padding">
+                                    <select formControlName="planCreatedBy" class="form-control">
+                                        <option value="" selected>Select</option>
+                                    </select>
+                                    <small class="alert-label" [hidden]="planDetailFormGroup.controls.planCreatedBy.valid || planDetailFormGroup.controls.planCreatedBy.pristine">
+                                        This is a required field.
+                                    </small>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="col-12 pad-up">
+                            <div class="form-group row pad-all">
+                                <label class="col-12 col-sm-4 no-padding control-label">Status</label>
+                                <div class="col-12 col-sm-8 no-padding">
+                                    <label class="switch">
+                                      <input type="checkbox" formControlName="planStatus" class="input-action-leader-board"/>
+                                      <div class="slider round"></div>
+                                    </label>
+                                </div>
+                                <!-- <select formControlName="planStatus" class="form-control">
+                                <option value="" selected>Select</option>
+                                </select>
+                                        <small class="alert-label" [hidden]="planDetailFormGroup.controls.planStatus.valid || planDetailFormGroup.controls.planStatus.pristine">
+                                    This is a required field.
+                                </small> -->
+                            </div>
+                        </div>
+                        <div class="col-12 text-right no-padding">
+                            <button (click)="onClickAddPlan(planDetailFormGroup.valid, planDetailFormGroup.value)" class="btn btn-primary btn-flat"> NEXT <i class="fa fa-chevron-right"></i></button>
+                        </div>
+                    </form>
+                </div>
+    
+                <div *ngIf="tab_premium">
+                    <div class="grey-wrap">
+                        <form [formGroup]="planPremiumFormGroup" novalidate>
+                            <div class="col-12 pad-up">
+                                <div class="form-group">
+                                    <!-- <label class="col-sm-2 control-label">Premium Payment</label> -->
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label class="col-12 no-padding">Premium Type</label>
+                                            <!-- <div style="display: flex;justify-content: space-between;" class="col-12 no-padding">
+                                                <label name="exampleRadios" id="2" class="radio-inline"><input type="radio" value="">Individual</label>
+                                                <label name="exampleRadios" id="3" class="radio-inline"><input type="radio" value="">Household</label>
+                                            </div> -->
+                                            <div style="display: flex;justify-content: space-between;" class="col-12">
+                                                <div *ngFor="let premiumType of premiumTypes" class="form-check form-check-inline">
+                                                    <label class="form-check-label">
+                                                      <input checked class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="premiumType"> {{premiumType.name}}
+                                                    </label>
+                                                </div>
+                                                <!-- <div class="form-check form-check-inline">
+                                                    <label class="form-check-label">
+                                                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Household"> Household
+                                                    </label>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="col-12 no-padding">Amount</label>
+                                            <div class="col-12 no-padding">
+                                                <input type="number" formControlName="planAmount" class="form-control" placeholder="Amount">
+                                                <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planAmount.valid || planPremiumFormGroup.controls.planAmount.pristine">
+                                                    This is a required field.
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-3">
+                                            <label class="col-12 no-padding">Unit</label>
+                                            <div class="col-12 no-padding">
+                                                <select formControlName="planUnit" class="form-control">
+                                                    <option value="" disabled selected>Select Unit</option>
+                                                    <option [ngValue]="duration" *ngFor="let duration of durations;">{{ duration.name }}</option>
+                                                </select>
+                                                <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planUnit.valid || planPremiumFormGroup.controls.planUnit.pristine">
+                                                    This is a required field.
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label class="col-12 no-padding">Duration</label>
+                                            <div class="col-12 no-padding">
+                                                <input type="number" formControlName="planDuration" class="form-control" placeholder="Duration">
+                                                <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planDuration.valid || planPremiumFormGroup.controls.planDuration.pristine">
+                                                    This is a required field.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-12 center-btn">
+                        <div class="btn btn-primary btn-flat" routerLink="/modules/plan/new-plan">
+                            <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT
                         </div>
                     </div> -->
-                    <div class="col-12 pad-up">
-                        <div class="form-group row pad-all">
-                            <label class="col-12 col-sm-4 no-padding control-label">Status</label>
-                            <div class="col-12 col-sm-8 no-padding">
-                                <label class="switch">
-                                  <input type="checkbox" formControlName="planStatus" class="input-action-leader-board"/>
-                                  <div class="slider round"></div>
-                                </label>
+                        </form>
+                        <div class="col-12 text-right no-padding">
+                            <button (click)="onClickAddPremium(planPremiumFormGroup.valid, planPremiumFormGroup.value)" class="btn btn-primary btn-flat"> <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT</button>
+                        </div>
+                    </div>
+    
+                    <div class="col-12 no-padding">
+                        <div class="table-responsive">
+                            <table class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr class="bg-gray text-white">
+                                        <th>S/N</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                        <th>Duration</th>
+                                        <th>Unit</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr>
+                                        <td>20.000</td>
+                                        <td>Monthly</td>
+                                        <td class="td-icos">
+                                            <i class="fa fa-edit"></i>
+                                            <i class="fa fa-trash"></i>
+                                        </td>
+                                    </tr> -->
+                                    <tr *ngIf="premiums.length === 0">
+                                        <td class="text-center" colspan="6">No data available in table</td>
+                                    </tr>
+                                    <tr class="tr-link" *ngFor="let premium of premiums; let i = index;">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{ premium.amount }}</td>
+                                        <td>{{ premium.category }}</td>
+                                        <td>{{ premium.durationInDay }}</td>
+                                        <td>{{ premium.unit }}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-flat btn-smaller">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-12 text-right">
+                                    <button  [disabled]="disablePremiumNextBtn" (click)="onClickPremiumNext()" class="btn btn-success btn-flat" [innerHtml]="premiumNextBtn"></button>
                             </div>
-                            <!-- <select formControlName="planStatus" class="form-control">
-                            <option value="" selected>Select</option>
-                            </select>
-                                    <small class="alert-label" [hidden]="planDetailFormGroup.controls.planStatus.valid || planDetailFormGroup.controls.planStatus.pristine">
-                                This is a required field.
-                            </small> -->
+                            
                         </div>
-                    </div>
-                    <div class="col-12 text-right no-padding">
-                        <button (click)="onClickAddPlan(planDetailFormGroup.valid, planDetailFormGroup.value)" class="btn btn-primary btn-flat"> NEXT <i class="fa fa-chevron-right"></i></button>
-                    </div>
-                </form>
-            </div>
-
-            <div *ngIf="tab_premium">
-                <div class="grey-wrap">
-                    <form [formGroup]="planPremiumFormGroup" novalidate>
-                        <div class="col-12 pad-up">
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-sm-4 control-label">Premium Payment</label>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <label class="col-12 no-padding">Category</label>
-                                        <div class="col-12 no-padding">
-                                            <input type="number" formControlName="planCategory" class="form-control" placeholder="Amount">
-                                            <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planCategory.valid || planPremiumFormGroup.controls.planCategory.pristine">
-                                                This is a required field.
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label class="col-12 no-padding">Amount</label>
-                                        <div class="col-12 no-padding">
-                                            <input type="number" formControlName="planAmount" class="form-control" placeholder="Amount">
-                                            <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planAmount.valid || planPremiumFormGroup.controls.planAmount.pristine">
-                                                This is a required field.
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-2">
-                                        <label class="col-12 no-padding">Unit</label>
-                                        <div class="col-12 no-padding">
-                                            <select formControlName="planUnit" class="form-control">
-                                                <option value="" disabled selected>Select Unit</option>
-                                                <option [ngValue]="duration" *ngFor="let duration of durations;">{{ duration.name }}</option>
-                                            </select>
-                                            <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planUnit.valid || planPremiumFormGroup.controls.planUnit.pristine">
-                                                This is a required field.
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <label class="col-12 no-padding">Duration</label>
-                                        <div class="col-12 no-padding">
-                                            <input type="number" formControlName="planDuration" class="form-control" placeholder="Duration">
-                                            <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planDuration.valid || planPremiumFormGroup.controls.planDuration.pristine">
-                                                This is a required field.
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="col-12 center-btn">
-                    <div class="btn btn-primary btn-flat" routerLink="/modules/plan/new-plan">
-                        <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT
-                    </div>
-                </div> -->
-                    </form>
-                    <div class="col-12 text-right no-padding">
-                        <button (click)="onClickAddPremium(planPremiumFormGroup.valid, planPremiumFormGroup.value)" class="btn btn-primary btn-flat"> <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT</button>
-                    </div>
-                </div>
-
-                <div class="col-12 no-padding">
-                    <div class="table-responsive">
-                        <table class="table table-striped" cellspacing="0" width="100%">
-                            <thead>
-                                <tr class="bg-gray text-white">
-                                    <th>S/N</th>
-                                    <th>Amount</th>
-                                    <th>Category</th>
-                                    <th>Duration</th>
-                                    <th>Unit</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- <tr>
-                                    <td>20.000</td>
-                                    <td>Monthly</td>
-                                    <td class="td-icos">
-                                        <i class="fa fa-edit"></i>
-                                        <i class="fa fa-trash"></i>
-                                    </td>
-                                </tr> -->
-                                <tr *ngIf="premiums.length === 0">
-                                    <td class="text-center" colspan="6">No data available in table</td>
-                                </tr>
-                                <tr class="tr-link" *ngFor="let premium of premiums; let i = index;">
-                                    <td>{{ i+1 }}</td>
-                                    <td>{{ premium.amount }}</td>
-                                    <td>{{ premium.category }}</td>
-                                    <td>{{ premium.durationInDay }}</td>
-                                    <td>{{ premium.unit }}</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-flat btn-smaller">Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="col-12 text-right">
-                                <button  [disabled]="disablePremiumNextBtn" (click)="onClickPremiumNext()" class="btn btn-success btn-flat" [innerHtml]="premiumNextBtn"></button>
-                        </div>
-                        
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>

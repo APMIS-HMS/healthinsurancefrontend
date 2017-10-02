@@ -1,3 +1,6 @@
+import { MaritalStatusService } from './services/common/marital-status.service';
+import { GenderService } from './services/api-services/setup/gender.service';
+import { TitleService } from './services/common/titles.service';
 import { PremiumTypeService } from './services/common/premium-type.service';
 import { UploadService } from './services/common/upload.service';
 import { SystemModuleService } from './services/common/system-module.service';
@@ -42,7 +45,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
     SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
     SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
     SetupService.CorporateFacilityService, SetupService.IndustryTypesService, AuthService, FacilityService,
-    UserTypeService, SystemModuleService, UploadService, PremiumTypeService],
+    UserTypeService, SystemModuleService, UploadService, PremiumTypeService, TitleService, GenderService, MaritalStatusService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
