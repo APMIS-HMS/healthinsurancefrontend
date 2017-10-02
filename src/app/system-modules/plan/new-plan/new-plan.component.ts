@@ -1,3 +1,4 @@
+import { PremiumTypeService } from './../../../services/common/premium-type.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -24,6 +25,7 @@ export class NewPlanComponent implements OnInit {
   saveBtn: String = 'SAVE <i class="fa fa-check" aria-hidden="true"></i>';
   premiumNextBtn: String = 'SAVE <i class="fa fa-check" aria-hidden="true"></i>';
   disablePremiumNextBtn: Boolean = false;
+  premiumTypes:any[] = [];
   
   tab_details = true;
   tab_premium = false;
@@ -39,7 +41,8 @@ export class NewPlanComponent implements OnInit {
     private _headerEventEmitter: HeaderEventEmitterService,
     private _planService: PlanService,
     private _planTypeService: PlanTypeService,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private _premiumTypeService:PremiumTypeService
 	) { }
 
 	ngOnInit() {
@@ -62,6 +65,14 @@ export class NewPlanComponent implements OnInit {
 			planAmount: [0, [<any>Validators.required]],
 			planUnit: ['', [<any>Validators.required]]
     });
+  }
+
+  _premiumTypes(){
+    this._premiumTypeService.find({}).then((payload:any) =>{
+      this.premiumTypes = payload.data;
+    }).catch(err =>{
+
+    })
   }
 
   onClickAddPlan(valid: Boolean, value: any) {
