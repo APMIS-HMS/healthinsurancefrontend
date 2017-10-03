@@ -1,0 +1,35 @@
+@import '../../assets/libs/variables.scss';
+
+#auth-content-wrapper {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: $brand-primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.platform-wrap{
+    margin: 0 auto;
+}
+.platform-img{
+    width: 90px;
+    background: #fff;
+    height: 90px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.platform-img img{
+    width: 100%;
+}
+.platform-label{
+    color: #fff;
+    font-size: $font-x3;
+    margin: 10px auto;
+    text-align: center;
+}

@@ -1,0 +1,45 @@
+@import '../../../assets/libs/variables.scss';
+.heading-subtitle {
+    display: block;
+    font-weight: 400;
+    font-size: 15px;
+    color: $grey-1;
+    line-height: 24px * 2;
+    text-align: center;
+}
+.onscreenModal{
+    padding: 20px;
+    background: #fff;
+}
+.loginmodal-title{
+    color: $brand-primary;
+    font-size: $font-x4;
+    margin: 20px auto;
+    text-align: center;
+}
+.form-field-wrap{
+    margin: 10px 0;
+}
+.btn{
+    margin: 10px auto;
+}
+.other-actions{
+    text-align: right;
+    font-size: $font-x2;
+}
+.other-action{
+    margin-bottom: 10px;
+}
+.action-label{
+    color: $grey-2;
+    font-style: italic;
+    margin-right: 20px;
+}
+.action-link{
+    color: lighten($brand-primary, 15%);
+    text-decoration: underline;
+    cursor: pointer;
+}
+.action-link:hover{
+    color: $red;
+}

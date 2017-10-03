@@ -1,0 +1,9 @@
+@import '../../../assets/libs/variables.scss';
+.heading-subtitle {
+    display: block;
+    font-weight: 400;
+    font-size: 15px;
+    color: $grey-1;
+    line-height: 24px * 2;
+    text-align: center;
+}
