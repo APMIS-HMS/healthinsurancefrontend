@@ -18,6 +18,7 @@ import { FacilityService } from '../../../services/common/facility.service';
 export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
 	@ViewChild('video') video: any;
 	@ViewChild('snapshot') snapshot: ElementRef;
+	@ViewChild('blah') blah: ElementRef;
 	public context: CanvasRenderingContext2D;
 	stepOneView: Boolean = true;
 	stepTwoView: Boolean = false;
@@ -232,6 +233,7 @@ export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
 			var idata = this.getVideoData(this.patOpts.x, this.patOpts.y, this.patOpts.w, this.patOpts.h);
 			console.log(idata)
 			this.context.putImageData(idata,300, 300);
+			
 			// this.context.drawImage(idata, 0, 0, 400, 400);
 			console.log(3)
 			this.patData = idata;
@@ -245,6 +247,7 @@ export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
 		hiddenCanvas.height = this._video.height;
 		var ctx = hiddenCanvas.getContext('2d');
 		ctx.drawImage(this._video, 0, 0, this._video.width, this._video.height);
+		// this.blah.nativeElement.src = 
 		console.log('2b')
 		return ctx.getImageData(x, y, w, h);
 	};
