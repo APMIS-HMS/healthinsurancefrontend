@@ -2,7 +2,7 @@
     <app-top-bar (showMenu)="menu_onClick($event)"></app-top-bar>
 </div>
 
-<div *ngIf = "menuToggle" class="menu-wrap shadow-RB animated fadeIn">
+<div *ngIf = "menuToggle" class="menu-wrap scroll shadow-RB animated fadeIn">
     <app-main-menu (closeMenu)="close_onClick($event)" ></app-main-menu>
 </div>
 
