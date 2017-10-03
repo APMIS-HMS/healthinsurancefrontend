@@ -9,6 +9,8 @@ import { FormControl } from '@angular/forms';
 export class DetailsPlanComponent implements OnInit {
 
   listsearchControl = new FormControl();  
+  premiumsearchControl = new FormControl(); 
+  
   tab_hias = true;
 	tab_premiums = false;
 	tab_drugs = false;
