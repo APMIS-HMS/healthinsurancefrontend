@@ -18,6 +18,8 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 export class NewUserComponent implements OnInit {
   userFormGroup: FormGroup;
   disableSaveBtn: boolean = false;
+  showOwnerDropdown: boolean = false;
+  selectedDropdown: String = '';
 
   owners: any = <any>[];
   user: any = <any>{};
@@ -42,8 +44,9 @@ export class NewUserComponent implements OnInit {
     this._getPlatformOwners();
 
     this.userFormGroup = this._fb.group({
+      userType: ['', [<any>Validators.required]],
       platformOwner: [''],
-      gender: ['', [<any>Validators.required]],
+      gender: ['male', [<any>Validators.required]],
       lastName: ['', [<any>Validators.required]],
       firstName: ['', [<any>Validators.required]],
       otherName: [''],
@@ -51,6 +54,27 @@ export class NewUserComponent implements OnInit {
       phoneNumber: ['', [<any>Validators.required]],
       mothersMaidenName: ['', [<any>Validators.required]],
       dob: ['', [<any>Validators.required]],
+    });
+
+    this.userFormGroup.controls['userType'].setValue('own');
+    this.userFormGroup.controls['gender'].setValue('male');
+
+    this.userFormGroup.controls['userType'].valueChanges.subscribe(val => {
+      console.log(val);
+      if (val === 'own') {
+        this.showOwnerDropdown = false;
+      } else if (val === 'others') {
+        this.showOwnerDropdown = true;
+      }
+    });
+
+    this.userFormGroup.controls['platformOwner'].valueChanges.subscribe(val => {
+      console.log(val);
+      if (val === 'own') {
+        this.showOwnerDropdown = false;
+      } else if (val === 'others') {
+        this.showOwnerDropdown = true;
+      }
     });
   }
 

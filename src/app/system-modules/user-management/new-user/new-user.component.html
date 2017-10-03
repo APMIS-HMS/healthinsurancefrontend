@@ -15,6 +15,23 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12 form-group col-md-6">
+                            <label class="col-12 no-padding control-label">User Type</label>
+                            <div class="col-12 no-padding">
+                                <label for="type-own">
+                                    <input type="radio" formControlName="userType" id="type-own" value="own">&nbsp;&nbsp;Own &nbsp;
+                                </label>
+                                <label for="type-others">
+                                    <input type="radio" formControlName="userType" id="type-others" value="others">&nbsp;&nbsp;Others &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12 form-group col-md-6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" *ngIf="showOwnerDropdown">
+                    <div class="row">
+                        <div class="col-12 form-group col-md-6">
                             <label class="col-12 no-padding control-label">Platform Owner</label>
                             <div class="col-12 no-padding">
                                 <select formControlName="platformOwner" class="form-control">
@@ -24,6 +41,24 @@
                             </div>
                         </div>
                         <div class="col-12 form-group col-md-6">
+                            <div *ngIf="selectedDropdown === 'HIA'">
+                                <label class="col-12 no-padding control-label">HIAs</label>
+                                <div class="col-12 no-padding">
+                                    <select formControlName="platformOwner" class="form-control">
+                                        <option value=" " disabled selected>Select HIA</option>
+                                        <option *ngFor="let owner of owners" [ngValue]="owner">{{owner.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div *ngIf="selectedDropdown === 'HIA'">
+                                <label class="col-12 no-padding control-label">Employers</label>
+                                <div class="col-12 no-padding">
+                                    <select formControlName="platformOwner" class="form-control">
+                                        <option value=" " disabled selected>Select Employer</option>
+                                        <option *ngFor="let owner of owners" [ngValue]="owner">{{owner.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -33,10 +68,10 @@
                             <label class="col-12 no-padding control-label">Gender</label>
                             <div class="col-12 no-padding">
                                 <label for="bene-male">
-                                    <input type="radio" formControlName="gender" name="gender" id="bene-male" value="male" checked>&nbsp;Male&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" formControlName="gender" id="bene-male" value="male">&nbsp;Male&nbsp;&nbsp;&nbsp;
                                 </label>
                                 <label for="bene-female">
-                                    <input type="radio" formControlName="gender" name="gender" id="bene-female" value="female" checked>&nbsp;Female &nbsp;
+                                    <input type="radio" formControlName="gender" id="bene-female" value="female">&nbsp;Female &nbsp;
                                 </label>
                                 <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
                                     This is a required field.

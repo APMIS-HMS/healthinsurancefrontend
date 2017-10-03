@@ -3,16 +3,16 @@
         <div class="col-12 col-sm-8">
             <div class="form-group">
                 <div class="col-sm-10 no-padding">
-                    <div class="input-group">
+                    <!-- <div class="input-group">
                         <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
                         <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
         <div class="col-12 col-sm-4">
             <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/plan/new-plan">
-                <i class="fa fa-plus-circle"></i> ADD HEALTH PLAN
+                <i class="fa fa-plus-circle"></i> Add Health Plan
             </a>
         </div>
     </div>
@@ -54,7 +54,7 @@
                             </select>
                             </div>
                             <div class="col-4 no-padding">
-                                <button type="" class="btn btn-default btn-flat text-brand border-brand">RESET</button>
+                                <button type="" class="btn btn-default btn-flat text-brand border-brand pull-right">Reset</button>
                             </div>
                         </div>
                     </div>
@@ -66,6 +66,7 @@
                 <table class="table table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr class="bg-gray text-white">
+                            <th>No</th>
                             <th>Name</th>
                             <th>Type</th>
                             <th>Number of HIAs</th>
@@ -87,6 +88,7 @@
                             </td>
                         </tr>
                         <tr class="tr-link" *ngFor="let plan of plans; let i = index;">
+                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ i+1 }}</td>
                             <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.name }}</td>
                             <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.planType.name }}</td>
                             <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ 'Number of HIAs' }}</td>
@@ -106,7 +108,7 @@
                 </table>
             </div>
             <div class="col-12 text-center">
-                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+                <button class="btn bg-yellow btn-flat">Load More</button>
             </div>
         </section>
     </div>
