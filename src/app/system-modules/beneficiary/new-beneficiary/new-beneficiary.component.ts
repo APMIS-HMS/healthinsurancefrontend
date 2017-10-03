@@ -3,7 +3,7 @@ import { MaritalStatusService } from './../../../services/common/marital-status.
 import { TitleService } from './../../../services/common/titles.service';
 import { GenderService } from './../../../services/common/gender.service';
 import { CountryService } from './../../../services/common/country.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Address, Facility, Gender, Title, MaritalStatus, Person, Beneficiary } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -15,7 +15,10 @@ import { FacilityService } from '../../../services/common/facility.service';
 	templateUrl: './new-beneficiary.component.html',
 	styleUrls: ['./new-beneficiary.component.scss']
 })
-export class NewBeneficiaryComponent implements OnInit {
+export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
+	@ViewChild('video') video: any;
+	@ViewChild('snapshot') snapshot: ElementRef;
+	public context: CanvasRenderingContext2D;
 	stepOneView: Boolean = true;
 	stepTwoView: Boolean = false;
 	stepThreeView: Boolean = false;
@@ -47,7 +50,10 @@ export class NewBeneficiaryComponent implements OnInit {
 	saveBtn: String = '&nbsp;&nbsp; SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
 	selectedCountry: any;
 	selectedState: any;
-
+	_video: any;
+	patCanvas: any;
+	patData: any;
+	patOpts = { x: 0, y: 0, w: 25, h: 25 };
 	constructor(
 		private _toastr: ToastsManager,
 		private _headerEventEmitter: HeaderEventEmitterService,
@@ -114,7 +120,17 @@ export class NewBeneficiaryComponent implements OnInit {
 			providerName: ['', [<any>Validators.required]]
 		});
 	}
-
+	ngAfterViewInit() {
+		this._video = this.video.nativeElement;
+		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+			navigator.mediaDevices.getUserMedia({ video: true })
+				.then(stream => {
+					this._video.src = window.URL.createObjectURL(stream);
+					this._video.play();
+				})
+		}
+		this.context = this.snapshot.nativeElement.getContext("2d");
+	}
 	_getGender() {
 		this._genderService.find({}).then((payload: any) => {
 			this.genders = payload.data;
@@ -130,7 +146,7 @@ export class NewBeneficiaryComponent implements OnInit {
 	}
 
 	_getMaritalStatus() {
-		this._maritalStatusService.find({}).then((payload:any) => {
+		this._maritalStatusService.find({}).then((payload: any) => {
 			this.maritalStatuses = payload.data;
 		}).catch(err => {
 
@@ -200,6 +216,38 @@ export class NewBeneficiaryComponent implements OnInit {
 			this._systemService.off();
 		})
 	}
+	makeSnapshot() {
+		console.log(1)
+		if (this._video) {
+			console.log(2)
+			// let patCanvas: any =  this.context;//document.querySelector('#snapshot');
+			// if (!patCanvas) return;
+
+			// patCanvas.width = this._video.width;
+			// patCanvas.height = this._video.height;
+			// var ctxPat = patCanvas.getContext('2d');
+
+			console.log(this.context);
+
+			var idata = this.getVideoData(this.patOpts.x, this.patOpts.y, this.patOpts.w, this.patOpts.h);
+			console.log(idata)
+			this.context.putImageData(idata,300, 300);
+			// this.context.drawImage(idata, 0, 0, 400, 400);
+			console.log(3)
+			this.patData = idata;
+		}
+	};
+
+	getVideoData(x, y, w, h) {
+		console.log('2a')
+		var hiddenCanvas = document.createElement('canvas');
+		hiddenCanvas.width = this._video.width;
+		hiddenCanvas.height = this._video.height;
+		var ctx = hiddenCanvas.getContext('2d');
+		ctx.drawImage(this._video, 0, 0, this._video.width, this._video.height);
+		console.log('2b')
+		return ctx.getImageData(x, y, w, h);
+	};
 
 	tabConfirm_click() {
 		this.tab_personalData = false;
@@ -361,7 +409,7 @@ export class NewBeneficiaryComponent implements OnInit {
 	}
 
 	getCountries() {
-		this._countriesService.find({}).then((payload:any) => {
+		this._countriesService.find({}).then((payload: any) => {
 			for (let i = 0; i < payload.data.length; i++) {
 				let country = payload.data[i];
 				if (country.name === "Nigeria") {
@@ -381,7 +429,7 @@ export class NewBeneficiaryComponent implements OnInit {
 		});
 	}
 	getGenders() {
-		this._genderService.find({}).then((payload:any) => {
+		this._genderService.find({}).then((payload: any) => {
 			this.genders = payload.data;
 		})
 	}
@@ -399,7 +447,7 @@ export class NewBeneficiaryComponent implements OnInit {
 	}
 
 	getAllProviders() {
-		this._facilityService.find({}).then((payload:any) => {
+		this._facilityService.find({}).then((payload: any) => {
 			console.log(payload);
 			this.providers = payload.data;
 		});
@@ -413,7 +461,7 @@ export class NewBeneficiaryComponent implements OnInit {
 	}
 
 	onChangeStateOfOrigin(value: any) {
-		this._countriesService.find({}).then((payload:any) => {
+		this._countriesService.find({}).then((payload: any) => {
 			for (let i = 0; i < payload.data.length; i++) {
 				let country = payload.data[i];
 				if (country.name === "Nigeria") {
