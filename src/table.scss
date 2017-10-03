@@ -56,6 +56,22 @@
 .td-ctaWrap i:hover, th i:hover{
     color: $green;
 }
+.td-trash-circle{
+    width: 6px;
+    height: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-x2;
+    color: #fff;
+    background: $brand-primary;
+    cursor: pointer;
+    border-radius: 100%;
+    margin-top: 4px;
+}
+.td-trash-circle:hover{
+    background: $red;
+}
 .th i{
     margin-right: 10px;
     cursor: pointer;
