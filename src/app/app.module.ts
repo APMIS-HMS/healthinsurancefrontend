@@ -1,5 +1,6 @@
+import { GenderService } from './services/common/gender.service';
+import { CountryService } from './services/common/country.service';
 import { MaritalStatusService } from './services/common/marital-status.service';
-import { GenderService } from './services/api-services/setup/gender.service';
 import { TitleService } from './services/common/titles.service';
 import { PremiumTypeService } from './services/common/premium-type.service';
 import { UploadService } from './services/common/upload.service';
@@ -39,13 +40,14 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
     LoadingBarModule.forRoot(),
   ],
   providers: [SocketService, RestService, SetupService.FacilitiesService, SetupService.FacilityTypesService,
-    SetupService.CountriesService, SetupService.GenderService, SetupService.TitleService,
+    SetupService.CountriesService, SetupService.TitleService,
     SetupService.ProfessionService, SetupService.PersonService, SetupService.RelationshipService,
     SetupService.MaritalStatusService,
     SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
     SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
     SetupService.CorporateFacilityService, SetupService.IndustryTypesService, AuthService, FacilityService,
-    UserTypeService, SystemModuleService, UploadService, PremiumTypeService, TitleService, GenderService, MaritalStatusService],
+    UserTypeService, SystemModuleService, UploadService, PremiumTypeService, TitleService, GenderService, MaritalStatusService,
+    CountryService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
