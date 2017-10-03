@@ -62,12 +62,14 @@
                             <div class="col-12 form-group col-md-6">
                                 <label class="col-12 no-padding control-label">Gender</label>
                                 <div class="col-12 no-padding">
+                                    <span *ngFor="let gender of genders;  let i=index">
                                     <label for="bene-male">
-                                    <input type="radio" formControlName="gender" name="gender" id="bene-male" value="male" checked>Male &nbsp;
+                                    <input [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}} &nbsp;
                                     </label>
-                                    <label for="bene-female">
+                                </span>
+                                    <!-- <label for="bene-female">
                                         <input type="radio" formControlName="gender" name="gender" id="bene-female" value="female" checked>Female &nbsp;
-                                    </label>
+                                    </label> -->
                                 </div>
                             </div>
                             <div class="col-12 form-group col-md-6">

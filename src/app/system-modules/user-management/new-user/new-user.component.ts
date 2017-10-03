@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { SystemModuleService } from './../../../services/common/system-module.service';
@@ -9,6 +10,7 @@ import { Facility, Person } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { UserTypeService } from '../../../services/common/user-type.service';
 
 @Component({
   selector: 'app-new-user',
@@ -30,7 +32,8 @@ export class NewUserComponent implements OnInit {
     private _fb: FormBuilder,
     private _personService: PersonService,
     private _ownershipService: OwnershipService,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private _userTypeService:UserTypeService
   ) { }
 
   ngOnInit() {
@@ -39,7 +42,7 @@ export class NewUserComponent implements OnInit {
     this.user = this._locker.getObject('auth');
     console.log(this.user.user);
 
-    this._getPlatformOwners();
+    this._getFacilities();
 
     this.userFormGroup = this._fb.group({
       platformOwner: [''],
@@ -82,13 +85,12 @@ export class NewUserComponent implements OnInit {
       }
     }
 
-    private _getPlatformOwners() {
+    private _getFacilities() {
       this._systemService.on();
-      this._ownershipService.findAll().then((res: any) => {
-        console.log(res);
+      this._userTypeService.findAll().then((res: any) => {
+        console.log(res)
         this._systemService.off();
         if (res.data.length > 0) {
-          console.log(res);
           this.owners = res.data;
         }
       }).catch(err => {
