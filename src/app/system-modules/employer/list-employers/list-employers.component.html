@@ -3,16 +3,16 @@
         <div class="col-12 col-sm-8">
             <div class="form-group">
                 <div class="col-sm-10 no-padding">
-                    <div class="input-group">
+                    <!-- <div class="input-group">
                         <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
                         <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
         <div class="col-12 col-sm-4">
             <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/employer/new-employer">
-                <i class="fa fa-plus-circle"></i> ADD EMPLOYER
+                <i class="fa fa-plus-circle"></i> Add Employer
             </a>
         </div>
     </div>
@@ -25,7 +25,7 @@
                         <label class="col-12 control-label">Status: </label>
                         <div class="col-12">
                             <select class="form-control">
-                                <option value="all">ALL</option>
+                                <option value="all">All</option>
                             </select>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                 </select>
                             </div>
                             <div class="col-5 no-padding">
-                                <button type="" class="btn btn-default btn-flat text-brand border-brand pull-right">RESET</button>
+                                <button type="" class="btn btn-default btn-flat text-brand border-brand pull-right">Reset</button>
                             </div>
                         </div>
                     </div>
@@ -60,6 +60,7 @@
                 <table class="table table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr class="bg-gray text-white">
+                            <th>No</th>
                             <th>Name</th>
                             <th>Contact Person</th>
                             <th>Phone number</th>
@@ -73,12 +74,13 @@
                     </thead>
                     <tbody>
                         <tr *ngIf="loading">
-                            <td class="text-center" colspan="9"><i class='fa fa-spinner fa-spin fa-2x' aria-hidden='true'></i></td>
+                            <td class="text-center" colspan="10"><i class='fa fa-spinner fa-spin fa-2x' aria-hidden='true'></i></td>
                         </tr>
                         <tr *ngIf="employers.length === 0 && !loading">
-                            <td class="text-center" colspan="9">No data available in table</td>
+                            <td class="text-center" colspan="10">No data available in table</td>
                         </tr>
-                        <tr class="tr-link" *ngFor="let employer of employers">
+                        <tr class="tr-link" *ngFor="let employer of employers; let i = index">
+                            <td>{{ i+1 }}</td>
                             <td>{{ employer.name }}</td>
                             <td>{{ employer.businessContact.lastName }} {{ employer.businessContact.firstName }}</td>
                             <td>{{ employer.businessContact.phoneNumber }}</td>
@@ -97,7 +99,7 @@
                 </table>
             </div>
             <div class="col-12 text-center">
-                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+                <button class="btn bg-yellow btn-flat">Load More</button>
             </div>
         </section>
     </div>

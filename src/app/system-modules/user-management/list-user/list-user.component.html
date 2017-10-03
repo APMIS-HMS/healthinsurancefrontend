@@ -22,11 +22,9 @@
                 <h5>Filters:</h5>
                 <div class="row no-margin-right">
                     <div class="form-group col-sm-6 col-md-6 col-lg-4 no-padding">
-                        <label class="col-12 control-label">Grading: </label>
+                        <label class="col-12 control-label">Name: </label>
                         <div class="col-12">
-                            <select class="form-control">
-                                <option value="all">ALL</option>
-                            </select>
+                            <input type="search" class="form-control" placeholder="Abimbola Buhari Ebuka">
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-md-6 col-lg-4 no-padding">
@@ -46,7 +44,7 @@
                                   </select>
                             </div>
                             <div class="col-4 col-sm-4 no-padding">
-                                <button type="" class="btn btn-default btn-flat text-brand border-brand pull-right">RESET</button>
+                                <button type="" class="btn btn-default btn-flat text-brand border-brand pull-right">Reset</button>
                             </div>
                         </div>
                     </div>
@@ -82,7 +80,7 @@
                         <tr class="tr-link" *ngFor="let user of users; let i = index;">
                             <td>{{ i+1 }}</td>
                             <td>{{ user?.firstName }} {{ user?.otherNames }} {{ user.lastName }}</td>
-                            <td>{{ 'Gender' }}</td>
+                            <td>{{ user.gender }}</td>
                             <td>{{ 'Email' }}</td>
                             <td>{{ 'Id Number'}}</td>
                             <td>{{ 'Beneficiary'}}</td>
@@ -102,7 +100,7 @@
                 </table>
             </div>
             <div class="col-xs-12 text-center">
-                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
+                <button class="btn bg-yellow btn-flat">Load More</button>
             </div>
         </section>
     </div>
