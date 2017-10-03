@@ -1,0 +1,64 @@
+
+@import "../../../assets/libs/variables.scss";
+
+.bar-wrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+}
+.sect-a{
+    display: flex;
+    align-items: center;
+}
+.menu-label {
+    font-size: 6px;
+}
+.menuico {
+    text-align: center;
+    color: $brand-primary;
+    padding: 6px 0;
+    cursor: pointer;
+    margin-right: 20px;
+}
+.menuico i{
+    font-size: $font-x4;
+}
+.platform-wrap{
+    display: flex;
+    align-items: center;
+    color: $brand-primary;
+    font-size: $font-x3;
+}
+.platform-logo{
+    width: 60px;
+    margin-right: 10px;
+}
+.platform-logo img{
+    width: 100%;
+}
+  .title-tab{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    background: $brand-primary;
+    height: 40px;
+  }
+  .title-tab .app-content-wrap{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .title{
+    color: $title-fontcolor;
+    font-size: $font-x3;
+    border-left: 1px solid $title-fontcolor;
+    padding-left: 3px;
+  }
+  .post-title{
+    color: $posttitle-fontcolor;
+    font-size: $font-x2;
+    padding-left: 5px;
+  }

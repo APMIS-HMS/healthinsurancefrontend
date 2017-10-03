@@ -18,11 +18,12 @@
         "testTsconfig": "tsconfig.spec.json",
         "prefix": "app",
         "styles": [
-            "../node_modules/bootstrap/dist/css/bootstrap.min.css",
             "../node_modules/font-awesome/scss/font-awesome.scss",
             "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
             "../node_modules/@ngx-loading-bar/core/loading-bar.css",
-            "styles.scss"
+            "normalize.scss",
+            "styles.scss",
+            "table.scss"
         ],
         "scripts": [
             "../node_modules/systemjs/dist/system.src.js",
@@ -61,7 +62,7 @@
         "styleExt": "scss",
         "component": {},
         "serve": {
-            "port": 4400
+            "port": 4900
         }
     }
 }

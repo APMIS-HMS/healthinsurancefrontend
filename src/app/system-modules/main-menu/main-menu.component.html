@@ -1,0 +1,35 @@
+<div class="user-sect">
+  <div class="user-img-wrap">
+    <img src="../../../assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg">
+  </div>
+
+  <div (click)="close_onClick()" class="menu-close">X</div>
+</div>
+
+<div class="username-wrap">
+  <div class="username">Jonathan Dede</div>
+  <div class="pipe">|</div>
+  <div class="user-logout">Logout</div>
+</div>
+
+<ul class="menu-links">
+  <div class="menu-group">
+    <li class="menu-link">HOME</li>
+    <li class="menu-link">BENEFICIARIES</li>
+    <li class="menu-link">EMPLOYERS</li>
+    <li class="menu-link">PROVIDERS</li>
+  </div>
+
+  <div class="menu-seperator"></div>
+
+  <div class="menu-group">
+      <li class="menu-link">HIA'S</li>
+      <li routerLink="/modules/plan/plans" (click)="close_onClick()" class="menu-link">PLANS</li>
+      <li class="menu-link">CLAIMS</li>
+      <li class="menu-link">AUTHORIZATIONS</li>
+      <li class="menu-link">COMPLAINTS</li>
+      <li class="menu-link">FUNDS</li>
+      <li class="menu-link">USERS</li>
+      <li class="menu-link">ANALYTICS</li>
+    </div>
+</ul>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
-import {HiaService } from '../../../services/api-services/index';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-details-plan',
@@ -9,21 +8,17 @@ import {HiaService } from '../../../services/api-services/index';
 })
 export class DetailsPlanComponent implements OnInit {
 
-	tab_hias = true;
+  listsearchControl = new FormControl();  
+  tab_hias = true;
 	tab_premiums = false;
 	tab_drugs = false;
 	tab_tests = false;
 	tab_procedures = false;
 	tab_diagnosis = false;
 
-  constructor(
-		private _headerEventEmitter: HeaderEventEmitterService
-	) { }
+  constructor() { }
 
-	ngOnInit() {
-		this._headerEventEmitter.setRouteUrl('HIA Details');
-		this._headerEventEmitter.setMinorRouteUrl('');
-	}
+	ngOnInit() {}
 
 	tabHia_click(){
 		this.tab_hias = true;
