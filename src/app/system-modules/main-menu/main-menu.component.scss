@@ -1,0 +1,62 @@
+@import '../../../assets/libs/variables.scss';
+
+.user-sect{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+.user-img-wrap{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+.user-img-wrap img{
+    width: 100%;
+}
+.menu-close{
+    color: #fff;
+    cursor: pointer;
+    font-size: $font-x5;
+    font-weight: bolder;
+}
+.username-wrap{
+    display: flex;
+    color: #fff;
+    font-size: $font-x2;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 0 20px;
+}
+.pipe{
+    padding: 0 10px;
+}
+.user-logout{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.user-logout:hover{
+    color: $red;
+}
+.menu-links{
+    color: #fff;
+    font-size: $font-x3;
+    margin-top: 30px;
+}
+.menu-link{
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 5px 20px;
+}
+.menu-link:hover{
+    background: lighten($brand-primary, 5%);
+}
+.menu-seperator{
+    background: $grey-2;
+    height: 1px;
+    width: 90%;
+    margin: 0 auto;
+}

@@ -1,22 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// Bootstrap
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { SystemModulesComponent } from './system-modules.component';
 import { systemModulesRoutes } from './system-modules.route';
-
-import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
-import { ContactPositionService } from '../services/index';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { TopBarComponent } from './top-bar/top-bar.component';
+import { MainMenuComponent } from './main-menu/main-menu.component';
 @NgModule({
     declarations: [
-        SystemModulesComponent
+        SystemModulesComponent,
+        TopBarComponent,
+        MainMenuComponent
     ],
-    exports: [],
-    imports: [NgbModule, systemModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
-    providers: [HeaderEventEmitterService, ContactPositionService]
+    exports: [FormsModule, ReactiveFormsModule],
+    imports: [FormsModule, ReactiveFormsModule, systemModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
+    providers: []
 })
 
 export class SystemModules {

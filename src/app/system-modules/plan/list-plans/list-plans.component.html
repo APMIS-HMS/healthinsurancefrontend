@@ -1,113 +1,108 @@
-<section class="content">
-    <div class="row">
-        <div class="col-12 col-sm-8">
-            <div class="form-group">
-                <div class="col-sm-10 no-padding">
-                    <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
-                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-4">
-            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/plan/new-plan">
-                <i class="fa fa-plus-circle"></i> ADD HEALTH PLAN
-            </a>
-        </div>
+<div class="list-search-wrap">
+    <div class="search-wrap">
+      <label class="label-xx">Search:</label>
+      <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+      <i class="fa fa-search" aria-hidden="true"></i>
     </div>
-    <div class="row">
-        <section class="col-12">
-            <div class="filter-box">
-                <h5>Filters:</h5>
-                <div class="row no-margin">
-                    <div class="form-group col-sm-6 col-md-6 col-lg-4">
-                        <label class="col-12 no-padding control-label">Type: </label>
-                        <div class="col-12 no-padding">
-                            <select class="form-control">
-                              <option value="all">ALL</option>
-                          </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6 col-md-6 col-lg-4">
-                        <label class="col-12 no-padding control-label">Created By: </label>
-                        <div class="col-12 no-padding">
-                            <select class="form-control">
-                              <option value="all">ALL</option>
-                          </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6 col-md-6 col-lg-4">
-                        <label class="col-12 no-padding control-label">Utilized By: </label>
-                        <div class="col-12 no-padding">
-                            <select class="form-control">
-                              <option value="all">ALL</option>
-                          </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6 col-md-6 col-lg-4">
-                        <label class="col-12 no-padding control-label">Status: </label>
-                        <div class="row no-margin-left no-margin-right">
-                            <div class="col-8 no-padding">
-                                <select class="form-control">
-                                <option value="all">ALL</option>
-                            </select>
-                            </div>
-                            <div class="col-4 no-padding">
-                                <button type="" class="btn btn-default btn-flat text-brand border-brand">RESET</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="col-12">
-            <div class="table-responsive">
-                <table class="table table-striped" cellspacing="0" width="100%">
-                    <thead>
-                        <tr class="bg-gray text-white">
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Number of HIAs</th>
-                            <th>Created By</th>
-                            <th>Week</th>
-                            <th>Premium Month</th>
-                            <th>Year</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngIf="plans.length === 0 && !loading">
-                            <td class="text-center" colspan="9">No data available in table</td>
-                        </tr>
-                        <tr *ngIf="plans.length === 0 && loading">
-                            <td class="text-center" colspan="9">
-                                <i class="fa fa-spinner fa-spin"></i>
-                            </td>
-                        </tr>
-                        <tr class="tr-link" *ngFor="let plan of plans; let i = index;">
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.name }}</td>
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.planType.name }}</td>
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ 'Number of HIAs' }}</td>
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}">{{ plan.planOwner }}</td>
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}">10 NGN</td>
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}">35 NGN</td>
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}" class="text-center">400 NGN</td>
-                            <td>
-                                <label class="switch">
-                                  <input type="checkbox" [attr.checked]="plan.isActive ? true : null" (change)="onClickActivate(plan);" class="input-action-leader-board"/>
-                                  <div class="slider round"></div>
-                                </label>
-                            </td>
-                            <td routerLink="/modules/plan/plans/{{ plan._id }}"><i class="fa fa-chevron-right"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-12 text-center">
-                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-            </div>
-        </section>
+
+    <div class="btn btn-medium btn-blue">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        ADD HEALTHPLAN
     </div>
-</section>
+</div>
+
+<div  class="shadow-RB">
+  <div class="list-filter-wrap">
+    <div class="label-xx">Filters:</div>
+
+    <div class="input-wrap">
+      <label>Type</label>
+      <select [formControl]="filterTypeControl">
+        <option>All</option>
+      </select>
+    </div>
+
+    <div class="input-wrap">
+      <label>Created By</label>
+      <select [formControl]="createdByControl">
+        <option>All</option>
+      </select>
+    </div>
+
+    <div class="input-wrap">
+      <label>Utilized By</label>
+      <select [formControl]="utilizedByControl">
+        <option>All</option>
+      </select>
+    </div>
+
+    <div class="input-wrap">
+      <label>Status</label>
+      <select [formControl]="statusControl">
+        <option>All</option>
+      </select>
+    </div>
+
+    <div class="btn btn-medium btn-blue-outline">RESET</div>
+  </div>
+
+  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+    <thead class="thead">
+      <tr class="tr">
+        <th class="th">Name</th>
+        <th class="th">Type</th>
+        <th class="th">Number of HIAs</th>
+        <th class="th">Created By</th>
+        <th class="th">Week</th>
+        <th class="th">Premium Month</th>
+        <th class="th">Year</th>
+        <th class="th">Status</th>
+        <th class="th"></th>
+      </tr>
+    </thead>
+
+    <tbody class="tbody">
+
+      <tr routerLink="/modules/plan/plans/87788" class="tr">
+        <td class="td">kkk</td>
+        <td class="td">mjjnnn nnn j</td>
+        <td class="td">oijoim</td>
+        <td class="td">090808080808</td>
+        <td class="td">kjkhkhkhkh</td>
+        <td class="td">oijoim</td>
+        <td class="td">090808080808</td>
+        <td class="td tbl-status-active">Active</td>
+        <td><i class="fa fa-chevron-right"></i></td>
+      </tr>
+
+      <tr routerLink="/modules/plan/plans/87788" class="tr">
+        <td class="td">kkk</td>
+        <td class="td">mjjnnn nnn j</td>
+        <td class="td">oijoim</td>
+        <td class="td">090808080808</td>
+        <td class="td">kjkhkhkhkh</td>
+        <td class="td">oijoim</td>
+        <td class="td">090808080808</td>
+        <td class="td tbl-status-inactive">Inactive</td>
+        <td><i class="fa fa-chevron-right"></i></td>
+      </tr>
+
+      <tr routerLink="/modules/plan/plans/87788" class="tr">
+        <td class="td">kkk</td>
+        <td class="td">mjjnnn nnn j</td>
+        <td class="td">oijoim</td>
+        <td class="td">090808080808</td>
+        <td class="td">kjkhkhkhkh</td>
+        <td class="td">oijoim</td>
+        <td class="td">090808080808</td>
+        <td class="td tbl-status-active">Active</td>
+        <td><i class="fa fa-chevron-right"></i></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="list-buttom">
+    <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+    <div class="btn btn-medium btn-yellow">Load More</div>
+  </div>
+</div>
