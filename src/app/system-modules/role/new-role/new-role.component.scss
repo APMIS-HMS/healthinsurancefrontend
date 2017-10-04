@@ -1,0 +1,30 @@
+
+label{
+    padding: 0;
+}
+.center-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pad-up {
+    padding-top: 10px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.form-group {
+    margin-bottom: 10px !important;
+    display: flex;
+}
+.grey-wrap{
+    background: #f8f8f8;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+form .btn{
+    margin: 10px auto;
+}
+
+.form-check-label{
+    padding-right: 40px;
+}
