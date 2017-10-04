@@ -4,11 +4,12 @@ export interface Plan {
     planOwner: String;
     isActive: Boolean;
     premiums: PlanPremium[];
-};
+}
 
 export interface PlanPremium {
     amount: Number;
     duration: Number;
     unit: String;
     durationInDay: Number;
-};
+    category: any;
+}

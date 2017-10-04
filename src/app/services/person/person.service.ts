@@ -18,14 +18,6 @@ export class PersonService {
     this._socket = _socketService.getService('people');
   }
 
-  findAll() {
-    return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('people').then((socket: any) => {
-        return socket.find();
-      }));
-    });
-  }
-
   find(query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('people').then((socket: any) => {
@@ -47,6 +39,9 @@ export class PersonService {
         return this._socket.create(param);
       }));
     });
+  }
+  createWithOutAuth(param: any) {
+    return this._socket.create(param);
   }
   update(param: any) {
     return new Promise((resolve, reject) => {
