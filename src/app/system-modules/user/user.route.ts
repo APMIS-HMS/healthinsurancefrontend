@@ -10,8 +10,7 @@ const USER_ROUTES: Routes = [
             { path: '', redirectTo: 'users', pathMatch: 'full' },
             { path: 'users', component: ListUserComponent },
             { path: 'users/:user-id', component: ListUserComponent },
-            { path: 'new', component: NewUserComponent },
-        ]
+            { path: 'new', component: NewUserComponent }, ]
     }
 ];
 
