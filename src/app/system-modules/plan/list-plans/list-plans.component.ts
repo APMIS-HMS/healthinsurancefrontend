@@ -47,7 +47,7 @@ export class ListPlansComponent implements OnInit {
 
   _getUserTypes() {
     this._systemService.on();
-    this._userTypeService.findAll().then((payload: any) => {
+    this._userTypeService.find({}).then((payload: any) => {
       this._systemService.off();
       if (payload.data.length > 0) {
         this.userTypes = payload.data;

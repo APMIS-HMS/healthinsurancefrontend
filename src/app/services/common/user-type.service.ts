@@ -17,18 +17,11 @@ export class UserTypeService {
   find(query?: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
-        return this._socket.find(query);
+        return socket.find(query);
       }))
     });
   }
-
-  findAll() {
-    return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
-        return socket.find();
-      }))
-    });
-  }
+  
   get(id: string, query: any) {
     return this._rest.get(id, query);
   }

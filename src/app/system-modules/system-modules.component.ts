@@ -40,11 +40,9 @@ export class SystemModulesComponent implements OnInit {
 		this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
 			if (value.status === 'On') {
 				this.online = true;
-				console.log(this.online);
 			} else {
 				this.loadingService.endLoading();
 				this.online = false;
-				console.log(this.online);
 			}
 		});
 		this._headerEventEmitter.announcedUrl.subscribe(url => {

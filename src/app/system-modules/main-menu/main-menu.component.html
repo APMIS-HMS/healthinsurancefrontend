@@ -7,7 +7,8 @@
 </div>
 
 <div class="username-wrap">
-    <div class="username">Jonathan Dede</div>
+    <div *ngIf="user !== undefined && user.lastName !== undefined" class="username">{{user?.lastName}} {{user?.firstName}}</div>
+    <div *ngIf="user !== undefined && user.lastName === undefined" class="username">{{user?.email}}</div>
     <div class="pipe">|</div>
     <div (click)="signOut()" class="user-logout">Logout</div>
 </div>

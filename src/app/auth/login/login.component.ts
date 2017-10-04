@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	getUserTypes() {
-		this._userTypeService.findAll().then(payload => {
+		this._userTypeService.find({}).then(payload => {
 			console.log(payload);
 		});
 	}

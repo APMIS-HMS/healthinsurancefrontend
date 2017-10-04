@@ -1,3 +1,5 @@
+import { UserService } from './services/common/user.service';
+import { GenderService } from './services/common/gender.service';
 
 import { UploadService } from './services/common/upload.service';
 import { AuthService } from './auth/services/auth.service';
@@ -34,14 +36,14 @@ import { FacilityService } from './services/common/facility.service';
 		CoolStorageModule,
 		LoadingBarModule.forRoot(),
 	],
-	providers: [SocketService, RestService, SetupService.FacilitiesService, SetupService.FacilityTypesService,
-		SetupService.CountriesService, SetupService.GenderService, SetupService.TitleService,
+	providers: [SocketService, RestService,
+		SetupService.CountriesService, SetupService.TitleService,
 		SetupService.ProfessionService, SetupService.PersonService, SetupService.RelationshipService,
 		SetupService.MaritalStatusService, SystemModuleService,
-		SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
+		SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
 		SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
 		SetupService.CorporateFacilityService, SetupService.IndustryTypesService, HeaderEventEmitterService, PremiumTypeService,
-		UserTypeService, AuthService, UploadService, FacilityService],
+		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService],
 	bootstrap: [AppComponent]
 })
 

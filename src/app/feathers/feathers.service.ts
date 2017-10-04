@@ -32,38 +32,29 @@ export class SocketService {
             .configure(hooks())
             .configure(authentication({ storage: window.localStorage }));
 
-        console.log(this.socket)
         this.socket.on('reconnect', (value) => {
-            console.log(value)
             this.onlineStatus = true;
             this._systemService.onlineStatusBroadCast({ status: 'On' });
         })
         this.socket.on('disconnect', (value) => {
-            console.log(value);
             this.onlineStatus = false;
             this._systemService.onlineStatusBroadCast({ status: 'Off' });
         })
         this.socket.on('connect', () => {
-            console.log('connected');
             this.onlineStatus = true;
             this._systemService.onlineStatusBroadCast({ status: 'On' });
         })
         this.socket.on('connecting', (value) => {
-            console.log(value)
         })
         this.socket.on('reauthentication-error', (value) => {
-            console.log(value)
             this.onlineStatus = false;
             this._systemService.onlineStatusBroadCast({ status: 'Off' });
         })
         this.socket.on('logout', (value) => {
-            console.log(value)
         })
         this.socket.on('reconnected', (value) => {
-            console.log(value)
         })
         this.socket.on('disconnected', (value) => {
-            console.log(value)
         })
     }
     logOut() {
@@ -94,9 +85,7 @@ export class SocketService {
                     this.socket = this.getService(service);
                     return Promise.resolve(this.socket);
                 }, error => {
-                    // console.log(error)
                 }).catch(err => {
-                    console.log(err)
                 }));
 
             });
