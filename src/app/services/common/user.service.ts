@@ -44,14 +44,21 @@ export class UserService {
   update(param: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('users').then((socket: any) => {
-        return this._socket.update(param._id, param);
+        return socket.update(param._id, param);
+      }));
+    });
+  }
+  patch(_id: any, data: any, param: any) {
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('users').then((socket: any) => {
+        return socket.patch(_id, data, param);
       }));
     });
   }
   remove(id: string, query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('users').then((socket: any) => {
-        return this._socket.remove(id, query);
+        return socket.remove(id, query);
       }));
     });
   }

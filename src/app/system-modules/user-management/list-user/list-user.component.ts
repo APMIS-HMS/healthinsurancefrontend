@@ -1,3 +1,5 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
+import { Router } from '@angular/router';
 import { UserService } from './../../../services/common/user.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
@@ -27,7 +29,9 @@ export class ListUserComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _toastr: ToastsManager,
-    private _userService: UserService
+    private _userService: UserService,
+    private _router: Router,
+    private _systemService: SystemModuleService
   ) { }
 
   ngOnInit() {
@@ -35,10 +39,22 @@ export class ListUserComponent implements OnInit {
   }
 
   _getUsers() {
+    this._systemService.on();
     this._userService.find({}).then((payload: any) => {
       this.users = payload.data;
+      this._systemService.off();
     }).catch(err => {
-
+      this._systemService.off();
     })
+  }
+
+  showDetails(user) {
+    this._systemService.on();
+    this._router.navigate(['/modules/user/users', user._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
   }
 }
