@@ -22,7 +22,7 @@ export class SocketService {
     public onlineStatus = false;
 
     constructor(
-        private locker: CoolLocalStorage, private _systemService:SystemModuleService
+        private locker: CoolLocalStorage, private _systemService: SystemModuleService
     ) {
         this.socket = io(HOST);
 
@@ -36,33 +36,33 @@ export class SocketService {
         this.socket.on('reconnect', (value) => {
             console.log(value)
             this.onlineStatus = true;
-            this._systemService.onlineStatusBroadCast({status:'On'});
+            this._systemService.onlineStatusBroadCast({ status: 'On' });
         })
-        this.socket.on('disconnect', (value)=>{
+        this.socket.on('disconnect', (value) => {
             console.log(value);
             this.onlineStatus = false;
-            this._systemService.onlineStatusBroadCast({status:'Off'});
+            this._systemService.onlineStatusBroadCast({ status: 'Off' });
         })
         this.socket.on('connect', () => {
             console.log('connected');
             this.onlineStatus = true;
-            this._systemService.onlineStatusBroadCast({status:'On'});
+            this._systemService.onlineStatusBroadCast({ status: 'On' });
         })
-        this.socket.on('connecting', (value)=>{
+        this.socket.on('connecting', (value) => {
             console.log(value)
         })
-        this.socket.on('reauthentication-error', (value)=>{
+        this.socket.on('reauthentication-error', (value) => {
             console.log(value)
             this.onlineStatus = false;
-            this._systemService.onlineStatusBroadCast({status:'Off'});
+            this._systemService.onlineStatusBroadCast({ status: 'Off' });
         })
         this.socket.on('logout', (value) => {
             console.log(value)
         })
-        this.socket.on('reconnected', (value)=>{
+        this.socket.on('reconnected', (value) => {
             console.log(value)
         })
-        this.socket.on('disconnected', (value)=>{
+        this.socket.on('disconnected', (value) => {
             console.log(value)
         })
     }
@@ -95,7 +95,7 @@ export class SocketService {
                     return Promise.resolve(this.socket);
                 }, error => {
                     // console.log(error)
-                }).catch(err =>{
+                }).catch(err => {
                     console.log(err)
                 }));
 

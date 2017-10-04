@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
 					this._toastr.success('You have successfully logged in!', 'Success!');
 				}, 1000);
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				this._toastr.error('Invalid email or password!', 'Error!');
 				this.loginFormGroup.controls['password'].reset();
 				this.loginBtnText = 'LOG IN &nbsp; <i class="fa fa-sign-in"></i>';
