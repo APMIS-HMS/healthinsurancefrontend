@@ -1,3 +1,97 @@
-<p>
-  list-beneficiary works!
-</p>
+<div class="list-search-wrap">
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
+
+    <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD BENEFICIARY
+    </div>
+</div>
+
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
+
+        <div class="input-wrap">
+            <label>Type</label>
+            <select [formControl]="filterTypeControl" class="form-control">
+        <option value="All" selected>All</option>
+        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Created By</label>
+            <select [formControl]="createdByControl">
+        <option>All</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Utilized By</label>
+            <select [formControl]="utilizedByControl">
+        <option>All</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Status</label>
+            <select [formControl]="statusControl">
+        <option selected value="All">All</option>
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+        </div>
+
+        <div class="btn btn-medium btn-blue-outline">RESET</div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">No</th>
+                <th class="th">Name</th>
+                <th class="th">Gender</th>
+                <th class="th">LASHMA ID</th>
+                <th class="th">DOB</th>
+                <th class="th">L.G.A</th>
+                <th class="th">HIA</th>
+                <th class="th">Status</th>
+                <th class="th"></th>
+            </tr>
+        </thead>
+
+        <tbody class="tbody">
+            <tr class="tr" *ngIf="beneficiaries.length === 0 && !loading">
+                <td class="text-center" colspan="9">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="beneficiaries.length === 0 && loading">
+                <td class="text-center" colspan="9">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
+            <tr *ngFor="let beneficiary of beneficiaries; let i = index;" routerLink="/modules/plan/plans/87788" class="tr">
+                <td class="td">{{ i+1 }}</td>
+                <td class="td">{{beneficiary?.lastName}} {{beneficiary?.firstName}} {{beneficiary?.otherNames}}</td>
+                <td class="td">{{beneficiary.gender}}</td>
+                <td class="td">{{beneficiary.organisationId}}</td>
+                <td class="td">{{beneficiary.dob}}</td>
+                <td class="td">{{beneficiary.lga}}</td>
+                <td class="td">{{beneficiary.hia}}</td>
+                <td class="td">
+                    <span class="{{ beneficiary.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}"> 
+                        {{ beneficiary.isTokenVerified ? 'Active': 'Inactive' }}
+                    </span>
+                </td>
+                <td routerLink="/modules/platform/platforms/{{beneficiary._id}}"><i class="fa fa-chevron-right"></i></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="list-buttom" *ngIf="beneficiaries.length > 0">
+        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+        <div class="btn btn-medium btn-yellow">Load More</div>
+    </div>
+</div>

@@ -445,10 +445,25 @@ input[type="checkbox"].switch_1:checked:after {
         }
     }
 }
-
 .alert-label {
     color: $red;
     padding: 10px 5px;
+}
+.grey-bg{
+    background: $grey-1;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+.td-icos{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.td-icos i{
+    color: $brand-primary;
+    font-size: $font-x4;
+    cursor: pointer;
 }
 
 .text-center {
