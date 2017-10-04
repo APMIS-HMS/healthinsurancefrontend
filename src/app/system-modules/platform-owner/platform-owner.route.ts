@@ -1,14 +1,17 @@
 import { RouterModule, Routes } from '@angular/router';
 
 import { PlatformOwnerComponent } from './platform-owner.component';
+import { ListPlatformComponent } from './list-platform/list-platform.component';
+import { NewPlatformComponent } from './new-platform/new-platform.component';
+import { PlatformDetailsComponent } from './/platform-details/platform-details.component';
 
 const PLATFORM_ROUTES: Routes = [
     {
         path: '', component: PlatformOwnerComponent, children: [
-            { path: '', redirectTo: 'roles', pathMatch: 'full' },
-            { path: 'platform', component: PlatformOwnerComponent },
-            { path: 'platform/platform-id', component: PlatformOwnerComponent },
-            { path: 'new', component: PlatformOwnerComponent },
+            { path: '', redirectTo: 'platforms', pathMatch: 'full' },
+            { path: 'platforms', component: ListPlatformComponent },
+            { path: 'platforms/:platform-id', component: PlatformDetailsComponent },
+            { path: 'new', component: NewPlatformComponent },
         ]
     }
 ];

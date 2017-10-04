@@ -33,7 +33,8 @@ select {
     width: $app-content-width;
     margin: 0 auto;
 }
-.content{
+
+.content {
     background: #fff;
     padding: 10px 40px;
     margin-top: 20px;
@@ -432,21 +433,32 @@ input[type="checkbox"].switch_1:checked:after {
 .frm-item-wrap .input-wrap select {
     width: 300px;
 }
+
 .frm-wrap {
     width: 580px;
-    .form-box {}
+    .form-box {
+        .form-field-wrap {
+            input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    }
 }
 
+// .frm-item-wrap .input-wrap,
+// .form-field-wrap {
+//     position: relative;
+//     padding-bottom: 5px;
+//     height: 
+// }
 .alert-label {
     color: $red;
     padding: 10px 5px;
 }
 
-
-
-
 @media only screen and (max-width: 1300px) {
-    .app-content-wrap{
+    .app-content-wrap {
         width: 90%;
     }
 }
