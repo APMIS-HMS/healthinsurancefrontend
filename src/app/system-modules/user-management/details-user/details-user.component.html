@@ -22,7 +22,7 @@
             <span *ngIf="!selectedUser?.isActive" class="td tbl-status-inactive">InActive</span>
           </div>
           <div class="switch_box box_1">
-              <input [checked]="selectedUser?.isActive" type="checkbox" class="switch_1">
+              <input [checked]="selectedUser?.isActive" (change)="_updateUser($event)" type="checkbox" class="switch_1">
           </div>
         </div>
 
@@ -35,7 +35,7 @@
             </div>
 
             <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PLAN
+              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ROLE
             </div>
           </div>
           <section>
