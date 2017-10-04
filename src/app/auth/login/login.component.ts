@@ -6,6 +6,11 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
+const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
+const NUMERIC_REGEX = /^[0-9]+$/;
+
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -29,7 +34,7 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit() {
 		this.loginFormGroup = this._fb.group({
-			email: ['', [<any>Validators.required]],
+			email: ['', [<any>Validators.pattern(EMAIL_REGEX)]],
 			password: ['', [<any>Validators.required]]
 		});
 
@@ -59,6 +64,7 @@ export class LoginComponent implements OnInit {
 				}, 1000);
 			}).catch(err => {
 				// console.log(err);
+				this._toastr.error('Invalid email or password!', 'Error!');
 				this.loginFormGroup.controls['password'].reset();
 				this.loginBtnText = 'LOG IN &nbsp; <i class="fa fa-sign-in"></i>';
 			});

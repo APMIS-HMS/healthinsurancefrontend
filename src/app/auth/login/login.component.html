@@ -1,33 +1,33 @@
 <div class="onscreenModal shadow-RB">
-
     <div class="loginmodal-title">Log In</div>
-
-    <form accept-charset="utf-8" [formGroup]="loginFormGroup" novalidate>
-        <div class="form-field-wrap">
-            <input type="email" class="form-control" formControlName="email" name="email" placeholder="Email" size="50" maxlength="255" />
-            <small class="alert-label" [hidden]="loginFormGroup.controls.email.valid || loginFormGroup.controls.email.pristine">
-                Kindly fill in this field.
-            </small>
-        </div>
-
-        <div class="form-field-wrap">
-            <input type="password" class="form-control" formControlName="password" name="password" placeholder="Password" size="50" maxlength="255" />
-            <small class="alert-label" [hidden]="loginFormGroup.controls.password.valid || loginFormGroup.controls.password.pristine">
-                Kindly fill in this field.
-            </small>
-        </div>
-
-        <div class="other-actions">
-            <div class="other-action">
-                <span class="action-label">Don't have an account yet?</span>
-                <span routerLink="/auth/sign-up" class="action-link">Sign Up</span>
+    <div class="form-box">
+        <form accept-charset="utf-8" [formGroup]="loginFormGroup" novalidate>
+            <div class="form-field-wrap">
+                <input type="email" class="form-control" formControlName="email" name="email" placeholder="Email" size="50" maxlength="255" />
+                <small class="alert-label" [hidden]="loginFormGroup.controls.email.valid || loginFormGroup.controls.email.pristine">
+                    Please enter a valid email address.
+                </small>
             </div>
-            <div style="display:none;" class="other-action">
-                <span class="action-link">Can't Login</span>
-            </div>
-        </div>
 
-        <button class="btn btn-medium btn-blue" [disabled]="!loginFormGroup.valid" [innerHTML]="loginBtnText" (click)="onClickLogin(loginFormGroup.value, loginFormGroup.valid)"></button>
-        <!-- <button class="btn btn-medium btn-blue">LOGIN</button> -->
-    </form>
+            <div class="form-field-wrap">
+                <input type="password" class="form-control" formControlName="password" name="password" placeholder="Password" size="50" maxlength="255" />
+                <small class="alert-label" [hidden]="loginFormGroup.controls.password.valid || loginFormGroup.controls.password.pristine">
+                    Password is required.
+                </small>
+            </div>
+
+            <div class="other-actions">
+                <div class="other-action">
+                    <span class="action-label">Don't have an account yet?</span>
+                    <span routerLink="/auth/sign-up" class="action-link">Sign Up</span>
+                </div>
+                <div style="display:none;" class="other-action">
+                    <span class="action-link">Can't Login</span>
+                </div>
+            </div>
+
+            <button class="btn btn-medium btn-blue" [disabled]="!loginFormGroup.valid" [innerHTML]="loginBtnText" (click)="onClickLogin(loginFormGroup.value, loginFormGroup.valid)"></button>
+            <!-- <button class="btn btn-medium btn-blue">LOGIN</button> -->
+        </form>
+    </div>
 </div>
