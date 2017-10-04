@@ -8,6 +8,13 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./list-roles.component.scss']
 })
 export class ListRolesComponent implements OnInit {
+
+  listsearchControl = new FormControl();
+  filterTypeControl = new FormControl();
+  createdByControl = new FormControl();
+  utilizedByControl = new FormControl();
+  statusControl = new FormControl();
+
   roleFormGroup: FormGroup;
   roles: any = <any>[];
   modules: any = <any>[];
