@@ -46,7 +46,7 @@ export class ListBeneficiaryComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
 
-    this._userTypeService.findAll().then(payload => {
+    this._userTypeService.find({}).then(payload => {
         console.log(payload)
       })
   }

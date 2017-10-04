@@ -73,9 +73,9 @@
                     <td class="td">{{user.createdAt|date:'short'}}</td>
                     <td>
                         <span *ngIf="user.isActive" class="td tbl-status-active">Active</span>
-                        <span *ngIf="!user.isActive" class="td tbl-status-inactive">Active</span>
+                        <span *ngIf="!user.isActive" class="td tbl-status-inactive">InActive</span>
                     </td>
-                    <td><i class="fa fa-chevron-right"></i></td>
+                    <td (click)="showDetails(user)"><i class="fa fa-chevron-right"></i></td>
                 </tr>
 
             </tbody>

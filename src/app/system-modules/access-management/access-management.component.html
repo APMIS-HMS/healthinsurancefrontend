@@ -1,5 +1,5 @@
 <section class="app-content-wrap">
-    
+
     <div class="content shadow-RB">
         <div class="list-search-wrap">
             <div class="search-wrap">
@@ -7,7 +7,7 @@
                 <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
                 <i class="fa fa-search" aria-hidden="true"></i>
             </div>
-        
+
             <div routerLink="/modules/role/new" class="btn btn-medium btn-blue">
                 <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ROLES
             </div>
@@ -17,7 +17,8 @@
                 <label class="label">Module</label>
                 <div class="input-wrap">
                     <select formControlName="module" class="form-control">
-                          <option value="" selected>All</option>
+                        <option  value="" selected>All</option>
+                        <option *ngFor="let module of modules"  value="{{module._id}}">{{module.name}}</option>
                     </select>
                 </div>
                 <small class="alert-label" [hidden]="accessFormGroup.controls.module.valid || accessFormGroup.controls.module.pristine">
@@ -27,15 +28,15 @@
             <div class="frm-item-wrap">
                 <label class="label">Accessibility</label>
                 <div class="input-wrap">
-                    <input type="number" formControlName="accessibility" class="form-control">
+                    <input type="text" formControlName="accessibility" class="form-control">
                 </div>
                 <small class="alert-label" [hidden]="accessFormGroup.controls.accessibility.valid || accessFormGroup.controls.accessibility.pristine">
                     This is a required field.
                 </small>
             </div>
-            <button (click)="onClickAddPremium(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> ADD</button>
+            <button [disabled]="!accessFormGroup.valid || addAccessBtnText" (click)="onClickAddAccess(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue" [innerHtml]="addAccessBtnText"></button>
         </form>
-        
+
         <table class="table">
             <thead class="thead">
                 <tr class="tr">
@@ -49,32 +50,32 @@
                     <td class="td">jhrb</td>
                     <td class="td">brbr</td>
                     <td class="td-icos">
-                      <i class="fa fa-trash"></i>
-                      <i class="fa fa-edit"></i>
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
                     </td>
                 </tr>
                 <tr class="tr">
                     <td class="td">jhrb</td>
                     <td class="td">brbr</td>
                     <td class="td-icos">
-                      <i class="fa fa-trash"></i>
-                      <i class="fa fa-edit"></i>
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
                     </td>
                 </tr>
                 <tr class="tr">
                     <td class="td">jhrb</td>
                     <td class="td">brbr</td>
                     <td class="td-icos">
-                      <i class="fa fa-trash"></i>
-                      <i class="fa fa-edit"></i>
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
                     </td>
                 </tr>
                 <tr class="tr">
                     <td class="td">jhrb</td>
                     <td class="td">brbr</td>
                     <td class="td-icos">
-                      <i class="fa fa-trash"></i>
-                      <i class="fa fa-edit"></i>
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
                     </td>
                 </tr>
             </tbody>
