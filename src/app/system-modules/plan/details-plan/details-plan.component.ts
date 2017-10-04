@@ -1,28 +1,33 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-details-plan',
-  templateUrl: './details-plan.component.html',
-  styleUrls: ['./details-plan.component.scss']
+	selector: 'app-details-plan',
+	templateUrl: './details-plan.component.html',
+	styleUrls: ['./details-plan.component.scss']
 })
 export class DetailsPlanComponent implements OnInit {
 
-  listsearchControl = new FormControl();  
-  premiumsearchControl = new FormControl(); 
-  
-  tab_hias = true;
+	listsearchControl = new FormControl();
+	premiumsearchControl = new FormControl();
+
+	tab_hias = true;
 	tab_premiums = false;
 	tab_drugs = false;
 	tab_tests = false;
 	tab_procedures = false;
 	tab_diagnosis = false;
 
-  constructor() { }
+	constructor(private _router: Router) { }
 
-	ngOnInit() {}
+	ngOnInit() { }
 
-	tabHia_click(){
+	navigateNewPlan() {
+		this._router.navigate(['/modules/plan/new']);
+	}
+
+	tabHia_click() {
 		this.tab_hias = true;
 		this.tab_premiums = false;
 		this.tab_drugs = false;
@@ -30,7 +35,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
 	}
-	tabPremiums_click(){
+	tabPremiums_click() {
 		this.tab_hias = false;
 		this.tab_premiums = true;
 		this.tab_drugs = false;
@@ -38,7 +43,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
 	}
-	tabDrugs_click(){
+	tabDrugs_click() {
 		this.tab_hias = false;
 		this.tab_premiums = false;
 		this.tab_drugs = true;
@@ -46,7 +51,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
 	}
-	tabTests_click(){
+	tabTests_click() {
 		this.tab_hias = false;
 		this.tab_premiums = false;
 		this.tab_drugs = false;
@@ -54,7 +59,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
 	}
-	tabProcedures_click(){
+	tabProcedures_click() {
 		this.tab_hias = false;
 		this.tab_premiums = false;
 		this.tab_drugs = false;
@@ -62,7 +67,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_procedures = true;
 		this.tab_diagnosis = false;
 	}
-	tabDiagnosis_click(){
+	tabDiagnosis_click() {
 		this.tab_hias = false;
 		this.tab_premiums = false;
 		this.tab_drugs = false;
