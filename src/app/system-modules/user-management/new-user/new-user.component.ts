@@ -112,7 +112,7 @@ export class NewUserComponent implements OnInit {
     private _getFacilities() {
       this._systemService.on();
       this._userTypeService.findAll().then((res: any) => {
-        console.log(res)
+        console.log(res);
         this._systemService.off();
         if (res.data.length > 0) {
           this.owners = res.data;

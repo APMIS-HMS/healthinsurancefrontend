@@ -1,8 +1,6 @@
 <section class="content">
-
-    <div class="nut-tab-topSect-wrap">
+    <!-- <div class="nut-tab-topSect-wrap">
         <div class="nutTabs-wrap">
-
             <div (click)="tabDetails_click()" [class.active-nut]="tab_details" class="nutTab-wrap">
                 <div class="nut-outer">
                     <div class="nut-inner"></div>
@@ -86,8 +84,28 @@
                 <i class="fa fa-times"></i> CANCEL
             </a>
         </div>
+    </div> -->
+
+    <div class="row pad-all">
+        <div class="col-12 col-sm-8">
+            <div class="form-group">
+                <div class="col-sm-10 no-padding">
+                    <!-- <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Name, ID Number or Date of Birth" aria-describedby="basic-addon2">
+                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4">
+            <a class="btn btn-default border-gray btn-flat text-gray pull-right" routerLink="/modules/plan/plans">
+                <i class="fa fa-times"></i> CANCEL
+            </a>
+        </div>
     </div>
-    <div class="row pad-up">
+
+
+    <div class="row pad-all border-top">
         <div class="col-12">
             <div *ngIf="tab_details" class="pad-all">
                 <form [formGroup]="planDetailFormGroup" novalidate>

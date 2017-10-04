@@ -122,6 +122,7 @@ export class SignupComponent implements OnInit {
 	}
 
 	private createUser(user: any): Promise < any > {
+		console.log(user);
 		return new Promise<any>(
 			(resolve, reject) => {
 				this._authService.create(user).then(res => {
