@@ -178,7 +178,7 @@ export class NewPlatformComponent implements OnInit {
   }
   _getUserTypes() {
     this._systemService.on();
-    this._userTypeService.findAll().then((payload: any) => {
+    this._userTypeService.find({}).then((payload: any) => {
       if (payload.data.length > 0) {
         const index = payload.data.findIndex(x => x.name === 'Platform Owner');
         if (index > -1) {

@@ -7,7 +7,8 @@
 </div>
 
 <div class="username-wrap">
-    <div class="username">Jonathan Dede</div>
+    <div *ngIf="user !== undefined && user.lastName !== undefined" class="username">{{user?.lastName}} {{user?.firstName}}</div>
+    <div *ngIf="user !== undefined && user.lastName === undefined" class="username">{{user?.email}}</div>
     <div class="pipe">|</div>
     <div (click)="signOut()" class="user-logout">Logout</div>
 </div>
@@ -15,7 +16,7 @@
 <ul class="menu-links">
     <div class="menu-group">
         <li (click)="close_onClick()" class="menu-link">HOME</li>
-        <li routerLink="/modules/beneficiary/new" (click)="close_onClick()" class="menu-link">BENEFICIARIES</li>
+        <li routerLink="/modules/beneficiary/beneficiaries" (click)="close_onClick()" class="menu-link">BENEFICIARIES</li>
         <li (click)="close_onClick()" class="menu-link">PREMIUM PAYMENTS</li>
         <li (click)="close_onClick()" class="menu-link">EMPLOYERS</li>
         <li (click)="close_onClick()" class="menu-link">PROVIDERS</li>
