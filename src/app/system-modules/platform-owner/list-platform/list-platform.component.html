@@ -51,6 +51,7 @@
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
             <tr class="tr">
+                <th class="th">No</th>
                 <th class="th">Name</th>
                 <th class="th">Type</th>
                 <th class="th">Number of HIAs</th>
@@ -64,46 +65,34 @@
         </thead>
 
         <tbody class="tbody">
-
-            <tr routerLink="/modules/plan/plans/87788" class="tr">
-                <td class="td">kkk</td>
-                <td class="td">mjjnnn nnn j</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td">kjkhkhkhkh</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td tbl-status-active">Active</td>
-                <td><i class="fa fa-chevron-right"></i></td>
+            <tr class="tr" *ngIf="owners.length === 0 && !loading">
+                <td class="text-center" colspan="10">No data available in table</td>
             </tr>
-
-            <tr routerLink="/modules/plan/plans/87788" class="tr">
-                <td class="td">kkk</td>
-                <td class="td">mjjnnn nnn j</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td">kjkhkhkhkh</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td tbl-status-inactive">Inactive</td>
-                <td><i class="fa fa-chevron-right"></i></td>
+            <tr class="tr" *ngIf="owners.length === 0 && loading">
+                <td class="text-center" colspan="10">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
             </tr>
-
-            <tr routerLink="/modules/plan/plans/87788" class="tr">
-                <td class="td">kkk</td>
-                <td class="td">mjjnnn nnn j</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td">kjkhkhkhkh</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td tbl-status-active">Active</td>
-                <td><i class="fa fa-chevron-right"></i></td>
+            <tr *ngFor="let owner of owners; let i = index;" routerLink="/modules/plan/plans/87788" class="tr">
+                <td class="td">{{ i+1 }}</td>
+                <td class="td">{{owner.name}}</td>
+                <td class="td">{{owner.shortName}}</td>
+                <td class="td"><a href="{{owner.website}}" target="_blank">{{owner.shortName}} website</a></td>
+                <td class="td">{{owner.email}}</td>
+                <td class="td">{{owner.businessContact.lastName}} {{owner.businessContact.firstName}}</td>
+                <td class="td">{{owner.businessContact.phoneNumber}}</td>
+                <td class="td">{{owner.businessContact.email}}</td>
+                <td class="td">
+                    <span class="{{ owner.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}"> 
+                        {{ owner.isTokenVerified ? 'Active': 'Inactive' }}
+                    </span>
+                </td>
+                <td routerLink="/modules/platform/platforms/{{owner._id}}"><i class="fa fa-chevron-right"></i></td>
             </tr>
         </tbody>
     </table>
 
-    <div class="list-buttom">
+    <div class="list-buttom" *ngIf="owners.length > 0">
         <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
         <div class="btn btn-medium btn-yellow">Load More</div>
     </div>
