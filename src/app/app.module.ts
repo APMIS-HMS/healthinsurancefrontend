@@ -20,31 +20,31 @@ import { AppComponent } from './app.component';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { FacilityService } from './services/common/facility.service';
 @NgModule({
-  declarations: [
-	AppComponent
-  ],
-  imports: [
-	BrowserAnimationsModule,
-	ToastModule.forRoot(),
-	BrowserModule,
-	FormsModule,
-	ReactiveFormsModule,
-	HttpModule,
-	appRouter,
-	CoolStorageModule,
-	LoadingBarModule.forRoot(),
-  ],
-  providers: [SocketService, RestService, SetupService.FacilitiesService, SetupService.FacilityTypesService,
-	SetupService.CountriesService, SetupService.GenderService, SetupService.TitleService,
-	SetupService.ProfessionService, SetupService.PersonService, SetupService.RelationshipService,
-	SetupService.MaritalStatusService, SystemModuleService,
-	SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
-	SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
-	SetupService.CorporateFacilityService, SetupService.IndustryTypesService, HeaderEventEmitterService, PremiumTypeService,
-	UserTypeService, AuthService, UploadService, FacilityService],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent
+	],
+	imports: [
+		BrowserAnimationsModule,
+		ToastModule.forRoot(),
+		BrowserModule,
+		FormsModule,
+		ReactiveFormsModule,
+		HttpModule,
+		appRouter,
+		CoolStorageModule,
+		LoadingBarModule.forRoot(),
+	],
+	providers: [SocketService, RestService, SetupService.FacilitiesService, SetupService.FacilityTypesService,
+		SetupService.CountriesService, SetupService.GenderService, SetupService.TitleService,
+		SetupService.ProfessionService, SetupService.PersonService, SetupService.RelationshipService,
+		SetupService.MaritalStatusService, SystemModuleService,
+		SetupService.UserService, SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
+		SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
+		SetupService.CorporateFacilityService, SetupService.IndustryTypesService, HeaderEventEmitterService, PremiumTypeService,
+		UserTypeService, AuthService, UploadService, FacilityService],
+	bootstrap: [AppComponent]
 })
 
 export class AppModule {
-  constructor() { }
+	constructor() { }
 }

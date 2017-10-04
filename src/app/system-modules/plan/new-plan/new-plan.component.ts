@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -43,7 +44,8 @@ export class NewPlanComponent implements OnInit {
     private _planService: PlanService,
     private _planTypeService: PlanTypeService,
     private _systemService: SystemModuleService,
-    private _premiumTypeService: PremiumTypeService) { }
+    private _premiumTypeService: PremiumTypeService,
+    private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
     this.planDetailFormGroup = this._fb.group({
@@ -61,6 +63,7 @@ export class NewPlanComponent implements OnInit {
 
     this._getPlanTypes();
     this._getPremiumTypes();
+    console.log(this._locker.getObject('auth'));
   }
 
 

@@ -9,6 +9,7 @@ import { ListPlansComponent } from './list-plans/list-plans.component';
 import { NewPlanComponent } from './new-plan/new-plan.component';
 import { planRoutes } from './plan.route';
 import { PlanComponent } from './plan.component';
+import { UserTypeService } from '../../services/common/user-type.service';
 
 @NgModule({
   imports: [
