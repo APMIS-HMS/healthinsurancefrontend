@@ -1,0 +1,62 @@
+<section class="app-content-wrap">
+    <div class="content shadow-RB">
+        <!-- <div class="nut-tab-topSect-wrap">
+    
+            <div class="btn btn-medium btn-grey-outline" routerLink="/modules/plan/plans">
+                <i class="fa fa-times"></i> CANCEL
+            </div>
+        </div> -->
+        <form [formGroup]="accessFormGroup" novalidate>
+            <div class="frm-item-wrap">
+                <label class="label">Module</label>
+                <div class="input-wrap">
+                    <select formControlName="module" class="form-control">
+                          <option value="" disabled selected>Select Unit</option>
+                    </select>
+                </div>
+                <small [hidden]="accessFormGroup.controls.module.valid || accessFormGroup.controls.module.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Accessibility</label>
+                <div class="input-wrap">
+                    <input type="number" formControlName="accessibility" class="form-control">
+                    <small [hidden]="accessFormGroup.controls.accessibility.valid || accessFormGroup.controls.accessibility.pristine">
+                        This is a required field.
+                    </small>
+                </div>
+            </div>
+        </form>
+        <div>
+            <button (click)="onClickAddPremium(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-grey-outline"> <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT</button>
+        </div>
+
+        <table class="table">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">S/N</th>
+                    <th class="th">Category</th>
+                    <th class="th">Amount</th>
+                    <th class="th">Unit</th>
+                    <th class="th">Duration in days</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr class="tr">
+                    <td class="td">jhrb</td>
+                    <td class="td">brbr</td>
+                    <td class="td">kjrvn</td>
+                    <td class="td">rvarar</td>
+                    <td class="td">ef fe</td>
+                    <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="col-12 text-right no-padding">
+            <button [disabled]="disablePremiumNextBtn" (click)="onClickPremiumNext()" class="btn btn-medium btn-blue">SAVE</button>
+        </div>
+    </div>
+</section>

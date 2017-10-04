@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { SystemModulesComponent } from './system-modules.component';
+import { AccessManagementComponent } from './access-management/access-management.component';
 
 const SYSTEMMODULES_ROUTES: Routes = [
     {
@@ -24,7 +25,8 @@ const SYSTEMMODULES_ROUTES: Routes = [
             {
                 path: 'beneficiary',
                 loadChildren: './beneficiary/beneficiary.module#BeneficiaryModule'
-            }
+            },
+            { path: 'access', component: AccessManagementComponent }
         ]
     }
 ];
