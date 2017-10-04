@@ -29,7 +29,11 @@ input, select{
 .app-content-wrap{
     width: $app-content-width;
     margin: 0 auto;
-    padding-top: 2px;
+}
+.content{
+    background: #fff;
+    padding: 10px 40px;
+    margin-top: 20px;
 }
 .search-wrap {
     position: relative;
@@ -378,5 +382,14 @@ input[type="checkbox"].switch_1:checked:after{
 }
 .frm-item-wrap .input-wrap input, .frm-item-wrap .input-wrap select{
     width: 300px;
+}
+
+
+
+
+@media only screen and (max-width: 1300px) {
+    .app-content-wrap{
+        width: 90%;
+    }
 }
     
