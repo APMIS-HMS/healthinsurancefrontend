@@ -135,6 +135,8 @@ select {
     align-items: center;
     background: $grey-1b;
     min-height: 80px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .label-xx {

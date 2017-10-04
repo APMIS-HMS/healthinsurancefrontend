@@ -7,11 +7,13 @@ import { systemModulesRoutes } from './system-modules.route';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { AccessManagementComponent } from './access-management/access-management.component';
 @NgModule({
     declarations: [
         SystemModulesComponent,
         TopBarComponent,
-        MainMenuComponent
+        MainMenuComponent,
+        AccessManagementComponent
     ],
     exports: [FormsModule, ReactiveFormsModule],
     imports: [FormsModule, ReactiveFormsModule, systemModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
