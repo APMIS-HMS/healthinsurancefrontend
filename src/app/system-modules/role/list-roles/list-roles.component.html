@@ -1,91 +1,72 @@
 <section class="app-content-wrap">
-    <div class="list-search-wrap">
-        <div class="search-wrap">
-            <label class="label-xx">Search:</label>
-            <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
-            <i class="fa fa-search" aria-hidden="true"></i>
+        
+    <div class="content shadow-RB">
+        <div class="list-search-wrap">
+            <div class="search-wrap">
+                <label class="label-xx">Search:</label>
+                <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+        
+            <div routerLink="/modules/role/new" class="btn btn-medium btn-blue">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> NEW ROLE
+            </div>
         </div>
-    
-        <div class="btn btn-medium btn-blue">
-            <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ACCESSIBILITY
-        </div>
-    </div>
-
-    <div class="shadow-RB">
-        <div class="list-filter-wrap">
-            <div class="label-xx">Filters:</div>
-
-            <div class="input-wrap">
-                <label>Type</label>
-                <select [formControl]="filterTypeControl">
-            <option>All</option>
-        </select>
+        <form class="grey-bg" [formGroup]="roleFormGroup" novalidate>
+            <div class="frm-item-wrap">
+                <label class="label">Role Name</label>
+                <div class="input-wrap">
+                    <input formControlName="roleName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="roleFormGroup.controls.roleName.valid || roleFormGroup.controls.roleName.pristine">
+                    This is a required field.
+                </small>
             </div>
-
-            <div class="input-wrap">
-                <label>Created By</label>
-                <select [formControl]="createdByControl">
-            <option>All</option>
-        </select>
-            </div>
-
-            <div class="input-wrap">
-                <label>Utilized By</label>
-                <select [formControl]="utilizedByControl">
-            <option>All</option>
-        </select>
-            </div>
-
-            <div class="input-wrap">
-                <label>Status</label>
-                <select [formControl]="statusControl">
-            <option>All</option>
-        </select>
-            </div>
-
-            <div class="btn btn-medium btn-blue-outline">RESET</div>
-        </div>
-
-        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <button (click)="onClickAddPremium(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> ADD</button>
+        </form>
+        
+        <table class="table">
             <thead class="thead">
                 <tr class="tr">
-                    <th class="th">No</th>
-                    <th class="th">Name</th>
-                    <th class="th">Accessibilities</th>
-                    <th class="th">Status</th>
-                    <th class="th">Action</th>
+                    <th class="th">Module</th>
+                    <th class="th">Accessibility</th>
+                    <th class="th"></th>
                 </tr>
             </thead>
-
             <tbody class="tbody">
-                <tr *ngIf="roles.length === 0 && !loading">
-                    <td class="text-center" colspan="5">No data available in table</td>
-                </tr>
-                <tr *ngIf="roles.length === 0 && loading">
-                    <td class="text-center" colspan="5">
-                        <i class="fa fa-spinner fa-spin"></i>
+                <tr class="tr">
+                    <td class="td">jhrb</td>
+                    <td class="td">brbr</td>
+                    <td class="td-icos">
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
                     </td>
                 </tr>
-                <tr class="tr" *ngFor="let role of roles; let i = index;">
-                    <td class="td">{{ i+1 }}</td>
-                    <td class="td">{{ role.name }}</td>
-                    <td class="td">{{ role.module.name }}</td>
-                    <td class="td">
-                        <label class="switch">
-                        <input type="checkbox" [attr.checked]="role.isActive ? true : null" (change)="onClickActivate(role);" class="input-action-leader-board"/>
-                        <div class="slider round"></div>
-                        </label>
+                <tr class="tr">
+                    <td class="td">jhrb</td>
+                    <td class="td">brbr</td>
+                    <td class="td-icos">
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
                     </td>
-                    <td class="td">
-                        <button class="btn btn-primary btn-flat btn-smaller" (click)="open(content, role)">Edit</button>
+                </tr>
+                <tr class="tr">
+                    <td class="td">jhrb</td>
+                    <td class="td">brbr</td>
+                    <td class="td-icos">
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
+                    </td>
+                </tr>
+                <tr class="tr">
+                    <td class="td">jhrb</td>
+                    <td class="td">brbr</td>
+                    <td class="td-icos">
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
                     </td>
                 </tr>
             </tbody>
         </table>
-
-        <div class="list-buttom">
-            <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-            <div class="btn btn-medium btn-yellow">Load More</div>
-        </div>
     </div>
 </section>

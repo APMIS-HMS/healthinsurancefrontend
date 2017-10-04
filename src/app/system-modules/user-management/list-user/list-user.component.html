@@ -7,109 +7,83 @@
         </div>
 
         <div routerLink="/modules/user/new" class="btn btn-medium btn-blue">
-            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            NEW USER
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> NEW USER
         </div>
     </div>
 
-    <div  class="shadow-RB">
+    <div class="shadow-RB">
         <div class="list-filter-wrap">
-        <div class="label-xx">Filters:</div>
+            <div class="label-xx">Filters:</div>
 
-        <div class="input-wrap">
-            <label>Type</label>
-            <select [formControl]="filterTypeControl">
+            <div class="input-wrap">
+                <label>Type</label>
+                <select [formControl]="filterTypeControl">
             <option>All</option>
             </select>
-        </div>
+            </div>
 
-        <div class="input-wrap">
-            <label>Created By</label>
-            <select [formControl]="createdByControl">
+            <div class="input-wrap">
+                <label>Created By</label>
+                <select [formControl]="createdByControl">
             <option>All</option>
             </select>
-        </div>
+            </div>
 
-        <div class="input-wrap">
-            <label>Utilized By</label>
-            <select [formControl]="utilizedByControl">
+            <div class="input-wrap">
+                <label>Utilized By</label>
+                <select [formControl]="utilizedByControl">
             <option>All</option>
             </select>
-        </div>
+            </div>
 
-        <div class="input-wrap">
-            <label>Status</label>
-            <select [formControl]="statusControl">
+            <div class="input-wrap">
+                <label>Status</label>
+                <select [formControl]="statusControl">
             <option>All</option>
             </select>
-        </div>
+            </div>
 
-        <div class="btn btn-medium btn-blue-outline">RESET</div>
+            <div class="btn btn-medium btn-blue-outline">RESET</div>
         </div>
 
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-        <thead class="thead">
-            <tr class="tr">
-                <th class="th">No</th>
-                <th class="th">Name</th>
-                <th class="th">Gender</th>
-                <th class="th">Email</th>
-                <th class="th">ID Number</th>
-                <th class="th">Type</th>
-                <th class="th">Added on</th>
-                <th class="th">Status</th>
-                <th class="th">Action</th>
-                <th class="th"></th>
-            </tr>
-        </thead>
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">No</th>
+                    <th class="th">Platform</th>
+                    <th class="th">ShortName</th>
+                    <th class="th">Name</th>
+                    <th class="th">Email</th>
+                    <th class="th">Type</th>
+                    <th class="th">Added on</th>
+                    <th class="th">Status</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
 
-        <tbody class="tbody">
+            <tbody class="tbody">
 
-            <tr class="tr">
-                <td class="td">kkk</td>
-                <td class="td">mjjnnn nnn j</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td">kjkhkhkhkh</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td">090808080808</td>
-                <td class="td tbl-status-active">Active</td>
-                <td><i class="fa fa-chevron-right"></i></td>
-            </tr>
+                <tr *ngFor="let user of users; let i=index" class="tr">
+                    <td class="td">{{i+1}}</td>
+                    <td class="td">{{user.platformOwnerId?.name}}</td>
+                    <td class="td">{{user.platformOwnerId?.shortName}}</td>
+                    <td class="td">{{user.lastName}} {{user.firstName}}</td>
+                    <td class="td">{{user.email}}</td>
+                    <td class="td">{{user.userType?.name}}</td>
+                    <td class="td">{{user.createdAt|date:'short'}}</td>
+                    <td>
+                        <span *ngIf="user.isActive" class="td tbl-status-active">Active</span>
+                        <span *ngIf="!user.isActive" class="td tbl-status-inactive">Active</span>
+                    </td>
+                    <td><i class="fa fa-chevron-right"></i></td>
+                </tr>
 
-            <tr class="tr">
-                <td class="td">kkk</td>
-                <td class="td">mjjnnn nnn j</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td">kjkhkhkhkh</td>
-                <td class="td">oijoim</td>
-                <td class="td">090808080808</td>
-                <td class="td">090808080808</td>
-                <td class="td tbl-status-inactive">Inactive</td>
-                <td><i class="fa fa-chevron-right"></i></td>
-            </tr>
-
-            <tr class="tr">
-            <td class="td">kkk</td>
-            <td class="td">mjjnnn nnn j</td>
-            <td class="td">oijoim</td>
-            <td class="td">090808080808</td>
-            <td class="td">kjkhkhkhkh</td>
-            <td class="td">090808080808</td>
-            <td class="td">oijoim</td>
-            <td class="td">090808080808</td>
-            <td class="td tbl-status-active">Active</td>
-            <td><i class="fa fa-chevron-right"></i></td>
-            </tr>
-        </tbody>
+            </tbody>
         </table>
 
         <div class="list-buttom">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-        <div class="btn btn-medium btn-yellow">Load More</div>
+            <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+            <div class="btn btn-medium btn-yellow">Load More</div>
         </div>
     </div>
 </div>
-    

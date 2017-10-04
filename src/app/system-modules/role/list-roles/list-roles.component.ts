@@ -9,32 +9,16 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 })
 export class ListRolesComponent implements OnInit {
 
-  listsearchControl = new FormControl();
-  filterTypeControl = new FormControl();
-  createdByControl = new FormControl();
-  utilizedByControl = new FormControl();
-  statusControl = new FormControl();
-
   roleFormGroup: FormGroup;
-  roles: any = <any>[];
-  modules: any = <any>[];
-  loading: Boolean = true;
-  disableAddBtn: Boolean = false;
-  closeResult: String;
-  selectedRole: any = <any>{};
-  selectedModule: any = <any>{};
-  addBtnText: String = '<i class="fa fa-plus"></i> Add Role';
+  listsearchControl = new FormControl();
 
-  constructor(
-    private _fb: FormBuilder,
-    private _toastr: ToastsManager,
-  ) { }
+  constructor(private _fb: FormBuilder) { }
 
   ngOnInit() {
     this.roleFormGroup = this._fb.group({
-      role: ['', [<any>Validators.required]],
-      module: ['', [<any>Validators.required]]
+      roleName: ['', [<any>Validators.required]]
     });
+
   }
 
 }
