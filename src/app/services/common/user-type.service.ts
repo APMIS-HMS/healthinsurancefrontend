@@ -14,6 +14,14 @@ export class UserTypeService {
     this._rest = _restService.getService('user-types');
   }
 
+  findAll() {
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
+        return socket.find();
+      }))
+    });
+  }
+
   find(query?: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
