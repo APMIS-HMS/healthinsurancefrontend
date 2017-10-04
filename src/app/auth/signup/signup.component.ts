@@ -42,9 +42,10 @@ export class SignupComponent implements OnInit {
 	}
 
 	_getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: 'LASHMA' } }).then(payload => {
-			if (payload.data.length > 0) {
-				this.currentPlatform = payload.data[0];
+		this._facilityService.findWithOutAuth({ query: { shortName: 'LASHMA' } }).then(res => {
+			console.log(res);
+			if (res.data.length > 0) {
+				this.currentPlatform = res.data[0];
 			}
 		}).catch(err => {
 			console.log(err);
@@ -59,14 +60,25 @@ export class SignupComponent implements OnInit {
 				email: value.email,
 				phoneNumber: value.phoneNumber,
 				mothersMaidenName: value.mothersMaidenName,
-				platformOnwerId: this.currentPlatform._id
+				// platformOnwerId: this.currentPlatform._id
 			};
 
 			const user = {
 				email: value.email,
 				password: value.password
 			};
-			console.log(person);
+			// console.log(person);
+			// this._personService.find({query: {
+			// 	email: person.email,
+			// 	mothersMaidenName: person.mothersMaidenName,
+			// 	phoneNumber: person.phoneNumber,
+			// 	lastName: person.lastName,
+			// 	firstName: person.firstName
+			// }}).then(findRes => {
+			// 	console.log(findRes);
+			// }).catch(err => {
+			// 	console.log(err);
+			// });
 			this.createPerson(person).then(res => {
 				console.log(res);
 				return this.createUser(user);

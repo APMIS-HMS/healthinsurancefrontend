@@ -427,7 +427,14 @@ input[type="checkbox"].switch_1:checked:after {
 
 .frm-wrap {
     width: 580px;
-    .form-box {}
+    .form-box {
+        .form-field-wrap {
+            input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    }
 }
 
 .alert-label {
