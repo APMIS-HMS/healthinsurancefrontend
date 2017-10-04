@@ -1,0 +1,8 @@
+@import '../../../../assets/libs/variables.scss';
+
+.status{
+    color: $orange;
+}
+input[type="checkbox"].switch_1:checked {
+background: $red;
+}
