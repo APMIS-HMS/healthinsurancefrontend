@@ -53,7 +53,7 @@
 </div> -->
 
 <div class="onscreenModal shadow-RB">
-        
+
     <div class="loginmodal-title">Sign Up</div>
 
     <form accept-charset="utf-8" [formGroup]="signupFormGroup" novalidate>
@@ -109,6 +109,7 @@
             </div>
         </div>
 
-        <button class="btn btn-medium btn-blue">LOGIN</button>
+        <button class="btn btn-medium btn-blue" [disabled]="!signupFormGroup.valid" [innerHTML]="signupBtnText" (click)="onClickRegister(signupFormGroup.value, signupFormGroup.valid)"></button>
+        <!-- <button class="btn btn-medium btn-blue">LOGIN</button> -->
     </form>
 </div>

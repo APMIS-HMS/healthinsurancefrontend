@@ -27,6 +27,7 @@
             </div>
         </div>
 
-        <button class="btn btn-medium btn-blue">LOGIN</button>
+        <button class="btn btn-medium btn-blue" [disabled]="!loginFormGroup.valid" [innerHTML]="loginBtnText" (click)="onClickLogin(loginFormGroup.value, loginFormGroup.valid)"></button>
+        <!-- <button class="btn btn-medium btn-blue">LOGIN</button> -->
     </form>
 </div>

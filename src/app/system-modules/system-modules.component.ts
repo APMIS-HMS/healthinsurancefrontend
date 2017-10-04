@@ -19,10 +19,10 @@ export class SystemModulesComponent implements OnInit {
 	ngOnInit() {
 	}
 
-	close_onClick(message: boolean){
+	close_onClick(message: boolean) {
 		this.menuToggle = false;
 	}
-	menu_onClick(message: boolean){
+	menu_onClick(message: boolean) {
 		this.menuToggle = true;
 	}
 
