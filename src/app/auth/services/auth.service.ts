@@ -34,6 +34,7 @@ export class AuthService {
     this._socketService.logOut();
   }
   login(query: any) {
+    console.log(query)
     return this._socketService.loginIntoApp(query);
   }
 

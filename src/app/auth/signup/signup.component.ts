@@ -1,3 +1,4 @@
+import { GenderService } from './../../services/common/gender.service';
 import { FacilityService } from './../../services/common/facility.service';
 import { Facility } from './../../models/organisation/facility';
 import { Component, OnInit } from '@angular/core';
@@ -26,7 +27,8 @@ export class SignupComponent implements OnInit {
 		private _authService: AuthService,
 		private _personService: PersonService,
 		private _locker: CoolLocalStorage,
-		private _facilityService: FacilityService
+		private _facilityService: FacilityService,
+		private _genderService:GenderService
 	) { }
 
 	ngOnInit() {
@@ -39,6 +41,14 @@ export class SignupComponent implements OnInit {
 			password: ['', [<any>Validators.required]]
 		});
 		this._getCurrentPlatform();
+	}
+
+	_getGender(){
+		this._genderService.find({}).then(payload =>{
+
+		}).catch(err =>{
+			
+		})
 	}
 
 	_getCurrentPlatform() {
