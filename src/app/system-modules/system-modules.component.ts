@@ -1,3 +1,5 @@
+import { AuthService } from './../auth/services/auth.service';
+import { HeaderEventEmitterService } from './../services/event-emitters/header-event-emitter.service';
 import { UploadService } from './../services/common/upload.service';
 import { SystemModuleService } from './../services/common/system-module.service';
 import { Router } from '@angular/router';
@@ -12,17 +14,52 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 export class SystemModulesComponent implements OnInit {
 
 	menuToggle = false;
-	
-	constructor() {
+	online = false;
+	pageInView: String = '';
+	minorPageInView: String = '';
+
+	constructor(
+		private _headerEventEmitter: HeaderEventEmitterService,
+		private _authService: AuthService,
+		private _router: Router,
+		private loadingService: LoadingBarService,
+		private _systemService: SystemModuleService,
+		private _uploadService: UploadService,
+	) {
+		this.online = this._uploadService.checkOnlineStatus();
 	}
 
 	ngOnInit() {
+		this._systemService.notificationAnnounced$.subscribe((value: any) => {
+			if (value.status === 'On') {
+				this.loadingService.startLoading();
+			} else {
+				this.loadingService.endLoading();
+			}
+		});
+		this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
+			if (value.status === 'On') {
+				this.online = true;
+				console.log(this.online);
+			} else {
+				this.loadingService.endLoading();
+				this.online = false;
+				console.log(this.online);
+			}
+		});
+		this._headerEventEmitter.announcedUrl.subscribe(url => {
+			this.pageInView = url;
+		});
+		this._headerEventEmitter.announcedMinorUrl.subscribe(url => {
+			this.minorPageInView = url;
+		});
+		this.online = this._uploadService.checkOnlineStatus();
 	}
 
-	close_onClick(message: boolean){
+	close_onClick(message: boolean) {
 		this.menuToggle = false;
 	}
-	menu_onClick(message: boolean){
+	menu_onClick(message: boolean) {
 		this.menuToggle = true;
 	}
 

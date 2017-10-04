@@ -28,6 +28,9 @@ export class FacilityService {
       }))
     });
   }
+  findWithOutAuth(query: any) {
+    return this._socket.find(query);
+  }
 
   get(id: string, query: any) {
     return new Promise((resolve, reject) => {

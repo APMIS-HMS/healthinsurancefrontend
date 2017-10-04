@@ -12,6 +12,18 @@ const SYSTEMMODULES_ROUTES: Routes = [
             {
                 path: 'user',
                 loadChildren: './user-management/user-management.module#UserManagementModule'
+            },
+            {
+                path: 'role',
+                loadChildren: './role/role.module#RoleModule'
+            },
+            {
+                path: 'provider',
+                loadChildren: './provider/provider.module#ProviderModule'
+            },
+            {
+                path: 'beneficiary',
+                loadChildren: './beneficiary/beneficiary.module#BeneficiaryModule'
             }
         ]
     }

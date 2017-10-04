@@ -1,5 +1,5 @@
 <section class="content shadow-RB">
-    
+
     <div class="nut-tab-topSect-wrap">
         <div class="nutTabs-wrap">
 
@@ -113,7 +113,7 @@
                 <label class="label">Status</label>
                 <div class="input-wrap">
                     <div class="switch_box box_1">
-                      <input formControlName="planStatus" type="checkbox" class="switch_1">
+                        <input formControlName="planStatus" type="checkbox" class="switch_1">
                     </div>
                 </div>
             </div>
@@ -122,92 +122,79 @@
     </div>
 
     <div *ngIf="tab_premium">
-        <div class="grey-wrap">
-            <form [formGroup]="planPremiumFormGroup" novalidate>
-                <div class="col-12 pad-up">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Premium Payment</label>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label class="col-12 no-padding">Amount</label>
-                                <div class="col-12 no-padding">
-                                    <input type="number" formControlName="planAmount" class="form-control" placeholder="Amount">
-                                    <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planAmount.valid || planPremiumFormGroup.controls.planAmount.pristine">
-                                        This is a required field.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <label class="col-12 no-padding">Unit</label>
-                                <div class="col-12 no-padding">
-                                    <select formControlName="planUnit" class="form-control">
-                                        <option value="" disabled selected>Select Unit</option>
-                                    </select>
-                                    <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planUnit.valid || planPremiumFormGroup.controls.planUnit.pristine">
-                                        This is a required field.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="col-12 no-padding">Duration</label>
-                                <div class="col-12 no-padding">
-                                    <input type="number" formControlName="planDuration" class="form-control" placeholder="Duration">
-                                    <small class="alert-label" [hidden]="planPremiumFormGroup.controls.planDuration.valid || planPremiumFormGroup.controls.planDuration.pristine">
-                                        This is a required field.
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <form [formGroup]="planPremiumFormGroup" novalidate>
+            <div class="frm-item-wrap">
+                <label class="label">Premium Category</label>
+                <div *ngFor="let premiumType of premiumTypes; let i=index" class="">
+                    <label class="form-check-label">
+                        <input formControlName="premiumCategory" class="form-check-input" type="radio"  id="inlineRadio1" [value]="premiumType"> {{premiumType.name}}
+                    </label>
                 </div>
-                <!-- <div class="col-12 center-btn">
-            <div class="btn btn-primary btn-flat" routerLink="/modules/plan/new-plan">
-                <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT
             </div>
-        </div> -->
-            </form>
-            <div class="col-12 text-right no-padding">
-                <button (click)="onClickAddPremium(planPremiumFormGroup.valid, planPremiumFormGroup.value)" class="btn btn-primary btn-flat"> <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT</button>
-                <button [disabled]="disablePremiumNextBtn" (click)="onClickPremiumNext()" class="btn btn-success btn-flat" [innerHtml]="premiumNextBtn"></button>
+            <div class="frm-item-wrap">
+                <label class="label">Amount</label>
+                <div class="input-wrap">
+                    <input type="number" formControlName="planAmount" class="form-control" placeholder="Amount">
+                    <small [hidden]="planPremiumFormGroup.controls.planAmount.valid || planPremiumFormGroup.controls.planAmount.pristine">
+                        This is a required field.
+                    </small>
+                </div>
             </div>
+            <div class="frm-item-wrap">
+                <label class="label">Duration</label>
+                <div class="input-wrap">
+                    <input type="number" formControlName="planDuration" class="form-control" placeholder="Duration">
+                    <small [hidden]="planPremiumFormGroup.controls.planDuration.valid || planPremiumFormGroup.controls.planDuration.pristine">
+                            This is a required field.
+                        </small>
+                </div>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Unit</label>
+                <div class="input-wrap">
+                    <select formControlName="planUnit" class="form-control">
+                            <option value="" disabled selected>Select Unit</option>
+                            <option [ngValue]="duration" *ngFor="let duration of durations;">{{ duration.name }}</option>
+                    </select>
+                    <small [hidden]="planPremiumFormGroup.controls.planUnit.valid || planPremiumFormGroup.controls.planUnit.pristine">
+                        This is a required field.
+                    </small>
+                </div>
+            </div>
+
+        </form>
+        <div>
+            <button (click)="onClickAddPremium(planPremiumFormGroup.valid, planPremiumFormGroup.value)" class="btn btn-medium btn-grey-outline"> <i class="fa fa-plus"></i> ADD PREMIUM PAYMENT</button>
         </div>
 
-        <div class="col-12 no-padding">
-            <div class="table-responsive">
-                <table class="table table-striped" cellspacing="0" width="100%">
-                    <thead>
-                        <tr class="bg-gray text-white">
-                            <th>S/N</th>
-                            <th>Amount</th>
-                            <th>Unit</th>
-                            <th>Duration in days</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- <tr>
-                            <td>20.000</td>
-                            <td>Monthly</td>
-                            <td class="td-icos">
-                                <i class="fa fa-edit"></i>
-                                <i class="fa fa-trash"></i>
-                            </td>
-                        </tr> -->
-                        <tr *ngIf="premiums.length === 0">
-                            <td class="text-center" colspan="5">No data available in table</td>
-                        </tr>
-                        <tr class="tr-link" *ngFor="let premium of premiums; let i = index;">
-                            <td>{{ i+1 }}</td>
-                            <td>{{ premium.amount }}</td>
-                            <td>{{ premium.unit }}</td>
-                            <td>{{ premium.durationInDay }}</td>
-                            <td>
-                                <button class="btn btn-primary btn-flat btn-smaller">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <table class="table">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">S/N</th>
+                    <th class="th">Category</th>
+                    <th class="th">Amount</th>
+                    <th class="th">Unit</th>
+                    <th class="th">Duration in days</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="premiums.length === 0">
+                    <td class="td" colspan="5">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngFor="let premium of premiums; let i = index;">
+                    <td class="td">{{ i+1 }}</td>
+                    <td class="td">{{ premium.category.name }}</td>
+                    <td class="td">{{ premium.amount }}</td>
+                    <td class="td">{{ premium.unit }}</td>
+                    <td class="td">{{ premium.durationInDay }}</td>
+                    <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="col-12 text-right no-padding">
+            <button [disabled]="disablePremiumNextBtn" (click)="onClickPremiumNext()" class="btn btn-medium btn-blue" [innerHtml]="premiumNextBtn"></button>
         </div>
     </div>
 </section>

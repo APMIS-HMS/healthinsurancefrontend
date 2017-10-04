@@ -1,24 +1,24 @@
 <div class="list-search-wrap">
-    <div class="search-wrap">
-      <label class="label-xx">Search:</label>
-      <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
-      <i class="fa fa-search" aria-hidden="true"></i>
-    </div>
+  <div class="search-wrap">
+    <label class="label-xx">Search:</label>
+    <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+    <i class="fa fa-search" aria-hidden="true"></i>
+  </div>
 
-    <div class="btn btn-medium btn-blue">
-        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-        ADD HEALTHPLAN
-    </div>
+  <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
+    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD HEALTHPLAN
+  </div>
 </div>
 
-<div  class="shadow-RB">
+<div class="shadow-RB">
   <div class="list-filter-wrap">
     <div class="label-xx">Filters:</div>
 
     <div class="input-wrap">
       <label>Type</label>
-      <select [formControl]="filterTypeControl">
-        <option>All</option>
+      <select [formControl]="filterTypeControl" class="form-control">
+        <option value="All" selected>All</option>
+        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
       </select>
     </div>
 
@@ -39,7 +39,9 @@
     <div class="input-wrap">
       <label>Status</label>
       <select [formControl]="statusControl">
-        <option>All</option>
+        <option selected value="All">All</option>
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
       </select>
     </div>
 
