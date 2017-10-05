@@ -1,3 +1,6 @@
+import { RoleService } from './../../../services/auth/role/role.service';
+import { SystemModuleService } from './../../../services/common/system-module.service';
+import { ModuleService } from './../../../services/common/module.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -12,13 +15,31 @@ export class NewRoleComponent implements OnInit {
   roleFormGroup: FormGroup;
   listsearchControl = new FormControl();
 
-  constructor(private _fb: FormBuilder) { }
+  modules: any[] = [];
+  accessibiliies: any[] = [];
+  constructor(private _fb: FormBuilder,
+    private _moduleService: ModuleService,
+    private _systemService: SystemModuleService,
+    private _roleService: RoleService) { }
 
   ngOnInit() {
     this.roleFormGroup = this._fb.group({
       roleName: ['', [<any>Validators.required]]
     });
-
+    this._getModules();
   }
 
+  _getModules() {
+    this._systemService.on();
+    this._moduleService.find({ query: { $sort: 'name', $limit: 100 } }).then((payload: any) => {
+      this.modules = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    })
+  }
+
+  onSelectModule(module) {
+    this.accessibiliies = module.accessibilities;
+  }
 }

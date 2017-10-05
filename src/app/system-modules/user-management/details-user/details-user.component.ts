@@ -2,7 +2,7 @@ import { SystemModuleService } from './../../../services/common/system-module.se
 import { UserService } from './../../../services/common/user.service';
 import { FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-details-user',
@@ -19,11 +19,10 @@ export class DetailsUserComponent implements OnInit {
   selectedUser: any;
 
   constructor(private _route: ActivatedRoute, private _userService: UserService,
-    private _systemService: SystemModuleService) { }
+    private _systemService: SystemModuleService, private _router:Router) { }
 
   ngOnInit() {
     this._route.params.subscribe(value => {
-      console.log(value)
       if (value.id !== undefined) {
         this._getUser(value.id);
       }
@@ -35,10 +34,9 @@ export class DetailsUserComponent implements OnInit {
 
   _updateUser(value) {
     this._systemService.on();
-    this.selectedUser.isActive = value;
+    this.selectedUser.isActive = value.target.checked;
     this._userService.patch(this.selectedUser._id, this.selectedUser, {}).then((payload: any) => {
       this.selectedUser = payload;
-      this.isActive.setValue(payload.isActive);
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
@@ -49,11 +47,14 @@ export class DetailsUserComponent implements OnInit {
     this._systemService.on();
     this._userService.get(id, {}).then((payload: any) => {
       this.selectedUser = payload;
-      console.log(this.selectedUser)
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
     })
+  }
+
+  routeAddRole(){
+    
   }
 
   tabHia_click() {

@@ -53,7 +53,7 @@ export class AccessManagementComponent implements OnInit {
   }
 
   private _getModules() {
-    this._moduleService.findAll().then((res: any) => {
+    this._moduleService.find({}).then((res: any) => {
       this.modules = res.data;
     }).catch(err => console.log(err));
   }

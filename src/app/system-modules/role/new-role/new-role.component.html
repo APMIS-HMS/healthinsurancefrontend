@@ -26,10 +26,7 @@
             <div class="list-boxes">
               <div class="list-box">
                 <ul class="list-a">
-                  <li>this that module</li>
-                  <li>this that module</li>
-                  <li>this that module</li>
-                  <li>this that module</li>
+                  <li (click)="onSelectModule(module)" *ngFor="let module of modules">{{module.name}}</li>
                 </ul>
               </div>
               <div class="list-box">
