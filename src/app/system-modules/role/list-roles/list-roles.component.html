@@ -1,5 +1,5 @@
 <section class="app-content-wrap">
-        
+
     <div class="content shadow-RB">
         <div class="list-search-wrap">
             <div class="search-wrap">
@@ -7,7 +7,7 @@
                 <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
                 <i class="fa fa-search" aria-hidden="true"></i>
             </div>
-        
+
             <div routerLink="/modules/role/new" class="btn btn-medium btn-blue">
                 <i class="fa fa-plus-circle" aria-hidden="true"></i> NEW ROLE
             </div>
@@ -24,7 +24,7 @@
             </div>
             <button (click)="onClickAddPremium(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> ADD</button>
         </form> -->
-        
+
         <table class="table">
             <thead class="thead">
                 <tr class="tr">
@@ -37,16 +37,22 @@
             <tbody class="tbody">
                 <tr *ngFor="let role of roles" class="tr">
                     <td colspan="4" class="td">{{role.name}}</td>
+                    <td *ngFor="let inner of role.accessibilities" colspan="4" class="td">
+                        <div class="td-row">
+                            <div class="td-data">{{inner.module.name}}</div>
+                            <div class="td-data">{{inner.accessibility.name}}</div>
+                        </div>
+                    </td>
                 </tr>
-                    <!-- <td class="td">{{role.module.name}}</td> -->
-                <tr *ngFor="let role1 of role.accessibilities" class="tr">
+                <!-- <td class="td">{{role.module.name}}</td> -->
+                <!-- <tr *ngFor="let role1 of role.accessibilities" class="tr">
                     <td class="td">{{role1.module.name}}</td>
                     <td class="td"></td>
                     <td class="td-icos">
                         <i class="fa fa-trash"></i>
                         <i class="fa fa-edit"></i>
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </div>
