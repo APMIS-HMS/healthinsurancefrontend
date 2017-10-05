@@ -14,7 +14,7 @@
         </div>
         <form class="grey-bg" [formGroup]="roleFormGroup" novalidate>
             <div class="frm-item-wrap">
-                <label class="label">Role Name</label>{{accessibilities?.length}}
+                <label class="label">Role Name</label>
                 <div class="input-wrap">
                     <input formControlName="roleName" class="form-control">
                 </div>
@@ -34,7 +34,7 @@
                 <ul class="list-b">
                   <li *ngFor="let access of accessibilities">
                       <label class="control control--checkbox">{{access.accessibility.name}}
-                        <input type="checkbox" (change)="accessbilityChange($event, access)"/>
+                        <input type="checkbox" [checked]="access.checked" (change)="accessbilityChange($event, access)"/>
                         <div class="control__indicator"></div>
                       </label>
                   </li>
@@ -55,14 +55,13 @@
                         <td class="td">{{role.module.name}}</td>
                         <td class="td">{{role.accessibility.accessibility.name}}</td>
                         <td class="td-icos">
-                          <i class="fa fa-trash"></i>
-                          <i class="fa fa-edit"></i>
+                          <i (click)="remove(role.accessibility.accessibility)" class="fa fa-trash"></i>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
-            <button (click)="onClickAddPremium(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> ADD</button>
+            <button (click)="onClickAddPremium(roleFormGroup.valid, roleFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> ADD</button>
         </form>
     </div>
 </section>

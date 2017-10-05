@@ -12,7 +12,7 @@
                 <i class="fa fa-plus-circle" aria-hidden="true"></i> NEW ROLE
             </div>
         </div>
-        <form class="grey-bg" [formGroup]="roleFormGroup" novalidate>
+        <!-- <form class="grey-bg" [formGroup]="roleFormGroup" novalidate>
             <div class="frm-item-wrap">
                 <label class="label">Role Name</label>
                 <div class="input-wrap">
@@ -23,44 +23,21 @@
                 </small>
             </div>
             <button (click)="onClickAddPremium(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> ADD</button>
-        </form>
+        </form> -->
         
         <table class="table">
             <thead class="thead">
                 <tr class="tr">
+                    <th class="th">Name</th>
                     <th class="th">Module</th>
                     <th class="th">Accessibility</th>
                     <th class="th"></th>
                 </tr>
             </thead>
             <tbody class="tbody">
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
-                    <td class="td-icos">
-                        <i class="fa fa-trash"></i>
-                        <i class="fa fa-edit"></i>
-                    </td>
-                </tr>
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
-                    <td class="td-icos">
-                        <i class="fa fa-trash"></i>
-                        <i class="fa fa-edit"></i>
-                    </td>
-                </tr>
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
-                    <td class="td-icos">
-                        <i class="fa fa-trash"></i>
-                        <i class="fa fa-edit"></i>
-                    </td>
-                </tr>
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
+                <tr *ngFor="let role of roles" class="tr">
+                    <td class="td">{{role.name}}</td>
+                    <!-- <td class="td">{{role.module.name}}</td> -->
                     <td class="td-icos">
                         <i class="fa fa-trash"></i>
                         <i class="fa fa-edit"></i>
