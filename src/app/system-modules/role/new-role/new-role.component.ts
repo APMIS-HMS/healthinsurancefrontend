@@ -1,3 +1,4 @@
+import { AccessibilityModel } from './../../../models/organisation/accessibility-model';
 import { RoleService } from './../../../services/auth/role/role.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { ModuleService } from './../../../services/common/module.service';
@@ -18,6 +19,8 @@ export class NewRoleComponent implements OnInit {
   modules: any[] = [];
   selectedModule:any;
   roles:any[] = [];
+  accessibilities:AccessibilityModel[] = [];
+  
   constructor(private _fb: FormBuilder,
     private _moduleService: ModuleService,
     private _systemService: SystemModuleService,
@@ -41,7 +44,14 @@ export class NewRoleComponent implements OnInit {
   }
 
   onSelectModule(selectedModule) {
+    this.accessibilities = [];
     this.selectedModule = selectedModule;
+    this.selectedModule.accessibilities.forEach(access =>{
+      let model:AccessibilityModel =  <AccessibilityModel>{};
+      model.accessibility = access;
+      model.checked = false;
+      this.accessibilities.push(model);
+    })
     this.roles.forEach(item =>{})
   }
   accessbilityChange($event, access){

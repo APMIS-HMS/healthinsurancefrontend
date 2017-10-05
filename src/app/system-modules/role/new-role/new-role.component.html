@@ -32,8 +32,8 @@
 
               <div class="list-box">
                 <ul class="list-b">
-                  <li *ngFor="let access of selectedModule?.accessibilities">
-                      <label class="control control--checkbox">{{access.name}}
+                  <li *ngFor="let access of accessibilities">
+                      <label class="control control--checkbox">{{access.accessibility.name}}
                         <input type="checkbox" (change)="accessbilityChange($event, access)"/>
                         <div class="control__indicator"></div>
                       </label>
@@ -53,7 +53,7 @@
                 <tbody class="tbody">
                     <tr *ngFor="let role of roles" class="tr">
                         <td class="td">{{role.module.name}}</td>
-                        <td class="td">{{role.accessibility.name}}</td>
+                        <td class="td">{{role.accessibility.accessibility.name}}</td>
                         <td class="td-icos">
                           <i class="fa fa-trash"></i>
                           <i class="fa fa-edit"></i>
