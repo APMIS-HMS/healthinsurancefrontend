@@ -36,8 +36,12 @@
             </thead>
             <tbody class="tbody">
                 <tr *ngFor="let role of roles" class="tr">
-                    <td class="td">{{role.name}}</td>
+                    <td colspan="4" class="td">{{role.name}}</td>
+                </tr>
                     <!-- <td class="td">{{role.module.name}}</td> -->
+                <tr *ngFor="let role1 of role.accessibilities" class="tr">
+                    <td class="td">{{role1.module.name}}</td>
+                    <td class="td"></td>
                     <td class="td-icos">
                         <i class="fa fa-trash"></i>
                         <i class="fa fa-edit"></i>
