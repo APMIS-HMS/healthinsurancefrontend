@@ -30,6 +30,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 path: 'beneficiary',
                 loadChildren: './beneficiary/beneficiary.module#BeneficiaryModule'
             },
+            {
+                path: 'employer',
+                loadChildren: './employer/employer.module#EmployerModule'
+            },
             { path: 'access', component: AccessManagementComponent }
         ]
     }
