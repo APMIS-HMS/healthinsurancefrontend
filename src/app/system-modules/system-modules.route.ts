@@ -30,6 +30,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 path: 'beneficiary',
                 loadChildren: './beneficiary/beneficiary.module#BeneficiaryModule'
             },
+            {
+                path: 'hia',
+                loadChildren: './hia/hia.module#HiaModule'
+            },
             { path: 'access', component: AccessManagementComponent }
         ]
     }
