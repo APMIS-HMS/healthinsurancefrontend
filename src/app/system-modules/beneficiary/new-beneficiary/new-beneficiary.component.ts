@@ -73,10 +73,6 @@ export class NewBeneficiaryComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('New Beneficiary');
     this._headerEventEmitter.setMinorRouteUrl('');
 
-    // this.getCountries();
-    // this.getTitles();
-    // this.getGenders();
-    // this.getMaritalStatus();
     // this.getAllProviders();
     // this.getAllHias();
 
