@@ -6,7 +6,7 @@ import { SystemModuleService } from './../../../services/common/system-module.se
 import { Facility, CareProvider, Provider, BankDetail, Address, HIA, Contact } from './../../../models/index';
 import { 
   FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
-  ContactPositionService, FacilityService, HiaPositionService, OwnershipService
+  ContactPositionService, FacilityService
 } from './../../../services/index';
 import { GRADES, HEFAMAA_STATUSES } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
@@ -47,11 +47,9 @@ export class NewProviderComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _toastr: ToastsManager,
-    private _positionService: HiaPositionService,
     private _countryService: CountryService,
     //private _facilityTypeService: FacilityTypeService,
     private _headerEventEmitter: HeaderEventEmitterService,
-    private _ownershipService: OwnershipService,
     private _userTypeService: UserTypeService,
     private _contactPositionService: ContactPositionService,
     private _facilityService: FacilityService,

@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { providerRoutes } from './provider.route';
 import {
     FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
-    ContactPositionService, FacilityService, HiaPositionService, OwnershipService
+    ContactPositionService, FacilityService
 } from '../../services/index';
 import { ProviderComponent } from './provider.component';
 import { ListProviderComponent } from './list-provider/list-provider.component';
@@ -21,6 +21,6 @@ import { ProviderDetailsComponent } from './provider-details/provider-details.co
     ],
     declarations: [ProviderComponent, ListProviderComponent, NewProviderComponent, ProviderDetailsComponent],
     providers: [FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
-        ContactPositionService, FacilityService, HiaPositionService, OwnershipService]
+        ContactPositionService, FacilityService]
 })
 export class ProviderModule { }
