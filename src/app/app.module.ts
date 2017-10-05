@@ -20,6 +20,7 @@ import { AppComponent } from './app.component';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { FacilityService } from './services/common/facility.service';
 import { PersonService } from './services/person/person.service';
+import { MyDatePickerModule } from 'mydatepicker';
 @NgModule({
 	declarations: [
 		AppComponent
@@ -33,6 +34,7 @@ import { PersonService } from './services/person/person.service';
 		HttpModule,
 		appRouter,
 		CoolStorageModule,
+		MyDatePickerModule,
 		LoadingBarModule.forRoot(),
 	],
 	providers: [SocketService, RestService, SystemModuleService, HeaderEventEmitterService, PremiumTypeService,

@@ -1,3 +1,4 @@
+import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { UploadService } from './../../../services/common/upload.service';
 import { Router } from '@angular/router';
 import { SystemModuleService } from './../../../services/common/system-module.service';
@@ -43,6 +44,17 @@ export class NewPlatformComponent implements OnInit {
   selectedUserType: any;
   selectedCountry: any;
   canAddImage = true;
+
+  public myDatePickerOptions: IMyDpOptions = {
+    // other options...
+    dateFormat: 'dd-mmm-yyyy',
+  };
+
+  public today: IMyDate = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    day: new Date().getDate()
+  }
 
   constructor(
     private _fb: FormBuilder,
@@ -360,5 +372,21 @@ export class NewPlatformComponent implements OnInit {
     }
   }
 
-
+  setDate(): void {
+    // Set today date using the patchValue function
+    let date = new Date();
+    this.platformFormGroup.patchValue({
+      registrationDate: {
+        date: {
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          day: date.getDate()
+        }
+      }
+    });
+  }
+  clearDate(): void {
+    // Clear the date using the patchValue function
+    this.platformFormGroup.patchValue({ registrationDate: null });
+  }
 }
