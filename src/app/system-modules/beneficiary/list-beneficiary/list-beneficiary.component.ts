@@ -26,6 +26,7 @@ export class ListBeneficiaryComponent implements OnInit {
   statusControl = new FormControl('All');
   previousUrl: string = '';
   beneficiaries: any = <any>[];
+  loading: Boolean = true;
 
   constructor(
     private _router: Router,

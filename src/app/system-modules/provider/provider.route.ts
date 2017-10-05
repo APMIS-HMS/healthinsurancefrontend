@@ -8,9 +8,9 @@ import { ProviderDetailsComponent } from './provider-details/provider-details.co
 const PROVIDER_ROUTES: Routes = [
     {
         path: '', component: ProviderComponent, children: [
-            { path: '', redirectTo: 'roles', pathMatch: 'full' },
+            { path: '', redirectTo: 'providers', pathMatch: 'full' },
             { path: 'providers', component: ListProviderComponent },
-            { path: 'provider/provider-id', component: ProviderDetailsComponent },
+            { path: 'providers/provider-id', component: ProviderDetailsComponent },
             { path: 'new', component: NewProviderComponent },
         ]
     }
