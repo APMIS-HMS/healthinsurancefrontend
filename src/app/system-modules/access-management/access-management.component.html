@@ -18,7 +18,7 @@
                 <div class="input-wrap">
                     <select formControlName="module" class="form-control">
                         <option  value="" selected>All</option>
-                        <option *ngFor="let module of modules"  value="{{module._id}}">{{module.name}}</option>
+                        <option *ngFor="let module of modules"  [ngValue]="module">{{module.name}}</option>
                     </select>
                 </div>
                 <small class="alert-label" [hidden]="accessFormGroup.controls.module.valid || accessFormGroup.controls.module.pristine">
@@ -34,45 +34,23 @@
                     This is a required field.
                 </small>
             </div>
-            <button [disabled]="!accessFormGroup.valid || addAccessBtnText" (click)="onClickAddAccess(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue" [innerHtml]="addAccessBtnText"></button>
+            <button [disabled]="!accessFormGroup.valid || disableAddAccessBtn" (click)="onClickAddAccess(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue" [innerHtml]="addAccessBtnText"></button>
         </form>
 
         <table class="table">
             <thead class="thead">
                 <tr class="tr">
+                    <th class="th">No</th>
                     <th class="th">Module</th>
                     <th class="th">Accessibility</th>
                     <th class="th"></th>
                 </tr>
             </thead>
             <tbody class="tbody">
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
-                    <td class="td-icos">
-                        <i class="fa fa-trash"></i>
-                        <i class="fa fa-edit"></i>
-                    </td>
-                </tr>
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
-                    <td class="td-icos">
-                        <i class="fa fa-trash"></i>
-                        <i class="fa fa-edit"></i>
-                    </td>
-                </tr>
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
-                    <td class="td-icos">
-                        <i class="fa fa-trash"></i>
-                        <i class="fa fa-edit"></i>
-                    </td>
-                </tr>
-                <tr class="tr">
-                    <td class="td">jhrb</td>
-                    <td class="td">brbr</td>
+                <tr class="tr" *ngFor="let access in accesses; let i - index" ;>
+                    <td class="td">{{ i+ 1 }}</td>
+                    <td class="td">{{ access.module?.name }}</td>
+                    <td class="td">{{ access.module }}</td>
                     <td class="td-icos">
                         <i class="fa fa-trash"></i>
                         <i class="fa fa-edit"></i>
