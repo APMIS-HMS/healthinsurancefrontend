@@ -11,6 +11,10 @@ import { Person } from '../../models/index';
 import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
+const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
+const NUMERIC_REGEX = /^[0-9]+$/;
 @Component({
 	selector: 'app-signup',
 	templateUrl: './signup.component.html',
@@ -35,8 +39,8 @@ export class SignupComponent implements OnInit {
 		this.signupFormGroup = this._fb.group({
 			firstName: ['', [<any>Validators.required]],
 			lastName: ['', [<any>Validators.required]],
-			phoneNumber: ['', [<any>Validators.required]],
-			email: ['', [<any>Validators.required]],
+			phoneNumber: ['', [<any>Validators.pattern(PHONE_REGEX)]],
+			email: ['', [<any>Validators.pattern(EMAIL_REGEX)]],
 			mothersMaidenName: ['', [<any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
