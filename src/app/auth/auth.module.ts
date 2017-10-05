@@ -5,7 +5,7 @@ import { authModulesRoutes } from './auth.route';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AuthService } from './services/auth.service';
-import { PersonService } from '../services/index';
+import { PersonService } from '../services/person/person.service';
 
 
 @NgModule({

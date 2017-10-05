@@ -15,12 +15,11 @@ import { SystemModuleService } from './services/common/system-module.service';
 import { UserTypeService } from './services/common/user-type.service';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { SocketService, RestService } from './feathers/feathers.service';
-import * as SetupService from './services/api-services/index';
-
 import { appRouter } from './app.route';
 import { AppComponent } from './app.component';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { FacilityService } from './services/common/facility.service';
+import { PersonService } from './services/person/person.service';
 @NgModule({
 	declarations: [
 		AppComponent
@@ -36,14 +35,8 @@ import { FacilityService } from './services/common/facility.service';
 		CoolStorageModule,
 		LoadingBarModule.forRoot(),
 	],
-	providers: [SocketService, RestService,
-		SetupService.CountriesService, SetupService.TitleService,
-		SetupService.ProfessionService, SetupService.PersonService, SetupService.RelationshipService,
-		SetupService.MaritalStatusService, SystemModuleService,
-		SetupService.HiaService, SetupService.HiaNameService, SetupService.HiaProgramService,
-		SetupService.HiaPlanService, SetupService.HiaPositionService, SetupService.OwnershipService,
-		SetupService.CorporateFacilityService, SetupService.IndustryTypesService, HeaderEventEmitterService, PremiumTypeService,
-		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService],
+	providers: [SocketService, RestService, SystemModuleService, HeaderEventEmitterService, PremiumTypeService,
+		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService],
 	bootstrap: [AppComponent]
 })
 

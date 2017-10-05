@@ -2,9 +2,8 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
-  FacilityService, IndustryService, CountryService, BankService, ContactPositionService, HiaPositionService,
-  UserTypeService, OwnershipService, SystemModuleService, CorporateFacilityService, HiaProgramService,
-  IndustryTypesService
+  FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
+  UserTypeService, SystemModuleService,
 } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -42,9 +41,7 @@ export class NewEmployerComponent implements OnInit {
     private _fb: FormBuilder,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
-    private _corporateService: CorporateFacilityService,
     private _industryService: IndustryService,
-    private _ownershipService: OwnershipService,
     private _userTypeService: UserTypeService,
     private _contactPositionService: ContactPositionService,
     private _facilityService: FacilityService,
