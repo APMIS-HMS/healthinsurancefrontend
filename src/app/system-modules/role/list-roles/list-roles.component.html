@@ -31,17 +31,16 @@
                     <th class="th">Name</th>
                     <th class="th">Module</th>
                     <th class="th">Accessibility</th>
-                    <th class="th"></th>
                 </tr>
             </thead>
             <tbody class="tbody">
                 <tr *ngFor="let role of roles" class="tr">
-                    <td colspan="4" class="td">{{role.name}}</td>
-                    <td *ngFor="let inner of role.accessibilities" colspan="4" class="td">
-                        <div class="td-row">
-                            <div class="td-data">{{inner.module.name}}</div>
-                            <div class="td-data">{{inner.accessibility.name}}</div>
-                        </div>
+                    <td class="td">{{role.name}}</td>
+                    <td class="td">
+                        <div *ngFor="let inner of role.accessibilities" class="td-data">{{inner.module.name}}</div>
+                    </td>
+                    <td class="td">
+                        <div *ngFor="let inner of role.accessibilities" class="td-data">{{inner.accessibility.name}}</div>
                     </td>
                 </tr>
                 <!-- <td class="td">{{role.module.name}}</td> -->
