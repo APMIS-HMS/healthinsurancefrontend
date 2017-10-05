@@ -36,5 +36,6 @@ export class MainMenuComponent implements OnInit {
   signOut() {
     this._authService.checkAuth();
     this._router.navigate(['/auth']);
+    this.close_onClick();
   }
 }
