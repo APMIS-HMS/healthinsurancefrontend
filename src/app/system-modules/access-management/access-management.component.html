@@ -47,10 +47,10 @@
                 </tr>
             </thead>
             <tbody class="tbody">
-                <tr class="tr" *ngFor="let access in accesses; let i - index" ;>
+                <tr class="tr" *ngFor="let access of selectedModule?.accessibilities; let i = index">
                     <td class="td">{{ i+ 1 }}</td>
-                    <td class="td">{{ access.module?.name }}</td>
-                    <td class="td">{{ access.module }}</td>
+                    <td class="td">{{ selectedModule?.name }}</td>
+                    <td class="td">{{ access.name }}</td>
                     <td class="td-icos">
                         <i class="fa fa-trash"></i>
                         <i class="fa fa-edit"></i>

@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -13,14 +14,17 @@ export class AccessManagementComponent implements OnInit {
   listsearchControl = new FormControl();
   modules: any = <any>[];
   accesses: any = <any>[];
+  moduleAccesses: any[] = [];
   disableAddAccessBtn: Boolean = false;
   addAccessBtnText: String = '<i class="fa fa-plus"></i> ADD';
+  selectedModule: any;
 
   constructor(
     private _fb: FormBuilder,
     private _roleService: RoleService,
     private _toastr: ToastsManager,
-    private _moduleService: ModuleService
+    private _moduleService: ModuleService,
+    private _systemService: SystemModuleService
   ) { }
 
   ngOnInit() {
@@ -32,34 +36,59 @@ export class AccessManagementComponent implements OnInit {
       accessibility: ['', [<any>Validators.required]]
     });
 
+    this.accessFormGroup.controls['module'].valueChanges.subscribe(value => {
+      this.selectedModule = value;
+      this.accessFormGroup.controls['accessibility'].reset();
+    })
+
   }
 
-  onClickAddAccess(valid: Boolean, value: any) {
-    if(valid) {
-      console.log(value);
-      const accessArray = [];
-      accessArray.push(value.accessibility);
-      const access = {
-        module: value.module,
-        accessibilities: accessArray
-      };
+  // onClickAddAccess(valid: Boolean, value: any) {
+  //   if (valid) {
+  //     console.log(value);
+  //     const accessArray = [];
+  //     accessArray.push(value.accessibility);
+  //     const access = {
+  //       module: value.module,
+  //       accessibilities: accessArray
+  //     };
 
-      this._roleService.create(access).then(res => {
+  //     this._roleService.create(access).then(res => {
+  //       console.log(res);
+  //     });
+  //   } else {
+  //     this._toastr.error('Some fields are empty', 'Error!');
+  //   }
+  // }
+
+  onClickAddAccess(valid: Boolean, value: any) {
+    if (valid) {
+      console.log(value);
+      this._systemService.on();
+      if (this.selectedModule.accessibilities === undefined) {
+        this.selectedModule.accessibilities = [];
+      }
+      this.selectedModule.accessibilities.push({ name: value.accessibility });
+      console.log(this.selectedModule)
+      this._moduleService.update(this.selectedModule).then(res => {
         console.log(res);
-      });
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      })
     } else {
       this._toastr.error('Some fields are empty', 'Error!');
     }
   }
 
   private _getModules() {
-    this._moduleService.find({}).then((res: any) => {
+    this._moduleService.find({ query: { $limit: 100, $sort: 'name' } }).then((res: any) => {
       this.modules = res.data;
     }).catch(err => console.log(err));
   }
-  
+
   private _getRoles() {
-    this._roleService.findAll().then((res: any) => {
+    this._roleService.find({}).then((res: any) => {
       this.accesses = res.data;
     }).catch(err => console.log(err));
   }

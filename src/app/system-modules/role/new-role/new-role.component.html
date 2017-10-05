@@ -14,7 +14,7 @@
         </div>
         <form class="grey-bg" [formGroup]="roleFormGroup" novalidate>
             <div class="frm-item-wrap">
-                <label class="label">Role Name</label>
+                <label class="label">Role Name</label>{{accessibilities?.length}}
                 <div class="input-wrap">
                     <input formControlName="roleName" class="form-control">
                 </div>
@@ -29,11 +29,12 @@
                   <li (click)="onSelectModule(module)" *ngFor="let module of modules">{{module.name}}</li>
                 </ul>
               </div>
+
               <div class="list-box">
                 <ul class="list-b">
-                  <li>
-                      <label class="control control--checkbox">First checkbox
-                        <input type="checkbox" checked="checked"/>
+                  <li *ngFor="let access of selectedModule?.accessibilities">
+                      <label class="control control--checkbox">{{access.name}}
+                        <input type="checkbox" (change)="accessbilityChange($event, access)"/>
                         <div class="control__indicator"></div>
                       </label>
                   </li>
@@ -50,33 +51,9 @@
                     </tr>
                 </thead>
                 <tbody class="tbody">
-                    <tr class="tr">
-                        <td class="td">jhrb</td>
-                        <td class="td">brbr</td>
-                        <td class="td-icos">
-                          <i class="fa fa-trash"></i>
-                          <i class="fa fa-edit"></i>
-                        </td>
-                    </tr>
-                    <tr class="tr">
-                        <td class="td">jhrb</td>
-                        <td class="td">brbr</td>
-                        <td class="td-icos">
-                          <i class="fa fa-trash"></i>
-                          <i class="fa fa-edit"></i>
-                        </td>
-                    </tr>
-                    <tr class="tr">
-                        <td class="td">jhrb</td>
-                        <td class="td">brbr</td>
-                        <td class="td-icos">
-                          <i class="fa fa-trash"></i>
-                          <i class="fa fa-edit"></i>
-                        </td>
-                    </tr>
-                    <tr class="tr">
-                        <td class="td">jhrb</td>
-                        <td class="td">brbr</td>
+                    <tr *ngFor="let role of roles" class="tr">
+                        <td class="td">{{role.module.name}}</td>
+                        <td class="td">{{role.accessibility.name}}</td>
                         <td class="td-icos">
                           <i class="fa fa-trash"></i>
                           <i class="fa fa-edit"></i>

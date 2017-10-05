@@ -16,7 +16,8 @@ export class NewRoleComponent implements OnInit {
   listsearchControl = new FormControl();
 
   modules: any[] = [];
-  accessibiliies: any[] = [];
+  selectedModule:any;
+  roles:any[] = [];
   constructor(private _fb: FormBuilder,
     private _moduleService: ModuleService,
     private _systemService: SystemModuleService,
@@ -39,7 +40,13 @@ export class NewRoleComponent implements OnInit {
     })
   }
 
-  onSelectModule(module) {
-    this.accessibiliies = module.accessibilities;
+  onSelectModule(selectedModule) {
+    this.selectedModule = selectedModule;
+    this.roles.forEach(item =>{})
+  }
+  accessbilityChange($event, access){
+    console.log($event.target.checked);
+    console.log(access)
+    this.roles.push({module:this.selectedModule, accessibility: access});
   }
 }

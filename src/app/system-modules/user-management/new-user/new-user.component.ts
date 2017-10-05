@@ -125,8 +125,10 @@ export class NewUserComponent implements OnInit {
       this._systemService.off();
       if (payload.data.length > 0) {
         payload.data.forEach((item, i) => {
-          if (item.name === 'Platform Owner' && this.auth.user.userType === undefined) {
-            this.userTypes.push(item);
+          if (item.name === 'Platform Owner') {
+            if(this.auth.user.userType === undefined){
+              this.userTypes.push(item);
+            }
           } else {
             this.userTypes.push(item);
           }
