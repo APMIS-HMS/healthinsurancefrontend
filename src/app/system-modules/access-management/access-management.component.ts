@@ -43,23 +43,6 @@ export class AccessManagementComponent implements OnInit {
 
   }
 
-  // onClickAddAccess(valid: Boolean, value: any) {
-  //   if (valid) {
-  //     console.log(value);
-  //     const accessArray = [];
-  //     accessArray.push(value.accessibility);
-  //     const access = {
-  //       module: value.module,
-  //       accessibilities: accessArray
-  //     };
-
-  //     this._roleService.create(access).then(res => {
-  //       console.log(res);
-  //     });
-  //   } else {
-  //     this._toastr.error('Some fields are empty', 'Error!');
-  //   }
-  // }
 
   onClickAddAccess(valid: Boolean, value: any) {
     if (valid) {
