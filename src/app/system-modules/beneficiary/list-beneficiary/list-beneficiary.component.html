@@ -72,7 +72,7 @@
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let beneficiary of beneficiaries; let i = index;" routerLink="/modules/plan/plans/87788" class="tr">
+            <tr *ngFor="let beneficiary of beneficiaries; let i = index;" routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}" class="tr">
                 <td class="td">{{ i+1 }}</td>
                 <td class="td">{{beneficiary?.lastName}} {{beneficiary?.firstName}} {{beneficiary?.otherNames}}</td>
                 <td class="td">{{beneficiary.gender}}</td>
@@ -85,7 +85,7 @@
                         {{ beneficiary.isTokenVerified ? 'Active': 'Inactive' }}
                     </span>
                 </td>
-                <td routerLink="/modules/platform/platforms/{{beneficiary._id}}"><i class="fa fa-chevron-right"></i></td>
+                <td routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}"><i class="fa fa-chevron-right"></i></td>
             </tr>
         </tbody>
     </table>
