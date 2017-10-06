@@ -1,85 +1,84 @@
+<div class="list-search-wrap">
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
 
-  <div class="list-search-wrap">
-      <div class="search-wrap">
-          <label class="label-xx">Search:</label>
-          <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
-          <i class="fa fa-search" aria-hidden="true"></i>
-      </div>
+    <div class="btn btn-medium btn-blue" routerLink="/modules/hia/new">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD HIA
+    </div>
+</div>
 
-      <div class="btn btn-medium btn-blue" routerLink="/modules/hia/new">
-          <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD HIIA
-      </div>
-  </div>
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
 
-  <div class="shadow-RB">
-      <div class="list-filter-wrap">
-          <div class="label-xx">Filters:</div>
-
-          <div class="input-wrap">
-              <label>Type</label>
-              <select [formControl]="filterTypeControl" class="form-control">
+        <div class="input-wrap">
+            <label>Type</label>
+            <select [formControl]="filterTypeControl" class="form-control">
                 <option value="All" selected>All</option>
               </select>
-          </div>
+        </div>
 
-          <div class="input-wrap">
-              <label>Created By</label>
-              <select [formControl]="createdByControl">
+        <div class="input-wrap">
+            <label>Created By</label>
+            <select [formControl]="createdByControl">
                 <option>All</option>
               </select>
-          </div>
+        </div>
 
-          <div class="input-wrap">
-              <label>Utilized By</label>
-              <select [formControl]="utilizedByControl">
+        <div class="input-wrap">
+            <label>Utilized By</label>
+            <select [formControl]="utilizedByControl">
                 <option>All</option>
               </select>
-          </div>
+        </div>
 
-          <div class="input-wrap">
-              <label>Status</label>
-              <select [formControl]="statusControl">
+        <div class="input-wrap">
+            <label>Status</label>
+            <select [formControl]="statusControl">
                 <option selected value="All">All</option>
                 <option value="true">Active</option>
                 <option value="false">Inactive</option>
               </select>
-          </div>
+        </div>
 
-          <div class="btn btn-medium btn-blue-outline">RESET</div>
-      </div>
+        <div class="btn btn-medium btn-blue-outline">RESET</div>
+    </div>
 
-      <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-          <thead class="thead">
-              <tr class="tr">
-                  <th class="th">No</th>
-                  <th class="th">Name</th>
-                  <th class="th">Type</th>
-                  <th class="th">Contact Person</th>
-                  <th class="th">Phone Number</th>
-                  <th class="th">Grade</th>
-                  <th class="th">Status</th>
-                  <th class="th"></th>
-              </tr>
-          </thead>
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">No</th>
+                <th class="th">Name</th>
+                <th class="th">Type</th>
+                <th class="th">Contact Person</th>
+                <th class="th">Phone Number</th>
+                <th class="th">Grade</th>
+                <th class="th">Status</th>
+                <th class="th"></th>
+            </tr>
+        </thead>
 
-          <tbody class="tbody">
-              <tr routerLink="/modules/hia/hias/87788" class="tr">
-                  <td class="td">ihuiui</td>
-                  <td class="td">iuhiun</td>
-                  <td class="td">iuhi</td>
-                  <td class="td">jhgjb</td>
-                  <td class="td">uihiin</td>
-                  <td class="td">uygub</td>
-                  <td class="td">
-                      <span class="tbl-status-active"> Active </span>
-                  </td>
-                  <td><i class="fa fa-chevron-right"></i></td>
-              </tr>
-          </tbody>
-      </table>
+        <tbody class="tbody">
+            <tr routerLink="/modules/hia/hias/87788" class="tr">
+                <td class="td">ihuiui</td>
+                <td class="td">iuhiun</td>
+                <td class="td">iuhi</td>
+                <td class="td">jhgjb</td>
+                <td class="td">uihiin</td>
+                <td class="td">uygub</td>
+                <td class="td">
+                    <span class="tbl-status-active"> Active </span>
+                </td>
+                <td><i class="fa fa-chevron-right"></i></td>
+            </tr>
+        </tbody>
+    </table>
 
-      <div class="list-buttom">
-          <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-          <div class="btn btn-medium btn-yellow">Load More</div>
-      </div>
-  </div>
+    <div class="list-buttom">
+        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+        <div class="btn btn-medium btn-yellow">Load More</div>
+    </div>
+</div>

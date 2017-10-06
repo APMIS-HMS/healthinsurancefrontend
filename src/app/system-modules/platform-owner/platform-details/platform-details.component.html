@@ -1,3 +1,102 @@
-<p>
-  platform-details works!
-</p>
+<div class="in-content-wrap">
+    <div class="back-btn">
+        <i class="fa fa-chevron-left"></i> BACK TO PLATFORM
+    </div>
+
+    <ul class="inpage-tabs">
+        <li (click)="tabClick('platform')" [class.tab-active]="tabPlatform">Platform</li>
+        <li (click)="tabClick('hia')" [class.tab-active]="tabHia">HIAs</li>
+        <li (click)="tabClick('provider')" [class.tab-active]="tabProvider">Providers</li>
+        <li (click)="tabClick('employer')" [class.tab-active]="tabEmployer">Employers</li>
+        <li (click)="tabClick('beneficiary')" [class.tab-active]="tabBeneficiary">Beneficiaries</li>
+    </ul>
+
+    <div>
+        <div *ngIf="tabPlatform" class="tab-pane fade show active shadow-RB">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div class="tab-logo">
+                        <img src="../../../../assets/img/lagos-state-logo.jpg">
+                    </div>
+                    <div>Lagos State Health Plan</div>
+                    <div>Type: Formal Sector</div>
+                    <div>Status: <span class="status">Active</span></div>
+                </div>
+
+                <div class="bar-icos"></div>
+            </div>
+
+            <section class="tab-cont content">
+                <div class="list-search-wrap">
+                    <div class="search-wrap">
+                        <label class="label-xx">Search:</label>
+                        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name of Health Insurance Agent">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PLAN
+                    </div>
+                </div>
+                <section>
+                    <div class="table-responsive">
+                        <table class="table" cellspacing="0">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">Health Insurance Agent</th>
+                                    <th class="th">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody">
+                                <tr class="tr">
+                                    <td class="td">Healthcare Security Limited</td>
+                                    <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                                </tr>
+                                <tr class="tr">
+                                    <td class="td">Multi Shield Nigeria Limited</td>
+                                    <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="list-buttom">
+                        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+                        <div class="btn btn-medium btn-yellow">Load More</div>
+                    </div>
+                </section>
+            </section>
+        </div>
+        <div *ngIf="tabHia" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Health Insurance Agents</div>
+                </div>
+            </div>
+            <app-list-hia class="tab-content"></app-list-hia>
+        </div>
+        <div *ngIf="tabProvider" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Health Care Providers</div>
+                </div>
+            </div>
+            <app-list-provider class="tab-content"></app-list-provider>
+        </div>
+        <div *ngIf="tabEmployer" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Employers</div>
+                </div>
+            </div>
+            <app-list-employer class="tab-content"></app-list-employer>
+        </div>
+        <div *ngIf="tabBeneficiary" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Beneficiaries</div>
+                </div>
+            </div>
+            <app-list-beneficiary class="tab-content"></app-list-beneficiary>
+        </div>
+    </div>
+</div>

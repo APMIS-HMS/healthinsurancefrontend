@@ -17,6 +17,10 @@ import { PlatformOwnerComponent } from './platform-owner.component';
 import { ListPlatformComponent } from './list-platform/list-platform.component';
 import { NewPlatformComponent } from './new-platform/new-platform.component';
 import { PlatformDetailsComponent } from './platform-details/platform-details.component';
+import { ListHiaComponent } from '../hia/list-hia/list-hia.component';
+import { ListProviderComponent } from '../provider/list-provider/list-provider.component';
+import { ListEmployerComponent } from '../employer/list-employer/list-employer.component';
+import { ListBeneficiaryComponent } from '../beneficiary/list-beneficiary/list-beneficiary.component';
 
 @NgModule({
     imports: [
@@ -26,7 +30,8 @@ import { PlatformDetailsComponent } from './platform-details/platform-details.co
         platformRoutes,
         MyDatePickerModule
     ],
-    declarations: [PlatformOwnerComponent, ListPlatformComponent, NewPlatformComponent, PlatformDetailsComponent],
+    declarations: [PlatformOwnerComponent, ListPlatformComponent, NewPlatformComponent,
+        PlatformDetailsComponent, ListHiaComponent, ListProviderComponent, ListEmployerComponent, ListBeneficiaryComponent],
     providers: [ContactPositionService, PlatformOwnerService, CountryService, BankService ]
 })
 export class PlatformOwnerModule { }

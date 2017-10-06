@@ -4,7 +4,7 @@
         <div class="nut-tab-topSect-wrap">
             <div></div>
 
-            <div class="btn btn-medium btn-grey-outline" routerLink="/modules/platform/platforms">
+            <div class="btn btn-medium btn-grey-outline" routerLink="/modules/employer/employers">
                 <i class="fa fa-times"></i> CANCEL
             </div>
         </div>
@@ -15,7 +15,7 @@
                 <div class="input-wrap">
                     <input type="text" formControlName="employerName" class="form-control">
                 </div>
-                <small class="alert-label" [hidden]="employerFormGroup.controls.providerName.valid || employerFormGroup.controls.providerName.pristine">
+                <small class="alert-label" [hidden]="employerFormGroup.controls.employerName.valid || employerFormGroup.controls.employerName.pristine">
                     This is a required field (minimum 3 and max of 50 characters).
                 </small>
             </div>
@@ -245,7 +245,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-medium btn-blue" (click)="onClickSaveEmployer(employerFormGroup, employerFormGroup.valid);" [innerHtml]="saveBtn"></button>
+                <button class="btn btn-medium btn-blue" (click)="onClickSaveEmployer(employerFormGroup.value, employerFormGroup.valid);" [innerHtml]="saveBtn"></button>
             </div>
         </form>
     </section>
