@@ -10,7 +10,7 @@ const PROVIDER_ROUTES: Routes = [
         path: '', component: ProviderComponent, children: [
             { path: '', redirectTo: 'providers', pathMatch: 'full' },
             { path: 'providers', component: ListProviderComponent },
-            { path: 'providers/provider-id', component: ProviderDetailsComponent },
+            { path: 'providers/:provider-id', component: ProviderDetailsComponent },
             { path: 'new', component: NewProviderComponent },
         ]
     }

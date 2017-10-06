@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared-modules/shared.module';
 
 import { hiaRoutes } from './hia.route';
 import { HiaComponent } from './hia.component';
@@ -11,9 +10,7 @@ import { TabTopBarComponent } from './hia-details/tab-top-bar/tab-top-bar.compon
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
+        SharedModule,
         hiaRoutes
     ],
     declarations: [HiaComponent, NewHiaComponent, ListHiaComponent, HiaDetailsComponent, TabTopBarComponent],
