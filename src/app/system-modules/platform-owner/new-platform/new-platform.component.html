@@ -59,7 +59,7 @@
             <div class="frm-item-wrap">
                 <label class="label">State</label>
                 <div class="input-wrap">
-                    <select formControlName="state" class="form-control">
+                    <select formControlName="state" class="form-control"  [compareWith]='compare'>
                         <option value="" selected>Select State</option>
                         <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
                     </select>
@@ -71,7 +71,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Local Government</label>
                 <div class="input-wrap">
-                    <select formControlName="lga" class="form-control">
+                    <select formControlName="lga" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Local Government</option>
                         <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
                     </select>
@@ -83,7 +83,7 @@
             <div class="frm-item-wrap">
                 <label class="label">City</label>
                 <div class="input-wrap">
-                    <select formControlName="city" class="form-control">
+                    <select formControlName="city" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select City</option>
                         <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
                     </select>
@@ -104,7 +104,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Bank</label>
                 <div class="input-wrap">
-                    <select formControlName="bank" class="form-control">
+                    <select formControlName="bank" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
                     </select>
@@ -152,7 +152,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's position</label>
                 <div class="input-wrap">
-                    <select formControlName="bc_position" class="form-control">
+                    <select formControlName="bc_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                     </select>
@@ -200,7 +200,7 @@
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Position</label>
                 <div class="input-wrap">
-                    <select formControlName="it_position" class="form-control">
+                    <select formControlName="it_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                     </select>
@@ -237,9 +237,9 @@
                       </small>
             </div> -->
             <div class="frm-item-wrap">
-                <label class="label">Date of Birth </label>
+                <label class="label">Registration Date </label>
                 <div style="width:300px;" class="input-wrap">
-                    <my-date-picker name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
+                    <my-date-picker  name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
                         This is a required field.
                     </small>

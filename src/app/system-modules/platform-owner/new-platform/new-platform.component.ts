@@ -1,4 +1,4 @@
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import { IMyDpOptions, IMyDate, IMyDateModel } from 'mydatepicker';
 import { UploadService } from './../../../services/common/upload.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SystemModuleService } from './../../../services/common/system-module.service';
@@ -50,11 +50,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     dateFormat: 'dd-mmm-yyyy',
   };
 
-  public today: IMyDate = {
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1,
-    day: new Date().getDate()
-  }
+  public today: IMyDate;
 
   constructor(
     private _fb: FormBuilder,
@@ -94,17 +90,36 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   }
 
   _initialiseFormGroup() {
+    let date = new Date(this.selectedFacility.createdAt);
+    if (this.selectedFacility.createdAt !== undefined) {
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
+      this.today = {
+        year: year,
+        month: month,
+        day: day
+      }
+    } else {
+      this.today = {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        day: new Date().getDate()
+      }
+    }
+
+
     this.platformFormGroup = this._fb.group({
       platformName: [this.selectedFacility != null ? this.selectedFacility.name : '', [<any>Validators.required]],
       email: [this.selectedFacility != null ? this.selectedFacility.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       website: [this.selectedFacility != null ? this.selectedFacility.website : '', [<any>Validators.required, <any>Validators.pattern(WEBSITE_REGEX)]],
       address: [this.selectedFacility.address != null ? this.selectedFacility.address.street : '', [<any>Validators.required]],
       shortName: [this.selectedFacility != null ? this.selectedFacility.shortName : '', [<any>Validators.required]],
-      state: ['', [<any>Validators.required]],
-      lga: ['', [<any>Validators.required]],
-      city: ['', [<any>Validators.required]],
-      neighbourhood: [this.selectedFacility.neighbourhood != null ? this.selectedFacility.address.neighbourhood : '', [<any>Validators.required]],
-      bank: ['', [<any>Validators.required]],
+      state: [this.selectedFacility.address != null ? this.selectedFacility.address.state : '', [<any>Validators.required]],
+      lga: [this.selectedFacility.address != null ? this.selectedFacility.address.lga : '', [<any>Validators.required]],
+      city: [this.selectedFacility.address != null ? this.selectedFacility.address.city : '', [<any>Validators.required]],
+      neighbourhood: [this.selectedFacility.address != null ? this.selectedFacility.address.neighbourhood : '', [<any>Validators.required]],
+      bank: [this.selectedFacility.address != null ? this.selectedFacility.bankDetails.bank : '', [<any>Validators.required]],
       bankAccName: [this.selectedFacility.bankDetails != null ? this.selectedFacility.bankDetails.name : '', [<any>Validators.required]],
       bankAccNumber: [this.selectedFacility.bankDetails != null ? this.selectedFacility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       bc_fname: [this.selectedFacility.businessContact != null ? this.selectedFacility.businessContact.firstName : '', [<any>Validators.required]],
@@ -117,13 +132,20 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       it_position: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.position : '', [<any>Validators.required]],
       it_email: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_phone: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      registrationDate: [new Date(this.selectedFacility.createdAt), [<any>Validators.required]]
+      registrationDate: [this.selectedFacility.createdAt != null ? this.selectedFacility.createdAt : this.today, [<any>Validators.required]]
     });
-    console.log(this.selectedFacility.createdAt)
+    console.log(this.selectedFacility);
+
+    if (this.selectedFacility.name !== undefined) {
+      this._getLgaAndCities(this.selectedFacility.address.state);
+      if(this.selectedFacility.logo !== undefined){
+        this.blah.nativeElement.src = this._uploadService.transform(this.selectedFacility.logo.thumbnail);
+      }
+    }
 
     this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
       if (value !== null) {
-        this._getLgaAndCities(this.selectedCountry._id, value);
+        this._getLgaAndCities(value, this.selectedCountry._id, );
       }
     });
   }
@@ -132,10 +154,10 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     this._systemService.on();
     this._facilityService.get(id, {}).then((payload: any) => {
       this.selectedFacility = payload;
-      console.log(this.selectedFacility)
       this._initialiseFormGroup();
       this._systemService.off();
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     })
   }
@@ -178,11 +200,10 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     })
   }
 
-  _getLgaAndCities(_id, state) {
+  _getLgaAndCities(state, _id?) {
     this._systemService.on();
     this._countriesService.find({
       query: {
-        _id: _id,
         "states.name": state.name,
         $select: { 'states.$': 1 }
 
@@ -309,8 +330,8 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   }
 
   compare(l1: any, l2: any) {
-		return l1._id === l2._id;
-	}
+    return l1._id === l2._id;
+  }
 
   save(valid, value) {
     valid = true;
@@ -402,16 +423,22 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       // })
     }
   }
+  // onDateChanged(event: IMyDateModel) {
+  //   //this.renewalDate = event.formatted;
+  //   this.platformFormGroup.patchValue({
+  //     registrationDate: this.today
+  //   })
+  // }
 
   setDate(): void {
     // Set today date using the patchValue function
-    let date = new Date();
+    // let date = new Date();
     this.platformFormGroup.patchValue({
       registrationDate: {
         date: {
-          year: date.getFullYear(),
-          month: date.getMonth() + 1,
-          day: date.getDate()
+          year: this.today.year,
+          month: this.today.month,
+          day: this.today.day
         }
       }
     });
