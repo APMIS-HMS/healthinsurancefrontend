@@ -2,6 +2,7 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SocketService, RestService } from '../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 let request = require('superagent');
 @Injectable()
 export class AuthService {
@@ -9,7 +10,7 @@ export class AuthService {
   public _changePasswordRest;
   private _rest;
   private _restLogin;
-  isLoggedIn = false;
+  public listner;
   private missionAnnouncedSource = new Subject<Object>();
   missionAnnounced$ = this.missionAnnouncedSource.asObservable();
   constructor(
@@ -24,6 +25,7 @@ export class AuthService {
     this._restLogin = _restService.getService('auth/local');
     this._socket.on('created', function (user) {
     });
+    this.listner = Observable.fromEvent(this._socket, 'patch');
   }
   announceMission(mission: Object) {
     console.log(mission)
@@ -34,6 +36,7 @@ export class AuthService {
     this._socketService.logOut();
   }
   login(query: any) {
+
     console.log(query)
     return this._socketService.loginIntoApp(query);
   }
