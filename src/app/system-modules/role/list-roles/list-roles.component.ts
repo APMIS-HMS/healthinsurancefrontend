@@ -30,6 +30,27 @@ export class ListRolesComponent implements OnInit {
     this.roleFormGroup = this._fb.group({
       roleName: ['', [<any>Validators.required]]
     });
+
+    this.listsearchControl.valueChanges
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        this._roleService.find(
+          {
+            query: {
+              $or: [
+                { name: { $regex: value, '$options': 'i' } },
+                { 'accessibilities.accessibility.name': { $regex: value, '$options': 'i' } },
+                { 'accessibilities.module.name': { $regex: value, '$options': 'i' } },
+              ]
+            }
+          })
+          .then((payload: any) => {
+            this.roles = payload.data;
+          }).catch(err => {
+
+          })
+      })
     this._getRoles();
   }
 
@@ -43,11 +64,11 @@ export class ListRolesComponent implements OnInit {
     });
   }
 
-  routeRole(role){
+  routeRole(role) {
     this._systemService.on();
-    this._router.navigate(['/modules/role/new',role._id]).then(res =>{
+    this._router.navigate(['/modules/role/new', role._id]).then(res => {
       this._systemService.off();
-    }).catch(err =>{
+    }).catch(err => {
       console.log(err);
       this._systemService.off();
     })
