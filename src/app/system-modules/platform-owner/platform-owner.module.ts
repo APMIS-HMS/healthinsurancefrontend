@@ -28,10 +28,13 @@ import { ListBeneficiaryComponent } from '../beneficiary/list-beneficiary/list-b
         FormsModule,
         ReactiveFormsModule,
         platformRoutes,
-        MyDatePickerModule
+        MyDatePickerModule,
+        // ListBeneficiaryComponent
     ],
     declarations: [PlatformOwnerComponent, ListPlatformComponent, NewPlatformComponent,
-        PlatformDetailsComponent, ListHiaComponent, ListProviderComponent, ListEmployerComponent, ListBeneficiaryComponent],
+        PlatformDetailsComponent,
+        // ListHiaComponent, ListProviderComponent, ListEmployerComponent
+    ],
     providers: [ContactPositionService, PlatformOwnerService, CountryService, BankService ]
 })
 export class PlatformOwnerModule { }

@@ -9,8 +9,8 @@ import {
 import { beneficiaryRoutes } from './beneficiary.route';
 import { BeneficiaryComponent } from '../beneficiary/beneficiary.component';
 import { NewBeneficiaryComponent } from './new-beneficiary/new-beneficiary.component';
-import { ListBeneficiaryComponent } from './list-beneficiary/list-beneficiary.component';
 import { BeneficiaryDetailsComponent } from './beneficiary-details/beneficiary-details.component';
+import { ListBeneficiaryComponent } from './list-beneficiary/list-beneficiary.component';
 
 @NgModule({
     imports: [
@@ -19,7 +19,10 @@ import { BeneficiaryDetailsComponent } from './beneficiary-details/beneficiary-d
         ReactiveFormsModule,
         beneficiaryRoutes
     ],
-    declarations: [BeneficiaryComponent, NewBeneficiaryComponent, ListBeneficiaryComponent, BeneficiaryDetailsComponent],
+    exports: [
+        ListBeneficiaryComponent
+    ],
+    declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, ListBeneficiaryComponent],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService,
     PlanTypeService, BeneficiaryService, SystemModuleService]
 })
