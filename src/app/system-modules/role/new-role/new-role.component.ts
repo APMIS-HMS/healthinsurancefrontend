@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 
 import { AccessibilityModel } from './../../../models/organisation/accessibility-model';
@@ -25,12 +25,15 @@ export class NewRoleComponent implements OnInit {
   roles: any[] = [];
   accessibilities: AccessibilityModel[] = [];
   auth: any;
+  selectedRole: any = <any>{};
+  btnText = 'ADD';
 
   constructor(private _fb: FormBuilder,
     private _moduleService: ModuleService,
     private _systemService: SystemModuleService,
     private _roleService: RoleService,
-    private _router:Router,
+    private _router: Router,
+    private _route: ActivatedRoute,
     private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
@@ -39,7 +42,27 @@ export class NewRoleComponent implements OnInit {
     this.roleFormGroup = this._fb.group({
       roleName: ['', [<any>Validators.required]]
     });
+
+    this._route.params.subscribe(param => {
+      if (param.id !== undefined) {
+        this._getRole(param.id);
+        this.btnText = 'UPDATE';
+      }
+    })
+
     this._getModules();
+  }
+
+  _getRole(id) {
+    this._roleService.get(id, {}).then((payload: any) => {
+      if (payload !== undefined) {
+        this.roleFormGroup.controls['roleName'].setValue(payload.name);
+        this.selectedRole = payload;
+        this.roles = payload.accessibilities;
+      }
+    }).catch(err => {
+
+    })
   }
 
   _getModules() {
@@ -63,9 +86,9 @@ export class NewRoleComponent implements OnInit {
     })
     this.roles.forEach(item => { })
   }
-  
+
   checkForExistence(accessibility) {
-    return this.roles.filter(x => x.accessibility.accessibility._id === accessibility._id).length > 0;
+    return this.roles.filter(x => x.accessibility._id === accessibility._id).length > 0;
   }
   accessbilityChange($event, access) {
     const checked = $event.target.checked;
@@ -74,7 +97,8 @@ export class NewRoleComponent implements OnInit {
       const index = this.roles.findIndex(x => x.accessibility.accessibility._id === access.accessibility._id);
       this.roles.splice(index, 1);
     } else if (!isExisting) {
-      this.roles.push({ module: this.selectedModule, accessibility: access });
+      console.log(access)
+      this.roles.push({ module: this.selectedModule, accessibility: access.accessibility });
     }
   }
 
@@ -89,38 +113,77 @@ export class NewRoleComponent implements OnInit {
     this.onSelectModule(this.selectedModule);
   }
 
-  onClickAddPremium(valid, value) {
+  onClickAddRole(valid, value) {
     if (valid) {
       this._systemService.on();
-      let newRole: Role = <Role>{};
-      newRole.name = value.roleName;
-      newRole.isActive = true;
-      newRole.facilityId = this.auth.user.facilityId;
-      newRole.accessibilities = [];
+      if (this.selectedRole._id === undefined) {
+        let newRole: Role = <Role>{};
+        newRole.name = value.roleName;
+        newRole.isActive = true;
+        newRole.facilityId = this.auth.user.facilityId;
+        newRole.accessibilities = [];
 
-      this.roles.forEach(item => {
-        delete item.module.accessibilities;
-        newRole.accessibilities.push({
-          accessibility: item.accessibility.accessibility,
-          module: item.module
+        this.roles.forEach(item => {
+          if (item.module.accessibilities !== undefined) {
+            delete item.module.accessibilities;
+            newRole.accessibilities.push({
+              accessibility: item.accessibility,
+              module: item.module
+            });
+          }
         });
-      });
-      this._roleService.create(newRole).then(payload => {
-        this.roleFormGroup.reset();
-        this.roles = [];
-        this.accessibilities = [];
-        this._getModules();
-        
-        this._router.navigate(['/modules/role/roles']).then(res =>{
-          this._systemService.off();
-        }).catch(error =>{
+        this._roleService.create(newRole).then(payload => {
+          this.roleFormGroup.reset();
+          this.roles = [];
+          this.accessibilities = [];
+          this._getModules();
+
+          this._router.navigate(['/modules/role/roles']).then(res => {
+            this._systemService.off();
+          }).catch(error => {
+            this._systemService.off();
+          })
+        }).catch(err => {
+          console.log(err);
           this._systemService.off();
         })
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      })
-      console.log(newRole);
+        console.log(newRole);
+      } else {
+        this.selectedRole.accessibilities = [];
+        console.log(this.roles)
+        this.roles.forEach(item => {
+          if (item.module.accessibilities === undefined) {
+            this.selectedRole.accessibilities.push({
+              accessibility: item.accessibility,
+              module: item.module
+            });
+          } else {
+            delete item.module.accessibilities;
+            this.selectedRole.accessibilities.push({
+              accessibility: item.accessibility,
+              module: item.module
+            });
+          }
+        });
+        console.log(this.roles)
+        this._roleService.update(this.selectedRole).then(payload => {
+          console.log(payload)
+          this.roleFormGroup.reset();
+          this.roles = [];
+          this.accessibilities = [];
+          this._getModules();
+
+          this._router.navigate(['/modules/role/roles']).then(res => {
+            this._systemService.off();
+          }).catch(error => {
+            this._systemService.off();
+          })
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+        })
+      }
+
     }
 
   }

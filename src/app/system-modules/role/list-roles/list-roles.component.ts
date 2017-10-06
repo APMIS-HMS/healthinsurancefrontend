@@ -43,4 +43,14 @@ export class ListRolesComponent implements OnInit {
     });
   }
 
+  routeRole(role){
+    this._systemService.on();
+    this._router.navigate(['/modules/role/new',role._id]).then(res =>{
+      this._systemService.off();
+    }).catch(err =>{
+      console.log(err);
+      this._systemService.off();
+    })
+  }
+
 }

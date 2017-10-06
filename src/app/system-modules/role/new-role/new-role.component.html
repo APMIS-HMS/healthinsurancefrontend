@@ -53,7 +53,7 @@
                 <tbody class="tbody">
                     <tr *ngFor="let role of roles" class="tr">
                         <td class="td">{{role.module.name}}</td>
-                        <td class="td">{{role.accessibility.accessibility.name}}</td>
+                        <td class="td">{{role.accessibility.name}}</td>
                         <td class="td-icos">
                           <i (click)="remove(role.accessibility.accessibility)" class="fa fa-trash"></i>
                         </td>
@@ -61,7 +61,7 @@
                 </tbody>
             </table>
 
-            <button (click)="onClickAddPremium(roleFormGroup.valid, roleFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> ADD</button>
+            <button (click)="onClickAddRole(roleFormGroup.valid, roleFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> {{btnText}}</button>
         </form>
     </div>
 </section>
