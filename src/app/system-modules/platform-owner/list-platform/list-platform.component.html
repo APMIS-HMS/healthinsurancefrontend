@@ -73,9 +73,9 @@
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let owner of owners; let i = index;" routerLink="/modules/plan/plans/87788" class="tr">
-                <td class="td">{{ i+1 }}</td>
-                <td class="td">{{owner.name}}</td>
+            <tr *ngFor="let owner of owners; let i = index;" class="tr">
+                <td (click)="navigateEditPlatform(owner)" class="td td-hover">{{ i+1 }}</td>
+                <td (click)="navigateEditPlatform(owner)" class="td td-hover">{{owner.name}}</td>
                 <td class="td">{{owner.shortName}}</td>
                 <td class="td"><a href="{{owner.website}}" target="_blank">{{owner.shortName}} website</a></td>
                 <td class="td">{{owner.email}}</td>
