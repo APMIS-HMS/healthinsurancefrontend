@@ -1,6 +1,6 @@
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { UploadService } from './../../../services/common/upload.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { CountryService } from './../../../services/common/country.service';
 import { BankService } from './../../../services/common/bank.service';
@@ -9,7 +9,7 @@ import { Address } from './../../../models/organisation/address';
 import { Facility } from './../../../models/organisation/facility';
 import { BankDetail } from './../../../models/organisation/bank-detail';
 import { Contact } from './../../../models/organisation/contact';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService } from './../../../services/common/facility.service';
@@ -28,7 +28,7 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   templateUrl: './new-platform.component.html',
   styleUrls: ['./new-platform.component.scss']
 })
-export class NewPlatformComponent implements OnInit {
+export class NewPlatformComponent implements OnInit, AfterViewInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild('blah') blah: ElementRef;
   saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
@@ -44,7 +44,7 @@ export class NewPlatformComponent implements OnInit {
   selectedUserType: any;
   selectedCountry: any;
   canAddImage = true;
-
+  selectedFacility: any = <any>{};
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
     dateFormat: 'dd-mmm-yyyy',
@@ -68,44 +68,58 @@ export class NewPlatformComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
-    private _router: Router
+    private _router: Router,
+    private _route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Platform');
     this._headerEventEmitter.setMinorRouteUrl('');
-
-    this.platformFormGroup = this._fb.group({
-      platformName: ['', [<any>Validators.required]],
-      email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      website: ['', [<any>Validators.required, <any>Validators.pattern(WEBSITE_REGEX)]],
-      address: ['', [<any>Validators.required]],
-      shortName: ['', [<any>Validators.required]],
-      state: ['', [<any>Validators.required]],
-      lga: ['', [<any>Validators.required]],
-      city: ['', [<any>Validators.required]],
-      neighbourhood: ['', [<any>Validators.required]],
-      bank: ['', [<any>Validators.required]],
-      bankAccName: ['', [<any>Validators.required]],
-      bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_fname: ['', [<any>Validators.required]],
-      bc_lname: ['', [<any>Validators.required]],
-      bc_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      bc_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_position: ['', [<any>Validators.required]],
-      it_fname: ['', [<any>Validators.required]],
-      it_lname: ['', [<any>Validators.required]],
-      it_position: ['', [<any>Validators.required]],
-      it_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      it_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      registrationDate: ['', [<any>Validators.required]]
-    });
-
-
+    this._initialiseFormGroup();
     this._getContactPositions();
     this._getUserTypes();
     this._getBanks();
     this._getCountries();
+  }
+
+  ngAfterViewInit() {
+    this._route.params.subscribe(param => {
+
+      if (param.id !== undefined) {
+        this._getPlatform(param.id);
+      } else {
+        this._initialiseFormGroup();
+      }
+    })
+  }
+
+  _initialiseFormGroup() {
+    this.platformFormGroup = this._fb.group({
+      platformName: [this.selectedFacility != null ? this.selectedFacility.name : '', [<any>Validators.required]],
+      email: [this.selectedFacility != null ? this.selectedFacility.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      website: [this.selectedFacility != null ? this.selectedFacility.website : '', [<any>Validators.required, <any>Validators.pattern(WEBSITE_REGEX)]],
+      address: [this.selectedFacility.address != null ? this.selectedFacility.address.street : '', [<any>Validators.required]],
+      shortName: [this.selectedFacility != null ? this.selectedFacility.shortName : '', [<any>Validators.required]],
+      state: ['', [<any>Validators.required]],
+      lga: ['', [<any>Validators.required]],
+      city: ['', [<any>Validators.required]],
+      neighbourhood: [this.selectedFacility.neighbourhood != null ? this.selectedFacility.address.neighbourhood : '', [<any>Validators.required]],
+      bank: ['', [<any>Validators.required]],
+      bankAccName: [this.selectedFacility.bankDetails != null ? this.selectedFacility.bankDetails.name : '', [<any>Validators.required]],
+      bankAccNumber: [this.selectedFacility.bankDetails != null ? this.selectedFacility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      bc_fname: [this.selectedFacility.businessContact != null ? this.selectedFacility.businessContact.firstName : '', [<any>Validators.required]],
+      bc_lname: [this.selectedFacility.businessContact != null ? this.selectedFacility.businessContact.lastName : '', [<any>Validators.required]],
+      bc_email: [this.selectedFacility.businessContact != null ? this.selectedFacility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      bc_phone: [this.selectedFacility.businessContact != null ? this.selectedFacility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      bc_position: [this.selectedFacility.businessContact != null ? this.selectedFacility.businessContact.position : '', [<any>Validators.required]],
+      it_fname: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.firstName : '', [<any>Validators.required]],
+      it_lname: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.lastName : '', [<any>Validators.required]],
+      it_position: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.position : '', [<any>Validators.required]],
+      it_email: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      it_phone: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      registrationDate: [new Date(this.selectedFacility.createdAt), [<any>Validators.required]]
+    });
+    console.log(this.selectedFacility.createdAt)
 
     this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
       if (value !== null) {
@@ -113,6 +127,19 @@ export class NewPlatformComponent implements OnInit {
       }
     });
   }
+
+  _getPlatform(id) {
+    this._systemService.on();
+    this._facilityService.get(id, {}).then((payload: any) => {
+      this.selectedFacility = payload;
+      console.log(this.selectedFacility)
+      this._initialiseFormGroup();
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    })
+  }
+
   _getCountries() {
     this._systemService.on();
     this._countriesService.find({
@@ -280,6 +307,10 @@ export class NewPlatformComponent implements OnInit {
 
     return facility;
   }
+
+  compare(l1: any, l2: any) {
+		return l1._id === l2._id;
+	}
 
   save(valid, value) {
     valid = true;

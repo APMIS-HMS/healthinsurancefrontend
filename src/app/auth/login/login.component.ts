@@ -48,6 +48,17 @@ export class LoginComponent implements OnInit {
 		});
 	}
 
+	setLoggedInUser(email: String, loggInState: boolean) {
+		this._authService.find({ query: { email: email } })
+			.then(payload => {
+				let currentUser = payload.data[0];
+				currentUser.loggedInUserStatus = {
+					"isLoggedIn": loggInState
+				};
+				this._authService.patch(currentUser._id, currentUser, {});
+			})
+	}
+
 	onClickLogin(value: any, valid: boolean) {
 		if (valid) {
 			this.loginBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
@@ -55,7 +66,7 @@ export class LoginComponent implements OnInit {
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
 				console.log(payload);
-
+				this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
 				this._router.navigate(['/modules/beneficiary/beneficiaries']).then(res => {
 					this._authService.announceMission({ status: 'On' });
 				});

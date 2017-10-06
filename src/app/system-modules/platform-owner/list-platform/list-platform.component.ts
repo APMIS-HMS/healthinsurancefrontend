@@ -91,4 +91,14 @@ export class ListPlatformComponent implements OnInit {
       this.loadingService.endLoading();
     });
   }
+
+  
+  navigateEditPlatform(platform) {
+    this.loadingService.startLoading();
+    this._router.navigate(['/modules/platform/new', platform._id]).then(res => {
+      this.loadingService.endLoading();
+    }).catch(err => {
+      this.loadingService.endLoading();
+    });
+  }
 }
