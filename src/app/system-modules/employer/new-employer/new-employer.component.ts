@@ -134,9 +134,9 @@ export class NewEmployerComponent implements OnInit {
       cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
       cinNumber: [this.facility != null ? this.facility.employer.cin : '', [<any>Validators.required]]
     });
-    console.log(this.industries)
+    console.log(this.industries);
     this.employerFormGroup.controls['state'].valueChanges.subscribe(value => {
-      console.log(this.selectedCountry)
+      console.log(this.selectedCountry);
       this.selectedState = value;
       if (value !== null && this.selectedCountry !== undefined) {
         this._getLgaAndCities(this.selectedCountry._id, value);

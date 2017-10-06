@@ -1,6 +1,8 @@
+import { MyDatePickerModule } from 'mydatepicker';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 import {
     ContactPositionService,
@@ -21,7 +23,8 @@ import { PlatformDetailsComponent } from './platform-details/platform-details.co
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        platformRoutes
+        platformRoutes,
+        MyDatePickerModule
     ],
     declarations: [PlatformOwnerComponent, ListPlatformComponent, NewPlatformComponent, PlatformDetailsComponent],
     providers: [ContactPositionService, PlatformOwnerService, CountryService, BankService ]
