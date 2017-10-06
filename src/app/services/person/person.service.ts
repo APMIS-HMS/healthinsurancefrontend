@@ -26,6 +26,10 @@ export class PersonService {
     });
   }
 
+  findWithOutAuth(query: any) {
+    return this._socket.find(query);
+  }
+
   get(id: string, query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('people').then((socket: any) => {

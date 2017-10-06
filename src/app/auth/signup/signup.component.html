@@ -51,7 +51,7 @@
         </form>
     </div>
 </div> -->
-
+<ngx-loading-bar></ngx-loading-bar>
 <div class="onscreenModal shadow-RB">
 
     <div class="loginmodal-title">Sign Up</div>
@@ -80,15 +80,21 @@
 
             <div class="form-field-wrap">
                 <input type="email" class="form-control" formControlName="email" placeholder="Email" size="50" maxlength="255" />
-                <small class="alert-label" [hidden]="signupFormGroup.controls.email.valid || signupFormGroup.controls.email.pristine">
+                <small class="alert-label" [hidden]="(signupFormGroup.controls.email.valid || signupFormGroup.controls.email.hasError('duplicate')) || signupFormGroup.controls.email.pristine">
                     Enter a valid email address
+                </small>
+                <small class="alert-label" *ngIf="signupFormGroup.controls.email.hasError('duplicate')">
+                    Duplicate email detected
                 </small>
             </div>
 
             <div class="form-field-wrap">
                 <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Phone Number" size="50" min-length="11" maxlength="15" />
-                <small class="alert-label" [hidden]="signupFormGroup.controls.phoneNumber.valid || signupFormGroup.controls.phoneNumber.pristine">
+                <small class="alert-label" [hidden]="(signupFormGroup.controls.phoneNumber.valid || signupFormGroup.controls.phoneNumber.hasError('duplicate')) || signupFormGroup.controls.phoneNumber.pristine">
                     Enter a valid phone number
+                </small>
+                <small class="alert-label" *ngIf="signupFormGroup.controls.phoneNumber.hasError('duplicate')">
+                    Duplicate phone number detected
                 </small>
             </div>
 

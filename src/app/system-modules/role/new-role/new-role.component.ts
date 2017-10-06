@@ -63,6 +63,7 @@ export class NewRoleComponent implements OnInit {
     })
     this.roles.forEach(item => { })
   }
+  
   checkForExistence(accessibility) {
     return this.roles.filter(x => x.accessibility.accessibility._id === accessibility._id).length > 0;
   }

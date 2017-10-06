@@ -1,1 +1,27 @@
 <div class="modal-title">Add Role</div>
+<div class="list-boxes">
+    <div class="list-box">
+        <ul class="list-a">
+            <li (click)="onSelectRole(role)" *ngFor="let role of roles">
+                <label class="control control--checkbox">{{role.name}}
+                <input type="checkbox" (change)="roleChange($event, role)"/>
+                <div class="control__indicator"></div>
+              </label>
+            </li>
+        </ul>
+    </div>
+
+    <div class="list-box">
+        <ul class="list-b">
+            <li *ngFor="let access of selectedRole.accessibilities">
+                <label class="control control--checkbox">{{access.accessibility.name}}
+              <input type="checkbox" disabled [checked]="access.checked" (change)="accessbilityChange($event, access)"/>
+              <div class="control__indicator"></div>
+            </label>
+            </li>
+        </ul>
+    </div>
+</div>
+<button [disabled]="checkedRoles.length < 1" class="btn btn-medium btn-blue" (click)="saveRole()">
+    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD CHECKED ROLE
+</button>
