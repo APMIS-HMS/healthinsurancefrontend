@@ -14,10 +14,10 @@
                 <label class="label">Platform Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="platformName" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.platformName.valid || platformFormGroup.controls.platformName.pristine">
+                            This is a required field.
+                        </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.platformName.valid || platformFormGroup.controls.platformName.pristine">
-                          This is a required field.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Platform Short Name</label>
@@ -25,35 +25,36 @@
                     <input type="text" formControlName="shortName" class="form-control">
                 </div>
                 <small class="alert-label" [hidden]="platformFormGroup.controls.shortName.valid || platformFormGroup.controls.shortName.pristine">
-                          This is a required field (minimum 2 and max of 10 characters).
-                      </small>
+                    This is a required field (minimum 2 and max of 10 characters).
+                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Email</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="email" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.email.valid || platformFormGroup.controls.email.pristine">
+                        Enter a valid email address.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.email.valid || platformFormGroup.controls.email.pristine">
-                  Enter a valid email address.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Website</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="website" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.website.valid || platformFormGroup.controls.website.pristine">
+                        Enter a valid website address. (e.g http://websitename.com)
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.website.valid || platformFormGroup.controls.website.pristine">
-                          Enter a valid website address. (e.g http://websitename.com)
-                      </small>
+                
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Address (Street)</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="address" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.address.valid || platformFormGroup.controls.address.pristine">
+                        Enter a valid address
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.address.valid || platformFormGroup.controls.address.pristine">
-                          Enter a valid address
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">State</label>
@@ -62,10 +63,10 @@
                         <option value="" selected>Select State</option>
                         <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.state.valid || platformFormGroup.controls.state.pristine">
+                        Choose a state from the dropdown above.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.state.valid || platformFormGroup.controls.state.pristine">
-                          Choose a state from the dropdown above.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Local Government</label>
@@ -74,10 +75,10 @@
                         <option value="" selected>Select Local Government</option>
                         <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.lga.valid || platformFormGroup.controls.lga.pristine">
+                        Choose L.G.A from the dropdown above.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.lga.valid || platformFormGroup.controls.lga.pristine">
-                          Choose L.G.A from the dropdown above.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">City</label>
@@ -86,19 +87,19 @@
                         <option value="" selected>Select City</option>
                         <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.city.valid || platformFormGroup.controls.city.pristine">
+                        Choose a city from the dropdown above.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.city.valid || platformFormGroup.controls.city.pristine">
-                          Choose a city from the dropdown above.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Neighbourhood</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="neighbourhood" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.neighbourhood.valid || platformFormGroup.controls.neighbourhood.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.neighbourhood.valid || platformFormGroup.controls.neighbourhood.pristine">
-                          This is a required field.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank</label>
@@ -107,46 +108,46 @@
                         <option value="" selected>Select Bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
                     </select>
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bank.valid || platformFormGroup.controls.bank.pristine">
+                        Choose a bank from the dropdown above.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bank.valid || platformFormGroup.controls.bank.pristine">
-                          Choose a bank from the dropdown above.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank Account Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="bankAccName" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bankAccName.valid || platformFormGroup.controls.bankAccName.pristine">
+                        Enter a valid bank account name.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bankAccName.valid || platformFormGroup.controls.bankAccName.pristine">
-                          Enter a valid bank account name.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank Account Number</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="bankAccNumber" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bankAccNumber.valid || platformFormGroup.controls.bankAccNumber.pristine">
+                        Enter a valid bank account number.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bankAccNumber.valid || platformFormGroup.controls.bankAccNumber.pristine">
-                          Enter a valid bank account number.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's First Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="bc_fname" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bc_fname.valid || platformFormGroup.controls.bc_fname.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bc_fname.valid || platformFormGroup.controls.bc_fname.pristine">
-                          This is a required field (minimum 3 and max of 50 characters).
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's Last Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="bc_lname" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bc_lname.valid || platformFormGroup.controls.bc_lname.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bc_lname.valid || platformFormGroup.controls.bc_lname.pristine">
-                          This is a required field (minimum 3 and max of 50 characters).
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's position</label>
@@ -155,46 +156,46 @@
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                     </select>
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bc_position.valid || platformFormGroup.controls.bc_position.pristine">
+                        Choose a position from the dropdown above.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bc_position.valid || platformFormGroup.controls.bc_position.pristine">
-                          Choose a position from the dropdown above.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's Email Address</label>
                 <div class="input-wrap">
                     <input type="email" formControlName="bc_email" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bc_email.valid || platformFormGroup.controls.bc_email.pristine">
+                        Enter a valid email address.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bc_email.valid || platformFormGroup.controls.bc_email.pristine">
-                          Enter a valid email address.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's  Phone number</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="bc_phone" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.bc_phone.valid || platformFormGroup.controls.bc_phone.pristine">
+                        Enter a valid phone number.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.bc_phone.valid || platformFormGroup.controls.bc_phone.pristine">
-                          Enter a valid phone number.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's First Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="it_fname" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.it_fname.valid || platformFormGroup.controls.it_fname.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.it_fname.valid || platformFormGroup.controls.it_fname.pristine">
-                          This is a required field (minimum 3 and max of 50 characters).
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Last Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="it_lname" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.it_lname.valid || platformFormGroup.controls.it_lname.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.it_lname.valid || platformFormGroup.controls.it_lname.pristine">
-                          This is a required field (minimum 3 and max of 50 characters).
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Position</label>
@@ -203,30 +204,30 @@
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                     </select>
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.it_position.valid || platformFormGroup.controls.it_position.pristine">
+                        Choose a position from the dropdown above.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.it_position.valid || platformFormGroup.controls.it_position.pristine">
-                          Choose a position from the dropdown above.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Email Address</label>
                 <div class="input-wrap">
                     <input type="email" formControlName="it_email" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.it_email.valid || platformFormGroup.controls.it_email.pristine">
+                        Enter a valid email address.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.it_email.valid || platformFormGroup.controls.it_email.pristine">
-                         Enter a valid email address.
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Phone number</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="it_phone" class="form-control">
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.it_phone.valid || platformFormGroup.controls.it_phone.pristine">
+                        Enter a valid phone number.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="platformFormGroup.controls.it_phone.valid || platformFormGroup.controls.it_phone.pristine">
-                          Enter a valid phone number.
-                      </small>
             </div>
-            <div class="frm-item-wrap">
+            <!-- <div class="frm-item-wrap">
                 <label class="label">Registration Date</label>
                 <div class="input-wrap">
                     <input type="date" formControlName="registrationDate" class="form-control">
@@ -234,22 +235,33 @@
                 <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
                           This is a required field.
                       </small>
+            </div> -->
+            <div class="frm-item-wrap">
+                <label class="label">Date of Birth </label>
+                <div style="width:300px;" class="input-wrap">
+                    <my-date-picker name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
+                    <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
+                        This is a required field.
+                    </small>
+                </div>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Photos</label>
+                <label class="label">
+                    <button (click)="showImageBrowseDlg()" class="btn btn-medium btn-blue">Search Photo</button>
+                </label>
                 <div class="input-wrap">
                     <div class="">
-                        <button (click)="showImageBrowseDlg()" class="btn btn-medium btn-blue">Search Photo</button>
                         <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this)">
                     </div>
-                    <div class="">
-                        <div class="placehold-wrap">
+                    <div style="width:100%;">
+                        <div style="width:100%;" class="placehold-wrap">
                             <img #blah id="blah" src="http://placehold.it/180" alt="your image" />
                         </div>
                     </div>
                 </div>
             </div>
-            <button class="btn btn-medium btn-blue" [disabled]="!platformFormGroup.valid" (click)="save(platformFormGroup.valid, platformFormGroup.value)" [innerHtml]="saveBtn"></button>
+            <button class="btn btn-medium btn-blue cta" [disabled]="!platformFormGroup.valid" (click)="save(platformFormGroup.valid, platformFormGroup.value)"
+                [innerHtml]="saveBtn"></button>
             <!-- <button (click)="onClickAddPlan(platformFormGroup.valid, platformFormGroup.value)" class="btn btn-medium btn-blue"> NEXT</button> -->
         </form>
     </section>

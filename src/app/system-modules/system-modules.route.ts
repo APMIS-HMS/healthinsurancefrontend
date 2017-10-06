@@ -31,6 +31,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 loadChildren: './beneficiary/beneficiary.module#BeneficiaryModule'
             },
             {
+                path: 'hia',
+                loadChildren: './hia/hia.module#HiaModule'
+            },
+            {
                 path: 'employer',
                 loadChildren: './employer/employer.module#EmployerModule'
             },

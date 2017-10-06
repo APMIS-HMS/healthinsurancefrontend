@@ -1,3 +1,6 @@
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { SystemModuleService } from './../../services/common/system-module.service';
+import { UserService } from './../../services/common/user.service';
 import { GenderService } from './../../services/common/gender.service';
 import { FacilityService } from './../../services/common/facility.service';
 import { Facility } from './../../models/organisation/facility';
@@ -10,7 +13,12 @@ import { PersonService } from '../../services/person/person.service';
 import { Person } from '../../models/index';
 import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Observable } from 'rxjs/Observable';
 
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
+const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
+const NUMERIC_REGEX = /^[0-9]+$/;
 @Component({
 	selector: 'app-signup',
 	templateUrl: './signup.component.html',
@@ -28,26 +36,84 @@ export class SignupComponent implements OnInit {
 		private _personService: PersonService,
 		private _locker: CoolLocalStorage,
 		private _facilityService: FacilityService,
-		private _genderService:GenderService
-	) { }
+		private _systemService: SystemModuleService,
+		private _genderService: GenderService,
+		private loadingService: LoadingBarService,
+		private _userService: UserService) { }
 
 	ngOnInit() {
+		this._systemService.notificationAnnounced$.subscribe((value: any) => {
+			if (value.status === 'On') {
+				this.loadingService.startLoading();
+			} else {
+				this.loadingService.endLoading();
+			}
+		});
 		this.signupFormGroup = this._fb.group({
 			firstName: ['', [<any>Validators.required]],
 			lastName: ['', [<any>Validators.required]],
-			phoneNumber: ['', [<any>Validators.required]],
-			email: ['', [<any>Validators.required]],
+			phoneNumber: ['', [<any>Validators.pattern(PHONE_REGEX)]],
+			email: ['', [<any>Validators.pattern(EMAIL_REGEX)]],
 			mothersMaidenName: ['', [<any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
 		this._getCurrentPlatform();
+
+		this.signupFormGroup.controls['email'].valueChanges
+			.debounceTime(200)
+			.distinctUntilChanged()
+			.subscribe(value => {
+				this._checkEmail(value);
+			});
+
+		this.signupFormGroup.controls['phoneNumber'].valueChanges
+			.debounceTime(200)
+			.distinctUntilChanged()
+			.subscribe(value => {
+				this._checkPhoneNumber(value);
+			});
 	}
 
-	_getGender(){
-		this._genderService.find({}).then(payload =>{
+	_checkEmail(value) {
+		this._systemService.on();
+		let person$ = Observable.fromPromise(this._personService.findWithOutAuth({ query: { email: value } }));
+		let user$ = Observable.fromPromise(this._userService.findWithOutAuth({ query: { email: value } }));
 
-		}).catch(err =>{
-			
+		Observable.forkJoin([person$, user$]).subscribe((results: any) => {
+			this._systemService.off();
+			if (results[0].data.length > 0 || results[1].data.length > 0) {
+				this.signupFormGroup.controls['email'].setErrors({ 'duplicate': true });
+				console.log(this.signupFormGroup.controls['email'].errors);
+			}
+			console.log(results);
+		}, error => {
+			console.log(error)
+			this._systemService.off();
+		});
+	}
+
+	_checkPhoneNumber(value) {
+		this._systemService.on();
+		let person$ = Observable.fromPromise(this._personService.findWithOutAuth({ query: { phoneNumber: value } }));
+		let user$ = Observable.fromPromise(this._userService.findWithOutAuth({ query: { phoneNumber: value } }));
+
+		Observable.forkJoin([person$, user$]).subscribe((results: any) => {
+			this._systemService.off();
+			if (results[0].data.length > 0 || results[1].data.length > 0) {
+				this.signupFormGroup.controls['phoneNumber'].setErrors({ 'duplicate': true });
+				console.log(this.signupFormGroup.controls['phoneNumber'].errors);
+			}
+			console.log(results);
+		}, error => {
+			console.log(error)
+			this._systemService.off();
+		});
+	}
+	_getGender() {
+		this._genderService.find({}).then(payload => {
+
+		}).catch(err => {
+
 		})
 	}
 

@@ -12,7 +12,7 @@
       <div>
         <div class="content-top-bar">
           <div class="tab-logo">
-            <img src="../../../../assets/img/lagos-state-logo.jpg">
+            <img src="../../../../assets/img/users/default.png">
           </div>
           <div>{{selectedUser?.email}}</div>
           <div>Type: {{selectedUser?.userType?.name}}</div>
@@ -34,7 +34,7 @@
               <i class="fa fa-search" aria-hidden="true"></i>
             </div>
 
-            <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
+            <div class="btn btn-medium btn-blue" (click)="addRole_click()">
               <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ROLE
             </div>
           </div>
@@ -67,5 +67,12 @@
         </section>
       </div>
     </div>
+  </div>
+</div>
+
+<div *ngIf="addRole" class="modal-overlay">
+  <div class="modal-wrap shadow-RB">
+    <div (click)="modal_close()" class="close-modal">X</div>
+      <app-modal-add-role></app-modal-add-role>
   </div>
 </div>

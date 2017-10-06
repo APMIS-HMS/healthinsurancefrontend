@@ -17,6 +17,7 @@ export class DetailsUserComponent implements OnInit {
 
   tab_hias = true;
   selectedUser: any;
+  addRole = false;
 
   constructor(private _route: ActivatedRoute, private _userService: UserService,
     private _systemService: SystemModuleService, private _router:Router) { }
@@ -59,6 +60,12 @@ export class DetailsUserComponent implements OnInit {
 
   tabHia_click() {
     this.tab_hias = true;
+  }
+  modal_close(){
+    this.addRole = false;
+  }
+  addRole_click(){
+    this.addRole = true;
   }
 
 }

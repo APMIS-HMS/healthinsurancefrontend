@@ -12,6 +12,7 @@ const PLATFORM_ROUTES: Routes = [
             { path: 'platforms', component: ListPlatformComponent },
             { path: 'platforms/:platform-id', component: PlatformDetailsComponent },
             { path: 'new', component: NewPlatformComponent },
+            { path: 'new/:id', component: NewPlatformComponent },
         ]
     }
 ];

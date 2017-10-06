@@ -6,8 +6,9 @@
 .app-content-container{
     width: 100%;
     background: $grey-1;
-    height: 100vh;
+    min-height: 100vh;
     padding-top: 2px;
+    padding-bottom: 20px;
 }
 .menu-wrap{
     background: $brand-primary;

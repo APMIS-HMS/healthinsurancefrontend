@@ -11,7 +11,7 @@ const ROLE_ROUTES: Routes = [
             { path: '', redirectTo: 'roles', pathMatch: 'full' },
             { path: 'roles', component: ListRolesComponent },
             { path: 'new', component: NewRoleComponent },
-            { path: 'roles/:role-id', component: RoleDetailsComponent },
+            { path: 'new/:id', component: NewRoleComponent },
         ]
     }
 ];
