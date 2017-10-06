@@ -150,8 +150,11 @@ select {
 }
 
 .input-wrap {
-    display: flex;
-    align-items: center;
+    display: block;
+    position: relative;
+    margin-bottom: 20px;
+}
+.input-wrap input, .input-wrap select, .input-wrap .date-picker{
     width: 300px;
 }
 
@@ -447,6 +450,7 @@ input[type="checkbox"].switch_1:checked:after {
 }
 
 .frm-item-wrap {
+    position: relative;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -475,7 +479,11 @@ input[type="checkbox"].switch_1:checked:after {
 }
 .alert-label {
     color: $red;
-    padding: 10px 5px;
+    padding: 10px 0;
+    max-width: 100%;
+    position: absolute;
+    bottom: -23px;
+    font-size: $font-x1;
 }
 .grey-bg{
     background: $grey-1;
@@ -514,7 +522,7 @@ input[type="checkbox"].switch_1:checked:after {
     background: #fff;
     min-width: 500px;
     min-height: 400px;
-    padding: 20px;
+    padding: 40px;
 }
 .close-modal {
     position: absolute;
@@ -528,7 +536,7 @@ input[type="checkbox"].switch_1:checked:after {
     color: $red;
 }
 .modal-title {
-    margin: 0 auto;
+    margin: 10px auto;
     text-align: center;
 }
 
