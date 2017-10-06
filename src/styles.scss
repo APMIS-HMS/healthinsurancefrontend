@@ -150,17 +150,11 @@ select {
 }
 
 .input-wrap {
-    display: block;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     position: relative;
-    margin-bottom: 20px;
-}
-.input-wrap input, .input-wrap select, .input-wrap .date-picker{
-    width: 300px;
-}
-
-.input-wrap label {
-    font-size: $font-x2;
-    padding-right: 20px;
+    margin: 10px 0;
 }
 
 .list-buttom {
@@ -454,6 +448,10 @@ input[type="checkbox"].switch_1:checked:after {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+}
+.list-filter-wrap label {
+    font-size: 14px;
+    padding-right: 20px;
 }
 
 .label {

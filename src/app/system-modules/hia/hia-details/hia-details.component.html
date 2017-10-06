@@ -18,51 +18,7 @@
   
     <div class="tab-content shadow-RB">
         <div *ngIf="tab_details" class="tab-pane fade show active">
-            <div>
-                
-                <app-tab-top-bar></app-tab-top-bar>
-  
-                <section class="tab-cont content">
-                  <div class="list-search-wrap">
-                      <div class="search-wrap">
-                      <label class="label-xx">Search:</label>
-                      <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name of Health Insurance Agent">
-                      <i class="fa fa-search" aria-hidden="true"></i>
-                      </div>
-                  
-                      <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
-                          <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                          ADD PLAN
-                      </div>
-                  </div>
-                  <section>
-                      <div class="table-responsive">
-                          <table class="table" cellspacing="0">
-                              <thead class="thead">
-                                  <tr class="tr">
-                                      <th class="th">Health Insurance Agent</th>
-                                      <th class="th">Delete</th>
-                                  </tr>
-                              </thead>
-                              <tbody class="tbody">
-                                  <tr class="tr">
-                                      <td class="td">Healthcare Security Limited</td>
-                                      <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
-                                  </tr>
-                                  <tr class="tr">
-                                      <td class="td">Multi Shield Nigeria Limited</td>
-                                      <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                      </div>
-                      <div class="list-buttom">
-                          <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-                          <div class="btn btn-medium btn-yellow">Load More</div>
-                      </div>
-                  </section>
-                </section>
-            </div>
+            <app-tab-top-bar></app-tab-top-bar>
         </div>
     </div>
   </div>
