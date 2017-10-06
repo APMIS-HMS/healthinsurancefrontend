@@ -9,13 +9,15 @@ import { UserManagementComponent } from './user-management.component';
 import { ListUserComponent } from './list-user/list-user.component';
 import { NewUserComponent } from './new-user/new-user.component';
 import { DetailsUserComponent } from './details-user/details-user.component';
+import { ModalAddRoleComponent } from './details-user/modal-add-role/modal-add-role.component';
 
 @NgModule({
     declarations: [
         UserManagementComponent,
         ListUserComponent,
         NewUserComponent,
-        DetailsUserComponent
+        DetailsUserComponent,
+        ModalAddRoleComponent
     ],
     exports: [],
     imports: [

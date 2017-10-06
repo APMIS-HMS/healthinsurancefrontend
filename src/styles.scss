@@ -498,6 +498,39 @@ input[type="checkbox"].switch_1:checked:after {
     text-align: center;
     padding: 10px;
 }
+.modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(231, 231, 231, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-wrap{
+    position: relative;
+    background: #fff;
+    min-width: 500px;
+    min-height: 400px;
+    padding: 20px;
+}
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: $font-x5;
+    cursor: pointer;
+    color: $grey-3;
+}
+.close-modal:hover{
+    color: $red;
+}
+.modal-title {
+    margin: 0 auto;
+    text-align: center;
+}
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {
