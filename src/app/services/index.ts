@@ -13,7 +13,6 @@ export * from './common/user-type.service';
 export * from './common/gender.service';
 export * from './common/titles.service';
 export * from './common/marital-status.service';
-export * from './common/facility.service';
 export * from './common/bank.service';
 export * from './common/industry.service';
 export * from './common/premium-type.service';

@@ -117,8 +117,9 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       it_position: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.position : '', [<any>Validators.required]],
       it_email: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_phone: [this.selectedFacility.itContact != null ? this.selectedFacility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      registrationDate: [this.selectedFacility != null ? this.selectedFacility.createdAt : new Date(), [<any>Validators.required]]
+      registrationDate: [new Date(this.selectedFacility.createdAt), [<any>Validators.required]]
     });
+    console.log(this.selectedFacility.createdAt)
 
     this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
       if (value !== null) {

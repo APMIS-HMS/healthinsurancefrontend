@@ -30,7 +30,7 @@ export class ListBeneficiaryComponent implements OnInit {
     // private _authService: AuthService,
     private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
-    // private _facilityService: FacilityService,
+    private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
     private _beneficiaryService: BeneficiaryService
   ) {

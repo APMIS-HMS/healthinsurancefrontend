@@ -30,12 +30,25 @@ export class MainMenuComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
   }
 
+  setLoggedInUser(email: String, loggInState: boolean) {
+    this._authService.find({ query: { email: email } })
+      .then(payload => {
+        let currentUser = payload.data[0];
+        currentUser.loggedInUserStatus={
+          "isLoggedIn":loggInState
+        };
+
+        this._authService.patch(currentUser._id,currentUser,{}).then(payload=>{
+          this._authService.checkAuth();
+          this._router.navigate(['/auth']);
+        });
+      })
+  }
+
   close_onClick() {
     this.closeMenu.emit(true);
   }
   signOut() {
-    this._authService.checkAuth();
-    this._router.navigate(['/auth']);
-    this.close_onClick();
+    this.setLoggedInUser(this.user.email, false);
   }
 }
