@@ -15,7 +15,7 @@ export class AccessManagementComponent implements OnInit {
   modules: any = <any>[];
   accesses: any = <any>[];
   moduleAccesses: any[] = [];
-  disableAddAccessBtn: Boolean = false;
+  disableAddAccessBtn: boolean = false;
   addAccessBtnText: String = '<i class="fa fa-plus"></i> ADD';
   selectedModule: any;
 

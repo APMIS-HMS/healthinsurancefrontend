@@ -23,6 +23,7 @@ export class ListEmployerComponent implements OnInit {
   statusControl = new FormControl('All');
   employers: any = <any>[];
   loading: Boolean = true;
+  planTypes:any[] = [];
 
   constructor(
     private _router: Router,

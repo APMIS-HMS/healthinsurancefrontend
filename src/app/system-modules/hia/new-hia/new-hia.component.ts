@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import 'rxjs/add/operator/filter';
+
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
   SystemModuleService, CountryService, BankService, ContactPositionService, UserTypeService,
@@ -292,5 +295,11 @@ export class NewHiaComponent implements OnInit {
     }).catch(err => {
       this._systemService.off();
     })
+  }
+  onClickSaveEmployer(value, valid) {
+
+  }
+  compareState(s1: any, s2: any) {
+    return s1._id === s2._id;
   }
 }

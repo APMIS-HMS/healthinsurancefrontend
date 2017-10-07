@@ -1,3 +1,4 @@
+import { ListLoggedInUserComponent } from './system-modules/user-management/list-loggedin-user/list-loggedin-user.component';
 import { UserService } from './services/common/user.service';
 import { GenderService } from './services/common/gender.service';
 
@@ -25,6 +26,7 @@ import { SharedModule } from './shared-modules/shared.module';
 @NgModule({
 	declarations: [
 		AppComponent,
+		ListLoggedInUserComponent
 	],
 	imports: [
 		BrowserAnimationsModule,
