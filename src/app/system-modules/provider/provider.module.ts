@@ -6,16 +6,16 @@ import {
     ContactPositionService, FacilityService
 } from '../../services/index';
 import { ProviderComponent } from './provider.component';
-import { ListProviderComponent } from './list-provider/list-provider.component';
 import { NewProviderComponent } from './new-provider/new-provider.component';
 import { ProviderDetailsComponent } from './provider-details/provider-details.component';
+import { ProviderTopBarComponent } from './provider-details/provider-top-bar/provider-top-bar.component';
 
 @NgModule({
     imports: [
         SharedModule,
         providerRoutes
     ],
-    declarations: [ProviderComponent, NewProviderComponent, ProviderDetailsComponent],
+    declarations: [ProviderComponent, NewProviderComponent, ProviderDetailsComponent, ProviderTopBarComponent],
     providers: [FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
         ContactPositionService, FacilityService]
 })
