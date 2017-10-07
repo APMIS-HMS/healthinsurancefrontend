@@ -157,7 +157,7 @@
                 <div class="input-wrap">
                     <select formControlName="lga" class="form-control">
                         <option  value="" selected>Local Government Area</option>
-                        <option *ngFor="let lga of lgas"  value="{{lga._id}}">{{lga.name}}</option>
+                        <option *ngFor="let lga of lgs"  value="{{lga._id}}">{{lga.name}}</option>
                     </select>
                 </div>
                 <small class="alert-label" [hidden]="stepOneFormGroup.controls.lga.valid || stepOneFormGroup.controls.lga.pristine">

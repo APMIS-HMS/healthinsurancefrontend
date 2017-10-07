@@ -1,6 +1,6 @@
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
 
@@ -23,6 +23,14 @@ export class NewHiaComponent implements OnInit {
   statusControl = new FormControl('All');
   hias: any = <any>[];
   loading: Boolean = true;
+  employerFormGroup: FormGroup;
+  states:any[]= [];
+  lgs:any[] = [];
+  cities:any[] = [];
+  contactPositions:any[] = [];
+  banks:any[] = [];
+  industries:any[] = [];
+  saveBtn ='';
 
   constructor(
     private _router: Router,
@@ -56,5 +64,11 @@ export class NewHiaComponent implements OnInit {
     }).catch(err => {
       this.loadingService.endLoading();
     });
+  }
+  onClickSaveEmployer(value, valid) {
+
+  }
+  compareState(s1: any, s2: any) {
+    return s1._id === s2._id;
   }
 }

@@ -43,7 +43,7 @@
             <div class="frm-item-wrap">
                 <label class="label">L.G.A</label>
                 <div class="input-wrap">
-                    <select formControlName="lga" class="form-control" [compareWith]='compareLGA'>
+                    <select formControlName="lga" class="form-control" [compareWith]='compareState'>
                         <option value="" selected>Select L.G.A</option>
                         <option *ngFor="let lga of lgs" [ngValue]="lga">{{ lga.name }}</option>
                     </select>
@@ -55,7 +55,7 @@
             <div class="frm-item-wrap">
                 <label class="label">City</label>
                 <div class="input-wrap">
-                    <select formControlName="city" class="form-control" [compareWith]='compareCity'>
+                    <select formControlName="city" class="form-control" [compareWith]='compareState'>
                         <option value="" selected>Select City</option>
                         <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
                     </select>
@@ -94,7 +94,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Industry Type</label>
                 <div class="input-wrap">
-                    <select formControlName="type" class="form-control" [compareWith]='compare'>
+                    <select formControlName="type" class="form-control" [compareWith]='compareState'>
                         <option value="" selected>Select Industry Type</option>
                         <option *ngFor="let industry of industries" [ngValue]="industry">{{ industry.name }}</option>
                     </select>
@@ -124,7 +124,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Business Contact position</label>
                 <div class="input-wrap">
-                    <select formControlName="bc_position" class="form-control" [compareWith]='compare'>
+                    <select formControlName="bc_position" class="form-control" [compareWith]='compareState'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                     </select>
@@ -172,7 +172,7 @@
             <div class="frm-item-wrap">
                 <label class="label">IT Contact Position</label>
                 <div class="input-wrap">
-                    <select formControlName="it_position" class="form-control" [compareWith]='compare'>
+                    <select formControlName="it_position" class="form-control" [compareWith]='compareState'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                     </select>
@@ -193,7 +193,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Bank</label>
                 <div class="input-wrap">
-                    <select formControlName="bank" class="form-control" [compareWith]='compare'>
+                    <select formControlName="bank" class="form-control" [compareWith]='compareState'>
                         <option value="" selected>Select Bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
                     </select>
