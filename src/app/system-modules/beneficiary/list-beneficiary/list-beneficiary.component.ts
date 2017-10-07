@@ -23,6 +23,7 @@ export class ListBeneficiaryComponent implements OnInit {
   statusControl = new FormControl('All');
   beneficiaries: any = <any>[];
   loading: Boolean = true;
+  planTypes:any[] = [];
 
   constructor(
     private _router: Router,

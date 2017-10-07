@@ -29,7 +29,8 @@ export class ListPlatformComponent implements OnInit {
   previousUrl: String = '';
   selectedUserType: any;
   owners: any[] = [];
-  loading: Boolean = true;
+  loading: boolean = true;
+  planTypes:any[] = [];
 
   constructor(
     private _router: Router,

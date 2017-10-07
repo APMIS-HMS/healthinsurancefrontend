@@ -469,5 +469,7 @@ export class NewBeneficiaryComponent implements OnInit {
     });
   }
 
+  onClickStepOne(value, valid) {
 
+  }
 }
