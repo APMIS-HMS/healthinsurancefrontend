@@ -1,15 +1,26 @@
-import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-
-import 'rxjs/add/operator/filter';
-
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
-  SystemModuleService, UserTypeService, FacilityService
+  SystemModuleService, CountryService, BankService, ContactPositionService, UserTypeService,
+  FacilityService
 } from './../../../services/index';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+import { HIA } from './../../../models/organisation/hia';
+import {
+  CountriesService, FacilityTypesService, FacilitiesService, GenderService, PersonService, TitleService, UserService,
+  MaritalStatusService, HiaService, HiaNameService, HiaProgramService, HiaPlanService, HiaPositionService
+} from '../../../services/api-services/index';
+import { Address, Facility, Gender, Title, MaritalStatus, Person, Beneficiary, Hia, Contact, BankDetail } from '../../../models/index';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
+import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+
+// import { Contact, BankDetail } from '../../../models/index';
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
+const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
+const NUMERIC_REGEX = /^[0-9]+$/;
 @Component({
   selector: 'app-new-hia',
   templateUrl: './new-hia.component.html',

@@ -4,7 +4,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Facility, CareProvider, Provider, BankDetail, Address, HIA, Contact } from './../../../models/index';
-import { 
+import {
   FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
   ContactPositionService, FacilityService
 } from './../../../services/index';
