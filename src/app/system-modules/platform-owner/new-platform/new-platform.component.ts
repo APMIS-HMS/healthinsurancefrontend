@@ -315,6 +315,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   save(valid, value) {
     valid = true;
     if (valid) {
+      
       this._systemService.on();
       this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
       let facility = this._extractFacility();

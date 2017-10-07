@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
+import { Observable, Subscription } from 'rxjs/Rx'
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { PlanTypeService } from './../../../services/common/plan-type.service';
@@ -43,13 +44,34 @@ export class ListPlatformComponent implements OnInit {
       .filter(event => event instanceof NavigationEnd)
       .subscribe(e => {
       });
-   }
+  }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Platform List');
     this._headerEventEmitter.setMinorRouteUrl('All Platforms');
 
     this._getUserTypes();
+
+    this.listsearchControl.valueChanges
+      .distinctUntilChanged()
+      .debounceTime(200)
+      .switchMap((term) => Observable.fromPromise(this._facilityService.find({
+        query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 }
+      })))
+      .subscribe((payload: any) => {
+        console.log(this.listsearchControl.value);
+        var strVal = this.listsearchControl.value;
+        this.owners = payload.data.filter(function (item) {
+          return( item.name.toLowerCase().includes(strVal.toLowerCase())
+          || item.shortName.toLowerCase() == strVal.toLowerCase()
+          || item.email.toLowerCase().includes(strVal.toLowerCase())
+          || item.businessContact.lastName.toLowerCase().includes(strVal.toLowerCase())
+          || item.businessContact.firstName.toLowerCase().includes(strVal.toLowerCase())
+          || item.businessContact.phoneNumber.includes(strVal.toLowerCase())
+          || item.businessContact.email.includes(strVal.toLowerCase()))
+        })
+      });
+      
   }
   _getPlatformOwners() {
     this._systemService.on();
@@ -92,7 +114,7 @@ export class ListPlatformComponent implements OnInit {
     });
   }
 
-  
+
   navigateEditPlatform(platform) {
     this.loadingService.startLoading();
     this._router.navigate(['/modules/platform/new', platform._id]).then(res => {
