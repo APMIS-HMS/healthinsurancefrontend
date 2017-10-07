@@ -537,6 +537,24 @@ input[type="checkbox"].switch_1:checked:after {
     margin: 10px auto;
     text-align: center;
 }
+.ico-cirle{
+    color: #fff;
+    background: $brand-primary;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    font-size: $font-x3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.frm-radio{
+    display: block;
+    text-align: center;
+    margin-right: 30px;
+}
+
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {
