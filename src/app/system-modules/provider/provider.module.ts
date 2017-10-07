@@ -6,7 +6,6 @@ import {
     ContactPositionService, FacilityService
 } from '../../services/index';
 import { ProviderComponent } from './provider.component';
-import { ListProviderComponent } from './list-provider/list-provider.component';
 import { NewProviderComponent } from './new-provider/new-provider.component';
 import { ProviderDetailsComponent } from './provider-details/provider-details.component';
 
@@ -15,7 +14,7 @@ import { ProviderDetailsComponent } from './provider-details/provider-details.co
         SharedModule,
         providerRoutes
     ],
-    declarations: [ProviderComponent, ListProviderComponent, NewProviderComponent, ProviderDetailsComponent],
+    declarations: [ProviderComponent, NewProviderComponent, ProviderDetailsComponent],
     providers: [FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
         ContactPositionService, FacilityService]
 })

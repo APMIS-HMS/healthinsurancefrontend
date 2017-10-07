@@ -7,7 +7,6 @@ import {
 
 import { employerRoutes } from './employer.route';
 import { EmployerComponent } from './employer.component';
-import { ListEmployerComponent } from './list-employer/list-employer.component';
 import { EmployerDetailsComponent } from './employer-details/employer-details.component';
 import { NewEmployerComponent } from './new-employer/new-employer.component';
 
@@ -16,7 +15,7 @@ import { NewEmployerComponent } from './new-employer/new-employer.component';
         SharedModule,
         employerRoutes
     ],
-    declarations: [EmployerComponent, ListEmployerComponent, EmployerDetailsComponent, NewEmployerComponent],
+    declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
         UserTypeService, SystemModuleService]
 })
