@@ -59,7 +59,7 @@
             <div class="frm-item-wrap">
                 <label class="label">State</label>
                 <div class="input-wrap">
-                    <select formControlName="state" class="form-control">
+                    <select formControlName="state" class="form-control"  [compareWith]='compare'>
                         <option value="" selected>Select State</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.state.valid || platformFormGroup.controls.state.pristine">
@@ -70,7 +70,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Local Government</label>
                 <div class="input-wrap">
-                    <select formControlName="lga" class="form-control">
+                    <select formControlName="lga" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Local Government</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.lga.valid || platformFormGroup.controls.lga.pristine">
@@ -81,7 +81,7 @@
             <div class="frm-item-wrap">
                 <label class="label">City</label>
                 <div class="input-wrap">
-                    <select formControlName="city" class="form-control">
+                    <select formControlName="city" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select City</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.city.valid || platformFormGroup.controls.city.pristine">
@@ -101,7 +101,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Bank</label>
                 <div class="input-wrap">
-                    <select formControlName="bank" class="form-control">
+                    <select formControlName="bank" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Bank</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bank.valid || platformFormGroup.controls.bank.pristine">
@@ -148,7 +148,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's position</label>
                 <div class="input-wrap">
-                    <select formControlName="bc_position" class="form-control">
+                    <select formControlName="bc_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bc_position.valid || platformFormGroup.controls.bc_position.pristine">
@@ -195,7 +195,7 @@
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Position</label>
                 <div class="input-wrap">
-                    <select formControlName="it_position" class="form-control">
+                    <select formControlName="it_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.it_position.valid || platformFormGroup.controls.it_position.pristine">
@@ -231,9 +231,9 @@
                       </small>
             </div> -->
             <div class="frm-item-wrap">
-                <label class="label">Date of Birth </label>
+                <label class="label">Registration Date </label>
                 <div style="width:300px;" class="input-wrap">
-                    <my-date-picker name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
+                    <my-date-picker  name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
                         This is a required field.
                     </small>

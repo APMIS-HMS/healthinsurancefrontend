@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { SharedModule } from '../../shared-modules/shared.module';
 import { providerRoutes } from './provider.route';
 import {
     FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
@@ -15,9 +13,7 @@ import { ProviderTopBarComponent } from './provider-details/provider-top-bar/pro
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
+        SharedModule,
         providerRoutes
     ],
     declarations: [ProviderComponent, ListProviderComponent, NewProviderComponent, ProviderDetailsComponent, ProviderTopBarComponent],

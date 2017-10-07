@@ -1,6 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared-modules/shared.module';
 
 import { SystemModulesComponent } from './system-modules.component';
 import { systemModulesRoutes } from './system-modules.route';
@@ -9,6 +8,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ModuleService, RoleService} from '../services/index';
 import { AccessManagementComponent } from './access-management/access-management.component';
+// import { ListBeneficiaryComponent } from '../system-modules/beneficiary/list-beneficiary/list-beneficiary.component';
+
 @NgModule({
     declarations: [
         SystemModulesComponent,
@@ -16,8 +17,8 @@ import { AccessManagementComponent } from './access-management/access-management
         MainMenuComponent,
         AccessManagementComponent
     ],
-    exports: [FormsModule, ReactiveFormsModule],
-    imports: [FormsModule, ReactiveFormsModule, systemModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
+    exports: [],
+    imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule],
     providers: [ModuleService, RoleService]
 })
 

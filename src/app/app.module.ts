@@ -21,9 +21,10 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { FacilityService } from './services/common/facility.service';
 import { PersonService } from './services/person/person.service';
 import { MyDatePickerModule } from 'mydatepicker';
+import { SharedModule } from './shared-modules/shared.module';
 @NgModule({
 	declarations: [
-		AppComponent
+		AppComponent,
 	],
 	imports: [
 		BrowserAnimationsModule,
@@ -36,6 +37,7 @@ import { MyDatePickerModule } from 'mydatepicker';
 		CoolStorageModule,
 		MyDatePickerModule,
 		LoadingBarModule.forRoot(),
+		SharedModule
 	],
 	providers: [SocketService, RestService, SystemModuleService, HeaderEventEmitterService, PremiumTypeService,
 		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService],

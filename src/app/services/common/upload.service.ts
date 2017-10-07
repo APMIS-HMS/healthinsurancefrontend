@@ -19,8 +19,9 @@ export class UploadService {
       .send(formData);
   }
   transform(url) {
-    url = this._restService.getHost() + '/' + url + '?';// + new Date().getTime();
-    return this._sanitizer.bypassSecurityTrustResourceUrl(url);
+    url = this._restService.getHost() + '/' + url + '?'; + new Date().getTime();
+    return url;
+    // return this._sanitizer.bypassSecurityTrustResourceUrl(url);
   }
   checkOnlineStatus() {
     return this._sockerService.onlineStatus;
