@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { SharedModule } from '../../shared-modules/shared.module';
 import {
     FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
     UserTypeService, SystemModuleService,
@@ -15,9 +13,7 @@ import { NewEmployerComponent } from './new-employer/new-employer.component';
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
+        SharedModule,
         employerRoutes
     ],
     declarations: [EmployerComponent, ListEmployerComponent, EmployerDetailsComponent, NewEmployerComponent],
