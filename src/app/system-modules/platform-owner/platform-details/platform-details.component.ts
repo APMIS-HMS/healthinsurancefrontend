@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+
 @Component({
   selector: 'app-platform-details',
   templateUrl: './platform-details.component.html',
@@ -21,9 +23,12 @@ export class PlatformDetailsComponent implements OnInit {
   constructor(
     private _router: Router,
     private loadingService: LoadingBarService,
+    private _headerEventEmitter: HeaderEventEmitterService,
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Platform Details');
+    this._headerEventEmitter.setMinorRouteUrl('Details');
   }
 
   navigateToPlatforms() {
