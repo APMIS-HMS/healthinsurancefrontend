@@ -52,7 +52,7 @@ export class NewHiaComponent implements OnInit {
   ) { }
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New HIA');
-    this._headerEventEmitter.setMinorRouteUrl('');
+    this._headerEventEmitter.setMinorRouteUrl('Create new Health Insurance Agent');
 
     this.hiaFormGroup = this._fb.group({
       agentName: ['', [<any>Validators.required]],

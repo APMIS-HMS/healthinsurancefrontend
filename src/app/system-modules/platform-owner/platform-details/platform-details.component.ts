@@ -1,7 +1,8 @@
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+import { LoadingBarService } from '@ngx-loading-bar/core';
 @Component({
   selector: 'app-platform-details',
   templateUrl: './platform-details.component.html',
@@ -17,9 +18,21 @@ export class PlatformDetailsComponent implements OnInit {
   tabEmployer = false;
   tabBeneficiary = false;
 
-  constructor() { }
+  constructor(
+    private _router: Router,
+    private loadingService: LoadingBarService,
+  ) { }
 
   ngOnInit() {
+  }
+
+  navigateToPlatforms() {
+    this.loadingService.startLoading();
+    this._router.navigate(['/modules/platform/platforms']).then(res => {
+      this.loadingService.endLoading();
+    }).catch(err => {
+      this.loadingService.endLoading();
+    });
   }
 
   tabClick(link: String) {

@@ -1,31 +1,31 @@
 <div class="app-content-wrap">
-  <div class="bar-wrap">
-    <div class="sect-a">
-      <div (click)="menu_show()" class="menuico">
-        <div class="menu-label">MENU</div>
-        <i class="fa fa-bars" aria-hidden="true"></i>
-      </div>
+    <div class="bar-wrap">
+        <div class="sect-a">
+            <div (click)="menu_show()" class="menuico">
+                <div class="menu-label">MENU</div>
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </div>
 
-      <div class="platform-wrap">
-        <div class="platform-logo">
-          <img src="../../../assets/img/logos/Lagos-State-logo.png">
+            <div class="platform-wrap">
+                <div class="platform-logo">
+                    <img src="../../../assets/img/logos/Lagos-State-logo.png">
+                </div>
+                <div class="platform-label">LAGOS STATE HEALTH MANAGEMENT AGENCY</div>
+            </div>
         </div>
-        <div class="platform-label">LAGOS STATE HEALTH MANAGEMENT AGENCY</div>
-      </div>
+        <div class="sect-b">
+            <div class="search-wrap">
+                <input class="top-tab-search" [formControl]="appsearchControl" type="search" placeholder="Search here...">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <!-- <div class="x">x</div> -->
+            </div>
+        </div>
     </div>
-    <div class="sect-b">
-      <div class="search-wrap">
-          <input class="top-tab-search" [formControl]="appsearchControl" type="search" placeholder="Search here...">
-          <i class="fa fa-search" aria-hidden="true"></i>
-          <!-- <div class="x">x</div> --> 
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="title-tab">
-  <div class="app-content-wrap">
-    <span class="title">HEALTH PLANS</span>
-    <span class="post-title">- Lagos State Health Plans</span>
-  </div>
+    <div class="app-content-wrap">
+        <span class="title">{{ pageInView }}</span>
+        <span class="post-title">- {{ minorPageInView }}</span>
+    </div>
 </div>

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
-import { Observable, Subscription } from 'rxjs/Rx'
+import { Observable, Subscription } from 'rxjs/Rx';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { PlanTypeService } from './../../../services/common/plan-type.service';

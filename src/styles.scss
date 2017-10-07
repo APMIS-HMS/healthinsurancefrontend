@@ -247,17 +247,20 @@ select {
     font-size: $font-x3;
     min-height: 50px;
 }
-.bar-labels{
+
+.bar-labels {
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
-.bar-icos{
+
+.bar-icos {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.bar-icos i{
+
+.bar-icos i {
     color: #fff;
     font-size: $font-x3;
     padding: 5px;
@@ -270,7 +273,8 @@ select {
     border-radius: 100%;
     cursor: pointer;
 }
-.bar-icos i:hover{
+
+.bar-icos i:hover {
     color: lighten($brand-primary, 50%);
     border: 2px solid lighten($brand-primary, 50%);
 }
@@ -383,6 +387,7 @@ select {
     padding: 4px;
     color: $brand-primary;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .switch_box {
@@ -449,6 +454,7 @@ input[type="checkbox"].switch_1:checked:after {
     align-items: center;
     margin-bottom: 10px;
 }
+
 .list-filter-wrap label {
     font-size: 14px;
     padding-right: 20px;
@@ -475,6 +481,7 @@ input[type="checkbox"].switch_1:checked:after {
         }
     }
 }
+
 .alert-label {
     color: $red;
     padding: 10px 0;
@@ -483,18 +490,21 @@ input[type="checkbox"].switch_1:checked:after {
     bottom: -23px;
     font-size: $font-x1;
 }
-.grey-bg{
+
+.grey-bg {
     background: $grey-1;
     padding: 10px;
     box-sizing: border-box;
     margin-bottom: 10px;
 }
-.td-icos{
+
+.td-icos {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
-.td-icos i{
+
+.td-icos i {
     color: $brand-primary;
     font-size: $font-x4;
     cursor: pointer;
@@ -504,7 +514,8 @@ input[type="checkbox"].switch_1:checked:after {
     text-align: center;
     padding: 10px;
 }
-.modal-overlay{
+
+.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -515,13 +526,15 @@ input[type="checkbox"].switch_1:checked:after {
     justify-content: center;
     align-items: center;
 }
-.modal-wrap{
+
+.modal-wrap {
     position: relative;
     background: #fff;
     min-width: 500px;
     min-height: 400px;
     padding: 40px;
 }
+
 .close-modal {
     position: absolute;
     right: 20px;
@@ -530,14 +543,17 @@ input[type="checkbox"].switch_1:checked:after {
     cursor: pointer;
     color: $grey-3;
 }
-.close-modal:hover{
+
+.close-modal:hover {
     color: $red;
 }
+
 .modal-title {
     margin: 10px auto;
     text-align: center;
 }
-.ico-cirle{
+
+.ico-cirle {
     color: #fff;
     background: $brand-primary;
     cursor: pointer;
@@ -549,12 +565,12 @@ input[type="checkbox"].switch_1:checked:after {
     justify-content: center;
     align-items: center;
 }
-.frm-radio{
+
+.frm-radio {
     display: block;
     text-align: center;
     margin-right: 30px;
 }
-
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {

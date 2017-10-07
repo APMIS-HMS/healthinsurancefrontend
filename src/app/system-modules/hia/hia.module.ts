@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
-
+import {
+    SystemModuleService, CountryService, BankService, ContactPositionService, UserTypeService, FacilityService
+} from '../../services/index';
 import { hiaRoutes } from './hia.route';
 import { HiaComponent } from './hia.component';
 import { NewHiaComponent } from './new-hia/new-hia.component';
@@ -13,6 +15,6 @@ import { TabTopBarComponent } from './hia-details/tab-top-bar/tab-top-bar.compon
         hiaRoutes
     ],
     declarations: [HiaComponent, NewHiaComponent, HiaDetailsComponent, TabTopBarComponent],
-    providers: []
+    providers: [CountryService, BankService, ContactPositionService, UserTypeService, FacilityService]
 })
 export class HiaModule { }

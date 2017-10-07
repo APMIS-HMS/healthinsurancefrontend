@@ -1,0 +1,77 @@
+@import '../../../../assets/libs/variables.scss';
+.status {
+    color: $orange;
+}
+
+.inpage-tabs li {
+    padding: 10px;
+}
+
+.details-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: $font-x2;
+}
+
+.detail-item {
+    margin-right: 30px;
+    padding-right: 34px;
+}
+
+.detail-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.detail-content {
+    position: relative;
+}
+
+.hia-logo {
+    width: 200px;
+    margin: 10px 0;
+}
+
+.hia-user {
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.hia-user img {
+    width: 100%;
+}
+
+.item-head {
+    margin-bottom: 20px;
+}
+
+.item-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.item-val {
+    color: $grey-3;
+}
+
+.group-wrap {
+    margin: 10px 0;
+}
+
+.group-item {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.ico-cirle {
+    position: absolute;
+    right: -40px;
+    top: 0;
+}
