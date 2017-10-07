@@ -70,7 +70,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Platform');
-    this._headerEventEmitter.setMinorRouteUrl('');
+    this._headerEventEmitter.setMinorRouteUrl('Create New Platform');
     this._initialiseFormGroup();
     this._getContactPositions();
     this._getUserTypes();
@@ -182,6 +182,8 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     })
   }
   _getStates(_id) {
+    console.log('call states')
+    console.log(_id);
     this._systemService.on();
     this._countriesService.find({
       query: {
@@ -190,12 +192,15 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
         $select: { 'states.cities': 0, 'states.lgs': 0 }
       }
     }).then((payload: any) => {
+      console.log(payload)
       this._systemService.off();
       if (payload.data.length > 0) {
         this.states = payload.data[0].states;
+        console.log(this.states)
       }
 
     }).catch(error => {
+      console.log(error)
       this._systemService.off();
     })
   }

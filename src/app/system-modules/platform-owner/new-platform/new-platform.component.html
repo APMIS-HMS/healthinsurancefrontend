@@ -61,6 +61,7 @@
                 <div class="input-wrap">
                     <select formControlName="state" class="form-control"  [compareWith]='compare'>
                         <option value="" selected>Select State</option>
+                        <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.state.valid || platformFormGroup.controls.state.pristine">
                         Choose a state from the dropdown above.
@@ -72,6 +73,7 @@
                 <div class="input-wrap">
                     <select formControlName="lga" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Local Government</option>
+                        <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.lga.valid || platformFormGroup.controls.lga.pristine">
                         Choose L.G.A from the dropdown above.
@@ -83,6 +85,7 @@
                 <div class="input-wrap">
                     <select formControlName="city" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select City</option>
+                        <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.city.valid || platformFormGroup.controls.city.pristine">
                         Choose a city from the dropdown above.
@@ -99,10 +102,11 @@
                 </div>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Bank</label>
+                <label class="label">Banker</label>
                 <div class="input-wrap">
                     <select formControlName="bank" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Bank</option>
+                        <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bank.valid || platformFormGroup.controls.bank.pristine">
                         Choose a bank from the dropdown above.
@@ -150,6 +154,7 @@
                 <div class="input-wrap">
                     <select formControlName="bc_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
+                        <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bc_position.valid || platformFormGroup.controls.bc_position.pristine">
                         Choose a position from the dropdown above.
@@ -197,6 +202,7 @@
                 <div class="input-wrap">
                     <select formControlName="it_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
+                        <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                     </select>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.it_position.valid || platformFormGroup.controls.it_position.pristine">
                         Choose a position from the dropdown above.
