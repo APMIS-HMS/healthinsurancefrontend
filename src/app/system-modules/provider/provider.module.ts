@@ -15,7 +15,7 @@ import { ProviderDetailsComponent } from './provider-details/provider-details.co
         SharedModule,
         providerRoutes
     ],
-    declarations: [ProviderComponent, ListProviderComponent, NewProviderComponent, ProviderDetailsComponent],
+    declarations: [ProviderComponent, NewProviderComponent, ProviderDetailsComponent],
     providers: [FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
         ContactPositionService, FacilityService]
 })

@@ -13,7 +13,7 @@ import { TabTopBarComponent } from './hia-details/tab-top-bar/tab-top-bar.compon
         SharedModule,
         hiaRoutes
     ],
-    declarations: [HiaComponent, NewHiaComponent, ListHiaComponent, HiaDetailsComponent, TabTopBarComponent],
+    declarations: [HiaComponent, NewHiaComponent, HiaDetailsComponent, TabTopBarComponent],
     providers: []
 })
 export class HiaModule { }

@@ -16,7 +16,7 @@ import { NewEmployerComponent } from './new-employer/new-employer.component';
         SharedModule,
         employerRoutes
     ],
-    declarations: [EmployerComponent, ListEmployerComponent, EmployerDetailsComponent, NewEmployerComponent],
+    declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
         UserTypeService, SystemModuleService]
 })
