@@ -437,8 +437,6 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   // }
 
   setDate(): void {
-    // Set today date using the patchValue function
-    // let date = new Date();
     this.platformFormGroup.patchValue({
       registrationDate: {
         date: {
@@ -450,7 +448,6 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     });
   }
   clearDate(): void {
-    // Clear the date using the patchValue function
     this.platformFormGroup.patchValue({ registrationDate: null });
   }
 }

@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">State</label>
                 <div class="input-wrap">
-                    <select formControlName="state" class="form-control">
+                    <select formControlName="state" class="form-control" [compareWith]='compare'>
                             <option value="" selected>Select State</option>
                             <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
                         </select>
@@ -52,7 +52,7 @@
             <div class="frm-item-wrap">
                 <label class="label">L.G.A</label>
                 <div class="input-wrap">
-                    <select formControlName="lga" class="form-control">
+                    <select formControlName="lga" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Local Government</option>
                         <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
                     </select>
@@ -64,7 +64,7 @@
             <div class="frm-item-wrap">
                 <label class="label">City</label>
                 <div class="input-wrap">
-                    <select formControlName="city" class="form-control">
+                    <select formControlName="city" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select City</option>
                         <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
                     </select>
@@ -121,7 +121,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Business Contact position</label>
                 <div class="input-wrap">
-                    <select formControlName="businessContactPosition" class="form-control">
+                    <select formControlName="businessContactPosition" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                     </select>
@@ -169,7 +169,7 @@
             <div class="frm-item-wrap">
                 <label class="label">IT Contact Position</label>
                 <div class="input-wrap">
-                    <select formControlName="iTContactPosition" class="form-control">
+                    <select formControlName="iTContactPosition" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                     </select>
@@ -190,9 +190,9 @@
             <div class="frm-item-wrap">
                 <label class="label">Type</label>
                 <div class="input-wrap">
-                    <select formControlName="type" class="form-control">
+                    <select formControlName="type" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Type</option>
-                        <option *ngFor="let type of userTypes" [ngValue]="type">{{ type.name }}</option>
+                        <option *ngFor="let type of hiaTypes" [ngValue]="type">{{ type.name }}</option>
                     </select>
                 </div>
                 <small class="alert-label" [hidden]="hiaFormGroup.controls.type.valid || hiaFormGroup.controls.type.pristine">
@@ -200,9 +200,21 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
+                <label class="label">Grade</label>
+                <div class="input-wrap">
+                    <select formControlName="grade" class="form-control" [compareWith]='compare'>
+                        <option value="" selected>Select Grade</option>
+                        <option *ngFor="let grade of hiaGrades" [ngValue]="grade">{{ grade.name }}</option>
+                    </select>
+                </div>
+                <small class="alert-label" [hidden]="hiaFormGroup.controls.grade.valid || hiaFormGroup.controls.grade.pristine">
+                    Choose grade from the dropdown.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
                 <label class="label">Bank</label>
                 <div class="input-wrap">
-                    <select formControlName="bank" class="form-control">
+                    <select formControlName="bank" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
                     </select>
@@ -248,23 +260,32 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Registration Date</label>
-                <div class="input-wrap">
-                    <input type="date" formControlName="registrationDate" class="form-control">
+                <label class="label">Registration Date </label>
+                <div style="width:300px;" class="input-wrap">
+                    <my-date-picker  name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.registrationDate.valid || hiaFormGroup.controls.registrationDate.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.registrationDate.valid || hiaFormGroup.controls.registrationDate.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Photo</label>
+                <label class="label">
+                    <button (click)="showImageBrowseDlg()" class="btn btn-medium btn-blue">Search Photo</button>
+                </label>
                 <div class="input-wrap">
-                    <button class="btn btn-medium btn-blue">Search Photo</button>
+                    <div class="">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this)">
+                    </div>
+                    <div style="width:100%;">
+                        <div style="width:100%;" class="placehold-wrap">
+                            <img #blah id="blah" src="http://placehold.it/180" alt="your image" />
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="text-center">
-                <button class="btn btn-medium btn-blue" [disabled]="!hiaFormGroup.valid" (click)="onClickSaveHia(hiaFormGroup, hiaFormGroup.valid);" [innerHtml]="saveBtn"></button>
-            </div>
+            
+            <button class="btn btn-medium btn-blue cta" [disabled]="!hiaFormGroup.valid" (click)="save(hiaFormGroup.valid, hiaFormGroup.value)"
+                [innerHtml]="saveBtn"></button>
         </form>
     </section>
 </div>
