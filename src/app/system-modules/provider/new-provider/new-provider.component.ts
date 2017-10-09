@@ -67,22 +67,33 @@ export class NewProviderComponent implements OnInit {
     private loadingService: LoadingBarService,
   ) { }
 
-  ngAfterViewInit() {
-    this._route.params.subscribe(param => {
+  // ngAfterViewInit() {
+  //   this._route.params.subscribe(param => {
+  //     console.log(param);
+  //     if (param.id !== undefined) {
+  //       console.log(param)
+  //       this.selectedFacilityId = param.id;
+  //       this._getProviderDetails(param.id);
+  //     } else {
+  //       this._initialiseFormGroup();
+  //     }
+  //   });
+  // }
 
+  ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('New Provider');
+    this._headerEventEmitter.setMinorRouteUrl('Create new provider');
+
+    this._route.params.subscribe(param => {
+      console.log(param);
       if (param.id !== undefined) {
-        console.log(param)
+        console.log(param);
         this.selectedFacilityId = param.id;
         this._getProviderDetails(param.id);
       } else {
         this._initialiseFormGroup();
       }
     });
-  }
-
-  ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('New Provider');
-    this._headerEventEmitter.setMinorRouteUrl('');
 
     this._initialiseFormGroup();
     this._getContactPositions();
@@ -92,48 +103,72 @@ export class NewProviderComponent implements OnInit {
     this._getFacilityOwnerships();
     this._getUserTypes();
 
-    this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
-      if (value !== null) {
-        this._getLgaAndCities(this.selectedCountry._id, value);
-      }
-    });
-    this.providerFormGroup.controls['classification'].setValue('primary');
-
   }
 
   _initialiseFormGroup() {
     this.providerFormGroup = this._fb.group({
-      providerName: [this.facility != null ? this.facility.name : '', [<any>Validators.required]],
-      email: [this.facility != null ? this.facility.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      address: [this.facility != null ? this.facility.address.street : '', [<any>Validators.required]],
-      state: [this.facility != null ? this.facility.address.state : '', [<any>Validators.required]],
-      lga: [this.facility != null ? this.facility.lga : '', [<any>Validators.required]],
-      city: [this.facility != null ? this.facility.city : '', [<any>Validators.required]],
-      neighbourhood: [this.facility != null ? this.facility.neighbourhood : '', [<any>Validators.required]],
-      phone: [this.facility != null ? this.facility.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_lname: [this.facility != null ? this.facility.businessContact.lastName : '', [<any>Validators.required]],
-      bc_fname: [this.facility != null ? this.facility.businessContact.firstName : '', [<any>Validators.required]],
-      bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
-      bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
-      it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
-      it_phone: [this.facility != null ? this.facility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
-      it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      type: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
-      lasrraId: [this.facility != null ? this.facility.lasrraId : '', [<any>Validators.required]],
-      hefeemaNumber: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
-      hefeemaStatus: [this.facility != null ? this.facility.hefeemaStatus : '', [<any>Validators.required]],
-      bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
-      bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
-      bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
-      cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
-      classification: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
-      grade: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
-      ownership: [this.facility != null ? this.facility.facilityOwnership : '', [<any>Validators.required]],
-      comment: [this.facility != null ? this.facility.provider.comment : '', [<any>Validators.required]]
+      providerName: ['', [<any>Validators.required]],
+      email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      address: ['', [<any>Validators.required]],
+      state: ['', [<any>Validators.required]],
+      lga: ['', [<any>Validators.required]],
+      city: ['', [<any>Validators.required]],
+      neighbourhood: ['', [<any>Validators.required]],
+      phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      bc_fname: ['', [<any>Validators.required]],
+      bc_lname: ['', [<any>Validators.required]],
+      bc_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      bc_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      bc_position: ['', [<any>Validators.required]],
+      it_fname: ['', [<any>Validators.required]],
+      it_lname: ['', [<any>Validators.required]],
+      it_position: ['', [<any>Validators.required]],
+      it_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      it_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      type: ['', [<any>Validators.required]],
+      lasrraId: ['', [<any>Validators.required]],
+      hefeemaNumber: ['', [<any>Validators.required]],
+      hefeemaStatus: ['', [<any>Validators.required]],
+      bank: ['', [<any>Validators.required]],
+      bankAccName: ['', [<any>Validators.required]],
+      bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
+      classification: ['', [<any>Validators.required]],
+      grade: ['', [<any>Validators.required]],
+      ownership: ['', [<any>Validators.required]],
+      comment: ['', [<any>Validators.required]]
     });
+    // this.providerFormGroup = this._fb.group({
+    //   providerName: [this.facility != null ? this.facility.name : '', [<any>Validators.required]],
+    //   email: [this.facility != null ? this.facility.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+    //   address: [this.facility != null ? this.facility.address.street : '', [<any>Validators.required]],
+    //   state: [this.facility != null ? this.facility.address.state : '', [<any>Validators.required]],
+    //   lga: [this.facility != null ? this.facility.lga : '', [<any>Validators.required]],
+    //   city: [this.facility != null ? this.facility.city : '', [<any>Validators.required]],
+    //   neighbourhood: [this.facility != null ? this.facility.neighbourhood : '', [<any>Validators.required]],
+    //   phone: [this.facility != null ? this.facility.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+    //   bc_lname: [this.facility != null ? this.facility.businessContact.lastName : '', [<any>Validators.required]],
+    //   bc_fname: [this.facility != null ? this.facility.businessContact.firstName : '', [<any>Validators.required]],
+    //   bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+    //   bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
+    //   bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+    //   it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
+    //   it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
+    //   it_phone: [this.facility != null ? this.facility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+    //   it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
+    //   it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+    //   type: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
+    //   lasrraId: [this.facility != null ? this.facility.lasrraId : '', [<any>Validators.required]],
+    //   hefeemaNumber: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
+    //   hefeemaStatus: [this.facility != null ? this.facility.hefeemaStatus : '', [<any>Validators.required]],
+    //   bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
+    //   bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
+    //   bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
+    //   cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
+    //   classification: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
+    //   grade: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
+    //   ownership: [this.facility != null ? this.facility.facilityOwnership : '', [<any>Validators.required]],
+    //   comment: [this.facility != null ? this.facility.provider.comment : '', [<any>Validators.required]]
+    // });
     
     this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
       console.log(this.selectedCountry);
@@ -142,10 +177,21 @@ export class NewProviderComponent implements OnInit {
         this._getLgaAndCities(this.selectedCountry._id, value);
       }
     });
-    if (this.facility !== undefined) {
+
+    if (this.facility._id !== undefined) {
+      console.log(this.facility);
       this.selectedState = this.facility.address.state;
-      this.providerFormGroup.controls['type'].setValue(this.facility.provider);
+      // this.providerFormGroup.controls['type'].setValue(this.facility.provider);
+    } else {
+      this.providerFormGroup.controls['classification'].setValue('primary');
     }
+
+    this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
+      if (value !== null) {
+        this._getLgaAndCities(this.selectedCountry._id, value);
+      }
+    });
+    
   }
 
   _getProviderDetails(routeId) {

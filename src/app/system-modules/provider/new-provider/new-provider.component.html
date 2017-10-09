@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">State</label>
                 <div class="input-wrap">
-                    <select formControlName="state" class="form-control">
+                    <select formControlName="state" class="form-control" [compareWith]='compareState'>
                         <option value="" selected>Select State</option>
                         <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
                     </select>
