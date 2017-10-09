@@ -62,17 +62,17 @@
         </thead>
 
         <tbody class="tbody">
-            <tr routerLink="/modules/hia/hias/87788" class="tr">
-                <td class="td">ihuiui</td>
-                <td class="td">iuhiun</td>
-                <td class="td">iuhi</td>
-                <td class="td">jhgjb</td>
-                <td class="td">uihiin</td>
-                <td class="td">uygub</td>
+            <tr *ngFor="let hia of hias; let i = index;" class="tr">
+                <td (click)="navigateEditHIA(hia)" class="td">{{i+1}}</td>
+                <td (click)="navigateEditHIA(hia)" class="td">{{hia.name}}</td>
+                <td class="td">{{hia.hia.type.name}}</td>
+                <td class="td">{{hia.itContact.lastName}} {{hia.itContact.firstName}}</td>
+                <td class="td">{{hia.itContact.phoneNumber}}</td>
+                <td class="td">{{hia.hia.grade.name}}</td>
                 <td class="td">
                     <span class="tbl-status-active"> Active </span>
                 </td>
-                <td><i class="fa fa-chevron-right"></i></td>
+                <td (click)="navigateViewHIADetail(hia)"><i class="fa fa-chevron-right"></i></td>
             </tr>
         </tbody>
     </table>

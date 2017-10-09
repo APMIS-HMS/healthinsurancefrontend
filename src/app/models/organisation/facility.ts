@@ -19,6 +19,7 @@ export interface Facility {
     address?: Address;
     bankDetails?: BankDetail;
     facilityType?: any;
+    platformOwnerId:any;
     website: string;
     lasraaId: string;
     shortName: string;
