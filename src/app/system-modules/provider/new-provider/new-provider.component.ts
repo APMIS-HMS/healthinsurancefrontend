@@ -70,7 +70,6 @@ export class NewProviderComponent implements OnInit {
   ) { }
 
   ngAfterViewInit() {
-    console.log('After View Init');
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
         this.selectedFacilityId = param.id;
@@ -101,9 +100,9 @@ export class NewProviderComponent implements OnInit {
       email: [this.facility != null ? this.facility.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       address: [this.facility != null ? this.facility.address.street : '', [<any>Validators.required]],
       state: [this.facility != null ? this.facility.address.state : '', [<any>Validators.required]],
-      lga: [this.facility != null ? this.facility.lga : '', [<any>Validators.required]],
-      city: [this.facility != null ? this.facility.city : '', [<any>Validators.required]],
-      neighbourhood: [this.facility != null ? this.facility.neighbourhood : '', [<any>Validators.required]],
+      lga: [this.facility != null ? this.facility.address.lga : '', [<any>Validators.required]],
+      city: [this.facility != null ? this.facility.address.city : '', [<any>Validators.required]],
+      neighbourhood: [this.facility != null ? this.facility.address.neighbourhood : '', [<any>Validators.required]],
       phone: [this.facility != null ? this.facility.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       bc_lname: [this.facility != null ? this.facility.businessContact.lastName : '', [<any>Validators.required]],
       bc_fname: [this.facility != null ? this.facility.businessContact.firstName : '', [<any>Validators.required]],
@@ -115,31 +114,21 @@ export class NewProviderComponent implements OnInit {
       it_phone: [this.facility != null ? this.facility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
       it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      type: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
-      lasrraId: [this.facility != null ? this.facility.lasrraId : '', [<any>Validators.required]],
-      hefeemaNumber: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
+      type: [this.facility != null ? this.facility.provider.facilityType : '', [<any>Validators.required]],
+      lasrraId: [this.facility != null ? this.facility.provider.lasrraId : '', [<any>Validators.required]],
+      hefeemaNumber: [this.facility != null ? this.facility.provider.hefeemaNumber : '', [<any>Validators.required]],
       hefeemaStatus: [this.facility != null ? this.facility.provider.hefeemaStatus : '', [<any>Validators.required]],
       bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
       bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
       bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
       // cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
       classification: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
-      grade: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
-      ownership: [this.facility != null ? this.facility.facilityOwnership : '', [<any>Validators.required]],
+      grade: [this.facility != null ? this.facility.provider.facilityGrade : '', [<any>Validators.required]],
+      ownership: [this.facility != null ? this.facility.provider.facilityOwnership : '', [<any>Validators.required]],
       comment: [this.facility != null ? this.facility.provider.comment : '', [<any>Validators.required]]
     });
     console.log(this.facility);
 
-    if (this.facility !== undefined) {
-      console.log(this.facility);
-      this.selectedState = this.facility.address.state;
-      // this.providerFormGroup.controls['type'].setValue(this.facility.provider);
-    }
-
-    if(this.facility === undefined) {
-      this.providerFormGroup.controls['classification'].setValue('primary');
-    }
-    
     this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
       console.log(this.selectedCountry);
       this.selectedState = value;
@@ -148,18 +137,16 @@ export class NewProviderComponent implements OnInit {
       }
     });
 
-    // this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
-    //   if (value !== null) {
-    //     this._getLgaAndCities(this.selectedCountry._id, value);
-    //   }
-    // });
-    
+    if (this.facility !== undefined) {
+      this.saveBtn = 'Update &nbsp; <i class="fa fa-edit"></i>';
+      this.selectedState = this.facility.address.state;
+      this.providerFormGroup.controls['classification'].setValue(this.facility.provider.facilityClass[0]);
+    }
   }
 
   _getProviderDetails(routeId) {
     this._systemService.on();
-    this._facilityService.get(routeId, {})
-      .then((res: Facility) => {
+    this._facilityService.get(routeId, {}).then((res: Facility) => {
         this._systemService.off();
         this.facility = res;
         this._initialiseFormGroup();
@@ -180,6 +167,9 @@ export class NewProviderComponent implements OnInit {
   compareBank(l1: any, l2: any) {
     return l1._id === l2._id;
   }
+  compareCategory(l1: any, l2: any) {
+    return l1._id === l2._id;
+  }
   compare(l1: any, l2: any) {
     return l1._id === l2._id;
   }
@@ -187,6 +177,9 @@ export class NewProviderComponent implements OnInit {
     return l1._id === l2._id;
   }
   compareStatus(l1: any, l2: any) {
+    return l1._id === l2._id;
+  }
+  compareOwnership(l1: any, l2: any) {
     return l1._id === l2._id;
   }
 
@@ -204,7 +197,6 @@ export class NewProviderComponent implements OnInit {
     this._systemService.on();
     this._providerGradesService.find({}).then((payload: any) => {
       this.grades = payload.data;
-      console.log(this.grades);
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
@@ -215,7 +207,6 @@ export class NewProviderComponent implements OnInit {
     this._systemService.on();
     this._providerStatusesService.find({}).then((payload: any) => {
       this.HEFAMAA_STATUSES = payload.data;
-      console.log(this.HEFAMAA_STATUSES);
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
@@ -366,6 +357,7 @@ export class NewProviderComponent implements OnInit {
     provider.facilityOwnership = this.providerFormGroup.controls['ownership'].value;
     provider.facilityType = this.providerFormGroup.controls['type'].value;
     provider.facilityClass = this.providerFormGroup.controls['classification'].value;
+    provider.facilityGrade = this.providerFormGroup.controls['grade'].value;
     provider.hefeemaNumber = this.providerFormGroup.controls['hefeemaNumber'].value;
     provider.hefeemaStatus = this.providerFormGroup.controls['hefeemaStatus'].value;
     provider.lasrraId = this.providerFormGroup.controls['lasrraId'].value;
@@ -430,7 +422,7 @@ export class NewProviderComponent implements OnInit {
           // this.providerFormGroup.reset();
           this._toastr.info('Navigating to provider details page...', 'Navigate!');
           setTimeout(e => {
-            this.navigateProviders('/modules/employer/employers/', + payload._id);
+            this.navigateProviders('/modules/provider/providers/', + payload._id);
           }, 2000);
           this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
           this._toastr.success('Care Provider has been updated successfully!', 'Success!');
