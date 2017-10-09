@@ -38,7 +38,7 @@
 
         <div class="input-wrap">
             <label>Status</label>
-            <select [formControl]="statusControl">
+            <select [formControl]="statusControl" (change)="onSelectedStatus($event.target.value)">
         <option selected value="All">All</option>
         <option value="true">Active</option>
         <option value="false">Inactive</option>

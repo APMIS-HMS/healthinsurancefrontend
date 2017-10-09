@@ -1,30 +1,26 @@
 <div class="in-content-wrap">
     <div routerLink="/modules/beneficiary/beneficiaries" class="back-btn">
-        <i class="fa fa-chevron-left"></i> BACK TO EMPLOYERS
+        <i class="fa fa-chevron-left"></i> BACK TO BENEFICIARIES
     </div>
 
     <ul class="inpage-tabs">
-        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Beneficiary Details</li>
-        <!-- <li (click)="tabPreauthorization_click()" [class.tab-active]="tab_preauthorization">Preauthorization</li>
-        <li (click)="tabPlans_click()" [class.tab-active]="tab_plans">List of Plans</li>
-        <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
-        <li (click)="tabEmployers_click()" [class.tab-active]="tab_employers">Employers</li>
+        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Personal Details</li>
         <li (click)="tabPayment_click()" [class.tab-active]="tab_payment">Payment History</li>
         <li (click)="tabClaims_click()" [class.tab-active]="tab_claims">Claims</li>
         <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
-        <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li> -->
+        <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li>
     </ul>
 
     <div class="tab-content shadow-RB">
         <div *ngIf="tab_details" class="tab-pane fade show active">
-            <!-- <app-employer-top-bar></app-employer-top-bar> -->
+            <app-beneficiary-top-bar></app-beneficiary-top-bar>
 
             <div class="details-wrap">
                 <div class="detail-item">
                     <div class="item-label item-head">Beneficiary Detail</div>
 
                     <div class="detail-content">
-                        <img class="hia-logo" src="../../../../assets/img/users/default.png">
+                        <img class="hia-user" src="../../../../assets/img/users/default.png">
                         <div class="group-wrap">
                             <div class="item-label">Health Care Security Limited</div>
                             <div class="item-val">Health Insurance Company</div>
@@ -45,53 +41,42 @@
                                 <div class="item-label">CIN Number:</div>
                                 <div class="item-val">223456</div>
                             </div>
-                            <div class="group-item">
-                                <div class="item-label">Registration Date:</div>
-                                <div class="item-val">12th Jun, 2017.</div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="item-label item-head">Business Contact</div>
+
+                            <div class="detail-content">
+                                <div class="hia-user">
+                                    <img src="../../../../assets/img/users/default.png">
+                                </div>
+                                <div class="group-wrap">
+                                    <div class="item-val">Abbey Silver</div>
+                                    <div class="item-val">08077887767</div>
+                                    <div class="item-val">abbey.silver@bbhc.com</div>
+                                    <div class="item-val">CEO</div>
+                                </div>
+                                <i class="ico-cirle fa fa-pencil"></i>
                             </div>
-                            <div class="group-item">
-                                <div class="item-label">Bank Account:</div>
-                                <div class="item-val">223343456</div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="item-label item-head">IT Contact</div>
+
+                            <div class="detail-content">
+                                <div class="hia-user">
+                                    <img src="../../../../assets/img/users/default.png">
+                                </div>
+                                <div class="group-wrap">
+                                    <div class="item-val">Dan Wande</div>
+                                    <div class="item-val">08077887767</div>
+                                    <div class="item-val">dan.wande@bbhc.com</div>
+                                    <div class="item-val">Technical Support</div>
+                                </div>
+                                <i class="ico-cirle fa fa-pencil"></i>
                             </div>
                         </div>
-                        <i class="ico-cirle fa fa-pencil"></i>
-                    </div>
-                </div>
-
-                <div class="detail-item">
-                    <div class="item-label item-head">Business Contact</div>
-
-                    <div class="detail-content">
-                        <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
-                        </div>
-                        <div class="group-wrap">
-                            <div class="item-val">Abbey Silver</div>
-                            <div class="item-val">08077887767</div>
-                            <div class="item-val">abbey.silver@bbhc.com</div>
-                            <div class="item-val">CEO</div>
-                        </div>
-                        <i class="ico-cirle fa fa-pencil"></i>
-                    </div>
-                </div>
-
-                <div class="detail-item">
-                    <div class="item-label item-head">IT Contact</div>
-
-                    <div class="detail-content">
-                        <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
-                        </div>
-                        <div class="group-wrap">
-                            <div class="item-val">Dan Wande</div>
-                            <div class="item-val">08077887767</div>
-                            <div class="item-val">dan.wande@bbhc.com</div>
-                            <div class="item-val">Technical Support</div>
-                        </div>
-                        <i class="ico-cirle fa fa-pencil"></i>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
