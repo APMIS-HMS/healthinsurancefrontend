@@ -56,7 +56,6 @@ export class NewEmployerComponent implements OnInit {
   ngAfterViewInit() {
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
-        console.log(param)
         this.selectedFacilityId = param.id;
         this._getEmployerDetails(param.id);
       } else {
