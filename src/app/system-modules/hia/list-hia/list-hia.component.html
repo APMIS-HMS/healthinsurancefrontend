@@ -18,6 +18,7 @@
             <label>Type</label>
             <select [formControl]="filterTypeControl" class="form-control">
                 <option value="All" selected>All</option>
+                <option [ngValue]="item.name" *ngFor="let item of hiaTypes">{{item.name}}</option>
               </select>
         </div>
 
@@ -29,15 +30,18 @@
         </div>
 
         <div class="input-wrap">
-            <label>Utilized By</label>
-            <select [formControl]="utilizedByControl">
-                <option>All</option>
+            <label>Grade</label>
+            <select [formControl]="utilizedByControl" (change)="onSelectedGrade($event.target.value)">
+                <option selected value="All">All</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
               </select>
         </div>
 
         <div class="input-wrap">
             <label>Status</label>
-            <select [formControl]="statusControl">
+            <select [formControl]="statusControl" (change)="onSelectedStatus($event.target.value)">
                 <option selected value="All">All</option>
                 <option value="true">Active</option>
                 <option value="false">Inactive</option>
@@ -69,10 +73,13 @@
                 <td class="td">{{hia.itContact.lastName}} {{hia.itContact.firstName}}</td>
                 <td class="td">{{hia.itContact.phoneNumber}}</td>
                 <td class="td">{{hia.hia.grade.name}}</td>
-                <td class="td">
+                <!-- <td class="td">
                     <span class="tbl-status-active"> Active </span>
+                </td> -->
+                <!-- <td (click)="navigateViewHIADetail(hia)"><i class="fa fa-chevron-right"></i></td> -->
+                <td (click)="navigateViewHIADetail(hia); " class="td hover {{ hia.isTokenVerified ? ' tbl-status-active': ' tbl-status-inactive' }} ">
+                    {{ hia.isTokenVerified ? 'Active': 'Inactive' }}
                 </td>
-                <td (click)="navigateViewHIADetail(hia)"><i class="fa fa-chevron-right"></i></td>
             </tr>
         </tbody>
     </table>

@@ -43,7 +43,9 @@ export class ListProviderComponent implements OnInit {
     this._getUserTypes();
     this._getFacilityCategories();
     this.filterTypeControl.valueChanges.subscribe(payload => {
+      this._systemService.on();
       if (payload != undefined) {
+       
         this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
           this.providers = payload1.data.filter(function (item) {
             return (item.provider.facilityType.name.toLowerCase().includes(payload.toLowerCase()))
@@ -51,11 +53,13 @@ export class ListProviderComponent implements OnInit {
         });
         
         if (payload === "All") {
+          this._systemService.on();
           this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
             this.providers = payload2.data;
           });
         }
       }
+      this._systemService.off();
     })
 
     this.listsearchControl.valueChanges
