@@ -1,0 +1,72 @@
+
+<form [formGroup]="frmNok" novalidate>
+    <div class="frm-item-wrap">
+        <label class="label">Gender</label>
+        <div class="input-wrap">
+            <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
+                <label for="bene-male">
+                    <input style="width: 30px;display: block;margin: 0 auto;" [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
+                </label>
+            </span>
+        </div>
+        <small class="alert-label" [hidden]="frmNok.controls.gender.valid || frmNok.controls.gender.pristine">
+            Gender is required.
+        </small>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">First name</label>
+        <div class="input-wrap">
+          <input type="text" formControlName="firstName">
+        </div>
+        <small class="alert-label" [hidden]="frmNok.controls.firstName.valid || frmNok.controls.firstName.pristine">
+            This is a required field (minimum 3 and max of 50 characters).
+        </small>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Middle name <small>(Optional)</small></label>
+        <div class="input-wrap">
+          <input type="text" name="middleName" formControlName="middleName">
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Surname</label>
+        <div class="input-wrap">
+          <input type="text" name="lastName" formControlName="lastName">
+        </div>
+        <small class="alert-label" [hidden]="frmNok.controls.lastName.valid || frmNok.controls.lastName.pristine">
+            This is a required field (minimum 3 and max of 50 characters).
+        </small>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Email</label>
+        <div class="input-wrap">
+            <input type="email" formControlName="email" class="form-control">
+        </div>
+        <small class="alert-label" [hidden]="frmNok.controls.email.valid || frmNok.controls.email.pristine">
+            Enter a valid email address.
+        </small>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Phone number</label>
+        <div class="input-wrap">
+            <input type="text" formControlName="phonenumber" class="form-control">
+        </div>
+        <small class="alert-label" [hidden]="frmNok.controls.phonenumber.valid || frmNok.controls.phonenumber.pristine">
+            Enter a valid phone number.
+        </small>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Secondary phone <small>(Optional)</small></label>
+        <div class="input-wrap">
+            <input type="text" formControlName="secondaryPhone" class="form-control">
+        </div>
+    </div>
+    <div style="text-align:right;">
+        <span class="txt-link"><i class="fa fa-plus"></i> Another Next Of Kin</span>
+    </div>
+    <div style="margin:10px auto;display:flex;justify-content:center;">
+        <button class="btn btn-medium btn-blue" (click)="onClickStepOne(frmNok.value, frmNok.valid);">
+            NEXT &nbsp; <i class="fa fa-chevron-right"></i>
+        </button>
+    </div>
+</form>

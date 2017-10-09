@@ -1,0 +1,63 @@
+<form [formGroup]="frmProgram" novalidate>
+    <div class="frm-inner-title">Health Insurance Agent</div>
+
+    <div class="frm-item-wrap">
+        <label class="label">HIA Name</label>
+        <div class="input-wrap">
+            <select formControlName="hiaName" class="form-control">
+                    <option  value="" selected>this time HIA</option>
+                    <option  value="">that season HIA</option>
+                </select>
+        </div>
+    </div>
+
+    <div class="frm-inner-title">Program</div>
+
+    <div class="frm-item-wrap">
+        <label class="label">Type</label>
+        <div class="input-wrap">
+            <select formControlName="programType" class="form-control">
+                    <option  value="" selected>this time HIA</option>
+                    <option  value="">that season HIA</option>
+                </select>
+        </div>
+    </div>
+
+    <div class="frm-item-wrap">
+        <label class="label">Name</label>
+        <div class="input-wrap">
+            <select formControlName="programName" class="form-control">
+                    <option  value="" selected>this time HIA</option>
+                    <option  value="">that season HIA</option>
+                </select>
+        </div>
+    </div>
+
+    <div class="frm-inner-title">Primary Health Care Provider</div>
+
+    <div class="frm-item-wrap">
+        <label class="label">Provider Name</label>
+        <div class="input-wrap">
+            <select formControlName="providerName" class="form-control">
+                    <option  value="" selected>this time HIA</option>
+                    <option  value="">that season HIA</option>
+                </select>
+        </div>
+    </div>
+
+    <div class="frm-item-wrap">
+        <label class="label">Premium Category</label>
+        <div class="input-wrap">
+            <select formControlName="policy" class="form-control">
+                    <option  value="" selected>Individual</option>
+                    <option  value="">Household</option>
+                </select>
+        </div>
+    </div>
+
+    <div style="margin:10px auto;display:flex;justify-content:center;">
+        <button class="btn btn-medium btn-blue" (click)="onClickStepOne(frmProgram.value, frmProgram.valid);">
+            NEXT &nbsp; <i class="fa fa-chevron-right"></i>
+        </button>
+    </div>
+</form>
