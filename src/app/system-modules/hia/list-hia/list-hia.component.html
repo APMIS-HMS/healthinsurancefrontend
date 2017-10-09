@@ -61,14 +61,15 @@
                 <th class="th">Phone Number</th>
                 <th class="th">Grade</th>
                 <th class="th">Status</th>
+                <td class="th">Action</td>
                 <th class="th"></th>
             </tr>
         </thead>
 
         <tbody class="tbody">
             <tr *ngFor="let hia of hias; let i = index;" class="tr">
-                <td (click)="navigateEditHIA(hia)" class="td">{{i+1}}</td>
-                <td (click)="navigateEditHIA(hia)" class="td">{{hia.name}}</td>
+                <td class="td">{{i+1}}</td>
+                <td class="td">{{hia.name}}</td>
                 <td class="td">{{hia.hia.type.name}}</td>
                 <td class="td">{{hia.itContact.lastName}} {{hia.itContact.firstName}}</td>
                 <td class="td">{{hia.itContact.phoneNumber}}</td>

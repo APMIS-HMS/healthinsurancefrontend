@@ -100,7 +100,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Type </label>
                 <div class="input-wrap">
-                    <select formControlName="planType" class="form-control">
+                    <select formControlName="planType" class="form-control" [compareWith]="compare">
                         <option value="" disabled selected>Select Plan Type</option>
                         <option [ngValue]="planType" *ngFor="let planType of planTypes;">{{ planType.name }}</option>
                     </select>
@@ -127,7 +127,7 @@
                 <label class="label">Premium Category</label>
                 <div *ngFor="let premiumType of premiumTypes; let i=index" class="">
                     <label class="form-check-label">
-                        <input formControlName="premiumCategory" class="form-check-input" type="radio"  id="inlineRadio1" [value]="premiumType"> {{premiumType.name}}
+                        <input [checked]="getSelectedCategory(i, premiumType)" formControlName="premiumCategory" class="form-check-input" type="radio"  id="inlineRadio1" [value]="premiumType"> {{premiumType.name}}
                     </label>
                 </div>
             </div>
@@ -152,9 +152,9 @@
             <div class="frm-item-wrap">
                 <label class="label">Duration Interval</label>
                 <div class="input-wrap">
-                    <select formControlName="planUnit" class="form-control">
-                            <option value="" disabled selected>Select Unit</option>
-                            <option [ngValue]="duration" *ngFor="let duration of durations;">{{ duration.name }}</option>
+                    <select formControlName="planUnit" class="form-control" [compareWith]="compareDuration">
+                            <option value="" disabled>Select Unit</option>
+                            <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
                     </select>
                     <small [hidden]="planPremiumFormGroup.controls.planUnit.valid || planPremiumFormGroup.controls.planUnit.pristine">
                         This is a required field.
@@ -182,11 +182,11 @@
                 <tr class="tr" *ngIf="premiums.length === 0">
                     <td class="td" colspan="5">No data available in table</td>
                 </tr>
-                <tr class="tr" *ngFor="let premium of premiums; let i = index;">
+                <tr (click)="onSelectPlanRow(premium)" class="tr" *ngFor="let premium of premiums; let i = index;">
                     <td class="td">{{ i+1 }}</td>
                     <td class="td">{{ premium.category.name }}</td>
                     <td class="td">{{ premium.amount }}</td>
-                    <td class="td">{{ premium.unit }}</td>
+                    <td class="td">{{ premium.unit.name }}</td>
                     <td class="td">{{ premium.durationInDay }}</td>
                     <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
                 </tr>
