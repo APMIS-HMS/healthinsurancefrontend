@@ -4,7 +4,7 @@
         <div class="nut-tab-topSect-wrap">
             <div></div>
 
-            <div class="btn btn-medium btn-grey-outline" routerLink="/modules/employer/employers">
+            <div class="btn btn-medium btn-grey-outline" (click)="navigateEmployers('/modules/employer/employers')">
                 <i class="fa fa-times"></i> CANCEL
             </div>
         </div>
@@ -94,12 +94,21 @@
             <div class="frm-item-wrap">
                 <label class="label">Industry Type</label>
                 <div class="input-wrap">
-                    <select formControlName="type" class="form-control" [compareWith]='compare'>
+                    <select formControlName="type" class="form-control" [compareWith]='compareIndustry'>
                         <option value="" selected>Select Industry Type</option>
                         <option *ngFor="let industry of industries" [ngValue]="industry">{{ industry.name }}</option>
                     </select>
                 </div>
                 <small class="alert-label" [hidden]="employerFormGroup.controls.type.valid || employerFormGroup.controls.type.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Business Contact First Name</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="bc_fname" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="employerFormGroup.controls.bc_fname.valid || employerFormGroup.controls.bc_fname.pristine">
                     This is a required field.
                 </small>
             </div>
@@ -239,7 +248,7 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">CAC Number</label>
+                <label class="label">Photo</label>
                 <div class="input-wrap">
                     <button class="btn btn-medium btn-blue">Search Photo</button>
                 </div>
