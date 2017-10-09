@@ -156,8 +156,6 @@ export class NewProviderComponent implements OnInit {
   }
 
   compareState(s1: any, s2: any) {
-    console.log(s1);
-    console.log(s2);
     return s1._id === s2._id;
   }
   compareCity(c1: any, c2: any) {
