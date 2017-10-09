@@ -3,10 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
+import { Observable, Subscription } from 'rxjs/Rx';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
-  SystemModuleService, UserTypeService, FacilityService
+  SystemModuleService, UserTypeService, FacilityService, FacilityCategoryService
 } from './../../../services/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
@@ -24,6 +25,7 @@ export class ListProviderComponent implements OnInit {
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
   providers: any = <any>[];
+  categories: any = <any>[];
   loading: boolean = true;
   selectedUserType: any = <any>{};
 
@@ -33,11 +35,59 @@ export class ListProviderComponent implements OnInit {
     private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
-    private _userTypeService: UserTypeService
+    private _userTypeService: UserTypeService,
+    private _facilityCategoryService: FacilityCategoryService
   ) { }
 
   ngOnInit() {
     this._getUserTypes();
+    this._getFacilityCategories();
+    this.filterTypeControl.valueChanges.subscribe(payload => {
+      if (payload != undefined) {
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
+          this.providers = payload1.data.filter(function (item) {
+            return (item.provider.facilityType.name.toLowerCase().includes(payload.toLowerCase()))
+          })
+        });
+        
+        if (payload === "All") {
+          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+            this.providers = payload2.data;
+          });
+        }
+      }
+    })
+
+    this.listsearchControl.valueChanges
+      .distinctUntilChanged()
+      .debounceTime(200)
+      .switchMap((term) => Observable.fromPromise(
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } })))
+      .subscribe((payload: any) => {
+        console.log(this.listsearchControl.value);
+        var strVal = this.listsearchControl.value;
+        console.log(payload.data);
+        this.providers = payload.data.filter(function (item) {
+          try {
+            return (item.name.toLowerCase().includes(strVal.toLowerCase())
+              || item.email.toLowerCase().includes(strVal.toLowerCase())
+              || item.provider.facilityType.name.toLowerCase().includes(strVal.toLowerCase())
+              || item.provider.facilityClass.toLowerCase().includes(strVal.toLowerCase())
+              || item.businessContact.lastName.toLowerCase().includes(strVal.toLowerCase())
+              || item.provider.facilityType.name.toLowerCase().includes(strVal.toLowerCase())
+              || item.businessContact.phoneNumber.includes(strVal.toLowerCase()))
+          } catch (Exception) {
+            return
+          }
+
+        })
+      });
+  }
+
+  private _getFacilityCategories() {
+    this._facilityCategoryService.find({}).then((payload: any) => {
+      this.categories = payload.data;
+    })
   }
 
   private _getProviders() {
@@ -48,6 +98,18 @@ export class ListProviderComponent implements OnInit {
         this.providers = res.data;
       }
     }).catch(err => console.log(err));
+  }
+
+  onSelectedStatus(item) {
+    console.log(item);
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id,isTokenVerified:item, $limit: 200 } }).then((payload: any) => {
+      this.providers = payload.data;
+    });
+    if(item=="All"){
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
+        this.providers = payload.data;
+      });
+    }
   }
 
   private _getUserTypes() {
