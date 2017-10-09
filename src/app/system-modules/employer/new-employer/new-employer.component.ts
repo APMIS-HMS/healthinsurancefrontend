@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
   FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
   UserTypeService, SystemModuleService,
@@ -31,14 +32,15 @@ export class NewEmployerComponent implements OnInit {
   userTypes: any[] = [];
   contactPositions: any[] = [];
   saveBtn: string = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-
+  selectedFacilityId: string;
   selectedUserType: any;
   selectedCountry: any;
-  selectedState: any
+  selectedState: any;
   facility: any;
 
   constructor(
     private _fb: FormBuilder,
+    private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _industryService: IndustryService,
@@ -48,22 +50,24 @@ export class NewEmployerComponent implements OnInit {
     private _bankService: BankService,
     private _countriesService: CountryService,
     private _route: ActivatedRoute,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private loadingService: LoadingBarService,
   ) { }
   ngAfterViewInit() {
     this._route.params.subscribe(param => {
 
       if (param.id !== undefined) {
         console.log(param)
+        this.selectedFacilityId = param.id;
         this._getEmployerDetails(param.id);
       } else {
         this._initialiseFormGroup();
       }
-    })
+    });
   }
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Employer');
-    this._headerEventEmitter.setMinorRouteUrl('');
+    this._headerEventEmitter.setMinorRouteUrl('Create new employer');
     this._initialiseFormGroup();
     this._getIndustries();
 
@@ -71,42 +75,8 @@ export class NewEmployerComponent implements OnInit {
     this._getCountries();
     this._getBanks();
     this._getUserTypes();
-    // this.employerFormGroup = this._fb.group({
-    // 	employerName: [this.facility != null ? this.facility.name : '', [<any>Validators.required]],
-    // 	address: ['', [<any>Validators.required]],
-    // 	email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    // 	state: [this.facility != null ? this.facility.address.state : '', [<any>Validators.required]],
-    // 	city: ['', [<any>Validators.required]],
-    // 	lga: ['', [<any>Validators.required]],
-    // 	neighbourhood: ['', [<any>Validators.required]],
-    // 	phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    // 	bc_lname: ['', [<any>Validators.required]],
-    // 	bc_fname: ['', [<any>Validators.required]],
-    // 	bc_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    // 	bc_position: ['', [<any>Validators.required]],
-    // 	bc_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    // 	it_lname: ['', [<any>Validators.required]],
-    // 	it_fname: ['', [<any>Validators.required]],
-    // 	it_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    // 	it_position: ['', [<any>Validators.required]],
-    // 	it_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    // 	type: ['', [<any>Validators.required]],
-    // 	bank: ['', [<any>Validators.required]],
-    // 	bankAccName: ['', [<any>Validators.required]],
-    // 	bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
-    // 	cacNumber: ['', [<any>Validators.required]],
-    // 	cinNumber: ['', [<any>Validators.required]]
-    // });
-
-    // this.employerFormGroup.controls['state'].valueChanges.subscribe(value => {
-    // 	console.log(value)
-    // 	if (value !== null) {
-    // 		this._getLgaAndCities(this.selectedCountry._id, value);
-    // 	}
-    // });
-
-
   }
+  
   _initialiseFormGroup() {
     this.employerFormGroup = this._fb.group({
       employerName: [this.facility != null ? this.facility.name : '', [<any>Validators.required]],
@@ -157,9 +127,9 @@ export class NewEmployerComponent implements OnInit {
         this._initialiseFormGroup();
       }).catch(err => {
         this._systemService.off();
-      })
-
+      });
   }
+
   compareState(s1: any, s2: any) {
     return s1._id === s2._id;
   }
@@ -170,7 +140,7 @@ export class NewEmployerComponent implements OnInit {
     return l1._id === l2._id;
   }
   compareIndustry(l1: any, l2: any) {
-    return l1._id === l2._id;
+      return l1._id === l2._id;
   }
   compare(l1: any, l2: any) {
     return l1._id === l2._id;
@@ -197,10 +167,10 @@ export class NewEmployerComponent implements OnInit {
         const index = payload.data.findIndex(x => x.name === 'Employer');
         if (index > -1) {
           this.selectedUserType = payload.data[index];
-          this.employerFormGroup.controls['type'].setValue(this.selectedUserType);
+          // this.employerFormGroup.controls['type'].setValue(this.selectedUserType);
         } else {
           this.selectedUserType = undefined;
-          this.employerFormGroup.controls['type'].reset();
+          // this.employerFormGroup.controls['type'].reset();
         }
       }
     }, error => {
@@ -366,15 +336,36 @@ export class NewEmployerComponent implements OnInit {
       this._systemService.on();
       this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
       let facility = this._extractFacility();
-      this._facilityService.create(facility).then(payload => {
-        this.employerFormGroup.reset();
-        this._systemService.off();
-        this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-        this._toastr.success('Employer has been created successfully!', 'Success!');
-      }).catch(err => {
-        this._systemService.off();
-      });
-
+      console.log(facility);
+      if (!!this.selectedFacilityId) {
+        // Edit Employer.
+        facility._id = this.selectedFacilityId;
+        this._facilityService.update(facility).then((payload: any) => {
+          console.log(payload);
+          this._systemService.off();
+          this._toastr.info('Navigating to employer details page...', 'Navigate!');
+          setTimeout(e => {
+            this.navigateEmployers('/modules/employer/employers/' + payload._id);
+          }, 2000);
+          this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+          this._toastr.success('Employer has been updated successfully!', 'Success!');
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+        });
+      } else {
+        // Create Employer.
+        this._facilityService.create(facility).then(payload => {
+          console.log(payload);
+          // this.employerFormGroup.reset();
+          this._systemService.off();
+          this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+          this._toastr.success('Employer has been created successfully!', 'Success!');
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+        });
+      }
     } else {
       this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
     }
@@ -393,6 +384,15 @@ export class NewEmployerComponent implements OnInit {
     }).catch(err => {
       this._systemService.off();
     })
+  }
+
+  navigateEmployers(url) {
+    this.loadingService.startLoading();
+    this._router.navigate([url]).then(res => {
+      this.loadingService.endLoading();
+    }).catch(err => {
+      this.loadingService.endLoading();
+    });
   }
 
 }

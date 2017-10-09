@@ -53,47 +53,51 @@
             <tr class="tr">
                 <th class="th">No</th>
                 <th class="th">Name</th>
+                <th class="th">Email</th>
                 <th class="th">Contact Person</th>
-                <th class="th">Phone number</th>
-                <th class="th">No. of Employers</th>
+                <th class="th">Contact Number</th>
                 <th class="th">Industry Type</th>
-                <th class="th">CAC number</th>
-                <th class="th">CIN number</th>
+                <th class="th">CAC Number</th>
+                <th class="th">CIN Number</th>
                 <th class="th">Status</th>
+                <th class="th">Action</th>
                 <th class="th"></th>
             </tr>
         </thead>
 
         <tbody class="tbody">
             <tr class="tr" *ngIf="employers.length === 0 && !loading">
-                <td class="text-center" colspan="9">No data available in table</td>
+                <td class="text-center" colspan="11">No data available in table</td>
             </tr>
             <tr class="tr" *ngIf="employers.length === 0 && loading">
-                <td class="text-center" colspan="9">
+                <td class="text-center" colspan="11">
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let employer of employers; let i = index;" routerLink="/modules/employer/employers/{{ employer._id }}" class="tr">
-                <td>{{ i+1 }}</td>
-                <td>{{ employer.name }}</td>
-                <td>{{ employer.businessContact.lastName }} {{ employer.businessContact.firstName }}</td>
-                <td>{{ employer.businessContact.phoneNumber }}</td>
-                <td class="text-right">{{ employer.businessContact.contactPhoneNo }}</td>
-                <td>Information Technology</td>
-                <td>{{ employer.employer.cacNumber }}</td>
-                <td>{{ employer.employer.cin }}</td>
-                <td>
-                    <span class="{{ employer.isTokenVerified ? 'text-success': 'text-red' }}"> 
-                        {{ employer.isTokenVerified ? 'Active': 'Inactive' }}
-                    </span>
+            <tr *ngFor="let employer of employers; let i = index;" class="tr">
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ i+1 }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.name }}</td>
+                <td class="td hover text-right" (click)="navigateToDetails(employer._id);">{{ employer.email }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.businessContact.lastName }} {{ employer.businessContact.firstName }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.businessContact.phoneNumber }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.industry.name }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.cacNumber }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.cin }}</td>
+                <td (click)="navigateToDetails(employer._id);" class="td hover {{ employer.isTokenVerified ? ' tbl-status-active': ' tbl-status-inactive' }}">
+                    {{ employer.isTokenVerified ? 'Active': 'Inactive' }}
                 </td>
-                <td><i class="fa fa-chevron-right" routerLink="/modules/employer/employers/{{ employer._id }}"></i></td>
+                <td class="td td-icos">
+                    <i class="fa fa-edit" (click)="onClickEdit(employer);"></i>
+                </td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">
+                    <i class="fa fa-chevron-right"></i>
+                </td>
             </tr>
         </tbody>
     </table>
 
     <div class="list-buttom" *ngIf="employers.length > 0">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+        <div class="list-summary">Showing 1 to {{ employers.length }} of {{ employers.length }} entries (filtered from {{ employers.length }} total entries)</div>
         <div class="btn btn-medium btn-yellow">Load More</div>
     </div>
 </div>

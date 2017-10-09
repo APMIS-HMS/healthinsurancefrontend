@@ -13,3 +13,5 @@ export const DURATIONS = [
     { 'id': 2, 'name': 'Month', 'days': 30, 'selected': false },
     { 'id': 3, 'name': 'Week', 'days': 7, 'selected': false }
 ];
+
+export const CurrentPlaformShortName ='LASHMA';

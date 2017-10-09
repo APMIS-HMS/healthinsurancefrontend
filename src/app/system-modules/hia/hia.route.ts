@@ -10,8 +10,9 @@ const HIA_ROUTES: Routes = [
         path: '', component: HiaComponent, children: [
             { path: '', redirectTo: 'hias', pathMatch: 'full' },
             { path: 'hias', component: ListHiaComponent },
-            { path: 'hias/:hia-id', component: HiaDetailsComponent },
+            { path: 'hias/:id', component: HiaDetailsComponent },
             { path: 'new', component: NewHiaComponent },
+            { path: 'new/:id', component: NewHiaComponent },
         ]
     }
 ];

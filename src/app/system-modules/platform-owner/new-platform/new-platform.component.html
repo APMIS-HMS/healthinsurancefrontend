@@ -45,7 +45,7 @@
                         Enter a valid website address. (e.g http://websitename.com)
                     </small>
                 </div>
-                
+
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Address (Street)</label>
@@ -59,7 +59,7 @@
             <div class="frm-item-wrap">
                 <label class="label">State</label>
                 <div class="input-wrap">
-                    <select formControlName="state" class="form-control"  [compareWith]='compare'>
+                    <select formControlName="state" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select State</option>
                         <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
                     </select>
@@ -239,7 +239,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Registration Date </label>
                 <div style="width:300px;" class="input-wrap">
-                    <my-date-picker  name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
+                    <my-date-picker name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
                         This is a required field.
                     </small>
@@ -260,8 +260,7 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-medium btn-blue cta" [disabled]="!platformFormGroup.valid" (click)="save(platformFormGroup.valid, platformFormGroup.value)"
-                [innerHtml]="saveBtn"></button>
+            <button class="btn btn-medium btn-blue cta" [disabled]="!platformFormGroup.valid" (click)="save(platformFormGroup.valid, platformFormGroup.value, fileInput)" [innerHtml]="saveBtn"></button>
             <!-- <button (click)="onClickAddPlan(platformFormGroup.valid, platformFormGroup.value)" class="btn btn-medium btn-blue"> NEXT</button> -->
         </form>
     </section>

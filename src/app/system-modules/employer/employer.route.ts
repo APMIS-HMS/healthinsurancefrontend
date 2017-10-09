@@ -10,8 +10,9 @@ const EMPLOYER_ROUTES: Routes = [
         path: '', component: EmployerComponent, children: [
             { path: '', redirectTo: 'employers', pathMatch: 'full' },
             { path: 'employers', component: ListEmployerComponent },
-            { path: 'employers/:employer-id', component: EmployerDetailsComponent },
+            { path: 'employers/:id', component: EmployerDetailsComponent },
             { path: 'new', component: NewEmployerComponent },
+            { path: 'new/:id', component: NewEmployerComponent },
         ]
     }
 ];

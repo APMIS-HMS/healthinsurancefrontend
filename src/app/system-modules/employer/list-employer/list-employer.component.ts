@@ -24,6 +24,7 @@ export class ListEmployerComponent implements OnInit {
   employers: any = <any>[];
   loading: Boolean = true;
   planTypes:any[] = [];
+  selectedUserType: any = <any>{};
 
   constructor(
     private _router: Router,
@@ -31,23 +32,57 @@ export class ListEmployerComponent implements OnInit {
     private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
+    private _userTypeService: UserTypeService
   ) { }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Beneficiary List');
-    this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
+    this._headerEventEmitter.setRouteUrl('Employer List');
+    this._headerEventEmitter.setMinorRouteUrl('All employers');
 
-    this._getEmployers();
+    this._getUserTypes();
+  }
+
+  onClickEdit(employer) {
+    console.log(employer);
   }
 
   private _getEmployers() {
-    this._facilityService.find({}).then((res: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((res: any) => {
       this.loading = false;
       console.log(res);
-      if (res.data > 0) {
+      if (res.data.length > 0) {
         this.employers = res.data;
       }
     }).catch(err => console.log(err));
+  }
+
+  private _getUserTypes() {
+    this._systemService.on();
+    this._userTypeService.find({}).then((payload: any) => {
+      this._systemService.off();
+      console.log(payload);
+      if (payload.data.length > 0) {
+        const index = payload.data.findIndex(x => x.name === 'Employer');
+        if (index > -1) {
+          this.selectedUserType = payload.data[index];
+          console.log(this.selectedUserType);
+          this._getEmployers();
+        } else {
+          this.selectedUserType = undefined;
+        }
+      }
+    }, error => {
+      this._systemService.off();
+    });
+  }
+
+  navigateToDetails(id: string) {
+    this.loadingService.startLoading();
+    this._router.navigate(['/modules/employer/employers/' + id]).then(res => {
+      this.loadingService.endLoading();
+    }).catch(err => {
+      this.loadingService.endLoading();
+    });
   }
 
   navigateNewEmployer() {

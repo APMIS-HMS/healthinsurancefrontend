@@ -338,55 +338,55 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     return l1._id === l2._id;
   }
 
-  save(valid, value) {
-    valid = true;
+  save(valid, value, image) {
     if (valid) {
-      
-      this._systemService.on();
-      this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
-      let facility = this._extractFacility();
-
-      let fileBrowser = this.fileInput.nativeElement;
-      if (fileBrowser.files && fileBrowser.files[0]) {
-        this.upload().then((result: any) => {
-          if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-            console.log(result.body[0].file)
-            facility.logo = result.body[0].file;
-            this._facilityService.create(facility).then((payload: Facility) => {
-              this._systemService.off();
-              this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-              this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-              this.platformFormGroup.reset();
-              this._router.navigate(['/modules/platform/platforms', payload._id]);
-            }).catch(err => {
-              this._systemService.off();
-            });
-          }
-        }).catch(err => {
-          this._systemService.off();
-        })
-
-
+      if (image.files && image.files[0]) {
+        this._systemService.on();
+        this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+        let facility = this._extractFacility();
+  
+        if (image.files && image.files[0]) {
+          // Save image to the DB before going to save facility.
+          this.upload(image).then((result: any) => {
+            console.log(result);
+            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+              console.log(result.body[0].file)
+              facility.logo = result.body[0].file;
+              this._facilityService.create(facility).then((payload: Facility) => {
+                this._systemService.off();
+                this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+                this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+                this.platformFormGroup.reset();
+                this._router.navigate(['/modules/platform/platforms', payload._id]);
+              }).catch(err => {
+                this._systemService.off();
+              });
+            }
+          }).catch(err => {
+            console.log(err);
+            this._systemService.off();
+          });
+        } else {
+          this._facilityService.create(facility).then((payload: Facility) => {
+            this._systemService.off();
+            // this.platformFormGroup.reset();
+            this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+            this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+            this._router.navigate(['/modules/platform/platforms', payload._id]);
+          }).catch(err => {
+            this._systemService.off();
+          });
+        }
       } else {
-        this._facilityService.create(facility).then((payload: Facility) => {
-          this._systemService.off();
-          // this.platformFormGroup.reset();
-          this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-          this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-          this._router.navigate(['/modules/platform/platforms', payload._id]);
-        }).catch(err => {
-          this._systemService.off();
-        });
+        this._systemService.off();
+        this._toastr.error('Please select an image!', 'Form Validation Error!');
       }
-
-
-
     } else {
       this._systemService.off();
       this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
     }
-
   }
+
   showImageBrowseDlg() {
     this.fileInput.nativeElement.click()
   }
@@ -405,14 +405,21 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     }
   }
 
-  upload() {
+  upload(image) {
     // this._systemService.on();
-    let fileBrowser = this.fileInput.nativeElement;
-    if (fileBrowser.files && fileBrowser.files[0]) {
+    // let fileBrowser = this.fileInput.nativeElement;
+    if (image.files && image.files[0]) {
       const formData = new FormData();
-      formData.append("platform", fileBrowser.files[0]);
+      formData.append("platform", image.files[0]);
+      // return new Promise((resolve, reject) => {
+      //   resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      // });
       return new Promise((resolve, reject) => {
-        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+        this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
+          resolve(res);
+        }).catch(err => {
+          reject(err)
+        });
       });
 
 
@@ -437,8 +444,6 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   // }
 
   setDate(): void {
-    // Set today date using the patchValue function
-    // let date = new Date();
     this.platformFormGroup.patchValue({
       registrationDate: {
         date: {
@@ -450,7 +455,6 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     });
   }
   clearDate(): void {
-    // Clear the date using the patchValue function
     this.platformFormGroup.patchValue({ registrationDate: null });
   }
 }
