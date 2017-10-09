@@ -3,10 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
+import { Observable, Subscription } from 'rxjs/Rx';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
-  SystemModuleService, UserTypeService, FacilityService
+  SystemModuleService, UserTypeService, FacilityService, IndustryService
 } from './../../../services/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
@@ -22,8 +23,9 @@ export class ListEmployerComponent implements OnInit {
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
   employers: any = <any>[];
+  industries: any = <any>[];
   loading: Boolean = true;
-  planTypes:any[] = [];
+  planTypes: any[] = [];
   selectedUserType: any = <any>{};
 
   constructor(
@@ -32,7 +34,8 @@ export class ListEmployerComponent implements OnInit {
     private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
-    private _userTypeService: UserTypeService
+    private _userTypeService: UserTypeService,
+    private _industryService: IndustryService
   ) { }
 
   ngOnInit() {
@@ -40,10 +43,64 @@ export class ListEmployerComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('All employers');
 
     this._getUserTypes();
+    this._getIndustries();
+
+    this.filterTypeControl.valueChanges.subscribe(payload => {
+      var previousEmployerLists = this.employers;
+
+      if (payload != undefined) {
+        this.employers = this.employers.filter(function (item) {
+          return (item.employer.industry.name.toLowerCase().includes(payload.toLowerCase()))
+        })
+        if (payload === "All") {
+          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
+            this.employers = payload.data;
+          });
+        }
+      }
+    })
+
+    this.listsearchControl.valueChanges
+      .distinctUntilChanged()
+      .debounceTime(200)
+      .switchMap((term) => Observable.fromPromise(
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } })))
+      .subscribe((payload: any) => {
+        console.log(this.listsearchControl.value);
+        var strVal = this.listsearchControl.value;
+        this.employers = payload.data.filter(function (item) {
+          return (item.name.toLowerCase().includes(strVal.toLowerCase())
+            || item.email.toLowerCase().includes(strVal.toLowerCase())
+            || item.employer.industry.name.toLowerCase().includes(strVal.toLowerCase())
+            || item.employer.cacNumber.toLowerCase().includes(strVal.toLowerCase())
+            || item.employer.cin.toLowerCase().includes(strVal.toLowerCase())
+            || item.businessContact.lastName.toLowerCase().includes(strVal.toLowerCase())
+            || item.businessContact.firstName.toLowerCase().includes(strVal.toLowerCase())
+            || item.businessContact.phoneNumber.includes(strVal.toLowerCase()))
+        })
+      });
   }
 
   onClickEdit(employer) {
     console.log(employer);
+  }
+
+  _getIndustries() {
+    this._industryService.find({}).then((res: any) => {
+      if (res.data.length > 0) {
+        this.industries = res.data;
+      }
+    }).catch(err => console.log(err));
+  }
+
+  onSelectedIndustry(item) {
+    console.log(item.name);
+  }
+
+  onSelectedStatus(item) {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id,isTokenVerified:item, $limit: 200 } }).then((payload: any) => {
+      this.employers = payload.data;
+    });
   }
 
   private _getEmployers() {

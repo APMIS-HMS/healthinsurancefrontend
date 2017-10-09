@@ -18,3 +18,5 @@ export * from './common/industry.service';
 export * from './common/premium-type.service';
 export * from './common/system-module.service';
 export * from './plan/plan.service';
+export * from './provider/provider-grades.service';
+export * from './provider/provider-statuses.service';

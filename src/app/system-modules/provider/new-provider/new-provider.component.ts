@@ -8,7 +8,7 @@ import { SystemModuleService } from './../../../services/common/system-module.se
 import { Facility, CareProvider, Provider, BankDetail, Address, HIA, Contact } from './../../../models/index';
 import {
   FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
-  ContactPositionService, FacilityService
+  ContactPositionService, FacilityService, ProviderGradesService, ProviderStatusesService
 } from './../../../services/index';
 import { GRADES, HEFAMAA_STATUSES } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
@@ -31,7 +31,7 @@ export class NewProviderComponent implements OnInit {
   countryId: string = "";
   stateId: string = "";
   facilityCategories: any = [];
-  grades: any = GRADES;
+  grades: any = <any>[];
   ownerships: any = [];
   countries: any[] = [];
   states: any[] = [];
@@ -40,11 +40,11 @@ export class NewProviderComponent implements OnInit {
   banks: any[] = [];
   userTypes: any[] = [];
   contactPositions: any[] = [];
-  HEFAMAA_STATUSES: any = HEFAMAA_STATUSES;
+  HEFAMAA_STATUSES: any = <any>[];
   saveBtn: string = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   selectedUserType: any;
   selectedCountry: any;
-  facility: any = <any>{};
+  facility: any;
   selectedFacilityId: string = '';
   selectedState: any;
 
@@ -65,36 +65,25 @@ export class NewProviderComponent implements OnInit {
     private _router: Router,
     private _route: ActivatedRoute,
     private loadingService: LoadingBarService,
+    private _providerGradesService: ProviderGradesService,
+    private _providerStatusesService: ProviderStatusesService
   ) { }
 
-  // ngAfterViewInit() {
-  //   this._route.params.subscribe(param => {
-  //     console.log(param);
-  //     if (param.id !== undefined) {
-  //       console.log(param)
-  //       this.selectedFacilityId = param.id;
-  //       this._getProviderDetails(param.id);
-  //     } else {
-  //       this._initialiseFormGroup();
-  //     }
-  //   });
-  // }
-
-  ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('New Provider');
-    this._headerEventEmitter.setMinorRouteUrl('Create new provider');
-
+  ngAfterViewInit() {
+    console.log('After View Init');
     this._route.params.subscribe(param => {
-      console.log(param);
       if (param.id !== undefined) {
-        console.log(param);
         this.selectedFacilityId = param.id;
         this._getProviderDetails(param.id);
       } else {
         this._initialiseFormGroup();
       }
     });
+  }
 
+  ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('New Provider');
+    this._headerEventEmitter.setMinorRouteUrl('Create new provider');
     this._initialiseFormGroup();
     this._getContactPositions();
     this._getCountries();
@@ -102,73 +91,54 @@ export class NewProviderComponent implements OnInit {
     this._getFacilityCategories();
     this._getFacilityOwnerships();
     this._getUserTypes();
-
+    this._getGrades();
+    this._getStatuses();
   }
 
   _initialiseFormGroup() {
     this.providerFormGroup = this._fb.group({
-      providerName: ['', [<any>Validators.required]],
-      email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      address: ['', [<any>Validators.required]],
-      state: ['', [<any>Validators.required]],
-      lga: ['', [<any>Validators.required]],
-      city: ['', [<any>Validators.required]],
-      neighbourhood: ['', [<any>Validators.required]],
-      phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_fname: ['', [<any>Validators.required]],
-      bc_lname: ['', [<any>Validators.required]],
-      bc_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      bc_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_position: ['', [<any>Validators.required]],
-      it_fname: ['', [<any>Validators.required]],
-      it_lname: ['', [<any>Validators.required]],
-      it_position: ['', [<any>Validators.required]],
-      it_email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      it_phone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      type: ['', [<any>Validators.required]],
-      lasrraId: ['', [<any>Validators.required]],
-      hefeemaNumber: ['', [<any>Validators.required]],
-      hefeemaStatus: ['', [<any>Validators.required]],
-      bank: ['', [<any>Validators.required]],
-      bankAccName: ['', [<any>Validators.required]],
-      bankAccNumber: ['', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
-      classification: ['', [<any>Validators.required]],
-      grade: ['', [<any>Validators.required]],
-      ownership: ['', [<any>Validators.required]],
-      comment: ['', [<any>Validators.required]]
+      providerName: [this.facility != null ? this.facility.name : '', [<any>Validators.required]],
+      email: [this.facility != null ? this.facility.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      address: [this.facility != null ? this.facility.address.street : '', [<any>Validators.required]],
+      state: [this.facility != null ? this.facility.address.state : '', [<any>Validators.required]],
+      lga: [this.facility != null ? this.facility.lga : '', [<any>Validators.required]],
+      city: [this.facility != null ? this.facility.city : '', [<any>Validators.required]],
+      neighbourhood: [this.facility != null ? this.facility.neighbourhood : '', [<any>Validators.required]],
+      phone: [this.facility != null ? this.facility.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      bc_lname: [this.facility != null ? this.facility.businessContact.lastName : '', [<any>Validators.required]],
+      bc_fname: [this.facility != null ? this.facility.businessContact.firstName : '', [<any>Validators.required]],
+      bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
+      bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
+      it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
+      it_phone: [this.facility != null ? this.facility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
+      it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      type: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
+      lasrraId: [this.facility != null ? this.facility.lasrraId : '', [<any>Validators.required]],
+      hefeemaNumber: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
+      hefeemaStatus: [this.facility != null ? this.facility.provider.hefeemaStatus : '', [<any>Validators.required]],
+      bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
+      bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
+      bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
+      // cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
+      classification: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
+      grade: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
+      ownership: [this.facility != null ? this.facility.facilityOwnership : '', [<any>Validators.required]],
+      comment: [this.facility != null ? this.facility.provider.comment : '', [<any>Validators.required]]
     });
-    // this.providerFormGroup = this._fb.group({
-    //   providerName: [this.facility != null ? this.facility.name : '', [<any>Validators.required]],
-    //   email: [this.facility != null ? this.facility.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    //   address: [this.facility != null ? this.facility.address.street : '', [<any>Validators.required]],
-    //   state: [this.facility != null ? this.facility.address.state : '', [<any>Validators.required]],
-    //   lga: [this.facility != null ? this.facility.lga : '', [<any>Validators.required]],
-    //   city: [this.facility != null ? this.facility.city : '', [<any>Validators.required]],
-    //   neighbourhood: [this.facility != null ? this.facility.neighbourhood : '', [<any>Validators.required]],
-    //   phone: [this.facility != null ? this.facility.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    //   bc_lname: [this.facility != null ? this.facility.businessContact.lastName : '', [<any>Validators.required]],
-    //   bc_fname: [this.facility != null ? this.facility.businessContact.firstName : '', [<any>Validators.required]],
-    //   bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    //   bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
-    //   bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    //   it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
-    //   it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
-    //   it_phone: [this.facility != null ? this.facility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    //   it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
-    //   it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    //   type: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
-    //   lasrraId: [this.facility != null ? this.facility.lasrraId : '', [<any>Validators.required]],
-    //   hefeemaNumber: [this.facility != null ? this.facility.email : '', [<any>Validators.required]],
-    //   hefeemaStatus: [this.facility != null ? this.facility.hefeemaStatus : '', [<any>Validators.required]],
-    //   bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
-    //   bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
-    //   bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
-    //   cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
-    //   classification: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
-    //   grade: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
-    //   ownership: [this.facility != null ? this.facility.facilityOwnership : '', [<any>Validators.required]],
-    //   comment: [this.facility != null ? this.facility.provider.comment : '', [<any>Validators.required]]
-    // });
+    console.log(this.facility);
+
+    if (this.facility !== undefined) {
+      console.log(this.facility);
+      this.selectedState = this.facility.address.state;
+      // this.providerFormGroup.controls['type'].setValue(this.facility.provider);
+    }
+
+    if(this.facility === undefined) {
+      this.providerFormGroup.controls['classification'].setValue('primary');
+    }
     
     this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
       console.log(this.selectedCountry);
@@ -178,19 +148,11 @@ export class NewProviderComponent implements OnInit {
       }
     });
 
-    if (this.facility._id !== undefined) {
-      console.log(this.facility);
-      this.selectedState = this.facility.address.state;
-      // this.providerFormGroup.controls['type'].setValue(this.facility.provider);
-    } else {
-      this.providerFormGroup.controls['classification'].setValue('primary');
-    }
-
-    this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
-      if (value !== null) {
-        this._getLgaAndCities(this.selectedCountry._id, value);
-      }
-    });
+    // this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
+    //   if (value !== null) {
+    //     this._getLgaAndCities(this.selectedCountry._id, value);
+    //   }
+    // });
     
   }
 
@@ -215,10 +177,16 @@ export class NewProviderComponent implements OnInit {
   compareLGA(l1: any, l2: any) {
     return l1._id === l2._id;
   }
-  compareIndustry(l1: any, l2: any) {
+  compareBank(l1: any, l2: any) {
     return l1._id === l2._id;
   }
   compare(l1: any, l2: any) {
+    return l1._id === l2._id;
+  }
+  compareGrade(l1: any, l2: any) {
+    return l1._id === l2._id;
+  }
+  compareStatus(l1: any, l2: any) {
     return l1._id === l2._id;
   }
 
@@ -229,9 +197,32 @@ export class NewProviderComponent implements OnInit {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
-  _getUserTypes() {
+  
+  private _getGrades() {
+    this._systemService.on();
+    this._providerGradesService.find({}).then((payload: any) => {
+      this.grades = payload.data;
+      console.log(this.grades);
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  private _getStatuses() {
+    this._systemService.on();
+    this._providerStatusesService.find({}).then((payload: any) => {
+      this.HEFAMAA_STATUSES = payload.data;
+      console.log(this.HEFAMAA_STATUSES);
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+  
+  private _getUserTypes() {
     this._systemService.on();
     this._userTypeService.findAll().then((payload: any) => {
       this._systemService.off();
@@ -250,7 +241,7 @@ export class NewProviderComponent implements OnInit {
       this._systemService.off();
     })
   }
-  _getCountries() {
+  private _getCountries() {
     this._systemService.on();
     this._countriesService.find({
       query: {
@@ -269,7 +260,7 @@ export class NewProviderComponent implements OnInit {
       this._systemService.off();
     })
   }
-  _getStates(_id) {
+  private _getStates(_id) {
     this._systemService.on();
     this._countriesService.find({
       query: {
@@ -430,34 +421,68 @@ export class NewProviderComponent implements OnInit {
       this._systemService.on();
       this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
       let facility = this._extractFacility();
-
-      this._facilityService.create(facility).then(payload => {
-        this._systemService.off();
-        this.providerFormGroup.reset();
-        this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-        this._toastr.success('Care Provider has been created successfully!', 'Success!');
-        this.providerFormGroup.controls['classification'].setValue('primary');
-      }).catch(err => {
-        this._systemService.off();
-        if (err == 'Error: This email already exist') {
-          this._toastr.error('This email alreay exist!', 'Email exists!');
-        } else {
-          this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
-        }
-      });
-
+      console.log(facility);
+      if (!!this.facility) {
+        // Edit Provider.
+        facility._id = this.selectedFacilityId;
+        this._facilityService.update(facility).then((payload: any) => {
+          this._systemService.off();
+          // this.providerFormGroup.reset();
+          this._toastr.info('Navigating to provider details page...', 'Navigate!');
+          setTimeout(e => {
+            this.navigateProviders('/modules/employer/employers/', + payload._id);
+          }, 2000);
+          this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+          this._toastr.success('Care Provider has been updated successfully!', 'Success!');
+          this.providerFormGroup.controls['classification'].setValue('primary');
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+          if (err == 'Error: This email already exist') {
+            this._toastr.error('This email alreay exist!', 'Email exists!');
+          } else {
+            this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+          }
+        });
+      } else {
+        // Create Provider
+        this._facilityService.create(facility).then(payload => {
+          this._systemService.off();
+          // this.providerFormGroup.reset();
+          this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+          this._toastr.success('Care Provider has been created successfully!', 'Success!');
+          this.providerFormGroup.controls['classification'].setValue('primary');
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+          if (err == 'Error: This email already exist') {
+            this._toastr.error('This email alreay exist!', 'Email exists!');
+          } else {
+            this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+          }
+        });
+      }
     } else {
       this._systemService.off();
       this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
     }
   }
 
-  navigateNewEmployer() {
-    this.loadingService.startLoading();
-    this._router.navigate(['/modules/provider/new']).then(res => {
-      this.loadingService.endLoading();
-    }).catch(err => {
-      this.loadingService.endLoading();
-    });
+  navigateProviders(path, routeId) {
+    if (!!routeId) {
+      this.loadingService.startLoading();
+      this._router.navigate([path + routeId]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    } else {
+      this.loadingService.startLoading();
+      this._router.navigate([path]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    }
   }
 }

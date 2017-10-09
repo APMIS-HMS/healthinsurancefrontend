@@ -15,30 +15,16 @@
         <div class="label-xx">Filters:</div>
 
         <div class="input-wrap">
-            <label>Type</label>
+            <label>Industries Type</label>
             <select [formControl]="filterTypeControl" class="form-control">
         <option value="All" selected>All</option>
-        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
-      </select>
-        </div>
-
-        <div class="input-wrap">
-            <label>Created By</label>
-            <select [formControl]="createdByControl">
-        <option>All</option>
-      </select>
-        </div>
-
-        <div class="input-wrap">
-            <label>Utilized By</label>
-            <select [formControl]="utilizedByControl">
-        <option>All</option>
+        <option *ngFor="let item of industries" [ngValue]="item.name" >{{ item.name }}</option>
       </select>
         </div>
 
         <div class="input-wrap">
             <label>Status</label>
-            <select [formControl]="statusControl">
+            <select [formControl]="statusControl" (change)="onSelectedStatus($event.target.value)">
         <option selected value="All">All</option>
         <option value="true">Active</option>
         <option value="false">Inactive</option>
@@ -97,7 +83,9 @@
     </table>
 
     <div class="list-buttom" *ngIf="employers.length > 0">
-        <div class="list-summary">Showing 1 to {{ employers.length }} of {{ employers.length }} entries (filtered from {{ employers.length }} total entries)</div>
+        <div class="list-summary">Showing 1 to {{ employers.length }} of {{ employers.length }} entries (filtered from {{ employers.length }} total
+            entries)
+        </div>
         <div class="btn btn-medium btn-yellow">Load More</div>
     </div>
 </div>

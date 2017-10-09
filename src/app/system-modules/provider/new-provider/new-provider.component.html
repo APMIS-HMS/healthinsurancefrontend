@@ -4,7 +4,7 @@
         <div class="nut-tab-topSect-wrap">
             <div></div>
 
-            <div class="btn btn-medium btn-grey-outline" (click)="navigateNewEmployer()">
+            <div class="btn btn-medium btn-grey-outline" (click)="navigateProviders('/modules/provider/providers')">
                 <i class="fa fa-times"></i> CANCEL
             </div>
         </div>
@@ -52,7 +52,7 @@
             <div class="frm-item-wrap">
                 <label class="label">L.G.A</label>
                 <div class="input-wrap">
-                    <select formControlName="lga" class="form-control">
+                    <select formControlName="lga" class="form-control" [compareWith]='compareLGA'>
                         <option value="" selected>Select Local Government</option>
                         <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
                     </select>
@@ -64,7 +64,7 @@
             <div class="frm-item-wrap">
                 <label class="label">City</label>
                 <div class="input-wrap">
-                    <select formControlName="city" class="form-control">
+                    <select formControlName="city" class="form-control" [compareWith]='compareCity'>
                         <option value="" selected>Select City</option>
                         <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
                     </select>
@@ -112,7 +112,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's Position</label>
                 <div class="input-wrap">
-                    <select formControlName="bc_position" class="form-control">
+                    <select formControlName="bc_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                     </select>
@@ -160,7 +160,7 @@
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Position</label>
                 <div class="input-wrap">
-                    <select formControlName="it_position" class="form-control">
+                    <select formControlName="it_position" class="form-control" [compareWith]='compare'>
                       <option value="" selected>Select Position</option>
                       <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
                   </select>
@@ -190,7 +190,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Type of Center</label>
                 <div class="input-wrap">
-                    <select formControlName="type" class="form-control">
+                    <select formControlName="type" class="form-control" [compareWith]='compare'>
                     <option value="" selected>Select Type</option>
                     <option *ngFor="let category of facilityCategories" [ngValue]="category">{{ category.name }}</option>
                   </select>
@@ -220,9 +220,9 @@
             <div class="frm-item-wrap">
                 <label class="label">HEFAMAA Status</label>
                 <div class="input-wrap">
-                    <select formControlName="hefeemaStatus" class="form-control">
+                    <select formControlName="hefeemaStatus" class="form-control" [compareWith]="compareStatus">
                       <option value="" selected>Select Status</option>
-                      <option *ngFor="let status of HEFAMAA_STATUSES" [ngValue]="status.id">{{ status.name }}</option>
+                      <option *ngFor="let status of HEFAMAA_STATUSES" [ngValue]="status">{{ status.name }}</option>
                   </select>
                 </div>
                 <small class="alert-label" [hidden]="providerFormGroup.controls.hefeemaStatus.valid || providerFormGroup.controls.hefeemaStatus.pristine">
@@ -232,7 +232,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Bank</label>
                 <div class="input-wrap">
-                    <select formControlName="bank" class="form-control">
+                    <select formControlName="bank" class="form-control" [compareWith]='compareBank'>
                     <option value="" selected>Select Bank</option>
                     <option *ngFor="let bank of banks" [ngValue]="bank">{{bank.name}}</option>
                     </select>
@@ -284,7 +284,7 @@
                 <div class="input-wrap">
                     <select formControlName="grade" class="form-control">
                       <option value="" selected>Select Grade</option>
-                      <option *ngFor="let grade of grades" [ngValue]="grade.id">{{ grade.name }}</option>
+                      <option *ngFor="let grade of grades" [ngValue]="grade">{{ grade.name }}</option>
                   </select>
                 </div>
                 <small class="alert-label" [hidden]="providerFormGroup.controls.grade.valid || providerFormGroup.controls.grade.pristine">
@@ -294,7 +294,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Ownership Center</label>
                 <div class="input-wrap">
-                    <select formControlName="ownership" class="form-control">
+                    <select formControlName="ownership" class="form-control" [compareWith]='compare'>
                       <option value="" selected>Select Ownership</option>
                       <option *ngFor="let ownership of ownerships" [ngValue]="ownership">{{ ownership.name }}</option>
                   </select>
@@ -316,8 +316,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-medium btn-blue" (click)="onClickSaveProvider(providerFormGroup, providerFormGroup.valid);">
-                    NEXT &nbsp; <i class="fa fa-chevron-right"></i>
+                <button class="btn btn-medium btn-blue" (click)="onClickSaveProvider(providerFormGroup, providerFormGroup.valid);" [innerHtml]="saveBtn">
                 </button>
             </div>
         </form>
