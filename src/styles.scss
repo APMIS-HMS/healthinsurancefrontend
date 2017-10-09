@@ -579,6 +579,19 @@ input[type="checkbox"].switch_1:checked:after {
 .hover {
     cursor: pointer;
 }
+.txt-link {
+    color: #003c6b;
+    text-align: right;
+    cursor: pointer;
+}
+.txt-link:hover{
+    text-decoration: underline;
+}
+.frm-inner-title {
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 20px;
+}
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {

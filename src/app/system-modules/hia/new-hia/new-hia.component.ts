@@ -53,7 +53,7 @@ export class NewHiaComponent implements OnInit {
   selectedFacility: any = <any>{};
 
   public myDatePickerOptions: IMyDpOptions = {
-    dateFormat: 'dd-mmm-yyyy',
+    dateFormat: 'dd-mmm-yyyy', 
   };
 
   public today: IMyDate;
