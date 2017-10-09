@@ -1,5 +1,11 @@
+import { UploadService } from './../../../services/common/upload.service';
+import { SystemModuleService } from './../../../services/common/system-module.service';
+import { Facility } from './../../../models/organisation/facility';
+
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { FacilityService } from '../../../services/index';
 
 @Component({
   selector: 'app-hia-details',
@@ -9,23 +15,56 @@ import { FormControl } from '@angular/forms';
 export class HiaDetailsComponent implements OnInit {
 
   listsearchControl = new FormControl();
-	premiumsearchControl = new FormControl();
+  premiumsearchControl = new FormControl();
+  selectedFacility: Facility = <Facility>{};
 
-	tab_details = true;
-	tab_preauthorization = false;
-	tab_plans = false;
-	tab_beneficiaries = false;
-	tab_employers = false;
+  tab_details = true;
+  tab_preauthorization = false;
+  tab_plans = false;
+  tab_beneficiaries = false;
+  tab_employers = false;
   tab_payment = false;
   tab_claims = false;
-	tab_complaints = false;
-	tab_referals = false;
+  tab_complaints = false;
+  tab_referals = false;
 
-	constructor() { }
+  constructor(
+    private _route: ActivatedRoute,
+    private _facilityService: FacilityService,
+    private _systemService:SystemModuleService,
+    private _uploadService:UploadService,
+    private _router:Router
+  ) { }
 
-  ngOnInit() { }
-  
-  tabDetails_click(){
+  ngOnInit() {
+    this._route.params.subscribe(param =>{
+      if(param.id !== undefined){
+        this._getHIADetails(param.id);
+      }
+    })
+   }
+
+  _getHIADetails(id) {
+    this._systemService.on();
+    this._facilityService.get(id, {}).then((payload: any) => {
+      this.selectedFacility = payload;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    })
+  }
+
+  navigateEditHIA(hia) {
+    this._systemService.on();
+    this._router.navigate(['/modules/hia/new', hia._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
+  }
+
+  tabDetails_click() {
     this.tab_details = true;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -36,7 +75,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
   }
-  tabPreauthorization_click(){
+  tabPreauthorization_click() {
     this.tab_details = false;
     this.tab_preauthorization = true;
     this.tab_plans = false;
@@ -47,7 +86,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
   }
-  tabPlans_click(){
+  tabPlans_click() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = true;
@@ -58,7 +97,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
   }
-  tabBeneficiaries_click(){
+  tabBeneficiaries_click() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -69,7 +108,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
   }
-  tabEmployers_click(){
+  tabEmployers_click() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -80,7 +119,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
   }
-  tabPayment_click(){
+  tabPayment_click() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -91,7 +130,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
   }
-  tabClaims_click(){
+  tabClaims_click() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -102,7 +141,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
   }
-  tabComplaints_click(){
+  tabComplaints_click() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -113,7 +152,7 @@ export class HiaDetailsComponent implements OnInit {
     this.tab_complaints = true;
     this.tab_referals = false;
   }
-  tabReferals_click(){
+  tabReferals_click() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;

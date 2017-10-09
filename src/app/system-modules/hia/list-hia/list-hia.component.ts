@@ -27,7 +27,6 @@ export class ListHiaComponent implements OnInit {
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _authService: AuthService,
-    private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
@@ -73,32 +72,32 @@ export class ListHiaComponent implements OnInit {
   }
 
   navigateNewHIA() {
-    this.loadingService.startLoading();
+    this._systemService.on();
     this._router.navigate(['/modules/hia/new']).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 
 
   navigateEditHIA(hia) {
-    this.loadingService.startLoading();
+    this._systemService.on();
     this._router.navigate(['/modules/hia/new', hia._id]).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
       console.log(err)
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 
   navigateViewHIADetail(hia) {
-    this.loadingService.startLoading();
+    this._systemService.on();
     this._router.navigate(['/modules/hia/hias', hia._id]).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
       console.log(err)
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 }

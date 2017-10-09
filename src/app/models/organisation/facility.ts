@@ -19,10 +19,11 @@ export interface Facility {
     address?: Address;
     bankDetails?: BankDetail;
     facilityType?: any;
-    platformOwnerId:any;
+    platformOwnerId: any;
     website: string;
     lasraaId: string;
     shortName: string;
     verificationToken: string;
     isTokenVerified: boolean;
+    isConfirmed: boolean;
 }

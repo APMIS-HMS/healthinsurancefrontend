@@ -1,14 +1,16 @@
-import { CoolLocalStorage } from 'angular2-cool-storage';
+import { ActivatedRoute } from '@angular/router';
 
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { PlanService, PlanTypeService } from '../../../services/index';
+import { PlanService, PlanTypeService, FacilityService } from '../../../services/index';
 import { Plan, PlanPremium } from '../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { DURATIONS } from '../../../services/globals/config';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { PremiumTypeService } from './../../../services/common/premium-type.service';
+import { CurrentPlaformShortName } from '../../../services/globals/config'
 
 @Component({
   selector: 'app-new-plan',
@@ -21,7 +23,6 @@ export class NewPlanComponent implements OnInit {
   planPremiumFormGroup: FormGroup;
 
   plan: Plan = <Plan>{};
-  planOwner: String = '';
   durations: any = DURATIONS;
   planTypes: any = <any>[];
   premiums: any = <any>[];
@@ -29,6 +30,10 @@ export class NewPlanComponent implements OnInit {
   premiumNextBtn: String = 'SAVE <i class="fa fa-check" aria-hidden="true"></i>';
   disablePremiumNextBtn: Boolean = false;
   premiumTypes: any[] = [];
+  currentPlatform: any;
+  user: any;
+  selectedPlan: any;
+  selectedPremium: any;
 
   tab_details = true;
   tab_premium = false;
@@ -45,9 +50,12 @@ export class NewPlanComponent implements OnInit {
     private _planTypeService: PlanTypeService,
     private _systemService: SystemModuleService,
     private _premiumTypeService: PremiumTypeService,
+    private _facilityService: FacilityService,
+    private _route: ActivatedRoute,
     private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
+    this.user = this._locker.getObject('auth');
     this.planDetailFormGroup = this._fb.group({
       planName: ['', [<any>Validators.required]],
       planType: ['', [<any>Validators.required]],
@@ -61,33 +69,70 @@ export class NewPlanComponent implements OnInit {
       premiumCategory: [this.premiumTypes[0], [<any>Validators.required]]
     });
 
+    this._getCurrentPlatform();
     this._getPlanTypes();
     this._getPremiumTypes();
-    console.log(this._locker.getObject('auth'));
+
+    this._route.params.subscribe(param => {
+      if (param.id !== undefined) {
+        this.premiumNextBtn = 'UPDATE <i class="fa fa-check" aria-hidden="true"></i>';
+        this._getPlan(param.id);
+      }
+    })
+  }
+
+  _getPlan(id) {
+    this._systemService.on();
+    this._planService.get(id, {}).then((payload: any) => {
+      this.planDetailFormGroup.controls['planName'].setValue(payload.name);
+      this.planDetailFormGroup.controls['planType'].setValue(payload.planType);
+      this.premiums = payload.premiums;
+      this.selectedPlan = payload;
+      this.plan = payload;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  _getCurrentPlatform() {
+    this._systemService.on();
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._systemService.off();
+      }
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    });
   }
 
 
   _getPremiumTypes() {
+    this._systemService.on();
     this._premiumTypeService.find({}).then((payload: any) => {
       this.premiumTypes = payload.data;
-      console.log(this.premiumTypes);
+      this._systemService.off();
     }).catch(err => {
+      this._systemService.off();
     });
   }
   private _getPlanTypes() {
     this._systemService.on();
-    this._planTypeService.findAll().then((res: any) => {
+    this._planTypeService.find({}).then((res: any) => {
       this._systemService.off();
       if (res.data.length > 0) {
         this.planTypes = res.data;
       }
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     });
   }
   onClickPremiumNext() {
     console.log(this.plan);
-    if (!this.plan.name) {
+    if (this.plan.name) {
       this.disablePremiumNextBtn = true;
       this.premiumNextBtn = 'Saving Plan... <i class="fa fa-spinner fa-spin"></i>';
       // Save plan
@@ -111,17 +156,32 @@ export class NewPlanComponent implements OnInit {
   }
   onClickAddPremium(valid: Boolean, value: any) {
     if (valid) {
-      const premium = <PlanPremium>{
-        category: value.premiumCategory,
-        amount: value.planAmount,
-        duration: value.planDuration,
-        unit: value.planUnit.name,
-        durationInDay: value.planUnit.days,
-      };
-      this.plan.premiums.push(premium);
-      this.premiums.push(premium);
-      console.log(this.premiums);
-      this.planPremiumFormGroup.reset();
+      console.log(value)
+      if (this.selectedPremium === undefined) {
+        const premium = <PlanPremium>{
+          category: value.premiumCategory,
+          amount: value.planAmount,
+          duration: value.planDuration,
+          unit: value.planUnit,
+          durationInDay: value.planUnit.days,
+        };
+        console.log(this.selectedPlan)
+        this.plan.premiums.push(premium);
+        this.premiums.push(premium);
+        console.log(this.premiums);
+        this.planPremiumFormGroup.reset();
+      }else{
+        this.selectedPremium.category = value.premiumCategory;
+        this.selectedPremium.amount = value.planAmount;
+        this.selectedPremium.duration = value.planDuration;
+        this.selectedPremium.unit = value.planUnit;
+        this.selectedPremium.durationInDay = value.planUnit.days;
+        const index = this.selectedPlan.premiums.findIndex(x => x._id === this.selectedPremium._id);
+        this.selectedPlan.premiums[index] = this.selectedPremium;
+        this.selectedPremium = undefined;
+        this.planPremiumFormGroup.reset();
+      }
+
     } else {
       console.log('Not valid');
     }
@@ -141,7 +201,9 @@ export class NewPlanComponent implements OnInit {
       this.plan = <Plan>{
         name: value.planName,
         planType: value.planType,
-        planOwner: this.planOwner,
+        platformOwnerId: this.currentPlatform,
+        userType: this.user.user.userType,
+        facilityId: this.user.user.facilityId,
         isActive: value.planStatus,
         premiums: []
       };
@@ -213,5 +275,30 @@ export class NewPlanComponent implements OnInit {
     this.tab_procedures = false;
     this.tab_diagnosis = false;
     this.tab_confirm = true;
+  }
+  compare(l1: any, l2: any) {
+    if (l1 !== null && l2 !== null) {
+      return l1._id === l2._id;
+    }
+
+  }
+  compareDuration(l1: any, l2: any) {
+    if (l1 !== null && l2 !== null) {
+      return l1.id === l2.id;
+    }
+  }
+  getSelectedCategory(index, premiumType) {
+    if (this.selectedPremium !== undefined && this.selectedPremium.category !== undefined) {
+      return this.selectedPremium.category._id === premiumType._id;
+    }
+
+  }
+  onSelectPlanRow(premium) {
+    console.log(premium);
+    this.selectedPremium = premium;
+    this.planPremiumFormGroup.controls['premiumCategory'].setValue(premium.category);
+    this.planPremiumFormGroup.controls['planAmount'].setValue(premium.amount);
+    this.planPremiumFormGroup.controls['planDuration'].setValue(premium.duration);
+    this.planPremiumFormGroup.controls['planUnit'].setValue(premium.unit);
   }
 }

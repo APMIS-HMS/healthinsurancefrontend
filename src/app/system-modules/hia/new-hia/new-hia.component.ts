@@ -98,10 +98,7 @@ export class NewHiaComponent implements OnInit {
     })
 
   }
-
-  ngAfterViewInit() {
-
-  }
+  
   _getHiaTypes() {
     this._systemService.on();
     this._hiaTypeService.find({
