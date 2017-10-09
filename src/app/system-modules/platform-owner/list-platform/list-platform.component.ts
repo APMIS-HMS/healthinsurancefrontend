@@ -91,6 +91,11 @@ export class ListPlatformComponent implements OnInit {
     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id,isTokenVerified:item, $limit: 200 } }).then((payload: any) => {
       this.owners = payload.data;
     });
+    if(item=="All"){
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
+        this.owners = payload.data;
+      });
+    }
   }
 
   private _getUserTypes() {
