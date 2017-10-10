@@ -14,7 +14,8 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
   ngOnInit() {
     this.frmDependants = this._fb.group({
-			firstName: ['', [<any>Validators.required]],
+      firstName: ['', [<any>Validators.required]],
+      title: ['', [<any>Validators.required]],
 			middleName: [''],
       lastName: ['', [<any>Validators.required]],
       phonenumber: ['', [<any>Validators.required]],
