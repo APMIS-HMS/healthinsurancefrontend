@@ -18,14 +18,6 @@ export class PlanTypeService {
     this._socket = _socketService.getService('plan-types');
   }
 
-  findAll() {
-    return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('plan-types').then((socket: any) => {
-        return socket.find();
-      }));
-    });
-  }
-
   find(query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('plan-types').then((socket: any) => {

@@ -1,3 +1,6 @@
+import { PlanService } from './../../../services/plan/plan.service';
+import { CoolLocalStorage } from 'angular2-cool-storage';
+import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { PlanTypeService } from './../../../services/common/plan-type.service';
 
 import { UploadService } from './../../../services/common/upload.service';
@@ -9,6 +12,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { UserTypeService } from '../../../services/common/user-type.service';
+import { FacilityService } from '../../../services/index';
 
 @Component({
   selector: 'app-list-plans',
@@ -25,23 +29,45 @@ export class ListPlansComponent implements OnInit {
 
   userTypes: any[] = [];
   planTypes: any[] = [];
+  currentPlatform: any;
+  user: any;
+  plans: any;
+
   constructor(private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _authService: AuthService,
-    private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
-    private _uploadService: UploadService, private _userTypeService: UserTypeService, private _planTypeService: PlanTypeService) { }
+    private _userTypeService: UserTypeService,
+    private _planTypeService: PlanTypeService,
+    private _planService: PlanService,
+    private _facilityService: FacilityService,
+    private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._getPlanTypes();
+    this._getCurrentPlatform();
   }
 
-  navigateNewPlan() {
-    this.loadingService.startLoading();
-    this._router.navigate(['/modules/plan/new']).then(res => {
-      this.loadingService.endLoading();
+  _getPlans() {
+    this._systemService.on();
+    this._planService.find({ query: { 'platformOwnerId._id': this.currentPlatform._id, 'facilityId._id': this.user.facilityId._id } }).then((payload: any) => {
+      this.plans = payload.data;
+      console.log(this.plans)
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
+    });
+  }
+
+  _getCurrentPlatform() {
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._getPlans();
+      }
+    }).catch(err => {
+      console.log(err);
     });
   }
 
@@ -59,12 +85,50 @@ export class ListPlansComponent implements OnInit {
 
   _getPlanTypes() {
     this._systemService.on();
-    this._planTypeService.findAll().then((payload: any) => {
+    this._planTypeService.find({}).then((payload: any) => {
       this._systemService.off();
       if (payload.data.length > 0) {
         this.planTypes = payload.data;
       }
     }, error => {
+      this._systemService.off();
+    });
+  }
+
+  getPrice(duration, plan) {
+    let ret = '0.00';
+    let index = plan.premiums.findIndex(x => x.unit.name === duration);
+    if (index === -1) {
+      return ret;
+    }else{
+      return plan.premiums[index].amount;
+    }
+  }
+
+  navigateNewPlan() {
+    this._systemService.on();
+    this._router.navigate(['/modules/plan/new']).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  navigateEditPlan(plan) {
+    this._systemService.on();
+    this._router.navigate(['/modules/plan/new', plan._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
+  }
+  navigatePlanDetail(plan){
+    this._systemService.on();
+    this._router.navigate(['/modules/plan/plans', plan._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
       this._systemService.off();
     });
   }

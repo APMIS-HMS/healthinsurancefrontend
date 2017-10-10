@@ -11,7 +11,8 @@ const PLAN_ROUTES: Routes = [
             { path: '', redirectTo: "plans", pathMatch: 'full' },
             { path: 'plans', component: ListPlansComponent },
             { path: 'plans/:id', component: DetailsPlanComponent },
-            { path: 'new', component: NewPlanComponent }
+            { path: 'new', component: NewPlanComponent },
+            { path: 'new/:id', component: NewPlanComponent }
         ]
     }
 ];

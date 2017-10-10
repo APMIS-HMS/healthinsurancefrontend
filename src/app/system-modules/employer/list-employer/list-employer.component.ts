@@ -23,6 +23,7 @@ export class ListEmployerComponent implements OnInit {
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
   employers: any = <any>[];
+  local_employers: any = <any>[];
   industries: any = <any>[];
   loading: Boolean = true;
   planTypes: any[] = [];
@@ -46,15 +47,16 @@ export class ListEmployerComponent implements OnInit {
     this._getIndustries();
 
     this.filterTypeControl.valueChanges.subscribe(payload => {
-      var previousEmployerLists = this.employers;
-
       if (payload != undefined) {
-        this.employers = this.employers.filter(function (item) {
-          return (item.employer.industry.name.toLowerCase().includes(payload.toLowerCase()))
-        })
-        if (payload === "All") {
-          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
-            this.employers = payload.data;
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
+          this.employers = payload1.data.filter(function (item) {
+            return (item.employer.industry.name.toLowerCase().includes(payload.toLowerCase()))
+          });
+        });
+
+        if (payload == "All") {
+          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+            this.employers = payload2.data;
           });
         }
       }
@@ -66,7 +68,6 @@ export class ListEmployerComponent implements OnInit {
       .switchMap((term) => Observable.fromPromise(
         this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } })))
       .subscribe((payload: any) => {
-        console.log(this.listsearchControl.value);
         var strVal = this.listsearchControl.value;
         this.employers = payload.data.filter(function (item) {
           return (item.name.toLowerCase().includes(strVal.toLowerCase())
@@ -97,10 +98,16 @@ export class ListEmployerComponent implements OnInit {
     console.log(item.name);
   }
 
-  onSelectedStatus(item) {
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id,isTokenVerified:item, $limit: 200 } }).then((payload: any) => {
+  onSelectedStatus(item: any) {
+    this.employers = this.local_employers;
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, isTokenVerified: item, $limit: 200 } }).then((payload: any) => {
       this.employers = payload.data;
     });
+    if (item == "All") {
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+        this.employers = payload2.data;
+      });
+    }
   }
 
   private _getEmployers() {
@@ -109,6 +116,7 @@ export class ListEmployerComponent implements OnInit {
       console.log(res);
       if (res.data.length > 0) {
         this.employers = res.data;
+        this.local_employers = this.employers;
       }
     }).catch(err => console.log(err));
   }

@@ -1,11 +1,14 @@
 <div class="content-top-bar">
   <div class="bar-labels">
-    <div>Grade: B</div>
-    <div>Status: Authorized</div>
+    <div>Grade: {{selectedFacility?.hia.grade.name}}</div>
+    <div>Status: 
+      <span class="text-red" *ngIf="selectedFacility?.isConfirmed===undefined || selectedFacility?.isConfirmed===false">Not Authorized</span>
+      <span *ngIf="selectedFacility?.isConfirmed===true">Authorized</span>
+    </div>
     <div>Full License: Valid till 11th Jun, 2018.</div>
   </div>
 
   <div class="bar-icos">
-      <i routerLink="/modules/hia/new" class="fa fa-pencil" aria-hidden="true"></i>
+      <i (click)="navigateEditHIA(selectedFacility)" class="fa fa-pencil" aria-hidden="true"></i>
   </div>
 </div>
