@@ -1,7 +1,7 @@
 import { UserService } from './../../../../services/common/user.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Router } from '@angular/router';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ModuleService, SystemModuleService, RoleService } from '../../../../services/index';
 
 @Component({
@@ -10,6 +10,8 @@ import { ModuleService, SystemModuleService, RoleService } from '../../../../ser
   styleUrls: ['./modal-add-role.component.scss']
 })
 export class ModalAddRoleComponent implements OnInit {
+
+  @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input() selectedUser;
   modules: any[] = [];
@@ -87,6 +89,10 @@ export class ModalAddRoleComponent implements OnInit {
       this._systemService.off()
     })
     // console.log(this.checkedRoles)
+  }
+
+  modalClose_event() {
+    this.closeModal.emit(true);
   }
 
 }
