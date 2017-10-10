@@ -1,6 +1,7 @@
+import { UserService } from './../../../../services/common/user.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModuleService, SystemModuleService, RoleService } from '../../../../services/index';
 
 @Component({
@@ -10,6 +11,7 @@ import { ModuleService, SystemModuleService, RoleService } from '../../../../ser
 })
 export class ModalAddRoleComponent implements OnInit {
 
+  @Input() selectedUser;
   modules: any[] = [];
   roles: any[] = [];
   auth: any;
@@ -19,9 +21,11 @@ export class ModalAddRoleComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _roleService: RoleService,
     private _router: Router,
+    private _userService: UserService,
     private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
+    console.log(this.selectedUser)
     this.auth = this._locker.getObject('auth');
     console.log(this.auth);
     this._getModules();
@@ -55,11 +59,34 @@ export class ModalAddRoleComponent implements OnInit {
   roleChange($event, role) {
     const checked = $event.target.checked;
     if (checked) {
-      this.checkedRoles.push(role._id);
+      this.checkedRoles.push(role);
     }
   }
+  confirmAndPush() {
+    const existingRoles = this.selectedUser.roles;
+    this.checkedRoles.forEach(item => {
+      const index = existingRoles.findIndex(x => x._id === item._id);
+      if (index === -1) {
+        this.selectedUser.roles.push(item);
+      }
+    })
+  }
   saveRole() {
-    console.log(this.checkedRoles);
+    this._systemService.on();
+    this.confirmAndPush();
+    this._userService.patch(this.selectedUser._id, this.selectedUser, {}).then(payload => {
+      console.log(payload)
+      this._router.navigate(['/modules/user/users/', this.selectedUser._id]).then(pay => {
+        this._systemService.off();
+      }).catch(er => {
+        console.log(er)
+        this._systemService.off();
+      });
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off()
+    })
+    // console.log(this.checkedRoles)
   }
 
 }

@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Component, OnInit } from '@angular/core';
@@ -52,6 +52,7 @@ export class NewPlanComponent implements OnInit {
     private _premiumTypeService: PremiumTypeService,
     private _facilityService: FacilityService,
     private _route: ActivatedRoute,
+    private _router:Router,
     private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
@@ -135,21 +136,43 @@ export class NewPlanComponent implements OnInit {
     if (this.plan.name) {
       this.disablePremiumNextBtn = true;
       this.premiumNextBtn = 'Saving Plan... <i class="fa fa-spinner fa-spin"></i>';
-      // Save plan
+
       this._systemService.on();
-      this._planService.create(this.plan).then(res => {
-        this._systemService.off();
-        this._toastr.success('Plan has been created successfully.', 'Success');
-        this.premiumNextBtn = 'Save <i class="fa fa-check" aria-hidden="true"></i>';
-        this.disablePremiumNextBtn = false;
-        this.planDetailFormGroup.reset();
-        this.planPremiumFormGroup.reset();
-        this.planDetailFormGroup.controls['planStatus'].setValue(true);
-        this.tabDetails_click();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      });
+      if (this.selectedPlan === undefined) {
+        this._planService.create(this.plan).then(res => {
+          this._systemService.off();
+          this._toastr.success('Plan has been created successfully.', 'Success');
+          this.premiumNextBtn = 'Save <i class="fa fa-check" aria-hidden="true"></i>';
+          this.disablePremiumNextBtn = false;
+          this.planDetailFormGroup.reset();
+          this.planPremiumFormGroup.reset();
+          this.planDetailFormGroup.controls['planStatus'].setValue(true);
+          this.tabDetails_click();
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+        });
+      }else{
+        this._planService.update(this.selectedPlan).then(res => {
+          this._systemService.off();
+          this._toastr.success('Plan has been updated successfully.', 'Success');
+          this.premiumNextBtn = 'Save <i class="fa fa-check" aria-hidden="true"></i>';
+          this.disablePremiumNextBtn = false;
+          this._router.navigate(['/modules/plan/plans']).then(payload =>{
+
+          }).catch(err =>{
+
+          });
+          this.planDetailFormGroup.reset();
+          this.planPremiumFormGroup.reset();
+          this.planDetailFormGroup.controls['planStatus'].setValue(true);
+          this.tabDetails_click();
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+        });
+      }
+
     } else {
       console.log('Plan Does not exist.');
     }
@@ -158,6 +181,7 @@ export class NewPlanComponent implements OnInit {
     if (valid) {
       console.log(value)
       if (this.selectedPremium === undefined) {
+        console.log(1)
         const premium = <PlanPremium>{
           category: value.premiumCategory,
           amount: value.planAmount,
@@ -167,10 +191,10 @@ export class NewPlanComponent implements OnInit {
         };
         console.log(this.selectedPlan)
         this.plan.premiums.push(premium);
-        this.premiums.push(premium);
         console.log(this.premiums);
         this.planPremiumFormGroup.reset();
-      }else{
+      } else {
+        console.log(2)
         this.selectedPremium.category = value.premiumCategory;
         this.selectedPremium.amount = value.planAmount;
         this.selectedPremium.duration = value.planDuration;

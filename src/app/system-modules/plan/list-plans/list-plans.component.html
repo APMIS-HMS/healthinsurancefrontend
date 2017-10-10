@@ -73,7 +73,7 @@
         <td class="td">{{plan.userType.name}}</td>
         <td class="td number">{{getPrice('Week', plan) | number:'1.2-2'}}</td>
         <td class="td number">{{getPrice('Month', plan) | number:'1.2-2'}}</td>
-        <td class="td number">{{getPrice('Year', plan)}}</td>
+        <td class="td number">{{getPrice('Year', plan) | number:'1.2-2'}}</td>
         <td class="td">
           <span *ngIf="plan.isActive" class="tbl-status-active">Active</span>
           <span *ngIf="!plan.isActive" class="tbl-status-inactive">InActive</span>
@@ -81,7 +81,7 @@
         <td class="td td-icos">
           <i class="fa fa-edit" (click)="navigateEditPlan(plan);"></i>
         </td>
-        <td><i class="fa fa-chevron-right"></i></td>
+        <td (click)="navigatePlanDetail(plan)"><i class="fa fa-chevron-right"></i></td>
       </tr>
     </tbody>
   </table>
