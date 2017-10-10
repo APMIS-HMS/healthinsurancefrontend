@@ -86,8 +86,9 @@ export class ListHiaComponent implements OnInit {
     this._systemService.on();
     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
       this.loading = false;
-      console.log(payload);
+      //console.log(payload);
       this.hias = payload.data;
+      console.log(this.hias);
       this._systemService.off();
     }).catch(error => {
       console.log(error);
