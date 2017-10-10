@@ -1,3 +1,4 @@
+import { MaritalStatusService } from './../../../../services/common/marital-status.service';
 import { TitleService } from './../../../../services/common/titles.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
@@ -6,7 +7,9 @@ import { GenderService } from './../../../../services/common/gender.service';
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import { CurrentPlaformShortName } from '../../../../services/globals/config';
 import { UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService } from '../../../../services/index';
+import { Person } from '../../../../models/index';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -34,9 +37,11 @@ export class NewBeneficiaryDataComponent implements OnInit {
   countries: any[] = [];
   states: any[] = [];
   lgs: any[] = [];
+  residenceLgs: any[] = [];
   cities: any[] = [];
   genders: any[] = [];
   titles: any[] = [];
+  maritalStatuses: any[] = [];
 
   _video: any;
   patCanvas: any;
@@ -52,6 +57,9 @@ export class NewBeneficiaryDataComponent implements OnInit {
   stepOneFormGroup: FormGroup;
   selectedBeneficiary: any = <any>{};
   selectedCountry: any;
+  currentPlatform: any;
+  stream: any;
+  btnCamera = 'Use Camera';
 
   constructor(
     private _fb: FormBuilder,
@@ -66,31 +74,13 @@ export class NewBeneficiaryDataComponent implements OnInit {
     private _uploadService: UploadService,
     private _titleService: TitleService,
     private _router: Router,
+    private _maritalService: MaritalStatusService,
     private _route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this._initialiseFormGroup();
-    // this.stepOneFormGroup = this._fb.group({
-    //   gender: [''],
-    //   title: ['', [<any>Validators.required]],
-    //   firstName: ['', [<any>Validators.required]],
-    //   middleName: [''],
-    //   lastName: ['', [<any>Validators.required]],
-    //   phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    //   secondaryPhone: ['', [<any>Validators.pattern(PHONE_REGEX)]],
-    //   email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    //   dob: ['', [<any>Validators.required]],
-    //   lasrraId: [''],
-    //   stateOfOrigin: ['', [<any>Validators.required]],
-    //   lgaOfOrigin: ['', [<any>Validators.required]],
-    //   maritalStatus: ['', [<any>Validators.required]],
-    //   noOfChildrenU18: ['', [<any>Validators.required]],
-    //   streetName: ['', [<any>Validators.required]],
-    //   lga: ['', [<any>Validators.required]],
-    //   neighbourhood: ['', [<any>Validators.required]],
-    //   mothermaidenname: ['']
-    // });
+
 
     this._route.params.subscribe(param => {
 
@@ -100,19 +90,45 @@ export class NewBeneficiaryDataComponent implements OnInit {
         this._initialiseFormGroup();
       }
     });
+
+    this._getCurrentPlatform();
+    this._getCountries();
     this._getGenders();
     this._getTitles();
+    this._getMaritalStatus();
   }
   ngAfterViewInit() {
     this._video = this.video.nativeElement;
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-          this._video.src = window.URL.createObjectURL(stream);
-          this._video.play();
-        })
+      // navigator.mediaDevices.getUserMedia({ video: true })
+      //   .then(stream => {
+      //     this.stream = stream;
+      //     // this._video.src = window.URL.createObjectURL(stream);
+      //     // this._video.play();
+      //   })
     }
     this.context = this.snapshot.nativeElement.getContext("2d");
+  }
+
+  _getCurrentPlatform() {
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      console.log(res);
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._getLga(this.currentPlatform.address.state);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+  _getMaritalStatus() {
+    this._systemService.on();
+    this._maritalService.find({}).then((payload: any) => {
+      this.maritalStatuses = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    })
   }
   _getTitles() {
     this._systemService.on();
@@ -180,8 +196,8 @@ export class NewBeneficiaryDataComponent implements OnInit {
   }
 
   _initialiseFormGroup() {
-    let date = new Date();
-    if (this.selectedBeneficiary.createdAt !== undefined) {
+    let date = this.selectedBeneficiary.person === undefined ? new Date() : new Date(this.selectedBeneficiary.person.dateOfBirth);
+    if (this.selectedBeneficiary.person !== undefined) {
       let year = date.getFullYear();
       let month = date.getMonth() + 1;
       let day = date.getDate();
@@ -198,43 +214,24 @@ export class NewBeneficiaryDataComponent implements OnInit {
       }
     }
 
-    // gender: [''],
-    // title: ['', [<any>Validators.required]],
-    // firstName: ['', [<any>Validators.required]],
-    // middleName: [''],
-    // lastName: ['', [<any>Validators.required]],
-    // phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-    // secondaryPhone: ['', [<any>Validators.pattern(PHONE_REGEX)]],
-    // email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-    // dob: ['', [<any>Validators.required]],
-    // lasrraId: [''],
-    // stateOfOrigin: ['', [<any>Validators.required]],
-    // lgaOfOrigin: ['', [<any>Validators.required]],
-    // maritalStatus: ['', [<any>Validators.required]],
-    // noOfChildrenU18: ['', [<any>Validators.required]],
-    // streetName: ['', [<any>Validators.required]],
-    // lga: ['', [<any>Validators.required]],
-    // neighbourhood: ['', [<any>Validators.required]],
-    // mothermaidenname: ['']
-
-
     this.stepOneFormGroup = this._fb.group({
-      gender: [this.selectedBeneficiary != null ? this.selectedBeneficiary.name : '', [<any>Validators.required]],
-      title: [this.selectedBeneficiary != null ? this.selectedBeneficiary.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      firstName: [this.selectedBeneficiary != null ? this.selectedBeneficiary.website : '', [<any>Validators.required, <any>Validators.pattern(WEBSITE_REGEX)]],
-      middleName: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.address.street : '', [<any>Validators.required]],
-      lastName: [this.selectedBeneficiary != null ? this.selectedBeneficiary.shortName : '', [<any>Validators.required]],
-      phonenumber: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.address.state : '', [<any>Validators.required]],
-      secondaryPhone: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.address.lga : '', [<any>Validators.required]],
-      email: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.address.city : '', [<any>Validators.required]],
-      dob: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.address.neighbourhood : '', [<any>Validators.required]],
+      gender: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.gender : '', [<any>Validators.required]],
+      title: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.title : '', [<any>Validators.required]],
+      firstName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.firstName : '', [<any>Validators.required]],
+      otherNames: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.otherNames : '', []],
+      lastName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.shortName : '', [<any>Validators.required]],
+      phonenumber: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      secondaryPhone: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.secondaryPhoneNumber : '', [<any>Validators.pattern(PHONE_REGEX)]],
+      email: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.address.city : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      dob: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.dateOfBirth : this.today, [<any>Validators.required]],
+      lashmaId: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.bankDetails.bank : '', []],
       lasrraId: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.bankDetails.bank : '', [<any>Validators.required]],
       stateOfOrigin: [this.selectedBeneficiary.bankDetails != null ? this.selectedBeneficiary.bankDetails.name : '', [<any>Validators.required]],
-      lgaOfOrigin: [this.selectedBeneficiary.bankDetails != null ? this.selectedBeneficiary.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      lgaOfOrigin: [this.selectedBeneficiary.bankDetails != null ? this.selectedBeneficiary.bankDetails.accountNumber : '', [<any>Validators.required]],
       maritalStatus: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.firstName : '', [<any>Validators.required]],
       noOfChildrenU18: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.lastName : '', [<any>Validators.required]],
-      streetName: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      lga: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      streetName: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.email : '', [<any>Validators.required]],
+      lga: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.phoneNumber : '', [<any>Validators.required]],
       neighbourhood: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.position : '', [<any>Validators.required]],
       mothermaidenname: [this.selectedBeneficiary.itContact != null ? this.selectedBeneficiary.itContact.firstName : '', [<any>Validators.required]]
     });
@@ -248,6 +245,7 @@ export class NewBeneficiaryDataComponent implements OnInit {
     }
 
     this.stepOneFormGroup.controls['stateOfOrigin'].valueChanges.subscribe(value => {
+      console.log(value);
       if (value !== null) {
         this._getLgaAndCities(value, this.selectedCountry._id, );
       }
@@ -276,6 +274,73 @@ export class NewBeneficiaryDataComponent implements OnInit {
     }).catch(error => {
       this._systemService.off();
     })
+  }
+
+  _getLga(state) {
+    this._systemService.on();
+    this._countriesService.find({
+      query: {
+        "states.name": state.name,
+        $select: { 'states.$': 1 }
+      }
+    }).then((payload: any) => {
+      this._systemService.off();
+      if (payload.data.length > 0) {
+        const states = payload.data[0].states;
+        if (states.length > 0) {
+          this.residenceLgs = states[0].lgs;
+        }
+      }
+
+    }).catch(error => {
+      this._systemService.off();
+    })
+  }
+
+  startCamera() {
+    if (this.btnCamera === 'Use Camera') {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            this.stream = stream;
+            this._video.src = window.URL.createObjectURL(stream);
+            this._video.play();
+          })
+      }
+      this.btnCamera = 'Stop Camera';
+    } else {
+      this._video.src = null;
+      var track = this.stream.getTracks()[0];
+      track.stop();
+      this.btnCamera = 'Use Camera';
+    }
+
+  }
+
+  changeGender($event, gender) {
+    this.stepOneFormGroup.controls['gender'].setValue(gender);
+  }
+  onClickStepOne(value, valid) {
+    console.log(valid)
+    console.log(value);
+    let person: Person = <Person>{};
+    person.dateOfBirth = value.dob;
+    person.email = value.email;
+    person.firstName = value.firstName;
+    person.gender = value.gender;
+    person.homeAddress = value.streetName;
+    person.lastName = value.lastName;
+    person.lgaOfOrigin = value.lgaOfOrigin;
+    person.maritalStatus = value.maritalStatus;
+    person.mothersMaidenName = value.mothermaidenname;
+    // person.nationality = this.
+    person.otherNames = value.otherNames;
+    person.phoneNumber = value.phonenumber;
+    person.platformOnwerId = this.currentPlatform;
+    person.stateOfOrigin = value.stateOfOrigin;
+    person.title = value.title;
+    console.log(person);
+
   }
 
   makeSnapshot() {
@@ -311,4 +376,18 @@ export class NewBeneficiaryDataComponent implements OnInit {
     return ctx.getImageData(x, y, w, h);
   };
 
+  setDate(): void {
+    this.stepOneFormGroup.patchValue({
+      dob: {
+        date: {
+          year: this.today.year,
+          month: this.today.month,
+          day: this.today.day
+        }
+      }
+    });
+  }
+  clearDate(): void {
+    this.stepOneFormGroup.patchValue({ dob: null });
+  }
 }

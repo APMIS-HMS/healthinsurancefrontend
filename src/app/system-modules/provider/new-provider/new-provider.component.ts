@@ -10,7 +10,7 @@ import {
   FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
   ContactPositionService, FacilityService, ProviderGradesService, ProviderStatusesService, UploadService
 } from './../../../services/index';
-import { GRADES, HEFAMAA_STATUSES } from '../../../services/globals/config';
+import { GRADES, HEFAMAA_STATUSES, CurrentPlaformShortName } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -47,6 +47,7 @@ export class NewProviderComponent implements OnInit {
   facility: any;
   selectedFacilityId: string = '';
   selectedState: any;
+  currentPlatform:any;
 
   constructor(
     private _fb: FormBuilder,
@@ -93,6 +94,7 @@ export class NewProviderComponent implements OnInit {
     this._getUserTypes();
     this._getGrades();
     this._getStatuses();
+    this._getCurrentPlatform();
   }
 
   _initialiseFormGroup() {
@@ -145,6 +147,19 @@ export class NewProviderComponent implements OnInit {
     }
   }
 
+  _getCurrentPlatform() {
+    this._systemService.on();
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
+      this._systemService.off();
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+      }
+    }).catch(err => {
+      this._systemService.off();
+      console.log(err);
+    });
+  }
+
   _getProviderDetails(routeId) {
     this._systemService.on();
     this._facilityService.get(routeId, {}).then((res: Facility) => {
@@ -175,7 +190,9 @@ export class NewProviderComponent implements OnInit {
     return l1._id === l2._id;
   }
   compareGrade(l1: any, l2: any) {
-    return l1._id === l2._id;
+    if(l1 !== null && l2 !== null){
+      return l1._id === l2._id;
+    }
   }
   compareStatus(l1: any, l2: any) {
     return l1._id === l2._id;
@@ -434,9 +451,11 @@ export class NewProviderComponent implements OnInit {
       if (!!this.facility) {
         // Edit Provider.
         facility._id = this.selectedFacilityId;
+        facility.platformOwnerId = this.currentPlatform;
+        console.log(facility)
         this._facilityService.update(facility).then((payload: any) => {
+          console.log(payload)
           this._systemService.off();
-          // this.providerFormGroup.reset();
           this._toastr.info('Navigating to provider details page...', 'Navigate!');
           setTimeout(e => {
             this.navigateProviders('/modules/provider/providers/', + payload._id);
@@ -455,6 +474,7 @@ export class NewProviderComponent implements OnInit {
         });
       } else {
         // Create Provider
+        facility.platformOwnerId = this.currentPlatform;
         this._facilityService.create(facility).then(payload => {
           this._systemService.off();
           // this.providerFormGroup.reset();

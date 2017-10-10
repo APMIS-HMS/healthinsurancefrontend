@@ -1,107 +1,126 @@
-
-<div class="pg-title">Jonathan Nelson</div>
+<div class="pg-title">
+    Jonathan Nelson</div>
 <div class="pg-subtitle">jonathan.nelson@gmail.com</div>
 
+<!-- 
+<form *ngIf="locationTypeControl.value != null" [formGroup]="clinicScheduleForm" class="form-horizontal" (ngSubmit)="onSubmit()">
+    <div formArrayName="clinicScheduleArray" class="frmArrayWrap">
+        <div class="frmArray" *ngFor="let schedule of clinicScheduleForm.controls['clinicScheduleArray'].controls; let i = index;">
+            <div (click)="closeClinicSchedule(schedule, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
+            <div formGroupName="{{i}}"> -->
+
+
 <form [formGroup]="frmDependants" novalidate>
-    <div class="frm-item-wrap">
-        <label class="label">Gender</label>
-        <div class="input-wrap">
-            <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
-                <label for="bene-male">
-                    <input style="width: 30px;display: block;margin: 0 auto;" [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
-                </label>
-            </span>
+
+    <div formArrayName="dependantArray" class="frmArrayWrap">
+        <div class="frmArray" *ngFor="let dependant of frmDependants.controls['dependantArray'].controls; let i = index;">
+            <div (click)="closeDependant(dependant, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
+            <div formGroupName="{{i}}">
+                <div class="frm-item-wrap">
+                    <label class="label">Gender</label>
+                    <div class="input-wrap">
+                        <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
+                            <label for="bene-male">
+                                <input style="width: 30px;display: block;margin: 0 auto;" [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
+                            </label>
+                    </span>
+                    </div>
+                    <small class="alert-label" [hidden]="dependant.controls.gender.valid || dependant.controls.gender.pristine">
+                        Gender is required.
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Title</label>
+                    <div class="input-wrap">
+                        <select formControlName="title" class="form-control">
+                            <option  value="" selected>Title</option>
+                            <option *ngFor="let title of titles"  [ngValue]="title">{{title.name}}</option>
+                        </select>
+                    </div>
+                    <small class="alert-label" [hidden]="dependant.controls.title.valid || dependant.controls.title.pristine">
+                        Choose title from dropdown.
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">First name</label>
+                    <div class="input-wrap">
+                        <input type="text" formControlName="firstName">
+                    </div>
+                    <small class="alert-label" [hidden]="dependant.controls.firstName.valid || dependant.controls.firstName.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Middle name <small>(Optional)</small></label>
+                    <div class="input-wrap">
+                        <input type="text" name="middleName" formControlName="middleName">
+                    </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Surname</label>
+                    <div class="input-wrap">
+                        <input type="text" name="lastName" formControlName="lastName">
+                    </div>
+                    <small class="alert-label" [hidden]="dependant.controls.lastName.valid || dependant.controls.lastName.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Email</label>
+                    <div class="input-wrap">
+                        <input type="email" formControlName="email" class="form-control">
+                    </div>
+                    <small class="alert-label" [hidden]="dependant.controls.email.valid || dependant.controls.email.pristine">
+                        Enter a valid email address.
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Phone number</label>
+                    <div class="input-wrap">
+                        <input type="text" formControlName="phonenumber" class="form-control">
+                    </div>
+                    <small class="alert-label" [hidden]="dependant.controls.phonenumber.valid || dependant.controls.phonenumber.pristine">
+                        Enter a valid phone number.
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Secondary phone <small>(Optional)</small></label>
+                    <div class="input-wrap">
+                        <input type="text" formControlName="secondaryPhone" class="form-control">
+                    </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Date of Birth</label>
+                    <div class="input-wrap">
+                        <my-date-picker style="width:300px;" name="dob" [options]="myDatePickerOptions" [selDate]="today" formControlName="dob"></my-date-picker>
+                    </div>
+                    <small class="alert-label" [hidden]="dependant.controls.dob.valid || dependant.controls.dob.pristine">
+                        Date of birth is required.
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Nature of Relationship</label>
+                    <div class="input-wrap">
+                        <select formControlName="relationship" class="form-control">
+                            <option  value="" disabled selected>Relationship</option>
+                            <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">LASRRA ID <small>number</small></label>
+                    <div class="input-wrap">
+                        <input type="text" formControlName="lasrraId">
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div style="text-align:right;">
+                <span (click)="pushNewDependant()" class="txt-link"><i class="fa fa-plus"></i> Another Dependant</span>
+            </div>
         </div>
-        <small class="alert-label" [hidden]="frmDependants.controls.gender.valid || frmDependants.controls.gender.pristine">
-            Gender is required.
-        </small>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Title</label>
-        <div class="input-wrap">
-            <select formControlName="title" class="form-control">
-                <option  value="" selected>Title</option>
-                <option *ngFor="let title of titles"  [ngValue]="title">{{title.name}}</option>
-            </select>
-        </div>
-        <small class="alert-label" [hidden]="frmDependants.controls.title.valid || frmDependants.controls.title.pristine">
-            Choose title from dropdown.
-        </small>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">First name</label>
-        <div class="input-wrap">
-          <input type="text" formControlName="firstName">
-        </div>
-        <small class="alert-label" [hidden]="frmDependants.controls.firstName.valid || frmDependants.controls.firstName.pristine">
-            This is a required field (minimum 3 and max of 50 characters).
-        </small>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Middle name <small>(Optional)</small></label>
-        <div class="input-wrap">
-          <input type="text" name="middleName" formControlName="middleName">
-        </div>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Surname</label>
-        <div class="input-wrap">
-          <input type="text" name="lastName" formControlName="lastName">
-        </div>
-        <small class="alert-label" [hidden]="frmDependants.controls.lastName.valid || frmDependants.controls.lastName.pristine">
-            This is a required field (minimum 3 and max of 50 characters).
-        </small>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Email</label>
-        <div class="input-wrap">
-            <input type="email" formControlName="email" class="form-control">
-        </div>
-        <small class="alert-label" [hidden]="frmDependants.controls.email.valid || frmDependants.controls.email.pristine">
-            Enter a valid email address.
-        </small>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Phone number</label>
-        <div class="input-wrap">
-            <input type="text" formControlName="phonenumber" class="form-control">
-        </div>
-        <small class="alert-label" [hidden]="frmDependants.controls.phonenumber.valid || frmDependants.controls.phonenumber.pristine">
-            Enter a valid phone number.
-        </small>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Secondary phone <small>(Optional)</small></label>
-        <div class="input-wrap">
-            <input type="text" formControlName="secondaryPhone" class="form-control">
-        </div>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Date of Birth</label>
-        <div class="input-wrap">
-            <my-date-picker style="width:300px;"  name="dob" [options]="myDatePickerOptions" [selDate]="today" formControlName="dob"></my-date-picker>
-        </div>
-        <small class="alert-label" [hidden]="frmDependants.controls.dob.valid || frmDependants.controls.dob.pristine">
-            Date of birth is required.
-        </small>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">Nature of Relationship</label>
-        <div class="input-wrap">
-          <select formControlName="relationship">
-              <option  value="" selected>Spouse</option>
-              <option  value="">Child</option>
-          </select>
-        </div>
-    </div>
-    <div class="frm-item-wrap">
-        <label class="label">LASRRA ID <small>number</small></label>
-        <div class="input-wrap">
-          <input type="text" formControlName="lasrraId">
-        </div>
-    </div>
-    <div style="text-align:right;">
-        <span class="txt-link"><i class="fa fa-plus"></i> Another Dependant</span>
     </div>
     <div style="margin:10px auto;display:flex;justify-content:center;">
         <button class="btn btn-medium btn-blue" (click)="onClickStepOne(frmDependants.value, frmDependants.valid);">
