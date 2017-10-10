@@ -123,4 +123,13 @@ export class ListPlansComponent implements OnInit {
       this._systemService.off();
     });
   }
+  navigatePlanDetail(plan){
+    this._systemService.on();
+    this._router.navigate(['/modules/plan/plans', plan._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
+  }
 }

@@ -14,6 +14,10 @@
     box-sizing: border-box;
     font-size: $font-x2;
 }
+.left-wrap{
+    display: flex;
+    justify-content: flex-start;
+}
 .detail-item{
     margin-right: 30px;
     padding-right: 34px;
@@ -36,9 +40,23 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    position: relative;
 }
 .hia-user img{
     width: 100%;
+}
+.pd-tag{
+    position: absolute;
+    background: $grey-2;
+    border: 1px solid $grey-3;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    top: 0;
+    left: 0;
 }
 .item-head{
     margin-bottom: 20px;

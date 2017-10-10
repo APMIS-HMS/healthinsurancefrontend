@@ -14,6 +14,18 @@
         </small>
     </div>
     <div class="frm-item-wrap">
+        <label class="label">Title</label>
+        <div class="input-wrap">
+            <select formControlName="title" class="form-control">
+                <option  value="" selected>Title</option>
+                <option *ngFor="let title of titles"  [ngValue]="title">{{title.name}}</option>
+            </select>
+        </div>
+        <small class="alert-label" [hidden]="frmDependants.controls.title.valid || frmDependants.controls.title.pristine">
+            Choose title from dropdown.
+        </small>
+    </div>
+    <div class="frm-item-wrap">
         <label class="label">First name</label>
         <div class="input-wrap">
           <input type="text" formControlName="firstName">

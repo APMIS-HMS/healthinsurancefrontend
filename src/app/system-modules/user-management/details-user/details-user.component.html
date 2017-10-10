@@ -30,7 +30,7 @@
           <div class="list-search-wrap">
             <div class="search-wrap">
               <label class="label-xx">Search:</label>
-              <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name of Health Insurance Agent">
+              <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name of Role">
               <i class="fa fa-search" aria-hidden="true"></i>
             </div>
 
@@ -43,17 +43,13 @@
               <table class="table" cellspacing="0">
                 <thead class="thead">
                   <tr class="tr">
-                    <th class="th">Health Insurance Agent</th>
+                    <th class="th">Role</th>
                     <th class="th">Delete</th>
                   </tr>
                 </thead>
                 <tbody class="tbody">
-                  <tr class="tr">
-                    <td class="td">Healthcare Security Limited</td>
-                    <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
-                  </tr>
-                  <tr class="tr">
-                    <td class="td">Multi Shield Nigeria Limited</td>
+                  <tr *ngFor="let role of selectedUser?.roles" class="tr">
+                    <td class="td">{{role.name}}</td>
                     <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
                   </tr>
                 </tbody>
@@ -73,6 +69,6 @@
 <div *ngIf="addRole" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-      <app-modal-add-role></app-modal-add-role>
+      <app-modal-add-role [selectedUser]="selectedUser"></app-modal-add-role>
   </div>
 </div>

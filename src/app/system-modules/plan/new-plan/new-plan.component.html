@@ -143,7 +143,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Duration Length</label>
                 <div class="input-wrap">
-                    <input type="number" formControlName="planDuration" class="form-control" placeholder="Duration">
+                    <input type="number" min="1" formControlName="planDuration" class="form-control" placeholder="Duration">
                     <small [hidden]="planPremiumFormGroup.controls.planDuration.valid || planPremiumFormGroup.controls.planDuration.pristine">
                             This is a required field.
                         </small>
