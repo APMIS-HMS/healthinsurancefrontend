@@ -43,6 +43,8 @@ export class DetailsPlanComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
+		this._headerEventEmitter.setRouteUrl('Plan Details');
+		this._headerEventEmitter.setMinorRouteUrl('View Plan Details');
 		this._route.params.subscribe(param =>{
 			if(param.id !== undefined){
 				this._getPlan(param.id);
