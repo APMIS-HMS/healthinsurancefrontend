@@ -12,6 +12,7 @@ export class UserTypeService {
     private _locker: CoolLocalStorage
   ) {
     this._rest = _restService.getService('user-types');
+    this._socket = _socketService.getService('user-types');
   }
 
   findAll() {
@@ -25,7 +26,7 @@ export class UserTypeService {
   find(query?: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
-        return socket.find(query);
+        return this._socket.find(query);
       }));
     });
   }

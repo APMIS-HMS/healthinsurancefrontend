@@ -1,7 +1,7 @@
-import { UserService } from './../../../../services/common/user.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Router } from '@angular/router';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { UserService } from './../../../../services/common/user.service';
 import { ModuleService, SystemModuleService, RoleService } from '../../../../services/index';
 
 @Component({
