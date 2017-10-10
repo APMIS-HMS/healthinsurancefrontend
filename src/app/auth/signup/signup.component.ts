@@ -14,7 +14,7 @@ import { Person } from '../../models/index';
 import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Observable } from 'rxjs/Observable';
-import { CurrentPlaformShortName } from '../../services/globals/config'
+import { CurrentPlaformShortName } from '../../services/globals/config';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -119,7 +119,7 @@ export class SignupComponent implements OnInit {
 	}
 
 	_getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: '' } }).then(res => {
+		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
 			console.log(res);
 			if (res.data.length > 0) {
 				this.currentPlatform = res.data[0];

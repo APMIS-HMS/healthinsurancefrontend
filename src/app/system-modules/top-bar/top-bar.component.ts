@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HeaderEventEmitterService } from '../../services/event-emitters/header-event-emitter.service';
+import { FacilityService } from '../../services/index';
+import { CurrentPlaformShortName } from '../../services/globals/config';
 
 @Component({
   selector: 'app-top-bar',
@@ -12,9 +14,11 @@ export class TopBarComponent implements OnInit {
   appsearchControl = new FormControl();
   pageInView: String = '';
   minorPageInView: String = '';
+  currentPlatform:any;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
+    private _facilityService:FacilityService
   ) { }
 
   ngOnInit() {
@@ -25,6 +29,17 @@ export class TopBarComponent implements OnInit {
       this.minorPageInView = url;
     });
   }
+
+  _getCurrentPlatform() {
+		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+			console.log(res);
+			if (res.data.length > 0) {
+				this.currentPlatform = res.data[0];
+			}
+		}).catch(err => {
+			console.log(err);
+		});
+	}
 
   menu_show() {
     this.showMenu.emit(true);
