@@ -55,8 +55,8 @@ export class SignupComponent implements OnInit {
 			mothersMaidenName: ['', [<any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
-		this._getUserType();
 		this._getCurrentPlatform();
+		this._getUserType();
 
 		this.signupFormGroup.controls['email'].valueChanges
 			.debounceTime(200)
@@ -86,7 +86,7 @@ export class SignupComponent implements OnInit {
 			}
 			console.log(results);
 		}, error => {
-			console.log(error)
+			console.log(error);
 			this._systemService.off();
 		});
 	}
@@ -117,15 +117,14 @@ export class SignupComponent implements OnInit {
 	}
 
 	_getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: '' } }).then(res => {
+		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
 			console.log(res);
 			if (res.data.length > 0) {
 				this.currentPlatform = res.data[0];
 			}
-		}).catch(err => {
-			console.log(err);
-		});
+		}).catch(err => console.log(err));
 	}
+
 	onClickRegister(value: any, valid: boolean) {
 		if (valid) {
 			this.signupBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
@@ -144,6 +143,7 @@ export class SignupComponent implements OnInit {
 				email: value.email,
 				phoneNumber: value.phoneNumber,
 				mothersMaidenName: value.mothersMaidenName,
+				platformOnwerId: ''
 			};
 			// console.log(person);
 			// this._personService.find({query: {
@@ -180,7 +180,7 @@ export class SignupComponent implements OnInit {
 	_getUserType() {
 		console.log('called');
 		this._systemService.on();
-		this._userTypeService.findWithOutAuth().then((res: any) => {
+		this._userTypeService.find().then((res: any) => {
 			console.log(res);
 			this._systemService.off();
 		}).catch(err => {
