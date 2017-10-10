@@ -132,6 +132,7 @@ export class SignupComponent implements OnInit {
 					platformOnwerId: this.currentPlatform,
 					userType: this.userType,
 				};
+				console.log(user);
 				console.log(person);
 				this.createPerson(person).then(res => {
 					console.log(res);
@@ -157,9 +158,9 @@ export class SignupComponent implements OnInit {
 
 	private _getCurrentPlatform() {
 		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-			console.log(res);
 			if (res.data.length > 0) {
 				this.currentPlatform = res.data[0];
+				console.log(this.currentPlatform);
 			}
 		}).catch(err => console.log(err));
 	}
