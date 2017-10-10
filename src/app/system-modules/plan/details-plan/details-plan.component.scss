@@ -1,5 +1,9 @@
 @import '../../../../assets/libs/variables.scss';
 
-.status{
+.inactive-status{
     color: $orange;
+}
+
+.active-status{
+    color: $green;
 }
