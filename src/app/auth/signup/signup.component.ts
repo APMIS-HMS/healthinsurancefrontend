@@ -1,20 +1,16 @@
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { SystemModuleService } from './../../services/common/system-module.service';
-import { UserService } from './../../services/common/user.service';
-import { GenderService } from './../../services/common/gender.service';
-import { FacilityService } from './../../services/common/facility.service';
-import { Facility } from './../../models/organisation/facility';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { UserTypeService } from './../../services/common/user-type.service';
-import { AuthService } from './../services/auth.service';
-import { PersonService } from '../../services/person/person.service';
-import { Person } from '../../models/index';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Observable } from 'rxjs/Observable';
-import { CurrentPlaformShortName } from '../../services/globals/config'
+import {
+	FacilityService, GenderService, UserService, SystemModuleService, UserTypeService, PersonService
+} from './../../services/index';
+import { AuthService } from './../services/auth.service';
+import { Facility, Person  } from './../../models/index';
+import { CurrentPlaformShortName } from '../../services/globals/config';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -40,6 +36,7 @@ export class SignupComponent implements OnInit {
 		private _systemService: SystemModuleService,
 		private _genderService: GenderService,
 		private loadingService: LoadingBarService,
+		private _userTypeService: UserTypeService,
 		private _userService: UserService) { }
 
 	ngOnInit() {
@@ -58,6 +55,7 @@ export class SignupComponent implements OnInit {
 			mothersMaidenName: ['', [<any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
+		this._getUserType();
 		this._getCurrentPlatform();
 
 		this.signupFormGroup.controls['email'].valueChanges
@@ -106,7 +104,7 @@ export class SignupComponent implements OnInit {
 			}
 			console.log(results);
 		}, error => {
-			console.log(error)
+			console.log(error);
 			this._systemService.off();
 		});
 	}
@@ -115,7 +113,7 @@ export class SignupComponent implements OnInit {
 
 		}).catch(err => {
 
-		})
+		});
 	}
 
 	_getCurrentPlatform() {
@@ -141,8 +139,11 @@ export class SignupComponent implements OnInit {
 			};
 
 			const user = {
+				firstName: value.firstName,
+				lastName: value.lastName,
 				email: value.email,
-				password: value.password
+				phoneNumber: value.phoneNumber,
+				mothersMaidenName: value.mothersMaidenName,
 			};
 			// console.log(person);
 			// this._personService.find({query: {
@@ -156,6 +157,7 @@ export class SignupComponent implements OnInit {
 			// }).catch(err => {
 			// 	console.log(err);
 			// });
+			console.log(person);
 			this.createPerson(person).then(res => {
 				console.log(res);
 				return this.createUser(user);
@@ -173,6 +175,18 @@ export class SignupComponent implements OnInit {
 				}, 1000);
 			}).catch(err => console.log(err));
 		}
+	}
+
+	_getUserType() {
+		console.log('called');
+		this._systemService.on();
+		this._userTypeService.findWithOutAuth().then((res: any) => {
+			console.log(res);
+			this._systemService.off();
+		}).catch(err => {
+			console.log(err);
+			this._systemService.off();
+		});
 	}
 
 	private createPerson(person: any): Promise<any> {

@@ -20,7 +20,7 @@ export class DetailsUserComponent implements OnInit {
   addRole = false;
 
   constructor(private _route: ActivatedRoute, private _userService: UserService,
-    private _systemService: SystemModuleService, private _router:Router) { }
+    private _systemService: SystemModuleService, private _router: Router) { }
 
   ngOnInit() {
     this._route.params.subscribe(value => {
@@ -30,7 +30,7 @@ export class DetailsUserComponent implements OnInit {
     });
     this.isActive.valueChanges.subscribe(value => {
       this._updateUser(value);
-    })
+    });
   }
 
   _updateUser(value) {
@@ -41,7 +41,7 @@ export class DetailsUserComponent implements OnInit {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
   _getUser(id) {
@@ -51,20 +51,20 @@ export class DetailsUserComponent implements OnInit {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
-  routeAddRole(){
+  routeAddRole() {
     
   }
 
   tabHia_click() {
     this.tab_hias = true;
   }
-  modal_close(){
+  modal_close() {
     this.addRole = false;
   }
-  addRole_click(){
+  addRole_click() {
     this.addRole = true;
   }
 

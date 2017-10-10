@@ -410,7 +410,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     // let fileBrowser = this.fileInput.nativeElement;
     if (image.files && image.files[0]) {
       const formData = new FormData();
-      formData.append("platform", image.files[0]);
+      formData.append('platform', image.files[0]);
       // return new Promise((resolve, reject) => {
       //   resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       // });
@@ -418,7 +418,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
         this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
           resolve(res);
         }).catch(err => {
-          reject(err)
+          reject(err);
         });
       });
 

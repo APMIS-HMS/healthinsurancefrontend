@@ -14,7 +14,7 @@ export class ModalAddRoleComponent implements OnInit {
   roles: any[] = [];
   auth: any;
   selectedRole: any = <any>{};
-  checkedRoles:any[] = [];
+  checkedRoles: any[] = [];
   constructor(private _moduleService: ModuleService,
     private _systemService: SystemModuleService,
     private _roleService: RoleService,
@@ -23,6 +23,7 @@ export class ModalAddRoleComponent implements OnInit {
 
   ngOnInit() {
     this.auth = this._locker.getObject('auth');
+    console.log(this.auth);
     this._getModules();
     this._getRoles();
   }
@@ -34,7 +35,7 @@ export class ModalAddRoleComponent implements OnInit {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
   _getRoles() {
@@ -51,14 +52,14 @@ export class ModalAddRoleComponent implements OnInit {
     this.selectedRole = role;
     console.log(role);
   }
-  roleChange($event, role){
+  roleChange($event, role) {
     const checked = $event.target.checked;
-    if(checked){
+    if (checked) {
       this.checkedRoles.push(role._id);
     }
   }
-  saveRole(){
-    console.log(this.checkedRoles)
+  saveRole() {
+    console.log(this.checkedRoles);
   }
 
 }
