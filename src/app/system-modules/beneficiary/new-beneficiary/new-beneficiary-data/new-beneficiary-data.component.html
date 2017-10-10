@@ -1,5 +1,15 @@
 <form [formGroup]="stepOneFormGroup" novalidate>
     <div class="frm-item-wrap">
+        <label class="label">LASHMA ID</label>
+        <div class="input-wrap">
+            <input type="text" name="lastName" formControlName="lashmaId" class="form-control">
+        </div>
+        <small class="alert-label" [hidden]="stepOneFormGroup.controls.lastName.valid || stepOneFormGroup.controls.lastName.pristine">
+        Last name is required.
+        </small>
+    </div><hr>
+
+    <div class="frm-item-wrap">
         <label class="label">Gender</label>
         <div class="input-wrap">
             <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
@@ -52,7 +62,7 @@
         </small>
     </div>
     <div class="frm-item-wrap">
-        <label class="label">Moother's Maiden Name <small>(Optional)</small></label>
+        <label class="label">Moother's Maiden Name</label>
         <div class="input-wrap">
             <input type="text" formControlName="mothermaidenname" class="form-control">
         </div>

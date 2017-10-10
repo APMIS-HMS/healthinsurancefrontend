@@ -14,11 +14,11 @@ export class TopBarComponent implements OnInit {
   appsearchControl = new FormControl();
   pageInView: String = '';
   minorPageInView: String = '';
-  currentPlatform:any;
+  currentPlatform: any;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
-    private _facilityService:FacilityService
+    private _facilityService: FacilityService
   ) { }
 
   ngOnInit() {
@@ -28,22 +28,23 @@ export class TopBarComponent implements OnInit {
     this._headerEventEmitter.announcedMinorUrl.subscribe(url => {
       this.minorPageInView = url;
     });
+    this._getCurrentPlatform();
   }
 
   _getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-			console.log(res);
-			if (res.data.length > 0) {
-				this.currentPlatform = res.data[0];
-			}
-		}).catch(err => {
-			console.log(err);
-		});
-	}
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+      console.log(res);
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
 
   menu_show() {
     this.showMenu.emit(true);
   }
-  
+
 
 }

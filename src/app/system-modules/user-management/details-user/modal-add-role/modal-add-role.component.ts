@@ -78,6 +78,7 @@ export class ModalAddRoleComponent implements OnInit {
     this.confirmAndPush();
     this._userService.patch(this.selectedUser._id, this.selectedUser, {}).then(payload => {
       console.log(payload)
+      this.modalClose_event();
       this._router.navigate(['/modules/user/users/', this.selectedUser._id]).then(pay => {
         this._systemService.off();
       }).catch(er => {

@@ -56,6 +56,8 @@ export class NewPlanComponent implements OnInit {
     private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('New Plan');
+    this._headerEventEmitter.setMinorRouteUrl('Create New Plan');
     this.user = this._locker.getObject('auth');
     this.planDetailFormGroup = this._fb.group({
       planName: ['', [<any>Validators.required]],

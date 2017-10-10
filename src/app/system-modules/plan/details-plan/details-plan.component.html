@@ -4,12 +4,12 @@
     </div>
 
     <ul class="inpage-tabs">
-        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">HIAS</li>
         <li (click)="tabPremiums_click()" [class.tab-active]="tab_premiums">Premiums</li>
         <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
         <li (click)="tabTests_click()" [class.tab-active]="tab_tests">Tests</li>
         <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
         <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
+        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">HIAS</li>
     </ul>
 
     <div class="tab-content shadow-RB">
@@ -94,7 +94,7 @@
                     <div class="list-search-wrap">
                         <div class="search-wrap">
                             <label class="label-xx">Search:</label>
-                            <input class="top-tab-search" [formControl]="premiumsearchControl" type="search" placeholder="Name of Health Insurance Agent">
+                            <input class="top-tab-search" [formControl]="premiumsearchControl" type="search" placeholder="Search Premium">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </div>
 

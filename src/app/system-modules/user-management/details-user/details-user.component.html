@@ -69,6 +69,6 @@
 <div *ngIf="addRole" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-      <app-modal-add-role [selectedUser]="selectedUser"></app-modal-add-role>
+      <app-modal-add-role (closeModal)="modal_close()" [selectedUser]="selectedUser"></app-modal-add-role>
   </div>
 </div>

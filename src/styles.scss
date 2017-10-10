@@ -592,6 +592,16 @@ input[type="checkbox"].switch_1:checked:after {
     font-style: italic;
     margin-top: 20px;
 }
+.pg-title {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+}
+.pg-subtitle {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+}
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {
