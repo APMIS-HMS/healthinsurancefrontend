@@ -4,10 +4,11 @@
         <div class="input-wrap">
             <input type="text" name="lastName" formControlName="lashmaId" class="form-control">
         </div>
-        <small class="alert-label" [hidden]="stepOneFormGroup.controls.lastName.valid || stepOneFormGroup.controls.lastName.pristine">
+        <small class="alert-label" [hidden]="stepOneFormGroup.controls.lashmaId.valid || stepOneFormGroup.controls.lashmaId.pristine">
         Last name is required.
         </small>
-    </div><hr>
+    </div>
+    <hr>
 
     <div class="frm-item-wrap">
         <label class="label">Gender</label>
@@ -94,7 +95,7 @@
     <div class="frm-item-wrap">
         <label class="label">Date of Birth</label>
         <div class="input-wrap">
-            <my-date-picker style="width:300px;"  name="dob" [options]="myDatePickerOptions" [selDate]="today" formControlName="dob"></my-date-picker>
+            <my-date-picker style="width:300px;" name="dob" [options]="myDatePickerOptions" [selDate]="today" formControlName="dob"></my-date-picker>
         </div>
         <small class="alert-label" [hidden]="stepOneFormGroup.controls.dob.valid || stepOneFormGroup.controls.dob.pristine">
             Date of birth is required.
