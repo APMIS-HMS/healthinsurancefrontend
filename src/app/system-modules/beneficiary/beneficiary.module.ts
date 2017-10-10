@@ -1,3 +1,4 @@
+import { BankService } from './../../services/common/bank.service';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
 import {
@@ -24,6 +25,6 @@ import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-no
     ],
     declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService,
-    PlanTypeService, BeneficiaryService, SystemModuleService]
+    PlanTypeService, BeneficiaryService, SystemModuleService, BankService]
 })
 export class BeneficiaryModule { }
