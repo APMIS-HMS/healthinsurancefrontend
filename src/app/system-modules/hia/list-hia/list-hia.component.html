@@ -74,13 +74,14 @@
                 <td class="td">{{hia.itContact.lastName}} {{hia.itContact.firstName}}</td>
                 <td class="td">{{hia.itContact.phoneNumber}}</td>
                 <td class="td">{{hia.hia.grade.name}}</td>
-                <!-- <td class="td">
-                    <span class="tbl-status-active"> Active </span>
-                </td> -->
-                <!-- <td (click)="navigateViewHIADetail(hia)"><i class="fa fa-chevron-right"></i></td> -->
                 <td (click)="navigateViewHIADetail(hia); " class="td hover {{ hia.isTokenVerified ? ' tbl-status-active': ' tbl-status-inactive' }} ">
                     {{ hia.isTokenVerified ? 'Active': 'Inactive' }}
                 </td>
+                <td class="td td-icos">
+                    <i class="fa fa-edit" (click)="navigateEditHIA(hia);"></i>
+                </td>
+                <td (click)="navigateViewHIADetail(hia)"><i class="fa fa-chevron-right"></i></td>
+
             </tr>
         </tbody>
     </table>
