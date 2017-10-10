@@ -4,6 +4,16 @@
 
 <form [formGroup]="frmDependants" novalidate>
     <div class="frm-item-wrap">
+        <label class="label">LASHMA ID</label>
+        <div class="input-wrap">
+            <input type="text" name="lastName" formControlName="lashmaId" class="form-control">
+        </div>
+        <small class="alert-label" [hidden]="frmDependants.controls.lashmaId.valid || frmDependants.controls.lashmaId.pristine">
+        Last name is required.
+        </small>
+    </div><hr>
+
+    <div class="frm-item-wrap">
         <label class="label">Gender</label>
         <div class="input-wrap">
             <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">

@@ -1,13 +1,4 @@
 <form [formGroup]="stepOneFormGroup" novalidate>
-    <div class="frm-item-wrap">
-        <label class="label">LASHMA ID</label>
-        <div class="input-wrap">
-            <input type="text" name="lastName" formControlName="lashmaId" class="form-control">
-        </div>
-        <small class="alert-label" [hidden]="stepOneFormGroup.controls.lastName.valid || stepOneFormGroup.controls.lastName.pristine">
-        Last name is required.
-        </small>
-    </div><hr>
 
     <div class="frm-item-wrap">
         <label class="label">Gender</label>

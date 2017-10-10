@@ -34,7 +34,6 @@ export class NewBeneficiaryDataComponent implements OnInit {
 
   ngOnInit() {
     this.stepOneFormGroup = this._fb.group({
-      lashmaId: [''],
       gender: [''],
       title: ['', [<any>Validators.required]],
       firstName: ['', [<any>Validators.required]],
