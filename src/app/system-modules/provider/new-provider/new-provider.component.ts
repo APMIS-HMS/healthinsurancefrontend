@@ -8,7 +8,7 @@ import { SystemModuleService } from './../../../services/common/system-module.se
 import { Facility, CareProvider, Provider, BankDetail, Address, HIA, Contact } from './../../../models/index';
 import {
   FacilityOwnershipService, FacilityCategoryService, UserTypeService, CountryService, BankService,
-  ContactPositionService, FacilityService, ProviderGradesService, ProviderStatusesService
+  ContactPositionService, FacilityService, ProviderGradesService, ProviderStatusesService, UploadService
 } from './../../../services/index';
 import { GRADES, HEFAMAA_STATUSES } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
@@ -62,6 +62,7 @@ export class NewProviderComponent implements OnInit {
     private _facilityCategoryService: FacilityCategoryService,
     private _facilityOwnershipService: FacilityOwnershipService,
     private _systemService: SystemModuleService,
+    private _uploadService: UploadService,
     private _router: Router,
     private _route: ActivatedRoute,
     private loadingService: LoadingBarService,
@@ -192,7 +193,7 @@ export class NewProviderComponent implements OnInit {
       this._systemService.off();
     });
   }
-  
+
   private _getGrades() {
     this._systemService.on();
     this._providerGradesService.find({}).then((payload: any) => {
@@ -212,7 +213,7 @@ export class NewProviderComponent implements OnInit {
       this._systemService.off();
     });
   }
-  
+
   private _getUserTypes() {
     this._systemService.on();
     this._userTypeService.findAll().then((payload: any) => {
@@ -230,7 +231,7 @@ export class NewProviderComponent implements OnInit {
       }
     }, error => {
       this._systemService.off();
-    })
+    });
   }
   private _getCountries() {
     this._systemService.on();
@@ -249,7 +250,7 @@ export class NewProviderComponent implements OnInit {
       }
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
   private _getStates(_id) {
     this._systemService.on();
@@ -267,7 +268,7 @@ export class NewProviderComponent implements OnInit {
 
     }).catch(error => {
       this._systemService.off();
-    })
+    });
   }
 
   _getLgaAndCities(_id, state) {
@@ -290,7 +291,7 @@ export class NewProviderComponent implements OnInit {
 
     }).catch(error => {
       this._systemService.off();
-    })
+    });
   }
   _getBanks() {
     this._systemService.on();
@@ -303,7 +304,23 @@ export class NewProviderComponent implements OnInit {
       this.banks = payload.data;
     }).catch(err => {
       this._systemService.off();
-    })
+    });
+  }
+
+  upload(image) {
+    // this._systemService.on();
+    // let fileBrowser = this.fileInput.nativeElement;
+    if (image.files && image.files[0]) {
+      const formData = new FormData();
+      formData.append('provider', image.files[0]);
+      return new Promise((resolve, reject) => {
+        this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
+          resolve(res);
+        }).catch(err => {
+          reject(err)
+        });
+      });
+    }
   }
 
   _extractBusinessContact(businessContact?: Contact) {

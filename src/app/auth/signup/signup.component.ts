@@ -1,19 +1,15 @@
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { SystemModuleService } from './../../services/common/system-module.service';
-import { UserService } from './../../services/common/user.service';
-import { GenderService } from './../../services/common/gender.service';
-import { FacilityService } from './../../services/common/facility.service';
-import { Facility } from './../../models/organisation/facility';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { UserTypeService } from './../../services/common/user-type.service';
-import { AuthService } from './../services/auth.service';
-import { PersonService } from '../../services/person/person.service';
-import { Person } from '../../models/index';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Observable } from 'rxjs/Observable';
+import {
+	FacilityService, GenderService, UserService, SystemModuleService, UserTypeService, PersonService
+} from './../../services/index';
+import { AuthService } from './../services/auth.service';
+import { Facility, Person, User  } from './../../models/index';
 import { CurrentPlaformShortName } from '../../services/globals/config';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -29,6 +25,8 @@ export class SignupComponent implements OnInit {
 	signupFormGroup: FormGroup;
 	signupBtnText: String = 'SIGN UP &nbsp; <i class="fa fa-sign-in"></i>';
 	currentPlatform: any;
+	userType: any;
+
 	constructor(
 		private _toastr: ToastsManager,
 		private _fb: FormBuilder,
@@ -40,6 +38,7 @@ export class SignupComponent implements OnInit {
 		private _systemService: SystemModuleService,
 		private _genderService: GenderService,
 		private loadingService: LoadingBarService,
+		private _userTypeService: UserTypeService,
 		private _userService: UserService) { }
 
 	ngOnInit() {
@@ -59,6 +58,7 @@ export class SignupComponent implements OnInit {
 			password: ['', [<any>Validators.required]]
 		});
 		this._getCurrentPlatform();
+		this._getUserType();
 
 		this.signupFormGroup.controls['email'].valueChanges
 			.debounceTime(200)
@@ -88,7 +88,7 @@ export class SignupComponent implements OnInit {
 			}
 			console.log(results);
 		}, error => {
-			console.log(error)
+			console.log(error);
 			this._systemService.off();
 		});
 	}
@@ -106,73 +106,78 @@ export class SignupComponent implements OnInit {
 			}
 			console.log(results);
 		}, error => {
-			console.log(error)
+			console.log(error);
 			this._systemService.off();
 		});
 	}
-	_getGender() {
-		this._genderService.find({}).then(payload => {
 
-		}).catch(err => {
-
-		})
-	}
-
-	_getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-			console.log(res);
-			if (res.data.length > 0) {
-				this.currentPlatform = res.data[0];
-			}
-		}).catch(err => {
-			console.log(err);
-		});
-	}
 	onClickRegister(value: any, valid: boolean) {
 		if (valid) {
-			this.signupBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
-			const person = <Person>{
-				firstName: value.firstName,
-				lastName: value.lastName,
-				email: value.email,
-				phoneNumber: value.phoneNumber,
-				mothersMaidenName: value.mothersMaidenName,
-				// platformOnwerId: this.currentPlatform._id
-			};
+			if (!!this.userType && !!this.currentPlatform) {
+				this.signupBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+				const person = <Person>{
+					firstName: value.firstName,
+					lastName: value.lastName,
+					email: value.email,
+					phoneNumber: value.phoneNumber,
+					mothersMaidenName: value.mothersMaidenName,
+				};
 
-			const user = {
-				email: value.email,
-				password: value.password
-			};
-			// console.log(person);
-			// this._personService.find({query: {
-			// 	email: person.email,
-			// 	mothersMaidenName: person.mothersMaidenName,
-			// 	phoneNumber: person.phoneNumber,
-			// 	lastName: person.lastName,
-			// 	firstName: person.firstName
-			// }}).then(findRes => {
-			// 	console.log(findRes);
-			// }).catch(err => {
-			// 	console.log(err);
-			// });
-			this.createPerson(person).then(res => {
-				console.log(res);
-				return this.createUser(user);
-			}).then(res => {
-				console.log(res);
-				return this.logUser(user);
-			}).then(res => {
-				console.log(res);
-				this._locker.setObject('auth', res);
-				this._router.navigate(['/modules/beneficiary/new']).then(navRes => {
-					this._authService.announceMission({ status: 'On' });
-				});
-				setTimeout(e => {
-					this._toastr.success('You have successfully logged in!', 'Success!');
-				}, 1000);
-			}).catch(err => console.log(err));
+				const user = {
+					firstName: value.firstName,
+					lastName: value.lastName,
+					email: value.email,
+					phoneNumber: value.phoneNumber,
+					mothersMaidenName: value.mothersMaidenName,
+					platformOnwerId: this.currentPlatform,
+					userType: this.userType,
+				};
+				console.log(user);
+				console.log(person);
+				this.createPerson(person).then(res => {
+					console.log(res);
+					return this.createUser(user);
+				}).then(res => {
+					console.log(res);
+					return this.logUser(user);
+				}).then(res => {
+					console.log(res);
+					this._locker.setObject('auth', res);
+					this._router.navigate(['/modules/beneficiary/new']).then(navRes => {
+						this._authService.announceMission({ status: 'On' });
+					});
+					setTimeout(e => {
+						this._toastr.success('You have successfully logged in!', 'Success!');
+					}, 1000);
+				}).catch(err => console.log(err));
+			} else {
+				this._toastr.error('There is a connection error, Please try again later!', 'Error!');
+			}
 		}
+	}
+
+	private _getCurrentPlatform() {
+		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+			if (res.data.length > 0) {
+				this.currentPlatform = res.data[0];
+				console.log(this.currentPlatform);
+			}
+		}).catch(err => console.log(err));
+	}
+
+	private _getUserType() {
+		this._systemService.on();
+		this._userTypeService.findWithOutAuth().then((res: any) => {
+			this._systemService.off();
+			if (res.data.length > 0) {
+				const index = res.data.findIndex(x => x.name === 'Platform Owner');
+				if (index > -1) {
+					this.userType = res.data[index];
+				}
+			}
+		}, error => {
+			this._systemService.off();
+		});
 	}
 
 	private createPerson(person: any): Promise<any> {
@@ -197,6 +202,12 @@ export class SignupComponent implements OnInit {
 				});
 			}
 		);
+	}
+
+	private _getGender() {
+		this._genderService.find({}).then(payload => {
+
+		}).catch(err => console.log(err));
 	}
 
 	private logUser(user: any): Promise<any> {

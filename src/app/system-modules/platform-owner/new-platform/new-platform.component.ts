@@ -1,22 +1,15 @@
 import { IMyDpOptions, IMyDate, IMyDateModel } from 'mydatepicker';
-import { UploadService } from './../../../services/common/upload.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SystemModuleService } from './../../../services/common/system-module.service';
-import { CountryService } from './../../../services/common/country.service';
-import { BankService } from './../../../services/common/bank.service';
-import { UserTypeService } from './../../../services/common/user-type.service';
-import { Address } from './../../../models/organisation/address';
-import { Facility } from './../../../models/organisation/facility';
-import { BankDetail } from './../../../models/organisation/bank-detail';
-import { Contact } from './../../../models/organisation/contact';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { FacilityService } from './../../../services/common/facility.service';
-
+import {
+  UploadService, SystemModuleService, CountryService, BankService, UserTypeService, FacilityService,
+  ContactPositionService, PlatformOwnerService
+} from './../../../services/index';
+import { Address, Facility, BankDetail, Contact } from './../../../models/index';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
-import { ContactPositionService, PlatformOwnerService } from '../../../services/index';
-// import { Contact, BankDetail } from '../../../models/index';
+
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
 // const PHONE_REGEX = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
@@ -345,17 +338,17 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
         this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
         let facility = this._extractFacility();
   
-        if (image.files && image.files[0]) {
+        if (!!facility._id) {
           // Save image to the DB before going to save facility.
           this.upload(image).then((result: any) => {
             console.log(result);
             if (result !== undefined && result.body !== undefined && result.body.length > 0) {
               console.log(result.body[0].file)
               facility.logo = result.body[0].file;
-              this._facilityService.create(facility).then((payload: Facility) => {
+              this._facilityService.update(facility).then((payload: Facility) => {
                 this._systemService.off();
                 this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-                this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+                this._toastr.success('Platform has been created successfully!', 'Success!');
                 this.platformFormGroup.reset();
                 this._router.navigate(['/modules/platform/platforms', payload._id]);
               }).catch(err => {
@@ -367,13 +360,23 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
             this._systemService.off();
           });
         } else {
-          this._facilityService.create(facility).then((payload: Facility) => {
-            this._systemService.off();
-            // this.platformFormGroup.reset();
-            this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-            this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-            this._router.navigate(['/modules/platform/platforms', payload._id]);
+          this.upload(image).then((result: any) => {
+            console.log(result);
+            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+              console.log(result.body[0].file)
+              facility.logo = result.body[0].file;
+              this._facilityService.create(facility).then((payload: Facility) => {
+                this._systemService.off();
+                this.platformFormGroup.reset();
+                this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+                this._toastr.success('Platform has been created successfully!', 'Success!');
+                this._router.navigate(['/modules/platform/platforms', payload._id]);
+              }).catch(err => {
+                this._systemService.off();
+              });
+            }
           }).catch(err => {
+            console.log(err);
             this._systemService.off();
           });
         }
@@ -410,7 +413,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     // let fileBrowser = this.fileInput.nativeElement;
     if (image.files && image.files[0]) {
       const formData = new FormData();
-      formData.append("platform", image.files[0]);
+      formData.append('platform', image.files[0]);
       // return new Promise((resolve, reject) => {
       //   resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       // });
@@ -418,7 +421,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
         this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
           resolve(res);
         }).catch(err => {
-          reject(err)
+          reject(err);
         });
       });
 

@@ -1,7 +1,7 @@
-import { UserService } from './../../../../services/common/user.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Router } from '@angular/router';
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { UserService } from './../../../../services/common/user.service';
 import { ModuleService, SystemModuleService, RoleService } from '../../../../services/index';
 
 @Component({
@@ -29,6 +29,7 @@ export class ModalAddRoleComponent implements OnInit {
   ngOnInit() {
     console.log(this.selectedUser)
     this.auth = this._locker.getObject('auth');
+    console.log(this.auth);
     this._getModules();
     this._getRoles();
   }
@@ -40,7 +41,7 @@ export class ModalAddRoleComponent implements OnInit {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
   _getRoles() {
