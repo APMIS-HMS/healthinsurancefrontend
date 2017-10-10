@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { FacilityService, SystemModuleService } from './../../../services/index';
@@ -11,6 +12,12 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
   styleUrls: ['./employer-details.component.scss']
 })
 export class EmployerDetailsComponent implements OnInit {
+  listsearchControl = new FormControl();
+  filterTypeControl = new FormControl('All');
+  createdByControl = new FormControl();
+  utilizedByControl = new FormControl();
+  statusControl = new FormControl('All');
+
 	tab_details = true;
 	tab_preauthorization = false;
 	tab_plans = false;

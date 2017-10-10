@@ -132,16 +132,12 @@ export class SignupComponent implements OnInit {
 					platformOnwerId: this.currentPlatform,
 					userType: this.userType,
 				};
-				console.log(user);
-				console.log(person);
+
 				this.createPerson(person).then(res => {
-					console.log(res);
 					return this.createUser(user);
 				}).then(res => {
-					console.log(res);
 					return this.logUser(user);
 				}).then(res => {
-					console.log(res);
 					this._locker.setObject('auth', res);
 					this._router.navigate(['/modules/beneficiary/new']).then(navRes => {
 						this._authService.announceMission({ status: 'On' });
