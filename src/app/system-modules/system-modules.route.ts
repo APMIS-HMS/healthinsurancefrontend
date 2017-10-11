@@ -38,6 +38,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 path: 'employer',
                 loadChildren: './employer/employer.module#EmployerModule'
             },
+            // {
+            //     path: 'checkin',
+            //     loadChildren: './checkin/checkin.module#CheckinModule'
+            // },
             { path: 'access', component: AccessManagementComponent }
         ]
     }

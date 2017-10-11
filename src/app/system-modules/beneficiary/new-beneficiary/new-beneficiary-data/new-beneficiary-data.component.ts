@@ -1,3 +1,6 @@
+import { Address } from './../../../../models/organisation/address';
+import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
+import { Beneficiary } from './../../../../models/setup/beneficiary';
 import { MaritalStatusService } from './../../../../services/common/marital-status.service';
 import { TitleService } from './../../../../services/common/titles.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -32,6 +35,7 @@ export class NewBeneficiaryDataComponent implements OnInit {
   stepTwoView: Boolean = false;
   stepThreeView: Boolean = false;
   stepFourView: Boolean = false;
+  popCamera: Boolean = false;
 
   banks: any[] = [];
   countries: any[] = [];
@@ -58,6 +62,7 @@ export class NewBeneficiaryDataComponent implements OnInit {
   selectedBeneficiary: any = <any>{};
   selectedCountry: any;
   currentPlatform: any;
+  selectedState: any;
   stream: any;
   btnCamera = 'Use Camera';
 
@@ -75,6 +80,7 @@ export class NewBeneficiaryDataComponent implements OnInit {
     private _titleService: TitleService,
     private _router: Router,
     private _maritalService: MaritalStatusService,
+    private _beneficiaryService: BeneficiaryService,
     private _route: ActivatedRoute
   ) { }
 
@@ -99,14 +105,6 @@ export class NewBeneficiaryDataComponent implements OnInit {
   }
   ngAfterViewInit() {
     this._video = this.video.nativeElement;
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      // navigator.mediaDevices.getUserMedia({ video: true })
-      //   .then(stream => {
-      //     this.stream = stream;
-      //     // this._video.src = window.URL.createObjectURL(stream);
-      //     // this._video.play();
-      //   })
-    }
     this.context = this.snapshot.nativeElement.getContext("2d");
   }
 
@@ -289,6 +287,7 @@ export class NewBeneficiaryDataComponent implements OnInit {
         const states = payload.data[0].states;
         if (states.length > 0) {
           this.residenceLgs = states[0].lgs;
+          this.selectedState = states[0];
         }
       }
 
@@ -307,8 +306,10 @@ export class NewBeneficiaryDataComponent implements OnInit {
             this._video.play();
           })
       }
+      this.popCamera = true;
       this.btnCamera = 'Stop Camera';
     } else {
+      this.popCamera = false;
       this._video.src = null;
       var track = this.stream.getTracks()[0];
       track.stop();
@@ -324,11 +325,18 @@ export class NewBeneficiaryDataComponent implements OnInit {
     console.log(valid)
     console.log(value);
     let person: Person = <Person>{};
-    person.dateOfBirth = value.dob;
+    let address: Address = <Address>{};
+    // address.city
+    address.lga = value.lga;
+    address.neighbourhood = value.neighbourhood;
+    address.state = this.selectedState;
+    address.street = value.streetName;
+
+    person.dateOfBirth = value.dob.jsdate;
     person.email = value.email;
     person.firstName = value.firstName;
     person.gender = value.gender;
-    person.homeAddress = value.streetName;
+    person.homeAddress = address;
     person.lastName = value.lastName;
     person.lgaOfOrigin = value.lgaOfOrigin;
     person.maritalStatus = value.maritalStatus;
@@ -336,10 +344,26 @@ export class NewBeneficiaryDataComponent implements OnInit {
     // person.nationality = this.
     person.otherNames = value.otherNames;
     person.phoneNumber = value.phonenumber;
-    person.platformOnwerId = this.currentPlatform;
+    person.platformOnwerId = this.currentPlatform._id;
     person.stateOfOrigin = value.stateOfOrigin;
     person.title = value.title;
     console.log(person);
+
+    let beneficiary: Beneficiary = <Beneficiary>{};
+    beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+    beneficiary.platformOwnerId = this.currentPlatform;
+
+    let policy: any = <any>{};
+
+
+    this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+      console.log(payload);
+      if (payload.statusCode === 200 && payload.error === false) {
+        this._systemService.announceBeneficiaryTabNotification('Two');
+      }
+    }).catch(err => {
+      console.log(err);
+    })
 
   }
 

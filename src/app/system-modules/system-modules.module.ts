@@ -8,6 +8,7 @@ import { TopBarComponent } from './top-bar/top-bar.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ModuleService, RoleService} from '../services/index';
 import { AccessManagementComponent } from './access-management/access-management.component';
+import { CheckinComponent } from './checkin/checkin.component';
 // import { ListBeneficiaryComponent } from '../system-modules/beneficiary/list-beneficiary/list-beneficiary.component';
 
 @NgModule({
@@ -15,7 +16,8 @@ import { AccessManagementComponent } from './access-management/access-management
         SystemModulesComponent,
         TopBarComponent,
         MainMenuComponent,
-        AccessManagementComponent
+        AccessManagementComponent,
+        CheckinComponent
     ],
     exports: [],
     imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule],
