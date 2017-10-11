@@ -1,5 +1,6 @@
-<div class="pg-title">Jonathan Nelson</div>
-<div class="pg-subtitle">jonathan.nelson@gmail.com</div>
+<div class="pg-title">
+    {{selectedBeneficiary?.person.lastName}} {{selectedBeneficiary?.person.firstName}}</div>
+<div class="pg-subtitle">{{selectedBeneficiary?.person.email}}</div>
 
 <form [formGroup]="frmProgram" novalidate>
     <div class="frm-inner-title">Health Insurance Agent</div>
@@ -51,7 +52,7 @@
     <div class="frm-item-wrap">
         <label class="label">Premium Category</label>
         <div class="input-wrap">
-            <select formControlName="policy" class="form-control">
+            <select formControlName="premiumCategory" class="form-control">
                 <option  value="" disabled selected>Premium Category</option>
                 <option *ngFor="let premiumType of premiumTypes"  [ngValue]="premiumType">{{premiumType.name}}</option>
                 </select>
@@ -59,7 +60,7 @@
     </div>
 
     <div style="margin:10px auto;display:flex;justify-content:center;">
-        <button class="btn btn-medium btn-blue" (click)="onClickStepOne(frmProgram.value, frmProgram.valid);">
+        <button class="btn btn-medium btn-blue" (click)="onClickStepFour(frmProgram.value, frmProgram.valid);">
             NEXT &nbsp; <i class="fa fa-chevron-right"></i>
         </button>
     </div>

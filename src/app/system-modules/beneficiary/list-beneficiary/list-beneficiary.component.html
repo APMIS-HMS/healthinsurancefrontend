@@ -59,6 +59,7 @@
                 <th class="th">L.G.A</th>
                 <th class="th">HIA</th>
                 <th class="th">Status</th>
+                <td class="th">Action</td>
                 <th class="th"></th>
             </tr>
         </thead>
@@ -72,18 +73,21 @@
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let beneficiary of beneficiaries; let i = index;" routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}" class="tr">
+            <tr *ngFor="let beneficiary of beneficiaries; let i = index;" class="tr">
                 <td class="td">{{ i+1 }}</td>
-                <td class="td">{{beneficiary?.lastName}} {{beneficiary?.firstName}} {{beneficiary?.otherNames}}</td>
-                <td class="td">{{beneficiary.gender}}</td>
-                <td class="td">{{beneficiary.organisationId}}</td>
-                <td class="td">{{beneficiary.dob}}</td>
-                <td class="td">{{beneficiary.lga}}</td>
+                <td class="td">{{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}} {{beneficiary?.otherNames}}</td>
+                <td class="td">{{beneficiary.person.gender.name}}</td>
+                <td class="td">{{beneficiary.platformOwnerNumber}}</td>
+                <td class="td">{{beneficiary.person.dateOfBirth | date}}</td>
+                <td class="td">{{beneficiary.person.homeAddress.lga.name}}</td>
                 <td class="td">{{beneficiary.hia}}</td>
                 <td class="td">
                     <span class="{{ beneficiary.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}"> 
                         {{ beneficiary.isTokenVerified ? 'Active': 'Inactive' }}
                     </span>
+                </td>
+                <td class="td td-icos">
+                    <i class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
                 </td>
                 <td routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}"><i class="fa fa-chevron-right"></i></td>
             </tr>

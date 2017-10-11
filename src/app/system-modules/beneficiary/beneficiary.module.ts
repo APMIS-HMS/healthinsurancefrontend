@@ -28,6 +28,6 @@ import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-no
     ],
     declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService, PlanService, PremiumTypeService,
-        PlanTypeService, BeneficiaryService, SystemModuleService, BankService, RelationshipService]
+        PlanTypeService, BeneficiaryService, BankService, RelationshipService]
 })
 export class BeneficiaryModule { }
