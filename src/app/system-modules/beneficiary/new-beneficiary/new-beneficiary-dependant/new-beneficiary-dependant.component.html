@@ -1,6 +1,6 @@
 <div class="pg-title">
-    Jonathan Nelson</div>
-<div class="pg-subtitle">jonathan.nelson@gmail.com</div>
+    {{selectedBeneficiary?.person.lastName}} {{selectedBeneficiary?.person.firstName}}</div>
+<div class="pg-subtitle">{{selectedBeneficiary?.person.email}}</div>
 
 <!-- 
 <form *ngIf="locationTypeControl.value != null" [formGroup]="clinicScheduleForm" class="form-horizontal" (ngSubmit)="onSubmit()">
@@ -32,7 +32,7 @@
                 <div class="frm-item-wrap">
                     <label class="label">Title</label>
                     <div class="input-wrap">
-                        <select formControlName="title" class="form-control">
+                        <select formControlName="title" class="form-control" [compareWith]='compare'>
                             <option  value="" selected>Title</option>
                             <option *ngFor="let title of titles"  [ngValue]="title">{{title.name}}</option>
                         </select>
