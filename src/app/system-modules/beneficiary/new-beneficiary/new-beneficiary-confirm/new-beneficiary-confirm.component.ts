@@ -6,8 +6,6 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./new-beneficiary-confirm.component.scss']
 })
 export class NewBeneficiaryConfirmComponent implements OnInit {
-  @Input() selectedBeneficiary: any;
-  @Input() dependants: any[];
   @Input() policy: any;
   constructor() { }
 

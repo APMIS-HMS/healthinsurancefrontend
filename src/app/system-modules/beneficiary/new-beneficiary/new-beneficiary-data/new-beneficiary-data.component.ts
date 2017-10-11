@@ -238,7 +238,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       email: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       dob: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.dateOfBirth : this.today, [<any>Validators.required]],
       lashmaId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.platformOwnerNumber : '', []],
-      lasrraId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.stateID : '', [<any>Validators.required]],
+      lasrraId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.stateID : '', []],
       stateOfOrigin: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.stateOfOrigin : '', [<any>Validators.required]],
       lgaOfOrigin: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.lgaOfOrigin : '', [<any>Validators.required]],
       maritalStatus: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.maritalStatus : '', [<any>Validators.required]],
@@ -252,8 +252,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     if (this.selectedBeneficiary._id !== undefined) {
       this._getLgaAndCities(this.selectedBeneficiary.person.stateOfOrigin);
       this.stepOneFormGroup.controls['gender'].setValue(this.selectedBeneficiary.person.gender);
-      if (this.selectedBeneficiary.logo !== undefined) {
-        this.blah.nativeElement.src = this._uploadService.transform(this.selectedBeneficiary.logo.thumbnail);
+      if (this.selectedBeneficiary.person.profileImageObject !== undefined) {
+        this.blah.nativeElement.src = this._uploadService.transform(this.selectedBeneficiary.person.profileImageObject.thumbnail);
       }
     }
 
@@ -341,6 +341,16 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   changeGender($event, gender) {
     this.stepOneFormGroup.controls['gender'].setValue(gender);
   }
+  upload() {
+    let fileBrowser = this.fileInput.nativeElement;
+    if (fileBrowser.files && fileBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", fileBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedBeneficiary.person._id));
+      });
+    }
+  }
   onClickStepOne(value, valid) {
     if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
       let person: Person = this.selectedBeneficiary.person;
@@ -366,15 +376,47 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       person.title = value.title;
 
 
+
+
+
+
+
+
+      let fileBrowser = this.fileInput.nativeElement;
       this._systemService.on();
-      this._personService.update(person).then(payload => {
-        this._getBeneficiary(this.selectedBeneficiary._id);
-        this._systemService.off();
-        this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      })
+      if (person.profileImageObject === undefined) {
+        if (fileBrowser.files && fileBrowser.files[0]) {
+          this.upload().then((result: any) => {
+            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+              person.profileImageObject = result.body[0].file;
+
+              this._personService.update(person).then(payload => {
+                this._getBeneficiary(this.selectedBeneficiary._id);
+                this._systemService.off();
+                this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+              }).catch(err => {
+                console.log(err);
+                this._systemService.off();
+              })
+            }
+          }).catch(err => {
+            this._systemService.off();
+          })
+        }
+      } else {
+        this._personService.update(person).then(payload => {
+          this._getBeneficiary(this.selectedBeneficiary._id);
+          this._systemService.off();
+          this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+        }).catch(err => {
+          console.log(err);
+          this._systemService.off();
+        })
+      }
+
+
+
+
     } else {
       let person: Person = <Person>{};
       let address: Address = <Address>{};
@@ -405,14 +447,40 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       let policy: any = <any>{};
 
 
-      this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
 
-        if (payload.statusCode === 200 && payload.error === false) {
-          this._systemService.announceBeneficiaryTabNotification('Two');
+
+
+      let fileBrowser = this.fileInput.nativeElement;
+      this._systemService.on();
+      if (person.profileImageObject === undefined) {
+        if (fileBrowser.files && fileBrowser.files[0]) {
+          this.upload().then((result: any) => {
+            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+              person.profileImageObject = result.body[0].file;
+
+              this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+
+                if (payload.statusCode === 200 && payload.error === false) {
+                  this._systemService.announceBeneficiaryTabNotification('Two');
+                }
+              }).catch(err => {
+                console.log(err);
+              })
+            }
+          }).catch(err => {
+            this._systemService.off();
+          })
         }
-      }).catch(err => {
-        console.log(err);
-      })
+      } else {
+        this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+
+          if (payload.statusCode === 200 && payload.error === false) {
+            this._systemService.announceBeneficiaryTabNotification('Two');
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      }
 
     }
 
