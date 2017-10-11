@@ -21,7 +21,7 @@
                     <div class="input-wrap">
                         <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
                             <label for="bene-male">
-                                <input style="width: 30px;display: block;margin: 0 auto;" [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
+                                <input style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender, dependant)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
                             </label>
                     </span>
                     </div>
@@ -114,16 +114,24 @@
                     </div>
                 </div>
 
+                <div class="frm-item-wrap">
+                    <label class="label"></label>
+                    <div class="input-wrap">
+                        <button class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
+                            Add &nbsp; <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
 
-            <div style="text-align:right;">
+            <div style="text-align:right;" *ngIf="dependant.controls.readOnly.value ===true && dependant.valid===true && (i+1)===frmDependants.controls['dependantArray'].controls.length">
                 <span (click)="pushNewDependant()" class="txt-link"><i class="fa fa-plus"></i> Another Dependant</span>
             </div>
         </div>
     </div>
     <div style="margin:10px auto;display:flex;justify-content:center;">
-        <button class="btn btn-medium btn-blue" (click)="onClickStepOne(frmDependants.value, frmDependants.valid);">
+        <button class="btn btn-medium btn-blue" (click)="onClickStepTwo(frmDependants);">
             NEXT &nbsp; <i class="fa fa-chevron-right"></i>
         </button>
     </div>

@@ -1,3 +1,5 @@
+import { Address } from './../../../../models/organisation/address';
+import { Person } from './../../../../models/person/person';
 import { RelationshipService } from './../../../../services/common/relationship.service';
 import { MaritalStatusService } from './../../../../services/common/marital-status.service';
 import { TitleService } from './../../../../services/common/titles.service';
@@ -25,14 +27,20 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
   frmDependants: FormGroup;
   lgs: any[] = [];
-  residenceLgs:any[] = [];
+  residenceLgs: any[] = [];
   cities: any[] = [];
   genders: any[] = [];
   titles: any[] = [];
   maritalStatuses: any[] = [];
-  relationships:any[] = [];
+  relationships: any[] = [];
 
-  currentPlatform:any;
+  currentPlatform: any;
+
+  public myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd-mmm-yyyy',
+  };
+
+  public today: IMyDate;
 
   constructor(
     private _fb: FormBuilder,
@@ -48,7 +56,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _titleService: TitleService,
     private _router: Router,
     private _maritalService: MaritalStatusService,
-    private _relationshipService:RelationshipService,
+    private _relationshipService: RelationshipService,
     private _route: ActivatedRoute
   ) { }
 
@@ -62,6 +70,11 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
 
   _addNewDependant() {
+    this.today = {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      day: new Date().getDate()
+    }
     this.frmDependants = this._fb.group({
       'dependantArray': this._fb.array([
         this._fb.group({
@@ -72,7 +85,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
           phonenumber: ['', [<any>Validators.required]],
           secondaryPhone: [''],
           email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-          dob: ['', [<any>Validators.required]],
+          dob: [this.today, [<any>Validators.required]],
           gender: ['', [<any>Validators.required]],
           relationship: ['', [<any>Validators.required]],
           lasrraId: ['', [<any>Validators.required]],
@@ -83,16 +96,16 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
 
   _getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-			console.log(res);
-			if (res.data.length > 0) {
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      console.log(res);
+      if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-			}
-		}).catch(err => {
-			console.log(err);
-		});
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
-  _getRelationships(){
+  _getRelationships() {
     this._systemService.on();
     this._relationshipService.find({}).then((payload: any) => {
       this.relationships = payload.data;
@@ -129,12 +142,11 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     })
   }
 
-  closeDependant(dependant, i){
+  closeDependant(dependant, i) {
     console.log(dependant)
   }
 
   pushNewDependant(dependant?, index?) {
-    console.log(dependant)
     if (dependant !== undefined && dependant.valid) {
       dependant.value.readOnly = true;
     }
@@ -145,7 +157,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         title: ['', [<any>Validators.required]],
         middleName: [''],
         lastName: ['', [<any>Validators.required]],
-        phonenumber: ['', [<any>Validators.required]],
+        phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
         secondaryPhone: [''],
         email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
         dob: ['', [<any>Validators.required]],
@@ -155,6 +167,45 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         readOnly: [false]
       })
       );
+  }
+  push(dependant, valid) {
+    dependant.controls['readOnly'].setValue(true);
+    console.log(dependant)
+    console.log(valid);
+  }
+
+  changeGender($event, gender, dependant) {
+    dependant.controls['gender'].setValue(gender);
+  }
+
+  onClickStepTwo(dependants) {
+    // this.frmDependants.
+    console.log(dependants)
+    let savedFiltered = dependants.controls.dependantArray.controls.filter(x => x.value.readOnly === true && x.valid);
+    console.log(savedFiltered)
+    savedFiltered.forEach(group =>{
+      let person: Person = <Person>{};
+      let address: Address = <Address>{};
+      // address.city
+      // address.lga = value.lga;
+      // address.neighbourhood = value.neighbourhood;
+      // address.state = this.selectedState;
+      // address.street = value.streetName;
+  
+      person.dateOfBirth = group.controls.dob.value.jsdate;
+      person.email = group.controls.email.value;
+      person.firstName = group.controls.firstName.value;
+      person.gender = group.controls.gender.value;
+      person.homeAddress = address;
+      person.lastName = group.controls.lastName.value;
+      person.otherNames = group.controls.middleName.value;
+      person.phoneNumber = group.controls.phonenumber.value;
+      person.platformOnwerId = this.currentPlatform._id;
+      person.title = group.controls.title.value;
+
+      console.log(person);
+      console.log(group)
+    })
   }
 
 }
