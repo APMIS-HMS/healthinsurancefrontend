@@ -1,3 +1,4 @@
+import { PersonService } from './../../../../services/person/person.service';
 import { Address } from './../../../../models/organisation/address';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
 import { Beneficiary } from './../../../../models/setup/beneficiary';
@@ -7,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GenderService } from './../../../../services/common/gender.service';
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName } from '../../../../services/globals/config';
@@ -24,7 +25,7 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   templateUrl: './new-beneficiary-data.component.html',
   styleUrls: ['./new-beneficiary-data.component.scss']
 })
-export class NewBeneficiaryDataComponent implements OnInit {
+export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   @ViewChild('video') video: any;
   @ViewChild('snapshot') snapshot: ElementRef;
@@ -36,6 +37,7 @@ export class NewBeneficiaryDataComponent implements OnInit {
   stepThreeView: Boolean = false;
   stepFourView: Boolean = false;
   popCamera: Boolean = false;
+  showPreview = false;
 
   banks: any[] = [];
   countries: any[] = [];
@@ -81,12 +83,23 @@ export class NewBeneficiaryDataComponent implements OnInit {
     private _router: Router,
     private _maritalService: MaritalStatusService,
     private _beneficiaryService: BeneficiaryService,
+    private _personService: PersonService,
     private _route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this._initialiseFormGroup();
 
+    this._getCurrentPlatform();
+    this._getCountries();
+    this._getGenders();
+    this._getTitles();
+    this._getMaritalStatus();
+  }
+  ngAfterViewInit() {
+    if (this.video !== undefined) {
+      this.context = this.snapshot.nativeElement.getContext("2d");
+    }
 
     this._route.params.subscribe(param => {
 
@@ -96,21 +109,17 @@ export class NewBeneficiaryDataComponent implements OnInit {
         this._initialiseFormGroup();
       }
     });
-
-    this._getCurrentPlatform();
-    this._getCountries();
-    this._getGenders();
-    this._getTitles();
-    this._getMaritalStatus();
   }
-  ngAfterViewInit() {
-    this._video = this.video.nativeElement;
-    this.context = this.snapshot.nativeElement.getContext("2d");
+
+  ngAfterViewChecked(): void {
+    if (this.video !== undefined) {
+      this._video = this.video.nativeElement;
+    }
+
   }
 
   _getCurrentPlatform() {
     this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getLga(this.currentPlatform.address.state);
@@ -147,7 +156,16 @@ export class NewBeneficiaryDataComponent implements OnInit {
     })
   }
   _getBeneficiary(id) {
-
+    this._systemService.on();
+    this._beneficiaryService.get(id, {}).then((payload: any) => {
+      this.selectedBeneficiary = payload;
+      console.log(this.selectedBeneficiary);
+      this._initialiseFormGroup();
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
   }
 
   _getCountries() {
@@ -170,8 +188,6 @@ export class NewBeneficiaryDataComponent implements OnInit {
     })
   }
   _getStates(_id) {
-    console.log('call states')
-    console.log(_id);
     this._systemService.on();
     this._countriesService.find({
       query: {
@@ -180,11 +196,9 @@ export class NewBeneficiaryDataComponent implements OnInit {
         $select: { 'states.cities': 0, 'states.lgs': 0 }
       }
     }).then((payload: any) => {
-      console.log(payload)
       this._systemService.off();
       if (payload.data.length > 0) {
         this.states = payload.data[0].states;
-        console.log(this.states)
       }
 
     }).catch(error => {
@@ -212,38 +226,38 @@ export class NewBeneficiaryDataComponent implements OnInit {
       }
     }
 
+
     this.stepOneFormGroup = this._fb.group({
       gender: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.gender : '', [<any>Validators.required]],
       title: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.title : '', [<any>Validators.required]],
       firstName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.firstName : '', [<any>Validators.required]],
       otherNames: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.otherNames : '', []],
-      lastName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.shortName : '', [<any>Validators.required]],
+      lastName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.lastName : '', [<any>Validators.required]],
       phonenumber: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       secondaryPhone: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.secondaryPhoneNumber : '', [<any>Validators.pattern(PHONE_REGEX)]],
-      email: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.address.city : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      email: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       dob: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.dateOfBirth : this.today, [<any>Validators.required]],
-      lashmaId: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.bankDetails.bank : '', []],
-      lasrraId: [this.selectedBeneficiary.address != null ? this.selectedBeneficiary.bankDetails.bank : '', [<any>Validators.required]],
-      stateOfOrigin: [this.selectedBeneficiary.bankDetails != null ? this.selectedBeneficiary.bankDetails.name : '', [<any>Validators.required]],
-      lgaOfOrigin: [this.selectedBeneficiary.bankDetails != null ? this.selectedBeneficiary.bankDetails.accountNumber : '', [<any>Validators.required]],
-      maritalStatus: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.firstName : '', [<any>Validators.required]],
-      noOfChildrenU18: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.lastName : '', [<any>Validators.required]],
-      streetName: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.email : '', [<any>Validators.required]],
-      lga: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.phoneNumber : '', [<any>Validators.required]],
-      neighbourhood: [this.selectedBeneficiary.businessContact != null ? this.selectedBeneficiary.businessContact.position : '', [<any>Validators.required]],
-      mothermaidenname: [this.selectedBeneficiary.itContact != null ? this.selectedBeneficiary.itContact.firstName : '', [<any>Validators.required]]
+      lashmaId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.platformOwnerNumber : '', []],
+      lasrraId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.stateID : '', [<any>Validators.required]],
+      stateOfOrigin: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.stateOfOrigin : '', [<any>Validators.required]],
+      lgaOfOrigin: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.lgaOfOrigin : '', [<any>Validators.required]],
+      maritalStatus: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.maritalStatus : '', [<any>Validators.required]],
+      noOfChildrenU18: [this.selectedBeneficiary != null ? this.selectedBeneficiary.numberOfUnderAge : '', [<any>Validators.required]],
+      streetName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.street : '', [<any>Validators.required]],
+      lga: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.lga : '', [<any>Validators.required]],
+      neighbourhood: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.neighbourhood : '', [<any>Validators.required]],
+      mothermaidenname: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.mothersMaidenName : '', [<any>Validators.required]]
     });
-    console.log(this.selectedBeneficiary);
 
-    if (this.selectedBeneficiary.name !== undefined) {
-      this._getLgaAndCities(this.selectedBeneficiary.address.state);
+    if (this.selectedBeneficiary._id !== undefined) {
+      this._getLgaAndCities(this.selectedBeneficiary.person.stateOfOrigin);
+      this.stepOneFormGroup.controls['gender'].setValue(this.selectedBeneficiary.person.gender);
       if (this.selectedBeneficiary.logo !== undefined) {
         this.blah.nativeElement.src = this._uploadService.transform(this.selectedBeneficiary.logo.thumbnail);
       }
     }
 
     this.stepOneFormGroup.controls['stateOfOrigin'].valueChanges.subscribe(value => {
-      console.log(value);
       if (value !== null) {
         this._getLgaAndCities(value, this.selectedCountry._id, );
       }
@@ -318,59 +332,94 @@ export class NewBeneficiaryDataComponent implements OnInit {
 
   }
 
+  compare(l1: any, l2: any) {
+    if (l1 !== null && l2 !== null) {
+      return l1._id === l2._id;
+    }
+    return false;
+  }
   changeGender($event, gender) {
     this.stepOneFormGroup.controls['gender'].setValue(gender);
   }
   onClickStepOne(value, valid) {
-    console.log(valid)
-    console.log(value);
-    let person: Person = <Person>{};
-    let address: Address = <Address>{};
-    // address.city
-    address.lga = value.lga;
-    address.neighbourhood = value.neighbourhood;
-    address.state = this.selectedState;
-    address.street = value.streetName;
+    if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
+      let person: Person = this.selectedBeneficiary.person;
+      let address: Address = this.selectedBeneficiary.person.homeAddress;
+      address.lga = value.lga;
+      address.neighbourhood = value.neighbourhood;
+      address.state = this.selectedState;
+      address.street = value.streetName;
 
-    person.dateOfBirth = value.dob.jsdate;
-    person.email = value.email;
-    person.firstName = value.firstName;
-    person.gender = value.gender;
-    person.homeAddress = address;
-    person.lastName = value.lastName;
-    person.lgaOfOrigin = value.lgaOfOrigin;
-    person.maritalStatus = value.maritalStatus;
-    person.mothersMaidenName = value.mothermaidenname;
-    // person.nationality = this.
-    person.otherNames = value.otherNames;
-    person.phoneNumber = value.phonenumber;
-    person.platformOnwerId = this.currentPlatform._id;
-    person.stateOfOrigin = value.stateOfOrigin;
-    person.title = value.title;
-    console.log(person);
-
-    let beneficiary: Beneficiary = <Beneficiary>{};
-    beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-    beneficiary.platformOwnerId = this.currentPlatform;
-
-    let policy: any = <any>{};
+      person.dateOfBirth = value.dob.jsdate;
+      person.email = value.email;
+      person.firstName = value.firstName;
+      person.gender = value.gender;
+      person.homeAddress = address;
+      person.lastName = value.lastName;
+      person.lgaOfOrigin = value.lgaOfOrigin;
+      person.maritalStatus = value.maritalStatus;
+      person.mothersMaidenName = value.mothermaidenname;
+      person.otherNames = value.otherNames;
+      person.phoneNumber = value.phonenumber;
+      person.platformOnwerId = this.currentPlatform._id;
+      person.stateOfOrigin = value.stateOfOrigin;
+      person.title = value.title;
 
 
-    this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
-      console.log(payload);
-      if (payload.statusCode === 200 && payload.error === false) {
-        this._systemService.announceBeneficiaryTabNotification('Two');
-      }
-    }).catch(err => {
-      console.log(err);
-    })
+      this._systemService.on();
+      this._personService.update(person).then(payload => {
+        this._getBeneficiary(this.selectedBeneficiary._id);
+        this._systemService.off();
+        this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      })
+    } else {
+      let person: Person = <Person>{};
+      let address: Address = <Address>{};
+      address.lga = value.lga;
+      address.neighbourhood = value.neighbourhood;
+      address.state = this.selectedState;
+      address.street = value.streetName;
+
+      person.dateOfBirth = value.dob.jsdate;
+      person.email = value.email;
+      person.firstName = value.firstName;
+      person.gender = value.gender;
+      person.homeAddress = address;
+      person.lastName = value.lastName;
+      person.lgaOfOrigin = value.lgaOfOrigin;
+      person.maritalStatus = value.maritalStatus;
+      person.mothersMaidenName = value.mothermaidenname;
+      person.otherNames = value.otherNames;
+      person.phoneNumber = value.phonenumber;
+      person.platformOnwerId = this.currentPlatform._id;
+      person.stateOfOrigin = value.stateOfOrigin;
+      person.title = value.title;
+
+      let beneficiary: Beneficiary = <Beneficiary>{};
+      beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+      beneficiary.platformOwnerId = this.currentPlatform;
+
+      let policy: any = <any>{};
+
+
+      this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+
+        if (payload.statusCode === 200 && payload.error === false) {
+          this._systemService.announceBeneficiaryTabNotification('Two');
+        }
+      }).catch(err => {
+        console.log(err);
+      })
+
+    }
 
   }
 
   makeSnapshot() {
-    console.log(1)
     if (this._video) {
-      console.log(2)
       // let patCanvas: any =  this.context;//document.querySelector('#snapshot');
       // if (!patCanvas) return;
 
@@ -378,25 +427,45 @@ export class NewBeneficiaryDataComponent implements OnInit {
       // patCanvas.height = this._video.height;
       // var ctxPat = patCanvas.getContext('2d');
 
-      console.log(this.context);
+
 
       var idata = this.getVideoData(this.patOpts.x, this.patOpts.y, this.patOpts.w, this.patOpts.h);
-      console.log(idata)
+
       this.context.putImageData(idata, 300, 300);
       // this.context.drawImage(idata, 0, 0, 400, 400);
-      console.log(3)
+
       this.patData = idata;
     }
   };
 
+  showImageBrowseDlg() {
+    this.fileInput.nativeElement.click()
+  }
+
+  readURL(input) {
+    this._systemService.on();
+    input = this.fileInput.nativeElement;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      let that = this;
+      reader.onload = function (e: any) {
+        that.showPreview = true;
+        that.blah.nativeElement.src = e.target.result;
+        that._systemService.off();
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
   getVideoData(x, y, w, h) {
-    console.log('2a')
+
     var hiddenCanvas = document.createElement('canvas');
     hiddenCanvas.width = this._video.width;
     hiddenCanvas.height = this._video.height;
     var ctx = hiddenCanvas.getContext('2d');
     ctx.drawImage(this._video, 0, 0, this._video.width, this._video.height);
-    console.log('2b')
+
     return ctx.getImageData(x, y, w, h);
   };
 

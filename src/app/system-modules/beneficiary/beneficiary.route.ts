@@ -12,7 +12,7 @@ const BENEFICIARY_ROUTES: Routes = [
             { path: 'beneficiaries', component: ListBeneficiaryComponent },
             { path: 'beneficiaries/:beneficiary-id', component: BeneficiaryDetailsComponent },
             { path: 'new', component: NewBeneficiaryComponent },
-        ]
+            { path: 'new/:id', component: NewBeneficiaryComponent },        ]
     }
 ];
 

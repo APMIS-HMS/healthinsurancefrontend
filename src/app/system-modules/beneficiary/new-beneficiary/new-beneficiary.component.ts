@@ -18,37 +18,47 @@ export class NewBeneficiaryComponent implements OnInit {
   tab_program = false;
   tab_confirm = false;
 
+  selectedBeneficiary: any;
+  dependants: any[] = [];
+  policy:any;
   constructor(
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService
   ) {
-    this._systemService.beneficiaryTabAnnounced$.subscribe(value => {
-      if (value === 'One') {
+    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+      this.selectedBeneficiary = value.beneficiary;
+      if(value.dependants !== undefined){
+        this.dependants = value.dependants;
+      }
+      if(value.policy !== undefined){
+        this.policy = value.policy;
+      }
+      if (value.tab === 'One') {
         this.tab_personalData = true;
         this.tab_dependants = false;
         this.tab_nok = false;
         this.tab_program = false;
         this.tab_confirm = false;
-      } else if (value === 'Two') {
+      } else if (value.tab === 'Two') {
         this.tab_personalData = false;
         this.tab_dependants = true;
         this.tab_nok = false;
         this.tab_program = false;
         this.tab_confirm = false;
-      } else if (value === 'Three') {
+      } else if (value.tab === 'Three') {
         this.tab_personalData = false;
         this.tab_dependants = false;
         this.tab_nok = true;
         this.tab_program = false;
         this.tab_confirm = false;
-      } else if (value === 'Four') {
+      } else if (value.tab === 'Four') {
         this.tab_personalData = false;
         this.tab_dependants = false;
         this.tab_nok = false;
         this.tab_program = true;
         this.tab_confirm = false;
-      } else if (value === 'Five') {
+      } else if (value.tab === 'Five') {
         this.tab_personalData = false;
         this.tab_dependants = false;
         this.tab_nok = false;

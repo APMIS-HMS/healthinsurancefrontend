@@ -4,7 +4,7 @@
         <div class="input-wrap">
             <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
                 <label for="bene-male">
-                    <input style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
+                    <input [checked]="selectedBeneficiary?.person?.gender?.name===gender.name"  style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
                 </label>
             </span>
         </div>
@@ -15,7 +15,7 @@
     <div class="frm-item-wrap">
         <label class="label">Title</label>
         <div class="input-wrap">
-            <select formControlName="title" class="form-control">
+            <select formControlName="title" class="form-control" [compareWith]='compare'>
                 <option  value="" selected>Title</option>
                 <option *ngFor="let title of titles"  [ngValue]="title">{{title.name}}</option>
             </select>
@@ -102,7 +102,7 @@
     <div class="frm-item-wrap">
         <label class="label">State of Origin</label>
         <div class="input-wrap">
-            <select formControlName="stateOfOrigin" class="form-control">
+            <select formControlName="stateOfOrigin" class="form-control" [compareWith]='compare'>
                 <option  value="" selected>Select State of origin</option>
                 <option *ngFor="let state of states"  [ngValue]="state">{{state.name}}</option>
             </select>
@@ -114,7 +114,7 @@
     <div class="frm-item-wrap">
         <label class="label">L.G.A of Origin</label>
         <div class="input-wrap">
-            <select formControlName="lgaOfOrigin" class="form-control">
+            <select formControlName="lgaOfOrigin" class="form-control" [compareWith]='compare'>
                 <option  value="" selected>Select L.G.A of origin</option>
                 <option *ngFor="let lga of lgs"  [ngValue]="lga">{{lga.name}}</option>
             </select>
@@ -126,7 +126,7 @@
     <div class="frm-item-wrap">
         <label class="label">Marital Status</label>
         <div class="input-wrap">
-            <select formControlName="maritalStatus" class="form-control">
+            <select formControlName="maritalStatus" class="form-control" [compareWith]='compare'>
                 <option  value="" selected>Marital Status</option>
                 <option *ngFor="let status of maritalStatuses"  [ngValue]="status">{{status.name}}</option>
             </select>
@@ -156,7 +156,7 @@
     <div class="frm-item-wrap">
         <label class="label">LGA/LCDA of Residence</label>
         <div class="input-wrap">
-            <select formControlName="lga" class="form-control">
+            <select formControlName="lga" class="form-control" [compareWith]='compare'>
                 <option  value="" selected>Local Government Area</option>
                 <option *ngFor="let lga of residenceLgs"  [ngValue]="lga">{{lga.name}}</option>
             </select>
@@ -177,8 +177,18 @@
     <div class="frm-item-wrap">
         <label class="label">Upload photo</label>
         <div class="input-wrap">
-            <button class="btn btn-medium btn-blue">Search Photo</button>
+            <button (click)="showImageBrowseDlg()" class="btn btn-medium btn-blue">Search Photo</button>
             <button (click)="startCamera()" class="btn btn-medium btn-blue"><i class="fa fa-camera"></i> {{btnCamera}}</button>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <div class="label">
+            <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this)">
+        </div>
+        <div class="input-wrap" *ngIf="showPreview">
+            <div style="width:100%;" class="placehold-wrap">
+                <img #blah id="blah" src="http://placehold.it/180" alt="your image" />
+            </div>
         </div>
     </div>
     <div style="margin:10px auto;display:flex;justify-content:center;">
