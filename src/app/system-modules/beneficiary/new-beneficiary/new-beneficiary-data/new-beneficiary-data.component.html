@@ -185,14 +185,14 @@
         <div class="label">
             <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this)">
         </div>
-        <div class="input-wrap" *ngIf="showPreview">
+        <div class="input-wrap" *ngIf="true">
             <div style="width:100%;" class="placehold-wrap">
                 <img #blah id="blah" src="http://placehold.it/180" alt="your image" />
             </div>
         </div>
     </div>
     <div style="margin:10px auto;display:flex;justify-content:center;">
-        <button class="btn btn-medium btn-blue" (click)="onClickStepOne(stepOneFormGroup.value, stepOneFormGroup.valid);">
+        <button [disabled]="!stepOneFormGroup.valid" class="btn btn-medium btn-blue" (click)="onClickStepOne(stepOneFormGroup.value, stepOneFormGroup.valid);">
             NEXT &nbsp; <i class="fa fa-chevron-right"></i>
         </button>
     </div>

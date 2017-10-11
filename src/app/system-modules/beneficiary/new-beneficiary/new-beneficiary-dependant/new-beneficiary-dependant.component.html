@@ -117,9 +117,12 @@
                 <div class="frm-item-wrap">
                     <label class="label"></label>
                     <div class="input-wrap">
-                        <button class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
+                        <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
                             Add &nbsp; <i class="fa fa-plus"></i>
                         </button>
+                        <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
+                                Add &nbsp; <i class="fa fa-plus"></i>
+                            </button>
                     </div>
                 </div>
             </div>
@@ -130,7 +133,10 @@
             </div>
         </div>
     </div>
-    <div style="margin:10px auto;display:flex;justify-content:center;">
+    <div style="margin:10px auto;display:flex;justify-content:space-between;">
+        <button class="btn btn-medium btn-blue" (click)="moveBack()">
+            PREVIOUS &nbsp; <i class="fa fa-chevron-right"></i>
+        </button>
         <button class="btn btn-medium btn-blue" (click)="onClickStepTwo(frmDependants);">
             NEXT &nbsp; <i class="fa fa-chevron-right"></i>
         </button>

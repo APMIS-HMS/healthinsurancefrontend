@@ -148,12 +148,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   onClickStepFour(value, valid) {
     console.log(value)
     if (valid) {
-      // this._systemService.announceBeneficiaryTabNotification({
-      //   tab: 'Five',
-      //   beneficiary: this.selectedBeneficiary,
-      //   dependants: this.dependants,
-      //   policy: value
-      // });
+
 
 
 
@@ -178,6 +173,13 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
       this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
         console.log(payload)
+
+        this._systemService.announceBeneficiaryTabNotification({
+          tab: 'Five',
+          policy: payload
+        });
+
+
       }).catch(err => {
         console.log(err)
       });

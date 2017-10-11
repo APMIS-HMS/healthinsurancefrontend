@@ -184,6 +184,10 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     dependant.controls['gender'].setValue(gender);
   }
 
+  moveBack(){
+    this._systemService.announceBeneficiaryTabNotification({tab:'One',beneficiary:this.selectedBeneficiary})
+  }
+
   onClickStepTwo(dependants) {
     // this.frmDependants.
     console.log(dependants)
