@@ -6,14 +6,14 @@
         <label class="label">Gender</label>
         <div class="input-wrap">
             <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
-                <label for="bene-male">
-                    <input style="width: 30px;display: block;margin: 0 auto;" [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
-                </label>
+                    <label for="bene-male">
+                        <input style="width: 30px;display: block;margin: 0 auto;" [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
+                    </label>
             </span>
         </div>
         <small class="alert-label" [hidden]="frmNok.controls.gender.valid || frmNok.controls.gender.pristine">
-            Gender is required.
-        </small>
+                Gender is required.
+            </small>
     </div>
     <div class="frm-item-wrap">
         <label class="label">Title</label>
@@ -30,7 +30,7 @@
     <div class="frm-item-wrap">
         <label class="label">First name</label>
         <div class="input-wrap">
-          <input type="text" formControlName="firstName">
+            <input type="text" formControlName="firstName">
         </div>
         <small class="alert-label" [hidden]="frmNok.controls.firstName.valid || frmNok.controls.firstName.pristine">
             This is a required field (minimum 3 and max of 50 characters).
@@ -39,13 +39,13 @@
     <div class="frm-item-wrap">
         <label class="label">Middle name <small>(Optional)</small></label>
         <div class="input-wrap">
-          <input type="text" name="middleName" formControlName="middleName">
+            <input type="text" name="middleName" formControlName="middleName">
         </div>
     </div>
     <div class="frm-item-wrap">
         <label class="label">Surname</label>
         <div class="input-wrap">
-          <input type="text" name="lastName" formControlName="lastName">
+            <input type="text" name="lastName" formControlName="lastName">
         </div>
         <small class="alert-label" [hidden]="frmNok.controls.lastName.valid || frmNok.controls.lastName.pristine">
             This is a required field (minimum 3 and max of 50 characters).
@@ -78,10 +78,10 @@
     <div class="frm-item-wrap">
         <label class="label">Nature of Relationship</label>
         <div class="input-wrap">
-          <select formControlName="relationship">
-              <option  value="" selected>Spouse</option>
-              <option  value="">Child</option>
-          </select>
+            <select formControlName="relationship" class="form-control">
+                    <option  value="" disabled selected>Relationship</option>
+                    <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
+                </select>
         </div>
     </div>
     <div style="text-align:right;">

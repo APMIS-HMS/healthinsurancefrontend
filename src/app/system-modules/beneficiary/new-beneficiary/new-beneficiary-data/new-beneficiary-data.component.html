@@ -4,7 +4,7 @@
         <div class="input-wrap">
             <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
                 <label for="bene-male">
-                    <input style="width: 30px;display: block;margin: 0 auto;" [checked]="i==0"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
+                    <input style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
                 </label>
             </span>
         </div>
@@ -45,9 +45,9 @@
     <div class="frm-item-wrap">
         <label class="label">Other Names</label>
         <div class="input-wrap">
-            <input type="text" name="middleName" formControlName="middleName" class="form-control">
+            <input type="text" name="otherNames" formControlName="otherNames" class="form-control">
         </div>
-        <small class="alert-label" [hidden]="stepOneFormGroup.controls.middleName.valid || stepOneFormGroup.controls.middleName.pristine">
+        <small class="alert-label" [hidden]="stepOneFormGroup.controls.otherNames.valid || stepOneFormGroup.controls.otherNames.pristine">
             This is a required field (minimum 3 and max of 50 characters).
         </small>
     </div>
@@ -102,9 +102,9 @@
     <div class="frm-item-wrap">
         <label class="label">State of Origin</label>
         <div class="input-wrap">
-            <select formControlName="stateOfOrigin" class="form-control" (change)="onChangeStateOfOrigin($event.target.value);">
+            <select formControlName="stateOfOrigin" class="form-control">
                 <option  value="" selected>Select State of origin</option>
-                <option *ngFor="let state of states"  value="{{state._id}}">{{state.name}}</option>
+                <option *ngFor="let state of states"  [ngValue]="state">{{state.name}}</option>
             </select>
         </div>
         <small class="alert-label" [hidden]="stepOneFormGroup.controls.stateOfOrigin.valid || stepOneFormGroup.controls.stateOfOrigin.pristine">
@@ -116,7 +116,7 @@
         <div class="input-wrap">
             <select formControlName="lgaOfOrigin" class="form-control">
                 <option  value="" selected>Select L.G.A of origin</option>
-                <option *ngFor="let lga of selectedLgas"  value="{{lga._id}}">{{lga.name}}</option>
+                <option *ngFor="let lga of lgs"  [ngValue]="lga">{{lga.name}}</option>
             </select>
         </div>
         <small class="alert-label" [hidden]="stepOneFormGroup.controls.lgaOfOrigin.valid || stepOneFormGroup.controls.lgaOfOrigin.pristine">
@@ -128,7 +128,7 @@
         <div class="input-wrap">
             <select formControlName="maritalStatus" class="form-control">
                 <option  value="" selected>Marital Status</option>
-                <option *ngFor="let status of maritalStatuses"  value="{{status._id}}">{{status.name}}</option>
+                <option *ngFor="let status of maritalStatuses"  [ngValue]="status">{{status.name}}</option>
             </select>
         </div>
         <small class="alert-label" [hidden]="stepOneFormGroup.controls.maritalStatus.valid || stepOneFormGroup.controls.maritalStatus.pristine">
@@ -158,7 +158,7 @@
         <div class="input-wrap">
             <select formControlName="lga" class="form-control">
                 <option  value="" selected>Local Government Area</option>
-                <option *ngFor="let lga of lgs"  value="{{lga._id}}">{{lga.name}}</option>
+                <option *ngFor="let lga of residenceLgs"  [ngValue]="lga">{{lga.name}}</option>
             </select>
         </div>
         <small class="alert-label" [hidden]="stepOneFormGroup.controls.lga.valid || stepOneFormGroup.controls.lga.pristine">
@@ -178,7 +178,8 @@
         <label class="label">Upload photo</label>
         <div class="input-wrap">
             <button class="btn btn-medium btn-blue">Search Photo</button>
-            <button (click)="makeSnapshot()" class="btn btn-medium btn-blue"><i class="fa fa-camera"></i> Use Camera</button>
+            <button (click)="startCamera()" class="btn btn-medium btn-blue"><i class="fa fa-camera"></i> {{btnCamera}}</button>
+            <button (click)="startCamera()" class="btn btn-medium btn-blue"><i class="fa fa-camera"></i> Snap</button>
         </div>
     </div>
     <div class="frm-item-wrap">
