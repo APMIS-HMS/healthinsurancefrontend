@@ -35,6 +35,7 @@ export class NewBeneficiaryDataComponent implements OnInit {
   stepTwoView: Boolean = false;
   stepThreeView: Boolean = false;
   stepFourView: Boolean = false;
+  popCamera: Boolean = false;
 
   banks: any[] = [];
   countries: any[] = [];
@@ -305,8 +306,10 @@ export class NewBeneficiaryDataComponent implements OnInit {
             this._video.play();
           })
       }
+      this.popCamera = true;
       this.btnCamera = 'Stop Camera';
     } else {
+      this.popCamera = false;
       this._video.src = null;
       var track = this.stream.getTracks()[0];
       track.stop();
