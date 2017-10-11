@@ -9,6 +9,9 @@ export class SystemModuleService {
   private notificationAnnouncedSource = new Subject<Object>();
   notificationAnnounced$ = this.notificationAnnouncedSource.asObservable();
 
+  private beneficiaryTabAnnouncedSource = new Subject<Object>();
+  beneficiaryTabAnnounced$ = this.beneficiaryTabAnnouncedSource.asObservable();
+
   private broadCastOnlineSource = new Subject<Object>();
   broadCastOnlineSource$ = this.broadCastOnlineSource.asObservable();
 
@@ -16,6 +19,10 @@ export class SystemModuleService {
   }
   announceNotification(notification: Object) {
     this.notificationAnnouncedSource.next(notification);
+  }
+
+  announceBeneficiaryTabNotification(notification: Object) {
+    this.beneficiaryTabAnnouncedSource.next(notification);
   }
 
   onlineStatusBroadCast(status: Object) {

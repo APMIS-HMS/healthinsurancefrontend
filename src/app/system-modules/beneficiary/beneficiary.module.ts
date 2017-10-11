@@ -1,3 +1,6 @@
+import { PremiumTypeService } from './../../services/common/premium-type.service';
+import { PlanService } from './../../services/plan/plan.service';
+import { RelationshipService } from './../../services/common/relationship.service';
 import { BankService } from './../../services/common/bank.service';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
@@ -24,7 +27,7 @@ import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-no
         MyDatePickerModule
     ],
     declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent],
-    providers: [CountryService, GenderService, TitleService, MaritalStatusService,
-    PlanTypeService, BeneficiaryService, SystemModuleService, BankService]
+    providers: [CountryService, GenderService, TitleService, MaritalStatusService, PlanService, PremiumTypeService,
+        PlanTypeService, BeneficiaryService, SystemModuleService, BankService, RelationshipService]
 })
 export class BeneficiaryModule { }
