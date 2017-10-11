@@ -10,7 +10,7 @@ const BENEFICIARY_ROUTES: Routes = [
         path: '', component: BeneficiaryComponent, children: [
             { path: '', redirectTo: 'beneficiaries', pathMatch: 'full' },
             { path: 'beneficiaries', component: ListBeneficiaryComponent },
-            { path: 'beneficiaries/:beneficiary-id', component: BeneficiaryDetailsComponent },
+            { path: 'beneficiaries/:id', component: BeneficiaryDetailsComponent },
             { path: 'new', component: NewBeneficiaryComponent },
         ]
     }

@@ -27,27 +27,33 @@
                             <div class="group-wrap">
                                 <div class="group-item">
                                     <div class="item-label">Date of Birth:</div>
-                                    <div class="item-val">{{ 'beneficiary.dateOfBirth' }}</div>
+                                    <div class="item-val">{{ beneficiary?.person?.dateOfBirth | date }}</div>
                                 </div>
                                 <!-- <div class="group-item">
-                            <div class="item-label">LASRRA ID:</div>
-                            <div class="item-val">133.23.22</div>
-                        </div> -->
+                                    <div class="item-label">LASRRA ID:</div>
+                                    <div class="item-val">133.23.22</div>
+                                </div> -->
+                                <div class="group-item">
+                                    <div class="item-label">Email:</div>
+                                    <div class="item-val">{{ beneficiary?.person?.email }}</div>
+                                </div>
                                 <div class="group-item">
                                     <div class="item-label">LASHMA ID:</div>
-                                    <div class="item-val">133.23.22</div>
+                                    <div class="item-val">{{ 'LS049300' }}</div>
                                 </div>
                                 <div class="group-item">
                                     <div class="item-label">CIN:</div>
-                                    <div class="item-val">133.23.22</div>
+                                    <div class="item-val">{{ 'CI3430490' }}</div>
                                 </div>
                             </div>
 
                             <div class="group-wrap">
-                                <div class="item-val">Professor Steve John Matanga</div>
-                                <div class="item-val">{{ 'beneficiary.phoneNumber' }}</div>
+                                <div class="item-val">
+                                    {{ beneficiary?.person?.title?.name }} {{ beneficiary?.person?.firstName }} {{ beneficiary?.person?.otherNames }} {{ beneficiary?.person?.lastName }}
+                                </div>
+                                <div class="item-val">{{ beneficiary?.person?.phoneNumber }}</div>
                             </div>
-                            <i class="ico-cirle fa fa-pencil"></i>
+                            <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class="ico-cirle fa fa-pencil"></i>
                         </div>
                     </div>
 
@@ -78,78 +84,78 @@
                                 <div class="item-val">{{ 'beneficiary?.dependant?.phoneNumber' }}</div>
                                 <div class="item-val">Relationship to primary insured:{{ 'beneficiary.phoneNumber' }}</div>
                             </div>
-                            <i class="ico-cirle fa fa-pencil"></i>
+                            <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class=" ico-cirle fa fa-pencil "></i>
                         </div>
                     </div>
 
-                    <div class="detail-item">
+                    <div class="detail-item ">
 
-                        <div class="detail-content">
-                            <div class="hia-user">
-                                <img src="../../../../assets/img/users/default.png">
-                                <div class="pd-tag">D</div>
+                        <div class="detail-content ">
+                            <div class="hia-user ">
+                                <img src="../../../../assets/img/users/default.png ">
+                                <div class="pd-tag ">D</div>
                             </div>
-                            <div class="group-wrap">
-                                <div class="group-item">
-                                    <div class="item-label">Date of Birth:</div>
-                                    <div class="item-val">11th Oct, 1977.</div>
+                            <div class="group-wrap ">
+                                <div class="group-item ">
+                                    <div class="item-label ">Date of Birth:</div>
+                                    <div class="item-val ">11th Oct, 1977.</div>
                                 </div>
-                                <div class="group-item">
-                                    <div class="item-label">LASRRA ID:</div>
-                                    <div class="item-val">133.23.22</div>
+                                <div class="group-item ">
+                                    <div class="item-label ">LASRRA ID:</div>
+                                    <div class="item-val ">133.23.22</div>
                                 </div>
-                                <div class="group-item">
-                                    <div class="item-label">LASHMA ID:</div>
-                                    <div class="item-val">133.23.22</div>
+                                <div class="group-item ">
+                                    <div class="item-label ">LASHMA ID:</div>
+                                    <div class="item-val ">133.23.22</div>
                                 </div>
-                            </div>
-
-                            <div class="group-wrap">
-                                <div class="item-val">Faith Ladi Geneva</div>
-                                <div class="item-val">08098976654</div>
-                                <div class="item-val">Relationship to primary insured: Daughter</div>
                             </div>
 
-                            <i class="ico-cirle fa fa-pencil"></i>
+                            <div class="group-wrap ">
+                                <div class="item-val ">Faith Ladi Geneva</div>
+                                <div class="item-val ">08098976654</div>
+                                <div class="item-val ">Relationship to primary insured: Daughter</div>
+                            </div>
+
+                            <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class="ico-cirle fa fa-pencil "></i>
                         </div>
                     </div>
                 </div>
-                <div class="right-wrap">
-                    <div class="detail-item">
+                <div class="right-wrap ">
+                    <div class="detail-item ">
 
-                        <div class="detail-content">
-                            <div class="group-wrap">
-                                <div class="item-label">Employer:</div>
+                        <div class="detail-content ">
+                            <div class="group-wrap ">
+                                <div class="item-label ">Employer:</div>
 
-                                <div class="item-val">Heptamile Global Limited</div>
-                                <div class="item-val">Block A4, Suit 76 Sura Shoping Complex</div>
-                                <div class="item-val">Compile Simpson Street Lagos</div>
-                                <div class="item-val">Ikoyi-Lagos.</div>
+                                <div class="item-val ">Heptamile Global Limited</div>
+                                <div class="item-val ">Block A4, Suit 76 Sura Shoping Complex</div>
+                                <div class="item-val ">Compile Simpson Street Lagos</div>
+                                <div class="item-val ">Ikoyi-Lagos.</div>
 
-                                <div style="width: 102px;margin-top: 10px;" class="btn btn-medium btn-blue-outline">To Details</div>
+                                <div style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
                             </div>
-                            <i class="ico-cirle fa fa-trash"></i>
+                            <i class="ico-cirle fa fa-trash "></i>
                         </div>
                     </div>
 
-                    <div class="detail-item">
+                    <div class="detail-item ">
 
-                        <div class="detail-content">
-                            <div class="hia-logo">
-                                <img src="../../../../assets/img/logos/bridgeclinicbanner.jpg">
+                        <div class="detail-content ">
+                            <div class="hia-logo ">
+                                <img src="../../../../assets/img/logos/bridgeclinicbanner.jpg ">
                             </div>
-                            <div class="group-wrap">
-                                <div class="item-label">Primary Healthcare Provider:</div>
+                            <div class="group-wrap ">
+                                <div class="item-label ">Primary Healthcare Provider:</div>
 
-                                <div class="item-val">The Bridge Clinic</div>
-                                <div class="item-val">Block A4, Suit 76 Sura Shoping Complex</div>
-                                <div class="item-val">Compile Simpson Street Lagos</div>
-                                <div class="item-val">Ikoyi-Lagos.</div>
-                                <div class="item-val">09099889998</div>
+                                <div class="item-val ">The Bridge Clinic</div>
+                                <div class="item-val ">Block A4, Suit 76 Sura Shoping Complex</div>
+                                <div class="item-val ">Compile Simpson Street Lagos</div>
+                                <div class="item-val ">Ikoyi-Lagos.</div>
+                                <div class="item-val ">09099889998</div>
 
-                                <div style="width: 102px;margin-top: 10px;" class="btn btn-medium btn-blue-outline">To Details</div>
+                                <div style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
                             </div>
-                            <i class="ico-cirle fa fa-trash"></i>
+                            <i class="ico-cirle fa fa-trash "></i>
                         </div>
                     </div>
                 </div>
