@@ -1,8 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FacilityService, SystemModuleService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
+import { DURATIONS } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -11,6 +13,7 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
   styleUrls: ['./provider-details.component.scss']
 })
 export class ProviderDetailsComponent implements OnInit {
+  approvalFormGroup: FormGroup;
 	tab_details = true;
 	tab_preauthorization = false;
 	tab_plans = false;
@@ -20,9 +23,13 @@ export class ProviderDetailsComponent implements OnInit {
   tab_claims = false;
 	tab_complaints = false;
   tab_referals = false;
+  durations: any = DURATIONS;
+  addApproval: boolean = false;
   facility: any = <any>{};
+  approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
 
 	constructor(
+    private _fb: FormBuilder,
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
@@ -40,6 +47,11 @@ export class ProviderDetailsComponent implements OnInit {
         this._getProviderDetails(param.id);
       }
     });
+
+    this.approvalFormGroup = this._fb.group({
+      duration: ['', [<any>Validators.required]],
+      unit: ['', [<any>Validators.required]]
+    });
   }
 
   private _getProviderDetails(routeId) {
@@ -53,6 +65,18 @@ export class ProviderDetailsComponent implements OnInit {
       }).catch(err => {
         this._systemService.off();
       });
+  }
+
+  onClickApprove(valid: boolean, value: any) {
+    console.log(valid);
+    console.log(value);
+    if (valid) {
+      
+    }
+  }
+
+  addApprovalClick() {
+    this.addApproval = !this.addApproval;
   }
 
   navigateProviders(url, id) {
