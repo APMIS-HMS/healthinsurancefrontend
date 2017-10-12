@@ -18,6 +18,7 @@ export class ListRolesComponent implements OnInit {
   listsearchControl = new FormControl();
   auth: any;
   roles: Role[] = [];
+  loading: boolean = true;
 
   constructor(private _fb: FormBuilder,
     private _systemService: SystemModuleService,
@@ -58,6 +59,7 @@ export class ListRolesComponent implements OnInit {
   _getRoles() {
     this._systemService.on();
     this._roleService.find({ query: { 'facilityId._id': this.auth.user.facilityId._id } }).then((payload: any) => {
+      this.loading = false;
       this.roles = payload.data;
       this._systemService.off();
     }).catch(err => {

@@ -1,74 +1,74 @@
 <div style="padding-top:2px;">
-  <section class="app-content-wrap content shadow-RB">
+    <section class="app-content-wrap content shadow-RB">
 
-    <div class="nut-tab-topSect-wrap">
-      <div></div>
+        <div class="nut-tab-topSect-wrap">
+            <div></div>
 
-      <div class="btn btn-medium btn-grey-outline" routerLink="/modules/user/users">
-        <i class="fa fa-times"></i> CANCEL
-      </div>
-    </div>
+            <div class="btn btn-medium btn-grey-outline" routerLink="/modules/user/users">
+                <i class="fa fa-times"></i> CANCEL
+            </div>
+        </div>
 
-    <form [formGroup]="userFormGroup" novalidate>
-      <div class="frm-item-wrap">
-        <label class="label">User Type</label>
-        <div class="input-wrap">
-          <select formControlName="userType" class="form-control">
+        <form [formGroup]="userFormGroup" novalidate>
+            <div class="frm-item-wrap">
+                <label class="label">User Type</label>
+                <div class="input-wrap">
+                    <select formControlName="userType" class="form-control">
                 <option value=" " disabled selected>Select User Type</option>
                 <option *ngFor="let user of userTypes" [ngValue]="user">{{user.name}}</option>
           </select>
-        </div>
-      </div>
+                </div>
+            </div>
 
-      <div *ngIf="showHIA" class="frm-item-wrap">
-        <label class="label">Facilities</label>
-        <div class="input-wrap">
-          <select formControlName="facilityId" class="form-control">
+            <div *ngIf="showHIA" class="frm-item-wrap">
+                <label class="label">Facilities</label>
+                <div class="input-wrap">
+                    <select formControlName="facilityId" class="form-control">
                 <option value=" " disabled selected>Select Facility</option>
                 <option *ngFor="let user of facilities" [ngValue]="user">{{user.name}}</option>
             </select>
-        </div>
-      </div>
+                </div>
+            </div>
 
-      <div *ngIf="showPlatformOwner" class="frm-item-wrap">
-        <label class="label">Facilities</label>
-        <div class="input-wrap">
-          <select formControlName="facilityId" class="form-control">
+            <div *ngIf="showPlatformOwner" class="frm-item-wrap">
+                <label class="label">Facilities</label>
+                <div class="input-wrap">
+                    <select formControlName="facilityId" class="form-control">
                     <option value=" " disabled selected>Select Facility</option>
                     <option *ngFor="let user of facilities" [ngValue]="user">{{user.name}}</option>
                 </select>
-        </div>
-      </div>
+                </div>
+            </div>
 
-      <div class="frm-item-wrap">
-        <label class="label">First Name</label>
-        <div class="input-wrap">
-          <input type="text" formControlName="firstName" class="form-control">
-        </div>
-            <small class="alert-label" [hidden]="userFormGroup.controls.firstName.valid || userFormGroup.controls.firstName.pristine">
+            <div class="frm-item-wrap">
+                <label class="label">First Name</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="firstName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="userFormGroup.controls.firstName.valid || userFormGroup.controls.firstName.pristine">
                           This is a required field (minimum 3 and max of 50 characters).
                       </small>
-      </div>
-      <div class="frm-item-wrap">
-        <label class="label">Last Name</label>
-        <div class="input-wrap">
-          <input type="text" formControlName="lastName" class="form-control">
-        </div>
-        <small class="alert-label" [hidden]="userFormGroup.controls.lastName.valid || userFormGroup.controls.lastName.pristine">
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Last Name</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="lastName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="userFormGroup.controls.lastName.valid || userFormGroup.controls.lastName.pristine">
                           This is a required field (minimum 3 and max of 50 characters).
                       </small>
-      </div>
+            </div>
 
-      <div class="frm-item-wrap">
-        <label class="label">Other Name</label>
-        <div class="input-wrap">
-          <input type="text" formControlName="otherName" class="form-control">
-        </div>
-        <small class="alert-label" [hidden]="userFormGroup.controls.otherName.valid || userFormGroup.controls.otherName.pristine">
+            <div class="frm-item-wrap">
+                <label class="label">Other Name</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="otherName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="userFormGroup.controls.otherName.valid || userFormGroup.controls.otherName.pristine">
                           This is a required field (minimum 3 and max of 50 characters).
                       </small>
-      </div>
-      <!-- <div class="frm-item-wrap">
+            </div>
+            <!-- <div class="frm-item-wrap">
         <label class="label">Gender</label>
         <span class="form-check-label" *ngFor="let gender of genders;  let i=index">
             <label for="bene-male">
@@ -85,25 +85,25 @@
                     </small>
         </div>
       </div> -->
-      <div class="frm-item-wrap">
-        <label class="label">Phone Number</label>
-        <div class="input-wrap">
-          <input type="text" formControlName="phoneNumber" class="form-control">
-        </div>
-        <small class="alert-label" [hidden]="userFormGroup.controls.phoneNumber.valid || userFormGroup.controls.phoneNumber.pristine">
+            <div class="frm-item-wrap">
+                <label class="label">Phone Number</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="phoneNumber" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="userFormGroup.controls.phoneNumber.valid || userFormGroup.controls.phoneNumber.pristine">
             This is a required field (minimum 3 and max of 50 characters).
         </small>
-      </div>
-      <div class="frm-item-wrap">
-        <label class="label">Email Address</label>
-        <div class="input-wrap">
-          <input type="text" formControlName="email" class="form-control">
-        </div>
-            <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Email Address</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="email" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
                           This is a required field (minimum 3 and max of 50 characters).
                       </small>
-      </div>
-      <!-- <div class="frm-item-wrap">
+            </div>
+            <!-- <div class="frm-item-wrap">
         <label class="label">Mother's Maiden Name</label>
         <div class="input-wrap">
           <input type="text" formControlName="mothersMaidenName" class="form-control">
@@ -113,7 +113,7 @@
         </div>
       </div> -->
 
-      <button (click)="onClickAddPlan(userFormGroup.valid, userFormGroup.value)" class="btn btn-medium btn-blue"> SAVE</button>
-    </form>
-  </section>
+            <button (click)="onClickSaveUser(userFormGroup.valid, userFormGroup.value)" class="btn btn-medium btn-blue"> SAVE</button>
+        </form>
+    </section>
 </div>
