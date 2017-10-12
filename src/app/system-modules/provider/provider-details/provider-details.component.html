@@ -95,8 +95,8 @@
             <div class="content-top-bar">
                 <div class="bar-labels">
                     <div>{{ facility?.name }}</div>
-                    <div>Status: <span class="{{ facility?.isConfirmed ? 'text-red' : 'text-red' }}<">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
-                    <div *ngIf="facility?.isConfirmed">Full License: Valid till {{ facility?.provider?.validityPeriods[facility?.provider?.validityPeriods.length - 1].createdAt | date }}</div>
+                    <div>Status: <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
+                    <div *ngIf="facility?.isConfirmed && facility?.provider?.validityPeriods.length > 0">Full License: Valid till {{ facility?.provider?.validityPeriods[facility?.provider?.validityPeriods.length - 1].createdAt | date }}</div>
                 </div>
 
                 <div class="bar-icos">
@@ -189,58 +189,66 @@
 <div *ngIf="addApproval" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="addApprovalClick();" class="close-modal">X</div>
-        <div class="modal-title">Add Validity</div>
+        <div class="modal-title">EDIT STATUS - <em>{{ facility?.name }}</em></div>
         <div class="list-boxes">
             <div class="box-left">
-                <form [formGroup]="approvalFormGroup" novalidate>
-                    <div class="form-item-wrap">
-                        <label class="label">Duration</label>
-                        <div class="input-wrap">
-                            <input type="number" min="1" formControlName="duration" class="form-control" placeholder="Duration">
+                <div *ngIf="!facility?.isConfirmed" style="padding: 10px 0px;">
+                    <form [formGroup]="approvalFormGroup" novalidate>
+                        <div class="form-item-wrap">
+                            <label class="label">Duration</label>
+                            <div class="input-wrap">
+                                <input type="number" min="1" formControlName="duration" class="form-control" placeholder="Duration">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-item-wrap">
-                        <label class="label">Unit</label>
-                        <div class="input-wrap">
-                            <select formControlName="unit" class="form-control">
-                                <option value="" disabled>Select Unit</option>
-                                <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
-                            </select>
+                        <div class="form-item-wrap">
+                            <label class="label">Unit</label>
+                            <div class="input-wrap">
+                                <select formControlName="unit" class="form-control">
+                                    <option value="" disabled>Select Unit</option>
+                                    <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
+                                </select>
+                            </div>
                         </div>
+                    </form>
+                    <div class="btn-box">
+                        <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
+                        <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
                     </div>
-                </form>
-                <div class="btn-box">
-                    <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
-                    <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
+                </div>
+                <div *ngIf="facility?.isConfirmed" style="padding: 70px 0px;">
+                    <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DEACTIVATE LICENSE</button>
                 </div>
             </div>
 
             <div class="box-right">
                 <div class="box">
+                    <div class="text-center">
+                        <span>List of Previous Licenses</span>
+                    </div>
                     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                         <thead class="thead">
                             <tr class="tr">
                                 <th class="th">No</th>
                                 <th class="th">Duration</th>
-                                <th class="th">Unit</th>
+                                <th class="th">Created At</th>
                                 <th class="th">Valid Till</th>
                             </tr>
                         </thead>
 
                         <tbody class="tbody">
                             <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && !loading">
-                                <td class="text-center" colspan="11">No data available in table</td>
+                                <td class="text-center" colspan="4">No data available in table</td>
                             </tr>
                             <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && loading">
-                                <td class="text-center" colspan="11">
+                                <td class="text-center" colspan="4">
                                     <i class="fa fa-spinner fa-spin"></i>
                                 </td>
                             </tr>
                             <tr *ngFor="let provider of facility?.provider?.validityPeriods; let i = index;" class="tr">
                                 <td class="td hover">{{ i+1 }}</td>
-                                <td class="td hover">{{ provider.duration }}</td>
-                                <td class="td hover">{{ provider.unit.name }}</td>
+                                <td class="td hover">{{ provider.duration }} {{ provider.unit.name }}</td>
                                 <td class="td hover">{{ provider.createdAt | date }}</td>
+                                <td class="td hover">{{ provider.validTill | date }}</td>
                             </tr>
                         </tbody>
                     </table>

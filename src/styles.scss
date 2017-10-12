@@ -119,6 +119,15 @@ select {
     background: lighten($green, 5%);
 }
 
+.btn-red {
+    background: $red;
+    color: #fff;
+}
+
+.btn-red:hover {
+    background: lighten($red, 5%);
+}
+
 .btn-grey-outline {
     border: 1px solid $grey-3;
     color: $grey-3;

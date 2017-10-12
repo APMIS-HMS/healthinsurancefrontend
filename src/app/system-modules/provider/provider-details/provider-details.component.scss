@@ -4,6 +4,12 @@
     min-height: 320px;
 }
 
+.modal-title {
+    text-align: left;
+    font-size: 20px;
+    color: $brand-primary;
+}
+
 .box-left {
     width: 30%;
     float: left;
@@ -14,9 +20,11 @@
     width: 70%;
     float: left;
     height: 100%;
-    color: red;
     .box {
-        padding: 20px;
+        padding: 0px 20px;
+        max-height: 240px;
+        height: auto;
+        overflow-y: auto;
     }
 }
 

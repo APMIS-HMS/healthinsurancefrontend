@@ -75,7 +75,8 @@ export class ProviderDetailsComponent implements OnInit {
       const validity = {
         duration: value.duration,
         unit: value.unit,
-        createdAt: this.addDays(new Date(), value.unit.days)
+        createdAt: new Date(),
+        validTill: this.addDays(new Date(), value.unit.days)
       };
 
       if (!!this.facility.provider.validityPeriods) {
@@ -89,6 +90,12 @@ export class ProviderDetailsComponent implements OnInit {
       this._facilityService.update(this.facility).then(res => {
         console.log(res);
         this.facility = res;
+        const status = this.facility.isConfirmed ? 'activated successfully' : 'deactivated successfully';
+        const text = this.facility.name + ' has been ' + status;
+        this._toastr.success(text, 'Confirmation!');
+        setTimeout(e => {
+          this.addApprovalClick();
+        }, 1000);
       });
     } else {
       this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
@@ -99,6 +106,20 @@ export class ProviderDetailsComponent implements OnInit {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
+  }
+
+  onClickDeactivate() {
+    this.facility.isConfirmed = false;
+    this._facilityService.update(this.facility).then(res => {
+      console.log(res);
+      this.facility = res;
+      const status = this.facility.isConfirmed ? 'activated successfully' : 'deactivated successfully';
+      const text = this.facility.name + ' has been ' + status;
+      this._toastr.success(text, 'Confirmation!');
+      setTimeout(e => {
+        this.addApprovalClick();
+      }, 1000);
+    });
   }
 
   addApprovalClick() {
