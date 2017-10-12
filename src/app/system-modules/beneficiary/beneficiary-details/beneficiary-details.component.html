@@ -9,6 +9,7 @@
         <li (click)="tabClaims_click()" [class.tab-active]="tab_claims">Claims</li>
         <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
         <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li>
+        <li (click)="tabCheckin_click()" [class.tab-active]="tab_checkin">Check In</li>
     </ul>
 
     <div class="tab-content shadow-RB">
@@ -29,10 +30,6 @@
                                     <div class="item-label">Date of Birth:</div>
                                     <div class="item-val">{{ beneficiary.dateOfBirth }}.</div>
                                 </div>
-                                <!-- <div class="group-item">
-                            <div class="item-label">LASRRA ID:</div>
-                            <div class="item-val">133.23.22</div>
-                        </div> -->
                                 <div class="group-item">
                                     <div class="item-label">LASHMA ID:</div>
                                     <div class="item-val">133.23.22</div>
@@ -151,6 +148,44 @@
                             </div>
                             <i class="ico-cirle fa fa-trash"></i>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="tab_checkin" class="tab-pane fade show active">
+            <app-beneficiary-top-bar></app-beneficiary-top-bar>
+            <div class="details-wrap">
+                <div class="detail-item blue-bg">
+                        
+                    <div class="detail-content">
+                        <div class="hia-user">
+                            <img src="../../../../assets/img/users/default.png">
+                            <div class="pd-tag">P</div>
+                        </div>
+                        <div class="group-wrap">
+                            <div class="group-item">
+                                <div class="item-label">Date of Birth:</div>
+                                <div class="item-val">11th Oct 2000</div>
+                            </div>
+                            <!-- <div class="group-item">
+                        <div class="item-label">LASRRA ID:</div>
+                        <div class="item-val">133.23.22</div>
+                    </div> -->
+                            <div class="group-item">
+                                <div class="item-label">LASHMA ID:</div>
+                                <div class="item-val">133.23.22</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">CIN:</div>
+                                <div class="item-val">133.23.22</div>
+                            </div>
+                        </div>
+
+                        <div class="group-wrap">
+                            <div class="item-val">Professor Steve John Matanga</div>
+                            <div class="item-val">08044334422</div>
+                        </div>
+                        <i class="ico-cirle fa fa-pencil"></i>
                     </div>
                 </div>
             </div>

@@ -16,7 +16,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
   tab_payment = false;
   tab_claims = false;
 	tab_complaints = false;
-	tab_referals = false;
+  tab_referals = false;
+  tab_checkin = false;
 
   constructor(
     private _router: Router,
@@ -74,6 +75,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
   tabPayment_click(){
     this.tab_details = false;
@@ -81,6 +83,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
   tabClaims_click(){
     this.tab_details = false;
@@ -88,6 +91,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_claims = true;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
   tabComplaints_click(){
     this.tab_details = false;
@@ -95,6 +99,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = true;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
   tabReferals_click(){
     this.tab_details = false;
@@ -102,6 +107,15 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = true;
+    this.tab_checkin  = false;
+  }
+  tabCheckin_click(){
+    this.tab_details = false;
+    this.tab_payment = false;
+    this.tab_claims = false;
+    this.tab_complaints = false;
+    this.tab_referals = false;
+    this.tab_checkin  = true;
   }
 
 }
