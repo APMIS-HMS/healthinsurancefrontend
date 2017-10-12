@@ -78,7 +78,7 @@
         </div>
 
         <div *ngIf="tab_nok">
-            <app-new-beneficiary-nok></app-new-beneficiary-nok>
+            <app-new-beneficiary-nok [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-nok>
         </div>
 
         <div *ngIf="tab_confirm">

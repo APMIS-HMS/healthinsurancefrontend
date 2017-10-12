@@ -176,7 +176,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
         this._systemService.announceBeneficiaryTabNotification({
           tab: 'Five',
-          policy: payload
+          policy: payload.body.policyObject
         });
 
 

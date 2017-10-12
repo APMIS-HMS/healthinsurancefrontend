@@ -169,7 +169,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         dob: ['', [<any>Validators.required]],
         gender: ['', [<any>Validators.required]],
         relationship: ['', [<any>Validators.required]],
-        lasrraId: ['', [<any>Validators.required]],
+        lasrraId: ['', []],
         readOnly: [false]
       })
       );
@@ -185,11 +185,14 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
 
   moveBack(){
-    this._systemService.announceBeneficiaryTabNotification({tab:'One',beneficiary:this.selectedBeneficiary})
+    this._systemService.announceBeneficiaryTabNotification({tab:'One',beneficiary:this.selectedBeneficiary});
+  }
+
+  skip(){
+    this._systemService.announceBeneficiaryTabNotification({tab:'Three',beneficiary:this.selectedBeneficiary})
   }
 
   onClickStepTwo(dependants) {
-    // this.frmDependants.
     console.log(dependants)
     let savedFiltered = dependants.controls.dependantArray.controls.filter(x => x.value.readOnly === true && x.valid);
     let dependantList: any[] = [];

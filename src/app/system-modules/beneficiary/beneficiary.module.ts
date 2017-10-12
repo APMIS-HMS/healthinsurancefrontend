@@ -1,3 +1,5 @@
+import { PolicyService } from './../../services/policy/policy.service';
+import { JsonDataService } from './../../services/common/json-data.service';
 import { PremiumTypeService } from './../../services/common/premium-type.service';
 import { PlanService } from './../../services/plan/plan.service';
 import { RelationshipService } from './../../services/common/relationship.service';
@@ -28,6 +30,6 @@ import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-no
     ],
     declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService, PlanService, PremiumTypeService,
-        PlanTypeService, BeneficiaryService, BankService, RelationshipService]
+        PlanTypeService, BeneficiaryService, BankService, RelationshipService, JsonDataService, PolicyService]
 })
 export class BeneficiaryModule { }

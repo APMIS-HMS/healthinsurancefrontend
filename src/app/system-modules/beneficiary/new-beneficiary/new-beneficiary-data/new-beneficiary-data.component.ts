@@ -250,7 +250,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     });
 
     if (this.selectedBeneficiary._id !== undefined) {
-      this._getLgaAndCities(this.selectedBeneficiary.person.stateOfOrigin);
+      if(this.selectedBeneficiary.person.stateOfOrigin !== undefined){
+        this._getLgaAndCities(this.selectedBeneficiary.person.stateOfOrigin);
+      }
+     
       this.stepOneFormGroup.controls['gender'].setValue(this.selectedBeneficiary.person.gender);
       if (this.selectedBeneficiary.person.profileImageObject !== undefined) {
         this.blah.nativeElement.src = this._uploadService.transform(this.selectedBeneficiary.person.profileImageObject.thumbnail);
@@ -347,12 +350,13 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       const formData = new FormData();
       formData.append("platform", fileBrowser.files[0]);
       return new Promise((resolve, reject) => {
-        resolve(this._uploadService.upload(formData, this.selectedBeneficiary.person._id));
+        resolve(this._uploadService.upload(formData, this.selectedCountry._id));
       });
     }
   }
   onClickStepOne(value, valid) {
     if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
+      console.log(1)
       let person: Person = this.selectedBeneficiary.person;
       let address: Address = this.selectedBeneficiary.person.homeAddress;
       address.lga = value.lga;
@@ -385,12 +389,17 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       let fileBrowser = this.fileInput.nativeElement;
       this._systemService.on();
       if (person.profileImageObject === undefined) {
+        console.log('1a')
         if (fileBrowser.files && fileBrowser.files[0]) {
+          console.log('1b')
           this.upload().then((result: any) => {
+            console.log('1c')
             if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+              console.log('1d')
               person.profileImageObject = result.body[0].file;
 
               this._personService.update(person).then(payload => {
+                console.log('1e')
                 this._getBeneficiary(this.selectedBeneficiary._id);
                 this._systemService.off();
                 this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
@@ -418,6 +427,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
 
     } else {
+      console.log(2)
       let person: Person = <Person>{};
       let address: Address = <Address>{};
       address.lga = value.lga;
@@ -453,21 +463,35 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       let fileBrowser = this.fileInput.nativeElement;
       this._systemService.on();
       if (person.profileImageObject === undefined) {
+        console.log('2a')
         if (fileBrowser.files && fileBrowser.files[0]) {
+          console.log('2b')
           this.upload().then((result: any) => {
+            console.log('2c')
             if (result !== undefined && result.body !== undefined && result.body.length > 0) {
               person.profileImageObject = result.body[0].file;
-
+              console.log('2d')
               this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
-
+                console.log('2e')
+                // should be sending selectedbeneficiary to steptwo
+                console.log(payload)
+               
                 if (payload.statusCode === 200 && payload.error === false) {
-                  this._systemService.announceBeneficiaryTabNotification('Two');
+                  console.log('am here oo')
+                  delete payload.body.beneficiary.personId;
+                  payload.body.beneficiary.person = payload.body.person;
+                  this.selectedBeneficiary = payload.body.beneficiary;
+                  // this._systemService.announceBeneficiaryTabNotification('Two');
+                  this._systemService.off();
+                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
                 }
               }).catch(err => {
+                this._systemService.off();
                 console.log(err);
               })
             }
           }).catch(err => {
+            console.log(err);
             this._systemService.off();
           })
         }
@@ -475,10 +499,14 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
 
           if (payload.statusCode === 200 && payload.error === false) {
+            this.selectedBeneficiary = payload.body.beneficiary;
+            this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
             this._systemService.announceBeneficiaryTabNotification('Two');
           }
+          this._systemService.off();
         }).catch(err => {
           console.log(err);
+          this._systemService.off();
         })
       }
 
