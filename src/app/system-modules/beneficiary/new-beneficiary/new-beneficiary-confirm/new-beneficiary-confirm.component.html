@@ -1,97 +1,89 @@
 <div class="details-wrap">
-    <div class="detail-item">
-      <div class="item-label item-head">Principal Detail</div>
+  <div class="detail-item">
+    <div class="item-label item-head">Principal Detail</div>
 
-      <div class="detail-content">
-        <img class="hia-user" src="../../../../assets/img/users/default.png">
-        <div class="group-wrap">
-          <div class="item-label">Health Care Security Limited</div>
-          <div class="item-val">Health Insurance Company</div>
-          <div class="item-val">Adowu Way, 23</div>
-          <div class="item-val">Ojokoro - Lagos</div>
-          <div class="item-val">08077887767</div>
-        </div>
-        <div class="group-wrap">
-          <div class="group-item">
-            <div class="item-label">NHIS Number:</div>
-            <div class="item-val">223343456</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">Type:</div>
-            <div class="item-val">Health Insurance Company</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">CIN Number:</div>
-            <div class="item-val">223456</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">Registration Date:</div>
-            <div class="item-val">12th Jun, 2017.</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">Bank Account:</div>
-            <div class="item-val">223343456</div>
-          </div>
-        </div>
-        <i class="ico-cirle fa fa-pencil"></i>
+    <div class="detail-content">
+      <img class="hia-user" src="../../../../assets/img/users/default.png">
+      <div class="group-wrap">
+        <div class="item-val">Date of Birth: {{policyObject?.principalBeneficiary.person.dateOfBirth|date}}</div>
       </div>
-    </div>
-
-    <div class="detail-item">
-      <div class="item-label item-head">Dependant</div>
-
-      <div class="detail-content">
-        <div class="hia-user">
-          <img src="../../../../assets/img/users/default.png">
+      <div class="group-wrap">
+        <div class="group-item">
+          <div class="item-label">LASRRA ID:</div>
+          <div class="item-val">{{policyObject?.principalBeneficiary.stateID}}</div>
         </div>
-        <div class="group-wrap">
-          <div class="item-val">Abbey Silver</div>
-          <div class="item-val">08077887767</div>
-          <div class="item-val">abbey.silver@bbhc.com</div>
-          <div class="item-val">CEO</div>
+        <div class="group-item">
+          <div class="item-label">LASHMA ID:</div>
+          <div class="item-val">{{policyObject?.principalBeneficiary.platformOwnerNumber}}</div>
         </div>
-        <i class="ico-cirle fa fa-pencil"></i>
+        <div class="group-item">
+          <div class="item-label">CIN Number:</div>
+          <div class="item-val"></div>
+        </div>
       </div>
-    </div>
-
-    <div class="detail-item">
-      <div class="item-label item-head">Dependant</div>
-
-      <div class="detail-content">
-        <div class="hia-user">
-          <img src="../../../../assets/img/users/default.png">
-        </div>
-        <div class="group-wrap">
-          <div class="item-val">Dan Wande</div>
-          <div class="item-val">08077887767</div>
-          <div class="item-val">dan.wande@bbhc.com</div>
-          <div class="item-val">Technical Support</div>
-        </div>
-        <i class="ico-cirle fa fa-pencil"></i>
-      </div>
+      <i class="ico-cirle fa fa-pencil"></i>
     </div>
   </div>
 
-  <div class="sec-sect">
-    <div class="sect-item">
-        <div class="item-label item-head">Health Care Insurance Agent</div>
-        <div class="item-val">Health Care Security Limited</div>
-        <i class="ico-cirle fa fa-pencil"></i>
-    </div>
-    <div class="sect-item">
-        <div class="item-label item-head">Program</div>
-        <div class="item-val">Health Care Secure Formal</div>
-        <i class="ico-cirle fa fa-pencil"></i>
-    </div>
-    <div class="sect-item">
-        <div class="item-label item-head">Care Provider Details</div>
-        <div class="item-val">LAgos State University Hospital</div>
-        <i class="ico-cirle fa fa-pencil"></i>
+  <div class="detail-item" *ngFor="let dependant of policyObject?.dependantBeneficiaries">
+    <div class="item-label item-head">Dependant</div>
+
+    <div class="detail-content">
+      <div class="hia-user">
+        <img src="../../../../assets/img/users/default.png">
+      </div>
+      <div class="group-wrap">
+          <div class="item-val">Date of Birth: {{dependant.beneficiary.personId.dateOfBirth|date}}</div>
+        </div>
+        <div class="group-wrap">
+            <div class="group-item">
+              <div class="item-label">LASRRA ID:</div>
+              <div class="item-val">{{dependant.beneficiary.stateID}}</div>
+            </div>
+            <div class="group-item">
+              <div class="item-label">LASHMA ID:</div>
+              <div class="item-val">{{dependant.beneficiary.platformOwnerNumber}}</div>
+            </div>
+          </div>
+      <i class="ico-cirle fa fa-pencil"></i>
     </div>
   </div>
+</div>
 
-  <div style="margin:40px auto;display:flex;justify-content:center;">
-      <button class="btn btn-medium btn-blue">
+<div class="sect-item">
+
+
+  <div class="group-item">
+      <div class="item-val">{{policyObject?.principalBeneficiary.person.title.name}} {{policyObject?.principalBeneficiary.person.lastName}} {{policyObject?.principalBeneficiary.person.firstName}} {{policyObject?.principalBeneficiary.person.otherNames}}</div>
+  </div>
+  <div class="group-item">
+      <div class="item-val">{{policyObject?.principalBeneficiary.person.phoneNumber}} </div>
+  </div>
+
+
+</div>
+
+
+<div class="sec-sect">
+  <div class="sect-item">
+    <div class="item-label item-head">Health Care Insurance Agent</div>
+    <div class="item-val">{{policyObject?.hiaId.name}}</div>
+    <i class="ico-cirle fa fa-pencil"></i>
+  </div>
+  <div class="sect-item">
+    <div class="item-label item-head">Program</div>
+    <div class="item-val">{{policyObject?.planId.name}}</div>
+    <i class="ico-cirle fa fa-pencil"></i>
+  </div>
+  <div class="sect-item">
+    <div class="item-label item-head">Care Provider Details</div>
+    <div class="item-val">{{policyObject?.providerId.name}}</div>
+    <i class="ico-cirle fa fa-pencil"></i>
+  </div>
+</div>
+
+<div style="margin:40px auto;display:flex;justify-content:center;">
+  <button class="btn btn-medium btn-blue">
           CONFIRM
       </button>
-  </div>
+</div>

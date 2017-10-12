@@ -2,13 +2,6 @@
     {{selectedBeneficiary?.person.lastName}} {{selectedBeneficiary?.person.firstName}}</div>
 <div class="pg-subtitle">{{selectedBeneficiary?.person.email}}</div>
 
-<!-- 
-<form *ngIf="locationTypeControl.value != null" [formGroup]="clinicScheduleForm" class="form-horizontal" (ngSubmit)="onSubmit()">
-    <div formArrayName="clinicScheduleArray" class="frmArrayWrap">
-        <div class="frmArray" *ngFor="let schedule of clinicScheduleForm.controls['clinicScheduleArray'].controls; let i = index;">
-            <div (click)="closeClinicSchedule(schedule, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
-            <div formGroupName="{{i}}"> -->
-
 
 <form [formGroup]="frmDependants" novalidate>
 
@@ -116,13 +109,13 @@
 
                 <div class="frm-item-wrap">
                     <label class="label"></label>
-                    <div class="input-wrap">
+                    <div class="input-wrap" style="display:flex;justify-content:space-between; width: 30%;">
                         <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
                             Add &nbsp; <i class="fa fa-plus"></i>
                         </button>
-                        <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
-                                Add &nbsp; <i class="fa fa-plus"></i>
-                            </button>
+                        <button class="btn btn-medium btn-blue" (click)="skip();">
+                            Skip &nbsp; <i class="fa fa-plus"></i>
+                        </button>
                     </div>
                 </div>
             </div>
