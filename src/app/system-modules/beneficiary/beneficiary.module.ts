@@ -21,6 +21,7 @@ import { NewBeneficiaryProgramComponent } from './new-beneficiary/new-beneficiar
 import { NewBeneficiaryDataComponent } from './new-beneficiary/new-beneficiary-data/new-beneficiary-data.component';
 import { NewBeneficiaryConfirmComponent } from './new-beneficiary/new-beneficiary-confirm/new-beneficiary-confirm.component';
 import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-nok/new-beneficiary-nok.component';
+import { CheckinDetailsComponent } from './beneficiary-details/checkin-details/checkin-details.component';
 
 @NgModule({
     imports: [
@@ -28,7 +29,7 @@ import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-no
         beneficiaryRoutes,
         MyDatePickerModule
     ],
-    declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent],
+    declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent, CheckinDetailsComponent],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService, PlanService, PremiumTypeService,
         PlanTypeService, BeneficiaryService, BankService, RelationshipService, JsonDataService, PolicyService]
 })

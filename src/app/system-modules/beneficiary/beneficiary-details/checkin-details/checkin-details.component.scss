@@ -1,0 +1,49 @@
+@import '../../../hia/hia-details/hia-details.component.scss';
+
+.details-wrap{
+    padding-left: 0;
+}
+.detail-item{
+    padding: 20px;
+    background: $brand-primary;
+    line-height: 1.5;
+}
+.item-label{
+    color: #fff;
+}
+.item-val{
+    color: lighten($brand-primary, 60%);
+}
+.group-wrap{
+    margin-bottom: 20px;
+}
+.hia-user{
+    margin: 0 auto;
+    width: 120px;
+    height: 120px;
+}
+.top-cta-wrap{
+    width: 100%;
+    padding: 20px 0;
+    border-bottom: 1px solid $grey-2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.right-wrap{
+    width: 100%;
+}
+.btn-yellow{
+    margin-right: 20px;
+}
+.sect-title {
+    font-weight: bold;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    margin: 20px auto;
+}
+.frm-title {
+    font-weight: bold;
+    font-size: 14px;
+}
