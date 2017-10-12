@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService, SystemModuleService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { DURATIONS } from '../../../services/globals/config';
@@ -30,6 +31,7 @@ export class ProviderDetailsComponent implements OnInit {
 
 	constructor(
     private _fb: FormBuilder,
+    private _toastr: ToastsManager,
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
@@ -68,11 +70,35 @@ export class ProviderDetailsComponent implements OnInit {
   }
 
   onClickApprove(valid: boolean, value: any) {
-    console.log(valid);
-    console.log(value);
     if (valid) {
-      
+      console.log(value);
+      const validity = {
+        duration: value.duration,
+        unit: value.unit,
+        createdAt: this.addDays(new Date(), value.unit.days)
+      };
+
+      if (!!this.facility.provider.validityPeriods) {
+        this.facility.provider.validityPeriods.push(validity);
+      } else {
+        this.facility.provider.validityPeriods = [];
+        this.facility.provider.validityPeriods.push(validity);
+      }
+
+      this.facility.isConfirmed = true;
+      this._facilityService.update(this.facility).then(res => {
+        console.log(res);
+        this.facility = res;
+      });
+    } else {
+      this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
     }
+  }
+
+  addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
   }
 
   addApprovalClick() {

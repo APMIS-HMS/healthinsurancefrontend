@@ -9,9 +9,9 @@ export const HEFAMAA_STATUSES = [
     {'id': 'Accredited', 'name': 'Accredited'}
 ];
 export const DURATIONS = [
-    { 'id': 1, 'name': 'Year', 'days': 365, 'selected': true },
-    { 'id': 2, 'name': 'Month', 'days': 30, 'selected': false },
-    { 'id': 3, 'name': 'Week', 'days': 7, 'selected': false }
+    { 'id': 1, 'name': 'Year', 'days': 365 },
+    { 'id': 2, 'name': 'Month', 'days': 30 },
+    { 'id': 3, 'name': 'Week', 'days': 7 }
 ];
 
 export const CurrentPlaformShortName = 'LASHMA';

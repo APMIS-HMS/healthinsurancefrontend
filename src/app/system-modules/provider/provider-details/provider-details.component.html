@@ -95,8 +95,8 @@
             <div class="content-top-bar">
                 <div class="bar-labels">
                     <div>{{ facility?.name }}</div>
-                    <div>Status: <span class="text-red">{{ facility?.isTokenVerified ? 'Authorized' : 'Not Authorized' }}</span></div>
-                    <div>Full License: Valid till 11th Jun, 2018.</div>
+                    <div>Status: <span class="{{ facility?.isConfirmed ? 'text-red' : 'text-red' }}<">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
+                    <div *ngIf="facility?.isConfirmed">Full License: Valid till {{ facility?.provider?.validityPeriods[facility?.provider?.validityPeriods.length - 1].createdAt | date }}</div>
                 </div>
 
                 <div class="bar-icos">
@@ -216,32 +216,35 @@
             </div>
 
             <div class="box-right">
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                    <thead class="thead">
-                        <tr class="tr">
-                            <th class="th">No</th>
-                            <th class="th">Duration</th>
-                            <th class="th">Unit</th>
-                            <th class="th">Valid Till</th>
-                        </tr>
-                    </thead>
+                <div class="box">
+                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                        <thead class="thead">
+                            <tr class="tr">
+                                <th class="th">No</th>
+                                <th class="th">Duration</th>
+                                <th class="th">Unit</th>
+                                <th class="th">Valid Till</th>
+                            </tr>
+                        </thead>
 
-                    <tbody class="tbody">
-                        <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && !loading">
-                            <td class="text-center" colspan="11">No data available in table</td>
-                        </tr>
-                        <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && loading">
-                            <td class="text-center" colspan="11">
-                                <i class="fa fa-spinner fa-spin"></i>
-                            </td>
-                        </tr>
-                        <tr *ngFor="let provider of facility?.provider?.validityPeriods; let i = index;" class="tr">
-                            <td class="td hover">{{ i+1 }}</td>
-                            <td class="td hover">{{ provider.name }}</td>
-                            <td class="td hover">{{ provider.email }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <tbody class="tbody">
+                            <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && !loading">
+                                <td class="text-center" colspan="11">No data available in table</td>
+                            </tr>
+                            <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && loading">
+                                <td class="text-center" colspan="11">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let provider of facility?.provider?.validityPeriods; let i = index;" class="tr">
+                                <td class="td hover">{{ i+1 }}</td>
+                                <td class="td hover">{{ provider.duration }}</td>
+                                <td class="td hover">{{ provider.unit.name }}</td>
+                                <td class="td hover">{{ provider.createdAt | date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
