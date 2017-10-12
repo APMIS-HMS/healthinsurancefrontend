@@ -27,6 +27,7 @@ export class ListRolesComponent implements OnInit {
 
   ngOnInit() {
     this.auth = this._locker.getObject('auth');
+    console.log(this.auth);
     this.roleFormGroup = this._fb.group({
       roleName: ['', [<any>Validators.required]]
     });
@@ -49,8 +50,8 @@ export class ListRolesComponent implements OnInit {
             this.roles = payload.data;
           }).catch(err => {
 
-          })
-      })
+          });
+      });
     this._getRoles();
   }
 
