@@ -189,46 +189,59 @@
 <div *ngIf="addApproval" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="addApprovalClick();" class="close-modal">X</div>
-        <div class="modal-title">Add License</div>
+        <div class="modal-title">Add Validity</div>
         <div class="list-boxes">
-            <div class="list-box">
+            <div class="box-left">
                 <form [formGroup]="approvalFormGroup" novalidate>
-                    <div class="frm-item-wrap">
+                    <div class="form-item-wrap">
                         <label class="label">Duration</label>
                         <div class="input-wrap">
                             <input type="number" min="1" formControlName="duration" class="form-control" placeholder="Duration">
                         </div>
-                        <small class="alert-label" [hidden]="approvalFormGroup.controls.duration.valid || approvalFormGroup.controls.duration.pristine">
-                            This is a required field (minimum 3 and max of 50 characters).
-                        </small>
                     </div>
-                    <div class="frm-item-wrap">
+                    <div class="form-item-wrap">
                         <label class="label">Unit</label>
                         <div class="input-wrap">
                             <select formControlName="unit" class="form-control">
-                                    <option value="" disabled>Select Unit</option>
-                                    <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
+                                <option value="" disabled>Select Unit</option>
+                                <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
                             </select>
                         </div>
-                        <small class="alert-label" [hidden]="approvalFormGroup.controls.unit.valid || approvalFormGroup.controls.unit.pristine">
-                            This is a required field (minimum 3 and max of 50 characters).
-                        </small>
                     </div>
                 </form>
-                <div>
-                    <button class="btn btn-medium btn-green" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
+                <div class="btn-box">
+                    <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
+                    <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
                 </div>
             </div>
 
-            <div class="list-box">
-                <ul class="list-b">
-                    <!-- <li *ngFor="let access of selectedRole.accessibilities">
-                        <label class="control control--checkbox">{{access.accessibility.name}}
-                        <input type="checkbox" disabled [checked]="access.checked" (change)="accessbilityChange($event, access)"/>
-                        <div class="control__indicator"></div>
-                        </label>
-                    </li> -->
-                </ul>
+            <div class="box-right">
+                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                        <tr class="tr">
+                            <th class="th">No</th>
+                            <th class="th">Duration</th>
+                            <th class="th">Unit</th>
+                            <th class="th">Valid Till</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                        <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && !loading">
+                            <td class="text-center" colspan="11">No data available in table</td>
+                        </tr>
+                        <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && loading">
+                            <td class="text-center" colspan="11">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let provider of facility?.provider?.validityPeriods; let i = index;" class="tr">
+                            <td class="td hover">{{ i+1 }}</td>
+                            <td class="td hover">{{ provider.name }}</td>
+                            <td class="td hover">{{ provider.email }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
