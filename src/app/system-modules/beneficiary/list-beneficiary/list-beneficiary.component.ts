@@ -54,14 +54,15 @@ export class ListBeneficiaryComponent implements OnInit {
   private _getBeneficiaries() {
     this._systemService.on();
     this._beneficiaryService.find({}).then((res: any) => {
+      this.loading = false;
       if (res.data.length > 0) {
         this.beneficiaries = res.data;
-        console.log(this.beneficiaries)
+        console.log(this.beneficiaries);
       }
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-      console.log(err)
+      console.log(err);
     });
   }
 
