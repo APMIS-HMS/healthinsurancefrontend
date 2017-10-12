@@ -18,6 +18,7 @@ export class ListRolesComponent implements OnInit {
   listsearchControl = new FormControl();
   auth: any;
   roles: Role[] = [];
+  loading: boolean = true;
 
   constructor(private _fb: FormBuilder,
     private _systemService: SystemModuleService,
@@ -27,6 +28,7 @@ export class ListRolesComponent implements OnInit {
 
   ngOnInit() {
     this.auth = this._locker.getObject('auth');
+    console.log(this.auth);
     this.roleFormGroup = this._fb.group({
       roleName: ['', [<any>Validators.required]]
     });
@@ -49,14 +51,15 @@ export class ListRolesComponent implements OnInit {
             this.roles = payload.data;
           }).catch(err => {
 
-          })
-      })
+          });
+      });
     this._getRoles();
   }
 
   _getRoles() {
     this._systemService.on();
     this._roleService.find({ query: { 'facilityId._id': this.auth.user.facilityId._id } }).then((payload: any) => {
+      this.loading = false;
       this.roles = payload.data;
       this._systemService.off();
     }).catch(err => {

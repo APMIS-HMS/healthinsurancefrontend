@@ -42,8 +42,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
 
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
-    this._beneficiaryService.get(routeId, {})
-      .then((res: Facility) => {
+    this._beneficiaryService.get(routeId, {}).then((res: Facility) => {
         console.log(res);
         this._headerEventEmitter.setMinorRouteUrl(res.name);
         this._systemService.off();
