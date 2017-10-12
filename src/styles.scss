@@ -603,6 +603,19 @@ input[type="checkbox"].switch_1:checked:after {
     font-size: 12px;
     margin-bottom: 20px;
 }
+.green{
+    color: $green;
+}
+.red{
+    color: $red;
+}
+.orange{
+    color: $orange;
+}
+.lemon-green{
+    color: $lemon-green;
+}
+
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {

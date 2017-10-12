@@ -1,0 +1,40 @@
+<div class="app-content-wrap shadow-RB">
+    <div class="list-search-wrap">
+        <div class="search-wrap">
+            <label class="label-xx">Search:</label>
+            <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="search">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+
+        <div class="btn btn-medium btn-grey-outline" routerLink="/modules/checkin/checkedin">
+            <i class="fa fa-times"></i> CANCEL
+        </div>
+    </div>
+
+    <div class="tbl-wrap">
+
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">Name</th>
+                    <th class="th">Gender</th>
+                    <th class="th">LASHMA ID</th>
+                    <th class="th">Date of Birth</th>
+                    <th class="th">Status</th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+
+                <tr class="tr">
+                    <td class="td">Samuel Amana</td>
+                    <td class="td">Male</td>
+                    <td class="td">122.22.12.1</td>
+                    <td class="td">11th October, 2000.</td>
+                    <td class="td"><span class="green">Active</span></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
