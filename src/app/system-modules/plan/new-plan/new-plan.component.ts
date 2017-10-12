@@ -10,7 +10,7 @@ import { DURATIONS } from '../../../services/globals/config';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { PremiumTypeService } from './../../../services/common/premium-type.service';
-import { CurrentPlaformShortName } from '../../../services/globals/config'
+import { CurrentPlaformShortName } from '../../../services/globals/config';
 
 @Component({
   selector: 'app-new-plan',

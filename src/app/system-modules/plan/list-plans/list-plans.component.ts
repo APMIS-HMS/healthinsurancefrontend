@@ -31,7 +31,8 @@ export class ListPlansComponent implements OnInit {
   planTypes: any[] = [];
   currentPlatform: any;
   user: any;
-  plans: any;
+  plans: any = [];
+  loading: boolean = true;
 
   constructor(private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -52,6 +53,7 @@ export class ListPlansComponent implements OnInit {
   _getPlans() {
     this._systemService.on();
     this._planService.find({ query: { 'platformOwnerId._id': this.currentPlatform._id, 'facilityId._id': this.user.facilityId._id } }).then((payload: any) => {
+      this.loading = false;
       this.plans = payload.data;
       console.log(this.plans)
       this._systemService.off();

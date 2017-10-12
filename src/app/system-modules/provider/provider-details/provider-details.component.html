@@ -100,7 +100,7 @@
                 </div>
 
                 <div class="bar-icos">
-                    <i (click)="navigateProviders('/modules/provider/new/', facility?._id)" class="fa fa-pencil" aria-hidden="true"></i>
+                    <i (click)="addApprovalClick();" class="fa fa-pencil" aria-hidden="true"></i>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
                         <div class="group-wrap">
                             <div class="group-item">
                                 <div class="item-label">HEFEEMA Status:</div>
-                                <div class="item-val">{{ facility?.provider?.hefeemaStatus }}</div>
+                                <div class="item-val">{{ facility?.provider?.hefeemaStatus.name }}</div>
                             </div>
                             <div class="group-item">
                                 <div class="item-label">Ownership:</div>
@@ -182,6 +182,53 @@
                         <i (click)="navigateProviders('/modules/provider/new/', facility?._id)" class="ico-cirle fa fa-pencil"></i>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="addApproval" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="addApprovalClick();" class="close-modal">X</div>
+        <div class="modal-title">Add License</div>
+        <div class="list-boxes">
+            <div class="list-box">
+                <form [formGroup]="approvalFormGroup" novalidate>
+                    <div class="frm-item-wrap">
+                        <label class="label">Duration</label>
+                        <div class="input-wrap">
+                            <input type="number" min="1" formControlName="duration" class="form-control" placeholder="Duration">
+                        </div>
+                        <small class="alert-label" [hidden]="approvalFormGroup.controls.duration.valid || approvalFormGroup.controls.duration.pristine">
+                            This is a required field (minimum 3 and max of 50 characters).
+                        </small>
+                    </div>
+                    <div class="frm-item-wrap">
+                        <label class="label">Unit</label>
+                        <div class="input-wrap">
+                            <select formControlName="unit" class="form-control">
+                                    <option value="" disabled>Select Unit</option>
+                                    <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
+                            </select>
+                        </div>
+                        <small class="alert-label" [hidden]="approvalFormGroup.controls.unit.valid || approvalFormGroup.controls.unit.pristine">
+                            This is a required field (minimum 3 and max of 50 characters).
+                        </small>
+                    </div>
+                </form>
+                <div>
+                    <button class="btn btn-medium btn-green" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
+                </div>
+            </div>
+
+            <div class="list-box">
+                <ul class="list-b">
+                    <!-- <li *ngFor="let access of selectedRole.accessibilities">
+                        <label class="control control--checkbox">{{access.accessibility.name}}
+                        <input type="checkbox" disabled [checked]="access.checked" (change)="accessbilityChange($event, access)"/>
+                        <div class="control__indicator"></div>
+                        </label>
+                    </li> -->
+                </ul>
             </div>
         </div>
     </div>
