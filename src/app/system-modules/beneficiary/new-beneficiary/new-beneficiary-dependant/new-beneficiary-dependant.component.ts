@@ -1,3 +1,4 @@
+import { Beneficiary } from './../../../../models/setup/beneficiary';
 import { Address } from './../../../../models/organisation/address';
 import { Person } from './../../../../models/person/person';
 import { RelationshipService } from './../../../../services/common/relationship.service';
@@ -7,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GenderService } from './../../../../services/common/gender.service';
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName } from '../../../../services/globals/config';
@@ -24,7 +25,7 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-beneficiary-dependant.component.scss']
 })
 export class NewBeneficiaryDependantComponent implements OnInit {
-
+  @Input() selectedBeneficiary: any;
   frmDependants: FormGroup;
   lgs: any[] = [];
   residenceLgs: any[] = [];
@@ -58,7 +59,14 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _maritalService: MaritalStatusService,
     private _relationshipService: RelationshipService,
     private _route: ActivatedRoute
-  ) { }
+  ) {
+    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+      console.log(value)
+      if (value.beneficiary !== undefined) {
+        console.log(value);
+      }
+    });
+  }
 
   ngOnInit() {
     this._addNewDependant();
@@ -66,7 +74,6 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     this._getGenders();
     this._getRelationships();
     this._getTitles();
-
   }
 
   _addNewDependant() {
@@ -88,7 +95,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
           dob: [this.today, [<any>Validators.required]],
           gender: ['', [<any>Validators.required]],
           relationship: ['', [<any>Validators.required]],
-          lasrraId: ['', [<any>Validators.required]],
+          lasrraId: ['', []],
           readOnly: [false]
         })
       ])
@@ -97,7 +104,6 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
   _getCurrentPlatform() {
     this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }
@@ -163,7 +169,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         dob: ['', [<any>Validators.required]],
         gender: ['', [<any>Validators.required]],
         relationship: ['', [<any>Validators.required]],
-        lasrraId: ['', [<any>Validators.required]],
+        lasrraId: ['', []],
         readOnly: [false]
       })
       );
@@ -178,34 +184,52 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     dependant.controls['gender'].setValue(gender);
   }
 
+  moveBack(){
+    this._systemService.announceBeneficiaryTabNotification({tab:'One',beneficiary:this.selectedBeneficiary});
+  }
+
+  skip(){
+    this._systemService.announceBeneficiaryTabNotification({tab:'Three',beneficiary:this.selectedBeneficiary})
+  }
+
   onClickStepTwo(dependants) {
-    // this.frmDependants.
     console.log(dependants)
     let savedFiltered = dependants.controls.dependantArray.controls.filter(x => x.value.readOnly === true && x.valid);
-    console.log(savedFiltered)
-    savedFiltered.forEach(group =>{
+    let dependantList: any[] = [];
+    savedFiltered.forEach(group => {
       let person: Person = <Person>{};
-      let address: Address = <Address>{};
-      // address.city
-      // address.lga = value.lga;
-      // address.neighbourhood = value.neighbourhood;
-      // address.state = this.selectedState;
-      // address.street = value.streetName;
-  
+
       person.dateOfBirth = group.controls.dob.value.jsdate;
       person.email = group.controls.email.value;
       person.firstName = group.controls.firstName.value;
       person.gender = group.controls.gender.value;
-      person.homeAddress = address;
+      person.homeAddress = this.selectedBeneficiary.person.homeAddress;
       person.lastName = group.controls.lastName.value;
       person.otherNames = group.controls.middleName.value;
       person.phoneNumber = group.controls.phonenumber.value;
       person.platformOnwerId = this.currentPlatform._id;
       person.title = group.controls.title.value;
+    
 
-      console.log(person);
-      console.log(group)
-    })
+      let beneficiary: Beneficiary = <Beneficiary>{};
+      beneficiary.stateID = group.lasrraId;
+      beneficiary.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
+
+
+      dependantList.push({person:person, beneficiary:beneficiary, relationship:group.controls.relationship.value});
+
+      // console.log(group)
+    });
+    // console.log(dependantList);
+
+    this._systemService.announceBeneficiaryTabNotification({tab:'Four',beneficiary:this.selectedBeneficiary, dependants:dependantList})
+  }
+
+  compare(l1: any, l2: any) {
+    if (l1 !== null && l2 !== null) {
+      return l1._id === l2._id;
+    }
+    return false;
   }
 
 }

@@ -1,3 +1,4 @@
+import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
 import { PremiumTypeService } from './../../../../services/common/premium-type.service';
 import { PlanService } from './../../../../services/plan/plan.service';
 import { PlanTypeService } from './../../../../services/common/plan-type.service';
@@ -8,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GenderService } from './../../../../services/common/gender.service';
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName } from '../../../../services/globals/config';
@@ -27,13 +28,15 @@ const NUMERIC_REGEX = /^[0-9]+$/;
 })
 export class NewBeneficiaryProgramComponent implements OnInit {
 
+  @Input() selectedBeneficiary: any;
+  @Input() dependants: any[];
   frmProgram: FormGroup;
   currentPlatform: any;
   hias: any[] = [];
   providers: any[] = [];
   planTypes: any[] = [];
-  plans:any[] = [];
-  premiumTypes:any[] = [];
+  plans: any[] = [];
+  premiumTypes: any[] = [];
 
   constructor(
     private _fb: FormBuilder,
@@ -51,8 +54,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     private _maritalService: MaritalStatusService,
     private _relationshipService: RelationshipService,
     private _planTypeService: PlanTypeService,
-    private _planService:PlanService,
-    private _premiumTypeService:PremiumTypeService,
+    private _planService: PlanService,
+    private _premiumTypeService: PremiumTypeService,
+    private _beneficiaryService: BeneficiaryService,
     private _route: ActivatedRoute
   ) { }
 
@@ -60,18 +64,18 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this.frmProgram = this._fb.group({
       hiaName: [''],
       programType: ['', [<any>Validators.required]],
-      policy: ['', [<any>Validators.required]],
+      premiumCategory: ['', [<any>Validators.required]],
       programName: ['', [<any>Validators.required]],
       providerName: ['', [<any>Validators.required]]
     });
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
-      console.log(value)
       this._getPlanByType(value._id);
     });
     this._getCurrentPlatform();
     this._getPlanTypes();
     this._getPremiumTypes();
+    console.log(this.dependants)
   }
 
   _getPlanByType(id) {
@@ -140,5 +144,46 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       this._systemService.off();
       console.log(err);
     });
+  }
+  onClickStepFour(value, valid) {
+    console.log(value)
+    if (valid) {
+
+
+
+
+
+
+      let policy: any = <any>{};
+      policy.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
+      policy.principalBeneficiary = this.selectedBeneficiary;
+      policy.hiaId = value.hiaName;
+      policy.providerId = value.providerName;
+      policy.planTypeId = value.programType;
+      policy.planId = value.programName;
+      policy.premiumCategoryId = value.premiumCategory;
+
+      let body = {
+        principal: this.selectedBeneficiary,
+        persons: this.dependants,
+        policy: policy,
+        platform: this.selectedBeneficiary.platformOwnerId
+      }
+      console.log(body);
+
+      this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
+        console.log(payload)
+
+        this._systemService.announceBeneficiaryTabNotification({
+          tab: 'Five',
+          policy: payload.body.policyObject
+        });
+
+
+      }).catch(err => {
+        console.log(err)
+      });
+    }
+
   }
 }

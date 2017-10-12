@@ -23,13 +23,11 @@ export class ListBeneficiaryComponent implements OnInit {
   statusControl = new FormControl('All');
   beneficiaries: any = <any>[];
   loading: Boolean = true;
-  planTypes:any[] = [];
+  planTypes: any[] = [];
 
   constructor(
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
-    // private _authService: AuthService,
-    private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
@@ -46,28 +44,44 @@ export class ListBeneficiaryComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
 
     this._userTypeService.find({}).then(payload => {
-      console.log(payload);
+      // console.log(payload);
     });
 
     this._getBeneficiaries();
   }
 
+
   private _getBeneficiaries() {
+    this._systemService.on();
     this._beneficiaryService.find({}).then((res: any) => {
-      this.loading = false;
-      console.log(res);
-      if (res.data > 0) {
+      if (res.data.length > 0) {
         this.beneficiaries = res.data;
+        console.log(this.beneficiaries)
       }
-    }).catch(err => console.log(err));
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+      console.log(err)
+    });
   }
 
   navigateNewPlatform() {
-    this.loadingService.startLoading();
+    this._systemService.on();
     this._router.navigate(['/modules/beneficiary/new']).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
+    });
+  }
+
+  navigateEditBeneficiary(beneficiary) {
+    console.log(beneficiary)
+    this._systemService.on();
+    this._router.navigate(['/modules/beneficiary/new', beneficiary._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
     });
   }
 

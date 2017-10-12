@@ -64,4 +64,12 @@ export class BeneficiaryService {
       .send(body);
   }
 
+  updateWithMiddleWare(body: any) {
+    let host = this._restService.getHost();
+    let path = host + '/lashma-beneficiaries';
+    return request
+      .put(path)
+      .send(body);
+  }
+
 }

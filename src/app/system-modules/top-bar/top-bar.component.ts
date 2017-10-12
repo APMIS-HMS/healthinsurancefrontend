@@ -33,7 +33,6 @@ export class TopBarComponent implements OnInit {
 
   _getCurrentPlatform() {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
-      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }

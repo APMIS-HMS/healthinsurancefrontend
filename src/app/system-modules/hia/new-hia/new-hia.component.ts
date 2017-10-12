@@ -527,7 +527,6 @@ export class NewHiaComponent implements OnInit {
   }
 
   upload() {
-    // this._systemService.on();
     let fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
       const formData = new FormData();
@@ -535,19 +534,6 @@ export class NewHiaComponent implements OnInit {
       return new Promise((resolve, reject) => {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
-
-
-
-
-      // this._systemService.upload(formData, this.selectedUserType._id).then(res => {
-      //   this._systemService.off();
-      //   console.log(res);
-      //   let enrolleeList: any[] = [];
-      //   if (res.body !== undefined && res.body.error_code === 0) {
-      //   }
-      // }).catch(err => {
-      //   this._systemService.off();
-      // })
     }
   }
   compareState(s1: any, s2: any) {

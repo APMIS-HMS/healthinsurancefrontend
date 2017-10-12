@@ -4,7 +4,7 @@
         <div class="nut-tab-topSect-wrap"> 
             <div class="nutTabs-wrap">
     
-                <div (click)="tabPersonalData_click()" [class.active-nut]="tab_personalData" class="nutTab-wrap">
+                <div  [class.active-nut]="tab_personalData" class="nutTab-wrap">
                     <div class="nut-outer">
                         <div class="nut-inner"></div>
                         <!-- <div class="nut-stroke">
@@ -15,7 +15,7 @@
                     <div class="nut-label">Principal</div>
                 </div>
     
-                <div (click)="tabDependants_click()" [class.active-nut]="tab_dependants" class="nutTab-wrap">
+                <div  [class.active-nut]="tab_dependants" class="nutTab-wrap">
                     <div class="nut-outer">
                         <div class="nut-inner"></div>
                         <!-- <div class="nut-stroke">
@@ -26,7 +26,7 @@
                     <div class="nut-label">Dependants</div>
                 </div>
 
-                <div (click)="tabNOK_click()" [class.active-nut]="tab_nok" class="nutTab-wrap">
+                <div  [class.active-nut]="tab_nok" class="nutTab-wrap">
                     <div class="nut-outer">
                         <div class="nut-inner"></div>
                         <!-- <div class="nut-stroke">
@@ -70,19 +70,19 @@
         </div>
 
         <div *ngIf="tab_dependants">
-            <app-new-beneficiary-dependant></app-new-beneficiary-dependant>
+            <app-new-beneficiary-dependant [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-dependant>
         </div>
 
         <div *ngIf="tab_program">
-            <app-new-beneficiary-program></app-new-beneficiary-program>
+            <app-new-beneficiary-program [selectedBeneficiary]="selectedBeneficiary" [dependants]="dependants"></app-new-beneficiary-program>
         </div>
 
         <div *ngIf="tab_nok">
-            <app-new-beneficiary-nok></app-new-beneficiary-nok>
+            <app-new-beneficiary-nok [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-nok>
         </div>
 
         <div *ngIf="tab_confirm">
-            <app-new-beneficiary-confirm></app-new-beneficiary-confirm>
+            <app-new-beneficiary-confirm [policy]="policy"></app-new-beneficiary-confirm>
         </div>
     </section>
 </div>
