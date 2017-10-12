@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { FacilityService, SystemModuleService } from './../../../services/index';
+import { FacilityService, SystemModuleService, BeneficiaryService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
@@ -26,6 +26,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private loadingService: LoadingBarService,
+    private _beneficiaryService: BeneficiaryService
   ) { }
 
   ngOnInit() {
@@ -41,7 +42,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
 
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
-    this._facilityService.get(routeId, {})
+    this._beneficiaryService.get(routeId, {})
       .then((res: Facility) => {
         console.log(res);
         this._headerEventEmitter.setMinorRouteUrl(res.name);
@@ -52,7 +53,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
       });
   }
 
-  navigateProviders(url, id) {
+  navigateBeneficiary(url, id) {
     this.loadingService.startLoading();
     if (!!id) {
       this._router.navigate([url + id]).then(res => {
