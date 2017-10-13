@@ -1,3 +1,5 @@
+import { PolicyService } from './../../services/policy/policy.service';
+import { BeneficiaryService } from './../../services/beneficiary/beneficiary.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +18,10 @@ import { NewCheckinComponent } from './new-checkin/new-checkin.component';
     CheckinComponent,
     CheckedinComponent,
     NewCheckinComponent,
+  ],
+  providers:[
+    BeneficiaryService,
+    PolicyService
   ]
 })
 export class CheckinModule { }
