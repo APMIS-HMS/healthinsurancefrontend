@@ -96,7 +96,7 @@
                 <div class="bar-labels">
                     <div>{{ facility?.name }}</div>
                     <div>Status: <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
-                    <div *ngIf="facility?.isConfirmed && facility?.provider?.validityPeriods?.length > 0">Full License: Valid till {{ facility?.provider?.validityPeriods[facility?.provider?.validityPeriods.length - 1].createdAt | date }}</div>
+                    <div *ngIf="facility?.isConfirmed && facility?.provider?.validityPeriods.length > 0">Full License: Valid till {{ facility?.provider?.validityPeriods[facility?.provider?.validityPeriods.length - 1].validTill | date }}</div>
                 </div>
 
                 <div class="bar-icos">
@@ -221,10 +221,10 @@
             </div>
 
             <div class="box-right">
+                <div class="text-center">
+                    <span>List of Previous Licenses</span>
+                </div>
                 <div class="box">
-                    <div class="text-center">
-                        <span>List of Previous Licenses</span>
-                    </div>
                     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                         <thead class="thead">
                             <tr class="tr">
