@@ -484,7 +484,7 @@ export class NewProviderComponent implements OnInit {
   }
 
   showImageBrowseDlg() {
-    this.fileInput.nativeElement.click()
+    this.fileInput.nativeElement.click();
   }
 
   readURL(input) {
