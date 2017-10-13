@@ -24,7 +24,7 @@
                   <div class="item-val">Male</div>
               </div>
               <div class="group-item">
-                  <div class="item-label">Relationship Status:</div>
+                  <div class="item-label">Marital Status:</div>
                   <div class="item-val">Single</div>
               </div>
               <div class="group-item">
@@ -32,11 +32,11 @@
                   <div class="item-val">122.22.32.45</div>
               </div>
               <div class="group-item">
-                  <div class="item-label">Transition ID:</div>
+                  <div class="item-label">Visit ID:</div>
                   <div class="item-val">2330</div>
               </div>
               <div class="group-item">
-                  <div class="item-label">Clinic Name:</div>
+                  <div class="item-label">Facility Name:</div>
                   <div class="item-val">Lagos State Clinic</div>
               </div>
           </div>
@@ -52,7 +52,6 @@
   <div *ngIf="checkinSect" class="right-wrap">
     <div class="top-cta-wrap">
         <div (click)="generate_otp()" class="btn btn-medium btn-yellow">GENERATE OTP</div>
-        <div class="btn btn-medium btn-yellow">GENERATE CLAIM</div>
     </div>
 
     <div *ngIf="checkinSect" class="right-content">
@@ -103,12 +102,17 @@
               </div>
           </div>
           
-          <button (click)="checkin_click()" class="btn btn-medium btn-blue"> NEXT</button>
+          <button (click)="checkin_click()" class="btn btn-medium btn-blue"> CHECKIN</button>
       </form>
     </div>
   </div>
 
   <div *ngIf="checkedinSect" class="right-wrap">
+
+    <div class="top-cta-wrap">
+        <div class="btn btn-medium btn-yellow">GENERATE CLAIM</div>
+    </div>
+
     <div class="right-content">
       <form [formGroup]="checkedinFormGroup" novalidate>
           <div class="frm-title">Checked In Patient</div>
