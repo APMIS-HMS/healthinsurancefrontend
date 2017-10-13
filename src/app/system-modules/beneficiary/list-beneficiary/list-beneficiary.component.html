@@ -54,6 +54,7 @@
                 <th class="th">No</th>
                 <th class="th">Name</th>
                 <th class="th">Gender</th>
+                <th class="th">Type</th>
                 <th class="th">LASHMA ID</th>
                 <th class="th">DOB</th>
                 <th class="th">L.G.A</th>
@@ -77,6 +78,7 @@
                 <td class="td">{{ i+1 }}</td>
                 <td class="td">{{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}} {{beneficiary?.otherNames}}</td>
                 <td class="td">{{beneficiary.person.gender.name}}</td>
+                <td class="td"><span class="baller">P</span> <span class="dep-count">+4</span></td>
                 <td class="td">{{beneficiary.platformOwnerNumber}}</td>
                 <td class="td">{{beneficiary.person.dateOfBirth | date}}</td>
                 <td class="td">{{beneficiary.person.homeAddress.lga.name}}</td>

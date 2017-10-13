@@ -646,6 +646,13 @@ input[type="checkbox"].switch_1:checked:after {
 .lemon-green {
     color: $lemon-green;
 }
+.baller {
+    padding: 8px;
+    background: $grey-1;
+    border-radius: 100%;
+    border: 1px solid $grey-2;
+    margin-right: 20px;
+}
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {
