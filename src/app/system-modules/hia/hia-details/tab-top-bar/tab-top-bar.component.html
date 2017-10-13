@@ -1,11 +1,8 @@
 <div class="content-top-bar">
     <div class="bar-labels">
         <div>Grade: {{selectedFacility?.hia.grade.name}}</div>
-        <div>Status:
-            <span class="text-red" *ngIf="selectedFacility?.isConfirmed===undefined || selectedFacility?.isConfirmed===false">Not Authorized</span>
-            <span *ngIf="selectedFacility?.isConfirmed===true">Authorized</span>
-        </div>
-        <div>Full License: Valid till 11th Jun, 2018.</div>
+        <div>Status: <span class="{{ selectedFacility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ selectedFacility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
+        <div *ngIf="selectedFacility?.isConfirmed && selectedFacility?.hia?.validityPeriods.length > 0">Full License: Valid till {{ selectedFacility?.hia?.validityPeriods[selectedFacility?.hia?.validityPeriods.length - 1].validTill | date }}</div>
     </div>
 
     <div class="bar-icos">

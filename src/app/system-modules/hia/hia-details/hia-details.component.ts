@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { DURATIONS } from '../../../services/globals/config';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { UploadService } from './../../../services/common/upload.service';
@@ -19,6 +20,7 @@ export class HiaDetailsComponent implements OnInit {
   selectedFacility: Facility = <Facility>{};
   addApproval: boolean = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
+  durations: any = DURATIONS;
 
   tab_details = true;
   tab_preauthorization = false;
