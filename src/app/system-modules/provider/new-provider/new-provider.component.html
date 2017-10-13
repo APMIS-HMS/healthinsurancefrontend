@@ -311,12 +311,22 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Logo</label>
+                <label class="label">
+                    <button (click)="showImageBrowseDlg(fileInput)" class="btn btn-medium btn-blue">Search Photo</button>
+                </label>
                 <div class="input-wrap">
-                    <button class="btn btn-medium btn-blue">Search Photo</button>
+                    <div class="">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this);">
+                    </div>
+                    <div style="width:100%;">
+                        <div style="width:100%;" class="placehold-wrap">
+                            <img #blah id="blah" src="http://placehold.it/180" alt="your image" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-medium btn-blue" (click)="onClickSaveProvider(providerFormGroup, providerFormGroup.valid);" [innerHtml]="saveBtn"></button>
+                <button class="btn btn-medium btn-blue" (click)="onClickSaveProvider(providerFormGroup, providerFormGroup.valid, fileInput);" [innerHtml]="saveBtn"></button>
             </div>
         </form>
     </section>

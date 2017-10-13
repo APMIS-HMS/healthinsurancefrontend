@@ -51,7 +51,7 @@ export class ProviderDetailsComponent implements OnInit {
     });
 
     this.approvalFormGroup = this._fb.group({
-      duration: ['', [<any>Validators.required]],
+      duration: [1, [<any>Validators.required]],
       unit: ['', [<any>Validators.required]]
     });
   }
@@ -71,7 +71,6 @@ export class ProviderDetailsComponent implements OnInit {
 
   onClickApprove(valid: boolean, value: any) {
     if (valid) {
-      console.log(value);
       const validity = {
         duration: value.duration,
         unit: value.unit,
