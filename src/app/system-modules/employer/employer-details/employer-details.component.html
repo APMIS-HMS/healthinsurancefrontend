@@ -21,12 +21,11 @@
             <div class="content-top-bar">
                 <div class="bar-labels">
                     <div>{{ facility?.name }}</div>
-                    <div>Status: <span class="text-red">{{ facility?.isTokenVerified ? 'Authorized' : 'Not Authorized' }}</span></div>
-                    <div>Full License: Valid till 11th Jun, 2018.</div>
+                    <div>Status: <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
                 </div>
 
                 <div class="bar-icos">
-                    <i (click)="navigateEmployers('/modules/employer/new/', facility?._id)" class="fa fa-pencil" aria-hidden="true"></i>
+                    <i (click)="addApprovalClick()" class="fa fa-pencil" aria-hidden="true"></i>
                 </div>
             </div>
 
@@ -124,37 +123,37 @@
                     <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </div>
-            
+
                 <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">
                     <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD BENEFICIARY
                 </div>
             </div>
-            
+
             <div>
                 <div class="list-filter-wrap">
                     <div class="label-xx">Filters:</div>
-            
+
                     <div class="input-wrap">
                         <label>Type</label>
                         <select [formControl]="filterTypeControl" class="form-control">
                     <option value="All" selected>All</option>
                     </select>
                     </div>
-            
+
                     <div class="input-wrap">
                         <label>Created By</label>
                         <select [formControl]="createdByControl">
                     <option>All</option>
                     </select>
                     </div>
-            
+
                     <div class="input-wrap">
                         <label>Utilized By</label>
                         <select [formControl]="utilizedByControl">
                     <option>All</option>
                     </select>
                     </div>
-            
+
                     <div class="input-wrap">
                         <label>Status</label>
                         <select [formControl]="statusControl">
@@ -163,10 +162,10 @@
                     <option value="false">Inactive</option>
                     </select>
                     </div>
-            
+
                     <div class="btn btn-medium btn-blue-outline">RESET</div>
                 </div>
-            
+
                 <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                     <thead class="thead">
                         <tr class="tr">
@@ -181,7 +180,7 @@
                             <th class="th"></th>
                         </tr>
                     </thead>
-            
+
                     <tbody class="tbody">
                         <tr routerLink="/modules/beneficiary/beneficiaries/8" class="tr">
                             <td class="td">1</td>
@@ -198,11 +197,25 @@
                         </tr>
                     </tbody>
                 </table>
-            
+
                 <div class="list-buttom">
                     <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
                     <div class="btn btn-medium btn-yellow">Load More</div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="addApproval" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="addApprovalClick();" class="close-modal">X</div>
+        <div class="modal-title">EDIT STATUS - <em>{{ facility?.name }}</em></div>
+        <div class="list-boxes">
+            <div class="btn-box">
+                <button *ngIf="!facility.isConfirmed" class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove();" [innerHtml]="approvalBtn"></button>
+                <button *ngIf="facility.isConfirmed" class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DISAPPROVE &nbsp; <i class="fa fa-check-circle"></i></button>
+                <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
             </div>
         </div>
     </div>
