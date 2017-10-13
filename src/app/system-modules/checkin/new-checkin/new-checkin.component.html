@@ -25,12 +25,16 @@
             </thead>
 
             <tbody class="tbody">
-
-                <tr class="tr">
-                    <td class="td">Samuel Amana</td>
-                    <td class="td">Male</td>
-                    <td class="td">122.22.12.1</td>
-                    <td class="td">11th October, 2000.</td>
+                <tr class="tr" *ngIf="beneficiaries.length === 0">
+                    <td class="text-center" colspan="5">
+                        <i class="text-center">No data available in table</i>
+                    </td>
+                </tr>
+                <tr *ngFor="let beneficiary of beneficiaries" class="tr">
+                    <td class="td">{{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}}</td>
+                    <td class="td">{{beneficiary?.person.gender.name}}</td>
+                    <td class="td">{{beneficiary?.platformOwnerNumber}}</td>
+                    <td class="td">{{beneficiary?.person.dateOfBirth | date}}</td>
                     <td class="td"><span class="green">Active</span></td>
                 </tr>
 

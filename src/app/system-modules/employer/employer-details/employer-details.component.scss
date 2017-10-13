@@ -1,1 +1,12 @@
 @import '../../hia/hia-details/hia-details.component.scss';
+.modal-wrap {
+    height: 150px;
+    width: 450px;
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.btn-box {
+    width: 260px;
+    padding: 30px 100px;
+}

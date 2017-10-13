@@ -45,8 +45,7 @@ export class ListHiaComponent implements OnInit {
 
     this.filterTypeControl.valueChanges.subscribe(payload => {
       this._systemService.on();
-      if (payload != undefined) {
-        
+      if (payload !== undefined) {
         console.log(payload);
         this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
           this.hias = payload1.data.filter(function (item) {
@@ -86,7 +85,6 @@ export class ListHiaComponent implements OnInit {
     this._systemService.on();
     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
       this.loading = false;
-      //console.log(payload);
       this.hias = payload.data;
       console.log(this.hias);
       this._systemService.off();

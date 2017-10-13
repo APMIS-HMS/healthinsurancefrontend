@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -25,6 +25,8 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-provider.component.scss']
 })
 export class NewProviderComponent implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('blah') blah: ElementRef;
   providerFormGroup: FormGroup;
   positions: any = [];
   lgas: any = [];
@@ -324,22 +326,6 @@ export class NewProviderComponent implements OnInit {
     });
   }
 
-  upload(image) {
-    // this._systemService.on();
-    // let fileBrowser = this.fileInput.nativeElement;
-    if (image.files && image.files[0]) {
-      const formData = new FormData();
-      formData.append('provider', image.files[0]);
-      return new Promise((resolve, reject) => {
-        this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
-          resolve(res);
-        }).catch(err => {
-          reject(err)
-        });
-      });
-    }
-  }
-
   _extractBusinessContact(businessContact?: Contact) {
     if (businessContact === undefined) {
       businessContact = <Contact>{};
@@ -494,6 +480,39 @@ export class NewProviderComponent implements OnInit {
     } else {
       this._systemService.off();
       this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+    }
+  }
+
+  showImageBrowseDlg() {
+    this.fileInput.nativeElement.click();
+  }
+
+  readURL(input) {
+    this._systemService.on();
+    input = this.fileInput.nativeElement;
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      let that = this;
+      reader.onload = function (e: any) {
+        that.blah.nativeElement.src = e.target.result;
+        that._systemService.off();
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  upload(image) {
+    if (image.files && image.files[0]) {
+      const formData = new FormData();
+      formData.append('platform', image.files[0]);
+      return new Promise((resolve, reject) => {
+        this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
+          resolve(res);
+        }).catch(err => {
+          reject(err);
+        });
+      });
     }
   }
 

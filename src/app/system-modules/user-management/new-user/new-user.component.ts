@@ -172,7 +172,7 @@ export class NewUserComponent implements OnInit {
     });
   }
 
-  onClickAddPlan(valid, value: any) {
+  onClickSaveUser(valid, value: any) {
     if (valid) {
       this._systemService.on();
       if (this.auth.user.userType === undefined) {
@@ -180,6 +180,7 @@ export class NewUserComponent implements OnInit {
       } else {
         value.platformOwnerId = this.user.platformOwnerId;
       }
+
       this._userService.create(value).then(payload => {
         console.log(payload);
         this._toastr.success('You have successfully created a user!', 'Success!');

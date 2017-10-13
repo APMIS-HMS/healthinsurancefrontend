@@ -10,7 +10,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GenderService } from './../../../../services/common/gender.service';
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import { IMyDpOptions, IMyDate } from 'mydatepicker'; 
 import { CurrentPlaformShortName } from '../../../../services/globals/config';
 import { UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService } from '../../../../services/index';
 import { Person } from '../../../../models/index';

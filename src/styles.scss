@@ -110,6 +110,24 @@ select {
     color: lighten($brand-primary, 5%);
 }
 
+.btn-green {
+    background: $green;
+    color: #fff;
+}
+
+.btn-green:hover {
+    background: lighten($green, 5%);
+}
+
+.btn-red {
+    background: $red;
+    color: #fff;
+}
+
+.btn-red:hover {
+    background: lighten($red, 5%);
+}
+
 .btn-grey-outline {
     border: 1px solid $grey-3;
     color: $grey-3;
@@ -131,6 +149,10 @@ select {
 
 .text-red {
     color: $red;
+}
+
+.text-green {
+    color: $green;
 }
 
 .list-filter-wrap {
@@ -579,43 +601,64 @@ input[type="checkbox"].switch_1:checked:after {
 .hover {
     cursor: pointer;
 }
+
 .txt-link {
     color: #003c6b;
     text-align: right;
     cursor: pointer;
 }
-.txt-link:hover{
+
+.txt-link:hover {
     text-decoration: underline;
 }
+
 .frm-inner-title {
     font-weight: bold;
     font-style: italic;
     margin-top: 20px;
 }
+
 .pg-title {
     width: 100%;
     text-align: center;
     font-size: 16px;
 }
+
 .pg-subtitle {
     width: 100%;
     text-align: center;
     font-size: 12px;
     margin-bottom: 20px;
 }
-.green{
+
+.green {
     color: $green;
 }
-.red{
+
+.red {
     color: $red;
 }
-.orange{
+
+.orange {
     color: $orange;
 }
-.lemon-green{
+
+.lemon-green {
     color: $lemon-green;
 }
 
+.baller {
+    padding: 8px;
+    background: $grey-1;
+    border-radius: 100%;
+    border: 1px solid $grey-2;
+    margin-right: 20px;
+}
+
+.image-holder {
+    width: 150px;
+    height: 150px;
+}
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {

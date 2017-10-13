@@ -1,3 +1,7 @@
+import { Observable } from 'rxjs/Rx';
+import { Beneficiary } from './../../../models/setup/beneficiary';
+import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { PolicyService } from './../../../services/policy/policy.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -24,6 +28,7 @@ export class ListBeneficiaryComponent implements OnInit {
   beneficiaries: any = <any>[];
   loading: Boolean = true;
   planTypes: any[] = [];
+  currentPlatform: any;
 
   constructor(
     private _router: Router,
@@ -31,7 +36,8 @@ export class ListBeneficiaryComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
-    private _beneficiaryService: BeneficiaryService
+    private _beneficiaryService: BeneficiaryService,
+    private _policyService: PolicyService
   ) {
     this._router.events
       .filter(event => event instanceof NavigationEnd)
@@ -47,21 +53,72 @@ export class ListBeneficiaryComponent implements OnInit {
       // console.log(payload);
     });
 
-    this._getBeneficiaries();
+    // this._getBeneficiaries();
+    this._getCurrentPlatform();
   }
 
-
-  private _getBeneficiaries() {
+  private _getCurrentPlatform() {
     this._systemService.on();
-    this._beneficiaryService.find({}).then((res: any) => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
-        this.beneficiaries = res.data;
-        console.log(this.beneficiaries)
+        this.currentPlatform = res.data[0];
+        this.getBeneficiariesFromPolicy(this.currentPlatform._id);
       }
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-      console.log(err)
+    });
+  }
+
+  getBeneficiariesFromPolicy(platformId) {
+    this._systemService.on();
+    this._policyService.find({
+      query: {
+        'platformOwnerId._id': platformId
+      }
+    }).then((res: any) => {
+      console.log(res);
+      if (res.data.length > 0) {
+        res.data.forEach(policy => {
+          let principal = policy.principalBeneficiary;
+          principal.isPrincipal = true;
+          principal.hia = policy.hiaId;
+          principal.isActive = policy.isActive;
+          principal.dependantCount = policy.dependantBeneficiaries.length;
+          this.beneficiaries.push(principal);
+          policy.dependantBeneficiaries.forEach(innerPolicy => {
+            innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+            innerPolicy.beneficiary.isPrincipal = false;
+            innerPolicy.beneficiary.hia = policy.hiaId;
+            innerPolicy.beneficiary.isActive = policy.isActive;
+            this.beneficiaries.push(innerPolicy.beneficiary);
+          })
+        })
+      }
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+      console.log(err);
+    });
+  }
+
+  private _getInActiveBeneficiaries(platformId) {
+
+    let policy$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
+    let benefic$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
+    this._systemService.on();
+    this._beneficiaryService.find({
+      'platformOwnerId._id': platformId
+    }).then((res: any) => {
+      this.loading = false;
+      if (res.data.length > 0) {
+        this.beneficiaries = res.data;
+        console.log(this.beneficiaries);
+      }
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+      console.log(err);
     });
   }
 

@@ -28,13 +28,16 @@ export class NewRoleComponent implements OnInit {
   selectedRole: any = <any>{};
   btnText = 'ADD';
 
-  constructor(private _fb: FormBuilder,
+  constructor(
+    private _fb: FormBuilder,
+    private _toastr: ToastsManager,
     private _moduleService: ModuleService,
     private _systemService: SystemModuleService,
     private _roleService: RoleService,
     private _router: Router,
     private _route: ActivatedRoute,
-    private _locker: CoolLocalStorage) { }
+    private _locker: CoolLocalStorage
+  ) { }
 
   ngOnInit() {
     this.auth = this._locker.getObject('auth');
@@ -137,16 +140,16 @@ export class NewRoleComponent implements OnInit {
           this.roles = [];
           this.accessibilities = [];
           this._getModules();
-
+          this._toastr.success('Role has been created successfully!', 'Success!');
           this._router.navigate(['/modules/role/roles']).then(res => {
             this._systemService.off();
           }).catch(error => {
             this._systemService.off();
-          })
+          });
         }).catch(err => {
           console.log(err);
           this._systemService.off();
-        })
+        });
         console.log(newRole);
       } else {
         this.selectedRole.accessibilities = [];
@@ -165,9 +168,9 @@ export class NewRoleComponent implements OnInit {
             });
           }
         });
-        console.log(this.roles)
+        console.log(this.roles);
         this._roleService.update(this.selectedRole).then(payload => {
-          console.log(payload)
+          console.log(payload);
           this.roleFormGroup.reset();
           this.roles = [];
           this.accessibilities = [];
@@ -181,7 +184,7 @@ export class NewRoleComponent implements OnInit {
         }).catch(err => {
           console.log(err);
           this._systemService.off();
-        })
+        });
       }
 
     }

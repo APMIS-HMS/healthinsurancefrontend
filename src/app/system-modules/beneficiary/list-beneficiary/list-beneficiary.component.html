@@ -17,32 +17,32 @@
         <div class="input-wrap">
             <label>Type</label>
             <select [formControl]="filterTypeControl" class="form-control">
-        <option value="All" selected>All</option>
-        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
-      </select>
+                <option value="All" selected>All</option>
+                <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
+            </select>
         </div>
 
         <div class="input-wrap">
             <label>Created By</label>
             <select [formControl]="createdByControl">
-        <option>All</option>
-      </select>
+                <option>All</option>
+            </select>
         </div>
 
         <div class="input-wrap">
             <label>Utilized By</label>
             <select [formControl]="utilizedByControl">
-        <option>All</option>
-      </select>
+                <option>All</option>
+            </select>
         </div>
 
         <div class="input-wrap">
             <label>Status</label>
             <select [formControl]="statusControl">
-        <option selected value="All">All</option>
-        <option value="true">Active</option>
-        <option value="false">Inactive</option>
-      </select>
+                <option selected value="All">All</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
         </div>
 
         <div class="btn btn-medium btn-blue-outline">RESET</div>
@@ -54,6 +54,7 @@
                 <th class="th">No</th>
                 <th class="th">Name</th>
                 <th class="th">Gender</th>
+                <th class="th">Type</th>
                 <th class="th">LASHMA ID</th>
                 <th class="th">DOB</th>
                 <th class="th">L.G.A</th>
@@ -77,19 +78,27 @@
                 <td class="td">{{ i+1 }}</td>
                 <td class="td">{{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}} {{beneficiary?.otherNames}}</td>
                 <td class="td">{{beneficiary.person.gender.name}}</td>
+                <td class="td">
+                    <span *ngIf="beneficiary?.isPrincipal" class="baller">P</span>
+                    <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary?.dependantCount}}</span>
+                    <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
+                    <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
+                </td>
                 <td class="td">{{beneficiary.platformOwnerNumber}}</td>
                 <td class="td">{{beneficiary.person.dateOfBirth | date}}</td>
                 <td class="td">{{beneficiary.person.homeAddress.lga.name}}</td>
-                <td class="td">{{beneficiary.hia}}</td>
+                <td class="td">{{beneficiary.hia.name}}</td>
                 <td class="td">
-                    <span class="{{ beneficiary.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}"> 
+                    <span class="{{ beneficiary.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}">
                         {{ beneficiary.isTokenVerified ? 'Active': 'Inactive' }}
                     </span>
                 </td>
                 <td class="td td-icos">
                     <i class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
                 </td>
-                <td routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}"><i class="fa fa-chevron-right"></i></td>
+                <td routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}">
+                    <i class="fa fa-chevron-right"></i>
+                </td>
             </tr>
         </tbody>
     </table>

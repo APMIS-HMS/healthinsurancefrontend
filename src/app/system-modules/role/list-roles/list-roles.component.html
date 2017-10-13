@@ -35,6 +35,14 @@
                 </tr>
             </thead>
             <tbody class="tbody">
+                <tr class="tr" *ngIf="roles.length === 0 && !loading">
+                    <td class="text-center" colspan="11">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="roles.length === 0 && loading">
+                    <td class="text-center" colspan="11">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
                 <tr *ngFor="let role of roles" class="tr">
                     <td class="td">{{role.name}}</td>
                     <td class="td">
@@ -45,8 +53,8 @@
                     </td>
                     <td>
                         <div class="td-icos">
-                            <i  class="fa fa-trash"></i>
-                            <i (click)="routeRole(role)"  class="fa fa-pencil"></i>
+                            <i class="fa fa-trash"></i>
+                            <i (click)="routeRole(role)" class="fa fa-pencil"></i>
                         </div>
                     </td>
                 </tr>

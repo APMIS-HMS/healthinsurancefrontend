@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; 
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { PlanService, PlanTypeService, FacilityService } from '../../../services/index';
 import { Plan, PlanPremium } from '../../../models/index';
@@ -10,7 +10,7 @@ import { DURATIONS } from '../../../services/globals/config';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { PremiumTypeService } from './../../../services/common/premium-type.service';
-import { CurrentPlaformShortName } from '../../../services/globals/config'
+import { CurrentPlaformShortName } from '../../../services/globals/config';
 
 @Component({
   selector: 'app-new-plan',

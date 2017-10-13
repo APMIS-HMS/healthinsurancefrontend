@@ -1,3 +1,6 @@
+import { UploadService } from './../../../services/common/upload.service';
+import { Observable } from 'rxjs/Observable';
+import { PolicyService } from './../../../services/policy/policy.service';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -12,11 +15,15 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 })
 export class BeneficiaryDetailsComponent implements OnInit {
   beneficiary: any;
-	tab_details = true;
+  policy:any;
+  tab_details = true;
   tab_payment = false;
   tab_claims = false;
-	tab_complaints = false;
-	tab_referals = false;
+  tab_complaints = false;
+  tab_referals = false;
+  tab_checkin = false;
+
+  dependants:any[] = [];
 
   constructor(
     private _router: Router,
@@ -25,7 +32,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private loadingService: LoadingBarService,
-    private _beneficiaryService: BeneficiaryService
+    private _beneficiaryService: BeneficiaryService,
+    private _policyService: PolicyService,
+    private _uploadService:UploadService
   ) { }
 
   ngOnInit() {
@@ -41,15 +50,24 @@ export class BeneficiaryDetailsComponent implements OnInit {
 
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
-    this._beneficiaryService.get(routeId, {})
-      .then((res: Facility) => {
-        console.log(res);
-        this._headerEventEmitter.setMinorRouteUrl(res.name);
-        this._systemService.off();
-        this.beneficiary = res;
-      }).catch(err => {
-        this._systemService.off();
-      });
+
+    let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
+    let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }));
+
+    Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
+      this._headerEventEmitter.setMinorRouteUrl(results[0].name);
+      this.beneficiary = results[0];
+      if(results[1].data.length > 0){
+        this.dependants = results[1].data[0].dependantBeneficiaries;
+        this.policy = results[1].data[0];
+        console.log(this.dependants)
+        console.log(this.policy)
+      }
+      
+      this._systemService.off();
+    }, error => {
+      this._systemService.off();
+    });
   }
 
   navigateBeneficiary(url, id) {
@@ -68,41 +86,54 @@ export class BeneficiaryDetailsComponent implements OnInit {
       });
     }
   }
-  
-  tabDetails_click(){
+
+  tabDetails_click() {
     this.tab_details = true;
     this.tab_payment = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
-  tabPayment_click(){
+  tabPayment_click() {
     this.tab_details = false;
     this.tab_payment = true;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
-  tabClaims_click(){
+  tabClaims_click() {
     this.tab_details = false;
     this.tab_payment = false;
     this.tab_claims = true;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
-  tabComplaints_click(){
+  tabComplaints_click() {
     this.tab_details = false;
     this.tab_payment = false;
     this.tab_claims = false;
     this.tab_complaints = true;
     this.tab_referals = false;
+    this.tab_checkin = false;
   }
-  tabReferals_click(){
+  tabReferals_click() {
     this.tab_details = false;
     this.tab_payment = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = true;
+    this.tab_checkin = false;
+  }
+  tabCheckin_click() {
+    this.tab_details = false;
+    this.tab_payment = false;
+    this.tab_claims = false;
+    this.tab_complaints = false;
+    this.tab_referals = false;
+    this.tab_checkin = true;
   }
 
 }
