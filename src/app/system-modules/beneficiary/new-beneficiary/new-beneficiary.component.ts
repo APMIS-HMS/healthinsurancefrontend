@@ -12,11 +12,11 @@ import { IMyDpOptions, IMyDate } from 'mydatepicker';
 })
 export class NewBeneficiaryComponent implements OnInit {
 
-  tab_personalData = false;
+  tab_personalData = true;
   tab_dependants = false;
   tab_nok = false;
   tab_program = false;
-  tab_confirm = true;
+  tab_confirm = false;
 
   selectedBeneficiary: any;
   dependants: any[] = [];
