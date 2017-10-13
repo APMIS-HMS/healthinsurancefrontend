@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { Facility } from './../../../../models/organisation/facility';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-tab-top-bar',
@@ -10,10 +10,18 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TabTopBarComponent implements OnInit {
   @Input() selectedFacility: Facility = <Facility>{};
-  constructor(private _systemService:SystemModuleService,
-  private _router:Router) { }
+  @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  constructor(
+    private _systemService: SystemModuleService,
+    private _router: Router
+  ) { }
 
   ngOnInit() {
+  }
+
+  addApprovalClick(e) {
+    this.closeModal.emit(true);
   }
 
   navigateEditHIA(hia) {
@@ -21,7 +29,7 @@ export class TabTopBarComponent implements OnInit {
     this._router.navigate(['/modules/hia/new', hia._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
-      console.log(err)
+      console.log(err);
       this._systemService.off();
     });
   }

@@ -1,12 +1,13 @@
 @import '../../../../assets/libs/variables.scss';
-
-.status{
+.status {
     color: $orange;
 }
-.inpage-tabs li{
+
+.inpage-tabs li {
     padding: 10px;
 }
-.details-wrap{
+
+.details-wrap {
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -14,29 +15,36 @@
     box-sizing: border-box;
     font-size: $font-x2;
 }
-.left-wrap{
+
+.left-wrap {
     display: flex;
     justify-content: flex-start;
 }
-.detail-item{
+
+.detail-item {
     margin-right: 30px;
     padding-right: 34px;
 }
-.detail-title{
+
+.detail-title {
     font-weight: bold;
     margin-bottom: 10px;
 }
-.detail-content{
+
+.detail-content {
     position: relative;
 }
-.hia-logo{
+
+.hia-logo {
     width: 200px;
     margin: 10px 0;
 }
-.hia-logo img{
+
+.hia-logo img {
     width: 100%;
 }
-.hia-user{
+
+.hia-user {
     width: 70px;
     height: 70px;
     border-radius: 100%;
@@ -45,10 +53,12 @@
     align-items: center;
     position: relative;
 }
-.hia-user img{
+
+.hia-user img {
     width: 100%;
 }
-.pd-tag{
+
+.pd-tag {
     position: absolute;
     background: $grey-2;
     border: 1px solid $grey-3;
@@ -61,25 +71,74 @@
     top: 0;
     left: 0;
 }
-.item-head{
+
+.item-head {
     margin-bottom: 20px;
 }
+
 .item-label {
     font-weight: bold;
     margin-right: 10px;
 }
-.item-val{
+
+.item-val {
     color: $grey-3;
 }
-.group-wrap{
+
+.group-wrap {
     margin: 10px 0;
 }
-.group-item{
+
+.group-item {
     display: flex;
     justify-content: flex-start;
 }
-.ico-cirle{
+
+.ico-cirle {
     position: absolute;
     right: -40px;
     top: 0;
+}
+
+.modal-wrap {
+    min-width: 800px;
+    min-height: 320px;
+}
+
+.modal-title {
+    text-align: left;
+    font-size: 20px;
+    color: $brand-primary;
+}
+
+.box-left {
+    width: 30%;
+    float: left;
+    height: 100%;
+}
+
+.box-right {
+    width: 70%;
+    float: left;
+    height: 100%;
+    .box {
+        padding: 0px 20px;
+        max-height: 240px;
+        height: auto;
+        overflow-y: auto;
+    }
+}
+
+.form-item-wrap {
+    input,
+    select {
+        width: 100%;
+    }
+}
+
+.btn-box {
+    width: 100%;
+    button {
+        float: left;
+    }
 }
