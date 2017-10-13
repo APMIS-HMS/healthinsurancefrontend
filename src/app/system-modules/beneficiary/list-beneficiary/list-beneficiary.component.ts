@@ -26,6 +26,7 @@ export class ListBeneficiaryComponent implements OnInit {
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
   beneficiaries: any = <any>[];
+  inActiveBeneficiaries: any[] = [];
   loading: Boolean = true;
   planTypes: any[] = [];
   currentPlatform: any;
@@ -54,7 +55,7 @@ export class ListBeneficiaryComponent implements OnInit {
     });
 
     // this._getBeneficiaries();
-    this._getCurrentPlatform();
+    // this._getCurrentPlatform();
   }
 
   private _getCurrentPlatform() {
@@ -62,7 +63,8 @@ export class ListBeneficiaryComponent implements OnInit {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        this.getBeneficiariesFromPolicy(this.currentPlatform._id);
+        this._getBeneficiariesFromPolicy(this.currentPlatform._id);
+        // this._getInActiveBeneficiaries(this.currentPlatform._id);
       }
       this._systemService.off();
     }).catch(err => {
@@ -70,7 +72,7 @@ export class ListBeneficiaryComponent implements OnInit {
     });
   }
 
-  getBeneficiariesFromPolicy(platformId) {
+  _getBeneficiariesFromPolicy(platformId) {
     this._systemService.on();
     this._policyService.find({
       query: {
@@ -103,23 +105,29 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   private _getInActiveBeneficiaries(platformId) {
-
-    let policy$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
-    let benefic$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
     this._systemService.on();
-    this._beneficiaryService.find({
-      'platformOwnerId._id': platformId
-    }).then((res: any) => {
-      this.loading = false;
-      if (res.data.length > 0) {
-        this.beneficiaries = res.data;
-        console.log(this.beneficiaries);
-      }
+    let policy$ = Observable.fromPromise(this._policyService.find({ 'platformOwnerId._id': platformId, isActive: true }));
+    let benefic$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
+
+    Observable.forkJoin([policy$, benefic$]).subscribe((results: any) => {
+      let beneficiaryList: any[] = results[1].data;
+
+      results[0].data.forEach(policy => {
+        let principal = policy.principalBeneficiary;
+        const index = beneficiaryList.findIndex(x => x._id === principal._id);
+        if (index > -1) {
+          beneficiaryList.splice(index);
+        }
+        policy.dependantBeneficiaries.forEach(innerPolicy => {
+          const index = beneficiaryList.findIndex(x => x._id === innerPolicy.beneficiary._id);
+          if (index > -1) {
+            beneficiaryList.splice(index);
+          }
+        })
+      })
+      this.inActiveBeneficiaries = beneficiaryList;
       this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-      console.log(err);
-    });
+    })
   }
 
   navigateNewPlatform() {
