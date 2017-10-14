@@ -23,6 +23,7 @@
     vertical-align: center;
     text-align: left;
     padding: 10px;
+    position: relative;
 }
 .tr:hover {background-color: $grey-1}
 .tr:nth-child(even) {background-color: $grey-1}

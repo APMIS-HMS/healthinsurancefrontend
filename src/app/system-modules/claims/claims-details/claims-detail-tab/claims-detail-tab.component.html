@@ -1,0 +1,109 @@
+<div class="claims-inner-wrap">
+  <div class="left-sect">
+      <div class="group-wrap">
+        <div class="group-item">
+          <div class="item-label">Date of Birth:</div>
+          <div class="item-val">11th Oct 2000</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Age:</div>
+          <div class="item-val">17</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Gender:</div>
+          <div class="item-val">Male</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">LASRRA ID:</div>
+          <div class="item-val">123.333.32.33</div>
+        </div>
+        <div class="group-item">
+            <div class="item-label">LAASHMA ID:</div>
+            <div class="item-val">255.544.53.3</div>
+          </div>
+      </div>
+
+      <div class="group-wrap">
+        <div class="group-item">
+          <div class="item-label">Hospital Name:</div>
+          <div class="item-val">Foremost Hospital</div>
+        </div>
+        <div class="group-item">
+            <div class="item-label">Provider ID:</div>
+            <div class="item-val">122.22.122</div>
+          </div>
+        <div class="group-item">
+          <div class="item-label">Health Plan:</div>
+          <div class="item-val">Formal Sector Plan</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Claim Type:</div>
+          <div class="item-val">Capitation</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Status:</div>
+          <div class="item-val"><span class="lemon--green">Filed</span>></div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Date when patient was checked in:</div>
+          <div class="item-val">11th Oct 2017</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Date when claims was filed:</div>
+          <div class="item-val">11th Oct 2017</div>
+        </div>
+      </div>
+  </div>
+  <div class="right-sect">
+    <div class="doc-wrap">
+      <div class="doc-title">Clinical Information</div>
+
+      <ul class="doc-entries">
+        <div class="entry-wrap">
+          <li class="doc-subtitle">Presenting Complaints</li>
+          <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+        </div>
+      </ul>
+    </div>
+
+    <div class="doc-wrap">
+      <div class="doc-title">Clinical Findings</div>
+
+      <ul class="doc-entries">
+        <div class="entry-wrap">
+          <li class="doc-subtitle">Examination Findings</li>
+          <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+        </div>
+
+        <div class="entry-wrap">
+          <li class="doc-subtitle">Diagnosis</li>
+          <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+        </div>
+
+        <div class="entry-wrap">
+          <li class="doc-subtitle">Investigations</li>
+          <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+        </div>
+
+        <div class="entry-wrap">
+          <li class="doc-subtitle">Amount</li>
+          <li>N20,000</li>
+        </div>
+      </ul>
+    </div>
+
+    <div class="action-wrap">
+        <div class="btn btn-medium btn-red" (click)="navigateNewPlatform()">REJECT</div>
+        <div class="btn btn-medium btn-red" (click)="navigateNewPlatform()">QUERY</div>
+        <div class="btn btn-medium btn-yellow" (click)="navigateNewPlatform()">HOLD</div>
+        <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">APPROVE</div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="modalApprove" class="modal-overlay">
+  <div class="modal-wrap shadow-RB">
+    <div (click)="modal_close()" class="close-modal">X</div>
+      <app-modal-approve-claim (closeModal)="modal_close()"></app-modal-approve-claim>
+  </div>
+</div> 
