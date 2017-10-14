@@ -1,0 +1,75 @@
+@import '../../../../assets/libs/variables.scss';
+@import '../../hia/hia-details/hia-details.component.scss';
+.claims-inner-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-sect {
+    width: 35%;
+}
+
+.right-sect {
+    width: 63%;
+    border-left: 3px solid $brand-primary;
+    border-top: 1px solid $grey-1b;
+    border-bottom: 1px solid $grey-1b;
+    .box {
+        padding-left: 10px;
+    }
+}
+
+.item-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.item-val {
+    color: $grey-3;
+}
+
+.group-wrap {
+    margin: 10px 0;
+}
+
+.group-item {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.doc-title {
+    font-weight: bold;
+    margin: 20px 0;
+    font-size: $font-x3;
+}
+
+.doc-subtitle {
+    font-weight: bold;
+    font-size: $font-x2;
+}
+
+.entry-wrap {
+    margin-bottom: 10px;
+}
+
+.action-wrap {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action-wrap .btn {
+    margin-right: 10px;
+}
+
+.doc-wrap {
+    .box {
+        padding: 20px 0px 40px 0px;
+        .fa-circle {
+            width: 40px;
+            height: 40px;
+            float: left;
+            font-size: 18px;
+        }
+    }
+}

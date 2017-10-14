@@ -43,6 +43,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 loadChildren: './claims/claims.module#ClaimsModule'
             },
             {
+                path: 'claims',
+                loadChildren: './claims-payment/claims-payment.module#ClaimsPaymentModule'
+            },
+            {
                 path: 'checkin',
                 loadChildren: './checkin/checkin.module#CheckinModule'
             },
