@@ -4,4 +4,5 @@ export interface HIA {
     grade:any;
     type:any;
     registrationDate: Date;
+    validityPeriods: any[];
 }

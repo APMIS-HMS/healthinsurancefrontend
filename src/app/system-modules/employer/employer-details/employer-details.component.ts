@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService, SystemModuleService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
@@ -12,11 +13,11 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
   styleUrls: ['./employer-details.component.scss']
 })
 export class EmployerDetailsComponent implements OnInit {
-  listsearchControl = new FormControl();
-  filterTypeControl = new FormControl('All');
-  createdByControl = new FormControl();
-  utilizedByControl = new FormControl();
-  statusControl = new FormControl('All');
+  // listsearchControl = new FormControl();
+  // filterTypeControl = new FormControl('All');
+  // createdByControl = new FormControl();
+  // utilizedByControl = new FormControl();
+  // statusControl = new FormControl('All');
 
 	tab_details = true;
 	tab_preauthorization = false;
@@ -28,9 +29,12 @@ export class EmployerDetailsComponent implements OnInit {
 	tab_complaints = false;
 	tab_referals = false;
   facility: any = <any>{};
+  addApproval: boolean = false;
+  approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
 
 	constructor(
     private _router: Router,
+    private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
@@ -47,6 +51,38 @@ export class EmployerDetailsComponent implements OnInit {
         this._getEmployerDetails(param.id);
       }
     });
+  }
+
+  onClickApprove() {
+      this.facility.isConfirmed = true;
+      this._facilityService.update(this.facility).then(res => {
+        console.log(res);
+        this.facility = res;
+        const status = this.facility.isConfirmed ? 'activated successfully' : 'deactivated successfully';
+        const text = this.facility.name + ' has been ' + status;
+        this._toastr.success(text, 'Confirmation!');
+        setTimeout(e => {
+          this.addApprovalClick();
+        }, 1000);
+      });
+  }
+
+  onClickDeactivate() {
+    this.facility.isConfirmed = false;
+    this._facilityService.update(this.facility).then(res => {
+      console.log(res);
+      this.facility = res;
+      const status = this.facility.isConfirmed ? 'activated successfully' : 'deactivated successfully';
+      const text = this.facility.name + ' has been ' + status;
+      this._toastr.success(text, 'Confirmation!');
+      setTimeout(e => {
+        this.addApprovalClick();
+      }, 1000);
+    });
+  }
+
+  addApprovalClick() {
+    this.addApproval = !this.addApproval;
   }
 
   private _getEmployerDetails(routeId) {

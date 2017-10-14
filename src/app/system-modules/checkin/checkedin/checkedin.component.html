@@ -65,18 +65,18 @@
 
             <tbody class="tbody">
 
-                <tr class="tr"  routerLink="/modules/beneficiary/beneficiaries/6">
-                    <td class="td">11th October</td>
-                    <td class="td">Samuel Amana</td>
-                    <td class="td">122.32.21.1</td>
+                <tr *ngFor="let check of checkedIns" class="tr" >
+                    <td class="td">{{check.createdAt | date}}</td>
+                    <td class="td">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
+                    <td class="td">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
                     <td class="td"><i class="fa fa-check green" aria-hidden="true"></i></td>
-                    <td class="td">Inpatient</td>
-                    <td class="td"><span class="green">Confirmed</span></td>
+                    <td class="td">{{check.encounterType.name}}</td>
+                    <td class="td"><span class="green">{{check.encounterStatus.name}}</span></td>
                     <td class="td"><span class="green">Active</span></td>
                     <td><i class="fa fa-times red" aria-hidden="true"></i></td>
+                    <td class="td">{{check.claimType.name}}</td>
                     <td class="td">Filed</td>
-                    <td class="td">Filed</td>
-                    <td><i class="fa fa-chevron-right"></i></td>
+                    <td (click)="routeBeneficiary(check)"><i class="fa fa-chevron-right"></i></td>
                 </tr>
 
             </tbody>

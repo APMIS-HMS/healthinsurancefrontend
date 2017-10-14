@@ -649,6 +649,7 @@ input[type="checkbox"].switch_1:checked:after {
 .blue{
     color: $brand-primary;
 }
+
 .baller {
     padding: 8px;
     background: $grey-1;
@@ -695,6 +696,11 @@ td .tooltip{
     font-size: 18px;
     margin-bottom: 20px;
     font-weight: bold;
+}
+
+.image-holder {
+    width: 150px;
+    height: 150px;
 }
 
 @media only screen and (max-width: 1300px) {

@@ -15,7 +15,7 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 })
 export class BeneficiaryDetailsComponent implements OnInit {
   beneficiary: any;
-  policy:any;
+  policy: any;
   tab_details = true;
   tab_payment = false;
   tab_claims = false;
@@ -23,7 +23,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
   tab_referals = false;
   tab_checkin = false;
 
-  dependants:any[] = [];
+  dependants: any[] = [];
+  isCheckIn = false;
 
   constructor(
     private _router: Router,
@@ -34,7 +35,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private loadingService: LoadingBarService,
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
-    private _uploadService:UploadService
+    private _uploadService: UploadService
   ) { }
 
   ngOnInit() {
@@ -46,6 +47,12 @@ export class BeneficiaryDetailsComponent implements OnInit {
         this._getBeneficiaryDetails(param.id);
       }
     });
+
+    this._route.data.subscribe(data => {
+      if(data.goCheckIn !== undefined && data.goCheckIn === true){
+        this.isCheckIn = true;
+      }
+    })
   }
 
   private _getBeneficiaryDetails(routeId) {
@@ -57,13 +64,17 @@ export class BeneficiaryDetailsComponent implements OnInit {
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
-      if(results[1].data.length > 0){
+      if (this.isCheckIn) {
+        this.tabCheckin_click();
+      }
+
+      if (results[1].data.length > 0) {
         this.dependants = results[1].data[0].dependantBeneficiaries;
         this.policy = results[1].data[0];
         console.log(this.dependants)
         console.log(this.policy)
       }
-      
+
       this._systemService.off();
     }, error => {
       this._systemService.off();
@@ -86,6 +97,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
       });
     }
   }
+
 
   tabDetails_click() {
     this.tab_details = true;

@@ -1,3 +1,8 @@
+import { CheckInService } from './../../services/common/check-in.service';
+import { EncounterTypeService } from './../../services/common/encounter-type.service';
+import { EncounterStatusService } from './../../services/common/encounter-status.service';
+import { ClaimStatusService } from './../../services/common/claim-status.service';
+import { ClaimTypeService } from './../../services/common/claim-type.service';
 import { PolicyService } from './../../services/policy/policy.service';
 import { BeneficiaryService } from './../../services/beneficiary/beneficiary.service';
 import { NgModule } from '@angular/core';
@@ -21,7 +26,12 @@ import { NewCheckinComponent } from './new-checkin/new-checkin.component';
   ],
   providers:[
     BeneficiaryService,
-    PolicyService
+    PolicyService,
+    ClaimTypeService,
+    ClaimStatusService,
+    EncounterStatusService,
+    EncounterTypeService,
+    CheckInService
   ]
 })
 export class CheckinModule { }

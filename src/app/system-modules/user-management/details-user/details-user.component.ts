@@ -35,6 +35,7 @@ export class DetailsUserComponent implements OnInit {
 
   _updateUser(value) {
     this._systemService.on();
+    
     this.selectedUser.isActive = value.target.checked;
     this._userService.patch(this.selectedUser._id, this.selectedUser, {}).then((payload: any) => {
       this.selectedUser = payload;

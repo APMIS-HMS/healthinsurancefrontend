@@ -1,3 +1,8 @@
+import { CheckInService } from './../../services/common/check-in.service';
+import { EncounterTypeService } from './../../services/common/encounter-type.service';
+import { EncounterStatusService } from './../../services/common/encounter-status.service';
+import { ClaimStatusService } from './../../services/common/claim-status.service';
+import { ClaimTypeService } from './../../services/common/claim-type.service';
 import { PolicyService } from './../../services/policy/policy.service';
 import { JsonDataService } from './../../services/common/json-data.service';
 import { PremiumTypeService } from './../../services/common/premium-type.service';
@@ -31,6 +36,10 @@ import { CheckinDetailsComponent } from './beneficiary-details/checkin-details/c
     ],
     declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent, CheckinDetailsComponent],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService, PlanService, PremiumTypeService,
-        PlanTypeService, BeneficiaryService, BankService, RelationshipService, JsonDataService, PolicyService]
+        PlanTypeService, BeneficiaryService, BankService, RelationshipService, JsonDataService, PolicyService,     ClaimTypeService,
+        ClaimStatusService,
+        EncounterStatusService,
+        EncounterTypeService,
+        CheckInService]
 })
 export class BeneficiaryModule { }
