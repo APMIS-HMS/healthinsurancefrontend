@@ -30,7 +30,6 @@ export class NewClaimComponent implements OnInit {
       auth: ['', [<any>Validators.required]],
       entryDate: ['', [<any>Validators.required]],
       claimType: ['', [<any>Validators.required]],
-      ffs: ['', [<any>Validators.required]],
       symtom: ['', [<any>Validators.required]],
       symtomDuration: ['', [<any>Validators.required]],
       symtomUnit: ['', [<any>Validators.required]],
@@ -43,7 +42,9 @@ export class NewClaimComponent implements OnInit {
       admissionDate: ['', [<any>Validators.required]],
       dischargeDate: ['', [<any>Validators.required]],
       clinicalNote: ['', [<any>Validators.required]],
-      claimsNote: ['', [<any>Validators.required]]  
+      claimsNote: ['', [<any>Validators.required]],
+      visitClass: ['', [<any>Validators.required]],
+      visitDate: ['', [<any>Validators.required]]    
     });
   }
 

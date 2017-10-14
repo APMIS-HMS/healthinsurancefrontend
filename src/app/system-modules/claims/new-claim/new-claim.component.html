@@ -29,7 +29,7 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Hospital NAme</label>
+                <label class="label">Hospital Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="hospital" class="form-control">
                 </div>
@@ -38,16 +38,7 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Name of Doctor</label>
-                <div class="input-wrap">
-                    <input type="email" formControlName="doctor" class="form-control">
-                </div>
-                <small class="alert-label" [hidden]="claimsFormGroup.controls.doctor.valid || claimsFormGroup.controls.doctor.pristine">
-                    This is a required field.
-                </small>
-            </div>
-            <div class="frm-item-wrap">
-                <label class="label">Type of Health Plan</label>
+                <label class="label">Health Plan</label>
                 <div class="input-wrap">
                     <input type="email" formControlName="plan" class="form-control">
                 </div>
@@ -56,16 +47,7 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Authorization Code</label>
-                <div class="input-wrap">
-                    <input type="text" formControlName="auth" class="form-control">
-                </div>
-                <small class="alert-label" [hidden]="claimsFormGroup.controls.auth.valid || claimsFormGroup.controls.auth.pristine">
-                    This is a required field.
-                </small>
-            </div>
-            <div class="frm-item-wrap">
-                <label class="label">Patient</label>
+                <label class="label">Encounter Type</label>
                 <div>
                   <div class="input-wrap" style="justify-content:flex-start; margin-bottom:20px;">
                       <span style="margin-right:10px;">
@@ -90,6 +72,10 @@
                           <div style="width:150px;">
                             <span class="inner-label">Date of Discharge:</span>
                               <my-date-picker  name="dischargeDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="dischargeDate"></my-date-picker>
+                          </div>
+                          <div style="width:150px;">
+                            <span class="inner-label">Date of Visit:</span>
+                              <my-date-picker  name="visitDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="visitDate"></my-date-picker>
                           </div>
                       </div>
                   </div>
@@ -116,56 +102,26 @@
                     </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Fee for Service</label>
+                <label class="label">Authorization Code</label>
                 <div class="input-wrap">
-                    <select formControlName="ffs" class="form-control">
-                        <option value="" selected>Select...</option>
-                    </select>
+                    <input type="text" formControlName="auth" class="form-control">
                 </div>
-                <small class="alert-label" [hidden]="claimsFormGroup.controls.ffs.valid || claimsFormGroup.controls.ffs.pristine">
+                <small class="alert-label" [hidden]="claimsFormGroup.controls.auth.valid || claimsFormGroup.controls.auth.pristine">
                     This is a required field.
                 </small>
             </div>
-
-            <div class="frm-group">
-                <div class="frm-title">Upload Document</div>
-  
-                <div class="frm-subsect">
-                  <div class="frm-item-wrap">
-                      <div class="input-wrap">
-                          <button class="btn btn-medium btn-blue"><i class="fa fa-file"></i>Select File</button>
-                      </div>
-                  </div>
-  
-                  <div class="tbl-wrap">
-                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                        <thead class="thead">
-                            <tr class="tr">
-                                <th class="th">File Name</th>
-                                <th class="th"></th>
-                            </tr>
-                        </thead>
-                  
-                        <tbody class="tbody">
-                            <tr class="tr">
-                                <td class="td">blahh.doc</td>
-                                <td><i class="fa fa-times"></i></td>
-                            </tr>
-  
-                            <tr class="tr">
-                                <td class="td">blahh.doc</td>
-                                <td><i class="fa fa-times"></i></td>
-                            </tr>
-  
-                            <tr class="tr">
-                                <td class="td">blahh.doc</td>
-                                <td><i class="fa fa-times"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                  </div>
+            
+            <div class="frm-item-wrap">
+                <label class="label">Visit Class</label>
+                <div class="input-wrap">
+                    <select formControlName="visitClass" class="form-control">
+                        <option value="" selected>Select...</option>
+                    </select>
                 </div>
-              </div>
+                <small class="alert-label" [hidden]="claimsFormGroup.controls.visitClass.valid || claimsFormGroup.controls.visitClass.pristine">
+                    Choose state from the dropdown.
+                </small>
+            </div>
 
             <div class="frm-group">
               <div class="frm-title">Clinical Information</div>
@@ -232,6 +188,16 @@
                       </tbody>
                   </table>
                 </div>
+              </div>
+
+              <div class="frm-item-wrap">
+                  <label class="label">Clinical Note</label>
+                  <div class="input-wrap" style="width:100%;">
+                      <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
+                  </div>
+                  <small class="alert-label" [hidden]="claimsFormGroup.controls.clinicalNote.valid || claimsFormGroup.controls.clinicalNote.pristine">
+                      This is a required field.
+                  </small>
               </div>
 
               <div class="frm-subsect">
@@ -453,21 +419,61 @@
               </div>
             </div>
 
-            <div class="frm-item-wrap">
-                <label class="label">Clinical Note</label>
-                <div class="input-wrap" style="width:100%;">
-                    <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
+            <div class="frm-group">
+              <div class="frm-title">Upload Document</div>
+
+              <div class="frm-subsect">
+                <div class="frm-item-wrap">
+                    <div class="input-wrap">
+                        <button class="btn btn-medium btn-blue"><i class="fa fa-file"></i>Select File</button>
+                    </div>
                 </div>
-                <small class="alert-label" [hidden]="claimsFormGroup.controls.clinicalNote.valid || claimsFormGroup.controls.clinicalNote.pristine">
-                    This is a required field.
-                </small>
+
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">File Name</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">blahh.doc</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">blahh.doc</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">blahh.doc</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
+
             <div class="frm-item-wrap">
                 <label class="label">Claims Note</label>
                 <div class="input-wrap" style="width:100%;">
                     <textarea formControlName="claimsNote" class="form-control-textArea"></textarea>
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.claimsNote.valid || claimsFormGroup.controls.claimsNote.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Name of Doctor</label>
+                <div class="input-wrap">
+                    <input type="email" formControlName="doctor" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="claimsFormGroup.controls.doctor.valid || claimsFormGroup.controls.doctor.pristine">
                     This is a required field.
                 </small>
             </div>
