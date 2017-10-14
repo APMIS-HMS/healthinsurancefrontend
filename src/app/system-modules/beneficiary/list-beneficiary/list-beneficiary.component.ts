@@ -55,7 +55,7 @@ export class ListBeneficiaryComponent implements OnInit {
     });
 
     // this._getBeneficiaries();
-    // this._getCurrentPlatform();
+    this._getCurrentPlatform();
   }
 
   private _getCurrentPlatform() {
@@ -105,13 +105,14 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   private _getInActiveBeneficiaries(platformId) {
+    console.log(platformId)
     this._systemService.on();
     let policy$ = Observable.fromPromise(this._policyService.find({ 'platformOwnerId._id': platformId, isActive: true }));
     let benefic$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
 
     Observable.forkJoin([policy$, benefic$]).subscribe((results: any) => {
       let beneficiaryList: any[] = results[1].data;
-
+      console.log(results)
       results[0].data.forEach(policy => {
         let principal = policy.principalBeneficiary;
         const index = beneficiaryList.findIndex(x => x._id === principal._id);
@@ -127,6 +128,8 @@ export class ListBeneficiaryComponent implements OnInit {
       })
       this.inActiveBeneficiaries = beneficiaryList;
       this._systemService.off();
+    }, error =>{
+      console.log(error)
     })
   }
 

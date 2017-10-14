@@ -90,8 +90,9 @@
                 <div class="frm-item-wrap">
                     <label class="label">Health Encounter Type </label>
                     <div class="input-wrap">
-                        <select formControlName="encounterType" class="form-control">
-                            <option value="" disabled selected>Select Plan Type</option>
+                        <select formControlName="encounterType" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of encounterTypes" [ngValue]="encounter">{{encounter.name}}</option>
                         </select>
                         <small class="alert-label" [hidden]="checkinFormGroup.controls.encounterType.valid || checkinFormGroup.controls.encounterType.pristine">
                             This is a required field.
@@ -134,8 +135,9 @@
                 <div class="frm-item-wrap">
                     <label class="label">Health Encounter Status</label>
                     <div class="input-wrap">
-                        <select formControlName="encounterStatus" class="form-control">
-                            <option value="" disabled selected>Select Plan Type</option>
+                        <select formControlName="encounterStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Status</option>
+                            <option *ngFor="let encounter of encounterStatuses" [ngValue]="encounter">{{encounter.name}}</option>
                         </select>
                         <small class="alert-label" [hidden]="checkedinFormGroup.controls.encounterStatus.valid || checkedinFormGroup.controls.encounterStatus.pristine">
                             This is a required field.
@@ -143,10 +145,11 @@
                     </div>
                 </div>
                 <div class="frm-item-wrap">
-                    <label class="label">Health Encounter Status</label>
+                    <label class="label">Health Encounter Type</label>
                     <div class="input-wrap">
-                        <select formControlName="encounterType" class="form-control">
-                            <option value="" disabled selected>Select Plan Type</option>
+                        <select formControlName="encounterType" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of encounterTypes" [ngValue]="encounter">{{encounter.name}}</option>
                         </select>
                         <small class="alert-label" [hidden]="checkedinFormGroup.controls.encounterType.valid || checkedinFormGroup.controls.encounterType.pristine">
                             This is a required field.

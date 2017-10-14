@@ -46,8 +46,9 @@ export class CheckinDetailsComponent implements OnInit {
   selectedClaimStatus: any;
   selectedEncounterType: any;
   selectedEncounterStatus: any;
-  selectedCheckIn: any;
+  selectedCheckIn: CheckIn;
   user: any;
+  hasCheckInToday = false;
 
   constructor(private _fb: FormBuilder,
     private _toastr: ToastsManager,
@@ -63,20 +64,24 @@ export class CheckinDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.beneficiary)
+    this.today = {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      day: new Date().getDate()
+    }
+    this.hasCheckInToday = false;
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
     this.otpFormGroup = this._fb.group({
       patient: ['', [<any>Validators.required]],
       otp: ['', [<any>Validators.required]]
     });
     this.checkinFormGroup = this._fb.group({
       encounterType: ['', [<any>Validators.required]],
-      encounterDate: ['', [<any>Validators.required]]
+      encounterDate: [this.today, [<any>Validators.required]]
     });
     this.checkedinFormGroup = this._fb.group({
       encounterType: ['', [<any>Validators.required]],
-      encounterDate: ['', [<any>Validators.required]],
+      encounterDate: [this.today, [<any>Validators.required]],
       encounterStatus: ['', [<any>Validators.required]]
     });
 
@@ -84,11 +89,32 @@ export class CheckinDetailsComponent implements OnInit {
     this._getClaimTypes();
     this._getEncounterStatuses();
     this._getEncounterTypes();
+
+    this._hasCheckInToday();
+
   }
 
   otp_verify() {
-    this.otp_show = false;
-    this.checkin_show = true;
+
+    this._checkInService.find({
+      query: {
+        beneficiaryId: this.beneficiary._id,
+        'otp.number': this.otpFormGroup.controls['otp'].value,
+        'otp.isVerified': false,
+        $client: {
+          verify: true
+        }
+      }
+    }).then((payload: any) => {
+      if (payload.data === true) {
+        this.otp_show = false;
+        this.checkin_show = true;
+      } else {
+        this._toastr.warning('Invalid or expired OTP supplied, check and try again', 'OTP');
+      }
+    }).catch(err => {
+      console.log(err);
+    })
   }
   ok_click() {
     this.otp_generated = false;
@@ -106,23 +132,35 @@ export class CheckinDetailsComponent implements OnInit {
     model.principalBeneficiaryId = this.beneficiary._id;
     model.providerFacilityId = this.user.facilityId;
     model.otp = {};
-    if(model.principalBeneficiaryId === model.beneficiaryId){
-      model.otp.phoneNumbers = ['08028217639'];
+    if (model.principalBeneficiaryId === model.beneficiaryId) {
+      model.otp.phoneNumbers = [this.beneficiary.person.phoneNumber];
     }
 
-    this._checkInService.create(model).then(payload =>{
-      console.log(payload);
+    this._checkInService.create(model).then(payload => {
       this._systemService.off();
       this.otp_generated = true;
-    }).catch(err =>{
+    }).catch(err => {
       console.log(err);
       this._systemService.off();
       this._toastr.error('Error(s) occured while generting token, please try again!!!', 'Token Error');
     })
   }
   checkin_click() {
-    this.checkinSect = false;
-    this.checkedinSect = true;
+    this.selectedCheckIn.encounterType = this.checkinFormGroup.controls['encounterType'].value;
+    this.selectedCheckIn.encounterDateTime = this.checkinFormGroup.controls['encounterDate'].value;
+    this._checkInService.patch(this.selectedCheckIn._id, this.selectedCheckIn, {
+      $client: {
+        confirmation: true
+      }
+    })
+      .then(payload => {
+        if (payload !== undefined) {
+          this.checkinSect = false;
+          this.checkedinSect = true;
+        }
+      }).catch(err => {
+        console.log(err);
+      })
   }
   getAge() {
     return differenceInYears(
@@ -130,7 +168,45 @@ export class CheckinDetailsComponent implements OnInit {
       this.beneficiary.person.dateOfBirth
     )
   }
+  compare(l1: any, l2: any) {
+    if (l1 !== null && l2 !== null) {
+      return l1._id === l2._id;
+    }
+    return false;
+  }
 
+  _hasCheckInToday() {
+    this._systemService.on();
+    this._checkInService.find({
+      query: {
+        beneficiaryId: this.beneficiary._id,
+        $client: {
+          hasCheckInToday: true
+        }
+      }
+    }).then((payload: any) => {
+      if (payload.data.length > 0) {
+        this.hasCheckInToday = true;
+        this.selectedCheckIn = payload.data[0];
+        if(this.selectedCheckIn.confirmation !== undefined){
+          this.checkedinFormGroup.controls['encounterType'].setValue(this.selectedCheckIn.encounterType);
+          this.checkedinFormGroup.controls['encounterDate'].setValue(this.selectedCheckIn.encounterDateTime)
+          this.checkedinFormGroup.controls['encounterStatus'].setValue(this.selectedCheckIn.encounterStatus)
+          this.checkinSect = false;
+          this.checkedinSect = true;
+        }else{
+          this.checkinFormGroup.controls['encounterType'].setValue(this.selectedCheckIn.encounterType);
+          this.otp_show = false;
+          this.checkin_show = true;
+        }
+      
+      }
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
+  }
 
 
   _getClaimTypes() {

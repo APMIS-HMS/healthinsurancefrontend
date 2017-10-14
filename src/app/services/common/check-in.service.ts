@@ -41,11 +41,18 @@ export class CheckInService {
       }))
     });
   }
-  update(param: any) {
+  update(data: any, param?) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('check-ins').then((socket: any) => {
-        return this._socket.update(param._id, param);
+        return this._socket.update(data._id, data, param);
       }))
+    });
+  }
+  patch(_id: any, data: any, param: any) {
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('check-ins').then((socket: any) => {
+        return socket.patch(_id, data, param);
+      }));
     });
   }
   remove(id: string, query: any) {

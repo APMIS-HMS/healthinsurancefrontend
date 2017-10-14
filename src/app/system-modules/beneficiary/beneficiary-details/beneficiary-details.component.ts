@@ -49,8 +49,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
     });
 
     this._route.data.subscribe(data => {
-      this.isCheckIn = true;
-      // this.tabCheckin_click();
+      if(data.goCheckIn !== undefined && data.goCheckIn === true){
+        this.isCheckIn = true;
+      }
     })
   }
 

@@ -15,6 +15,7 @@ export interface CheckIn {
     confirmation: any;
     otp: any;
     checkOut: any;
+    _id:any;
 }
 
 
