@@ -646,12 +646,55 @@ input[type="checkbox"].switch_1:checked:after {
 .lemon-green {
     color: $lemon-green;
 }
+.blue{
+    color: $brand-primary;
+}
 .baller {
     padding: 8px;
     background: $grey-1;
     border-radius: 100%;
     border: 1px solid $grey-2;
     margin-right: 20px;
+}
+.fa-circle {
+    color: #fff !important;
+    background: $brand-primary;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+td .tooltip{
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+        position: absolute;
+        width: 300px;
+        background: #fff;
+        border: 1px solid $grey-2;
+        padding: 10px 20px;
+        z-index: 2;
+        overflow: visible;
+        white-space: normal;
+        -webkit-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
+        -moz-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
+        box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
+        .tip-title{
+            display: block;
+        }
+    }
+}
+.tip-title{
+    display: none;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 @media only screen and (max-width: 1300px) {
