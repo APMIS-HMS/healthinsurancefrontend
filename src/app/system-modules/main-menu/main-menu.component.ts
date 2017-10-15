@@ -13,9 +13,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
   styleUrls: ['./main-menu.component.scss']
 })
 export class MainMenuComponent implements OnInit {
-
   @Output() closeMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
-
   user: any;
 
   constructor(private _headerEventEmitter: HeaderEventEmitterService,
@@ -34,8 +32,8 @@ export class MainMenuComponent implements OnInit {
     this._authService.find({ query: { email: email } })
       .then(payload => {
         let currentUser = payload.data[0];
-        currentUser.loggedInUserStatus={
-          "isLoggedIn":loggInState
+        currentUser.loggedInUserStatus = {
+          "isLoggedIn": loggInState
         };
 
         this._authService.patch(currentUser._id,currentUser,{}).then(payload=>{

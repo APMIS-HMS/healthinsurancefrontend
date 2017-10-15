@@ -2,6 +2,8 @@ import { SystemModuleService } from './system-module.service';
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 let request = require('superagent');
 
 
@@ -11,6 +13,9 @@ export class FacilityService {
   public _socket;
   private _rest;
   private _restLogin;
+
+  private loggedInUserAnnouncedSource = new Subject<Object>();
+  loggedInUserAnnounced$ = this.loggedInUserAnnouncedSource.asObservable();
 
   constructor(
     private _socketService: SocketService,
@@ -70,5 +75,12 @@ export class FacilityService {
       .send(body);
   }
 
+  announceLoggedInUser(notification: Object) {
+    this.loggedInUserAnnouncedSource.next(notification);
+  }
+
+  // receiveLoggedInUser(): Observable<Object> {
+  //   // return this.announceLoggedInUser.asObservable();
+  // }
 
 }
