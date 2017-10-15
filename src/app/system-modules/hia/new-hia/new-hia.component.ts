@@ -429,6 +429,7 @@ export class NewHiaComponent implements OnInit {
             this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
             this._router.navigate(['/modules/hia/hias']);
           }).catch(err => {
+            console.log(err)
             this._systemService.off();
           });
         }

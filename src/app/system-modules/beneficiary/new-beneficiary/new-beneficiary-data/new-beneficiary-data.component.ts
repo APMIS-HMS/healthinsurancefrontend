@@ -26,7 +26,7 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-beneficiary-data.component.scss']
 })
 export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, AfterViewChecked {
-
+  
   @ViewChild('video') video: any;
   @ViewChild('snapshot') snapshot: ElementRef;
   @ViewChild('fileInput') fileInput: ElementRef;

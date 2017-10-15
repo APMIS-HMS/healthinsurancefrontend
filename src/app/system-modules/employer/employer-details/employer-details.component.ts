@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { UploadService } from './../../../services/common/upload.service';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -13,6 +14,8 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
   styleUrls: ['./employer-details.component.scss']
 })
 export class EmployerDetailsComponent implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
+
   listsearchControl = new FormControl();
   filterTypeControl = new FormControl('All');
   createdByControl = new FormControl();
@@ -30,7 +33,9 @@ export class EmployerDetailsComponent implements OnInit {
 	tab_referals = false;
   facility: any = <any>{};
   addApproval: boolean = false;
+  isUploading = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
+  intendingBeneficiaries:any[] = [];
 
 	constructor(
     private _router: Router,
@@ -40,6 +45,8 @@ export class EmployerDetailsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private loadingService: LoadingBarService,
+    private _uploadService:UploadService
+
   ) { }
 
   ngOnInit() {
@@ -79,6 +86,65 @@ export class EmployerDetailsComponent implements OnInit {
         this.addApprovalClick();
       }, 1000);
     });
+  }
+
+  showImageBrowseDlg() {
+    this.fileInput.nativeElement.click()
+    this.isUploading = true;
+  }
+
+  excelDateToJSDate(date) {
+    return new Date(Math.round((date - 25569) * 86400 * 1000));
+  }
+
+  public upload(e) {
+    let fileBrowser = this.fileInput.nativeElement;
+    if (fileBrowser.files && fileBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("excelfile", fileBrowser.files[0]);
+      formData.append("facilityId", this.facility._id);
+      this._uploadService.upload(formData, this.facility._id).then(res => {
+        console.log(res.body.data.Sheet1)
+        let enrolleeList: any[] = [];
+        if (res.body !== undefined && res.body.error_code === 0) {
+          res.body.data.Sheet1.forEach(row => {
+            let rowObj: any = <any>{};
+            rowObj.serial = row.A;
+            rowObj.surname = row.B;
+            rowObj.firstName = row.C;
+            rowObj.gender = row.D;
+            rowObj.filNo = row.E;
+            rowObj.category = row.F;
+            rowObj.sponsor = row.G;
+            rowObj.plan = row.H;
+            rowObj.type = row.I;
+            // rowObj.date = this.excelDateToJSDate(row.J);
+            enrolleeList.push(rowObj);
+          });
+          // const index = this.loginHMOListObject.hmos.findIndex(x => x._id === hmo._id);
+          // let facHmo = this.loginHMOListObject.hmos[index];
+          // let enrolleeItem = {
+          //   month: new Date().getMonth() + 1,
+          //   year: new Date().getFullYear(),
+          //   enrollees: enrolleeList
+          // }
+          // console.log(enrolleeItem);
+
+          // facHmo.enrolleeList.push(enrolleeItem);
+          // console.log(facHmo);
+          // this.loginHMOListObject.hmos[index] = facHmo;
+
+
+          // console.log(this.loginHMOListObject);
+          // this.hmoService.update(this.loginHMOListObject).then(pay => {
+          //   console.log(pay);
+          //   this.getLoginHMOList();
+          // })
+        }
+      }).catch(err => {
+        // this._notification('Error', "There was an error uploading the file");
+      });
+    }
   }
 
   addApprovalClick() {
