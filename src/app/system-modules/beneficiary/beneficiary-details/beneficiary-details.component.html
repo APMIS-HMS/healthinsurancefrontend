@@ -134,6 +134,14 @@
         <div *ngIf="tab_checkin" class="tab-pane fade show active">
             <app-checkin-details [beneficiary]="beneficiary"></app-checkin-details>
         </div>
+        <div *ngIf="tab_claims" class="tab-pane fade show active">
+            <app-beneficiary-top-bar></app-beneficiary-top-bar>
+            <app-list-claims></app-list-claims>
+        </div>
+        <div *ngIf="tab_referals" class="tab-pane fade show active">
+            <app-beneficiary-top-bar></app-beneficiary-top-bar>
+            <app-list-referals></app-list-referals>
+        </div>
     </div>
 </div>
 

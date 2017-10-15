@@ -6,6 +6,8 @@ import { ListHiaComponent } from '../system-modules/hia/list-hia/list-hia.compon
 import { ListProviderComponent } from '../system-modules/provider/list-provider/list-provider.component';
 import { ListEmployerComponent } from '../system-modules/employer/list-employer/list-employer.component';
 import { ListBeneficiaryComponent } from '../system-modules/beneficiary/list-beneficiary/list-beneficiary.component';
+import { ListClaimsComponent } from '../system-modules/claims/list-claims/list-claims.component';
+import { ListReferalsComponent } from '../system-modules/referal/list-referals/list-referals.component';
 
 @NgModule({
     declarations: [
@@ -13,6 +15,8 @@ import { ListBeneficiaryComponent } from '../system-modules/beneficiary/list-ben
         ListProviderComponent,
         ListEmployerComponent,
         ListBeneficiaryComponent,
+        ListClaimsComponent,
+        ListReferalsComponent
     ],
     exports: [
         CommonModule,
@@ -21,13 +25,15 @@ import { ListBeneficiaryComponent } from '../system-modules/beneficiary/list-ben
         ListHiaComponent,
         ListProviderComponent,
         ListEmployerComponent,
-        ListBeneficiaryComponent
+        ListBeneficiaryComponent,
+        ListClaimsComponent,
+        ListReferalsComponent
     ],
     imports: [
         RouterModule,
         CommonModule,
         FormsModule,
-        ReactiveFormsModule,
+        ReactiveFormsModule
     ],
     providers: []
 })

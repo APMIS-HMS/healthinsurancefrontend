@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService, SystemModuleService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
@@ -15,6 +15,12 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 })
 export class ProviderDetailsComponent implements OnInit {
   approvalFormGroup: FormGroup;
+  listsearchControl = new FormControl();
+  filterTypeControl = new FormControl('All');
+  createdByControl = new FormControl();
+  utilizedByControl = new FormControl();
+  statusControl = new FormControl('All');
+
 	tab_details = true;
 	tab_preauthorization = false;
 	tab_plans = false;

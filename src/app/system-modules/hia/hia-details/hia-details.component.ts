@@ -16,6 +16,13 @@ import { FacilityService } from '../../../services/index';
 })
 export class HiaDetailsComponent implements OnInit {
   approvalFormGroup: FormGroup;
+
+  listsearchControl = new FormControl();
+  filterTypeControl = new FormControl('All');
+  createdByControl = new FormControl();
+  utilizedByControl = new FormControl();
+  statusControl = new FormControl('All');
+  
   selectedFacility: Facility = <Facility>{};
   addApproval: boolean = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
