@@ -22,3 +22,11 @@ export * from './plan/plan.service';
 export * from './provider/provider-grades.service';
 export * from './provider/provider-statuses.service';
 export * from './person/person.service';
+export * from './common/claim-type.service';
+export * from './common/visit-type.service';
+export * from './common/procedure.service';
+export * from './common/drug.service';
+export * from './common/symptoms.service';
+export * from './common/diagnosis.service';
+export * from './common/investigation.service';
+

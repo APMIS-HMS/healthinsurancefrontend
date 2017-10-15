@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
-
+import {
+    ClaimTypeService, VisitTypeService,DiagnosisService,ProcedureService,DrugService,SymptomService,InvestigationService
+} from '../../services/index';
 import { claimsRoutes } from './claims.route';
 import { ClaimsComponent } from './claims.component';
 import { ClaimsDetailsComponent } from './claims-details/claims-details.component';
@@ -22,6 +24,7 @@ import { ClaimsOthersTabComponent } from './claims-details/claims-others-tab/cla
         MyDatePickerModule
     ],
     declarations: [ClaimsComponent, ClaimsDetailsComponent, NewClaimComponent, ListClaimsComponent, ClaimsTopBarComponent, ClaimsDetailTabComponent, ModalApproveClaimComponent, ModalRejectClaimComponent, ModalHoldClaimComponent, ModalQueryClaimComponent, ClaimsOthersTabComponent],
-    providers: []
+    providers: [ClaimTypeService,VisitTypeService,SymptomService,InvestigationService,DrugService,DiagnosisService,
+        ProcedureService]
 })
 export class ClaimsModule { }
