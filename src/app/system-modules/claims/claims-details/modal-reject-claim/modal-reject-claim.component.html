@@ -1,12 +1,12 @@
-<div class="modal-title">Approve Claim -133392-BA</div>
+<div class="modal-title">Reject Claim -133392-BA</div>
 
-<form [formGroup]="claimsApproveFormGroup" novalidate>
+<form [formGroup]="claimsRejectFormGroup" novalidate>
     <div class="frm-item-wrap">
         <label class="label">Reason</label>
         <div class="input-wrap" style="width:100%;">
             <textarea formControlName="reason" class="form-control-textArea"></textarea>
         </div>
-        <small class="alert-label" [hidden]="claimsApproveFormGroup.controls.reason.valid || claimsApproveFormGroup.controls.reason.pristine">
+        <small class="alert-label" [hidden]="claimsRejectFormGroup.controls.reason.valid || claimsRejectFormGroup.controls.reason.pristine">
             This is a required field.
         </small>
     </div>
@@ -16,7 +16,7 @@
         <div class="input-wrap">
             <input type="text" formControlName="name" class="form-control">
         </div>
-        <small class="alert-label" [hidden]="claimsApproveFormGroup.controls.name.valid || claimsApproveFormGroup.controls.name.pristine">
+        <small class="alert-label" [hidden]="claimsRejectFormGroup.controls.name.valid || claimsRejectFormGroup.controls.name.pristine">
             This is a required field (minimum 3 and max of 50 characters).
         </small>
     </div>
@@ -28,7 +28,7 @@
                 <option value="" selected>Select...</option>
             </select>
         </div>
-        <small class="alert-label" [hidden]="claimsApproveFormGroup.controls.institution.valid || claimsApproveFormGroup.controls.institution.pristine">
+        <small class="alert-label" [hidden]="claimsRejectFormGroup.controls.institution.valid || claimsRejectFormGroup.controls.institution.pristine">
             Choose state from the dropdown.
         </small>
     </div>

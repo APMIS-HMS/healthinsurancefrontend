@@ -174,15 +174,36 @@
 </div>
 
 <div class="action-wrap">
-    <div class="btn btn-medium btn-red" (click)="navigateNewPlatform()">REJECT</div>
-    <div class="btn btn-medium btn-red" (click)="navigateNewPlatform()">QUERY</div>
-    <div class="btn btn-medium btn-yellow" (click)="navigateNewPlatform()">HOLD</div>
-    <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">APPROVE</div>
+    <div class="btn btn-medium btn-red" (click)="rejectClaim()">REJECT</div>
+    <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
+    <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
+    <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
 </div>
 
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
       <app-modal-approve-claim (closeModal)="modal_close()"></app-modal-approve-claim>
+  </div>
+</div> 
+
+<div *ngIf="modalReject" class="modal-overlay">
+  <div class="modal-wrap shadow-RB">
+    <div (click)="modal_close()" class="close-modal">X</div>
+      <app-modal-reject-claim (closeModal)="modal_close()"></app-modal-reject-claim>
+  </div>
+</div> 
+
+<div *ngIf="modalQuery" class="modal-overlay">
+  <div class="modal-wrap shadow-RB">
+    <div (click)="modal_close()" class="close-modal">X</div>
+      <app-modal-query-claim (closeModal)="modal_close()"></app-modal-query-claim>
+  </div>
+</div> 
+
+<div *ngIf="modalHold" class="modal-overlay">
+  <div class="modal-wrap shadow-RB">
+    <div (click)="modal_close()" class="close-modal">X</div>
+      <app-modal-hold-claim (closeModal)="modal_close()"></app-modal-hold-claim>
   </div>
 </div> 
