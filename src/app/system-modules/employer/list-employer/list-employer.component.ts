@@ -4,7 +4,6 @@ import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
 import { Observable, Subscription } from 'rxjs/Rx';
-
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
   SystemModuleService, UserTypeService, FacilityService, IndustryService
@@ -47,14 +46,14 @@ export class ListEmployerComponent implements OnInit {
     this._getIndustries();
 
     this.filterTypeControl.valueChanges.subscribe(payload => {
-      if (payload != undefined) {
+      if (payload !== undefined) {
         this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
           this.employers = payload1.data.filter(function (item) {
             return (item.employer.industry.name.toLowerCase().includes(payload.toLowerCase()))
           });
         });
 
-        if (payload == "All") {
+        if (payload === 'All') {
           this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
             this.employers = payload2.data;
           });

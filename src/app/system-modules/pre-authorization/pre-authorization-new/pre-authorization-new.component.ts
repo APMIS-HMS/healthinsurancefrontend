@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
@@ -19,10 +21,14 @@ export class PreAuthorizationNewComponent implements OnInit {
 
   public today: IMyDate;
 
-  constructor(private _pa: FormBuilder) { }
+  constructor(
+    private _fb: FormBuilder,
+    private _router: Router,
+    private loadingService: LoadingBarService,
+  ) { }
 
   ngOnInit() {
-    this.preAuthFormGroup = this._pa.group({
+    this.preAuthFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
       gender: ['', [<any>Validators.required]],
       age: ['', [<any>Validators.required]],
@@ -47,4 +53,22 @@ export class PreAuthorizationNewComponent implements OnInit {
     });
   }
 
+
+  navigate(url: string, id: string) {
+    if (!!id) {
+      this.loadingService.startLoading();
+      this._router.navigate([url + id]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    } else {
+      this.loadingService.startLoading();
+      this._router.navigate([url]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    }
+  }
 }

@@ -1,101 +1,102 @@
 <div class="list-search-wrap">
-  <div class="search-wrap">
-    <label class="label-xx">Search:</label>
-    <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
-    <i class="fa fa-search" aria-hidden="true"></i>
-  </div>
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
 
-  <div class="btn btn-medium btn-blue" routerLink="/modules/pre-auth/new">
-    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PRE-AUTHORIZATION
-  </div>
+    <div class="btn btn-medium btn-blue" (click)="navigate('/modules/pre-auth/new');">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PRE-AUTHORIZATION
+    </div>
 </div>
 
 <div class="shadow-RB">
-  <div class="list-filter-wrap">
-    <div class="label-xx">Filters:</div>
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
 
-    <div class="input-wrap">
-      <label>Responsible HIA</label>
-      <select [formControl]="filterHiaControl" class="form-control">
+        <div class="input-wrap">
+            <label>Responsible HIA</label>
+            <select [formControl]="filterHiaControl" class="form-control">
             <option value="All" selected>All</option>
           </select>
-    </div>
+        </div>
 
-    <div class="input-wrap">
-      <label>Hospital Name</label>
-      <select [formControl]="hospitalControl">
+        <div class="input-wrap">
+            <label>Hospital Name</label>
+            <select [formControl]="hospitalControl">
             <option>All</option>
           </select>
-    </div>
+        </div>
 
-    <div class="input-wrap">
-      <label>Health Care Plan</label>
-      <select [formControl]="planControl">
+        <div class="input-wrap">
+            <label>Health Care Plan</label>
+            <select [formControl]="planControl">
             <option>All</option>
           </select>
+        </div>
+
+        <div class="btn btn-medium btn-blue-outline">RESET</div>
     </div>
 
-    <div class="btn btn-medium btn-blue-outline">RESET</div>
-  </div>
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">Date and Time</th>
+                <th class="th">Patient Name</th>
+                <th class="th">LASHMA ID</th>
+                <th class="th">HIA</th>
+                <th class="th">Health Care Provider</th>
+                <th class="th">Status</th>
+                <th class="th">Reason for Request</th>
+                <th class="th">Emergency</th>
+                <th class="th"></th>
+            </tr>
+        </thead>
 
-  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-    <thead class="thead">
-      <tr class="tr">
-        <th class="th">Date and Time</th>
-        <th class="th">Patient Name</th>
-        <th class="th">LASHMA ID</th>
-        <th class="th">HIA</th>
-        <th class="th">Health Care Provider</th>
-        <th class="th">Status</th>
-        <th class="th">Reason for Request</th>
-        <th class="th"></th>
-      </tr>
-    </thead>
+        <tbody class="tbody">
+            <tr class="tr">
+                <td class="td">12 - 10 - 2017</td>
+                <td class="td">Jonathan Nelson</td>
+                <td class="td">211.221.33.3</td>
+                <td class="td">Healthy Health LTD</td>
+                <td class="td">Foremost Hospital</td>
+                <td class="td"><span class="green">Approved</span></td>
+                <td class="td">Body Swelling</td>
+                <td class="td">Emergency
+                    <div class="tooltip">
+                        <div class="tip-title"></div>
+                        <div class="tip-content"></div>
+                    </div>
+                </td>
+                <td class="td td-icos" routerLink="/modules/pre-auth/pre-authorizations/11">
+                    <i class="fa fa-info fa-circle"></i>
+                    <i class="fa fa-chevron-right"></i>
+                </td>
+            </tr>
+            <tr class="tr">
+                <td class="td">12 - 10 - 2017</td>
+                <td class="td">Jonathan Nelson</td>
+                <td class="td">211.221.33.3</td>
+                <td class="td">Healthy Health LTD</td>
+                <td class="td">Foremost Hospital</td>
+                <td class="td"><span class="Red">Denied</span></td>
+                <td class="td">Body Swelling</td>
+                <td class="td">Emergency
+                    <div class="tooltip">
+                        <div class="tip-title"></div>
+                        <div class="tip-content"></div>
+                    </div>
+                </td>
+                <td class="td td-icos" routerLink="/modules/pre-auth/pre-authorizations/11">
+                    <i class="fa fa-info fa-circle"></i>
+                    <i class="fa fa-chevron-right"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    <tbody class="tbody">
-      <tr class="tr">
-        <td class="td">12 - 10 - 2017</td>
-        <td class="td">Jonathan Nelson</td>
-        <td class="td">211.221.33.3</td>
-        <td class="td">Healthy Health LTD</td>
-        <td class="td">Foremost Hospital</td>
-        <td class="td"><span class="green">Approved</span></td>
-        <td class="td">Body Swelling</td>
-        <td class="td">Emergency
-          <div class="tooltip">
-            <div class="tip-title"></div>
-            <div class="tip-content"></div>
-          </div>
-        </td>
-        <td class="td td-icos" routerLink="/modules/pre-auth/pre-authorizations/11">
-          <i class="fa fa-info fa-circle"></i>
-          <i class="fa fa-chevron-right"></i>
-        </td>
-      </tr>
-      <tr class="tr">
-        <td class="td">12 - 10 - 2017</td>
-        <td class="td">Jonathan Nelson</td>
-        <td class="td">211.221.33.3</td>
-        <td class="td">Healthy Health LTD</td>
-        <td class="td">Foremost Hospital</td>
-        <td class="td"><span class="Red">Denied</span></td>
-        <td class="td">Body Swelling</td>
-        <td class="td">Emergency
-          <div class="tooltip">
-            <div class="tip-title"></div>
-            <div class="tip-content"></div>
-          </div>
-        </td>
-        <td class="td td-icos" routerLink="/modules/pre-auth/pre-authorizations/11">
-          <i class="fa fa-info fa-circle"></i>
-          <i class="fa fa-chevron-right"></i>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="list-buttom">
-    <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-    <div class="btn btn-medium btn-yellow">Load More</div>
-  </div>
+    <div class="list-buttom">
+        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+        <div class="btn btn-medium btn-yellow">Load More</div>
+    </div>
 </div>

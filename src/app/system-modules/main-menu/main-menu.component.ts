@@ -1,9 +1,9 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { UploadService } from './../../services/common/upload.service';
 import { SystemModuleService } from './../../services/common/system-module.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Router } from '@angular/router';
 import { AuthService } from './../../auth/services/auth.service';
+import { UploadService, FacilityService } from './../../services/index';
 import { HeaderEventEmitterService } from './../../services/event-emitters/header-event-emitter.service';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
@@ -16,16 +16,22 @@ export class MainMenuComponent implements OnInit {
   @Output() closeMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
   user: any;
 
-  constructor(private _headerEventEmitter: HeaderEventEmitterService,
+  constructor(
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _authService: AuthService,
     private _router: Router,
     private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
-    private _locker: CoolLocalStorage) { }
+    private _locker: CoolLocalStorage,
+    private _facilityService: FacilityService
+  ) { }
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
+    this._systemService.loggedInUserAnnounced.subscribe(userObj => {
+      console.log(userObj);
+    });
   }
 
   setLoggedInUser(email: String, loggInState: boolean) {

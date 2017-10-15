@@ -14,9 +14,6 @@ export class FacilityService {
   private _rest;
   private _restLogin;
 
-  private loggedInUserAnnouncedSource = new Subject<Object>();
-  loggedInUserAnnounced$ = this.loggedInUserAnnouncedSource.asObservable();
-
   constructor(
     private _socketService: SocketService,
     private _restService: RestService,
@@ -74,13 +71,5 @@ export class FacilityService {
       .put(path)
       .send(body);
   }
-
-  announceLoggedInUser(notification: Object) {
-    this.loggedInUserAnnouncedSource.next(notification);
-  }
-
-  // receiveLoggedInUser(): Observable<Object> {
-  //   // return this.announceLoggedInUser.asObservable();
-  // }
 
 }

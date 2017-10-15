@@ -43,6 +43,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 loadChildren: './claims/claims.module#ClaimsModule'
             },
             {
+                path: 'pre-auth',
+                loadChildren: './pre-authorization/pre-authorization.module#PreAuthorizationModule'
+            },
+            {
                 path: 'claims',
                 loadChildren: './claims-payment/claims-payment.module#ClaimsPaymentModule'
             },
