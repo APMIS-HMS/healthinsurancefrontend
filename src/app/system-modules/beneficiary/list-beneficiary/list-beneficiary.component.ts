@@ -79,6 +79,7 @@ export class ListBeneficiaryComponent implements OnInit {
         'platformOwnerId._id': platformId
       }
     }).then((res: any) => {
+      this.loading = false;
       console.log(res);
       if (res.data.length > 0) {
         res.data.forEach(policy => {
@@ -94,8 +95,8 @@ export class ListBeneficiaryComponent implements OnInit {
             innerPolicy.beneficiary.hia = policy.hiaId;
             innerPolicy.beneficiary.isActive = policy.isActive;
             this.beneficiaries.push(innerPolicy.beneficiary);
-          })
-        })
+          });
+        });
       }
       this._systemService.off();
     }).catch(err => {

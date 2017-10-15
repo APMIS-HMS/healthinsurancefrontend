@@ -1,0 +1,16 @@
+@import '../../../../assets/libs/variables.scss';
+.list-filter-wrap {
+    flex-direction: column;
+    .filter-box {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        float: left;
+    }
+    .payment-box {
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}

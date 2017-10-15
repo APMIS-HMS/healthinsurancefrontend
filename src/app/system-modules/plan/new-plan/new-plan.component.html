@@ -1,6 +1,6 @@
 <section class="content shadow-RB">
 
-    <div class="nut-tab-topSect-wrap"> 
+    <div class="nut-tab-topSect-wrap">
         <div class="nutTabs-wrap">
 
             <div (click)="tabDetails_click()" [class.active-nut]="tab_details" class="nutTab-wrap">
@@ -119,7 +119,7 @@
             </div>
             <button (click)="onClickAddPlan(planDetailFormGroup.valid, planDetailFormGroup.value)" class="btn btn-medium btn-blue"> NEXT</button>
         </form>
-    </div> 
+    </div>
 
     <div *ngIf="tab_premium">
         <div class="pg-title">Health Plan Title</div>
@@ -182,7 +182,7 @@
             </thead>
             <tbody class="tbody">
                 <tr class="tr" *ngIf="premiums.length === 0">
-                    <td class="td" colspan="5">No data available in table</td>
+                    <td class="td" style="text-align: center;" colspan="6">No data available in table</td>
                 </tr>
                 <tr (click)="onSelectPlanRow(premium)" class="tr" *ngFor="let premium of premiums; let i = index;">
                     <td class="td">{{ i+1 }}</td>

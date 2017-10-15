@@ -151,14 +151,15 @@ export class NewProviderComponent implements OnInit {
 
   _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
-      this._systemService.off();
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
+        this._systemService.off();
       }
     }).catch(err => {
-      this._systemService.off();
       console.log(err);
+      this._systemService.off();
     });
   }
 

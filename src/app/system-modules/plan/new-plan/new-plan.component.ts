@@ -181,7 +181,7 @@ export class NewPlanComponent implements OnInit {
   }
   onClickAddPremium(valid: Boolean, value: any) {
     if (valid) {
-      console.log(value)
+      console.log(value);
       if (this.selectedPremium === undefined) {
         console.log(1)
         const premium = <PlanPremium>{
@@ -191,8 +191,10 @@ export class NewPlanComponent implements OnInit {
           unit: value.planUnit,
           durationInDay: value.planUnit.days,
         };
-        console.log(this.selectedPlan)
+        console.log(this.selectedPlan);
+        this.premiums.push(premium);
         this.plan.premiums.push(premium);
+        console.log(premium);
         console.log(this.premiums);
         this.planPremiumFormGroup.reset();
       } else {
@@ -209,7 +211,7 @@ export class NewPlanComponent implements OnInit {
       }
 
     } else {
-      console.log('Not valid');
+      this._toastr.error('Please fill all required field.', 'Form Validation Error!');
     }
   }
 
