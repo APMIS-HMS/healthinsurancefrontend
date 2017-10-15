@@ -40,8 +40,8 @@ export class ListEmployerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Employer List');
-    this._headerEventEmitter.setMinorRouteUrl('All employers');
+    this._headerEventEmitter.setRouteUrl('Organisation List');
+    this._headerEventEmitter.setMinorRouteUrl('All Organisations');
 
     this._getUserTypes();
     this._getIndustries();
