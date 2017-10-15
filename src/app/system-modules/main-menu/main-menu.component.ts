@@ -51,6 +51,7 @@ export class MainMenuComponent implements OnInit {
     this._systemService.loggedInUserAnnounced.subscribe(userObj => {
       console.log(userObj);
     });
+    this._checkRole();
   }
 
   setLoggedInUser(email: String, loggInState: boolean) {
@@ -66,6 +67,33 @@ export class MainMenuComponent implements OnInit {
           this._router.navigate(['/auth']);
         });
       })
+  }
+
+  private _checkRole() {
+    const role = this.user.roles;
+    role.forEach(roleItem => {
+      if (!!roleItem.accessibilities) {
+        const accessibilities = roleItem.accessibilities;
+        accessibilities.forEach(access => {
+          if (!!access.module) {
+            switch (access.module.name) {
+              case 'Beneficiary':
+                this.hasBeneficiary = true;
+              break;
+              case 'Care Provider':
+                this.hasProvider = true;
+              break;
+              case 'Employer':
+                this.hasOrganisation = true;
+              break;
+            }
+          }
+        });
+      }
+    });
+    // switch() {
+
+    // }
   }
 
   close_onClick() {
