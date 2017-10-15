@@ -15,6 +15,24 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 export class MainMenuComponent implements OnInit {
   @Output() closeMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
   user: any;
+  hasBeneficiary: boolean = false;
+  hasProvider: boolean = false;
+  hasOrganisation: boolean = false;
+  hasHIA: boolean = false;
+  hasPlan: boolean = false;
+  hasCheckIn: boolean = false;
+  hasPremiumPayment: boolean = false;
+  hasClaim: boolean = false;
+  hasClaimPayment: boolean = false;
+  hasReferral: boolean = false;
+  hasAuthorization: boolean = false;
+  hasComplaint: boolean = false;
+  hasFundManagement: boolean = false;
+  hasAnalytics: boolean = false;
+  hasPlatform: boolean = false;
+  hasRoleManagement: boolean = false;
+  hasAccessManagement: boolean = false;
+  hasUserManagement: boolean = false;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -25,10 +43,11 @@ export class MainMenuComponent implements OnInit {
     private _uploadService: UploadService,
     private _locker: CoolLocalStorage,
     private _facilityService: FacilityService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
     this._systemService.loggedInUserAnnounced.subscribe(userObj => {
       console.log(userObj);
     });
