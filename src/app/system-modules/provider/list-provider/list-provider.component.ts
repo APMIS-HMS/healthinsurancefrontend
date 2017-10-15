@@ -4,7 +4,6 @@ import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
 import { Observable, Subscription } from 'rxjs/Rx';
-
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
   SystemModuleService, UserTypeService, FacilityService, FacilityCategoryService

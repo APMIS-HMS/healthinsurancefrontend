@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ModuleService, RoleService } from '../../services/index';
+import { HeaderEventEmitterService } from '../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-access-management',
@@ -23,11 +24,14 @@ export class AccessManagementComponent implements OnInit {
     private _fb: FormBuilder,
     private _roleService: RoleService,
     private _toastr: ToastsManager,
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _moduleService: ModuleService,
     private _systemService: SystemModuleService
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Manage Accessibilities');
+    this._headerEventEmitter.setMinorRouteUrl('List of all accessibilities');
     this._getModules();
     this._getRoles();
 

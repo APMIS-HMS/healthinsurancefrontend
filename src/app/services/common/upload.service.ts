@@ -21,6 +21,7 @@ export class UploadService {
   transform(url) {
     url = this._restService.getHost() + '/' + url + '?'; + new Date().getTime();
     return url;
+    // url = this._restService.getHost() + url + '?' + new Date().getTime();
     // return this._sanitizer.bypassSecurityTrustResourceUrl(url);
   }
   checkOnlineStatus() {

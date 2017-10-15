@@ -34,7 +34,8 @@ export class ListPlansComponent implements OnInit {
   plans: any = [];
   loading: boolean = true;
 
-  constructor(private _router: Router,
+  constructor(
+    private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _authService: AuthService,
     private _systemService: SystemModuleService,
@@ -42,9 +43,12 @@ export class ListPlansComponent implements OnInit {
     private _planTypeService: PlanTypeService,
     private _planService: PlanService,
     private _facilityService: FacilityService,
-    private _locker: CoolLocalStorage) { }
+    private _locker: CoolLocalStorage
+  ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Plan List');
+    this._headerEventEmitter.setMinorRouteUrl('List of all plans');
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getPlanTypes();
     this._getCurrentPlatform();

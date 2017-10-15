@@ -216,10 +216,10 @@
                             </div>
                         </div>
                         <div class="form-item-wrap">
-                            <label class="label">Unit</label>
+                            <label class="label">Interval</label>
                             <div class="input-wrap">
                                 <select formControlName="unit" class="form-control">
-                                    <option value="" disabled>Select Unit</option>
+                                    <option value="" disabled>Select Interval</option>
                                     <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
                                 </select>
                             </div>

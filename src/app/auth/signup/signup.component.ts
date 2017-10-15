@@ -113,6 +113,7 @@ export class SignupComponent implements OnInit {
 
 	onClickRegister(value: any, valid: boolean) {
 		if (valid) {
+			console.log(value);
 			if (!!this.userType && !!this.currentPlatform) {
 				this.signupBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
 				const person = <Person>{
@@ -131,6 +132,7 @@ export class SignupComponent implements OnInit {
 					mothersMaidenName: value.mothersMaidenName,
 					platformOnwerId: this.currentPlatform,
 					userType: this.userType,
+					password: value.password
 				};
 
 				this.createPerson(person).then(res => {
