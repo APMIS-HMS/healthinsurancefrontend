@@ -89,7 +89,7 @@ export class MainMenuComponent implements OnInit {
               case 'platform':
                 this.hasPlatform = true;
               break;
-              case 'hia':
+              case 'Health Insurance Agent':
                 this.hasHIA = true;
               break;
               case 'premium payment':
@@ -98,7 +98,7 @@ export class MainMenuComponent implements OnInit {
               case 'claims':
                 this.hasClaim = true;
               break;
-              case 'claims payment':
+              case 'Claims (And Capitation) Payment':
                 this.hasClaimPayment = true;
               break;
               case 'check-in':
