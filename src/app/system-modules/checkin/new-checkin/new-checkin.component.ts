@@ -34,6 +34,8 @@ export class NewCheckinComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('New Check In');
+    this._headerEventEmitter.setMinorRouteUrl('Create new check in beneficiary');
     this.listsearchControl.valueChanges
       .debounceTime(250)
       .distinctUntilChanged()
@@ -137,5 +139,23 @@ export class NewCheckinComponent implements OnInit {
       }).catch(err => {
         this._systemService.off();
       })
+  }
+
+  navigate(url: string, id: string) {
+    if (!!id) {
+      this.loadingService.startLoading();
+      this._router.navigate([url + id]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    } else {
+      this.loadingService.startLoading();
+      this._router.navigate([url]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    }
   }
 }
