@@ -1,0 +1,137 @@
+<div class="in-content-wrap">
+    <div routerLink="/modules/claims/claims-payment" class="back-btn">
+        <i class="fa fa-chevron-left"></i> BACK TO CLAIMS PAYMENT
+    </div>
+
+    <ul class="inpage-tabs">
+        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Claim Payment Details</li>
+        <!-- <li (click)="tabOther_click()" [class.tab-active]="tab_other">Other Claims</li>
+        <li (click)="tabTreatment_click()" [class.tab-active]="tab_treatment">Treatment</li>
+        <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+        <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li> -->
+    </ul>
+
+    <div class="tab-content shadow-RB">
+        <div *ngIf="tab_details" class="tab-pane fade show active">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Pre-auth ID:123901</div>
+                    <div>Claim ID: 132992</div>
+                    <div>Referral ID:123901</div>
+                    <div>Payment Status: <span class="lemon-green">Approved for payment</span></div>
+                </div>
+
+                <div class="bar-icos">
+                    <i routerLink="/modules/beneficiary/new" class="fa fa-pencil" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div class="details-wrap">
+                <div class="claims-inner-wrap">
+                    <div class="left-sect">
+                        <div class="group-wrap">
+                            <div class="group-item">
+                                <div class="item-label">LASRRA ID:</div>
+                                <div class="item-val">125.54.232</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">LASHMA ID:</div>
+                                <div class="item-val">223.45.67.01</div>
+                            </div>
+                        </div>
+
+                        <div class="group-wrap">
+                            <div class="group-item">
+                                <div class="item-label">Doctor Name:</div>
+                                <div class="item-val">First Name Lastname</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Health Plan:</div>
+                                <div class="item-val">Formal Sector Plan</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Date of Admission:</div>
+                                <div class="item-val">01 - 01 - 2016</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Date of Discharge:</div>
+                                <div class="item-val">10 - 01 - 2016</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Capitation:</div>
+                                <div class="item-val">Filed</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Fee for service:</div>
+                                <div class="item-val">Filed</div>
+                            </div>
+                        </div>
+                        <div class="group-wrap">
+                            <div class="group-item">
+                                <div class="item-val">Primary Health Care Provider</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-val">THE BRIDGE CLINIC 66 Oduduwa Way, Ikeja , Lagos</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-val">+234 810 460 7790</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-val">Hefeema Number: 1830274</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-sect">
+                        <div class="box">
+                            <div class="doc-wrap">
+                                <div class="box">
+                                    <i class="fa fa-info fa-circle fa-5x"></i>
+                                    <div class="" style="float: left;padding:10px;"><span class="text-green">Approved</span> for payment 02 - 08 - 2016 15:00</div>
+                                </div>
+                            </div>
+                            <div class="doc-wrap">
+                                <div class="doc-title">Clinical Information</div>
+
+                                <ul class="doc-entries">
+                                    <div class="entry-wrap">
+                                        <li class="doc-subtitle">Presenting Complaints</li>
+                                        <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+                                    </div>
+                                </ul>
+                            </div>
+
+                            <div class="doc-wrap">
+                                <div class="doc-title">Clinical Findings</div>
+
+                                <ul class="doc-entries">
+                                    <div class="entry-wrap">
+                                        <li class="doc-subtitle">Examination Findings</li>
+                                        <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+                                    </div>
+
+                                    <div class="entry-wrap">
+                                        <li class="doc-subtitle">Diagnosis</li>
+                                        <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+                                    </div>
+
+                                    <div class="entry-wrap">
+                                        <li class="doc-subtitle">Investigations</li>
+                                        <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+                                    </div>
+
+                                    <div class="entry-wrap">
+                                        <li class="doc-subtitle">Amount</li>
+                                        <li>N20,000</li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="action-wrap">
+                                <button class="btn btn-medium btn-yellow">QUEUE CLAIM FOR PAYMENT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

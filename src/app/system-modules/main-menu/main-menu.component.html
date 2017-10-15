@@ -13,7 +13,7 @@
     <div (click)="signOut()" class="user-logout">Logout</div>
 </div>
 
-<ul class="menu-links"> 
+<ul class="menu-links">
     <div class="menu-group">
         <li (click)="close_onClick()" class="menu-link">HOME</li>
         <li routerLink="/modules/beneficiary/beneficiaries" (click)="close_onClick()" class="menu-link">BENEFICIARIES</li>
@@ -27,7 +27,7 @@
         <li routerLink="/modules/claim/claims" (click)="close_onClick()" class="menu-link">CLAIMS</li>
         <li routerLink="/modules/referal/referals" (click)="close_onClick()" class="menu-link">REFFERALS</li>
         <li (click)="close_onClick()" class="menu-link">AUTHORIZATIONS</li>
-        <li (click)="close_onClick()" class="menu-link">CLAIMS PAYMENT</li>
+        <li (click)="close_onClick()" routerLink="/modules/claims/claims-payment" class="menu-link">CLAIMS PAYMENT</li>
         <li (click)="close_onClick()" class="menu-link">COMPLAINTS</li>
         <li (click)="close_onClick()" class="menu-link">FUND MANAGEMENT</li>
         <li (click)="close_onClick()" class="menu-link">ANALYTICS</li>

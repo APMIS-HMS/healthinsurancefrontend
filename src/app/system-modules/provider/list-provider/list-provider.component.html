@@ -68,10 +68,10 @@
 
         <tbody class="tbody">
             <tr class="tr" *ngIf="providers.length === 0 && !loading">
-                <td class="text-center" colspan="11">No data available in table</td>
+                <td class="text-center" colspan="12">No data available in table</td>
             </tr>
             <tr class="tr" *ngIf="providers.length === 0 && loading">
-                <td class="text-center" colspan="11">
+                <td class="text-center" colspan="12">
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
@@ -91,8 +91,8 @@
                 <td class="td hover" (click)="navigateToDetails(provider._id);">
                     <input type="checkbox" disabled [attr.checked]="provider.provider.facilityClass.includes('tertiary') ? true : null ">
                 </td>
-                <td (click)="navigateToDetails(provider._id); " class="td hover {{ provider.isTokenVerified ? ' tbl-status-active': ' tbl-status-inactive' }} ">
-                    {{ provider.isTokenVerified ? 'Active': 'Inactive' }}
+                <td (click)="navigateToDetails(provider._id); " class="td hover {{ provider.isConfirmed ? ' tbl-status-active': ' tbl-status-inactive' }} ">
+                    {{ provider.isConfirmed ? 'Active': 'Inactive' }}
                 </td>
                 <td class="td td-icos">
                     <i class="fa fa-edit " (click)="onClickEdit(provider); "></i>

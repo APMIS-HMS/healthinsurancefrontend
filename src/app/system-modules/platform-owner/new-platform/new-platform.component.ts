@@ -366,6 +366,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
               console.log(result.body[0].file)
               facility.logo = result.body[0].file;
               this._facilityService.create(facility).then((payload: Facility) => {
+                console.log(payload);
                 this._systemService.off();
                 this.platformFormGroup.reset();
                 this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
