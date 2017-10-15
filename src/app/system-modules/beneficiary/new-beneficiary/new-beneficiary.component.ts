@@ -70,7 +70,7 @@ export class NewBeneficiaryComponent implements OnInit {
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Beneficiary');
-    this._headerEventEmitter.setMinorRouteUrl('');
+    this._headerEventEmitter.setMinorRouteUrl('Create new beneficiary');
   }
 
   tabConfirm_click() {
