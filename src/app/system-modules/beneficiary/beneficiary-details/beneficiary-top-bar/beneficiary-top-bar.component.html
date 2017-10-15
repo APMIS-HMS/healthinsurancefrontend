@@ -1,12 +1,14 @@
 <div class="content-top-bar">
-  <div class="bar-labels">
-    <div>Household ID: 223.43.67</div>
-    <div>Registered By: Lashma</div>
-    <div>Program: Formal Sector Plan</div>
-    <div>Premium paid until: 11th Oct, 2018.</div>
-  </div>
+    <div class="bar-labels">
+        <div>Household ID: {{ policy?.policyId }}</div>
+        <div>Registered By: {{ policy?.platformOwnerId?.shortName }}</div>
+        <!-- <div>Status: <span class="{{ selectedFacility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ selectedFacility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div> -->
+        <!-- <div *ngIf="selectedFacility?.isConfirmed && selectedFacility?.hia?.validityPeriods.length > 0">Full License: Valid till {{ selectedFacility?.hia?.validityPeriods[selectedFacility?.hia?.validityPeriods.length - 1].validTill | date }}</div> -->
+        <div>Program: {{ policy?.planId?.name }}</div>
+        <div>Premium paid until: 11th Oct, 2018.</div>
+    </div>
 
-  <div class="bar-icos">
-      <i routerLink="/modules/beneficiary/new" class="fa fa-pencil" aria-hidden="true"></i>
-  </div>
+    <div class="bar-icos">
+        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+    </div>
 </div>

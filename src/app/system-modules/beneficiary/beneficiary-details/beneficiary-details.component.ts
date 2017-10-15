@@ -1,9 +1,12 @@
-import { UploadService } from './../../../services/common/upload.service';
-import { Observable } from 'rxjs/Observable';
-import { PolicyService } from './../../../services/policy/policy.service';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Observable } from 'rxjs/Observable';
+import { UploadService } from './../../../services/common/upload.service';
+import { PolicyService } from './../../../services/policy/policy.service';
+import { DURATIONS } from '../../../services/globals/config';
 import { FacilityService, SystemModuleService, BeneficiaryService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
@@ -14,6 +17,7 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
   styleUrls: ['./beneficiary-details.component.scss']
 })
 export class BeneficiaryDetailsComponent implements OnInit {
+  approvalFormGroup: FormGroup;
   beneficiary: any;
   policy: any;
   tab_details = true;
@@ -22,12 +26,17 @@ export class BeneficiaryDetailsComponent implements OnInit {
   tab_complaints = false;
   tab_referals = false;
   tab_checkin = false;
+  addApproval: boolean = false;
+  approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
+  durations: any = DURATIONS;
 
   dependants: any[] = [];
   isCheckIn = false;
 
   constructor(
+    private _fb: FormBuilder,
     private _router: Router,
+    private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
@@ -46,6 +55,11 @@ export class BeneficiaryDetailsComponent implements OnInit {
       if (param.id !== undefined) {
         this._getBeneficiaryDetails(param.id);
       }
+    });
+
+    this.approvalFormGroup = this._fb.group({
+      duration: [1, [<any>Validators.required]],
+      unit: ['', [<any>Validators.required]]
     });
 
     this._route.data.subscribe(data => {
@@ -74,11 +88,75 @@ export class BeneficiaryDetailsComponent implements OnInit {
         console.log(this.dependants)
         console.log(this.policy)
       }
+      console.log(this.beneficiary);
+      console.log(this.dependants);
+      console.log(this.policy);
 
       this._systemService.off();
     }, error => {
       this._systemService.off();
     });
+  }
+
+  onClickApprove(valid: boolean, value: any) {
+    if (valid) {
+    //   const validity = {
+    //     duration: value.duration,
+    //     unit: value.unit,
+    //     createdAt: new Date(),
+    //     validTill: this.addDays(new Date(), value.unit.days)
+    //   };
+
+    //   if (!!this.beneficiary) {
+    //     this.beneficiary.hia.validityPeriods.push(validity);
+    //   } else {
+    //     this.beneficiary.hia.validityPeriods = [];
+    //     this.beneficiary.hia.validityPeriods.push(validity);
+    //   }
+
+    //   this.beneficiary.isConfirmed = true;
+    //   this._facilityService.update(this.beneficiary).then((res: Facility) => {
+    //     console.log(res);
+    //     this.beneficiary = res;
+    //     const status = this.beneficiary.isConfirmed ? 'activated successfully' : 'deactivated successfully';
+    //     const text = this.beneficiary.name + ' has been ' + status;
+    //     this._toastr.success(text, 'Confirmation!');
+    //     setTimeout(e => {
+    //       this.addApprovalClick();
+    //     }, 1000);
+    //   });
+    // } else {
+    //   this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
+    }
+  }
+
+  addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  onClickDeactivate() {
+    this.beneficiary.isConfirmed = false;
+    this._facilityService.update(this.beneficiary).then((res: Facility) => {
+      console.log(res);
+      this.beneficiary = res;
+      const status = this.beneficiary.isConfirmed ? 'activated successfully' : 'deactivated successfully';
+      const text = this.beneficiary.name + ' has been ' + status;
+      this._toastr.success(text, 'Confirmation!');
+      setTimeout(e => {
+        this.addApprovalClick();
+      }, 1000);
+    });
+  }
+
+  addApprovalClick() {
+    console.log(this.beneficiary);
+    this.addApproval = !this.addApproval;
+  }
+
+  openModal(e) {
+    this.addApproval = true;
   }
 
   navigateBeneficiary(url, id) {
