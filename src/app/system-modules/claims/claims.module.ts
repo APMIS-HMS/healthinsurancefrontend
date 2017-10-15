@@ -13,6 +13,7 @@ import { ModalApproveClaimComponent } from './claims-details/modal-approve-claim
 import { ModalRejectClaimComponent } from './claims-details/modal-reject-claim/modal-reject-claim.component';
 import { ModalHoldClaimComponent } from './claims-details/modal-hold-claim/modal-hold-claim.component';
 import { ModalQueryClaimComponent } from './claims-details/modal-query-claim/modal-query-claim.component';
+import { ClaimsOthersTabComponent } from './claims-details/claims-others-tab/claims-others-tab.component';
 
 @NgModule({
     imports: [
@@ -20,7 +21,7 @@ import { ModalQueryClaimComponent } from './claims-details/modal-query-claim/mod
         claimsRoutes,
         MyDatePickerModule
     ],
-    declarations: [ClaimsComponent, ClaimsDetailsComponent, NewClaimComponent, ListClaimsComponent, ClaimsTopBarComponent, ClaimsDetailTabComponent, ModalApproveClaimComponent, ModalRejectClaimComponent, ModalHoldClaimComponent, ModalQueryClaimComponent],
+    declarations: [ClaimsComponent, ClaimsDetailsComponent, NewClaimComponent, ListClaimsComponent, ClaimsTopBarComponent, ClaimsDetailTabComponent, ModalApproveClaimComponent, ModalRejectClaimComponent, ModalHoldClaimComponent, ModalQueryClaimComponent, ClaimsOthersTabComponent],
     providers: []
 })
 export class ClaimsModule { }
