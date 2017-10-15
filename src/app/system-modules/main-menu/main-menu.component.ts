@@ -76,15 +76,54 @@ export class MainMenuComponent implements OnInit {
         const accessibilities = roleItem.accessibilities;
         accessibilities.forEach(access => {
           if (!!access.module) {
-            switch (access.module.name) {
-              case 'Beneficiary':
+            switch (access.module.name.toLowerCase()) {
+              case 'beneficiary':
                 this.hasBeneficiary = true;
               break;
-              case 'Care Provider':
+              case 'care provider':
                 this.hasProvider = true;
               break;
-              case 'Employer':
+              case 'employer':
                 this.hasOrganisation = true;
+              break;
+              case 'platform':
+                this.hasPlatform = true;
+              break;
+              case 'hia':
+                this.hasHIA = true;
+              break;
+              case 'premium payment':
+                this.hasPremiumPayment = true;
+              break;
+              case 'claims':
+                this.hasClaim = true;
+              break;
+              case 'claims payment':
+                this.hasClaimPayment = true;
+              break;
+              case 'check-in':
+                this.hasCheckIn = true;
+              break;
+              case 'user-management':
+                this.hasCheckIn = true;
+              break;
+              case 'plan':
+                this.hasCheckIn = true;
+              break;
+              case 'pre-authorization':
+                this.hasCheckIn = true;
+              break;
+              case 'analytics':
+                this.hasAnalytics = true;
+              break;
+              case 'fund-management':
+                this.hasFundManagement = true;
+              break;
+              case 'complaint':
+                this.hasComplaint = true;
+              break;
+              case 'referral':
+                this.hasReferral = true;
               break;
             }
           }
