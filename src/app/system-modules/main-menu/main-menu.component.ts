@@ -51,6 +51,7 @@ export class MainMenuComponent implements OnInit {
     this._systemService.loggedInUserAnnounced.subscribe(userObj => {
       console.log(userObj);
     });
+    this._checkRole();
   }
 
   setLoggedInUser(email: String, loggInState: boolean) {
@@ -66,6 +67,72 @@ export class MainMenuComponent implements OnInit {
           this._router.navigate(['/auth']);
         });
       })
+  }
+
+  private _checkRole() {
+    const role = this.user.roles;
+    role.forEach(roleItem => {
+      if (!!roleItem.accessibilities) {
+        const accessibilities = roleItem.accessibilities;
+        accessibilities.forEach(access => {
+          if (!!access.module) {
+            switch (access.module.name.toLowerCase()) {
+              case 'beneficiary':
+                this.hasBeneficiary = true;
+              break;
+              case 'care provider':
+                this.hasProvider = true;
+              break;
+              case 'employer':
+                this.hasOrganisation = true;
+              break;
+              case 'platform':
+                this.hasPlatform = true;
+              break;
+              case 'Health Insurance Agent':
+                this.hasHIA = true;
+              break;
+              case 'premium payment':
+                this.hasPremiumPayment = true;
+              break;
+              case 'claims':
+                this.hasClaim = true;
+              break;
+              case 'Claims (And Capitation) Payment':
+                this.hasClaimPayment = true;
+              break;
+              case 'check-in':
+                this.hasCheckIn = true;
+              break;
+              case 'user-management':
+                this.hasCheckIn = true;
+              break;
+              case 'plan':
+                this.hasCheckIn = true;
+              break;
+              case 'pre-authorization':
+                this.hasCheckIn = true;
+              break;
+              case 'analytics':
+                this.hasAnalytics = true;
+              break;
+              case 'fund-management':
+                this.hasFundManagement = true;
+              break;
+              case 'complaint':
+                this.hasComplaint = true;
+              break;
+              case 'referral':
+                this.hasReferral = true;
+              break;
+            }
+          }
+        });
+      }
+    });
+    // switch() {
+
+    // }
   }
 
   close_onClick() {

@@ -39,6 +39,8 @@ export class ListProviderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Provider List');
+    this._headerEventEmitter.setMinorRouteUrl('All providers');
     this._getUserTypes();
     this._getFacilityCategories();
     this.filterTypeControl.valueChanges.subscribe(payload => {
