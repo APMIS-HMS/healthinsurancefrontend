@@ -47,10 +47,9 @@ export class MainMenuComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
-    this._systemService.loggedInUserAnnounced.subscribe(userObj => {
-      console.log(userObj);
-    });
+    // this._systemService.loggedInUserAnnounced.subscribe(userObj => {
+    //   console.log(userObj);
+    // });
     this._checkRole();
   }
 
@@ -130,9 +129,26 @@ export class MainMenuComponent implements OnInit {
         });
       }
     });
-    // switch() {
-
-    // }
+    
+    
+    // this.hasBeneficiary = true;
+    // this.hasProvider = true;
+    // this.hasOrganisation = true;
+    // this.hasHIA = true;
+    // this.hasPlan = true;
+    // this.hasCheckIn = true;
+    // this.hasPremiumPayment = true;
+    // this.hasClaim = true;
+    // this.hasClaimPayment = true;
+    // this.hasReferral = true;
+    // this.hasAuthorization = true;
+    // this.hasComplaint = true;
+    // this.hasFundManagement = true;
+    // this.hasAnalytics = true;
+    // this.hasPlatform = true;
+    // this.hasRoleManagement = true;
+    // this.hasAccessManagement = true;
+    // this.hasUserManagement = true;
   }
 
   close_onClick() {
