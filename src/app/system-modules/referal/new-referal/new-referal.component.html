@@ -1,0 +1,404 @@
+<div style="padding-top:2px;">
+    <section class="app-content-wrap content shadow-RB">
+
+        <div class="nut-tab-topSect-wrap">
+            <div></div>
+
+            <div class="btn btn-medium btn-grey-outline" routerLink="/modules/referal/referals">
+                <i class="fa fa-times"></i> CANCEL
+            </div>
+        </div>
+
+        <form [formGroup]="referalFormGroup" novalidate>
+            <div class="frm-item-wrap">
+                <label class="label">Patient Name</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="patientName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.patientName.valid || referalFormGroup.controls.patientName.pristine">
+                    This is a required field (minimum 3 and max of 50 characters).
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Gender</label>
+                <div class="input-wrap">
+                    <select formControlName="gender" class="form-control">
+                        <option value="" selected>Select...</option>
+                    </select>
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.gender.valid || referalFormGroup.controls.gender.pristine">
+                        Choose state from the dropdown.
+                    </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Address</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="address" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.address.valid || referalFormGroup.controls.address.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Refering Hospital</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="referingHospital" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.referingHospital.valid || referalFormGroup.controls.referingHospital.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Destination Hospital</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="destinationHospital" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.destinationHospital.valid || referalFormGroup.controls.destinationHospital.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Refering Institution</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="referingInstitution" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.referingInstitution.valid || referalFormGroup.controls.referingInstitution.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Name of Referal</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="referalName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.referalName.valid || referalFormGroup.controls.referalName.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Refering Lashma ID</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="referingLashmaId" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.referingLashmaId.valid || referalFormGroup.controls.referingLashmaId.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Referal Code</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="referalCode" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.referalCode.valid || referalFormGroup.controls.referalCode.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Date of Referal</label>
+                <div style="width:300px;" class="input-wrap">
+                    <my-date-picker  name="entryDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="referalDate"></my-date-picker>
+                    <small class="alert-label" [hidden]="referalFormGroup.controls.referalDate.valid || referalFormGroup.controls.referalDate.pristine">
+                        This is a required field.
+                    </small>
+                </div>
+            </div>
+
+            <div class="frm-group">
+              <div class="frm-title">Clinical Information</div>
+
+              <div class="frm-subsect">
+                <div class="frm-item-wrap">
+                    <label class="label">Presenting Complaints</label>
+                    <div class="input-wrap">
+                      <div>
+                        <div class="input-wrap-x2">
+                            <div class="searchable-input">
+                              <input style="width:155px;" type="text" formControlName="complaint" class="form-control">
+
+                              <ul *ngIf="searchResults" class="search-results">
+                                <li>Several symtoms shows here</li>
+                                <li>Several symtoms shows here</li>
+                                <li>Several symtoms shows here</li>
+                                <li>Several symtoms shows here</li>
+                              </ul>
+                            </div>
+                            <div class="input-wrap-x2">
+                                <input style="width:50px;" type="text" formControlName="complaintDuration" class="form-control">
+                                <select formControlName="complaintUnit" class="form-control">
+                                    <option value="" selected>Week</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="btn btn-medium btn-blue-outline">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD COMPLAINTS
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">Complaints</th>
+                              <th class="th">Duration</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td class="td">11 weeks</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td class="td">11 weeks</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td class="td">11 weeks</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="frm-group">
+              <div class="frm-title">Clinical Findings</div>
+
+              <div class="frm-subsect">
+                <div class="frm-item-wrap">
+                    <label class="label">Provisional Diagnosis</label>
+                    <div class="input-wrap">
+                        <div class="searchable-input">
+                          <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
+
+                          <ul *ngIf="searchResults" class="search-results">
+                            <li>Several symtoms shows here</li>
+                            <li>Several symtoms shows here</li>
+                            <li>Several symtoms shows here</li>
+                            <li>Several symtoms shows here</li>
+                          </ul>
+
+                          <div class="btn btn-medium btn-blue-outline">
+                              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DIAGNOSIS
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">Diagnosis</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="frm-subsect">
+                <div class="frm-item-wrap">
+                    <label class="label">Treatment Before Referal</label>
+                    <div class="input-wrap">
+                        <div class="searchable-input">
+                          <input style="width:300px;" type="text" formControlName="procedure" class="form-control">
+
+                          <ul *ngIf="searchResults" class="search-results">
+                            <li>Several symtoms shows here</li>
+                            <li>Several symtoms shows here</li>
+                            <li>Several symtoms shows here</li>
+                            <li>Several symtoms shows here</li>
+                          </ul>
+
+                          <div class="btn btn-medium btn-blue-outline">
+                              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURE
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">Prcedure</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="frm-subsect">
+                <div class="frm-item-wrap">
+                    <label class="label">Drug</label>
+                    <div class="input-wrap">
+                      <div>
+                        <div class="input-wrap-x2">
+                            <div class="searchable-input">
+                              <input style="width:155px;" type="text" formControlName="drug" class="form-control">
+
+                              <ul *ngIf="searchResults" class="search-results">
+                                <li>Several symtoms shows here</li>
+                                <li>Several symtoms shows here</li>
+                                <li>Several symtoms shows here</li>
+                                <li>Several symtoms shows here</li>
+                              </ul>
+                            </div>
+                            <div class="input-wrap-x2">
+                                <input style="width:50px;" type="text" formControlName="drugQty" class="form-control">
+                                <select formControlName="drugUnit" class="form-control">
+                                    <option value="" selected>Packs</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="btn btn-medium btn-blue-outline">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DRUG
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">Drug</th>
+                              <th class="th">Quantity</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">Paraacetamol</td>
+                              <td class="td">2 Cards</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Tramadol</td>
+                              <td class="td">11 Packs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Quinin</td>
+                              <td class="td">1 Card</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="frm-group">
+              <div class="frm-title">Upload Document</div>
+
+              <div class="frm-subsect">
+                <div class="frm-item-wrap">
+                    <div class="input-wrap">
+                        <button class="btn btn-medium btn-blue"><i class="fa fa-file"></i>Upload File</button>
+                    </div>
+                </div>
+
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">File Name</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">blahh.doc</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">blahh.doc</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">blahh.doc</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="frm-item-wrap">
+                <label class="label">Reason for Referal</label>
+                <div class="input-wrap" style="width:100%;">
+                    <textarea formControlName="reason" class="form-control-textArea"></textarea>
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.reason.valid || referalFormGroup.controls.reason.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Name of Doctor</label>
+                <div class="input-wrap">
+                    <input type="email" formControlName="doctor" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="referalFormGroup.controls.doctor.valid || referalFormGroup.controls.doctor.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            
+            <button class="btn btn-medium btn-blue cta">SEND</button>
+        </form>
+    </section>
+</div>

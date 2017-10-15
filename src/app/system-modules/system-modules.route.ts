@@ -46,6 +46,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 path: 'checkin',
                 loadChildren: './checkin/checkin.module#CheckinModule'
             },
+            {
+                path: 'referal',
+                loadChildren: './referal/referal.module#ReferalModule'
+            },
             { path: 'access', component: AccessManagementComponent }
         ]
     }
