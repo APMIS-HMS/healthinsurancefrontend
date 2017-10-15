@@ -1,5 +1,5 @@
 <div class="in-content-wrap">
-    <div routerLink="/modules/beneficiary/beneficiaries" class="back-btn">
+    <div (click)="navigateBeneficiary('/modules/beneficiary/beneficiaries');" class="back-btn">
         <i class="fa fa-chevron-left"></i> BACK TO BENEFICIARIES
     </div>
 
@@ -140,10 +140,10 @@
 <div *ngIf="addApproval" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="addApprovalClick();" class="close-modal">X</div>
-        <div class="modal-title">EDIT STATUS - <em>{{ beneficiary?.name }}</em></div>
+        <div class="modal-title">EDIT STATUS - <em>Beneficiary</em></div>
         <div class="list-boxes">
             <div class="box-left">
-                <div *ngIf="!selectedFacility?.isConfirmed" style="padding: 10px 0px;">
+                <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">
                     <form [formGroup]="approvalFormGroup" novalidate>
                         <div class="form-item-wrap">
                             <label class="label">Duration</label>
@@ -160,13 +160,19 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-item-wrap">
+                            <label class="label">Start Date</label>
+                            <div class="input-wrap">
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="today" formControlName="startDate"></my-date-picker>
+                            </div>
+                        </div>
                     </form>
                     <div class="btn-box">
                         <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
                         <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
                     </div>
                 </div>
-                <div *ngIf="selectedFacility?.isConfirmed" style="padding: 70px 0px;">
+                <div *ngIf="policy?.isActive" style="padding: 70px 0px;">
                     <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DEACTIVATE LICENSE</button>
                 </div>
             </div>
@@ -181,25 +187,27 @@
                             <tr class="tr">
                                 <th class="th">No</th>
                                 <th class="th">Duration</th>
+                                <th class="th">Start Date</th>
                                 <th class="th">Created At</th>
                                 <th class="th">Valid Till</th>
                             </tr>
                         </thead>
 
                         <tbody class="tbody">
-                            <tr class="tr" *ngIf="selectedFacility?.hia?.validityPeriods?.length === 0 && !loading">
+                            <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && !loading">
                                 <td class="text-center" colspan="4">No data available in table</td>
                             </tr>
-                            <tr class="tr" *ngIf="selectedFacility?.hia?.validityPeriods?.length === 0 && loading">
+                            <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && loading">
                                 <td class="text-center" colspan="4">
                                     <i class="fa fa-spinner fa-spin"></i>
                                 </td>
                             </tr>
-                            <tr *ngFor="let hia of selectedFacility?.hia?.validityPeriods; let i = index;" class="tr">
+                            <tr *ngFor="let pol of policy?.validityPeriods; let i = index;" class="tr">
                                 <td class="td hover">{{ i+1 }}</td>
-                                <td class="td hover">{{ hia.duration }} {{ hia.unit.name }}</td>
-                                <td class="td hover">{{ hia.createdAt | date }}</td>
-                                <td class="td hover">{{ hia.validTill | date }}</td>
+                                <td class="td hover">{{ pol.duration }} {{ pol.unit.name }}</td>
+                                <td class="td hover">{{ pol.createdAt | date }}</td>
+                                <td class="td hover">{{ pol.startDate?.jsdate | date }}</td>
+                                <td class="td hover">{{ pol.validTill | date }}</td>
                             </tr>
                         </tbody>
                     </table>

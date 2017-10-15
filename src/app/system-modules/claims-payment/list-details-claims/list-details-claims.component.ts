@@ -8,20 +8,19 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService } from '../../../services/index';
 import { Claim } from '../../../models/index';
-import { DummyClaimService } from './claims';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
-  selector: 'app-list-claims-payment',
-  templateUrl: './list-claims-payment.component.html',
-  styleUrls: ['./list-claims-payment.component.scss']
+  selector: 'app-list-details-claims',
+  templateUrl: './list-details-claims.component.html',
+  styleUrls: ['./list-details-claims.component.scss']
 })
-export class ListClaimsPaymentComponent implements OnInit {
+export class ListDetailsClaimsComponent implements OnInit {
   listsearchControl = new FormControl();
   filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
-  ffsTabActive:boolean = true;
+  ffsTabActive: boolean = true;
   cTabActive: boolean = false;
   user: any;
   currentPlatform: any;
@@ -38,8 +37,7 @@ export class ListClaimsPaymentComponent implements OnInit {
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
     private _locker: CoolLocalStorage,
-    private _claimsPaymentService: ClaimsPaymentService,
-    private _getDummyData: DummyClaimService
+    private _claimsPaymentService: ClaimsPaymentService
   ) { }
 
   ngOnInit() {
@@ -50,30 +48,23 @@ export class ListClaimsPaymentComponent implements OnInit {
     this._getClaimsPayments();
   }
 
+
   private _getClaimsPayments() {
-    this._getDummyData.get().then((res: Claim) => {
-      console.log(res);
+    this._systemService.on();
+    this._facilityService.find({
+      query: {
+        'platformOwnerId._id': this.currentPlatform,
+        'facilityType._id': this.user.facilityId._id, $limit: 200
+    }}).then((payload: any) => {
       this.loading = false;
-      this.claims = res;
+      this.claims = payload.data;
+      console.log(this.claims);
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
     });
   }
-
-  // private _getClaimsPayments() {
-  //   this._systemService.on();
-  //   this._facilityService.find({
-  //     query: {
-  //       'platformOwnerId._id': this.currentPlatform,
-  //       'facilityType._id': this.user.facilityId._id, $limit: 200
-  //   }}).then((payload: any) => {
-  //     this.loading = false;
-  //     this.claims = payload.data;
-  //     console.log(this.claims);
-  //     this._systemService.off();
-  //   }).catch(error => {
-  //     console.log(error);
-  //     this._systemService.off();
-  //   });
-  // }
 
   _getCurrentPlatform() {
     this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
@@ -137,4 +128,5 @@ export class ListClaimsPaymentComponent implements OnInit {
       });
     }
   }
+
 }

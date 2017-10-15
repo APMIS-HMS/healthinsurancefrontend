@@ -22,3 +22,5 @@ export * from './plan/plan.service';
 export * from './provider/provider-grades.service';
 export * from './provider/provider-statuses.service';
 export * from './person/person.service';
+export * from './hia/hia-type.service';
+export * from './claim/claims-payment.service';

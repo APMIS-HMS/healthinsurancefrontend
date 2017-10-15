@@ -59,7 +59,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
 
     this.approvalFormGroup = this._fb.group({
       duration: [1, [<any>Validators.required]],
-      unit: ['', [<any>Validators.required]]
+      unit: ['', [<any>Validators.required]],
+      startDate: [new Date(), [<any>Validators.required]]
     });
 
     this._route.data.subscribe(data => {
@@ -100,33 +101,46 @@ export class BeneficiaryDetailsComponent implements OnInit {
 
   onClickApprove(valid: boolean, value: any) {
     if (valid) {
-    //   const validity = {
-    //     duration: value.duration,
-    //     unit: value.unit,
-    //     createdAt: new Date(),
-    //     validTill: this.addDays(new Date(), value.unit.days)
-    //   };
+      console.log(this.policy);
+      const validity = {
+        duration: value.duration,
+        unit: value.unit,
+        startDate: value.startDate,
+        createdAt: new Date(),
+        validTill: this.addDays(new Date(), value.unit.days)
+      };
 
-    //   if (!!this.beneficiary) {
-    //     this.beneficiary.hia.validityPeriods.push(validity);
-    //   } else {
-    //     this.beneficiary.hia.validityPeriods = [];
-    //     this.beneficiary.hia.validityPeriods.push(validity);
-    //   }
+      if (!!this.policy.validityPeriods) {
+        this.policy.validityPeriods.push(validity);
+      } else {
+        this.policy.validityPeriods = [];
+        this.policy.validityPeriods.push(validity);
+      }
 
-    //   this.beneficiary.isConfirmed = true;
-    //   this._facilityService.update(this.beneficiary).then((res: Facility) => {
-    //     console.log(res);
-    //     this.beneficiary = res;
-    //     const status = this.beneficiary.isConfirmed ? 'activated successfully' : 'deactivated successfully';
-    //     const text = this.beneficiary.name + ' has been ' + status;
-    //     this._toastr.success(text, 'Confirmation!');
-    //     setTimeout(e => {
-    //       this.addApprovalClick();
-    //     }, 1000);
-    //   });
-    // } else {
-    //   this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
+      this.policy.isActive = true;
+      this._policyService.update(this.policy).then((res: any) => {
+        console.log(res);
+        this.policy = res;
+        const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
+        const text = 'Policy has been ' + status;
+        this._toastr.success(text, 'Confirmation!');
+        // Send sms to Principal Beneficiary
+        const smsData = {
+          content: 'Testing beneficiary',
+          sender: 'Me',
+          receiver: '08056679920'
+        };
+
+        this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
+          console.log(res);
+        }).catch(err => console.log(err));
+
+        setTimeout(e => {
+          this.addApprovalClick();
+        }, 1000);
+      });
+    } else {
+      this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
     }
   }
 
@@ -137,12 +151,12 @@ export class BeneficiaryDetailsComponent implements OnInit {
   }
 
   onClickDeactivate() {
-    this.beneficiary.isConfirmed = false;
-    this._facilityService.update(this.beneficiary).then((res: Facility) => {
+    this.policy.isActive = false;
+    this._policyService.update(this.policy).then((res: Facility) => {
       console.log(res);
       this.beneficiary = res;
-      const status = this.beneficiary.isConfirmed ? 'activated successfully' : 'deactivated successfully';
-      const text = this.beneficiary.name + ' has been ' + status;
+      const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
+      const text = 'Policy has been ' + status;
       this._toastr.success(text, 'Confirmation!');
       setTimeout(e => {
         this.addApprovalClick();

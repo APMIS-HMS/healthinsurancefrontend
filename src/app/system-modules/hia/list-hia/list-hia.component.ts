@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { HiaTypeService } from './../../../services/hia/hia-type.service';
-import { SystemModuleService, UserTypeService, FacilityService } from '../../../services/index';
+import { SystemModuleService, UserTypeService, FacilityService, HiaTypeService } from '../../../services/index';
 
 @Component({
   selector: 'app-list-hia',
@@ -33,7 +32,7 @@ export class ListHiaComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
-    private  _hiaTypeService:HiaTypeService
+    private  _hiaTypeService: HiaTypeService
   ) { }
 
   ngOnInit() {

@@ -7,6 +7,9 @@ import { ClaimsPaymentComponent } from './claims-payment.component';
 import { ClaimsPaymentDetailsComponent } from './claims-payment-details/claims-payment-details.component';
 import { ListClaimsPaymentComponent } from './list-claims-payment/list-claims-payment.component';
 import { QueuedClaimsPaymentComponent } from './queued-claims-payment/queued-claims-payment.component';
+import { DummyClaimService } from './list-claims-payment/claims';
+import { ClaimsPaymentService } from '../../services/index';
+import { ListDetailsClaimsComponent } from './list-details-claims/list-details-claims.component';
 
 @NgModule({
     imports: [
@@ -14,7 +17,12 @@ import { QueuedClaimsPaymentComponent } from './queued-claims-payment/queued-cla
         claimsPaymentRoutes,
         MyDatePickerModule
     ],
-    declarations: [ClaimsPaymentComponent, ClaimsPaymentDetailsComponent, ListClaimsPaymentComponent, QueuedClaimsPaymentComponent],
-    providers: []
+    declarations: [
+        ClaimsPaymentComponent,
+        ClaimsPaymentDetailsComponent,
+        ListClaimsPaymentComponent,
+        QueuedClaimsPaymentComponent,
+        ListDetailsClaimsComponent],
+    providers: [DummyClaimService, ClaimsPaymentService]
 })
 export class ClaimsPaymentModule { }
