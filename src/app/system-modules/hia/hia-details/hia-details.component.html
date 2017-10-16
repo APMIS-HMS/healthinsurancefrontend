@@ -99,104 +99,7 @@
         </div>
 
         <div *ngIf='tab_beneficiaries' class="tab-pane fade show active">
-            <div class="content-top-bar">
-                <div class="bar-labels">
-                    <div>RealTrek Works Corporation</div>
-                    <div>Status: <span class="text-red">Authorized</span></div>
-                    <div>Full License: Valid till 11th Jun, 2018.</div>
-                </div>
-
-                <div class="bar-icos">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                </div>
-            </div>
-
-            <div class="list-search-wrap">
-                <div class="search-wrap">
-                    <label class="label-xx">Search:</label>
-                    <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </div>
-
-                <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD BENEFICIARY
-                </div>
-            </div>
-
-            <div>
-                <div class="list-filter-wrap">
-                    <div class="label-xx">Filters:</div>
-
-                    <div class="input-wrap">
-                        <label>Type</label>
-                        <select [formControl]="filterTypeControl" class="form-control">
-                <option value="All" selected>All</option>
-                </select>
-                    </div>
-
-                    <div class="input-wrap">
-                        <label>Created By</label>
-                        <select [formControl]="createdByControl">
-                <option>All</option>
-                </select>
-                    </div>
-
-                    <div class="input-wrap">
-                        <label>Utilized By</label>
-                        <select [formControl]="utilizedByControl">
-                <option>All</option>
-                </select>
-                    </div>
-
-                    <div class="input-wrap">
-                        <label>Status</label>
-                        <select [formControl]="statusControl">
-                <option selected value="All">All</option>
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-                </select>
-                    </div>
-
-                    <div class="btn btn-medium btn-blue-outline">RESET</div>
-                </div>
-
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                    <thead class="thead">
-                        <tr class="tr">
-                            <th class="th">No</th>
-                            <th class="th">Name</th>
-                            <th class="th">Gender</th>
-                            <th class="th">LASHMA ID</th>
-                            <th class="th">DOB</th>
-                            <th class="th">L.G.A</th>
-                            <th class="th">HIA</th>
-                            <th class="th">Status</th>
-                            <th class="th"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="tbody">
-                        <tr routerLink="/modules/beneficiary/beneficiaries/8" class="tr">
-                            <td class="td">1</td>
-                            <td class="td">Jonathan Nelson</td>
-                            <td class="td">Male</td>
-                            <td class="td">123.455.65.67</td>
-                            <td class="td">11th Oct, 2010</td>
-                            <td class="td">Agidimgbi</td>
-                            <td class="td">First Life Health Care</td>
-                            <td class="td">
-                                <span class="tbl-status-active"> Active</span>
-                            </td>
-                            <td routerLink="/modules/beneficiary/beneficiaries/8"><i class="fa fa-chevron-right"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="list-buttom">
-                    <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-                    <div class="btn btn-medium btn-yellow">Load More</div>
-                </div>
-            </div>
+            <app-list-beneficiary></app-list-beneficiary>
         </div>
     </div>
 </div>
@@ -216,10 +119,10 @@
                             </div>
                         </div>
                         <div class="form-item-wrap">
-                            <label class="label">Unit</label>
+                            <label class="label">Interval</label>
                             <div class="input-wrap">
                                 <select formControlName="unit" class="form-control">
-                                    <option value="" disabled>Select Unit</option>
+                                    <option value="" disabled>Select Interval</option>
                                     <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
                                 </select>
                             </div>

@@ -9,6 +9,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 import differenceInYears from 'date-fns/difference_in_years';
 
 @Component({
@@ -25,6 +26,7 @@ export class CheckedinComponent implements OnInit {
   statusControl = new FormControl();
 
   checkedIns: CheckIn[] = [];
+  loading: boolean = true;
   user: any;
 
   constructor(
@@ -34,10 +36,13 @@ export class CheckedinComponent implements OnInit {
     private _checkInService: CheckInService,
     private _uploadService: UploadService,
     private _locker: CoolLocalStorage,
-    private _router:Router
+    private loadingService: LoadingBarService,
+    private _router: Router
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Check In');
+    this._headerEventEmitter.setMinorRouteUrl('Check In Beneficiaries');
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCheckedIn();
   }
@@ -52,6 +57,7 @@ export class CheckedinComponent implements OnInit {
         }
       }
     }).then((payload: any) => {
+      this.loading = false;
       this.checkedIns = payload.data;
       this._systemService.off();
     }).catch(err => {
@@ -66,6 +72,24 @@ export class CheckedinComponent implements OnInit {
     }).catch(err =>{
       this._systemService.off();
     })
+  }
+
+  navigate(url: string, id: string) {
+    if (!!id) {
+      this.loadingService.startLoading();
+      this._router.navigate([url + id]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    } else {
+      this.loadingService.startLoading();
+      this._router.navigate([url]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    }
   }
 
 }

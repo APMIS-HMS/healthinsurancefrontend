@@ -6,6 +6,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Role } from '../../../models/organisation/role';
+import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-list-roles',
@@ -23,10 +24,13 @@ export class ListRolesComponent implements OnInit {
   constructor(private _fb: FormBuilder,
     private _systemService: SystemModuleService,
     private _router: Router,
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _locker: CoolLocalStorage,
     private _roleService: RoleService) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Role List');
+    this._headerEventEmitter.setMinorRouteUrl('List of all roles');
     this.auth = this._locker.getObject('auth');
     console.log(this.auth);
     this.roleFormGroup = this._fb.group({

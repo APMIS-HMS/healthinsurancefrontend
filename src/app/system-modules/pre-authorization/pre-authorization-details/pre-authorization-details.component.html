@@ -1,0 +1,30 @@
+<div class="in-content-wrap">
+  <div routerLink="/modules/pre-auth/pre-authorizations" class="back-btn">
+    <i class="fa fa-chevron-left"></i> BACK TO PRE-AUTHORIZATION
+  </div>
+
+  <ul class="inpage-tabs">
+    <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Pre - Authorization Details</li>
+    <li (click)="tabOther_click()" [class.tab-active]="tab_other">Other Pre - Authorizations</li>
+    <!-- <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+    <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li> -->
+  </ul>
+
+  <div class="tab-content shadow-RB">
+    <div *ngIf="tab_details" class="tab-pane fade show active">
+      <app-authorization-top-bar></app-authorization-top-bar>
+
+      <div class="details-wrap">
+        <app-authorization-details-tab style="width:100%;"></app-authorization-details-tab>
+      </div>
+    </div>
+
+    <div *ngIf="tab_other" class="tab-pane fade show active">
+      <app-authorization-top-bar></app-authorization-top-bar>
+
+      <div class="details-wrap">
+        <app-authorization-others-tab style="width:100%;"></app-authorization-others-tab>
+      </div>
+    </div>
+  </div>
+</div>

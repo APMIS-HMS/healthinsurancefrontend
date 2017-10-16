@@ -1,9 +1,8 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { DURATIONS } from '../../../services/globals/config';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { UploadService } from './../../../services/common/upload.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
@@ -17,6 +16,13 @@ import { FacilityService } from '../../../services/index';
 })
 export class HiaDetailsComponent implements OnInit {
   approvalFormGroup: FormGroup;
+
+  listsearchControl = new FormControl();
+  filterTypeControl = new FormControl('All');
+  createdByControl = new FormControl();
+  utilizedByControl = new FormControl();
+  statusControl = new FormControl('All');
+  
   selectedFacility: Facility = <Facility>{};
   addApproval: boolean = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';

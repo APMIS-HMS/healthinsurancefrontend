@@ -2,6 +2,9 @@ import { SystemModuleService } from './system-module.service';
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+let request = require('superagent');
 
 
 @Injectable()
@@ -59,6 +62,14 @@ export class FacilityService {
         return this._socket.remove(id, query);
       }))
     });
+  }
+
+  sendSMSWithMiddleWare(body: any) {
+    let host = this._restService.getHost();
+    let path = host + '/api/send-sms';
+    return request
+      .put(path)
+      .send(body);
   }
 
 }

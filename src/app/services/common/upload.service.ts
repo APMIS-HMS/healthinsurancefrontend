@@ -13,7 +13,7 @@ export class UploadService {
 
   upload(formData, id) {
     const host = this._restService.getHost();
-    const path = host + '/upload-file';
+    const path = host + '/uploadexcel';
     return request
       .post(path)
       .send(formData);
@@ -21,6 +21,7 @@ export class UploadService {
   transform(url) {
     url = this._restService.getHost() + '/' + url + '?'; + new Date().getTime();
     return url;
+    // url = this._restService.getHost() + url + '?' + new Date().getTime();
     // return this._sanitizer.bypassSecurityTrustResourceUrl(url);
   }
   checkOnlineStatus() {

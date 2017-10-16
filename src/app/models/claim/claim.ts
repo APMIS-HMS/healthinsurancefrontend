@@ -12,6 +12,7 @@ export interface Claim {
     claimType:any;
     approvedDocumentation:any[];
     notificationMessage: any;
+    providerFacilityId:any;
     _id:any;
 }
 

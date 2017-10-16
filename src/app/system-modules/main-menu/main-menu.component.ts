@@ -1,9 +1,9 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { UploadService } from './../../services/common/upload.service';
 import { SystemModuleService } from './../../services/common/system-module.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Router } from '@angular/router';
 import { AuthService } from './../../auth/services/auth.service';
+import { UploadService, FacilityService } from './../../services/index';
 import { HeaderEventEmitterService } from './../../services/event-emitters/header-event-emitter.service';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
@@ -13,29 +13,52 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
   styleUrls: ['./main-menu.component.scss']
 })
 export class MainMenuComponent implements OnInit {
-
   @Output() closeMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
-
   user: any;
+  hasBeneficiary: boolean = false;
+  hasProvider: boolean = false;
+  hasOrganisation: boolean = false;
+  hasHIA: boolean = false;
+  hasPlan: boolean = false;
+  hasCheckIn: boolean = false;
+  hasPremiumPayment: boolean = false;
+  hasClaim: boolean = false;
+  hasClaimPayment: boolean = false;
+  hasReferral: boolean = false;
+  hasAuthorization: boolean = false;
+  hasComplaint: boolean = false;
+  hasFundManagement: boolean = false;
+  hasAnalytics: boolean = false;
+  hasPlatform: boolean = false;
+  hasRoleManagement: boolean = false;
+  hasAccessManagement: boolean = false;
+  hasUserManagement: boolean = false;
 
-  constructor(private _headerEventEmitter: HeaderEventEmitterService,
+  constructor(
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _authService: AuthService,
     private _router: Router,
     private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
-    private _locker: CoolLocalStorage) { }
+    private _locker: CoolLocalStorage,
+    private _facilityService: FacilityService
+  ) {}
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
+    // this._systemService.loggedInUserAnnounced.subscribe(userObj => {
+    //   console.log(userObj);
+    // });
+    this._checkRole();
   }
 
   setLoggedInUser(email: String, loggInState: boolean) {
     this._authService.find({ query: { email: email } })
       .then(payload => {
         let currentUser = payload.data[0];
-        currentUser.loggedInUserStatus={
-          "isLoggedIn":loggInState
+        currentUser.loggedInUserStatus = {
+          "isLoggedIn": loggInState
         };
 
         this._authService.patch(currentUser._id,currentUser,{}).then(payload=>{
@@ -43,6 +66,89 @@ export class MainMenuComponent implements OnInit {
           this._router.navigate(['/auth']);
         });
       })
+  }
+
+  private _checkRole() {
+    const role = this.user.roles;
+    role.forEach(roleItem => {
+      if (!!roleItem.accessibilities) {
+        const accessibilities = roleItem.accessibilities;
+        accessibilities.forEach(access => {
+          if (!!access.module) {
+            switch (access.module.name.toLowerCase()) {
+              case 'beneficiary':
+                this.hasBeneficiary = true;
+              break;
+              case 'care provider':
+                this.hasProvider = true;
+              break;
+              case 'employer':
+                this.hasOrganisation = true;
+              break;
+              case 'platform':
+                this.hasPlatform = true;
+              break;
+              case 'Health Insurance Agent':
+                this.hasHIA = true;
+              break;
+              case 'premium payment':
+                this.hasPremiumPayment = true;
+              break;
+              case 'claims':
+                this.hasClaim = true;
+              break;
+              case 'Claims (And Capitation) Payment':
+                this.hasClaimPayment = true;
+              break;
+              case 'check-in':
+                this.hasCheckIn = true;
+              break;
+              case 'user-management':
+                this.hasCheckIn = true;
+              break;
+              case 'plan':
+                this.hasCheckIn = true;
+              break;
+              case 'pre-authorization':
+                this.hasCheckIn = true;
+              break;
+              case 'analytics':
+                this.hasAnalytics = true;
+              break;
+              case 'fund-management':
+                this.hasFundManagement = true;
+              break;
+              case 'complaint':
+                this.hasComplaint = true;
+              break;
+              case 'referral':
+                this.hasReferral = true;
+              break;
+            }
+          }
+        });
+      }
+    });
+    
+    
+    this.hasBeneficiary = true;
+    this.hasProvider = true;
+    this.hasOrganisation = true;
+    this.hasHIA = true;
+    this.hasPlan = true;
+    this.hasCheckIn = true;
+    this.hasPremiumPayment = true;
+    this.hasClaim = true;
+    this.hasClaimPayment = true;
+    this.hasReferral = true;
+    this.hasAuthorization = true;
+    this.hasComplaint = true;
+    this.hasFundManagement = true;
+    this.hasAnalytics = true;
+    this.hasPlatform = true;
+    this.hasRoleManagement = true;
+    this.hasAccessManagement = true;
+    this.hasUserManagement = true;
   }
 
   close_onClick() {

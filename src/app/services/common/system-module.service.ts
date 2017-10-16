@@ -15,6 +15,9 @@ export class SystemModuleService {
   private broadCastOnlineSource = new Subject<Object>();
   broadCastOnlineSource$ = this.broadCastOnlineSource.asObservable();
 
+  private loggedInUserAnnouncedSource = new Subject<Object>();
+  loggedInUserAnnounced = this.loggedInUserAnnouncedSource.asObservable();
+
   constructor(private locker: CoolLocalStorage) {
   }
   announceNotification(notification: Object) {
@@ -23,6 +26,10 @@ export class SystemModuleService {
 
   announceBeneficiaryTabNotification(notification: Object) {
     this.beneficiaryTabAnnouncedSource.next(notification);
+  }
+
+  announceLoggedInUser(userObject: Object) {
+    this.loggedInUserAnnouncedSource.next(userObject);
   }
 
   onlineStatusBroadCast(status: Object) {

@@ -9,6 +9,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Role } from '../../../models/organisation/role';
+import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-new-role',
@@ -30,6 +31,7 @@ export class NewRoleComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _toastr: ToastsManager,
     private _moduleService: ModuleService,
     private _systemService: SystemModuleService,
@@ -40,6 +42,8 @@ export class NewRoleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('New Role');
+    this._headerEventEmitter.setMinorRouteUrl('Create new role');
     this.auth = this._locker.getObject('auth');
     console.log(this.auth);
     this.roleFormGroup = this._fb.group({
@@ -51,7 +55,7 @@ export class NewRoleComponent implements OnInit {
         this._getRole(param.id);
         this.btnText = 'UPDATE';
       }
-    })
+    });
 
     this._getModules();
   }
@@ -86,7 +90,7 @@ export class NewRoleComponent implements OnInit {
       model.accessibility = access;
       model.checked = this.checkForExistence(access);
       this.accessibilities.push(model);
-    })
+    });
     this.roles.forEach(item => { })
   }
 

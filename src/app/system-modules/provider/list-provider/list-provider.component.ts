@@ -4,7 +4,6 @@ import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/filter';
 import { Observable, Subscription } from 'rxjs/Rx';
-
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
   SystemModuleService, UserTypeService, FacilityService, FacilityCategoryService
@@ -40,6 +39,8 @@ export class ListProviderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Provider List');
+    this._headerEventEmitter.setMinorRouteUrl('All providers');
     this._getUserTypes();
     this._getFacilityCategories();
     this.filterTypeControl.valueChanges.subscribe(payload => {

@@ -116,8 +116,10 @@
 
     <div *ngIf="checkedinSect" class="right-wrap">
 
-        <div class="top-cta-wrap" (click)="navigateToNewClaim()">
-            <div class="btn btn-medium btn-yellow">GENERATE CLAIM</div>
+        <div class="top-cta-wrap">
+            <div (click)="navigateToNewClaim()" class="btn btn-medium btn-yellow">GENERATE CLAIM</div>
+            <div routerLink="/modules/referal/new" class="btn btn-medium btn-yellow">NEW REFERAL</div>
+            <div routerLink="/modules/pre-auth/new" class="btn btn-medium btn-yellow">NEW AUTHORIZATION</div>
         </div>
 
         <div class="right-content">
