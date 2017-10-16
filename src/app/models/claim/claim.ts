@@ -1,5 +1,7 @@
 export interface Claim {
     platformOwnerId: any; // platform owner object
+    claimId: String;
+    providerId: String;
     beneficialDetail: any;
     checkedinDetail: any;
     documentation: any;
