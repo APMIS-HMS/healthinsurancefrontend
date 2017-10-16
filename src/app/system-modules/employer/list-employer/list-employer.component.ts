@@ -154,9 +154,11 @@ export class ListEmployerComponent implements OnInit {
 
   navigateToDetails(id: string) {
     this.loadingService.startLoading();
+    console.log(id)
     this._router.navigate(['/modules/employer/employers/' + id]).then(res => {
       this.loadingService.endLoading();
     }).catch(err => {
+      console.log(err)
       this.loadingService.endLoading();
     });
   }

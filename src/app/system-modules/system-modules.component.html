@@ -7,6 +7,6 @@
     <app-main-menu (closeMenu)="close_onClick($event)" ></app-main-menu>
 </div>
 
-<div class="app-content-container">
+<div (click)="close_onClick($event)" class="app-content-container">
     <router-outlet></router-outlet>
 </div>

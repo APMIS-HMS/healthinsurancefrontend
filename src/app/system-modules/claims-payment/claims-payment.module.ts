@@ -8,7 +8,7 @@ import { ClaimsPaymentDetailsComponent } from './claims-payment-details/claims-p
 import { ListClaimsPaymentComponent } from './list-claims-payment/list-claims-payment.component';
 import { QueuedClaimsPaymentComponent } from './queued-claims-payment/queued-claims-payment.component';
 import { DummyClaimService } from './list-claims-payment/claims';
-import { ClaimsPaymentService } from '../../services/index';
+import { ClaimsPaymentService, ClaimService } from '../../services/index';
 import { ListDetailsClaimsComponent } from './list-details-claims/list-details-claims.component';
 
 @NgModule({
@@ -23,6 +23,6 @@ import { ListDetailsClaimsComponent } from './list-details-claims/list-details-c
         ListClaimsPaymentComponent,
         QueuedClaimsPaymentComponent,
         ListDetailsClaimsComponent],
-    providers: [DummyClaimService, ClaimsPaymentService]
+    providers: [DummyClaimService, ClaimsPaymentService, ClaimService]
 })
 export class ClaimsPaymentModule { }

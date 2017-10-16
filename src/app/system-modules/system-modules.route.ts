@@ -1,6 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { SystemModulesComponent } from './system-modules.component';
 import { AccessManagementComponent } from './access-management/access-management.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 const SYSTEMMODULES_ROUTES: Routes = [
     {
@@ -58,7 +59,8 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 path: 'referal',
                 loadChildren: './referal/referal.module#ReferalModule'
             },
-            { path: 'access', component: AccessManagementComponent }
+            { path: 'access', component: AccessManagementComponent },
+            { path: 'welcome', component: WelcomeComponent }
         ]
     }
 ];

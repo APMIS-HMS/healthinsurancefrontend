@@ -13,7 +13,7 @@ export class UploadService {
 
   upload(formData, id) {
     const host = this._restService.getHost();
-    const path = host + '/uploadexcel';
+    const path = host + '/upload-file';
     return request
       .post(path)
       .send(formData);
