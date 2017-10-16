@@ -468,6 +468,7 @@ export class NewProviderComponent implements OnInit {
           this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
           this._toastr.success('Care Provider has been created successfully!', 'Success!');
           this.providerFormGroup.controls['classification'].setValue('primary');
+          this._router.navigate(['/modules/provider/providers'])
         }).catch(err => {
           console.log(err);
           this._systemService.off();
