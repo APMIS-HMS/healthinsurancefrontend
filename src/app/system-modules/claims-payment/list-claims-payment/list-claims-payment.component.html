@@ -74,9 +74,9 @@
                     </td>
                 </tr>
                 <tr *ngFor="let claim of claims; let i = index;" class="tr">
-                    <td class="td">1</td>
-                    <td class="td">11th Oct 2017</td>
-                    <td class="td">1450 NGN</td>
+                    <td class="td">{{ i+1 }}</td>
+                    <td class="td">{{ claim?.dateClaimCreated | date }}</td>
+                    <td class="td">{{ claim?.costingApprovalDocumentation }} NGN</td>
                     <td class="td">324234 - AC</td>
                     <td class="td">Hosp 18B</td>
                     <td class="td">Formal Sector</td>
