@@ -130,6 +130,9 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   onClickFFSQueueItemsSelected() {
     console.log(this.selectedFFSClaims);
+    // this._claimService.patch(this.selectedCClaims).then(res => {
+    //   console.log(res);
+    // }).catch(err => console.log(err));
   }
 
   onClickCQueueItemsSelected() {
