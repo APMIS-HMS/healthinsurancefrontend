@@ -6,7 +6,7 @@
             <i class="fa fa-search" aria-hidden="true"></i>
         </div>
 
-        <div routerLink="/modules/checkin/new" class="btn btn-medium btn-blue">
+        <div (click)="navigate('/modules/checkin/new');" class="btn btn-medium btn-blue">
             <i class="fa fa-plus-circle" aria-hidden="true"></i> NEW CHECK-IN
         </div>
     </div>
@@ -64,8 +64,15 @@
             </thead>
 
             <tbody class="tbody">
-
-                <tr *ngFor="let check of checkedIns" class="tr" >
+                <tr class="tr" *ngIf="checkedIns.length === 0 && !loading">
+                    <td class="text-center" colspan="11">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="checkedIns.length === 0 && loading">
+                    <td class="text-center" colspan="11">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr *ngFor="let check of checkedIns" class="tr">
                     <td class="td">{{check.createdAt | date}}</td>
                     <td class="td">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
                     <td class="td">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
@@ -78,7 +85,6 @@
                     <td class="td">Filed</td>
                     <td (click)="routeBeneficiary(check)"><i class="fa fa-chevron-right"></i></td>
                 </tr>
-
             </tbody>
         </table>
 

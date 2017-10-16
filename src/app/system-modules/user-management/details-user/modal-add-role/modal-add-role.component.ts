@@ -45,13 +45,23 @@ export class ModalAddRoleComponent implements OnInit {
   }
 
   _getRoles() {
-    this._systemService.on();
-    this._roleService.find({ query: { 'facilityId._id': this.auth.user.facilityId._id } }).then((payload: any) => {
-      this.roles = payload.data;
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
+    if (this.auth.user.facilityId !== undefined) {
+      this._systemService.on();
+      this._roleService.find({ query: { 'facilityId._id': this.auth.user.facilityId._id } }).then((payload: any) => {
+        this.roles = payload.data;
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
+    } else {
+      this._systemService.on();
+      this._roleService.find({}).then((payload: any) => {
+        this.roles = payload.data;
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
+    }
   }
 
   onSelectRole(role) {
@@ -69,6 +79,8 @@ export class ModalAddRoleComponent implements OnInit {
     this.checkedRoles.forEach(item => {
       const index = existingRoles.findIndex(x => x._id === item._id);
       if (index === -1) {
+        // let copyRole = JSON.parse(item);
+        delete item.accessibilities;
         this.selectedUser.roles.push(item);
       }
     })

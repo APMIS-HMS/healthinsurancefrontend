@@ -40,7 +40,8 @@
                 <div class="tab-c" (click)="onClickTab('capitation');" [class.claim-tab-active]="cTabActive">Capitation</div>
             </div>
             <div class="queue-btn-box">
-                <button class="btn btn-medium btn-yellow">Queue Items Selected</button>
+                <button *ngIf="selectedFFSClaims.length > 0 && ffsTabActive" (click)="onClickFFSQueueItemsSelected();" class="btn btn-medium btn-yellow">Queue Items Selected</button>
+                <button *ngIf="selectedCClaims.length > 0 && cTabActive" (click)="onClickCQueueItemsSelected();" class="btn btn-medium btn-yellow">Queue Items Selected</button>
             </div>
         </div>
     </div>
@@ -56,7 +57,6 @@
                     <th class="th">Provider ID</th>
                     <th class="th">Health Care Plan</th>
                     <th class="th">Responsible HIA</th>
-                    <th class="th">Capitation</th>
                     <th class="th">Fee for Service</th>
                     <th class="th">Status</th>
                     <th class="th">Queue for payment</th>
@@ -84,12 +84,9 @@
                     <td class="td">
                         <input type="checkbox">
                     </td>
-                    <td class="td">
-                        <input type="checkbox">
-                    </td>
                     <td class="td"><span class="red">Not Paid</span></td>
                     <td class="td">
-                        <input (change)="onCheckQueue(i, $event, claim);" type="checkbox">
+                        <input (change)="onCheckFFSQueue(i, $event, claim);" type="checkbox">
                     </td>
                     <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">
                         <i class="fa fa-chevron-right"></i>
@@ -115,7 +112,6 @@
                     <th class="th">Health Care Plan</th>
                     <th class="th">Responsible HIA</th>
                     <th class="th">Capitation</th>
-                    <th class="th">Fee for Service</th>
                     <th class="th">Status</th>
                     <th class="th">Queue for payment</th>
                     <th class="th"></th>
@@ -142,12 +138,9 @@
                     <td class="td">
                         <input type="checkbox">
                     </td>
-                    <td class="td">
-                        <input type="checkbox">
-                    </td>
                     <td class="td"><span class="red">Not Paid</span></td>
                     <td class="td">
-                        <input (change)="onCheckQueue(i, $event, claim);" type="checkbox">
+                        <input (change)="onCheckCQueue(i, $event, claim);" type="checkbox">
                     </td>
                     <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">
                         <i class="fa fa-chevron-right"></i>

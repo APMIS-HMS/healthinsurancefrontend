@@ -6,7 +6,7 @@
             <i class="fa fa-search" aria-hidden="true"></i>
         </div>
 
-        <div class="btn btn-medium btn-grey-outline" routerLink="/modules/checkin/checkedin">
+        <div class="btn btn-medium btn-grey-outline" (click)="navigate('/modules/checkin/checkedin');">
             <i class="fa fa-times"></i> CANCEL
         </div>
     </div>
@@ -27,7 +27,7 @@
 
             <tbody class="tbody">
                 <tr class="tr" *ngIf="beneficiaries.length === 0">
-                    <td class="text-center" colspan="5">
+                    <td class="text-center" colspan="6">
                         <i class="text-center">No data available in table</i>
                     </td>
                 </tr>
@@ -44,7 +44,6 @@
                     <td class="td">{{beneficiary?.person.dateOfBirth | date}}</td>
                     <td class="td"><span class="green">Active</span></td>
                 </tr>
-
             </tbody>
         </table>
     </div>

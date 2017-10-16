@@ -6,7 +6,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
-import { SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService } from '../../../services/index';
+import { SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService } from '../../../services/index';
 import { Claim } from '../../../models/index';
 import { DummyClaimService } from './claims';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -26,7 +26,8 @@ export class ListClaimsPaymentComponent implements OnInit {
   user: any;
   currentPlatform: any;
   claims: any = [];
-  selectedClaims: any = [];
+  selectedFFSClaims: any = [];
+  selectedCClaims: any = [];
   loading: boolean = true;
 
   constructor(
@@ -39,7 +40,8 @@ export class ListClaimsPaymentComponent implements OnInit {
     private _userTypeService: UserTypeService,
     private _locker: CoolLocalStorage,
     private _claimsPaymentService: ClaimsPaymentService,
-    private _getDummyData: DummyClaimService
+    private _getDummyData: DummyClaimService,
+    private _claimService: ClaimService
   ) { }
 
   ngOnInit() {
@@ -50,30 +52,30 @@ export class ListClaimsPaymentComponent implements OnInit {
     this._getClaimsPayments();
   }
 
-  private _getClaimsPayments() {
-    this._getDummyData.get().then((res: Claim) => {
-      console.log(res);
-      this.loading = false;
-      this.claims = res;
-    });
-  }
-
   // private _getClaimsPayments() {
-  //   this._systemService.on();
-  //   this._facilityService.find({
-  //     query: {
-  //       'platformOwnerId._id': this.currentPlatform,
-  //       'facilityType._id': this.user.facilityId._id, $limit: 200
-  //   }}).then((payload: any) => {
+  //   this._getDummyData.get().then((res: Claim) => {
+  //     console.log(res);
   //     this.loading = false;
-  //     this.claims = payload.data;
-  //     console.log(this.claims);
-  //     this._systemService.off();
-  //   }).catch(error => {
-  //     console.log(error);
-  //     this._systemService.off();
+  //     this.claims = res;
   //   });
   // }
+
+  private _getClaimsPayments() {
+    this._systemService.on();
+    this._claimService.find({
+      query: {
+        'checkedinDetail.platformOwnerId._id': this.currentPlatform,
+        // 'facilityType._id': this.user.facilityId._id, $limit: 200
+    }}).then((payload: any) => {
+      this.loading = false;
+      this.claims = payload.data;
+      console.log(this.claims);
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
+  }
 
   _getCurrentPlatform() {
     this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
@@ -86,28 +88,49 @@ export class ListClaimsPaymentComponent implements OnInit {
     });
   }
 
-  onCheckQueue(index, event, claim: Claim) {
+  onCheckFFSQueue(index, event, claim: Claim) {
     console.log(claim);
     if (event.srcElement.checked) {
-      this.selectedClaims.push(claim);
+      this.selectedFFSClaims.push(claim);
     } else {
       // Remove from the selected Claim
-      if (this.selectedClaims.length > 0) {
-        this.selectedClaims.splice(index, 1);
+      if (this.selectedFFSClaims.length > 0) {
+        this.selectedFFSClaims.splice(index, 1);
       }
     }
-    console.log(this.selectedClaims);
+    console.log(this.selectedFFSClaims);
+  }
+  
+  onCheckCQueue(index, event, claim: Claim) {
+    console.log(claim);
+    if (event.srcElement.checked) {
+      this.selectedCClaims.push(claim);
+    } else {
+      // Remove from the selected Claim
+      if (this.selectedCClaims.length > 0) {
+        this.selectedCClaims.splice(index, 1);
+      }
+    }
+    console.log(this.selectedCClaims);
   }
 
-  onClickQueueForService() {
-    if (this.selectedClaims.length > 0) {
-      // Save into the Claims Queued Service
-      // this._claimsPaymentService.create(this.selectedClaims).then(res => {
-      //   console.log(res);
-      // }).catch(err => console.log(err));
-    } else {
-      this._toastr.error('Please check items on the list', 'Checkbox Validation!');
-    }
+  // onClickQueueForService() {
+  //   if (this.selectedClaims.length > 0) {
+  //     // Save into the Claims Queued Service
+  //     // this._claimsPaymentService.create(this.selectedClaims).then(res => {
+  //     //   console.log(res);
+  //     // }).catch(err => console.log(err));
+  //   } else {
+  //     this._toastr.error('Please check items on the list', 'Checkbox Validation!');
+  //   }
+  // }
+
+  onClickFFSQueueItemsSelected() {
+    console.log(this.selectedFFSClaims);
+  }
+
+  onClickCQueueItemsSelected() {
+    console.log(this.selectedCClaims);
   }
 
   onClickTab(tabName: string) {

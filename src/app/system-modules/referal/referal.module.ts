@@ -17,7 +17,14 @@ import { ModalRejectReferalComponent } from './referal-details/modal-reject-refe
         ReferalRoutes,
         MyDatePickerModule
     ],
-    declarations: [ReferalComponent,ReferalDetailsComponent, NewReferalComponent, ReferalTopBarComponent, ReferalDetailTabComponent, ModalApproveReferalComponent, ModalRejectReferalComponent],
+    declarations: [
+        ReferalComponent,
+        ReferalDetailsComponent,
+        NewReferalComponent,
+        ReferalTopBarComponent,
+        ReferalDetailTabComponent,
+        ModalApproveReferalComponent,
+        ModalRejectReferalComponent],
     providers: []
 })
 export class ReferalModule { }
