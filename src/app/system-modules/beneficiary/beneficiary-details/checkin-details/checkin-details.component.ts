@@ -12,6 +12,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import { Router } from '@angular/router';
 import differenceInYears from 'date-fns/difference_in_years';
 
 @Component({
@@ -60,7 +61,8 @@ export class CheckinDetailsComponent implements OnInit {
     private _encounterStatusService: EncounterStatusService,
     private _checkInService: CheckInService,
     private _uploadService: UploadService,
-    private _locker: CoolLocalStorage
+    private _locker: CoolLocalStorage,
+    private _router: Router,
   ) { }
 
   ngOnInit() {
@@ -275,6 +277,16 @@ export class CheckinDetailsComponent implements OnInit {
       console.log(err);
       this._systemService.off();
     })
+  }
+
+  navigateToNewClaim() {
+    this._systemService.on();
+    this._router.navigate(['/modules/claim/new', this.selectedCheckIn._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
   }
 
 }

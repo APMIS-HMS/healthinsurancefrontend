@@ -1,20 +1,22 @@
 export interface Claim {
-    platformOwnerId: any; // platform owner object
-    claimId: String;
-    providerId: String;
-    beneficialDetail: any;
     checkedinDetail: any;
-    documentation: any;
-    CurentClaimStatus: any;
-    claimType: any; // either fee for service or Capitation.
-    approval: any;
+    documentation: any[];
+    CurentClaimStatus:any;
+    approval:Date;
+    claimNote:any;
     medicalPersonelName: any;
-    medicalPersonelShortName: String;
-    authorizationCode: String;
-    costingApprovalDocumentation: Number;
+    medicalPersonelShortName: any;
+    authorizationCode: any;
+    costingApprovalDocumentation: any;
     paymentStatus: any;
-    approvedDocumentation: any;
+    claimType:any;
+    approvedDocumentation:any[];
     notificationMessage: any;
-    isChecked: Boolean;
-    totalAmount: Number;
+    providerFacilityId:any;
+    _id:any;
+}
+
+export interface ClaimDocument {
+    clinicalDocument: any,
+    response: any,
 }

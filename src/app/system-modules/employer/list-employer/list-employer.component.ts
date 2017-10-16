@@ -45,21 +45,33 @@ export class ListEmployerComponent implements OnInit {
     this._getUserTypes();
     this._getIndustries();
 
-    this.filterTypeControl.valueChanges.subscribe(payload => {
-      if (payload !== undefined) {
-        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
-          this.employers = payload1.data.filter(function (item) {
-            return (item.employer.industry.name.toLowerCase().includes(payload.toLowerCase()))
-          });
-        });
+    // this.filterTypeControl.valueChanges.subscribe(payload => {
+    //   if (payload != undefined) {
+    //     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
+    //       this.employers = payload1.data.filter(function (item) {
+    //         return (item.employer.industry.name.toLowerCase().includes(payload.toLowerCase()))
+    //       });
+    //     });
 
-        if (payload === 'All') {
-          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
-            this.employers = payload2.data;
-          });
-        }
-      }
-    })
+    //     if (payload == "All") {
+    //       this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+    //         this.employers = payload2.data;
+    //       });
+    //     }
+    //   }
+    // })
+    this.filterTypeControl.valueChanges
+    .distinctUntilChanged()
+    .debounceTime(200)
+    .switchMap((term) => Observable.fromPromise(
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }))).subscribe((payload1: any) => {
+        this.employers = payload1.data.filter(function (item) {
+          return (item.employer.industry.name.toLowerCase().includes(payload1.toLowerCase()))
+        });
+      });
+
+
+
 
     this.listsearchControl.valueChanges
       .distinctUntilChanged()
