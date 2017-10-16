@@ -40,7 +40,8 @@
                 <div class="tab-c" (click)="onClickTab('capitation');" [class.claim-tab-active]="cTabActive">Capitation</div>
             </div>
             <div class="queue-btn-box">
-                <button *ngIf="selectedClaims.length > 0" (click)="onClickQueueItemsSelected();" class="btn btn-medium btn-yellow">Queue Items Selected</button>
+                <button *ngIf="selectedFFSClaims.length > 0 && ffsTabActive" (click)="onClickFFSQueueItemsSelected();" class="btn btn-medium btn-yellow">Queue Items Selected</button>
+                <button *ngIf="selectedCClaims.length > 0 && cTabActive" (click)="onClickCQueueItemsSelected();" class="btn btn-medium btn-yellow">Queue Items Selected</button>
             </div>
         </div>
     </div>
@@ -85,7 +86,7 @@
                     </td>
                     <td class="td"><span class="red">Not Paid</span></td>
                     <td class="td">
-                        <input (change)="onCheckQueue(i, $event, claim);" type="checkbox">
+                        <input (change)="onCheckFFSQueue(i, $event, claim);" type="checkbox">
                     </td>
                     <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">
                         <i class="fa fa-chevron-right"></i>
@@ -139,7 +140,7 @@
                     </td>
                     <td class="td"><span class="red">Not Paid</span></td>
                     <td class="td">
-                        <input (change)="onCheckQueue(i, $event, claim);" type="checkbox">
+                        <input (change)="onCheckCQueue(i, $event, claim);" type="checkbox">
                     </td>
                     <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">
                         <i class="fa fa-chevron-right"></i>

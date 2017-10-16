@@ -26,7 +26,8 @@ export class ListClaimsPaymentComponent implements OnInit {
   user: any;
   currentPlatform: any;
   claims: any = [];
-  selectedClaims: any = [];
+  selectedFFSClaims: any = [];
+  selectedCClaims: any = [];
   loading: boolean = true;
 
   constructor(
@@ -86,32 +87,49 @@ export class ListClaimsPaymentComponent implements OnInit {
     });
   }
 
-  onCheckQueue(index, event, claim: Claim) {
+  onCheckFFSQueue(index, event, claim: Claim) {
     console.log(claim);
     if (event.srcElement.checked) {
-      this.selectedClaims.push(claim);
+      this.selectedFFSClaims.push(claim);
     } else {
       // Remove from the selected Claim
-      if (this.selectedClaims.length > 0) {
-        this.selectedClaims.splice(index, 1);
+      if (this.selectedFFSClaims.length > 0) {
+        this.selectedFFSClaims.splice(index, 1);
       }
     }
-    console.log(this.selectedClaims);
+    console.log(this.selectedFFSClaims);
   }
-
-  onClickQueueForService() {
-    if (this.selectedClaims.length > 0) {
-      // Save into the Claims Queued Service
-      // this._claimsPaymentService.create(this.selectedClaims).then(res => {
-      //   console.log(res);
-      // }).catch(err => console.log(err));
+  
+  onCheckCQueue(index, event, claim: Claim) {
+    console.log(claim);
+    if (event.srcElement.checked) {
+      this.selectedCClaims.push(claim);
     } else {
-      this._toastr.error('Please check items on the list', 'Checkbox Validation!');
+      // Remove from the selected Claim
+      if (this.selectedCClaims.length > 0) {
+        this.selectedCClaims.splice(index, 1);
+      }
     }
+    console.log(this.selectedCClaims);
   }
 
-  onClickQueueItemsSelected() {
-    console.log(this.selectedClaims);
+  // onClickQueueForService() {
+  //   if (this.selectedClaims.length > 0) {
+  //     // Save into the Claims Queued Service
+  //     // this._claimsPaymentService.create(this.selectedClaims).then(res => {
+  //     //   console.log(res);
+  //     // }).catch(err => console.log(err));
+  //   } else {
+  //     this._toastr.error('Please check items on the list', 'Checkbox Validation!');
+  //   }
+  // }
+
+  onClickFFSQueueItemsSelected() {
+    console.log(this.selectedFFSClaims);
+  }
+
+  onClickCQueueItemsSelected() {
+    console.log(this.selectedCClaims);
   }
 
   onClickTab(tabName: string) {
