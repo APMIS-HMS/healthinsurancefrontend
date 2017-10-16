@@ -140,24 +140,24 @@ export class MainMenuComponent implements OnInit {
     });
 
 
-    this.hasBeneficiary = true;
-    this.hasProvider = true;
-    this.hasOrganisation = true;
-    this.hasHIA = true;
-    this.hasPlan = true;
-    this.hasCheckIn = true;
-    this.hasPremiumPayment = true;
-    this.hasClaim = true;
-    this.hasClaimPayment = true;
-    this.hasReferral = true;
-    this.hasAuthorization = true;
-    this.hasComplaint = true;
-    this.hasFundManagement = true;
-    this.hasAnalytics = true;
-    this.hasPlatform = true;
-    this.hasRoleManagement = true;
-    this.hasAccessManagement = true;
-    this.hasUserManagement = true;
+    // this.hasBeneficiary = true;
+    // this.hasProvider = true;
+    // this.hasOrganisation = true;
+    // this.hasHIA = true;
+    // this.hasPlan = true;
+    // this.hasCheckIn = true;
+    // this.hasPremiumPayment = true;
+    // this.hasClaim = true;
+    // this.hasClaimPayment = true;
+    // this.hasReferral = true;
+    // this.hasAuthorization = true;
+    // this.hasComplaint = true;
+    // this.hasFundManagement = true;
+    // this.hasAnalytics = true;
+    // this.hasPlatform = true;
+    // this.hasRoleManagement = true;
+    // this.hasAccessManagement = true;
+    // this.hasUserManagement = true;
   }
 
   close_onClick() {

@@ -1,3 +1,4 @@
+import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -37,6 +38,7 @@ export class NewEmployerComponent implements OnInit {
   selectedCountry: any;
   selectedState: any;
   facility: any;
+  currentPlatform:any;
 
   constructor(
     private _fb: FormBuilder,
@@ -66,6 +68,7 @@ export class NewEmployerComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Employer');
     this._headerEventEmitter.setMinorRouteUrl('Create new employer');
+    this._getCurrentPlatform();
     this._initialiseFormGroup();
     this._getIndustries();
 
@@ -114,6 +117,18 @@ export class NewEmployerComponent implements OnInit {
       this.selectedState = this.facility.address.state;
       this.employerFormGroup.controls['type'].setValue(this.facility.employer.industry);
     }
+  }
+
+  _getCurrentPlatform() {
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      console.log(res);
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        console.log(this.currentPlatform);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   _getEmployerDetails(routeId) {
@@ -325,6 +340,7 @@ export class NewEmployerComponent implements OnInit {
     facility.name = this.employerFormGroup.controls['employerName'].value;
     facility.phoneNumber = this.employerFormGroup.controls['phone'].value;
     facility.facilityType = this.selectedUserType;
+    facility.platformOwnerId = this.currentPlatform;
 
     return facility;
   }

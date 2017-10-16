@@ -130,7 +130,7 @@ export class SignupComponent implements OnInit {
 					email: value.email,
 					phoneNumber: value.phoneNumber,
 					mothersMaidenName: value.mothersMaidenName,
-					platformOnwerId: this.currentPlatform,
+					platformOwnerId: this.currentPlatform,
 					userType: this.userType,
 					password: value.password
 				};
