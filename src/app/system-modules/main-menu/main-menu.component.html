@@ -15,7 +15,7 @@
 
 <ul class="menu-links">
     <div class="menu-group">
-        <li (click)="close_onClick()" class="menu-link">HOME</li>
+        <li routerLink="/modules/welcome" (click)="close_onClick()" class="menu-link">HOME</li>
         <li *ngIf="hasBeneficiary" routerLink="/modules/beneficiary/beneficiaries" (click)="close_onClick()" class="menu-link">BENEFICIARIES</li>
         <li *ngIf="hasPremiumPayment" (click)="close_onClick()" class="menu-link">PREMIUM PAYMENTS</li>
         <li *ngIf="hasOrganisation" routerLink="/modules/employer/employers" (click)="close_onClick()" class="menu-link">ORGANISATIONS</li>
