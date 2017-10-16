@@ -16,6 +16,7 @@ export interface CheckIn {
     otp: any;
     checkOut: any;
     _id:any;
+    beneficiaryObject:any;
 }
 
 

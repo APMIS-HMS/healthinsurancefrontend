@@ -14,13 +14,13 @@ export class DiagnosisService {
     private _restService: RestService,
     private locker: CoolLocalStorage
   ) {
-    this._rest = _restService.getService('diagnosises');
-    this._socket = _socketService.getService('diagnosises');
+    this._rest = _restService.getService('diagnoses');
+    this._socket = _socketService.getService('diagnoses');
   }
 
   find(query: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('diagnosises').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('diagnoses').then((socket: any) => {
         return socket.find(query);
       }));
     });
@@ -28,28 +28,28 @@ export class DiagnosisService {
 
   get(id: string, query: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('diagnosises').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('diagnoses').then((socket: any) => {
         return this._socket.get(id, query);
       }));
     });
   }
   create(param: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('diagnosises').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('diagnoses').then((socket: any) => {
         return this._socket.create(param);
       }));
     });
   }
   update(param: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('diagnosises').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('diagnoses').then((socket: any) => {
         return this._socket.update(param._id, param);
       }));
     });
   }
   remove(id: string, query: any) {
     return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('diagnosises').then((socket: any) => {
+      resolve(this._socketService.authenticateUser('diagnoses').then((socket: any) => {
         return this._socket.remove(id, query);
       }));
     });

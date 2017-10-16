@@ -29,4 +29,6 @@ export * from './common/drug.service';
 export * from './common/symptoms.service';
 export * from './common/diagnosis.service';
 export * from './common/investigation.service';
+export * from './common/check-in.service';
+export * from './common/claim.service';
 

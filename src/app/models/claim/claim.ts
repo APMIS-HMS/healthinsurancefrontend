@@ -1,9 +1,9 @@
 export interface Claim {
-    beneficialDetail: any;
     checkedinDetail: any;
     documentation: any[];
     CurentClaimStatus:any;
     approval:Date;
+    claimNote:any;
     medicalPersonelName: any;
     medicalPersonelShortName: any;
     authorizationCode: any;
@@ -12,9 +12,6 @@ export interface Claim {
     claimType:any;
     approvedDocumentation:any[];
     notificationMessage: any;
-    confirmation: any;
-    otp: any;
-    checkOut: any;
     _id:any;
 }
 

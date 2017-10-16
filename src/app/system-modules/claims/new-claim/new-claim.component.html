@@ -50,32 +50,33 @@
                 <label class="label">Encounter Type</label>
                 <div>
                     <div class="input-wrap" style="justify-content:flex-start; margin-bottom:20px;">
-                        <span style="margin-right:10px" *ngIf="currentCheckIn.encounterType == Outpatient">
-                          <label for="outPatient">
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="outPatient" name="outPatient" >
+                        <span style="margin-right:10px" *ngIf="SelectedCheckinItem?.encounterType?.name == Out-Patient">
+                          <label for="outPatient" *ngIf="SelectedCheckinItem.encounterType.name == 'Out-Patient'">
+                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="outPatient" name="outPatient" checked>
                               Outpatient
                           </label>
                       </span>
                         <span>
-                          <label for="inPatient" *ngIf="currentCheckIn.encounterType == Inpatient">
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="inPatient" name="inPatient" >
+                          <label for="inPatient" *ngIf="SelectedCheckinItem?.encounterType?.name == 'In-Patient'">
+                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="inPatient" name="inPatient" checked>
                               Inpatient
                           </label>
                       </span>
                     </div>
                     <div class="input-wrap">
                         <div class="input-wrap-x2">
-                            <div *ngIf="currentCheckIn.encounterType == Inpatient">
+                            <div *ngIf="SelectedCheckinItem?.encounterType?.name == 'In-Patient'">
                                 <div style="width:150px;margin-right:10px">
                                     <span class="inner-label">Date of Admission:</span>
-                                    <my-date-picker name="admissionDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="admissionDate"></my-date-picker>
+                                    <span>{{SelectedCheckinItem.confirmation|date}}</span>
+                                    <!-- <my-date-picker name="admissionDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="admissionDate"></my-date-picker> -->
                                 </div>
                                 <div style="width:150px">
                                     <span class="inner-label">Date of Discharge:</span>
                                     <my-date-picker name="dischargeDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="dischargeDate"></my-date-picker>
                                 </div>
                             </div>
-                            <div *ngIf="currentCheckIn.encounterType == Outpatient">
+                            <div *ngIf="SelectedCheckinItem?.encounterType?.name == Out-Patient">
                                 <div style="width:150px">
                                     <span class="inner-label">Date of Visit:</span>
                                     <my-date-picker name="visitDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="visitDate"></my-date-picker>
@@ -107,7 +108,7 @@
                         Choose state from the dropdown.
                     </small>
             </div>
-            <div class="frm-item-wrap" *ngIf="claimsFormGroup.controls.claimType.value == 'FFS'">
+            <div class="frm-item-wrap" *ngIf="claimsFormGroup.controls.claimType.value == 'Fees for Service'">
                 <label class="label">Authorization Code</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="auth" class="form-control">

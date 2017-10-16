@@ -3,6 +3,8 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Claim, ClaimDocument } from './../../../models/index';
 import { CheckIn } from './../../../models/check-in/check-in';
+import { CheckInService } from './../../../services/common/check-in.service';
+import { ClaimService } from './../../../services/common/claim.service';
 import { ClaimTypeService } from './../../../services/common/claim-type.service';
 import { VisitTypeService } from './../../../services/common/visit-type.service';
 import { SymptomService } from './../../../services/common/symptoms.service';
@@ -10,6 +12,7 @@ import { ProcedureService } from './../../../services/common/procedure.service';
 import { DiagnosisService } from './../../../services/common/diagnosis.service';
 import { InvestigationService } from './../../../services/common/investigation.service';
 import { DrugService } from './../../../services/common/drug.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SystemModuleService } from './../../../services/index';
 
 import 'rxjs/add/operator/filter';
@@ -24,10 +27,10 @@ export class NewClaimComponent implements OnInit {
 
   claimsFormGroup: FormGroup;
   searchResults = false;
-  searchResultSymptoms = false;
   currentCheckIn: CheckIn = <CheckIn>{};
   claimItem: Claim = <Claim>{};
   claimDocItem: ClaimDocument = <ClaimDocument>{};
+  SelectedCheckinItem: CheckIn = <CheckIn>{};
   symptomLists: any = <any>[];
   diagnosisLists: any = <any>[];
   investigationList: any = <any>[];
@@ -55,10 +58,19 @@ export class NewClaimComponent implements OnInit {
     private _symptomService: SymptomService,
     private _procedureService: ProcedureService,
     private _diagnosisService: DiagnosisService,
+    private _route: ActivatedRoute,
     private _drugService: DrugService,
+    private _checkInService: CheckInService,
+    private _claimService: ClaimService,
     private _investigationService: InvestigationService) { }
 
   ngOnInit() {
+    this._route.params.subscribe(param => {
+      if (param.id !== undefined) {
+        this._getSelectedCheckinItem(param.id);
+      }
+    });
+
     this.claimDocItem.clinicalDocument = {};
     this.claimDocItem.clinicalDocument.symptom = []
     this.symptomLists = [];
@@ -80,7 +92,7 @@ export class NewClaimComponent implements OnInit {
       drugUnit: [''],
       outPatient: [''],
       inPatient: [''],
-      admissionDate: [''],
+      //admissionDate: [''],
       dischargeDate: [''],
       clinicalNote: ['', [<any>Validators.required]],
       claimsNote: [''],
@@ -96,6 +108,7 @@ export class NewClaimComponent implements OnInit {
       .debounceTime(250)
       .distinctUntilChanged()
       .subscribe(value => {
+        this.searchResults = false;
         this._getDrugs(value);
       }, error => {
         this._systemService.off();
@@ -143,6 +156,13 @@ export class NewClaimComponent implements OnInit {
       });
   }
 
+  _getSelectedCheckinItem(checkinId) {
+    this._checkInService.find({ query: { _id: checkinId } }).then((payload: any) => {
+      this.SelectedCheckinItem = payload.data[0];
+      console.log(this.SelectedCheckinItem);
+    })
+  }
+
   _getClaimTypes() {
     this._claimTypeService.find({}).then((payload: any) => {
       this.claimTypesItems = payload.data;
@@ -180,14 +200,16 @@ export class NewClaimComponent implements OnInit {
   }
 
   _getDrugs(value) {
-    if (value.length >= 3) {
-      this._drugService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.drugItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
-        }
-      })
+    if (this.searchResults == false) {
+      if (value.length >= 3) {
+        this._drugService.find({}).then((payload: any) => {
+          if (payload.data.length > 0) {
+            this.drugItems = payload.data.filter((filterItem: any) => {
+              return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
+            })
+          }
+        })
+      }
     }
   }
 
@@ -255,6 +277,7 @@ export class NewClaimComponent implements OnInit {
   onSelectDrug(param) {
     this.claimsFormGroup.controls.drug.setValue(param);
     this.drugItems = [];
+    this.searchResults = true;
   }
 
   onAddDrug() {
@@ -276,18 +299,37 @@ export class NewClaimComponent implements OnInit {
     });
   }
 
+  generateNameAbbreviation(fullname) {
+    var matches = fullname.toString().match(/\b(\w)/g);
+    var acronym = matches.join('');
+  }
+
 
   onSendClaim() {
     this.claimDocItem.clinicalDocument = {
-      "visitType":this.claimsFormGroup.controls.visitType.value,
+      "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
       "investigations": this.investigationList,
       "procedures": this.procedureList,
       "diagnosis": this.diagnosisLists,
-      "symptoms": this.symptomLists
+      "symptoms": this.symptomLists,
+      "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
-    this.claimItem.authorizationCode = this.claimsFormGroup.controls.authorizationCode.value;
-    //this.claimItem.
+    this.claimItem.checkedinDetail = this.SelectedCheckinItem;
+    this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
+    this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
+    this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
+    this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
+    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
+    this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
+    this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
+    this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
+    console.log(this.claimItem);
+    this._claimService.create(this.claimItem).then((payload: any) => {
+      console.log(payload);
+    }, error => {
+      console.log(error);
+    })
   }
 
 }
