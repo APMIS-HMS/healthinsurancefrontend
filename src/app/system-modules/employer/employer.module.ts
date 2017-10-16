@@ -1,3 +1,5 @@
+import { ClaimService } from './../../services/common/claim.service';
+import { TitleService } from './../../services/common/titles.service';
 import { PolicyService } from './../../services/policy/policy.service';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
@@ -19,6 +21,6 @@ import { EmployerTopBarComponent } from './employer-details/employer-top-bar/emp
     ],
     declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent, EmployerTopBarComponent],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
-        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService]
+        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService]
 })
 export class EmployerModule { }

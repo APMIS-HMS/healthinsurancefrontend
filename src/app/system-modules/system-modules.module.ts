@@ -8,13 +8,15 @@ import { TopBarComponent } from './top-bar/top-bar.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ModuleService, RoleService} from '../services/index';
 import { AccessManagementComponent } from './access-management/access-management.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
     declarations: [
         SystemModulesComponent,
         TopBarComponent,
         MainMenuComponent,
-        AccessManagementComponent
+        AccessManagementComponent,
+        WelcomeComponent
     ],
     exports: [],
     imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule],

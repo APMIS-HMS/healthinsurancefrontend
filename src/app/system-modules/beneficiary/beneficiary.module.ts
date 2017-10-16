@@ -1,3 +1,4 @@
+import { ClaimService } from './../../services/common/claim.service';
 import { CheckInService } from './../../services/common/check-in.service';
 import { EncounterTypeService } from './../../services/common/encounter-type.service';
 import { EncounterStatusService } from './../../services/common/encounter-status.service';
@@ -40,6 +41,7 @@ import { CheckinDetailsComponent } from './beneficiary-details/checkin-details/c
         ClaimStatusService,
         EncounterStatusService,
         EncounterTypeService,
+        ClaimService,
         CheckInService]
 })
 export class BeneficiaryModule { }
