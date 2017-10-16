@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Claim, ClaimDocument } from './../../../models/index';
@@ -43,6 +44,7 @@ export class NewClaimComponent implements OnInit {
   diagnosisItems: any = <any>[];
   investigationItems: any = <any>[];
   drugItems: any = <any>[];
+  user: any;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -52,6 +54,7 @@ export class NewClaimComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
+    private _locker: CoolLocalStorage,
     private _systemService: SystemModuleService,
     private _claimTypeService: ClaimTypeService,
     private _visitTypeService: VisitTypeService,
@@ -65,6 +68,7 @@ export class NewClaimComponent implements OnInit {
     private _investigationService: InvestigationService) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
         this._getSelectedCheckinItem(param.id);
@@ -75,13 +79,13 @@ export class NewClaimComponent implements OnInit {
     this.claimDocItem.clinicalDocument.symptom = []
     this.symptomLists = [];
     this.claimsFormGroup = this._fb.group({
-      // patientName: ['', [<any>Validators.required]],
-      // lashmaid: ['', [<any>Validators.required]],
-      // hospital: ['', [<any>Validators.required]],
+      patientName: ['', [<any>Validators.required]],
+      lashmaid: ['', [<any>Validators.required]],
+      hospital: ['', [<any>Validators.required]],
       medicalPersonelName: ['', [<any>Validators.required]],
-      // plan: ['', [<any>Validators.required]],
+      plan: ['', [<any>Validators.required]],
       auth: [''],
-      //entryDate: ['', [<any>Validators.required]],
+      entryDate: ['', [<any>Validators.required]],
       claimType: ['', [<any>Validators.required]],
       symptom: [''],
       symptomDuration: [''],
@@ -108,7 +112,7 @@ export class NewClaimComponent implements OnInit {
       .debounceTime(250)
       .distinctUntilChanged()
       .subscribe(value => {
-        this.searchResults = false;
+        //this.searchResults = false;
         this._getDrugs(value);
       }, error => {
         this._systemService.off();
@@ -315,6 +319,7 @@ export class NewClaimComponent implements OnInit {
       "symptoms": this.symptomLists,
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
+    this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
     this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
