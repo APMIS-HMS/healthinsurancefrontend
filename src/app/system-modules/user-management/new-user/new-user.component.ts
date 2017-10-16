@@ -12,9 +12,10 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
 
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService } from '../../../services/common/facility.service';
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { IMyDpOptions, IMyDate } from 'mydatepicker';
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
 const NUMERIC_REGEX = /^[0-9]+$/;
@@ -62,6 +63,7 @@ export class NewUserComponent implements OnInit {
     private _authService: AuthService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
+    private loadingService: LoadingBarService,
     private _userTypeService: UserTypeService,
     private _genderService: GenderService,
     private _locker: CoolLocalStorage,
@@ -71,7 +73,8 @@ export class NewUserComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    this._headerEventEmitter.setRouteUrl('New User');
+    this._headerEventEmitter.setMinorRouteUrl('Create new user');
     this.userFormGroup = this._fb.group({
       userType: ['', [<any>Validators.required]],
       platformOwnerId: [''],
@@ -203,6 +206,24 @@ export class NewUserComponent implements OnInit {
   clearDate(): void {
     // Clear the date using the patchValue function
     this.userFormGroup.patchValue({ dob: null });
+  }
+
+  navigate(url: string, id: string) {
+    if (!!id) {
+      this.loadingService.startLoading();
+      this._router.navigate([url + id]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    } else {
+      this.loadingService.startLoading();
+      this._router.navigate([url]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    }
   }
 
 }

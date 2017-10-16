@@ -110,6 +110,10 @@ export class ListClaimsPaymentComponent implements OnInit {
     }
   }
 
+  onClickQueueItemsSelected() {
+    console.log(this.selectedClaims);
+  }
+
   onClickTab(tabName: string) {
     if (tabName === 'feeForService') {
       this.ffsTabActive = true;

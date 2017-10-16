@@ -6,6 +6,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService } from '../../../services/common/facility.service';
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-list-user',
@@ -33,11 +35,15 @@ export class ListUserComponent implements OnInit {
     private _toastr: ToastsManager,
     private _userService: UserService,
     private _router: Router,
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
+    private loadingService: LoadingBarService,
     private _locker: CoolLocalStorage
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('User List');
+    this._headerEventEmitter.setMinorRouteUrl('List all all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
     this._getUsers();
   }
@@ -76,4 +82,23 @@ export class ListUserComponent implements OnInit {
       this._systemService.off();
     });
   }
+
+  navigate(url: string, id: string) {
+    if (!!id) {
+      this.loadingService.startLoading();
+      this._router.navigate([url + id]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    } else {
+      this.loadingService.startLoading();
+      this._router.navigate([url]).then(res => {
+        this.loadingService.endLoading();
+      }).catch(err => {
+        this.loadingService.endLoading();
+      });
+    }
+  }
+
 }
