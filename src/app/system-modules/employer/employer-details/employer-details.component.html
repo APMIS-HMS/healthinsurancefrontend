@@ -21,7 +21,9 @@
             <div class="content-top-bar">
                 <div class="bar-labels">
                     <div>{{ facility?.name }}</div>
-                    <div>Status: <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
+                    <div>Status:
+                        <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span>
+                    </div>
                 </div>
 
                 <div class="bar-icos">
@@ -105,7 +107,69 @@
         </div>
 
         <div *ngIf='tab_beneficiaries' class="tab-pane fade show active">
-            <app-list-beneficiary></app-list-beneficiary>
+            <div class="btn btn-medium btn-blue" (click)="showImageBrowseDlg()">
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i> UPLOAD BENEFICIARIES
+                <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;"
+                    #fileInput type="file" id="uploadResult" (change)="upload($event)">
+            </div>
+            <div *ngIf="!isUploading">
+                <app-list-beneficiary></app-list-beneficiary>
+            </div>
+
+            <table *ngIf="isUploading" class="table" cellpadding="0" cellspacing="0" border="0.5">
+                <thead class="thead">
+                    <tr class="tr">
+                        <th class="th">No</th>
+                        <th class="th">Name</th>
+                        <th class="th">Gender</th>
+                        <th class="th">Type</th>
+                        <th class="th">LASHMA ID</th>
+                        <th class="th">DOB</th>
+                        <th class="th">L.G.A</th>
+                        <th class="th">HIA</th>
+                        <th class="th">Status</th>
+                        <td class="th">Action</td>
+                        <th class="th"></th>
+                    </tr>
+                </thead>
+
+                <tbody class="tbody">
+                    <tr class="tr" *ngIf="intendingBeneficiaries.length === 0 && !loading">
+                        <td class="text-center" colspan="11">No data available in table</td>
+                    </tr>
+                    <tr class="tr" *ngIf="intendingBeneficiaries.length === 0 && loading">
+                        <td class="text-center" colspan="11">
+                            <i class="fa fa-spinner fa-spin"></i>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let beneficiary of intendingBeneficiaries; let i = index;" class="tr">
+                        <td class="td">{{ i+1 }}</td>
+                        <td class="td">{{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}} {{beneficiary?.otherNames}}</td>
+                        <td class="td">{{beneficiary.person.gender.name}}</td>
+                        <td class="td">
+                            <span *ngIf="beneficiary?.isPrincipal" class="baller">P</span>
+                            <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary?.dependantCount}}</span>
+                            <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
+                            <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
+                        </td>
+                        <td class="td">{{beneficiary.platformOwnerNumber}}</td>
+                        <td class="td">{{beneficiary.person.dateOfBirth | date}}</td>
+                        <td class="td">{{beneficiary.person.homeAddress.lga.name}}</td>
+                        <td class="td">{{beneficiary.hia.name}}</td>
+                        <td class="td">
+                            <span class="{{ beneficiary.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}">
+                                {{ beneficiary.isTokenVerified ? 'Active': 'Inactive' }}
+                            </span>
+                        </td>
+                        <td class="td td-icos">
+                            <i class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
+                        </td>
+                        <td routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}">
+                            <i class="fa fa-chevron-right"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -113,11 +177,15 @@
 <div *ngIf="addApproval" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="addApprovalClick();" class="close-modal">X</div>
-        <div class="modal-title">EDIT STATUS - <em>{{ facility?.name }}</em></div>
+        <div class="modal-title">EDIT STATUS -
+            <em>{{ facility?.name }}</em>
+        </div>
         <div class="list-boxes">
             <div class="btn-box">
                 <button *ngIf="!facility.isConfirmed" class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove();" [innerHtml]="approvalBtn"></button>
-                <button *ngIf="facility.isConfirmed" class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DISAPPROVE &nbsp; <i class="fa fa-check-circle"></i></button>
+                <button *ngIf="facility.isConfirmed" class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DISAPPROVE &nbsp;
+                    <i class="fa fa-check-circle"></i>
+                </button>
                 <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
             </div>
         </div>
