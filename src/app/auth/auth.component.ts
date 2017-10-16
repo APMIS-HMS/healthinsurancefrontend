@@ -19,8 +19,6 @@ export class AuthComponent implements OnInit {
 
 	onClickTab(tab) {
 		this.tabActive = true;
-
-		console.log(tab);
 		if (tab === 'login') {
 			this.tabId = 'login';
 		} else if (tab === 'register') {

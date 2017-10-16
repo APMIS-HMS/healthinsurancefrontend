@@ -64,6 +64,7 @@ export class LoginComponent implements OnInit {
 			this.loginBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
 
 			this._authService.login(value).then(payload => {
+				console.log(payload);
 				this._locker.setObject('auth', payload);
 				console.log(payload);
 				this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
