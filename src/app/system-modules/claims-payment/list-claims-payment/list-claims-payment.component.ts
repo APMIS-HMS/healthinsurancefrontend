@@ -49,7 +49,8 @@ export class ListClaimsPaymentComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('Unpaid Claims payment list');
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.user);
-    this._getClaimsPayments();
+
+    this._getCurrentPlatform();
   }
 
   // private _getClaimsPayments() {
@@ -61,15 +62,16 @@ export class ListClaimsPaymentComponent implements OnInit {
   // }
 
   private _getClaimsPayments() {
+    console.log(this.currentPlatform);
     this._systemService.on();
     this._claimService.find({
       query: {
-        'checkedinDetail.platformOwnerId._id': this.currentPlatform,
+        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
         // 'facilityType._id': this.user.facilityId._id, $limit: 200
     }}).then((payload: any) => {
+      console.log(payload);
       this.loading = false;
       this.claims = payload.data;
-      console.log(this.claims);
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -80,6 +82,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   _getCurrentPlatform() {
     this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
       if (res.data.length > 0) {
+        console.log(res);
         this.currentPlatform = res.data[0];
         this._getClaimsPayments();
       }
