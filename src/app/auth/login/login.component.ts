@@ -69,11 +69,9 @@ export class LoginComponent implements OnInit {
 				console.log(payload);
 				this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
 				this._router.navigate(['/modules/welcome']).then(res => {
-					this._authService.announceMission({ status: 'On' }); 
-				});
-				setTimeout(e => {
+					this._authService.announceMission({ status: 'On' });
 					this._toastr.success('You have successfully logged in!', 'Success!');
-				}, 1000);
+				});
 			}).catch(err => {
 				console.log(err);
 				this._toastr.error('Invalid email or password!', 'Error!');
