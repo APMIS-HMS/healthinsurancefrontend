@@ -94,6 +94,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   onCheckFFSQueue(index, event, claim: Claim) {
     console.log(claim);
     if (event.srcElement.checked) {
+      claim.isQueuedForPayment = true;
       this.selectedFFSClaims.push(claim);
     } else {
       // Remove from the selected Claim
@@ -101,7 +102,6 @@ export class ListClaimsPaymentComponent implements OnInit {
         this.selectedFFSClaims.splice(index, 1);
       }
     }
-    console.log(this.selectedFFSClaims);
   }
   
   onCheckCQueue(index, event, claim: Claim) {
