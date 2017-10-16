@@ -1,3 +1,7 @@
+import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CountryService } from './../../../services/common/country.service';
+import { GenderService } from './../../../services/common/gender.service';
+import { TitleService } from './../../../services/common/titles.service';
 import { UploadService } from './../../../services/common/upload.service';
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -36,6 +40,13 @@ export class EmployerDetailsComponent implements OnInit {
   isUploading = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
   intendingBeneficiaries:any[] = [];
+  states:any[] = [];
+  countries:any[] = [];
+  cities:any[] = [];
+  lgs:any[] = [];
+  currentPlatform:any;
+  selectedCountry:any;
+  selectedState:any;
 
 	constructor(
     private _router: Router,
@@ -45,7 +56,10 @@ export class EmployerDetailsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private loadingService: LoadingBarService,
-    private _uploadService:UploadService
+    private _uploadService:UploadService,
+    private _titleService:TitleService,
+    private _genderService:GenderService,
+    private _countryService:CountryService,
 
   ) { }
 
@@ -58,6 +72,79 @@ export class EmployerDetailsComponent implements OnInit {
         this._getEmployerDetails(param.id);
       }
     });
+  }
+
+  private _getCurrentPlatform() {
+		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+			if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+			}
+		}).catch(err => console.log(err));
+  }
+
+  _getCountries() {
+    this._systemService.on();
+    this._countryService.find({
+      query: {
+        $limit: 200,
+        $select: { "states": 0 }
+      }
+    }).then((payload: any) => {
+      this._systemService.off();
+      this.countries = payload.data;
+      const index = this.countries.findIndex(x => x.name === 'Nigeria');
+      if (index > -1) {
+        this.selectedCountry = this.countries[index];
+        this._getStates(this.selectedCountry._id);
+        if (this.selectedState !== undefined) {
+          this._getLgaAndCities(this.selectedCountry._id, this.selectedState);
+        }
+      }
+    }).catch(err => {
+      this._systemService.off();
+    })
+  }
+  
+  _getStates(_id) {
+    this._systemService.on();
+    this._countryService.find({
+      query: {
+        _id: _id,
+        $limit: 200,
+        $select: { "states.cities": 0, "states.lgs": 0 }
+      }
+    }).then((payload: any) => {
+      this._systemService.off();
+      if (payload.data.length > 0) {
+        this.states = payload.data[0].states;
+      }
+
+    }).catch(error => {
+      this._systemService.off();
+    })
+  }
+
+  _getLgaAndCities(_id, state) {
+    this._systemService.on();
+    this._countryService.find({
+      query: {
+        _id: _id,
+        "states.name": state.name,
+        $select: { 'states.$': 1 }
+      }
+    }).then((payload: any) => {
+      this._systemService.off();
+      if (payload.data.length > 0) {
+        const states = payload.data[0].states;
+        if (states.length > 0) {
+          this.cities = states[0].cities;
+          this.lgs = states[0].lgs;
+        }
+      }
+
+    }).catch(error => {
+      this._systemService.off();
+    })
   }
 
   onClickApprove() {
