@@ -328,7 +328,12 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   }
 
   compare(l1: any, l2: any) {
-    return l1._id === l2._id;
+    if(l1 !== null && l2 !== null){
+      return l1._id === l2._id;
+    }else{
+      return false;
+    }
+    
   }
 
   save(valid, value, image) {
@@ -373,6 +378,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
                 this._toastr.success('Platform has been created successfully!', 'Success!');
                 this._router.navigate(['/modules/platform/platforms', payload._id]);
               }).catch(err => {
+                console.log(err)
                 this._systemService.off();
               });
             }

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { PolicyService } from './../../../../services/policy/policy.service';
 import { Observable } from 'rxjs/Rx';
 import { JsonDataService } from './../../../../services/common/json-data.service';
@@ -12,7 +13,7 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
   @Input() policy: any;
   policyObject: any;
   constructor(private _dataService: JsonDataService,
-    private _policyService: PolicyService) { }
+    private _policyService: PolicyService, private _router:Router) { }
 
   ngOnInit() {
     console.log(this.policy);
@@ -29,6 +30,10 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
     }).catch(err => {
       console.log(err);
     })
+  }
+
+  confirm(){
+    this._router.navigate(['modules/beneficiary/beneficiaries']);
   }
 
 }

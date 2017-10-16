@@ -412,10 +412,12 @@ export class NewHiaComponent implements OnInit {
                 this.hiaFormGroup.reset();
                 this._router.navigate(['/modules/hia/hias']);
               }).catch(err => {
+                console.log(err)
                 this._systemService.off();
               });
             }
           }).catch(err => {
+            console.log(err)
             this._systemService.off();
           })
 

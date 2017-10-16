@@ -32,6 +32,7 @@ export class NewClaimComponent implements OnInit {
   claimItem: Claim = <Claim>{};
   claimDocItem: ClaimDocument = <ClaimDocument>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
+  SelectedCheckinItemPlan: any = <any>{};
   symptomLists: any = <any>[];
   diagnosisLists: any = <any>[];
   investigationList: any = <any>[];
@@ -163,6 +164,7 @@ export class NewClaimComponent implements OnInit {
   _getSelectedCheckinItem(checkinId) {
     this._checkInService.find({ query: { _id: checkinId } }).then((payload: any) => {
       this.SelectedCheckinItem = payload.data[0];
+      this.SelectedCheckinItemPlan = this.SelectedCheckinItem.policyObject[0].planId.name;
       console.log(this.SelectedCheckinItem);
     })
   }
@@ -319,6 +321,7 @@ export class NewClaimComponent implements OnInit {
       "symptoms": this.symptomLists,
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
+    this.claimItem.documentation = this.claimDocItem.clinicalDocument;
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
@@ -326,7 +329,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
     this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
-    this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
+    //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
     this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
     console.log(this.claimItem);

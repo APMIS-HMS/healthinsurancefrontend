@@ -130,7 +130,7 @@ export class SignupComponent implements OnInit {
 					email: value.email,
 					phoneNumber: value.phoneNumber,
 					mothersMaidenName: value.mothersMaidenName,
-					platformOnwerId: this.currentPlatform,
+					platformOwnerId: this.currentPlatform,
 					userType: this.userType,
 					password: value.password
 				};
@@ -143,10 +143,8 @@ export class SignupComponent implements OnInit {
 					this._locker.setObject('auth', res);
 					this._router.navigate(['/modules/beneficiary/new']).then(navRes => {
 						this._authService.announceMission({ status: 'On' });
-					});
-					setTimeout(e => {
 						this._toastr.success('You have successfully logged in!', 'Success!');
-					}, 1000);
+					});
 				}).catch(err => console.log(err));
 			} else {
 				this._toastr.error('There is a connection error, Please try again later!', 'Error!');
