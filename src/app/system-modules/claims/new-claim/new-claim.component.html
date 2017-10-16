@@ -13,7 +13,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Patient Name</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="patientName" class="form-control">
+                    <input type="text" formControlName="patientName" class="form-control" value="{{SelectedCheckinItem?.personObject?.firstName}} {{SelectedCheckinItem?.personObject?.lastName}} ">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.patientName.valid || claimsFormGroup.controls.patientName.pristine">
                     This is a required field (minimum 3 and max of 50 characters).
@@ -22,7 +22,7 @@
             <div class="frm-item-wrap">
                 <label class="label">LASHMA ID</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="lashmaid" class="form-control">
+                    <input type="text" formControlName="lashmaid" class="form-control" value="{{SelectedCheckinItem?.beneficiaryObject?.platformOwnerNumber}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.lashmaid.valid || claimsFormGroup.controls.lashmaid.pristine">
                     This is a required field.
@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Hospital Name</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="hospital" class="form-control">
+                    <input type="text" formControlName="hospital" class="form-control"  value="{{SelectedCheckinItem?.providerFacilityId?.name}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.hospital.valid || claimsFormGroup.controls.hospital.pristine">
                     This is a required field.
@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Health Plan</label>
                 <div class="input-wrap">
-                    <input type="email" formControlName="plan" class="form-control">
+                    <input type="email" formControlName="plan" class="form-control" value="{{SelectedCheckinItemPlan}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.plan.valid || claimsFormGroup.controls.plan.pristine">
                     This is a required field.

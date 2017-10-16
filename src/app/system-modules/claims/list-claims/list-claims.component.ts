@@ -26,7 +26,12 @@ export class ListClaimsComponent implements OnInit {
         providerFacilityId: this.user.facilityId._id
       }
     }).then((payload: any) => {
-      this.listOfClaims = payload.data[0];
+      this.listOfClaims = payload.data;
+      this.listOfClaims.forEach(element => {
+        element.checkinDetails.policyObject = element.checkinDetails.policyObject[0];
+      });
+      //this.listOfClaims.checkinDetails.policyObject = this.listOfClaims.checkinDetails.policyObject[0];
+      console.log(this.listOfClaims);
     });
   }
 
