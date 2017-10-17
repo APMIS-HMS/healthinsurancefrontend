@@ -15,6 +15,11 @@ export class PreAuthorizationNewComponent implements OnInit {
   searchResults = false;
   Disabled = false;
 
+  tab_complaints = true;
+  tab_diagnosis = false;
+  tab_procedures = false;
+  tab_services = false;
+
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
   };
@@ -70,5 +75,30 @@ export class PreAuthorizationNewComponent implements OnInit {
         this.loadingService.endLoading();
       });
     }
+  }
+
+  tabComplaints_click(){
+    this.tab_complaints = true;
+    this.tab_diagnosis = false;
+    this.tab_procedures = false;
+    this.tab_services = false;
+  }
+  tabDiagnosis_click(){
+    this.tab_complaints = false;
+    this.tab_diagnosis = true;
+    this.tab_procedures = false;
+    this.tab_services = false;
+  }
+  tabProcedures_click(){
+    this.tab_complaints = false;
+    this.tab_diagnosis = false;
+    this.tab_procedures = true;
+    this.tab_services = false;
+  }
+  tabServices_click(){
+    this.tab_complaints = false;
+    this.tab_diagnosis = false;
+    this.tab_procedures = false;
+    this.tab_services = true;
   }
 }

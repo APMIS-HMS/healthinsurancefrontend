@@ -55,7 +55,7 @@
                 <small class="alert-label" [hidden]="preAuthFormGroup.controls.healthCareProvider.valid || preAuthFormGroup.controls.healthCareProvider.pristine">
                     This is a required field.
                 </small>
-            </div>
+            </div> 
 
             <div class="frm-item-wrap">
                 <label class="label">HIA</label>
@@ -67,7 +67,7 @@
                 </small>
             </div>
 
-            <div class="frm-item-wrap">
+            <!-- <div class="frm-item-wrap">
                 <label class="label">Visit Class</label>
                 <div class="input-wrap">
                     <select formControlName="visitClass" class="form-control">
@@ -77,16 +77,7 @@
                 <small class="alert-label" [hidden]="preAuthFormGroup.controls.visitClass.valid || preAuthFormGroup.controls.visitClass.pristine">
                     Choose state from the dropdown.
                 </small>
-            </div>
-            <!-- <div class="frm-item-wrap">
-    <label class="label">Claim ID</label>
-    <div class="input-wrap">
-      <input type="email" formControlName="claimId" class="form-control">
-    </div>
-    <small class="alert-label" [hidden]="preAuthFormGroup.controls.claimId.valid || preAuthFormGroup.controls.claimId.pristine">
-                    This is a required field.
-                </small>
-  </div> -->
+            </div> -->
 
             <div class="frm-item-wrap">
                 <label class="label">Date of Request</label>
@@ -131,83 +122,319 @@
                 </small>
             </div>
 
-            <div class="frm-group">
-                <div class="frm-title">Clinical Information</div>
-
-                <div class="frm-subsect">
-                    <div class="frm-item-wrap">
-                        <label class="label">Presenting Complaints</label>
-                        <div class="input-wrap">
-                            <div>
-                                <div class="input-wrap-x2">
-                                    <div class="searchable-input">
-                                        <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
-
-                                        <ul *ngIf="searchResults" class="search-results">
-                                            <li>Complaints shows here</li>
-                                            <li>Complaints shows here</li>
-                                            <li>Complaints shows here</li>
-                                            <li>Complaints shows here</li>
-                                        </ul>
-                                    </div>
-                                    <div class="input-wrap-x2">
-                                        <input style="width:50px;" type="text" formControlName="complaintsDuration" class="form-control">
-                                        <select formControlName="complaintsUnit" class="form-control">
-                                    <option value="" selected>Week</option>
-                                </select>
-                                    </div>
-                                </div>
-
-                                <div class="btn btn-medium btn-blue-outline">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD COMPLAINTS
-                                </div>
-                            </div>
+            <ul class="inpage-tabs">
+                <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+                <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
+                <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
+                <li (click)="tabServices_click()" [class.tab-active]="tab_services">Services</li>
+            </ul>
+        
+            <div class="tab-content shadow-RB-lite">
+                <div *ngIf="tab_complaints" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Information - Complaints</div>
+                        </div>
+                    
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
 
-                    <div class="tbl-wrap">
-                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                            <thead class="thead">
-                                <tr class="tr">
-                                    <th class="th">Complaints</th>
-                                    <th class="th">Duration</th>
-                                    <th class="th">Authorization Need</th>
-                                    <th class="th"></th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="tbody">
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">11 weeks</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">11 weeks</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">11 weeks</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="frm-subsect">
+                        <div class="frm-item-wrap">
+                            <label class="label">Complaint</label>
+                            <div class="input-wrap">
+                                <div>
+                                    <div class="input-wrap-x2">
+                                        <div class="searchable-input">
+                                            <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
+    
+                                            <ul *ngIf="searchResults" class="search-results">
+                                                <li>Complaints shows here</li>
+                                                <li>Complaints shows here</li>
+                                                <li>Complaints shows here</li>
+                                                <li>Complaints shows here</li>
+                                            </ul>
+                                        </div>
+                                        <div class="input-wrap-x2">
+                                            <input style="width:50px;" type="text" formControlName="complaintsDuration" class="form-control">
+                                            <select formControlName="complaintsUnit" class="form-control">
+                                        <option value="" selected>Week</option>
+                                    </select>
+                                        </div>
+                                    </div>
+    
+                                    <div class="btn btn-medium btn-blue-outline">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD COMPLAINTS
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="tbl-wrap">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">Complaints</th>
+                                        <th class="th">Duration</th>
+                                        <th class="th">Authorization Need</th>
+                                        <th class="th"></th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody class="tbody">
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">11 weeks</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">11 weeks</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+    
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">11 weeks</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+    
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
+                <div *ngIf="tab_diagnosis" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Information - Diagnosis</div>
+                        </div>
+                    
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <div class="frm-subsect">
+                        <div class="frm-item-wrap">
+                            <label class="label">Diagnosis</label>
+                            <div class="input-wrap">
+                                <div class="searchable-input">
+                                    <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
+    
+                                    <ul *ngIf="searchResults" class="search-results">
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                    </ul>
+    
+                                    <div class="btn btn-medium btn-blue-outline">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DIAGNOSIS
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="tbl-wrap">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">Diagnosis</th>
+                                        <th class="th">Authorization Needed</th>
+                                        <th class="th"></th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody class="tbody">
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+    
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+    
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="tab_procedures" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Information - Procedure</div>
+                        </div>
+                    
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                        </div>
+                    </div>
+    
+                    <div class="frm-subsect">
+                        <div class="frm-item-wrap">
+                            <label class="label">Procedures</label>
+                            <div class="input-wrap">
+                                <div class="searchable-input">
+                                    <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
+    
+                                    <ul *ngIf="searchResults" class="search-results">
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                    </ul>
+    
+                                    <div class="btn btn-medium btn-blue-outline">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="tbl-wrap">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">Procedures</th>
+                                        <th class="th">Authorization Needed</th>
+                                        <th class="th"></th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody class="tbody">
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+    
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+    
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    
+                <div *ngIf="tab_services" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Information - Services</div>
+                        </div>
+                    
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                        </div>
+                    </div>
+    
+                    <div class="frm-subsect">
+                        <div class="frm-item-wrap">
+                            <label class="label">Services</label>
+                            <div class="input-wrap">
+                                <div class="searchable-input">
+                                    <input style="width:300px;" type="text" formControlName="services" class="form-control">
+    
+                                    <ul *ngIf="searchResults" class="search-results">
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                        <li>Several symtoms shows here</li>
+                                    </ul>
+    
+                                    <div class="btn btn-medium btn-blue-outline">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD SERVICES
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="tbl-wrap">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">Services</th>
+                                        <th class="th">Authorization Needed</th>
+                                        <th class="th"></th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody class="tbody">
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+    
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+    
+                                    <tr class="tr">
+                                        <td class="td">Bilataral signs</td>
+                                        <td class="td">
+                                            <input type="checkbox" disabled="disabled">
+                                        </td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="frm-group">
+                
                 <div class="frm-item-wrap">
                     <label class="label">Clinical Note</label>
                     <div class="input-wrap" style="width:100%;">
@@ -218,126 +445,6 @@
                   </small>
                 </div>
 
-                <div class="frm-subsect">
-                    <div class="frm-item-wrap">
-                        <label class="label">Diagnosis</label>
-                        <div class="input-wrap">
-                            <div class="searchable-input">
-                                <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
-
-                                <ul *ngIf="searchResults" class="search-results">
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                </ul>
-
-                                <div class="btn btn-medium btn-blue-outline">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DIAGNOSIS
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tbl-wrap">
-                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                            <thead class="thead">
-                                <tr class="tr">
-                                    <th class="th">Diagnosis</th>
-                                    <th class="th">Authorization Needed</th>
-                                    <th class="th"></th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="tbody">
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="frm-subsect">
-                    <div class="frm-item-wrap">
-                        <label class="label">Procedures</label>
-                        <div class="input-wrap">
-                            <div class="searchable-input">
-                                <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
-
-                                <ul *ngIf="searchResults" class="search-results">
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                </ul>
-
-                                <div class="btn btn-medium btn-blue-outline">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tbl-wrap">
-                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                            <thead class="thead">
-                                <tr class="tr">
-                                    <th class="th">Procedures</th>
-                                    <th class="th">Authorization Needed</th>
-                                    <th class="th"></th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="tbody">
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
                 <div class="frm-item-wrap">
                     <label class="label">Reason for Request</label>
                     <div class="input-wrap" style="width:100%;">
@@ -346,66 +453,6 @@
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestReason.valid || preAuthFormGroup.controls.requestReason.pristine">
                     This is a required field.
                 </small>
-                </div>
-
-                <div class="frm-subsect">
-                    <div class="frm-item-wrap">
-                        <label class="label">Services</label>
-                        <div class="input-wrap">
-                            <div class="searchable-input">
-                                <input style="width:300px;" type="text" formControlName="services" class="form-control">
-
-                                <ul *ngIf="searchResults" class="search-results">
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                    <li>Several symtoms shows here</li>
-                                </ul>
-
-                                <div class="btn btn-medium btn-blue-outline">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD SERVICES
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tbl-wrap">
-                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                            <thead class="thead">
-                                <tr class="tr">
-                                    <th class="th">Services</th>
-                                    <th class="th">Authorization Needed</th>
-                                    <th class="th"></th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="tbody">
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-
-                                <tr class="tr">
-                                    <td class="td">Bilataral signs</td>
-                                    <td class="td">
-                                        <input type="checkbox" disabled="disabled">
-                                    </td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
 
             </div>
