@@ -81,7 +81,7 @@ export class NewCheckinComponent implements OnInit {
   }
 
   _getBeneficiariesFromPolicy(platformId, search) {
-    if (search.length > 3) {
+    if (search.length > 2) {
       this._systemService.on();
       this._policyService.find({
         query: {
