@@ -229,15 +229,12 @@
                     This is a required field.
                 </small>
             </div>
-            <div class="frm-item-wrap">
+            <!-- <div class="frm-item-wrap">
                 <label class="label">CIN Number</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="cinNumber" class="form-control">
                 </div>
-                <small class="alert-label" [hidden]="employerFormGroup.controls.cinNumber.valid || employerFormGroup.controls.cinNumber.pristine">
-                    This is a required field.
-                </small>
-            </div>
+            </div> -->
             <div class="frm-item-wrap">
                 <label class="label">CAC Number</label>
                 <div class="input-wrap">
@@ -250,11 +247,22 @@
             <div class="frm-item-wrap">
                 <label class="label">Logo</label>
                 <div class="input-wrap">
-                    <button class="btn btn-medium btn-blue">Search Photo</button>
+                    <div class="img-box">
+                        <button (click)="showImageBrowseDlg('logo')" class="btn btn-medium btn-blue">Search Photo</button>
+                    </div>
+                    <div class="img-holder-box">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #logoInput type="file" id="uploadResult" (change)="readURL(this)">
+                        <div style="width:100%;" class="placehold-wrap">
+                            <img #blah id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-medium btn-blue" (click)="onClickSaveEmployer(employerFormGroup.value, employerFormGroup.valid);" [innerHtml]="saveBtn"></button>
+                <button class="btn btn-medium btn-blue" [disabled]="disableBtn || !employerFormGroup.valid" (click)="onClickSaveEmployer(employerFormGroup.value, employerFormGroup.valid);">
+                    <span *ngIf="btnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                    <span *ngIf="btnText">SAVE &nbsp; <i class="fa fa-check"></i></span>
+                </button>
             </div>
         </form>
     </section>

@@ -1,11 +1,11 @@
 import { CurrentPlaformShortName } from './../../../services/globals/config';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import {
   FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
-  UserTypeService, SystemModuleService,
+  UserTypeService, SystemModuleService, UploadService
 } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -21,6 +21,13 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-employer.component.scss']
 })
 export class NewEmployerComponent implements OnInit {
+  @ViewChild('logoInput') logoInput: ElementRef;
+  @ViewChild('logoImage') logoImage: ElementRef;
+  @ViewChild('bInput') bInput: ElementRef;
+  @ViewChild('bImage') bImage: ElementRef;
+  @ViewChild('itInput') itInput: ElementRef;
+  @ViewChild('itImage') itImage: ElementRef;
+
   employerFormGroup: FormGroup;
   countryId: string = "";
   stateId: string = "";
@@ -32,13 +39,15 @@ export class NewEmployerComponent implements OnInit {
   banks: any[] = [];
   userTypes: any[] = [];
   contactPositions: any[] = [];
-  saveBtn: string = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   selectedFacilityId: string;
   selectedUserType: any;
   selectedCountry: any;
   selectedState: any;
   facility: any;
   currentPlatform:any;
+  btnText: boolean = true;
+  btnProcessing: boolean = false;
+  disableBtn: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -54,6 +63,7 @@ export class NewEmployerComponent implements OnInit {
     private _route: ActivatedRoute,
     private _systemService: SystemModuleService,
     private loadingService: LoadingBarService,
+    private _uploadService: UploadService
   ) { }
   ngAfterViewInit() {
     this._route.params.subscribe(param => {
@@ -79,6 +89,7 @@ export class NewEmployerComponent implements OnInit {
   }
   
   _initialiseFormGroup() {
+    console.log(this.selectedFacilityId);
     this.employerFormGroup = this._fb.group({
       employerName: [this.facility != null ? this.facility.name : '', [<any>Validators.required]],
       address: [this.facility != null ? this.facility.address.street : '', [<any>Validators.required]],
@@ -103,8 +114,10 @@ export class NewEmployerComponent implements OnInit {
       bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
       bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
       cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
-      cinNumber: [this.facility != null ? this.facility.employer.cin : '', [<any>Validators.required]]
+      // cinNumber: [ {value: this.facility != null ? this.facility.employer.cin : '' }]
     });
+
+   // this.employerFormGroup.controls['cinNumber'].disabled;
     console.log(this.industries);
     this.employerFormGroup.controls['state'].valueChanges.subscribe(value => {
       console.log(this.selectedCountry);
@@ -316,7 +329,7 @@ export class NewEmployerComponent implements OnInit {
     }
 
     employer.industry = this.employerFormGroup.controls['type'].value;
-    employer.cin = this.employerFormGroup.controls['cinNumber'].value;
+    // employer.cin = this.employerFormGroup.controls['cinNumber'].value;
     employer.cacNumber = this.employerFormGroup.controls['cacNumber'].value;
     return employer;
   }
@@ -348,7 +361,10 @@ export class NewEmployerComponent implements OnInit {
   onClickSaveEmployer(value: any, valid: boolean) {
     if (valid) {
       this._systemService.on();
-      this.saveBtn = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
+      this.btnText = false;
+      this.btnProcessing = true;
+      this.disableBtn = true;
+
       let facility = this._extractFacility();
       console.log(facility);
       if (!!this.selectedFacilityId) {
@@ -361,10 +377,15 @@ export class NewEmployerComponent implements OnInit {
           setTimeout(e => {
             this.navigateEmployers('/modules/employer/employers/' + payload._id);
           }, 2000);
-          this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
           this._toastr.success('Employer has been updated successfully!', 'Success!');
+          this.btnText = true;
+          this.btnProcessing = false;
+          this.disableBtn = false;
         }).catch(err => {
           console.log(err);
+          this.btnText = true;
+          this.btnProcessing = false;
+          this.disableBtn = false;
           this._systemService.off();
         });
       } else {
@@ -373,10 +394,15 @@ export class NewEmployerComponent implements OnInit {
           console.log(payload);
           // this.employerFormGroup.reset();
           this._systemService.off();
-          this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
           this._toastr.success('Employer has been created successfully!', 'Success!');
+          this.btnText = true;
+          this.btnProcessing = false;
+          this.disableBtn = false;
         }).catch(err => {
           console.log(err);
+          this.btnText = true;
+          this.btnProcessing = false;
+          this.disableBtn = false;
           this._systemService.off();
         });
       }
@@ -398,6 +424,93 @@ export class NewEmployerComponent implements OnInit {
     }).catch(err => {
       this._systemService.off();
     })
+  }
+
+  showImageBrowseDlg(context) {
+    switch(context) {
+      case 'b-contact':
+        this.bInput.nativeElement.click();
+      break;
+      case 'it-contact':
+        this.itInput.nativeElement.click();
+      break;
+      case 'logo':
+        this.logoInput.nativeElement.click();
+      break;
+    }
+  }
+  readURL(input) {
+    this._systemService.on();
+    switch (input) {
+      case 'b-contact':
+        input = this.bInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.bImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'it-contact':
+        input = this.itInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.itImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'logo':
+        input = this.logoInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.logoImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+    }
+  }
+
+  upload() {
+    let logoBrowser = this.logoInput.nativeElement;
+    if (logoBrowser.files && logoBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", logoBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+
+    let itBrowser = this.itInput.nativeElement;
+    if (itBrowser.files && itBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", itBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+
+    let bBrowser = this.bInput.nativeElement;
+    if (bBrowser.files && bBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", bBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
   }
 
   navigateEmployers(url) {

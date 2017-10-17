@@ -188,6 +188,17 @@ button {
     align-items: center;
     position: relative;
     margin: 10px 0;
+    .img-box {
+        width: 150px;
+    }
+    .img-holder-box {
+        width: 150px;
+        .image-holder {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+    }
 }
 
 .inputWrap {
@@ -715,11 +726,6 @@ td .tooltip {
     font-size: 18px;
     margin-bottom: 20px;
     font-weight: bold;
-}
-
-.image-holder {
-    width: 150px;
-    height: 150px;
 }
 
 @media only screen and (max-width: 1300px) {
