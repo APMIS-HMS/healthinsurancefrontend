@@ -10,7 +10,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GenderService } from './../../../../services/common/gender.service';
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { IMyDpOptions, IMyDate } from 'mydatepicker'; 
+import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName } from '../../../../services/globals/config';
 import { UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService } from '../../../../services/index';
 import { Person } from '../../../../models/index';
@@ -26,7 +26,7 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-beneficiary-data.component.scss']
 })
 export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  
+
   @ViewChild('video') video: any;
   @ViewChild('snapshot') snapshot: ElementRef;
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -61,7 +61,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   public today: IMyDate;
 
   stepOneFormGroup: FormGroup;
-  selectedBeneficiary: any = <any>{};
+  selectedBeneficiary: any = <any>{ numberOfUnderAge: 0 };
   selectedCountry: any;
   currentPlatform: any;
   selectedState: any;
@@ -242,7 +242,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       stateOfOrigin: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.stateOfOrigin : '', [<any>Validators.required]],
       lgaOfOrigin: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.lgaOfOrigin : '', [<any>Validators.required]],
       maritalStatus: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.maritalStatus : '', [<any>Validators.required]],
-      noOfChildrenU18: [this.selectedBeneficiary != null ? this.selectedBeneficiary.numberOfUnderAge : '', [<any>Validators.required]],
+      noOfChildrenU18: [this.selectedBeneficiary != null ? this.selectedBeneficiary.numberOfUnderAge : 0, [<any>Validators.required]],
       streetName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.street : '', [<any>Validators.required]],
       lga: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.lga : '', [<any>Validators.required]],
       neighbourhood: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.neighbourhood : '', [<any>Validators.required]],
@@ -250,10 +250,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     });
 
     if (this.selectedBeneficiary._id !== undefined) {
-      if(this.selectedBeneficiary.person.stateOfOrigin !== undefined){
+      if (this.selectedBeneficiary.person.stateOfOrigin !== undefined) {
         this._getLgaAndCities(this.selectedBeneficiary.person.stateOfOrigin);
       }
-     
+
       this.stepOneFormGroup.controls['gender'].setValue(this.selectedBeneficiary.person.gender);
       if (this.selectedBeneficiary.person.profileImageObject !== undefined) {
         this.blah.nativeElement.src = this._uploadService.transform(this.selectedBeneficiary.person.profileImageObject.thumbnail);
@@ -475,7 +475,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                 console.log('2e')
                 // should be sending selectedbeneficiary to steptwo
                 console.log(payload)
-               
+
                 if (payload.statusCode === 200 && payload.error === false) {
                   console.log('am here oo')
                   delete payload.body.beneficiary.personId;

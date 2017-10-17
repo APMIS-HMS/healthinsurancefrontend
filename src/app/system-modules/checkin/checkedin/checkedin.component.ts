@@ -59,19 +59,31 @@ export class CheckedinComponent implements OnInit {
     }).then((payload: any) => {
       this.loading = false;
       this.checkedIns = payload.data;
+      console.log(this.checkedIns)
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
     });
   }
 
-  routeBeneficiary(check){
+  // routeBeneficiary(check){
+  //   this._systemService.on();
+  //   this._router.navigate(['/modules/beneficiary/beneficiaries',check.beneficiaryId]).then(payload =>{
+  //     this._systemService.off();
+  //   }).catch(err =>{
+  //     this._systemService.off();
+  //   })
+  // }
+
+  
+  routeBeneficiaryDetails(check) {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/beneficiaries',check.beneficiaryId]).then(payload =>{
-      this._systemService.off();
-    }).catch(err =>{
-      this._systemService.off();
-    })
+    this._router.navigate(['/modules/beneficiary/check-in', check.beneficiaryId])
+      .then(payload => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      })
   }
 
   navigate(url: string, id: string) {

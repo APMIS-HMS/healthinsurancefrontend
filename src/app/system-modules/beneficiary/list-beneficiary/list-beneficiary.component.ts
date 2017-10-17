@@ -89,13 +89,13 @@ export class ListBeneficiaryComponent implements OnInit {
           principal.isActive = policy.isActive;
           principal.dependantCount = policy.dependantBeneficiaries.length;
           this.beneficiaries.push(principal);
-          policy.dependantBeneficiaries.forEach(innerPolicy => {
-            innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
-            innerPolicy.beneficiary.isPrincipal = false;
-            innerPolicy.beneficiary.hia = policy.hiaId;
-            innerPolicy.beneficiary.isActive = policy.isActive;
-            this.beneficiaries.push(innerPolicy.beneficiary);
-          });
+          // policy.dependantBeneficiaries.forEach(innerPolicy => {
+          //   innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+          //   innerPolicy.beneficiary.isPrincipal = false;
+          //   innerPolicy.beneficiary.hia = policy.hiaId;
+          //   innerPolicy.beneficiary.isActive = policy.isActive;
+          //   this.beneficiaries.push(innerPolicy.beneficiary);
+          // });
         });
       }
       this._systemService.off();

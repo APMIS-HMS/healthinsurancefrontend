@@ -125,15 +125,18 @@ export class CheckinDetailsComponent implements OnInit {
         }
       }
     }).then((payload: any) => {
-      if (payload.data === true) {
+      console.log(payload)
+      if (payload.data !== undefined) {
         this.otp_show = false;
         this.checkin_show = true;
         this._initializedForm();
+        console.log('in')
       } else {
         this._toastr.warning('Invalid or expired OTP supplied, check and try again', 'OTP');
       }
       this._systemService.off();
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     })
   }
@@ -181,9 +184,11 @@ export class CheckinDetailsComponent implements OnInit {
           this.checkinSect = false;
           this.checkedinSect = true;
           this.selectedCheckIn = payload;
+          this._initializedForm();
         }
         this._systemService.off();
       }).catch(err => {
+        console.log(err);
         this._systemService.off();
       })
   }

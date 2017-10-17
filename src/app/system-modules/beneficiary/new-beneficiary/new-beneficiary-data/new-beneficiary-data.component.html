@@ -140,7 +140,7 @@
     <div class="frm-item-wrap">
         <label class="label">Number of childern under 18</label>
         <div class="inputWrap">
-            <input type="number" formControlName="noOfChildrenU18" class="form-control">
+            <input type="number" min="0" formControlName="noOfChildrenU18" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.noOfChildrenU18.valid || stepOneFormGroup.controls.noOfChildrenU18.pristine">
                     This field is required.
                 </small>
