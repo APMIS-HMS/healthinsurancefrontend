@@ -59,6 +59,7 @@ export class CheckedinComponent implements OnInit {
     }).then((payload: any) => {
       this.loading = false;
       this.checkedIns = payload.data;
+      console.log(this.checkedIns);
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
