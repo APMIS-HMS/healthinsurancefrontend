@@ -18,74 +18,71 @@
                                 </label>
                         </span>
                         </div>
-                        <small class="alert-label" [hidden]="dependant.controls.gender.valid || dependant.controls.gender.pristine">
-                            Gender is required.
-                        </small>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Title</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <select formControlName="title" class="form-control" [compareWith]='compare'>
                                 <option  value="" selected>Title</option>
                                 <option *ngFor="let title of titles"  [ngValue]="title">{{title.name}}</option>
                             </select>
+                            <small class="alert-label" [hidden]="dependant.controls.title.valid || dependant.controls.title.pristine">
+                                    Choose title from dropdown.
+                                </small>
                         </div>
-                        <small class="alert-label" [hidden]="dependant.controls.title.valid || dependant.controls.title.pristine">
-                            Choose title from dropdown.
-                        </small>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">First name</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <input type="text" formControlName="firstName">
+                            <small class="alert-label" [hidden]="dependant.controls.firstName.valid || dependant.controls.firstName.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
                         </div>
-                        <small class="alert-label" [hidden]="dependant.controls.firstName.valid || dependant.controls.firstName.pristine">
-                            This is a required field (minimum 3 and max of 50 characters).
-                        </small>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Middle name <small>(Optional)</small></label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <input type="text" name="middleName" formControlName="middleName">
                         </div>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Surname</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <input type="text" name="lastName" formControlName="lastName">
+                            <small class="alert-label" [hidden]="dependant.controls.lastName.valid || dependant.controls.lastName.pristine">
+                                    This is a required field (minimum 3 and max of 50 characters).
+                                </small>
                         </div>
-                        <small class="alert-label" [hidden]="dependant.controls.lastName.valid || dependant.controls.lastName.pristine">
-                            This is a required field (minimum 3 and max of 50 characters).
-                        </small>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Email</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <input type="email" formControlName="email" class="form-control">
+                            <small class="alert-label" [hidden]="dependant.controls.email.valid || dependant.controls.email.pristine">
+                                    Enter a valid email address.
+                                </small>
                         </div>
-                        <small class="alert-label" [hidden]="dependant.controls.email.valid || dependant.controls.email.pristine">
-                            Enter a valid email address.
-                        </small>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Phone number</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <input type="text" formControlName="phonenumber" class="form-control">
+                            <small class="alert-label" [hidden]="dependant.controls.phonenumber.valid || dependant.controls.phonenumber.pristine">
+                                    Enter a valid phone number.
+                                </small>
                         </div>
-                        <small class="alert-label" [hidden]="dependant.controls.phonenumber.valid || dependant.controls.phonenumber.pristine">
-                            Enter a valid phone number.
-                        </small>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Secondary phone <small>(Optional)</small></label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <input type="text" formControlName="secondaryPhone" class="form-control">
                         </div>
                     </div>
 
                     <div class="frm-item-wrap">
                         <label class="label">Nature of Relationship</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <select formControlName="relationship" class="form-control">
                                 <option  value="" disabled selected>Relationship</option>
                                 <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
@@ -95,7 +92,7 @@
     
                     <div class="frm-item-wrap">
                         <label class="label"></label>
-                        <div class="input-wrap" style="display:flex;justify-content:space-between; width: 30%;">
+                        <div class="inputWrap" style="display:flex;justify-content:space-between; width: 30%;">
                             <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
                                 Add &nbsp; <i class="fa fa-plus"></i>
                             </button>
