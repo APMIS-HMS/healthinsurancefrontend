@@ -131,60 +131,82 @@
                 </small>
             </div>
 
-            <div class="frm-group">
-                <div class="frm-title">Clinical Information</div>
-
-                <div class="frm-subsect">
-                    <div class="frm-item-wrap">
-                        <label class="label">Symptoms</label>
-                        <div class="input-wrap">
-                            <div>
-                                <div class="input-wrap-x2">
-                                    <div class="searchable-input">
-                                        <input style="width:155px;" type="text" formControlName="symptom" class="form-control">
-
-                                        <ul *ngFor="let item of symptomItems" class="search-results">
-                                            <li (click)="onSelectSymptom(item.name)">{{item.name}}</li>
-                                        </ul>
-                                    </div>
-                                    <div class="input-wrap-x2">
-                                        <input style="width:50px;" type="text" formControlName="symptomDuration" class="form-control">
-                                        <select formControlName="symptomUnit" class="form-control">
-                                        <option value="Hour" selected>Hour</option>
-                                        <option value="Week">Week</option>
-                                        <option value="Month">Month</option>
-                                        <option value="Year">Year</option>
-                                </select>
-                                    </div>
-                                </div>
-
-                                <div class="btn btn-medium btn-blue-outline" (click)="onAddSymptom()">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD symptom
-                                </div>
-                            </div>
+            <ul class="inpage-tabs">
+                <li (click)="tabSymptoms_click()" [class.tab-active]="tab_symptoms">Symptoms</li>
+                <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
+                <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
+                <li (click)="tabServices_click()" [class.tab-active]="tab_services">Services</li>
+            </ul>
+        
+            <div class="tab-content shadow-RB-lite">
+                <div *ngIf="tab_complaints" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Information - Complaints</div>
+                        </div>
+                    
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
 
-                    <div class="tbl-wrap">
-                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                            <thead class="thead">
-                                <tr class="tr">
-                                    <th class="th">symptom</th>
-                                    <th class="th">Duration</th>
-                                    <th class="th"></th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="tbody">
-                                <tr class="tr" *ngFor="let item of symptomLists">
-                                    <td class="td">{{item.name}}</td>
-                                    <td class="td">{{item.duration}} {{item.unit}}</td>
-                                    <td><i class="fa fa-times"></i></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="frm-subsect">
+                        <div class="frm-item-wrap">
+                            <label class="label">Symptoms</label>
+                            <div class="input-wrap">
+                                <div>
+                                    <div class="input-wrap-x2">
+                                        <div class="searchable-input">
+                                            <input style="width:155px;" type="text" formControlName="symptom" class="form-control">
+    
+                                            <ul *ngFor="let item of symptomItems" class="search-results">
+                                                <li (click)="onSelectSymptom(item.name)">{{item.name}}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="input-wrap-x2">
+                                            <input style="width:50px;" type="text" formControlName="symptomDuration" class="form-control">
+                                            <select formControlName="symptomUnit" class="form-control">
+                                            <option value="Hour" selected>Hour</option>
+                                            <option value="Week">Week</option>
+                                            <option value="Month">Month</option>
+                                            <option value="Year">Year</option>
+                                    </select>
+                                        </div>
+                                    </div>
+    
+                                    <div class="btn btn-medium btn-blue-outline" (click)="onAddSymptom()">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD symptom
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="tbl-wrap">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">symptom</th>
+                                        <th class="th">Duration</th>
+                                        <th class="th"></th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody class="tbody">
+                                    <tr class="tr" *ngFor="let item of symptomLists">
+                                        <td class="td">{{item.name}}</td>
+                                        <td class="td">{{item.duration}} {{item.unit}}</td>
+                                        <td><i class="fa fa-times"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="frm-group">
+
+                
 
                 <div class="frm-item-wrap">
                     <label class="label">Clinical Note</label>
