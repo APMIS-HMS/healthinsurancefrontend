@@ -62,3 +62,27 @@
     font-size: $font-x2;
     padding-left: 5px;
   }
+  .user-wrap{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+  }
+  .user-img-wrap{
+      width: 35px;
+      height: 35px;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+  }
+  .user-img-wrap img{
+      width: 100%;
+  }
+  .user-text-wrap{
+      color: #fff;
+      font-size: $font-x2;
+  }
+  .user-others{
+      color: lighten($brand-primary, 55%);
+  }
