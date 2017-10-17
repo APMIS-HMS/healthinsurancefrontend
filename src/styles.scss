@@ -82,9 +82,11 @@ select {
     border: 0;
 }
 
-.btn.disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
+button {
+    &:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
 }
 
 .btn i {
