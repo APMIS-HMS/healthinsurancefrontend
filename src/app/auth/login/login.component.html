@@ -26,8 +26,10 @@
                 </div>
             </div>
 
-            <button class="btn btn-medium btn-blue" [disabled]="!loginFormGroup.valid" [innerHTML]="loginBtnText" (click)="onClickLogin(loginFormGroup.value, loginFormGroup.valid)"></button>
-            <!-- <button class="btn btn-medium btn-blue">LOGIN</button> -->
+            <button class="btn btn-medium btn-blue" [disabled]="disableBtn || !loginFormGroup.valid" (click)="onClickLogin(loginFormGroup.value, loginFormGroup.valid)">
+                <span *ngIf="loginBtnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                <span *ngIf="loginBtnText">LOG IN &nbsp; <i class="fa fa-sign-in"></i></span>
+            </button>
         </form>
     </div>
 </div>

@@ -23,9 +23,11 @@ const NUMERIC_REGEX = /^[0-9]+$/;
 })
 export class SignupComponent implements OnInit {
 	signupFormGroup: FormGroup;
-	signupBtnText: String = 'SIGN UP &nbsp; <i class="fa fa-sign-in"></i>';
 	currentPlatform: any;
 	userType: any;
+	signupBtnText: boolean = true;
+	signupBtnProcessing: boolean = false;
+	disableBtn: boolean = false;
 
 	constructor(
 		private _toastr: ToastsManager,
@@ -52,8 +54,8 @@ export class SignupComponent implements OnInit {
 		this.signupFormGroup = this._fb.group({
 			firstName: ['', [<any>Validators.required]],
 			lastName: ['', [<any>Validators.required]],
-			phoneNumber: ['', [<any>Validators.pattern(PHONE_REGEX)]],
-			email: ['', [<any>Validators.pattern(EMAIL_REGEX)]],
+			phoneNumber: ['', [<any>Validators.pattern(PHONE_REGEX), <any>Validators.required]],
+			email: ['', [<any>Validators.pattern(EMAIL_REGEX), <any>Validators.required]],
 			mothersMaidenName: ['', [<any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
@@ -115,7 +117,10 @@ export class SignupComponent implements OnInit {
 		if (valid) {
 			console.log(value);
 			if (!!this.userType && !!this.currentPlatform) {
-				this.signupBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+				this.signupBtnText = false;
+				this.signupBtnProcessing = true;
+				this.disableBtn = true;
+
 				const person = <Person>{
 					firstName: value.firstName,
 					lastName: value.lastName,
@@ -140,15 +145,26 @@ export class SignupComponent implements OnInit {
 				}).then(res => {
 					return this.logUser(user);
 				}).then(res => {
+					this.signupBtnText = true;
+					this.signupBtnProcessing = false;
+					this.disableBtn = false;
+
 					this._locker.setObject('auth', res);
 					this._router.navigate(['/modules/beneficiary/new']).then(navRes => {
 						this._authService.announceMission({ status: 'On' });
 						this._toastr.success('You have successfully logged in!', 'Success!');
 					});
-				}).catch(err => console.log(err));
+				}).catch(err => {
+					console.log(err);
+					this.signupBtnText = true;
+					this.signupBtnProcessing = false;
+					this.disableBtn = false;
+				});
 			} else {
 				this._toastr.error('There is a connection error, Please try again later!', 'Error!');
 			}
+		} else {
+			this._toastr.error('Please fill in the required fields!', 'Form Validation Error!');
 		}
 	}
 

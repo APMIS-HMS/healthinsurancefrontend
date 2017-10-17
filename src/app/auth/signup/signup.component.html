@@ -115,8 +115,10 @@
                 </div>
             </div>
 
-            <button class="btn btn-medium btn-blue" [disabled]="!signupFormGroup.valid" [innerHTML]="signupBtnText" (click)="onClickRegister(signupFormGroup.value, signupFormGroup.valid)"></button>
-            <!-- <button class="btn btn-medium btn-blue">LOGIN</button> -->
+            <button class="btn btn-medium btn-blue" [disabled]="disableBtn || !signupFormGroup.valid" (click)="onClickRegister(signupFormGroup.value, signupFormGroup.valid)">
+                <span *ngIf="signupBtnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                <span *ngIf="signupBtnText">SIGN UP &nbsp; <i class="fa fa-sign-in"></i></span>
+            </button>
         </form>
     </div>
 </div>
