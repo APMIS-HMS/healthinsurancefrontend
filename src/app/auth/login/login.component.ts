@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit() {
 		this.loginFormGroup = this._fb.group({
-			email: ['', [<any>Validators.pattern(EMAIL_REGEX)]],
+			email: ['', [<any>Validators.pattern(EMAIL_REGEX), <any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
 
@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
 				this.disableBtn = false;
 			});
 		} else {
-			console.log('Something went wrong');
+			this._toastr.error('Please fill in the required fields!', 'Form Validation Error!');
 		}
 	}
 

@@ -54,8 +54,8 @@ export class SignupComponent implements OnInit {
 		this.signupFormGroup = this._fb.group({
 			firstName: ['', [<any>Validators.required]],
 			lastName: ['', [<any>Validators.required]],
-			phoneNumber: ['', [<any>Validators.pattern(PHONE_REGEX)]],
-			email: ['', [<any>Validators.pattern(EMAIL_REGEX)]],
+			phoneNumber: ['', [<any>Validators.pattern(PHONE_REGEX), <any>Validators.required]],
+			email: ['', [<any>Validators.pattern(EMAIL_REGEX), <any>Validators.required]],
 			mothersMaidenName: ['', [<any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
@@ -163,6 +163,8 @@ export class SignupComponent implements OnInit {
 			} else {
 				this._toastr.error('There is a connection error, Please try again later!', 'Error!');
 			}
+		} else {
+			this._toastr.error('Please fill in the required fields!', 'Form Validation Error!');
 		}
 	}
 
