@@ -19,6 +19,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   tab_diagnosis = false;
   tab_procedures = false;
   tab_services = false;
+  tab_notes = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -82,23 +83,34 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_diagnosis = false;
     this.tab_procedures = false;
     this.tab_services = false;
+    this.tab_notes = false;
   }
   tabDiagnosis_click(){
     this.tab_complaints = false;
     this.tab_diagnosis = true;
     this.tab_procedures = false;
     this.tab_services = false;
+    this.tab_notes = false;
   }
   tabProcedures_click(){
     this.tab_complaints = false;
     this.tab_diagnosis = false;
     this.tab_procedures = true;
     this.tab_services = false;
+    this.tab_notes = false;
   }
   tabServices_click(){
     this.tab_complaints = false;
     this.tab_diagnosis = false;
     this.tab_procedures = false;
     this.tab_services = true;
+    this.tab_notes = false;
+  }
+  tabNotes_click(){
+    this.tab_complaints = false;
+    this.tab_diagnosis = false;
+    this.tab_procedures = false;
+    this.tab_services = false;
+    this.tab_notes = true;
   }
 }

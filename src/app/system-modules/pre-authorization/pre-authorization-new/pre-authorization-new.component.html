@@ -127,6 +127,7 @@
                 <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
                 <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
                 <li (click)="tabServices_click()" [class.tab-active]="tab_services">Services</li>
+                <li (click)="tabNotes_click()" [class.tab-active]="tab_notes">Notes & Documentations</li>
             </ul>
         
             <div class="tab-content shadow-RB-lite">
@@ -431,31 +432,63 @@
                         </div>
                     </div>
                 </div>
+
+                <div *ngIf="tab_notes" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Documentation</div>
+                        </div>
+                    
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                        </div>
+                    </div>
+    
+                    <div class="frm-group">
+                        
+                        <div class="frm-item-wrap">
+                            <label class="label">Clinical Note</label>
+                            <div class="input-wrap" style="width:100%;">
+                                <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
+                            </div>
+                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.clinicalNote.valid || preAuthFormGroup.controls.clinicalNote.pristine">
+                              This is a required field.
+                          </small>
+                        </div>
+        
+                        <div class="frm-item-wrap">
+                            <label class="label">Reason for Request</label>
+                            <div class="input-wrap" style="width:100%;">
+                                <textarea formControlName="requestReason" class="form-control-textArea"></textarea>
+                            </div>
+                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestReason.valid || preAuthFormGroup.controls.requestReason.pristine">
+                            This is a required field.
+                        </small>
+                        </div>
+        
+                    </div>
+                    <div class="frm-item-wrap">
+                        <label class="label">Pre-Authorization Note</label>
+                        <div class="input-wrap" style="width:100%;">
+                            <textarea formControlName="preAuthorizationNote" class="form-control-textArea"></textarea>
+                        </div>
+                        <small class="alert-label" [hidden]="preAuthFormGroup.controls.preAuthorizationNote.valid || preAuthFormGroup.controls.preAuthorizationNote.pristine">
+                            This is a required field.
+                        </small>
+                    </div>
+                    <div class="frm-item-wrap">
+                        <label class="label">Name of Doctor</label>
+                        <div class="input-wrap">
+                            <input type="email" formControlName="docName" class="form-control">
+                        </div>
+                        <small class="alert-label" [hidden]="preAuthFormGroup.controls.docName.valid || preAuthFormGroup.controls.docName.pristine">
+                            This is a required field.
+                        </small>
+                    </div>
+                </div>
             </div>
 
-            <div class="frm-group">
-                
-                <div class="frm-item-wrap">
-                    <label class="label">Clinical Note</label>
-                    <div class="input-wrap" style="width:100%;">
-                        <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
-                    </div>
-                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.clinicalNote.valid || preAuthFormGroup.controls.clinicalNote.pristine">
-                      This is a required field.
-                  </small>
-                </div>
-
-                <div class="frm-item-wrap">
-                    <label class="label">Reason for Request</label>
-                    <div class="input-wrap" style="width:100%;">
-                        <textarea formControlName="requestReason" class="form-control-textArea"></textarea>
-                    </div>
-                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestReason.valid || preAuthFormGroup.controls.requestReason.pristine">
-                    This is a required field.
-                </small>
-                </div>
-
-            </div>
+           
 
             <!-- <div class="frm-group">
     <div class="frm-title">Upload Document</div>
@@ -497,24 +530,7 @@
     </div>
   </div> -->
 
-            <div class="frm-item-wrap">
-                <label class="label">Pre-Authorization Note</label>
-                <div class="input-wrap" style="width:100%;">
-                    <textarea formControlName="preAuthorizationNote" class="form-control-textArea"></textarea>
-                </div>
-                <small class="alert-label" [hidden]="preAuthFormGroup.controls.preAuthorizationNote.valid || preAuthFormGroup.controls.preAuthorizationNote.pristine">
-                    This is a required field.
-                </small>
-            </div>
-            <div class="frm-item-wrap">
-                <label class="label">Name of Doctor</label>
-                <div class="input-wrap">
-                    <input type="email" formControlName="docName" class="form-control">
-                </div>
-                <small class="alert-label" [hidden]="preAuthFormGroup.controls.docName.valid || preAuthFormGroup.controls.docName.pristine">
-                    This is a required field.
-                </small>
-            </div>
+
 
             <button class="btn btn-medium btn-blue cta">SEND</button>
         </form>
