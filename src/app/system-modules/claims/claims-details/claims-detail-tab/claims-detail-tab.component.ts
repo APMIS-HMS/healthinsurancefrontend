@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CoolLocalStorage } from 'angular2-cool-storage';
+import { ClaimService } from './../../../../services/common/claim.service';
 
 @Component({
   selector: 'app-claims-detail-tab',
@@ -12,28 +15,40 @@ export class ClaimsDetailTabComponent implements OnInit {
   modalHold = false;
   modalQuery = false;
 
-  constructor() { }
+
+  constructor(private _route: ActivatedRoute,
+    private _locker: CoolLocalStorage,
+  private _claimService:ClaimService ) { }
 
   ngOnInit() {
+    this._route.params.subscribe(param => {
+      if (param.id !== undefined) {
+        this._getSelectedClaimItem(param.id);
+      }
+    });
   }
 
-  approveClaim(){
+  approveClaim() {
     this.modalApprove = true;
   }
-  rejectClaim(){
+  rejectClaim() {
     this.modalReject = true;
   }
-  holdClaim(){
+  holdClaim() {
     this.modalHold = true;
   }
-  queryClaim(){
+  queryClaim() {
     this.modalQuery = true;
   }
-  modal_close(){
+  modal_close() {
     this.modalApprove = false;
     this.modalReject = false;
     this.modalQuery = false;
     this.modalHold = false;
+  }
+
+  _getSelectedClaimItem(id){
+
   }
 
 }

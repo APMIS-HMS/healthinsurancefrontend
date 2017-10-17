@@ -20,7 +20,9 @@ export class LoginComponent implements OnInit {
 	showLoginTab: Boolean = false;
 	showRegTab: Boolean = false;
 	loginFormGroup: FormGroup;
-	loginBtnText: String = 'LOG IN &nbsp; <i class="fa fa-sign-in"></i>';
+	loginBtnText: boolean = true;
+	loginBtnProcessing: boolean = false;
+	disableBtn: boolean = false;
 
 	constructor(
 		private _toastr: ToastsManager,
@@ -34,7 +36,7 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit() {
 		this.loginFormGroup = this._fb.group({
-			email: ['', [<any>Validators.pattern(EMAIL_REGEX)]],
+			email: ['', [<any>Validators.pattern(EMAIL_REGEX), <any>Validators.required]],
 			password: ['', [<any>Validators.required]]
 		});
 
@@ -49,25 +51,27 @@ export class LoginComponent implements OnInit {
 	}
 
 	setLoggedInUser(email: String, loggInState: boolean) {
-		this._authService.find({ query: { email: email } })
-			.then(payload => {
-				let currentUser = payload.data[0];
-				currentUser.loggedInUserStatus = {
-					"isLoggedIn": loggInState
-				};
-				this._authService.patch(currentUser._id, currentUser, {});
-			})
+		this._authService.find({ query: { email: email } }).then(payload => {
+			let currentUser = payload.data[0];
+			currentUser.loggedInUserStatus = {
+				'isLoggedIn': loggInState
+			};
+			this._authService.patch(currentUser._id, currentUser, {});
+		});
 	}
 
 	onClickLogin(value: any, valid: boolean) {
 		if (valid) {
-			this.loginBtnText = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+			this.loginBtnText = false;
+			this.loginBtnProcessing = true;
+			this.disableBtn = true;
 
 			this._authService.login(value).then(payload => {
-				console.log(payload);
 				this._locker.setObject('auth', payload);
-				console.log(payload);
 				this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
+				this.loginBtnText = true;
+				this.loginBtnProcessing = false;
+				this.disableBtn = false;
 				this._router.navigate(['/modules/welcome']).then(res => {
 					this._authService.announceMission({ status: 'On' });
 					this._toastr.success('You have successfully logged in!', 'Success!');
@@ -76,19 +80,13 @@ export class LoginComponent implements OnInit {
 				console.log(err);
 				this._toastr.error('Invalid email or password!', 'Error!');
 				this.loginFormGroup.controls['password'].reset();
-				this.loginBtnText = 'LOG IN &nbsp; <i class="fa fa-sign-in"></i>';
+				this.loginBtnText = true;
+				this.loginBtnProcessing = false;
+				this.disableBtn = false;
 			});
+		} else {
+			this._toastr.error('Please fill in the required fields!', 'Form Validation Error!');
 		}
-
-
-		// if (valid) {
-		// 	this.loginBtnText = "Please wait... &nbsp; <i class='fa fa-spinner fa-spin' aria-hidden='true'></i>";
-
-		// 	setTimeout(() => {
-		// 		this.toastr.success('You have successfully logged in!', 'Success!');
-		// 		this._router.navigate(['/modules/beneficiary/beneficiaries']);
-		// 	}, 2000);
-		// }
 	}
 
 	onClickTab(tab) {
