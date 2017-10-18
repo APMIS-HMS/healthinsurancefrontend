@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ClaimService } from './../../../services/common/claim.service';
@@ -18,15 +17,18 @@ export class ListClaimsComponent implements OnInit {
   listOfClaims: any = <any>[];
   user: any;
 
-  constructor(private _claimService: ClaimService, private _locker: CoolLocalStorage,private _route: ActivatedRoute,) { }
+  constructor(private _claimService: ClaimService, private _locker: CoolLocalStorage) { }
 
   ngOnInit() {
-    this._route.params.subscribe(param => {
-      if (param.id !== undefined) {
-        //this._getBeneficiaryDetails(param.id);
+    this.user = (<any>this._locker.getObject('auth')).user;
+    this._claimService.find({
+      query: {
+        providerFacilityId: this.user.facilityId._id
       }
+    }).then((payload: any) => {
+      this.listOfClaims = payload.data;
+      console.log(this.listOfClaims);
     });
   }
 
- // _getDetails
 }

@@ -404,6 +404,7 @@ export class NewClaimComponent implements OnInit {
 
 
   onSendClaim() {
+    this.claimDocItem.clinicalDocument = {};
     this.claimDocItem.clinicalDocument = {
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
@@ -413,7 +414,8 @@ export class NewClaimComponent implements OnInit {
       "symptoms": this.symptomLists,
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
-    this.claimItem.documentation = this.claimDocItem.clinicalDocument;
+    console.log(this.claimDocItem);
+    this.claimItem.documentation.push(this.claimDocItem.clinicalDocument);
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
