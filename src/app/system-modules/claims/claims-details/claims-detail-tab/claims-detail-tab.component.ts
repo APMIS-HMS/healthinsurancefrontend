@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ClaimService } from './../../../../services/common/claim.service';
+import differenceInYears from 'date-fns/difference_in_years';
 
 @Component({
   selector: 'app-claims-detail-tab',
@@ -50,14 +51,13 @@ export class ClaimsDetailTabComponent implements OnInit {
     this.modalHold = false;
   }
 
+  
   _getSelectedClaimItem(id) {
     this._claimService.get(id, {}).then((payload: any) => {
       this.selectedClaim = payload;
-      let dob = this.selectedClaim.checkedinDetail.personObject.dateOfBirth;
-      let currentYear = new Date().getFullYear();
-      this.displayAge = currentYear - dob;
-      
       console.log(this.selectedClaim);
+      this.displayAge = differenceInYears(new Date(),this.selectedClaim.checkedinDetail.personObject.dateOfBirth)
+     // console.log(this.displayAge);
     });
   }
 

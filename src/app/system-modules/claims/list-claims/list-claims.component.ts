@@ -21,6 +21,7 @@ export class ListClaimsComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user._id);
     this._claimService.find({
       query: {
         providerFacilityId: this.user.facilityId._id
