@@ -152,6 +152,7 @@ export class NewEmployerComponent implements OnInit {
         this._systemService.off();
         this.facility = res;
         this._initialiseFormGroup();
+        this._initImages(res);
       }).catch(err => {
         this._systemService.off();
       });
@@ -556,6 +557,18 @@ export class NewEmployerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
+    }
+  }
+
+  private _initImages(facility: Facility) {
+    if(!!facility.logo) {
+      this.logoImage.nativeElement.src = facility.logo;
+    }
+    if (!!facility.businessContact.image) {
+      this.bImage.nativeElement.src = facility.businessContact.image;
+    }
+    if (!!facility.itContact.image) {
+      this.itImage.nativeElement.src = facility.itContact.image;
     }
   }
 

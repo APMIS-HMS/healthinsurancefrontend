@@ -25,8 +25,12 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-provider.component.scss']
 })
 export class NewProviderComponent implements OnInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
-  @ViewChild('blah') blah: ElementRef;
+  @ViewChild('logoInput') logoInput: ElementRef;
+  @ViewChild('logoImage') logoImage: ElementRef;
+  @ViewChild('bInput') bInput: ElementRef;
+  @ViewChild('bImage') bImage: ElementRef;
+  @ViewChild('itInput') itInput: ElementRef;
+  @ViewChild('itImage') itImage: ElementRef;
   providerFormGroup: FormGroup;
   positions: any = [];
   lgas: any = [];
@@ -169,6 +173,7 @@ export class NewProviderComponent implements OnInit {
         this._systemService.off();
         this.facility = res;
         this._initialiseFormGroup();
+        this._initImages(res);
       }).catch(err => {
         this._systemService.off();
       });
@@ -437,45 +442,76 @@ export class NewProviderComponent implements OnInit {
       console.log(facility);
       if (!!this.facility) {
         // Edit Provider.
-        facility._id = this.selectedFacilityId;
-        facility.platformOwnerId = this.currentPlatform;
-        console.log(facility)
-        this._facilityService.update(facility).then((payload: any) => {
-          console.log(payload)
-          this._systemService.off();
-          this._toastr.info('Navigating to provider details page...', 'Navigate!');
-          setTimeout(e => {
-            this.navigateProviders('/modules/provider/providers/', + payload._id);
-          }, 2000);
-          this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-          this._toastr.success('Care Provider has been updated successfully!', 'Success!');
-          this.providerFormGroup.controls['classification'].setValue('primary');
-        }).catch(err => {
-          console.log(err);
-          this._systemService.off();
-          if (err == 'Error: This email already exist') {
-            this._toastr.error('This email alreay exist!', 'Email exists!');
-          } else {
-            this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+          console.log(allResult);
+          if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+            facility.logo = allResult[0].body[0].file;
           }
+          // Business Contact Image
+          if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+            facility.itContact.image = allResult[2].body[0].file;
+          }
+
+          facility._id = this.selectedFacilityId;
+          facility.platformOwnerId = this.currentPlatform;
+          facility.provider.providerId = this.facility.provider.providerId;
+          console.log(facility);
+          this._facilityService.update(facility).then((payload: any) => {
+            console.log(payload)
+            this._systemService.off();
+            this._toastr.info('Navigating to provider details page...', 'Navigate!');
+            setTimeout(e => {
+              this.navigateProviders('/modules/provider/providers/', + payload._id);
+            }, 2000);
+            this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+            this._toastr.success('Care Provider has been updated successfully!', 'Success!');
+            this.providerFormGroup.controls['classification'].setValue('primary');
+          }).catch(err => {
+            console.log(err);
+            this._systemService.off();
+            if (err == 'Error: This email already exist') {
+              this._toastr.error('This email alreay exist!', 'Email exists!');
+            } else {
+              this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+            }
+          });
         });
       } else {
         // Create Provider
-        facility.platformOwnerId = this.currentPlatform;
-        this._facilityService.create(facility).then(payload => {
-          this._systemService.off();
-          this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-          this._toastr.success('Care Provider has been created successfully!', 'Success!');
-          this.providerFormGroup.controls['classification'].setValue('primary');
-          this._router.navigate(['/modules/provider/providers'])
-        }).catch(err => {
-          console.log(err);
-          this._systemService.off();
-          if (err == 'Error: This email already exist') {
-            this._toastr.error('This email alreay exist!', 'Email exists!');
-          } else {
-            this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+          console.log(allResult);
+          if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+            facility.logo = allResult[0].body[0].file;
           }
+          // Business Contact Image
+          if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+            facility.itContact.image = allResult[2].body[0].file;
+          }
+
+          facility.platformOwnerId = this.currentPlatform;
+          this._facilityService.create(facility).then(payload => {
+            this._systemService.off();
+            this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+            this._toastr.success('Care Provider has been created successfully!', 'Success!');
+            this.providerFormGroup.controls['classification'].setValue('primary');
+            this._router.navigate(['/modules/provider/providers'])
+          }).catch(err => {
+            console.log(err);
+            this._systemService.off();
+            if (err == 'Error: This email already exist') {
+              this._toastr.error('This email alreay exist!', 'Email exists!');
+            } else {
+              this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+            }
+          });
         });
       }
     } else {
@@ -484,36 +520,108 @@ export class NewProviderComponent implements OnInit {
     }
   }
 
-  showImageBrowseDlg() {
-    this.fileInput.nativeElement.click();
+  showImageBrowseDlg(context) {
+    switch (context) {
+      case 'b-contact':
+        this.bInput.nativeElement.click();
+        break;
+      case 'it-contact':
+        this.itInput.nativeElement.click();
+        break;
+      case 'logo':
+        this.logoInput.nativeElement.click();
+        break;
+    }
   }
 
   readURL(input) {
     this._systemService.on();
-    input = this.fileInput.nativeElement;
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      let that = this;
-      reader.onload = function (e: any) {
-        that.blah.nativeElement.src = e.target.result;
-        that._systemService.off();
-      };
+    switch (input) {
+      case 'b-contact':
+        input = this.bInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.bImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
 
-      reader.readAsDataURL(input.files[0]);
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'it-contact':
+        input = this.itInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.itImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'logo':
+        input = this.logoInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            console.log(e);
+            that.logoImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
     }
   }
 
-  upload(image) {
-    if (image.files && image.files[0]) {
+  uploadLogo() {
+    let logoBrowser = this.logoInput.nativeElement;
+    if (logoBrowser.files && logoBrowser.files[0]) {
       const formData = new FormData();
-      formData.append('platform', image.files[0]);
+      formData.append("platform", logoBrowser.files[0]);
       return new Promise((resolve, reject) => {
-        this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
-          resolve(res);
-        }).catch(err => {
-          reject(err);
-        });
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
+    }
+  }
+
+  uploadItContact() {
+    let itBrowser = this.itInput.nativeElement;
+    if (itBrowser.files && itBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", itBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  uploadBContact() {
+    let bBrowser = this.bInput.nativeElement;
+    if (bBrowser.files && bBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", bBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  private _initImages(facility: Facility) {
+    if (!!facility.logo) {
+      this.logoImage.nativeElement.src = facility.logo;
+    }
+    if (!!facility.businessContact.image) {
+      this.bImage.nativeElement.src = facility.businessContact.image;
+    }
+    if (!!facility.itContact.image) {
+      this.itImage.nativeElement.src = facility.itContact.image;
     }
   }
 
