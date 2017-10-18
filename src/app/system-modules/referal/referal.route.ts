@@ -8,9 +8,9 @@ import { NewReferalComponent } from './new-referal/new-referal.component';
 const REFERAL_ROUTES: Routes = [
     {
         path: '', component: ReferalComponent, children: [
-            { path: '', redirectTo: 'referrals', pathMatch: 'full' },
-            { path: 'referrals', component: ListReferalsComponent },
-            { path: 'referrals/:id', component: ReferalDetailsComponent },
+            { path: '', redirectTo: 'referals', pathMatch: 'full' },
+            { path: 'referals', component: ListReferalsComponent },
+            { path: 'referals/:id', component: ReferalDetailsComponent },
             { path: 'new', component: NewReferalComponent },
             { path: 'new/:id', component: NewReferalComponent }
         ]
