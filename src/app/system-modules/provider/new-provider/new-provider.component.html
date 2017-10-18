@@ -92,6 +92,20 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
+                <label class="label">Business Contact Photo</label>
+                <div class="input-wrap">
+                    <div class="img-box">
+                        <button (click)="showImageBrowseDlg('b-contact')" class="btn btn-medium btn-blue">Search Photo</button>
+                    </div>
+                    <div class="img-holder-box">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #bInput type="file" id="bUploadResult" (change)="readURL('b-contact')">
+                        <div style="width:100%;" class="placehold-wrap">
+                            <img #bImage id="bImage" class="image-holder" src="assets/img/users/default.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="frm-item-wrap">
                 <label class="label">Business Contact's First Name</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="bc_fname" class="form-control">
@@ -138,6 +152,20 @@
                 <small class="alert-label" [hidden]="providerFormGroup.controls.bc_phone.valid || providerFormGroup.controls.bc_phone.pristine">
                     This is a required field.
                 </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">It Contact Photo</label>
+                <div class="input-wrap">
+                    <div class="img-box">
+                        <button (click)="showImageBrowseDlg('it-contact')" class="btn btn-medium btn-blue">Search Photo</button>
+                    </div>
+                    <div class="img-holder-box">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #itInput type="file" id="itUploadResult" (change)="readURL('it-contact')">
+                        <div style="width:100%;" class="placehold-wrap">
+                            <img #itImage id="logoImage" class="image-holder" src="assets/img/users/default.png" />
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's First Name</label>
@@ -311,22 +339,23 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Logo</label>
-                <label class="label">
-                    <button (click)="showImageBrowseDlg(fileInput)" class="btn btn-medium btn-blue">Search Photo</button>
-                </label>
                 <div class="input-wrap">
-                    <div class="">
-                        <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this);">
+                    <div class="img-box">
+                        <button (click)="showImageBrowseDlg('logo')" class="btn btn-medium btn-blue">Search Photo</button>
                     </div>
-                    <div style="width:100%;">
+                    <div class="img-holder-box">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #logoInput type="file" id="uploadResult" (change)="readURL('logo')">
                         <div style="width:100%;" class="placehold-wrap">
-                            <img #blah id="blah" class="image-holder" src="http://placehold.it/180" alt="your image" />
+                            <img #logoImage id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
                         </div>
                     </div>
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-medium btn-blue" (click)="onClickSaveProvider(providerFormGroup, providerFormGroup.valid, fileInput);" [innerHtml]="saveBtn"></button>
+                <button class="btn btn-medium btn-blue" (click)="onClickSaveProvider(providerFormGroup, providerFormGroup.valid);">
+                    <span *ngIf="btnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                    <span *ngIf="btnText">SAVE &nbsp; <i class="fa fa-check"></i></span>
+                </button>
             </div>
         </form>
     </section>

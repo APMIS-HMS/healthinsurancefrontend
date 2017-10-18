@@ -5,6 +5,7 @@ export interface Provider {
     facilityClass: any;
     hefeemaNumber: any;
     hefeemaStatus: any;
+    providerId: String;
     lasrraId: any;
     comment?: any;
 }
