@@ -127,7 +127,7 @@
                 <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
                 <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
                 <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
-                <li (click)="tabServices_click()" [class.tab-active]="tab_services">Services</li>
+                <li (click)="tabServices_click()" [class.tab-active]="tab_services">Investigations</li>
                 <li (click)="tabNotes_click()" [class.tab-active]="tab_notes">Notes & Documentations</li>
             </ul>
 
@@ -356,7 +356,7 @@
                 <div *ngIf="tab_services" class="tab-pane fade show active">
                     <div class="content-top-bar">
                         <div class="bar-labels">
-                            <div>Clinical Information - Services</div>
+                            <div>Clinical Information - Investigations</div>
                         </div>
 
                         <div class="bar-icos">
@@ -371,14 +371,14 @@
                                 <div class="searchable-input">
                                     <input style="width:300px;" type="text" formControlName="services" class="form-control">
 
-                                    <ul *ngIf="searchResults" class="search-results">
-                                        <li>Several symtoms shows here</li>
-                                        <li>Several symtoms shows here</li>
-                                        <li>Several symtoms shows here</li>
-                                        <li>Several symtoms shows here</li>
-                                    </ul>
+                                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.services.valid || preAuthFormGroup.controls.services.pristine">
+                                            Investigation value is required.
+                                        </small>
+                                        <ul *ngIf="investigationSearchResult" class="search-results">
+                                            <li (click)="onSelectInvestigation(result)" *ngFor="let result of investigationItems">{{result.name}}</li>
+                                        </ul>
 
-                                    <div class="btn btn-medium btn-blue-outline">
+                                    <div (click)="onAddInvestigation()" class="btn btn-medium btn-blue-outline">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD SERVICES
                                     </div>
                                 </div>
@@ -396,33 +396,13 @@
                                 </thead>
 
                                 <tbody class="tbody">
-                                    <tr class="tr">
-                                        <td class="td">Bilataral signs</td>
+                                    <tr *ngFor="let investigation of investigationList; let i=index" class="tr">
+                                        <td  class="td">{{investigation.investigation.name}}</td>
                                         <td class="td">
                                             <input type="checkbox" disabled="disabled">
                                         </td>
                                         <td>
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="tr">
-                                        <td class="td">Bilataral signs</td>
-                                        <td class="td">
-                                            <input type="checkbox" disabled="disabled">
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="tr">
-                                        <td class="td">Bilataral signs</td>
-                                        <td class="td">
-                                            <input type="checkbox" disabled="disabled">
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-times"></i>
+                                            <i (click)="removeInvestigation(i)" class="fa fa-times"></i>
                                         </td>
                                     </tr>
                                 </tbody>

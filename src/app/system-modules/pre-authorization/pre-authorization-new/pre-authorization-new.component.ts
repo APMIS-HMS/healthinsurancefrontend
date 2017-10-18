@@ -28,6 +28,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   complaintSearchResult = false;
   diagnosisSearchResult = false;
   procedureSearchResult = false;
+  investigationSearchResult = false;
   Disabled = false;
 
   tab_complaints = true;
@@ -46,6 +47,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   selectedComplain: any;
   selectedDiagnosis: any;
   selectedProcedure:any;
+  selectedInvestigation:any;
 
   complaintLists: any[] = <any>[];
   diagnosisLists: any = <any>[];
@@ -193,6 +195,19 @@ export class PreAuthorizationNewComponent implements OnInit {
       console.log(error)
     });
 
+    this.preAuthFormGroup.controls.services.valueChanges
+    .debounceTime(250)
+    .distinctUntilChanged()
+    .subscribe(value => {
+      if (!(this.investigationItems.filter(x => x.name === value).length > 0)) {
+        this.selectedInvestigation = undefined;
+        this._getInvestigations(value);
+      }
+    }, error => {
+      this._systemService.off();
+      console.log(error)
+    });
+
   }
 
 
@@ -261,13 +276,18 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   _getInvestigations(value) {
-    if (value.length >= 3) {
-      this._investigationService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.investigationItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
+    if (value && value.length > 1) {
+      this._investigationService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
         }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.investigationSearchResult = true;
+          this.investigationItems = payload.data;
+          console.log(this.investigationItems)
+        }
+
       })
     }
   }
@@ -317,6 +337,9 @@ export class PreAuthorizationNewComponent implements OnInit {
   removeProcedure(i) {
     this.procedureList.splice(i);
   }
+  removeInvestigation(i) {
+    this.investigationList.splice(i);
+  }
 
   onSelectComplain(complain) {
     this.preAuthFormGroup.controls.presentingComplaints.setValue(complain.name);
@@ -332,6 +355,24 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.preAuthFormGroup.controls.procedures.setValue(procedure.name);
     this.procedureSearchResult = false;
     this.selectedProcedure = procedure;
+  }
+  onSelectInvestigation(investigation) {
+    this.preAuthFormGroup.controls.services.setValue(investigation.name);
+    this.investigationSearchResult = false;
+    this.selectedInvestigation = investigation;
+  }
+  onAddInvestigation() {
+    let name = this.preAuthFormGroup.controls.services;
+    if (name.valid) {
+      this.investigationList.push({
+        "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
+      });
+      console.log(this.investigationList)
+      this.preAuthFormGroup.controls.services.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
+
   }
   onAddProcedure() {
     let name = this.preAuthFormGroup.controls.procedures;
