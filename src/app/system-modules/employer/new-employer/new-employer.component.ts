@@ -10,6 +10,7 @@ import {
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import { FORM_VALIDATION_ERROR_MESSAGE } from '../../../services/globals/config';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -390,24 +391,47 @@ export class NewEmployerComponent implements OnInit {
         });
       } else {
         // Create Employer.
-        this._facilityService.create(facility).then(payload => {
-          console.log(payload);
-          // this.employerFormGroup.reset();
-          this._systemService.off();
-          this._toastr.success('Employer has been created successfully!', 'Success!');
-          this.btnText = true;
-          this.btnProcessing = false;
-          this.disableBtn = false;
-        }).catch(err => {
-          console.log(err);
-          this.btnText = true;
-          this.btnProcessing = false;
-          this.disableBtn = false;
-          this._systemService.off();
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+            console.log(allResult);
+            if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+              facility.logo = allResult[0].body[0].file;
+            }
+            // Business Contact Image
+            if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+              facility.businessContact.image = allResult[1].body[0].file;
+            }
+            // IT Contact Image.
+            if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+              facility.itContact.image = allResult[2].body[0].file;
+            }
+
+            this._facilityService.create(facility).then(payload => {
+              console.log(payload);
+              // this.employerFormGroup.reset();
+              this._systemService.off();
+              this._toastr.success('Employer has been created successfully!', 'Success!');
+              this.btnText = true;
+              this.btnProcessing = false;
+              this.disableBtn = false;
+            }).catch(err => {
+              console.log(err);
+              this.btnText = true;
+              this.btnProcessing = false;
+              this.disableBtn = false;
+              this._systemService.off();
+            });
         });
       }
     } else {
-      this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+      let counter = 0;
+      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      Object.keys(this.employerFormGroup.controls).forEach((field, i) => {
+        const control = this.employerFormGroup.get(field);
+        if (!control.valid) {
+          control.markAsDirty({ onlySelf: true });
+          counter = counter + 1;
+        }
+      });
     }
   }
 
@@ -439,6 +463,7 @@ export class NewEmployerComponent implements OnInit {
       break;
     }
   }
+
   readURL(input) {
     this._systemService.on();
     switch (input) {
@@ -485,7 +510,7 @@ export class NewEmployerComponent implements OnInit {
     }
   }
 
-  upload() {
+  uploadLogo() {
     let logoBrowser = this.logoInput.nativeElement;
     if (logoBrowser.files && logoBrowser.files[0]) {
       const formData = new FormData();
@@ -494,8 +519,10 @@ export class NewEmployerComponent implements OnInit {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
     }
+  }
 
-    let itBrowser = this.logoInput.nativeElement;
+  uploadItContact() {
+    let itBrowser = this.itInput.nativeElement;
     if (itBrowser.files && itBrowser.files[0]) {
       const formData = new FormData();
       formData.append("platform", itBrowser.files[0]);
@@ -503,7 +530,9 @@ export class NewEmployerComponent implements OnInit {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
     }
+  }
 
+  uploadBContact() {
     let bBrowser = this.bInput.nativeElement;
     if (bBrowser.files && bBrowser.files[0]) {
       const formData = new FormData();

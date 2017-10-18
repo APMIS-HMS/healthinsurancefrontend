@@ -36,7 +36,8 @@
                     <div class="item-label item-head">Employer Detail</div>
 
                     <div class="detail-content">
-                        <img class="hia-logo" src="../../../../assets/img/logos/bridgeclinicbanner.jpg">
+                        <img *ngIf="facility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility.logo.thumbnail)">
+                        <img *ngIf="facility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
                         <div class="group-wrap">
                             <div class="item-label">{{ facility?.name }}</div>
                             <div class="item-val">{{ facility?.employer?.industry?.name }}</div>
@@ -75,7 +76,8 @@
 
                     <div class="detail-content">
                         <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
+                            <img *ngIf="facility?.businessContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.businessContact?.image?.thumbnail)">
+                            <img *ngIf="facility?.businessContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
                         </div>
                         <div class="group-wrap">
                             <div class="item-val">{{ facility?.businessContact?.firstName }} {{ facility?.businessContact?.lastName }}</div>
@@ -92,7 +94,8 @@
 
                     <div class="detail-content">
                         <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
+                            <img *ngIf="facility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform('this.facility?.itContact?.image?.thumbnail')">
+                            <img *ngIf="facility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
                         </div>
                         <div class="group-wrap">
                             <div class="item-val">{{ facility?.itContact?.firstName }} {{ facility?.itContact?.lastName }}</div>
@@ -109,8 +112,7 @@
         <div *ngIf='tab_beneficiaries' class="tab-pane fade show active">
             <div class="btn btn-medium btn-blue" (click)="showImageBrowseDlg()">
                 <i class="fa fa-file-excel-o" aria-hidden="true"></i> UPLOAD BENEFICIARIES
-                <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;"
-                    #fileInput type="file" id="uploadResult" (change)="upload($event)">
+                <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
             </div>
             <div *ngIf="!isUploading">
                 <app-list-beneficiary></app-list-beneficiary>

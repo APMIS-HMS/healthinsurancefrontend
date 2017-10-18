@@ -110,9 +110,9 @@
                         <button (click)="showImageBrowseDlg('b-contact')" class="btn btn-medium btn-blue">Search Photo</button>
                     </div>
                     <div class="img-holder-box">
-                        <input accept="image/x-png,image/jpeg" style="display:none;" #bInput type="file" id="uploadResult" (change)="readURL('b-contact')">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #bInput type="file" id="bUploadResult" (change)="readURL('b-contact')">
                         <div style="width:100%;" class="placehold-wrap">
-                            <img #bImage id="bImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
+                            <img #bImage id="bImage" class="image-holder" src="assets/img/users/default.png" />
                         </div>
                     </div>
                 </div>
@@ -172,9 +172,9 @@
                         <button (click)="showImageBrowseDlg('it-contact')" class="btn btn-medium btn-blue">Search Photo</button>
                     </div>
                     <div class="img-holder-box">
-                        <input accept="image/x-png,image/jpeg" style="display:none;" #itInput type="file" id="uploadResult" (change)="readURL('it-contact')">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #itInput type="file" id="itUploadResult" (change)="readURL('it-contact')">
                         <div style="width:100%;" class="placehold-wrap">
-                            <img #itImage id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
+                            <img #itImage id="logoImage" class="image-holder" src="assets/img/users/default.png" />
                         </div>
                     </div>
                 </div>
@@ -287,7 +287,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-medium btn-blue" [disabled]="disableBtn || !employerFormGroup.valid" (click)="onClickSaveEmployer(employerFormGroup.value, employerFormGroup.valid);">
+                <button class="btn btn-medium btn-blue" [disabled]="disableBtn" (click)="onClickSaveEmployer(employerFormGroup.value, employerFormGroup.valid, logoInput, bInput, itInput);">
                     <span *ngIf="btnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
                     <span *ngIf="btnText">SAVE &nbsp; <i class="fa fa-check"></i></span>
                 </button>
