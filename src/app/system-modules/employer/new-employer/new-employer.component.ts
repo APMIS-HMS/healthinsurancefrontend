@@ -385,6 +385,7 @@ export class NewEmployerComponent implements OnInit {
           }
 
           facility._id = this.selectedFacilityId;
+          facility.employer.cin = this.facility.employer.cin;
           this._facilityService.update(facility).then((payload: any) => {
             console.log(payload);
             this._systemService.off();
