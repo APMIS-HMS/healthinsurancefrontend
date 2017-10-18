@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Health Plan</label>
                 <div class="input-wrap">
-                    <input type="email" formControlName="plan" class="form-control" value="{{SelectedCheckinItemPlan}}">
+                    <input type="email" formControlName="plan" class="form-control" value="{{SelectedCheckinItem?.policyObject?.planId?.name}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.plan.valid || claimsFormGroup.controls.plan.pristine">
                     This is a required field.
@@ -50,15 +50,15 @@
                 <label class="label">Encounter Type</label>
                 <div>
                     <div class="input-wrap" style="justify-content:flex-start; margin-bottom:20px;">
-                        <span style="margin-right:10px" *ngIf="SelectedCheckinItem?.encounterType?.name == Out-Patient">
-                          <label for="outPatient" *ngIf="SelectedCheckinItem.encounterType.name == 'Out-Patient'">
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="outPatient" name="outPatient" checked>
+                        <span style="margin-right:10px">
+                          <label for="outPatient">
+                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" [checked]="isOutPatient" formControlName="outPatient" name="outPatient" checked>
                               Outpatient
                           </label>
                       </span>
                         <span>
-                          <label for="inPatient" *ngIf="SelectedCheckinItem?.encounterType?.name == 'In-Patient'">
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="inPatient" name="inPatient" checked>
+                          <label for="inPatient" >
+                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio"  [checked]="isInpatient" formControlName="inPatient" name="inPatient" checked>
                               Inpatient
                           </label>
                       </span>

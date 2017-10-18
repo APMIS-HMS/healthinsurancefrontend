@@ -28,6 +28,9 @@ export class NewClaimComponent implements OnInit {
 
   claimsFormGroup: FormGroup;
   searchResults = false;
+  searchProcedureResults = false;
+  searchDiagnosisResults=false;
+  searchInvestigationResults = false;
   currentCheckIn: CheckIn = <CheckIn>{};
   claimItem: Claim = <Claim>{};
   claimDocItem: ClaimDocument = <ClaimDocument>{};
@@ -46,6 +49,8 @@ export class NewClaimComponent implements OnInit {
   investigationItems: any = <any>[];
   drugItems: any = <any>[];
   user: any;
+  isOutpatient: boolean = false;
+  isInpatient: boolean = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -164,7 +169,13 @@ export class NewClaimComponent implements OnInit {
   _getSelectedCheckinItem(checkinId) {
     this._checkInService.find({ query: { _id: checkinId } }).then((payload: any) => {
       this.SelectedCheckinItem = payload.data[0];
-      this.SelectedCheckinItemPlan = this.SelectedCheckinItem.policyObject[0].planId.name;
+      if (this.SelectedCheckinItem.encounterType == "In-Patient") {
+        this.isInpatient = true;
+        this.isOutpatient = false;
+      } else {
+        this.isOutpatient = true;
+        this.isInpatient = false;
+      }
       console.log(this.SelectedCheckinItem);
     })
   }
@@ -194,14 +205,16 @@ export class NewClaimComponent implements OnInit {
   }
 
   _getProcedures(value) {
-    if (value.length >= 3) {
-      this._procedureService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.procedureItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
-        }
-      })
+    if (this.searchProcedureResults == false) {
+      if (value.length >= 3) {
+        this._procedureService.find({}).then((payload: any) => {
+          if (payload.data.length > 0) {
+            this.procedureItems = payload.data.filter((filterItem: any) => {
+              return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
+            })
+          }
+        })
+      }
     }
   }
 
@@ -220,32 +233,37 @@ export class NewClaimComponent implements OnInit {
   }
 
   _getDiagnosises(value) {
-    if (value.length >= 3) {
-      this._diagnosisService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.diagnosisItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
-        }
-      })
+    if (this.searchDiagnosisResults == false) {
+      if (value.length >= 3) {
+        this._diagnosisService.find({}).then((payload: any) => {
+          if (payload.data.length > 0) {
+            this.diagnosisItems = payload.data.filter((filterItem: any) => {
+              return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
+            })
+          }
+        })
+      }
     }
   }
 
   _getInvestigations(value) {
-    if (value.length >= 3) {
-      this._investigationService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.investigationItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
-        }
-      })
+    if (this.searchInvestigationResults == false) {
+      if (value.length >= 3) {
+        this._investigationService.find({}).then((payload: any) => {
+          if (payload.data.length > 0) {
+            this.investigationItems = payload.data.filter((filterItem: any) => {
+              return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
+            })
+          }
+        })
+      }
     }
   }
 
   onSelectSymptom(param) {
     this.claimsFormGroup.controls.symptom.setValue(param);
     this.symptomItems = [];
+    this.searchResults = true;
   }
 
   onAddSymptom() {
@@ -260,6 +278,7 @@ export class NewClaimComponent implements OnInit {
   onSelectDiagnosis(param) {
     this.claimsFormGroup.controls.diagnosis.setValue(param);
     this.diagnosisItems = [];
+    this.searchResults = true;
   }
 
   onAddDiagnosis() {
@@ -272,6 +291,7 @@ export class NewClaimComponent implements OnInit {
   onSelectInvestigation(param) {
     this.claimsFormGroup.controls.investigations.setValue(param);
     this.investigationItems = [];
+    this.searchResults = true;
   }
 
   onAddInvestigation() {
@@ -297,6 +317,7 @@ export class NewClaimComponent implements OnInit {
   onSelectProcedure(param) {
     this.claimsFormGroup.controls.procedure.setValue(param);
     this.procedureItems = [];
+    this.searchProcedureResults = true;
   }
 
   onAddProcedure() {
