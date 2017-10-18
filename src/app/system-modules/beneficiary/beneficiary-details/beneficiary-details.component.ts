@@ -89,9 +89,6 @@ export class BeneficiaryDetailsComponent implements OnInit {
         console.log(this.dependants)
         console.log(this.policy)
       }
-      console.log(this.beneficiary);
-      console.log(this.dependants);
-      console.log(this.policy);
 
       this._systemService.off();
     }, error => {
@@ -101,7 +98,6 @@ export class BeneficiaryDetailsComponent implements OnInit {
 
   onClickApprove(valid: boolean, value: any) {
     if (valid) {
-      console.log(this.policy);
       const validity = {
         duration: value.duration,
         unit: value.unit,

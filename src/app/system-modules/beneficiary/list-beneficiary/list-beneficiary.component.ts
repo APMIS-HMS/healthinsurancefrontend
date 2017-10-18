@@ -92,6 +92,7 @@ export class ListBeneficiaryComponent implements OnInit {
           policy.dependantBeneficiaries.forEach(innerPolicy => {
             innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
             innerPolicy.beneficiary.isPrincipal = false;
+            innerPolicy.beneficiary.principalId = principal._id;
             innerPolicy.beneficiary.hia = policy.hiaId;
             innerPolicy.beneficiary.isActive = policy.isActive;
             this.beneficiaries.push(innerPolicy.beneficiary);
@@ -129,7 +130,7 @@ export class ListBeneficiaryComponent implements OnInit {
       })
       this.inActiveBeneficiaries = beneficiaryList;
       this._systemService.off();
-    }, error =>{
+    }, error => {
       console.log(error)
     })
   }
@@ -144,7 +145,6 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   navigateEditBeneficiary(beneficiary) {
-    console.log(beneficiary)
     this._systemService.on();
     this._router.navigate(['/modules/beneficiary/new', beneficiary._id]).then(res => {
       this._systemService.off();
@@ -152,6 +152,28 @@ export class ListBeneficiaryComponent implements OnInit {
       console.log(err)
       this._systemService.off();
     });
+  }
+
+  navigateDetailBeneficiary(beneficiary) {
+    console.log(beneficiary)
+    if (beneficiary.isPrincipal) {
+      this._systemService.on();
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary._id]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err)
+        this._systemService.off();
+      });
+    } else {
+      this._systemService.on();
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.principalId]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err)
+        this._systemService.off();
+      });
+    }
+
   }
 
 

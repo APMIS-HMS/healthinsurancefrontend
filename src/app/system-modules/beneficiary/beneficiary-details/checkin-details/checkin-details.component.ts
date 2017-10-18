@@ -210,9 +210,9 @@ export class CheckinDetailsComponent implements OnInit {
     this._checkInService.find({
       query: {
         beneficiaryId: this.beneficiary._id,
-        $client: {
-          hasCheckInToday: true
-        }
+        // $client: {
+        //   hasCheckInToday: true
+        // }
       }
     }).then((payload: any) => {
       if (payload.data.length > 0) {
@@ -292,6 +292,14 @@ export class CheckinDetailsComponent implements OnInit {
       console.log(err)
       this._systemService.off();
     });
+  }
+  navigateToNewAuthorization(){
+    this._systemService.on();
+    this._router.navigate(['/modules/pre-auth/new', this.selectedCheckIn._id]).then(res =>{
+      this._systemService.off();
+    }).catch(err =>{
+      this._systemService.off();
+    })
   }
 
 }

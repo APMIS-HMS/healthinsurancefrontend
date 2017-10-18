@@ -1,3 +1,4 @@
+import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
 import { PremiumTypeService } from './../../../../services/common/premium-type.service';
 import { PlanService } from './../../../../services/plan/plan.service';
@@ -182,6 +183,16 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
       }).catch(err => {
         console.log(err)
+      });
+    }else{
+      let counter = 0;
+      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      Object.keys(this.frmProgram.controls).forEach((field, i) => { // {1}
+        const control = this.frmProgram.get(field);
+        if (!control.valid) {
+          control.markAsDirty({ onlySelf: true });
+          counter = counter + 1;
+        }
       });
     }
 

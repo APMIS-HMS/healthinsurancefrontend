@@ -176,8 +176,6 @@ export class NewBeneficiaryNokComponent implements OnInit {
   }
   push(dependant, valid) {
     dependant.controls['readOnly'].setValue(true);
-    console.log(dependant)
-    console.log(valid);
   }
 
   changeGender($event, gender, dependant) {
