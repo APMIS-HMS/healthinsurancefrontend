@@ -125,9 +125,11 @@
 
             <ul class="inpage-tabs">
                 <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+                <li (click)="tabClinicalNotes_click()" [class.tab-active]="tab_clinicalNotes">Clinical Notes</li>
                 <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
                 <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
                 <li (click)="tabServices_click()" [class.tab-active]="tab_services">Investigations</li>
+                <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
                 <li (click)="tabNotes_click()" [class.tab-active]="tab_notes">Notes & Documentations</li>
             </ul>
 
@@ -215,6 +217,32 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <div *ngIf="tab_clinicalNotes" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Documentation</div>
+                        </div>
+
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <div class="frm-group">
+
+                        <div class="frm-item-wrap">
+                            <label class="label">Clinical Note</label>
+                            <div class="input-wrap" style="width:100%;">
+                                <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
+                            </div>
+                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.clinicalNote.valid || preAuthFormGroup.controls.clinicalNote.pristine">
+                                This is a required field.
+                            </small>
+                        </div>
+
                     </div>
                 </div>
 
@@ -317,11 +345,11 @@
                                 <div class="searchable-input">
                                     <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
                                     <ul *ngIf="procedureSearchResult" class="search-results">
-                                            <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
-                                        </ul>
+                                        <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
+                                    </ul>
 
                                     <div (click)="onAddProcedure()" class="btn btn-medium btn-blue-outline">
-                                        <i  class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
                                     </div>
                                 </div>
                             </div>
@@ -372,11 +400,11 @@
                                     <input style="width:300px;" type="text" formControlName="services" class="form-control">
 
                                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.services.valid || preAuthFormGroup.controls.services.pristine">
-                                            Investigation value is required.
-                                        </small>
-                                        <ul *ngIf="investigationSearchResult" class="search-results">
-                                            <li (click)="onSelectInvestigation(result)" *ngFor="let result of investigationItems">{{result.name}}</li>
-                                        </ul>
+                                        Investigation value is required.
+                                    </small>
+                                    <ul *ngIf="investigationSearchResult" class="search-results">
+                                        <li (click)="onSelectInvestigation(result)" *ngFor="let result of investigationItems">{{result.name}}</li>
+                                    </ul>
 
                                     <div (click)="onAddInvestigation()" class="btn btn-medium btn-blue-outline">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD SERVICES
@@ -397,7 +425,7 @@
 
                                 <tbody class="tbody">
                                     <tr *ngFor="let investigation of investigationList; let i=index" class="tr">
-                                        <td  class="td">{{investigation.investigation.name}}</td>
+                                        <td class="td">{{investigation.investigation.name}}</td>
                                         <td class="td">
                                             <input type="checkbox" disabled="disabled">
                                         </td>
@@ -409,6 +437,92 @@
                             </table>
                         </div>
                     </div>
+                </div>
+
+                <div *ngIf="tab_drugs" class="tab-pane fade show active">
+                    <div class="content-top-bar">
+                        <div class="bar-labels">
+                            <div>Clinical Information - Drugs</div>
+                        </div>
+
+                        <div class="bar-icos">
+                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+
+
+                    <div class="frm-subsect">
+                        <div class="frm-item-wrap">
+                            <label class="label">Drug</label>
+                            <div class="input-wrap">
+                                <div>
+                                    <div class="input-wrap-x2">
+                                        <div class="searchable-input">
+                                            <input style="width:155px;" type="text" formControlName="drug" class="form-control">
+                                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.drug.valid || preAuthFormGroup.controls.drug.pristine">
+                                                Drug value is required.
+                                            </small>
+                                            <ul *ngIf="drugSearchResult" class="search-results">
+                                                <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="input-wrap-x2">
+                                            <input style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
+                                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.drugQty.valid || preAuthFormGroup.controls.drugQty.pristine">
+                                                Drug Quantity value is required.
+                                            </small>
+                                            <div>
+                                                <select formControlName="drugUnit" class="form-control">
+                                                    <option disabled value="" selected>Select...</option>
+                                                    <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
+                                                </select>
+                                                <small class="alert-label" [hidden]="preAuthFormGroup.controls.drugUnit.valid || preAuthFormGroup.controls.drugUnit.pristine">
+                                                    Drug Unit value is required.
+                                                </small>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="btn btn-medium btn-blue-outline" (click)="onAddDrug()">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DRUG
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tbl-wrap">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">Drug</th>
+                                        <th class="th">Quantity</th>
+                                        <th class="th"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="tbody">
+                                    <tr class="tr" *ngFor="let item of drugList;let i=index">
+                                        <th class="td">{{item.drug.name}}</th>
+                                        <th class="td">{{item.quantity}} {{item.unit.name}}</th>
+                                        <td>
+                                            <i class="fa fa-times" (click)="removeDrug(i)"></i>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
                 </div>
 
                 <div *ngIf="tab_notes" class="tab-pane fade show active">
@@ -423,16 +537,6 @@
                     </div>
 
                     <div class="frm-group">
-
-                        <div class="frm-item-wrap">
-                            <label class="label">Clinical Note</label>
-                            <div class="input-wrap" style="width:100%;">
-                                <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
-                            </div>
-                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.clinicalNote.valid || preAuthFormGroup.controls.clinicalNote.pristine">
-                                This is a required field.
-                            </small>
-                        </div>
 
                         <div class="frm-item-wrap">
                             <label class="label">Reason for Request</label>
@@ -510,7 +614,7 @@
 
 
 
-            <button class="btn btn-medium btn-blue cta">SEND</button>
+            <button (click)="send()" class="btn btn-medium btn-blue cta">SEND</button>
         </form>
     </section>
 </div>
