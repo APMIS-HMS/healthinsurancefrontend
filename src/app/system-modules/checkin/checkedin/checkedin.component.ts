@@ -49,6 +49,7 @@ export class CheckedinComponent implements OnInit {
 
   _getCheckedIn() {
     this._systemService.on();
+    console.log(this.user.facilityId._id)
     this._checkInService.find({
       query: {
         'providerFacilityId._id': this.user.facilityId._id,

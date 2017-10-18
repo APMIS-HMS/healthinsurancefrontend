@@ -464,7 +464,6 @@ export class NewProviderComponent implements OnInit {
         facility.platformOwnerId = this.currentPlatform;
         this._facilityService.create(facility).then(payload => {
           this._systemService.off();
-          // this.providerFormGroup.reset();
           this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
           this._toastr.success('Care Provider has been created successfully!', 'Success!');
           this.providerFormGroup.controls['classification'].setValue('primary');

@@ -60,7 +60,8 @@ export class ListUserComponent implements OnInit {
         this._systemService.off();
       });
     } else if (this.auth.userType.name === 'Platform Owner') {
-      this._userService.find({ query: { 'facilityId._id': this.auth.facilityId._id } }).then((payload: any) => {
+      console.log(this.auth)
+      this._userService.find({ query: { 'platformOwnerId._id': this.auth.platformOwnerId._id } }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
         this.users = payload.data;

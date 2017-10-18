@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HeaderEventEmitterService } from '../../services/event-emitters/header-event-emitter.service';
@@ -15,13 +16,16 @@ export class TopBarComponent implements OnInit {
   pageInView: String = '';
   minorPageInView: String = '';
   currentPlatform: any;
+  user:any;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
-    private _facilityService: FacilityService
+    private _facilityService: FacilityService,
+    private _locker:CoolLocalStorage
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._headerEventEmitter.announcedUrl.subscribe(url => {
       this.pageInView = url;
     });
