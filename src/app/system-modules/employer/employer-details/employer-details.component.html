@@ -94,7 +94,7 @@
 
                     <div class="detail-content">
                         <div class="hia-user">
-                            <img *ngIf="facility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform('this.facility?.itContact?.image?.thumbnail')">
+                            <img *ngIf="facility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.itContact?.image?.thumbnail)">
                             <img *ngIf="facility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
                         </div>
                         <div class="group-wrap">
