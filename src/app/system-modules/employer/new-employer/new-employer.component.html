@@ -112,7 +112,9 @@
                     <div class="img-holder-box">
                         <input accept="image/x-png,image/jpeg" style="display:none;" #bInput type="file" id="bUploadResult" (change)="readURL('b-contact')">
                         <div style="width:100%;" class="placehold-wrap">
-                            <img #bImage id="bImage" class="image-holder" src="assets/img/users/default.png" />
+                            <img #bImage id="bImage" class="image-holder" *ngIf="facility?.businessContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.businessContact?.image?.thumbnail)">
+                            <img #bImage id="bImage" class="image-holder" *ngIf="facility?.businessContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+                            <!-- <img #bImage id="bImage" class="image-holder" src="assets/img/users/default.png" /> -->
                         </div>
                     </div>
                 </div>
@@ -174,7 +176,9 @@
                     <div class="img-holder-box">
                         <input accept="image/x-png,image/jpeg" style="display:none;" #itInput type="file" id="itUploadResult" (change)="readURL('it-contact')">
                         <div style="width:100%;" class="placehold-wrap">
-                            <img #itImage id="logoImage" class="image-holder" src="assets/img/users/default.png" />
+                            <img #itImage id="logoImage" class="image-holder" *ngIf="facility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.itContact?.image?.thumbnail)">
+                            <img #itImage id="logoImage" class="image-holder" *ngIf="facility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+                            <!-- <img #itImage id="logoImage" class="image-holder" src="assets/img/users/default.png" /> -->
                         </div>
                     </div>
                 </div>
@@ -281,7 +285,9 @@
                     <div class="img-holder-box">
                         <input accept="image/x-png,image/jpeg" style="display:none;" #logoInput type="file" id="uploadResult" (change)="readURL('logo')">
                         <div style="width:100%;" class="placehold-wrap">
-                            <img #logoImage id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
+                            <img #logoImage id="logoImage" class="image-holder" *ngIf="facility?.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.logo?.thumbnail)">
+                            <img #logoImage id="logoImage" class="image-holder" *ngIf="facility?.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
+                            <!-- <img #logoImage id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" /> -->
                         </div>
                     </div>
                 </div>

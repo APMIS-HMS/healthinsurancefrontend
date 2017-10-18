@@ -370,24 +370,39 @@ export class NewEmployerComponent implements OnInit {
       console.log(facility);
       if (!!this.selectedFacilityId) {
         // Edit Employer.
-        facility._id = this.selectedFacilityId;
-        this._facilityService.update(facility).then((payload: any) => {
-          console.log(payload);
-          this._systemService.off();
-          this._toastr.info('Navigating to employer details page...', 'Navigate!');
-          setTimeout(e => {
-            this.navigateEmployers('/modules/employer/employers/' + payload._id);
-          }, 2000);
-          this._toastr.success('Employer has been updated successfully!', 'Success!');
-          this.btnText = true;
-          this.btnProcessing = false;
-          this.disableBtn = false;
-        }).catch(err => {
-          console.log(err);
-          this.btnText = true;
-          this.btnProcessing = false;
-          this.disableBtn = false;
-          this._systemService.off();
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+          console.log(allResult);
+          if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+            facility.logo = allResult[0].body[0].file;
+          }
+          // Business Contact Image
+          if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+            facility.itContact.image = allResult[2].body[0].file;
+          }
+
+          facility._id = this.selectedFacilityId;
+          this._facilityService.update(facility).then((payload: any) => {
+            console.log(payload);
+            this._systemService.off();
+            this._toastr.info('Navigating to employer details page...', 'Navigate!');
+            setTimeout(e => {
+              this.navigateEmployers('/modules/employer/employers/' + payload._id);
+            }, 2000);
+            this._toastr.success('Employer has been updated successfully!', 'Success!');
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
+          }).catch(err => {
+            console.log(err);
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
+            this._systemService.off();
+          });
         });
       } else {
         // Create Employer.
