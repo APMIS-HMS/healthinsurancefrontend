@@ -1,3 +1,5 @@
+import { PolicyService } from './../../services/policy/policy.service';
+import { DrugPackSizeService } from './../../services/common/drug-pack-size.service';
 import { DiagnosisTypeService } from './../../services/common/diagnosis-type.service';
 import { DiagnosisService } from './../../services/common/diagnosis.service';
 import { DrugService } from './../../services/common/drug.service';
@@ -42,6 +44,6 @@ import { ModalQueryAuthorizationComponent } from './pre-authorization-details/mo
         ModalHoldAuthorizationComponent,
         ModalQueryAuthorizationComponent],
     providers: [VisitTypeService, CheckInService, SymptomService,InvestigationService,DrugService,DiagnosisService,
-        ProcedureService, DiagnosisTypeService, ProcedureService]
+        ProcedureService, DiagnosisTypeService, ProcedureService, DrugPackSizeService, PolicyService]
 })
 export class PreAuthorizationModule { }

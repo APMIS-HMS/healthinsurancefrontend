@@ -1,3 +1,6 @@
+import { Observable } from 'rxjs/Observable';
+import { PolicyService } from './../../../services/policy/policy.service';
+import { DrugPackSizeService } from './../../../services/common/drug-pack-size.service';
 import { DiagnosisTypeService } from './../../../services/common/diagnosis-type.service';
 import { InvestigationService } from './../../../services/common/investigation.service';
 import { DrugService } from './../../../services/common/drug.service';
@@ -24,10 +27,13 @@ import { DURATIONS } from '../../../services/globals/config';
 export class PreAuthorizationNewComponent implements OnInit {
 
   preAuthFormGroup: FormGroup;
+  symptomFormGroup: FormGroup;
   searchResults = false;
   complaintSearchResult = false;
   diagnosisSearchResult = false;
   procedureSearchResult = false;
+  investigationSearchResult = false;
+  drugSearchResult = false;
   Disabled = false;
 
   tab_complaints = true;
@@ -35,6 +41,8 @@ export class PreAuthorizationNewComponent implements OnInit {
   tab_procedures = false;
   tab_services = false;
   tab_notes = false;
+  tab_drugs = false;
+  tab_clinicalNotes = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -45,7 +53,10 @@ export class PreAuthorizationNewComponent implements OnInit {
   selectedCheckIn: any;
   selectedComplain: any;
   selectedDiagnosis: any;
-  selectedProcedure:any;
+  selectedProcedure: any;
+  selectedInvestigation: any;
+  selectedDrug: any;
+  selectedPolicy:any;
 
   complaintLists: any[] = <any>[];
   diagnosisLists: any = <any>[];
@@ -61,11 +72,11 @@ export class PreAuthorizationNewComponent implements OnInit {
   drugItems: any = <any>[];
 
   diagnosisTypes: any[] = [];
+  packSizes: any[] = [];
 
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
-    private loadingService: LoadingBarService,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _visitTypeService: VisitTypeService,
     private _systemService: SystemModuleService,
@@ -76,7 +87,9 @@ export class PreAuthorizationNewComponent implements OnInit {
     private _diagnosisService: DiagnosisService,
     private _drugService: DrugService,
     private _investigationService: InvestigationService,
-    private _diagnosisTypeService: DiagnosisTypeService
+    private _diagnosisTypeService: DiagnosisTypeService,
+    private _drugPackSizeService: DrugPackSizeService,
+    private _policyService: PolicyService
   ) { }
 
   ngOnInit() {
@@ -85,6 +98,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.durations = DURATIONS;
     this._getVisitTypes();
     this._getDiagnosisTypes();
+    this._getDrugPackSizes();
     this._initializeFormGroup();
 
     this._route.params.subscribe(param => {
@@ -125,7 +139,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       age: [this.selectedCheckIn != null ? this._getAge() : 0, [<any>Validators.required]],
       address: [this.selectedCheckIn != null ? this._getAddress() : '', [<any>Validators.required]],
       healthCareProvider: [this.selectedCheckIn != null ? this.selectedCheckIn.providerFacilityId.name : '', [<any>Validators.required]],
-      hia: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      hia: [this.selectedPolicy != null ? this.selectedPolicy.hiaId.name : '', [<any>Validators.required]],
       visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -139,19 +153,25 @@ export class PreAuthorizationNewComponent implements OnInit {
       procedures: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       services: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
+      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       preAuthorizationNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       docName: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]]
     });
 
-    // this.preAuthFormGroup.controls.drug.valueChanges
-    // .debounceTime(250)
-    // .distinctUntilChanged()
-    // .subscribe(value => {
-    //   this._getDrugs(value);
-    // }, error => {
-    //   this._systemService.off();
-    //   console.log(error)
-    // });
+    this.preAuthFormGroup.controls.drug.valueChanges
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        if (!(this.drugItems.filter(x => x.name === value).length > 0)) {
+          this.selectedDrug = undefined;
+          this._getDrugs(value);
+        }
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
 
     this.preAuthFormGroup.controls.presentingComplaints.valueChanges
       .debounceTime(250)
@@ -181,17 +201,30 @@ export class PreAuthorizationNewComponent implements OnInit {
       });
 
     this.preAuthFormGroup.controls.procedures.valueChanges
-    .debounceTime(250)
-    .distinctUntilChanged()
-    .subscribe(value => {
-      if (!(this.procedureItems.filter(x => x.name === value).length > 0)) {
-        this.selectedProcedure = undefined;
-        this._getProcedures(value);
-      }
-    }, error => {
-      this._systemService.off();
-      console.log(error)
-    });
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        if (!(this.procedureItems.filter(x => x.name === value).length > 0)) {
+          this.selectedProcedure = undefined;
+          this._getProcedures(value);
+        }
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
+    this.preAuthFormGroup.controls.services.valueChanges
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        if (!(this.investigationItems.filter(x => x.name === value).length > 0)) {
+          this.selectedInvestigation = undefined;
+          this._getInvestigations(value);
+        }
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
 
   }
 
@@ -230,16 +263,17 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   _getDrugs(value) {
-    if (this.searchResults == false) {
-      if (value.length >= 3) {
-        this._drugService.find({}).then((payload: any) => {
-          if (payload.data.length > 0) {
-            this.drugItems = payload.data.filter((filterItem: any) => {
-              return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-            })
-          }
-        })
-      }
+    if (value && value.length > 1) {
+      this._drugService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
+        }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.drugSearchResult = true;
+          this.drugItems = payload.data;
+        }
+      })
     }
   }
 
@@ -253,21 +287,23 @@ export class PreAuthorizationNewComponent implements OnInit {
         if (payload.data.length > 0) {
           this.diagnosisSearchResult = true;
           this.diagnosisItems = payload.data;
-          console.log(this.diagnosisItems)
         }
-
       })
     }
   }
 
   _getInvestigations(value) {
-    if (value.length >= 3) {
-      this._investigationService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.investigationItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
+    if (value && value.length > 1) {
+      this._investigationService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
         }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.investigationSearchResult = true;
+          this.investigationItems = payload.data;
+        }
+
       })
     }
   }
@@ -276,9 +312,42 @@ export class PreAuthorizationNewComponent implements OnInit {
     this._checkInService.get(id, {}).then((payload: any) => {
       this.selectedCheckIn = payload;
       this._initializeFormGroup();
+      this._getPolicy();
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
+    })
+  }
+
+  _getPolicy() {
+    this._systemService.on();
+    let policy$ = Observable.fromPromise(this._policyService.find(
+      {
+        query: {
+          $and: [
+            { isActive: true },
+            {
+              $or: [
+                { 'principalBeneficiary._id': this.selectedCheckIn.beneficiaryId },
+                { 'dependantBeneficiaries.beneficiary._id': this.selectedCheckIn.beneficiaryId }
+              ]
+            }
+          ]
+        }
+      }
+    ));
+
+
+    Observable.forkJoin([policy$]).subscribe((results: any) => {
+      let policyResult = results[0];
+      if(policyResult.data.length > 0){
+        this.selectedPolicy = policyResult.data[0];
+        this.preAuthFormGroup.controls.hia.setValue(this.selectedPolicy.hiaId.name);
+      }
+      
+      this._systemService.off();
+    }, error => {
+      console.log(error)
     })
   }
 
@@ -294,6 +363,17 @@ export class PreAuthorizationNewComponent implements OnInit {
       this.selectedCheckIn.beneficiaryObject.personId.homeAddress.neighbourhood + ', ' +
       this.selectedCheckIn.beneficiaryObject.personId.homeAddress.lga.name + ', ' +
       this.selectedCheckIn.beneficiaryObject.personId.homeAddress.state.name
+  }
+
+  _getDrugPackSizes() {
+    this._systemService.on();
+    this._drugPackSizeService.find({}).then((payload: any) => {
+      this.packSizes = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
   }
 
   _getVisitTypes() {
@@ -317,6 +397,12 @@ export class PreAuthorizationNewComponent implements OnInit {
   removeProcedure(i) {
     this.procedureList.splice(i);
   }
+  removeInvestigation(i) {
+    this.investigationList.splice(i);
+  }
+  removeDrug(i) {
+    this.drugList.splice(i);
+  }
 
   onSelectComplain(complain) {
     this.preAuthFormGroup.controls.presentingComplaints.setValue(complain.name);
@@ -333,13 +419,53 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.procedureSearchResult = false;
     this.selectedProcedure = procedure;
   }
+  onSelectInvestigation(investigation) {
+    this.preAuthFormGroup.controls.services.setValue(investigation.name);
+    this.investigationSearchResult = false;
+    this.selectedInvestigation = investigation;
+  }
+  onSelectDrug(drug) {
+    this.preAuthFormGroup.controls.drug.setValue(drug.name);
+    this.drugSearchResult = false;
+    this.selectedDrug = drug;
+  }
+  onAddDrug() {
+    let name = this.preAuthFormGroup.controls.drug;
+    let unit = this.preAuthFormGroup.controls.drugUnit;
+    let quantity = this.preAuthFormGroup.controls.drugQty;
+    if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
+      this.drugList.push({
+        "drug": typeof (this.selectedDrug) === 'object' ? this.selectedDrug : name.value,
+        "unit": unit.value,
+        "quantity": quantity.value
+      });
+      this.preAuthFormGroup.controls.drug.reset();
+      unit.reset();
+      quantity.reset(1);
+    } else {
+      name.markAsDirty({ onlySelf: true });
+      unit.markAsDirty({ onlySelf: true });
+      quantity.markAsDirty({ onlySelf: true });
+    }
+  }
+  onAddInvestigation() {
+    let name = this.preAuthFormGroup.controls.services;
+
+    if (name.valid) {
+      this.investigationList.push({
+        "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
+      });
+      this.preAuthFormGroup.controls.services.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
+  }
   onAddProcedure() {
     let name = this.preAuthFormGroup.controls.procedures;
     if (name.valid) {
       this.procedureList.push({
         "procedure": typeof (this.selectedProcedure) === 'object' ? this.selectedProcedure : name.value,
       });
-      console.log(this.procedureList)
       this.preAuthFormGroup.controls.procedures.reset();
     } else {
       name.markAsDirty({ onlySelf: true });
@@ -391,31 +517,17 @@ export class PreAuthorizationNewComponent implements OnInit {
 
   }
 
-  needAuthorization(procedure){
-    if(procedure.procedure.PA === ' Y '){
+  needAuthorization(procedure) {
+    if (procedure.procedure.PA === ' Y ') {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
 
-
-  navigate(url: string, id: string) {
-    if (!!id) {
-      this.loadingService.startLoading();
-      this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
-      }).catch(err => {
-        this.loadingService.endLoading();
-      });
-    } else {
-      this.loadingService.startLoading();
-      this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
-      }).catch(err => {
-        this.loadingService.endLoading();
-      });
-    }
+  send(){
+    console.log(this.preAuthFormGroup.valid);
+    console.log(this.preAuthFormGroup.value);
   }
 
   tabComplaints_click() {
@@ -424,6 +536,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_procedures = false;
     this.tab_services = false;
     this.tab_notes = false;
+    this.tab_drugs = false;
+    this.tab_clinicalNotes = false;
   }
   tabDiagnosis_click() {
     this.tab_complaints = false;
@@ -431,6 +545,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_procedures = false;
     this.tab_services = false;
     this.tab_notes = false;
+    this.tab_drugs = false;
+    this.tab_clinicalNotes = false;
   }
   tabProcedures_click() {
     this.tab_complaints = false;
@@ -438,6 +554,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_procedures = true;
     this.tab_services = false;
     this.tab_notes = false;
+    this.tab_drugs = false;
+    this.tab_clinicalNotes = false;
   }
   tabServices_click() {
     this.tab_complaints = false;
@@ -445,6 +563,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_procedures = false;
     this.tab_services = true;
     this.tab_notes = false;
+    this.tab_drugs = false;
+    this.tab_clinicalNotes = false;
   }
   tabNotes_click() {
     this.tab_complaints = false;
@@ -452,5 +572,26 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_procedures = false;
     this.tab_services = false;
     this.tab_notes = true;
+    this.tab_drugs = false;
+    this.tab_clinicalNotes = false;
+  }
+  tabDrugs_click() {
+    this.tab_complaints = false;
+    this.tab_diagnosis = false;
+    this.tab_procedures = false;
+    this.tab_services = false;
+    this.tab_notes = false;
+    this.tab_drugs = true;
+    this.tab_clinicalNotes = false;
+  }
+
+  tabClinicalNotes_click() {
+    this.tab_complaints = false;
+    this.tab_diagnosis = false;
+    this.tab_procedures = false;
+    this.tab_services = false;
+    this.tab_notes = false;
+    this.tab_drugs = false;
+    this.tab_clinicalNotes = true;
   }
 }
