@@ -6,7 +6,19 @@
     justify-content: space-between;
 }
 .left-sect{
+    position: relative;
     width: 35%;
+}
+.left-fixed{
+    position: fixed;
+}
+.left-fixed{
+    position: fixed;
+    width: 31%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: lighten($brand-primary, 71%);
+    border: 1px solid lighten($brand-primary, 50%)
 }
 .right-sect{
     width: 63%;

@@ -79,6 +79,7 @@ export class NewClaimComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
+    private _router: Router,
     private _locker: CoolLocalStorage,
     private _systemService: SystemModuleService,
     private _claimTypeService: ClaimTypeService,
@@ -366,7 +367,7 @@ export class NewClaimComponent implements OnInit {
     let name = this.claimsFormGroup.controls.drug;
     let qty = this.claimsFormGroup.controls.drugQty;
     let unit = this.claimsFormGroup.controls.drugUnit;
-    if (name.valid) {
+    if (name.valid && qty.value.length>0) {
       this.drugList.push({
         "drug": typeof (this.selectedDrug.name) === 'object' ? this.selectedDrug : name.value,
         "quantity": qty.value,
@@ -402,8 +403,16 @@ export class NewClaimComponent implements OnInit {
     var acronym = matches.join('');
   }
 
+  onRemove(data:any[],item:any) {
+    const index: number = data.indexOf(item);
+    if (index !== -1) {
+        data.splice(index, 1);
+    }        
+}
+
 
   onSendClaim() {
+    this.claimDocItem.clinicalDocument = {};
     this.claimDocItem.clinicalDocument = {
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
@@ -413,7 +422,8 @@ export class NewClaimComponent implements OnInit {
       "symptoms": this.symptomLists,
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
-    this.claimItem.documentation = this.claimDocItem.clinicalDocument;
+    console.log(this.claimDocItem);
+    this.claimItem.documentation.push(this.claimDocItem.clinicalDocument);
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
@@ -430,10 +440,21 @@ export class NewClaimComponent implements OnInit {
       console.log(payload);
       this.claimsFormGroup.reset();
       this.isProcessing = false;
+      this.navigateListClaim();
     }, error => {
       console.log(error);
       this.isProcessing = false;
     })
+  }
+
+  navigateListClaim() {
+    this._systemService.on();
+    this._router.navigate(['/modules/claim']).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
   }
 
   tabSymptoms_click(){
