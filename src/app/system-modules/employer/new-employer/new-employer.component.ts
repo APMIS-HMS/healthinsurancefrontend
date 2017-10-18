@@ -474,6 +474,7 @@ export class NewEmployerComponent implements OnInit {
           var reader = new FileReader();
           let that = this;
           reader.onload = function (e: any) {
+             console.log(e);
             that.logoImage.nativeElement.src = e.target.result;
             that._systemService.off();
           };
@@ -494,7 +495,7 @@ export class NewEmployerComponent implements OnInit {
       });
     }
 
-    let itBrowser = this.itInput.nativeElement;
+    let itBrowser = this.logoInput.nativeElement;
     if (itBrowser.files && itBrowser.files[0]) {
       const formData = new FormData();
       formData.append("platform", itBrowser.files[0]);
