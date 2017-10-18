@@ -56,7 +56,7 @@
         </div>
     </div>
     <div *ngIf="checkinSect" class="right-wrap">
-        <div class="top-cta-wrap">
+        <div class="top-cta-wrap" *ngIf="selectedCheckIn === undefined">
             <div (click)="generate_otp()" class="btn btn-medium btn-yellow">GENERATE OTP</div>
         </div>
 
@@ -82,7 +82,14 @@
                         </small>
                     </div>
                 </div>
-                <button (click)="otp_verify()" class="btn btn-medium btn-blue"> VERIFY OTP</button>
+                <div class="frm-item-wrap btn-space">
+                    <button (click)="otp_verify()" class="btn btn-medium btn-blue label"> VERIFY OTP</button>
+                    <div class="input-wrap" *ngIf="selectedCheckIn !== undefined">
+                        <button (click)="otp_regenerate()" class="btn btn-medium btn-blue form-control"> RE-GENERATE OTP</button>
+                    </div>
+                </div>
+
+
             </form>
 
             <form *ngIf="checkin_show" [formGroup]="checkinFormGroup" class="animated fadeIn" novalidate>

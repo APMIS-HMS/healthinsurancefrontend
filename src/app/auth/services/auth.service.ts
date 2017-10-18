@@ -28,7 +28,6 @@ export class AuthService {
     this.listner = Observable.fromEvent(this._socket, 'patch');
   }
   announceMission(mission: Object) {
-    console.log(mission)
     this.missionAnnouncedSource.next(mission);
   }
 
@@ -36,7 +35,6 @@ export class AuthService {
     this._socketService.logOut();
   }
   login(query: any) {
-    console.log(query);
     return this._socketService.loginIntoApp(query);
   }
 

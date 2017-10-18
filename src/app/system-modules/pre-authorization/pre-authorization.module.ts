@@ -1,3 +1,8 @@
+import { DiagnosisService } from './../../services/common/diagnosis.service';
+import { DrugService } from './../../services/common/drug.service';
+import { SymptomService } from './../../services/common/symptoms.service';
+import { ProcedureService } from './../../services/common/procedure.service';
+import { InvestigationService } from './../../services/common/investigation.service';
 import { CheckInService } from './../../services/common/check-in.service';
 import { VisitTypeService } from './../../services/common/visit-type.service';
 import { NgModule } from '@angular/core';
@@ -35,6 +40,7 @@ import { ModalQueryAuthorizationComponent } from './pre-authorization-details/mo
         ModalRejectAuthorizationComponent,
         ModalHoldAuthorizationComponent,
         ModalQueryAuthorizationComponent],
-    providers: [VisitTypeService, CheckInService]
+    providers: [VisitTypeService, CheckInService, SymptomService,InvestigationService,DrugService,DiagnosisService,
+        ProcedureService]
 })
 export class PreAuthorizationModule { }

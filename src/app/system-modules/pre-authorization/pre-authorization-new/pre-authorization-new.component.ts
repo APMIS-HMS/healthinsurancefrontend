@@ -1,13 +1,19 @@
+import { InvestigationService } from './../../../services/common/investigation.service';
+import { DrugService } from './../../../services/common/drug.service';
+import { DiagnosisService } from './../../../services/common/diagnosis.service';
+import { ProcedureService } from './../../../services/common/procedure.service';
+import { SymptomService } from './../../../services/common/symptoms.service';
 import { CheckInService } from './../../../services/common/check-in.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { VisitTypeService } from './../../../services/common/visit-type.service';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import differenceInYears from 'date-fns/difference_in_years';
+import { DURATIONS } from '../../../services/globals/config';
 
 @Component({
   selector: 'app-pre-authorization-new',
@@ -18,6 +24,8 @@ export class PreAuthorizationNewComponent implements OnInit {
 
   preAuthFormGroup: FormGroup;
   searchResults = false;
+  complaintSearchResult = false;
+  diagnosisSearchResult = false;
   Disabled = false;
 
   tab_complaints = true;
@@ -33,7 +41,21 @@ export class PreAuthorizationNewComponent implements OnInit {
   public today: IMyDate;
   selectedPreAuthorization: any;
   selectedCheckIn: any;
+  selectedComplain: any;
+  selectedDiagnosis:any;
+
+  complaintLists: any[] = <any>[];
+  diagnosisLists: any = <any>[];
+  investigationList: any = <any>[];
+  drugList: any = <any>[];
+  procedureList: any = <any>[];
   visitTypes: any[] = [];
+  durations: any[] = [];
+  symptomItems: any = <any>[];
+  procedureItems: any = <any>[];
+  diagnosisItems: any = <any>[];
+  investigationItems: any = <any>[];
+  drugItems: any = <any>[];
 
   constructor(
     private _fb: FormBuilder,
@@ -43,38 +65,20 @@ export class PreAuthorizationNewComponent implements OnInit {
     private _visitTypeService: VisitTypeService,
     private _systemService: SystemModuleService,
     private _checkInService: CheckInService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _symptomService: SymptomService,
+    private _procedureService: ProcedureService,
+    private _diagnosisService: DiagnosisService,
+    private _drugService: DrugService,
+    private _investigationService: InvestigationService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Pre-Authorization');
     this._headerEventEmitter.setMinorRouteUrl('Create New Pre-Authorization');
-
+    this.durations = DURATIONS;
     this._getVisitTypes();
-
-    this.preAuthFormGroup = this._fb.group({
-      patientName: ['', [<any>Validators.required]],
-      gender: ['', [<any>Validators.required]],
-      age: ['', [<any>Validators.required]],
-      address: ['', [<any>Validators.required]],
-      healthCareProvider: ['', [<any>Validators.required]],
-      hia: ['', [<any>Validators.required]],
-      visitClass: ['', [<any>Validators.required]],
-      requestDate: ['', [<any>Validators.required]],
-      requestTime: ['', [<any>Validators.required]],
-      clinicalNote: ['', [<any>Validators.required]],
-      emergency: ['', [<any>Validators.required]],
-      presentingComplaints: ['', [<any>Validators.required]],
-      complaintsDuration: ['', [<any>Validators.required]],
-      complaintsUnit: ['', [<any>Validators.required]],
-      diagnosis: ['', [<any>Validators.required]],
-      procedures: ['', [<any>Validators.required]],
-      requestReason: ['', [<any>Validators.required]],
-      services: ['', [<any>Validators.required]],
-      preAuthorizationNote: ['', [<any>Validators.required]],
-      docName: ['', [<any>Validators.required]]
-
-    });
+    this._initializeFormGroup();
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
@@ -82,6 +86,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       }
     })
   }
+
 
   _initializeFormGroup() {
     if (this.selectedPreAuthorization !== undefined && this.selectedPreAuthorization._id !== undefined) {
@@ -99,10 +104,10 @@ export class PreAuthorizationNewComponent implements OnInit {
     }
     this.preAuthFormGroup = this._fb.group({
 
-      patientName: [this.selectedCheckIn.beneficiaryObject != null ? this.selectedCheckIn.beneficiaryObject.personId.lastName + ' ' + this.selectedCheckIn.beneficiaryObject.personId.firstName + ' ' + this.selectedCheckIn.beneficiaryObject.personId.otherNames : '', [<any>Validators.required]],
-      gender: [this.selectedCheckIn.beneficiaryObject != null ? this.selectedCheckIn.beneficiaryObject.personId.gender.name : '', [<any>Validators.required]],
-      age: [this.selectedCheckIn.beneficiaryObject != null ? this._getAge() : 0, [<any>Validators.required]],
-      address: [this.selectedCheckIn.beneficiaryObject != null ? this._getAddress() : '', [<any>Validators.required]],
+      patientName: [this.selectedCheckIn != null ? this.selectedCheckIn.beneficiaryObject.personId.lastName + ' ' + this.selectedCheckIn.beneficiaryObject.personId.firstName + ' ' + this.selectedCheckIn.beneficiaryObject.personId.otherNames : '', [<any>Validators.required]],
+      gender: [this.selectedCheckIn != null ? this.selectedCheckIn.beneficiaryObject.personId.gender.name : '', [<any>Validators.required]],
+      age: [this.selectedCheckIn != null ? this._getAge() : 0, [<any>Validators.required]],
+      address: [this.selectedCheckIn != null ? this._getAddress() : '', [<any>Validators.required]],
       healthCareProvider: [this.selectedCheckIn != null ? this.selectedCheckIn.providerFacilityId.name : '', [<any>Validators.required]],
       hia: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -111,7 +116,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       clinicalNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       emergency: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       presentingComplaints: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      complaintsDuration: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      complaintsDuration: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
       complaintsUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       diagnosis: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       procedures: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -120,19 +125,139 @@ export class PreAuthorizationNewComponent implements OnInit {
       preAuthorizationNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       docName: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]]
     });
+
+    // this.preAuthFormGroup.controls.drug.valueChanges
+    // .debounceTime(250)
+    // .distinctUntilChanged()
+    // .subscribe(value => {
+    //   this._getDrugs(value);
+    // }, error => {
+    //   this._systemService.off();
+    //   console.log(error)
+    // });
+
+    this.preAuthFormGroup.controls.presentingComplaints.valueChanges
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        if (!(this.symptomItems.filter(x => x.name === value).length > 0)) {
+          this.selectedComplain = undefined;
+          this._getSymptoms(value);
+        }
+
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
+    this.preAuthFormGroup.controls.diagnosis.valueChanges
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        if (!(this.diagnosisItems.filter(x => x.name === value).length > 0)) {
+          this.selectedDiagnosis = undefined;
+          this._getDiagnosises(value);
+        }
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
+    this.preAuthFormGroup.controls.procedures.valueChanges
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        this._getProcedures(value);
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
   }
 
+
+  _getSymptoms(value) {
+    if (value && value.length > 1) {
+      this._symptomService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
+        }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.complaintSearchResult = true;
+          this.symptomItems = payload.data
+        }
+
+      })
+    }
+
+  }
+
+  _getProcedures(value) {
+    if (value.length >= 3) {
+      this._procedureService.find({}).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.procedureItems = payload.data.filter((filterItem: any) => {
+            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
+          })
+        }
+      })
+    }
+  }
+
+  _getDrugs(value) {
+    if (this.searchResults == false) {
+      if (value.length >= 3) {
+        this._drugService.find({}).then((payload: any) => {
+          if (payload.data.length > 0) {
+            this.drugItems = payload.data.filter((filterItem: any) => {
+              return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
+            })
+          }
+        })
+      }
+    }
+  }
+
+  _getDiagnosises(value) {
+    if (value && value.length > 1) {
+      this._diagnosisService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
+        }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.diagnosisSearchResult = true;
+          this.diagnosisItems = payload.data;
+          console.log(this.diagnosisItems)
+        }
+
+      })
+    }
+  }
+
+  _getInvestigations(value) {
+    if (value.length >= 3) {
+      this._investigationService.find({}).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.investigationItems = payload.data.filter((filterItem: any) => {
+            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
+          })
+        }
+      })
+    }
+  }
   _getCheckedIn(id) {
     this._systemService.on();
     this._checkInService.get(id, {}).then((payload: any) => {
       this.selectedCheckIn = payload;
-      console.log(this.selectedCheckIn)
       this._initializeFormGroup();
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
     })
   }
+
 
   _getAge() {
     return differenceInYears(
@@ -151,12 +276,70 @@ export class PreAuthorizationNewComponent implements OnInit {
     this._systemService.on();
     this._visitTypeService.find({}).then((payload: any) => {
       this.visitTypes = payload.data;
-      console.log(this.visitTypes)
       this._systemService.off();
     }).catch(err => {
       console.log(err);
       this._systemService.off();
     })
+  }
+
+  removeComplain(complain, i){
+    this.complaintLists.splice(i);
+  }
+
+  removeDiagnosis(diagnosis, i){
+    this.diagnosisLists.splice(i);
+  }
+
+  onSelectComplain(complain) {
+    this.preAuthFormGroup.controls.presentingComplaints.setValue(complain.name);
+    this.complaintSearchResult = false;
+    this.selectedComplain = complain;
+  }
+  onSelectDiagnosis(diagnosis){
+    this.preAuthFormGroup.controls.diagnosis.setValue(diagnosis.name);
+    this.diagnosisSearchResult = false;
+    this.selectedDiagnosis = diagnosis;
+  }
+  onAddDiagnosis() {
+    let name = this.preAuthFormGroup.controls.diagnosis;
+    if (name.valid) {
+      this.diagnosisLists.push({
+        "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
+      });
+      this.preAuthFormGroup.controls.diagnosis.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
+
+  }
+  onAddComplaint() {
+    let name = this.preAuthFormGroup.controls.presentingComplaints;
+    let duration = this.preAuthFormGroup.controls.complaintsDuration;
+    let unit = this.preAuthFormGroup.controls.complaintsUnit;
+    if (name.valid && duration.valid && unit.valid) {
+      this.complaintLists.push({
+        "symptom": typeof (this.selectedComplain) === 'object' ? this.selectedComplain : name.value,
+        "duration": this.preAuthFormGroup.controls.complaintsDuration.value,
+        "unit": this.preAuthFormGroup.controls.complaintsUnit.value,
+      });
+      this.preAuthFormGroup.controls.presentingComplaints.reset();
+      this.preAuthFormGroup.controls.complaintsDuration.reset(1);
+      this.preAuthFormGroup.controls.complaintsUnit.reset(this.durations[0]);
+    } else {
+      name.markAsDirty({ onlySelf: true });
+      duration.markAsDirty({ onlySelf: true });
+      unit.markAsDirty({ onlySelf: true });
+      // this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      // Object.keys(this.stepOneFormGroup.controls).forEach((field, i) => { // {1}
+      //   const control = this.stepOneFormGroup.get(field);
+      //   if (!control.valid) {
+      //     control.markAsDirty({ onlySelf: true });
+      //     counter = counter + 1;
+      //   }
+      // });
+    }
+
   }
 
 

@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Hospital Name</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="hospital" class="form-control"  value="{{SelectedCheckinItem?.providerFacilityId?.name}}">
+                    <input type="text" formControlName="hospital" class="form-control" value="{{SelectedCheckinItem?.providerFacilityId?.name}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.hospital.valid || claimsFormGroup.controls.hospital.pristine">
                     This is a required field.
@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Health Plan</label>
                 <div class="input-wrap">
-                    <input type="email" formControlName="plan" class="form-control" value="{{SelectedCheckinItemPlan}}">
+                    <input type="email" formControlName="plan" class="form-control" value="{{SelectedCheckinItem?.policyObject?.planId?.name}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.plan.valid || claimsFormGroup.controls.plan.pristine">
                     This is a required field.
@@ -50,15 +50,15 @@
                 <label class="label">Encounter Type</label>
                 <div>
                     <div class="input-wrap" style="justify-content:flex-start; margin-bottom:20px;">
-                        <span style="margin-right:10px" *ngIf="SelectedCheckinItem?.encounterType?.name == Out-Patient">
-                          <label for="outPatient" *ngIf="SelectedCheckinItem.encounterType.name == 'Out-Patient'">
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="outPatient" name="outPatient" checked>
+                        <span style="margin-right:10px">
+                          <label for="outPatient">
+                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" [checked]="isOutPatient" formControlName="outPatient" name="outPatient" checked>
                               Outpatient
                           </label>
                       </span>
                         <span>
-                          <label for="inPatient" *ngIf="SelectedCheckinItem?.encounterType?.name == 'In-Patient'">
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="inPatient" name="inPatient" checked>
+                          <label for="inPatient" >
+                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio"  [checked]="isInpatient" formControlName="inPatient" name="inPatient" checked>
                               Inpatient
                           </label>
                       </span>
@@ -137,14 +137,14 @@
                 <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
                 <li (click)="tabServices_click()" [class.tab-active]="tab_services">Services</li>
             </ul>
-        
+
             <div class="tab-content shadow-RB-lite">
                 <div *ngIf="tab_complaints" class="tab-pane fade show active">
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Information - Complaints</div>
                         </div>
-                    
+
                         <div class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
@@ -158,29 +158,30 @@
                                     <div class="input-wrap-x2">
                                         <div class="searchable-input">
                                             <input style="width:155px;" type="text" formControlName="symptom" class="form-control">
-    
-                                            <ul *ngFor="let item of symptomItems" class="search-results">
-                                                <li (click)="onSelectSymptom(item.name)">{{item.name}}</li>
+                                            <ul *ngIf="symptomSearchResult" class="search-results">
+                                                <li (click)="onSelectSymptom(result)" *ngFor="let result of symptomItems">{{result.name}}</li>
                                             </ul>
                                         </div>
                                         <div class="input-wrap-x2">
                                             <input style="width:50px;" type="text" formControlName="symptomDuration" class="form-control">
                                             <select formControlName="symptomUnit" class="form-control">
-                                            <option value="Hour" selected>Hour</option>
+                                            <option value="Hour" selected>Minute</option>
+                                            <option value="Hour">Hour</option>
+                                            <option value="Hour">Day</option>
                                             <option value="Week">Week</option>
                                             <option value="Month">Month</option>
                                             <option value="Year">Year</option>
                                     </select>
                                         </div>
                                     </div>
-    
+
                                     <div class="btn btn-medium btn-blue-outline" (click)="onAddSymptom()">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD symptom
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="tbl-wrap">
                             <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                                 <thead class="thead">
@@ -190,10 +191,10 @@
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
-    
+
                                 <tbody class="tbody">
                                     <tr class="tr" *ngFor="let item of symptomLists">
-                                        <td class="td">{{item.name}}</td>
+                                        <td class="td">{{item.symptom}}</td>
                                         <td class="td">{{item.duration}} {{item.unit}}</td>
                                         <td><i class="fa fa-times"></i></td>
                                     </tr>
@@ -206,7 +207,7 @@
 
             <div class="frm-group">
 
-                
+
 
                 <div class="frm-item-wrap">
                     <label class="label">Clinical Note</label>
@@ -224,9 +225,8 @@
                         <div class="input-wrap">
                             <div class="searchable-input">
                                 <input style="width:300px" type="text" formControlName="diagnosis" class="form-control">
-
-                                <ul *ngFor="let item of diagnosisItems" class="search-results" (click)="onSelectDiagnosis(item.name)">
-                                    <li>{{item.name}}</li>
+                                <ul *ngIf="diagnosisSearchResult" class="search-results">
+                                    <li (click)="onSelectDiagnosis(result)" *ngFor="let result of diagnosisItems">{{result.name}}</li>
                                 </ul>
 
                                 <div class="btn btn-medium btn-blue-outline" (click)="onAddDiagnosis()">
@@ -247,7 +247,7 @@
 
                             <tbody class="tbody">
                                 <tr class="tr" *ngFor="let item of diagnosisLists">
-                                    <td class="td">{{item.name}}</td>
+                                    <td class="td">{{item.diagnosis}}</td>
                                     <td><i class="fa fa-times"></i></td>
                                 </tr>
                             </tbody>
@@ -261,11 +261,9 @@
                         <div class="input-wrap">
                             <div class="searchable-input">
                                 <input style="width:300px;" type="text" formControlName="investigations" class="form-control">
-
-                                <ul class="search-results" *ngFor="let item of investigationItems" (click)="onSelectInvestigation(item.name)">
-                                    <li>{{item.name}}</li>
+                                <ul *ngIf="investigationSearchResult" class="search-results">
+                                    <li (click)="onSelectInvestigation(result)" *ngFor="let result of investigationItems">{{result.name}}</li>
                                 </ul>
-
                                 <div class="btn btn-medium btn-blue-outline" (click)="onAddInvestigation()">
                                     <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD INVESTIGATION
                                 </div>
@@ -284,7 +282,7 @@
 
                             <tbody class="tbody">
                                 <tr class="tr" *ngFor="let item of investigationList">
-                                    <td class="td">{{item.name}}</td>
+                                    <td class="td">{{item.investigation}}</td>
                                     <td><i class="fa fa-times"></i></td>
                                 </tr>
                             </tbody>
@@ -304,9 +302,8 @@
                                 <div class="input-wrap-x2">
                                     <div class="searchable-input">
                                         <input style="width:155px;" type="text" formControlName="drug" class="form-control">
-
-                                        <ul *ngFor="let item of drugItems" class="search-results" (click)="onSelectDrug(item.name)">
-                                            <li>{{item.name}}</li>
+                                        <ul *ngIf="drugSearchResult" class="search-results">
+                                            <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
                                         </ul>
                                     </div>
                                     <div class="input-wrap-x2">
@@ -337,7 +334,7 @@
 
                             <tbody class="tbody">
                                 <tr class="tr" *ngFor="let item of drugList">
-                                    <th class="td">{{item.name}}</th>
+                                    <th class="td">{{item.drug}}</th>
                                     <th class="td">{{item.quantity}} {{item.unit}}</th>
                                     <td><i class="fa fa-times"></i></td>
                                 </tr>
@@ -354,8 +351,8 @@
                             <div class="searchable-input">
                                 <input style="width:300px;" type="text" formControlName="procedure" class="form-control">
 
-                                <ul *ngFor="let item of procedureItems" class="search-results" (click)="onSelectProcedure(item.name)">
-                                    <li>{{item.name}}</li>
+                                <ul *ngIf="procedureSearchResult" class="search-results">
+                                    <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
                                 </ul>
 
                                 <div class="btn btn-medium btn-blue-outline" (click)="onAddProcedure()">
@@ -376,10 +373,10 @@
 
                             <tbody class="tbody">
                                 <tr class="tr" *ngFor="let item of procedureList">
-                                    <td class="td">{{item.name}}</td>
+                                    <td class="td">{{item.procedure}}</td>
                                     <td><i class="fa fa-times"></i></td>
                                 </tr>
-                        </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -434,7 +431,16 @@
                 </small>
             </div>
 
-            <button class="btn btn-medium btn-blue cta" (click)="onSendClaim()">SEND</button>
+            <button class="btn btn-medium btn-blue cta" (click)="onSendClaim()">
+                <span>
+                    <div [hidden] = "isProcessing">
+                            Save
+                    </div>
+                    <div [hidden] = "!isProcessing">
+                            Processing... <i class='fa fa-spinner fa-spin'></i>
+                    </div>
+                </span>
+            </button>
         </form>
     </section>
 </div>

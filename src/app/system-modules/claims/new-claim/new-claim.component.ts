@@ -28,6 +28,20 @@ export class NewClaimComponent implements OnInit {
 
   claimsFormGroup: FormGroup;
   searchResults = false;
+  selectedDiagnosis:any;
+  selectedProcedure:any;
+  selectedInvestigation:any;
+  selectedDrug:any;
+  selectedSymptom:any;
+
+  isProcessing=false;
+  isItemselected = true;
+  
+  procedureSearchResult = false;
+  drugSearchResult = false;
+  diagnosisSearchResult = false;
+  symptomSearchResult = false;
+  investigationSearchResult = false;
   currentCheckIn: CheckIn = <CheckIn>{};
   claimItem: Claim = <Claim>{};
   claimDocItem: ClaimDocument = <ClaimDocument>{};
@@ -46,6 +60,8 @@ export class NewClaimComponent implements OnInit {
   investigationItems: any = <any>[];
   drugItems: any = <any>[];
   user: any;
+  isOutpatient: boolean = false;
+  isInpatient: boolean = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -113,7 +129,6 @@ export class NewClaimComponent implements OnInit {
       .debounceTime(250)
       .distinctUntilChanged()
       .subscribe(value => {
-        //this.searchResults = false;
         this._getDrugs(value);
       }, error => {
         this._systemService.off();
@@ -131,14 +146,17 @@ export class NewClaimComponent implements OnInit {
       });
 
     this.claimsFormGroup.controls.diagnosis.valueChanges
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(value => {
+    .debounceTime(250)
+    .distinctUntilChanged()
+    .subscribe(value => {
+      if (!(this.diagnosisItems.filter(x => x.name === value).length > 0)) {
+        this.selectedDiagnosis = undefined;
         this._getDiagnosises(value);
-      }, error => {
-        this._systemService.off();
-        console.log(error)
-      });
+      }
+    }, error => {
+      this._systemService.off();
+      console.log(error)
+    });
 
     this.claimsFormGroup.controls.procedure.valueChanges
       .debounceTime(250)
@@ -164,7 +182,13 @@ export class NewClaimComponent implements OnInit {
   _getSelectedCheckinItem(checkinId) {
     this._checkInService.find({ query: { _id: checkinId } }).then((payload: any) => {
       this.SelectedCheckinItem = payload.data[0];
-      this.SelectedCheckinItemPlan = this.SelectedCheckinItem.policyObject[0].planId.name;
+      if (this.SelectedCheckinItem.encounterType == "In-Patient") {
+        this.isInpatient = true;
+        this.isOutpatient = false;
+      } else {
+        this.isOutpatient = true;
+        this.isInpatient = false;
+      }
       console.log(this.SelectedCheckinItem);
     })
   }
@@ -182,127 +206,187 @@ export class NewClaimComponent implements OnInit {
   }
 
   _getSymptoms(value) {
-    if (value.length >= 3) {
-      this._symptomService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.symptomItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
+
+    if (value && value.length > 1) {
+      this._symptomService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
         }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.symptomSearchResult = true;
+          this.symptomItems = payload.data;
+        }
+
       })
     }
   }
 
   _getProcedures(value) {
-    if (value.length >= 3) {
-      this._procedureService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.procedureItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
+    if (value && value.length > 1) {
+      this._procedureService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
         }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.procedureSearchResult = true;
+          this.procedureItems = payload.data;
+          console.log(this.procedureItems);
+        }
+
       })
     }
   }
 
   _getDrugs(value) {
-    if (this.searchResults == false) {
-      if (value.length >= 3) {
-        this._drugService.find({}).then((payload: any) => {
-          if (payload.data.length > 0) {
-            this.drugItems = payload.data.filter((filterItem: any) => {
-              return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-            })
-          }
-        })
-      }
+    if (value && value.length > 1) {
+      this._drugService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
+        }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.drugSearchResult = true;
+          this.drugItems = payload.data;
+          console.log(this.diagnosisItems)
+        }
+
+      })
     }
   }
 
   _getDiagnosises(value) {
-    if (value.length >= 3) {
-      this._diagnosisService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.diagnosisItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
+    if (value && value.length > 1) {
+      this._diagnosisService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
         }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.diagnosisSearchResult = true;
+          this.diagnosisItems = payload.data;
+          console.log(this.diagnosisItems)
+        }
+
       })
     }
   }
 
   _getInvestigations(value) {
-    if (value.length >= 3) {
-      this._investigationService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.investigationItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
+    if (value && value.length > 1) {
+      this._investigationService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
         }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.investigationSearchResult = true;
+          this.investigationItems = payload.data;
+          console.log(this.investigationItems);
+        }
+
       })
     }
   }
 
-  onSelectSymptom(param) {
-    this.claimsFormGroup.controls.symptom.setValue(param);
-    this.symptomItems = [];
+  onSelectSymptom(symptom) {
+    this.claimsFormGroup.controls.symptom.setValue(symptom);
+    this.symptomSearchResult = false;
+    this.selectedSymptom = symptom;
   }
 
   onAddSymptom() {
-    this.symptomLists.push({
-      "name": this.claimsFormGroup.controls.symptom.value,
-      "duration": this.claimsFormGroup.controls.symptomDuration.value,
-      "unit": this.claimsFormGroup.controls.symptomUnit.value,
-    });
-    console.log(this.symptomLists);
+    let name = this.claimsFormGroup.controls.symptom;
+    let duration = this.claimsFormGroup.controls.symptomDuration;
+    let unit = this.claimsFormGroup.controls.symptomUnit;
+    if (name.valid) {
+      this.drugList.push({
+        "symptom": typeof (this.selectedSymptom.symptom) === 'object' ? this.selectedSymptom.symptom : name.value,
+        "duration": typeof (this.selectedSymptom.duration) === 'object' ? this.selectedSymptom.duration : duration.value,
+        "unit": typeof (this.selectedSymptom.unit) === 'object' ? this.selectedSymptom.unit : unit.value,
+      });
+      this.claimsFormGroup.controls.symptom.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
   }
 
-  onSelectDiagnosis(param) {
-    this.claimsFormGroup.controls.diagnosis.setValue(param);
-    this.diagnosisItems = [];
+  onSelectDiagnosis(diagnosis){
+    this.claimsFormGroup.controls.diagnosis.setValue(diagnosis.name);
+    this.diagnosisSearchResult = false;
+    this.selectedDiagnosis = diagnosis;
   }
 
   onAddDiagnosis() {
-    this.diagnosisLists.push({
-      "name": this.claimsFormGroup.controls.diagnosis.value
-    });
-    console.log(this.diagnosisLists);
+    let name = this.claimsFormGroup.controls.diagnosis;
+    if (name.valid) {
+      this.diagnosisLists.push({
+        "diagnosis": typeof (this.selectedDiagnosis.name) === 'object' ? this.selectedDiagnosis : name.value,
+      });
+      this.claimsFormGroup.controls.diagnosis.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
   }
 
-  onSelectInvestigation(param) {
-    this.claimsFormGroup.controls.investigations.setValue(param);
-    this.investigationItems = [];
+  onSelectInvestigation(investigation) {
+    this.claimsFormGroup.controls.investigations.setValue(investigation.name);
+    this.investigationSearchResult = false;
+    this.selectedInvestigation = investigation;
   }
 
   onAddInvestigation() {
-    this.investigationList.push({
-      "name": this.claimsFormGroup.controls.investigations.value
-    });
+    let name = this.claimsFormGroup.controls.investigations;
+    if (name.valid) {
+      this.investigationList.push({
+        "investigation": typeof (this.selectedInvestigation.name) === 'object' ? this.selectedInvestigation : name.value,
+      });
+      this.claimsFormGroup.controls.investigations.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
   }
 
-  onSelectDrug(param) {
-    this.claimsFormGroup.controls.drug.setValue(param);
-    this.drugItems = [];
-    this.searchResults = true;
+  onSelectDrug(drug) {
+    this.claimsFormGroup.controls.drug.setValue(drug.name);
+    this.drugSearchResult = false;
+    this.selectedDrug = drug;
   }
 
   onAddDrug() {
-    this.drugList.push({
-      "name": this.claimsFormGroup.controls.drug.value,
-      "quantity": this.claimsFormGroup.controls.drugQty.value,
-      "unit": this.claimsFormGroup.controls.drugUnit.value
-    });
+    let name = this.claimsFormGroup.controls.drug;
+    let qty = this.claimsFormGroup.controls.drugQty;
+    let unit = this.claimsFormGroup.controls.drugUnit;
+    if (name.valid) {
+      this.drugList.push({
+        "drug": typeof (this.selectedDrug.name) === 'object' ? this.selectedDrug : name.value,
+        "quantity": qty.value,
+        "unit": unit.value,
+      });
+      this.claimsFormGroup.controls.drug.reset();
+      this.claimsFormGroup.controls.drugQty.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
   }
 
-  onSelectProcedure(param) {
-    this.claimsFormGroup.controls.procedure.setValue(param);
-    this.procedureItems = [];
+  onSelectProcedure(procedure) {
+    this.claimsFormGroup.controls.procedure.setValue(procedure.name);
+    this.procedureSearchResult =false;
+    this.selectedProcedure = procedure;
   }
 
   onAddProcedure() {
-    this.procedureList.push({
-      "name": this.claimsFormGroup.controls.procedure.value
-    });
+    let name = this.claimsFormGroup.controls.procedure;
+    if (name.valid) {
+      this.procedureList.push({
+        "procedure": typeof (this.selectedProcedure.name) === 'object' ? this.selectedProcedure : name.value,
+      });
+      this.claimsFormGroup.controls.procedure.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
   }
 
   generateNameAbbreviation(fullname) {
@@ -333,10 +417,14 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
     console.log(this.claimItem);
+    this.isProcessing = true;
     this._claimService.create(this.claimItem).then((payload: any) => {
       console.log(payload);
+      this.claimsFormGroup.reset();
+      this.isProcessing = false;
     }, error => {
       console.log(error);
+      this.isProcessing = false;
     })
   }
 

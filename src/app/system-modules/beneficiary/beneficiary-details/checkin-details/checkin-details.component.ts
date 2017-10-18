@@ -210,9 +210,9 @@ export class CheckinDetailsComponent implements OnInit {
     this._checkInService.find({
       query: {
         beneficiaryId: this.beneficiary._id,
-        // $client: {
-        //   hasCheckInToday: true
-        // }
+        $client: {
+          hasCheckInToday: true
+        }
       }
     }).then((payload: any) => {
       if (payload.data.length > 0) {
@@ -282,6 +282,10 @@ export class CheckinDetailsComponent implements OnInit {
       console.log(err);
       this._systemService.off();
     })
+  }
+
+  otp_regenerate(){
+    this.selectedCheckIn = undefined;
   }
 
   navigateToNewClaim() {
