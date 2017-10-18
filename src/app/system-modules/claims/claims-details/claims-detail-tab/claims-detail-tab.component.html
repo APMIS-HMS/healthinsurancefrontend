@@ -3,11 +3,11 @@
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Date of Birth:</div>
-          <div class="item-val">11th Oct 2000</div>
+          <div class="item-val">{{selectedClaim?.checkedinDetail?.personObject?.dateOfBirth|date}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Age:</div>
-          <div class="item-val">17</div>
+          <div class="item-val">{{displayAge}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Gender:</div>
