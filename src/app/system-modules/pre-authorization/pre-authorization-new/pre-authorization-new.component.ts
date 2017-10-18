@@ -1,3 +1,4 @@
+import { DiagnosisTypeService } from './../../../services/common/diagnosis-type.service';
 import { InvestigationService } from './../../../services/common/investigation.service';
 import { DrugService } from './../../../services/common/drug.service';
 import { DiagnosisService } from './../../../services/common/diagnosis.service';
@@ -26,6 +27,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   searchResults = false;
   complaintSearchResult = false;
   diagnosisSearchResult = false;
+  procedureSearchResult = false;
   Disabled = false;
 
   tab_complaints = true;
@@ -42,7 +44,8 @@ export class PreAuthorizationNewComponent implements OnInit {
   selectedPreAuthorization: any;
   selectedCheckIn: any;
   selectedComplain: any;
-  selectedDiagnosis:any;
+  selectedDiagnosis: any;
+  selectedProcedure:any;
 
   complaintLists: any[] = <any>[];
   diagnosisLists: any = <any>[];
@@ -57,6 +60,8 @@ export class PreAuthorizationNewComponent implements OnInit {
   investigationItems: any = <any>[];
   drugItems: any = <any>[];
 
+  diagnosisTypes: any[] = [];
+
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
@@ -70,7 +75,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     private _procedureService: ProcedureService,
     private _diagnosisService: DiagnosisService,
     private _drugService: DrugService,
-    private _investigationService: InvestigationService
+    private _investigationService: InvestigationService,
+    private _diagnosisTypeService: DiagnosisTypeService
   ) { }
 
   ngOnInit() {
@@ -78,6 +84,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('Create New Pre-Authorization');
     this.durations = DURATIONS;
     this._getVisitTypes();
+    this._getDiagnosisTypes();
     this._initializeFormGroup();
 
     this._route.params.subscribe(param => {
@@ -87,7 +94,16 @@ export class PreAuthorizationNewComponent implements OnInit {
     })
   }
 
-
+  _getDiagnosisTypes() {
+    this._systemService.on();
+    this._diagnosisTypeService.find({}).then((payload: any) => {
+      this.diagnosisTypes = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
+  }
   _initializeFormGroup() {
     if (this.selectedPreAuthorization !== undefined && this.selectedPreAuthorization._id !== undefined) {
       this.today = {
@@ -119,6 +135,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       complaintsDuration: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
       complaintsUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       diagnosis: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      diagnosisType: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       procedures: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       services: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -164,14 +181,17 @@ export class PreAuthorizationNewComponent implements OnInit {
       });
 
     this.preAuthFormGroup.controls.procedures.valueChanges
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(value => {
+    .debounceTime(250)
+    .distinctUntilChanged()
+    .subscribe(value => {
+      if (!(this.procedureItems.filter(x => x.name === value).length > 0)) {
+        this.selectedProcedure = undefined;
         this._getProcedures(value);
-      }, error => {
-        this._systemService.off();
-        console.log(error)
-      });
+      }
+    }, error => {
+      this._systemService.off();
+      console.log(error)
+    });
 
   }
 
@@ -194,13 +214,17 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   _getProcedures(value) {
-    if (value.length >= 3) {
-      this._procedureService.find({}).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.procedureItems = payload.data.filter((filterItem: any) => {
-            return (filterItem.name.toString().toLowerCase().includes(value.toString().toLowerCase()));
-          })
+    if (value && value.length > 1) {
+      this._procedureService.find({
+        query: {
+          'name': { $regex: value, '$options': 'i' },
         }
+      }).then((payload: any) => {
+        if (payload.data.length > 0) {
+          this.procedureSearchResult = true;
+          this.procedureItems = payload.data
+        }
+
       })
     }
   }
@@ -283,12 +307,15 @@ export class PreAuthorizationNewComponent implements OnInit {
     })
   }
 
-  removeComplain(complain, i){
+  removeComplain(complain, i) {
     this.complaintLists.splice(i);
   }
 
-  removeDiagnosis(diagnosis, i){
+  removeDiagnosis(diagnosis, i) {
     this.diagnosisLists.splice(i);
+  }
+  removeProcedure(i) {
+    this.procedureList.splice(i);
   }
 
   onSelectComplain(complain) {
@@ -296,20 +323,42 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.complaintSearchResult = false;
     this.selectedComplain = complain;
   }
-  onSelectDiagnosis(diagnosis){
+  onSelectDiagnosis(diagnosis) {
     this.preAuthFormGroup.controls.diagnosis.setValue(diagnosis.name);
     this.diagnosisSearchResult = false;
     this.selectedDiagnosis = diagnosis;
   }
-  onAddDiagnosis() {
-    let name = this.preAuthFormGroup.controls.diagnosis;
+  onSelectProcedure(procedure) {
+    this.preAuthFormGroup.controls.procedures.setValue(procedure.name);
+    this.procedureSearchResult = false;
+    this.selectedProcedure = procedure;
+  }
+  onAddProcedure() {
+    let name = this.preAuthFormGroup.controls.procedures;
     if (name.valid) {
-      this.diagnosisLists.push({
-        "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
+      this.procedureList.push({
+        "procedure": typeof (this.selectedProcedure) === 'object' ? this.selectedProcedure : name.value,
       });
-      this.preAuthFormGroup.controls.diagnosis.reset();
+      console.log(this.procedureList)
+      this.preAuthFormGroup.controls.procedures.reset();
     } else {
       name.markAsDirty({ onlySelf: true });
+    }
+
+  }
+  onAddDiagnosis() {
+    let name = this.preAuthFormGroup.controls.diagnosis;
+    let diagnosisType = this.preAuthFormGroup.controls.diagnosisType;
+    if (name.valid && diagnosisType.valid) {
+      this.diagnosisLists.push({
+        "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
+        "diagnosisType": diagnosisType.value
+      });
+      this.preAuthFormGroup.controls.diagnosis.reset();
+      diagnosisType.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+      diagnosisType.markAsDirty({ onlySelf: true })
     }
 
   }
@@ -340,6 +389,14 @@ export class PreAuthorizationNewComponent implements OnInit {
       // });
     }
 
+  }
+
+  needAuthorization(procedure){
+    if(procedure.procedure.PA === ' Y '){
+      return true;
+    }else{
+      return false;
+    }
   }
 
 

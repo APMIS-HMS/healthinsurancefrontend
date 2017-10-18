@@ -235,11 +235,35 @@
                             <div class="input-wrap">
                                 <div class="searchable-input">
                                     <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
-
+                                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.diagnosis.valid || preAuthFormGroup.controls.diagnosis.pristine">
+                                        Diagnosis Type value is required.
+                                    </small>
                                     <ul *ngIf="diagnosisSearchResult" class="search-results">
                                         <li (click)="onSelectDiagnosis(result)" *ngFor="let result of diagnosisItems">{{result.name}}</li>
                                     </ul>
 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="frm-item-wrap">
+                            <label class="label">Diagnosis Type</label>
+                            <div class="inputWrap">
+                                <select formControlName="diagnosisType" class="form-control">
+                                    <option disabled value="" selected>Select...</option>
+                                    <option *ngFor="let type of diagnosisTypes" [ngValue]="type">{{type.name}}</option>
+                                </select>
+                                <small class="alert-label" [hidden]="preAuthFormGroup.controls.diagnosisType.valid || preAuthFormGroup.controls.diagnosisType.pristine">
+                                    Diagnosis Type value is required.
+                                </small>
+                            </div>
+                        </div>
+
+
+                        <div class="frm-item-wrap">
+                            <label class="label"></label>
+                            <div class="inputWrap">
+                                <div class="searchable-input">
                                     <div (click)="onAddDiagnosis()" class="btn btn-medium btn-blue-outline">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DIAGNOSIS
                                     </div>
@@ -252,6 +276,7 @@
                                 <thead class="thead">
                                     <tr class="tr">
                                         <th class="th">Diagnosis</th>
+                                        <th class="th">Diagnosis Type</th>
                                         <th class="th">Authorization Needed</th>
                                         <th class="th"></th>
                                     </tr>
@@ -260,6 +285,7 @@
                                 <tbody class="tbody">
                                     <tr *ngFor="let diagnosis of diagnosisLists; let i=index" class="tr">
                                         <td class="td">{{diagnosis.diagnosis.name}}</td>
+                                        <td class="td">{{diagnosis.diagnosisType.name}}</td>
                                         <td class="td">
                                             <input type="checkbox" disabled="disabled">
                                         </td>
@@ -290,16 +316,12 @@
                             <div class="input-wrap">
                                 <div class="searchable-input">
                                     <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
+                                    <ul *ngIf="procedureSearchResult" class="search-results">
+                                            <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
+                                        </ul>
 
-                                    <ul *ngIf="searchResults" class="search-results">
-                                        <li>Several symtoms shows here</li>
-                                        <li>Several symtoms shows here</li>
-                                        <li>Several symtoms shows here</li>
-                                        <li>Several symtoms shows here</li>
-                                    </ul>
-
-                                    <div class="btn btn-medium btn-blue-outline">
-                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
+                                    <div (click)="onAddProcedure()" class="btn btn-medium btn-blue-outline">
+                                        <i  class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
                                     </div>
                                 </div>
                             </div>
@@ -316,33 +338,13 @@
                                 </thead>
 
                                 <tbody class="tbody">
-                                    <tr class="tr">
-                                        <td class="td">Bilataral signs</td>
+                                    <tr *ngFor="let procedure of procedureList; let i=index" class="tr">
+                                        <td class="td">{{procedure.procedure.name}}</td>
                                         <td class="td">
-                                            <input type="checkbox" disabled="disabled">
+                                            <input [checked]="needAuthorization(procedure)" type="checkbox" disabled="disabled">
                                         </td>
                                         <td>
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="tr">
-                                        <td class="td">Bilataral signs</td>
-                                        <td class="td">
-                                            <input type="checkbox" disabled="disabled">
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-times"></i>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="tr">
-                                        <td class="td">Bilataral signs</td>
-                                        <td class="td">
-                                            <input type="checkbox" disabled="disabled">
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-times"></i>
+                                            <i (click)="removeProcedure(i)" class="fa fa-times"></i>
                                         </td>
                                     </tr>
                                 </tbody>
