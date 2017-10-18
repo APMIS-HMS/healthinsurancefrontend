@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'app-beneficiary-top-bar',
@@ -12,7 +12,6 @@ export class BeneficiaryTopBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.policy);
   }
 
   addApprovalClick(e) {

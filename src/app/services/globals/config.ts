@@ -15,3 +15,4 @@ export const DURATIONS = [
 ];
 
 export const CurrentPlaformShortName = 'LASHMA';
+export const FORM_VALIDATION_ERROR_MESSAGE ='One or more required fields are missing!'

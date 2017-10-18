@@ -1,3 +1,5 @@
+import { CheckInService } from './../../services/common/check-in.service';
+import { VisitTypeService } from './../../services/common/visit-type.service';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
@@ -11,8 +13,8 @@ import { PreAuthorizationListComponent } from './pre-authorization-list/pre-auth
 import { AuthorizationTopBarComponent } from './pre-authorization-details/authorization-top-bar/authorization-top-bar.component';
 import { AuthorizationDetailsTabComponent } from './pre-authorization-details/authorization-details-tab/authorization-details-tab.component';
 import { AuthorizationOthersTabComponent } from './pre-authorization-details/authorization-others-tab/authorization-others-tab.component';
-import { ModalApproveAuthorizationComponent } from    './pre-authorization-details/modal-approve-authorization/modal-approve-authorization.component';
-import { ModalRejectAuthorizationComponent } from    './pre-authorization-details/modal-reject-authorization/modal-reject-authorization.component';
+import { ModalApproveAuthorizationComponent } from './pre-authorization-details/modal-approve-authorization/modal-approve-authorization.component';
+import { ModalRejectAuthorizationComponent } from './pre-authorization-details/modal-reject-authorization/modal-reject-authorization.component';
 import { ModalHoldAuthorizationComponent } from './pre-authorization-details/modal-hold-authorization/modal-hold-authorization.component';
 import { ModalQueryAuthorizationComponent } from './pre-authorization-details/modal-query-authorization/modal-query-authorization.component';
 
@@ -22,17 +24,17 @@ import { ModalQueryAuthorizationComponent } from './pre-authorization-details/mo
         MyDatePickerModule,
         PreAuthorizationRoutes,
     ],
-    declarations: [PreAuthorizationComponent, 
-        PreAuthorizationDetailsComponent, 
-        PreAuthorizationNewComponent, 
-        PreAuthorizationListComponent, 
-        AuthorizationTopBarComponent, 
-        AuthorizationDetailsTabComponent, 
-        AuthorizationOthersTabComponent, 
-        ModalApproveAuthorizationComponent, 
-        ModalRejectAuthorizationComponent, 
-        ModalHoldAuthorizationComponent, 
+    declarations: [PreAuthorizationComponent,
+        PreAuthorizationDetailsComponent,
+        PreAuthorizationNewComponent,
+        PreAuthorizationListComponent,
+        AuthorizationTopBarComponent,
+        AuthorizationDetailsTabComponent,
+        AuthorizationOthersTabComponent,
+        ModalApproveAuthorizationComponent,
+        ModalRejectAuthorizationComponent,
+        ModalHoldAuthorizationComponent,
         ModalQueryAuthorizationComponent],
-    providers: []
+    providers: [VisitTypeService, CheckInService]
 })
 export class PreAuthorizationModule { }

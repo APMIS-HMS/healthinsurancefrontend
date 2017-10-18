@@ -1,3 +1,4 @@
+import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
 import { PersonService } from './../../../../services/person/person.service';
 import { Address } from './../../../../models/organisation/address';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
@@ -355,162 +356,197 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     }
   }
   onClickStepOne(value, valid) {
-    if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
-      console.log(1)
-      let person: Person = this.selectedBeneficiary.person;
-      let address: Address = this.selectedBeneficiary.person.homeAddress;
-      address.lga = value.lga;
-      address.neighbourhood = value.neighbourhood;
-      address.state = this.selectedState;
-      address.street = value.streetName;
+    if (valid) {
+      if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
+        console.log(1)
+        let person: Person = this.selectedBeneficiary.person;
+        let address: Address = this.selectedBeneficiary.person.homeAddress;
+        address.lga = value.lga;
+        address.neighbourhood = value.neighbourhood;
+        address.state = this.selectedState;
+        address.street = value.streetName;
 
-      person.dateOfBirth = value.dob.jsdate;
-      person.email = value.email;
-      person.firstName = value.firstName;
-      person.gender = value.gender;
-      person.homeAddress = address;
-      person.lastName = value.lastName;
-      person.lgaOfOrigin = value.lgaOfOrigin;
-      person.maritalStatus = value.maritalStatus;
-      person.mothersMaidenName = value.mothermaidenname;
-      person.otherNames = value.otherNames;
-      person.phoneNumber = value.phonenumber;
-      person.platformOnwerId = this.currentPlatform._id;
-      person.stateOfOrigin = value.stateOfOrigin;
-      person.title = value.title;
-
-
-
+        person.dateOfBirth = value.dob.jsdate;
+        person.email = value.email;
+        person.firstName = value.firstName;
+        person.gender = value.gender;
+        person.homeAddress = address;
+        person.lastName = value.lastName;
+        person.lgaOfOrigin = value.lgaOfOrigin;
+        person.maritalStatus = value.maritalStatus;
+        person.mothersMaidenName = value.mothermaidenname;
+        person.otherNames = value.otherNames;
+        person.phoneNumber = value.phonenumber;
+        person.platformOnwerId = this.currentPlatform._id;
+        person.stateOfOrigin = value.stateOfOrigin;
+        person.title = value.title;
 
 
 
 
 
-      let fileBrowser = this.fileInput.nativeElement;
-      this._systemService.on();
-      if (person.profileImageObject === undefined) {
-        console.log('1a')
-        if (fileBrowser.files && fileBrowser.files[0]) {
-          console.log('1b')
-          this.upload().then((result: any) => {
-            console.log('1c')
-            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-              console.log('1d')
-              person.profileImageObject = result.body[0].file;
-
-              this._personService.update(person).then(payload => {
-                console.log('1e')
-                this._getBeneficiary(this.selectedBeneficiary._id);
-                this._systemService.off();
-                this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-              }).catch(err => {
-                console.log(err);
-                this._systemService.off();
-              })
-            }
-          }).catch(err => {
-            this._systemService.off();
-          })
-        }
-      } else {
-        this._personService.update(person).then(payload => {
-          this._getBeneficiary(this.selectedBeneficiary._id);
-          this._systemService.off();
-          this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-        }).catch(err => {
-          console.log(err);
-          this._systemService.off();
-        })
-      }
 
 
 
+        let fileBrowser = this.fileInput.nativeElement;
+        this._systemService.on();
+        if (person.profileImageObject === undefined) {
+          console.log('1a')
+          if (fileBrowser.files && fileBrowser.files[0]) {
+            console.log('1b')
+            this.upload().then((result: any) => {
+              console.log('1c')
+              if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+                console.log('1d')
+                person.profileImageObject = result.body[0].file;
 
-    } else {
-      console.log(2)
-      let person: Person = <Person>{};
-      let address: Address = <Address>{};
-      address.lga = value.lga;
-      address.neighbourhood = value.neighbourhood;
-      address.state = this.selectedState;
-      address.street = value.streetName;
-
-      person.dateOfBirth = value.dob.jsdate;
-      person.email = value.email;
-      person.firstName = value.firstName;
-      person.gender = value.gender;
-      person.homeAddress = address;
-      person.lastName = value.lastName;
-      person.lgaOfOrigin = value.lgaOfOrigin;
-      person.maritalStatus = value.maritalStatus;
-      person.mothersMaidenName = value.mothermaidenname;
-      person.otherNames = value.otherNames;
-      person.phoneNumber = value.phonenumber;
-      person.platformOnwerId = this.currentPlatform._id;
-      person.stateOfOrigin = value.stateOfOrigin;
-      person.title = value.title;
-
-      let beneficiary: Beneficiary = <Beneficiary>{};
-      beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-      beneficiary.platformOwnerId = this.currentPlatform;
-
-      let policy: any = <any>{};
-
-
-
-
-
-      let fileBrowser = this.fileInput.nativeElement;
-      this._systemService.on();
-      if (person.profileImageObject === undefined) {
-        console.log('2a')
-        if (fileBrowser.files && fileBrowser.files[0]) {
-          console.log('2b')
-          this.upload().then((result: any) => {
-            console.log('2c')
-            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-              person.profileImageObject = result.body[0].file;
-              console.log('2d')
-              this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
-                console.log('2e')
-                // should be sending selectedbeneficiary to steptwo
-                console.log(payload)
-
-                if (payload.statusCode === 200 && payload.error === false) {
-                  console.log('am here oo')
-                  delete payload.body.beneficiary.personId;
-                  payload.body.beneficiary.person = payload.body.person;
-                  this.selectedBeneficiary = payload.body.beneficiary;
-                  // this._systemService.announceBeneficiaryTabNotification('Two');
+                this._personService.update(person).then(payload => {
+                  console.log('1e')
+                  this._getBeneficiary(this.selectedBeneficiary._id);
                   this._systemService.off();
                   this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-                }
-              }).catch(err => {
-                this._systemService.off();
-                console.log(err);
-              })
-            }
+                }).catch(err => {
+                  console.log(err);
+                  this._systemService.off();
+                })
+              }
+            }).catch(err => {
+              this._systemService.off();
+            })
+          } else {
+            this._personService.update(person).then(payload => {
+              this._getBeneficiary(this.selectedBeneficiary._id);
+              this._systemService.off();
+              this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+            }).catch(err => {
+              console.log(err);
+              this._systemService.off();
+            })
+          }
+        } else {
+          this._personService.update(person).then(payload => {
+            this._getBeneficiary(this.selectedBeneficiary._id);
+            this._systemService.off();
+            this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
           }).catch(err => {
             console.log(err);
             this._systemService.off();
           })
         }
+
+
+
+
       } else {
-        this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+        console.log(2)
+        let person: Person = <Person>{};
+        let address: Address = <Address>{};
+        address.lga = value.lga;
+        address.neighbourhood = value.neighbourhood;
+        address.state = this.selectedState;
+        address.street = value.streetName;
 
-          if (payload.statusCode === 200 && payload.error === false) {
-            this.selectedBeneficiary = payload.body.beneficiary;
-            this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-            this._systemService.announceBeneficiaryTabNotification('Two');
+        person.dateOfBirth = value.dob.jsdate;
+        person.email = value.email;
+        person.firstName = value.firstName;
+        person.gender = value.gender;
+        person.homeAddress = address;
+        person.lastName = value.lastName;
+        person.lgaOfOrigin = value.lgaOfOrigin;
+        person.maritalStatus = value.maritalStatus;
+        person.mothersMaidenName = value.mothermaidenname;
+        person.otherNames = value.otherNames;
+        person.phoneNumber = value.phonenumber;
+        person.platformOnwerId = this.currentPlatform._id;
+        person.stateOfOrigin = value.stateOfOrigin;
+        person.title = value.title;
+
+        let beneficiary: Beneficiary = <Beneficiary>{};
+        beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+        beneficiary.platformOwnerId = this.currentPlatform;
+
+        let policy: any = <any>{};
+
+
+
+
+
+        let fileBrowser = this.fileInput.nativeElement;
+        this._systemService.on();
+        if (person.profileImageObject === undefined) {
+          console.log('2a')
+          if (fileBrowser.files && fileBrowser.files[0]) {
+            console.log('2b')
+            this.upload().then((result: any) => {
+              console.log('2c')
+              if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+                person.profileImageObject = result.body[0].file;
+                console.log('2d')
+                this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+                  console.log('2e')
+                  // should be sending selectedbeneficiary to steptwo
+                  console.log(payload)
+
+                  if (payload.statusCode === 200 && payload.error === false) {
+                    console.log('am here oo')
+                    delete payload.body.beneficiary.personId;
+                    payload.body.beneficiary.person = payload.body.person;
+                    this.selectedBeneficiary = payload.body.beneficiary;
+                    // this._systemService.announceBeneficiaryTabNotification('Two');
+                    this._systemService.off();
+                    this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                  }
+                }).catch(err => {
+                  this._systemService.off();
+                  console.log(err);
+                })
+              }
+            }).catch(err => {
+              console.log(err);
+              this._systemService.off();
+            })
+          } else {
+            this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+
+              if (payload.statusCode === 200 && payload.error === false) {
+                this.selectedBeneficiary = payload.body.beneficiary;
+                this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                this._systemService.announceBeneficiaryTabNotification('Two');
+              }
+              this._systemService.off();
+            }).catch(err => {
+              console.log(err);
+              this._systemService.off();
+            })
           }
-          this._systemService.off();
-        }).catch(err => {
-          console.log(err);
-          this._systemService.off();
-        })
-      }
+        } else {
+          this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
 
+            if (payload.statusCode === 200 && payload.error === false) {
+              this.selectedBeneficiary = payload.body.beneficiary;
+              this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+              this._systemService.announceBeneficiaryTabNotification('Two');
+            }
+            this._systemService.off();
+          }).catch(err => {
+            console.log(err);
+            this._systemService.off();
+          })
+        }
+
+      }
+    } else {
+      let counter = 0;
+      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      Object.keys(this.stepOneFormGroup.controls).forEach((field, i) => { // {1}
+        const control = this.stepOneFormGroup.get(field);
+        if (!control.valid) {
+          control.markAsDirty({ onlySelf: true });
+          counter = counter + 1;
+        }
+      });
     }
+
 
   }
 

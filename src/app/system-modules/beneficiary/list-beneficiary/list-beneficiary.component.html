@@ -94,9 +94,9 @@
                     </span>
                 </td>
                 <td class="td td-icos">
-                    <i class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
+                    <i *ngIf="beneficiary.isPrincipal" class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
                 </td>
-                <td routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}">
+                <td (click)="navigateDetailBeneficiary(beneficiary)">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>

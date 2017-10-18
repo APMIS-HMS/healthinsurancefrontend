@@ -33,7 +33,6 @@ export class SystemModulesComponent implements OnInit {
 
 	ngOnInit() {
 		this.user = (<any> this._locker.getObject('auth')).user;
-		console.log(this.user);
 		this._systemService.announceLoggedInUser(this.user);
 
 		this._systemService.notificationAnnounced$.subscribe((value: any) => {

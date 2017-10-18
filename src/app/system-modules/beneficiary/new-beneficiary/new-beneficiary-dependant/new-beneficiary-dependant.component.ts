@@ -1,3 +1,4 @@
+import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
 import { Beneficiary } from './../../../../models/setup/beneficiary';
 import { Address } from './../../../../models/organisation/address';
 import { Person } from './../../../../models/person/person';
@@ -149,7 +150,6 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
 
   closeDependant(dependant, i) {
-    console.log(dependant)
   }
 
   pushNewDependant(dependant?, index?) {
@@ -175,9 +175,20 @@ export class NewBeneficiaryDependantComponent implements OnInit {
       );
   }
   push(dependant, valid) {
-    dependant.controls['readOnly'].setValue(true);
-    console.log(dependant)
-    console.log(valid);
+    if(valid){
+      dependant.controls['readOnly'].setValue(true);
+    }else{
+      let counter = 0;
+      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      Object.keys(dependant.controls).forEach((field, i) => { // {1}
+        const control = dependant.get(field);
+        if (!control.valid) {
+          control.markAsDirty({ onlySelf: true });
+          counter = counter + 1;
+        }
+      });
+    }
+    
   }
 
   changeGender($event, gender, dependant) {
