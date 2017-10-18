@@ -114,12 +114,9 @@ export class NewEmployerComponent implements OnInit {
       bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
       bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
       bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
-      cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
-      // cinNumber: [ {value: this.facility != null ? this.facility.employer.cin : '' }]
+      cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]]
     });
 
-   // this.employerFormGroup.controls['cinNumber'].disabled;
-    console.log(this.industries);
     this.employerFormGroup.controls['state'].valueChanges.subscribe(value => {
       console.log(this.selectedCountry);
       this.selectedState = value;
@@ -390,10 +387,8 @@ export class NewEmployerComponent implements OnInit {
           this._facilityService.update(facility).then((payload: any) => {
             console.log(payload);
             this._systemService.off();
-            this._toastr.info('Navigating to employer details page...', 'Navigate!');
-            setTimeout(e => {
-              this.navigateEmployers('/modules/employer/employers/' + payload._id);
-            }, 2000);
+            // this.employerFormGroup.reset();
+            this.navigateEmployers('/modules/employer/employers/' + payload._id);
             this._toastr.success('Employer has been updated successfully!', 'Success!');
             this.btnText = true;
             this.btnProcessing = false;
@@ -427,6 +422,7 @@ export class NewEmployerComponent implements OnInit {
               // this.employerFormGroup.reset();
               this._systemService.off();
               this._toastr.success('Employer has been created successfully!', 'Success!');
+              this.navigateEmployers('/modules/employer/employers');
               this.btnText = true;
               this.btnProcessing = false;
               this.disableBtn = false;

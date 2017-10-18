@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { FacilityService, SystemModuleService } from './../../../services/index';
+import { FacilityService, SystemModuleService, UploadService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { DURATIONS } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
@@ -44,6 +44,7 @@ export class ProviderDetailsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private loadingService: LoadingBarService,
+    private _uploadService: UploadService,
   ) { }
 
   ngOnInit() {

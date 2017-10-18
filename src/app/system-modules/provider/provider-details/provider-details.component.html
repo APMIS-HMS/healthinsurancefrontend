@@ -27,7 +27,8 @@
                     <div class="item-label item-head">Provider Detail</div>
 
                     <div class="detail-content">
-                        <img class="hia-logo" src="../../../../assets/img/logos/bridgeclinicbanner.jpg">
+                        <img *ngIf="facility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility.logo.thumbnail)">
+                        <img *ngIf="facility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
                         <div class="group-wrap">
                             <div class="item-label">{{ facility?.name }}</div>
                             <!-- <div class="item-val">{{ facility?.provider.industry.name }}</div> -->
@@ -72,7 +73,8 @@
 
                     <div class="detail-content">
                         <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
+                            <img *ngIf="facility?.businessContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.businessContact?.image?.thumbnail)">
+                            <img *ngIf="facility?.businessContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
                         </div>
                         <div class="group-wrap">
                             <div class="item-val">{{ facility?.businessContact?.firstName }} {{ facility?.businessContact?.lastName }}</div>
@@ -89,7 +91,8 @@
 
                     <div class="detail-content">
                         <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
+                            <img *ngIf="facility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.itContact?.image?.thumbnail)">
+                            <img *ngIf="facility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
                         </div>
                         <div class="group-wrap">
                             <div class="item-val">{{ facility?.itContact?.firstName }} {{ facility?.itContact?.lastName }}</div>

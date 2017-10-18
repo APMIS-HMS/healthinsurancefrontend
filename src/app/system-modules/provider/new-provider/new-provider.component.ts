@@ -12,6 +12,7 @@ import {
 } from './../../../services/index';
 import { GRADES, HEFAMAA_STATUSES, CurrentPlaformShortName } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import { FORM_VALIDATION_ERROR_MESSAGE } from '../../../services/globals/config';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -47,13 +48,15 @@ export class NewProviderComponent implements OnInit {
   userTypes: any[] = [];
   contactPositions: any[] = [];
   HEFAMAA_STATUSES: any = <any>[];
-  saveBtn: string = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   selectedUserType: any;
   selectedCountry: any;
   facility: any;
   selectedFacilityId: string = '';
   selectedState: any;
   currentPlatform:any;
+  btnText: boolean = true;
+  btnProcessing: boolean = false;
+  disableBtn: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -147,7 +150,6 @@ export class NewProviderComponent implements OnInit {
     });
 
     if (this.facility !== undefined) {
-      this.saveBtn = 'Update &nbsp; <i class="fa fa-edit"></i>';
       this.selectedState = this.facility.address.state;
       this.providerFormGroup.controls['classification'].setValue(this.facility.provider.facilityClass[0]);
     }
@@ -437,7 +439,10 @@ export class NewProviderComponent implements OnInit {
   onClickSaveProvider(value: any, valid: boolean) {
     if (valid) {
       this._systemService.on();
-      this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+      this.btnText = false;
+      this.btnProcessing = true;
+      this.disableBtn = true;
+
       let facility = this._extractFacility();
       console.log(facility);
       if (!!this.facility) {
@@ -464,15 +469,18 @@ export class NewProviderComponent implements OnInit {
             console.log(payload)
             this._systemService.off();
             this._toastr.info('Navigating to provider details page...', 'Navigate!');
-            setTimeout(e => {
-              this.navigateProviders('/modules/provider/providers/', + payload._id);
-            }, 2000);
-            this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+            this.navigateProviders('/modules/provider/providers/', + payload._id);
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
             this._toastr.success('Care Provider has been updated successfully!', 'Success!');
             this.providerFormGroup.controls['classification'].setValue('primary');
           }).catch(err => {
             console.log(err);
             this._systemService.off();
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
             if (err == 'Error: This email already exist') {
               this._toastr.error('This email alreay exist!', 'Email exists!');
             } else {
@@ -499,13 +507,19 @@ export class NewProviderComponent implements OnInit {
           facility.platformOwnerId = this.currentPlatform;
           this._facilityService.create(facility).then(payload => {
             this._systemService.off();
-            this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
             this._toastr.success('Care Provider has been created successfully!', 'Success!');
+            // this.providerFormGroup.reset();
             this.providerFormGroup.controls['classification'].setValue('primary');
-            this._router.navigate(['/modules/provider/providers'])
+            this._router.navigate(['/modules/provider/providers']);
           }).catch(err => {
             console.log(err);
             this._systemService.off();
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
             if (err == 'Error: This email already exist') {
               this._toastr.error('This email alreay exist!', 'Email exists!');
             } else {
@@ -516,7 +530,15 @@ export class NewProviderComponent implements OnInit {
       }
     } else {
       this._systemService.off();
-      this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+      let counter = 0;
+      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      Object.keys(this.providerFormGroup.controls).forEach((field, i) => {
+        const control = this.providerFormGroup.get(field);
+        if (!control.valid) {
+          control.markAsDirty({ onlySelf: true });
+          counter = counter + 1;
+        }
+      });
     }
   }
 
