@@ -121,6 +121,11 @@ export class NewProviderComponent implements OnInit {
       bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
       bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      hmo_lname: [this.facility != null ? this.facility.hmoContact.lastName : '', [<any>Validators.required]],
+      hmo_fname: [this.facility != null ? this.facility.hmoContact.firstName : '', [<any>Validators.required]],
+      hmo_phone: [this.facility != null ? this.facility.hmoContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      hmo_position: [this.facility != null ? this.facility.hmoContact.position : '', [<any>Validators.required]],
+      hmo_email: [this.facility != null ? this.facility.hmoContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
       it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
       it_phone: [this.facility != null ? this.facility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
@@ -345,6 +350,18 @@ export class NewProviderComponent implements OnInit {
     businessContact.position = this.providerFormGroup.controls['bc_position'].value;
     return businessContact;
   }
+  
+  _extractHMOContact(hmoContact?: Contact) {
+    if (hmoContact === undefined) {
+      hmoContact = <Contact>{};
+    }
+    hmoContact.lastName = this.providerFormGroup.controls['hmo_fname'].value;
+    hmoContact.firstName = this.providerFormGroup.controls['hmo_lname'].value;
+    hmoContact.email = this.providerFormGroup.controls['hmo_email'].value;
+    hmoContact.phoneNumber = this.providerFormGroup.controls['hmo_phone'].value;
+    hmoContact.position = this.providerFormGroup.controls['hmo_position'].value;
+    return hmoContact;
+  }
   _extractITContact(itContact?: Contact) {
     if (itContact === undefined) {
       itContact = <Contact>{};
@@ -395,6 +412,7 @@ export class NewProviderComponent implements OnInit {
 
   _extractFacility(facility?: Facility) {
     const businessContact = this._extractBusinessContact();
+    const hmoContact = this._extractHMOContact();
     const itContact = this._extractITContact();
     const bankDetails = this._extractBankDetail();
     const address = this._extractAddress();
