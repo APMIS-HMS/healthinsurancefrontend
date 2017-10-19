@@ -563,7 +563,7 @@ input[type="checkbox"].switch_1:checked:after {
 }
 
 .text-center {
-    text-align: center;
+    text-align: center !important;
     padding: 10px;
 }
 
@@ -697,8 +697,9 @@ input[type="checkbox"].switch_1:checked:after {
     align-items: center;
     font-size: 12px;
 }
-.tip-td:hover{
-    .tooltip{
+
+.tip-td:hover {
+    .tooltip {
         display: block;
         position: absolute;
         right: 0;
@@ -729,28 +730,33 @@ input[type="checkbox"].switch_1:checked:after {
     margin-bottom: 20px;
     font-weight: bold;
 }
-.bar-right{
+
+.bar-right {
     display: flex;
     justify-content: flex-end;
     align-items: center;
 }
-.icons-wrap{
+
+.icons-wrap {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     margin-left: 20px;
 }
-.icons-wrap i{
+
+.icons-wrap i {
     cursor: pointer;
     font-size: $font-x4;
     color: #fff;
     padding: 3px;
     position: relative;
 }
-.icons-wrap i:hover{
+
+.icons-wrap i:hover {
     color: lighten($brand-primary, 60%);
 }
-.notify-count{
+
+.notify-count {
     position: absolute;
     top: -5px;
     right: -5px;

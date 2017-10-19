@@ -19,8 +19,9 @@ export interface Authorization {
 
 export interface PreAuthorizationDocument {
     document: Document[];
-    response?: any[];
+    response?: any;
     approvedStatus:any;
+    _id: any;
 }
 
 export interface Document {
@@ -28,4 +29,5 @@ export interface Document {
     clinicalDocumentation: any;
     approvedStatus:any;
     order:number;
+    _id: any;
 }
