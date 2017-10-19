@@ -76,7 +76,7 @@
                                     <my-date-picker name="dischargeDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="dischargeDate"></my-date-picker>
                                 </div>
                             </div>
-                            <div *ngIf="SelectedCheckinItem?.encounterType?.name == Out-Patient">
+                            <div *ngIf="SelectedCheckinItem?.encounterType?.name == 'Out-Patient'">
                                 <div style="width:150px">
                                     <span class="inner-label">Date of Visit:</span>
                                     <my-date-picker name="visitDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="visitDate"></my-date-picker>

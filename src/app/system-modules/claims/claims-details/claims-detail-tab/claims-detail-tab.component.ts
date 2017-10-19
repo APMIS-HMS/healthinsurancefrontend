@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ClaimService } from './../../../../services/common/claim.service';
@@ -10,7 +10,7 @@ import differenceInYears from 'date-fns/difference_in_years';
   styleUrls: ['./claims-detail-tab.component.scss']
 })
 export class ClaimsDetailTabComponent implements OnInit {
-
+  
   modalApprove = false;
   modalReject = false;
   modalHold = false;
