@@ -12,22 +12,22 @@
         </div>
         <div class="group-item">
           <div class="item-label">Gender:</div>
-          <div class="item-val">Male</div>
+          <div class="item-val">{{selectedClaim?.checkedinDetail?.personObject?.gender?.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">LASRRA ID:</div>
-          <div class="item-val">123.333.32.33</div>
+          <div class="item-val">{{selectedClaim?.checkedinDetail?.policyObject?.providerId?.provider?.lasrraId}}</div>
         </div>
         <div class="group-item">
             <div class="item-label">LAASHMA ID:</div>
-            <div class="item-val">255.544.53.3</div>
+            <div class="item-val">{{selectedClaim?.checkedinDetail?.beneficiaryObject?.platformOwnerNumber}}</div>
           </div>
       </div>
 
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Hospital Name:</div>
-          <div class="item-val">Foremost Hospital</div>
+          <div class="item-val">{{selectedClaim?.checkedinDetail?.policyObject?.providerId?.name}}</div>
         </div>
         <div class="group-item">
             <div class="item-label">Provider ID:</div>
@@ -35,23 +35,23 @@
           </div>
         <div class="group-item">
           <div class="item-label">Health Plan:</div>
-          <div class="item-val">Formal Sector Plan</div>
+          <div class="item-val">{{selectedClaim?.checkedinDetail?.policyObject?.planId?.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Claim Type:</div>
-          <div class="item-val">Capitation</div>
+          <div class="item-val">{{selectedClaim?.claimType}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Status:</div>
-          <div class="item-val"><span class="lemon--green">Filed</span>></div>
+          <div class="item-val"><span class="lemon--green">{{selectedClaim?.checkedinDetail?.claimStatus?.name}}</span></div>
         </div>
         <div class="group-item">
           <div class="item-label">Date when patient was checked in:</div>
-          <div class="item-val">11th Oct 2017</div>
+          <div class="item-val">{{selectedClaim?.checkedinDetail?.confirmation| date:'medium'}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Date when claims was filed:</div>
-          <div class="item-val">11th Oct 2017</div>
+          <div class="item-val">{{selectedClaim?.dateClaimCreated| date:'medium'}}</div>
         </div>
       </div>
     </div>

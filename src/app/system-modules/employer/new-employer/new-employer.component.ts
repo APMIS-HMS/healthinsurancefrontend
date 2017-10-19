@@ -111,15 +111,12 @@ export class NewEmployerComponent implements OnInit {
       it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
       it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       type: [this.facility != null ? this.facility.employer.industry : '', [<any>Validators.required]],
-      bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
-      bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
-      bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
-      cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]],
-      // cinNumber: [ {value: this.facility != null ? this.facility.employer.cin : '' }]
+      // bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
+      // bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
+      // bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
+      cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]]
     });
 
-   // this.employerFormGroup.controls['cinNumber'].disabled;
-    console.log(this.industries);
     this.employerFormGroup.controls['state'].valueChanges.subscribe(value => {
       console.log(this.selectedCountry);
       this.selectedState = value;
@@ -152,6 +149,7 @@ export class NewEmployerComponent implements OnInit {
         this._systemService.off();
         this.facility = res;
         this._initialiseFormGroup();
+        this._initImages(res);
       }).catch(err => {
         this._systemService.off();
       });
@@ -303,15 +301,15 @@ export class NewEmployerComponent implements OnInit {
     itContact.position = this.employerFormGroup.controls['it_position'].value;
     return itContact;
   }
-  _extractBankDetail(bankDetail?: BankDetail) {
-    if (bankDetail === undefined) {
-      bankDetail = <BankDetail>{};
-    }
-    bankDetail.accountNumber = this.employerFormGroup.controls['bankAccNumber'].value;
-    bankDetail.bank = this.employerFormGroup.controls['bank'].value;
-    bankDetail.name = this.employerFormGroup.controls['bankAccName'].value;
-    return bankDetail;
-  }
+  // _extractBankDetail(bankDetail?: BankDetail) {
+  //   if (bankDetail === undefined) {
+  //     bankDetail = <BankDetail>{};
+  //   }
+  //   bankDetail.accountNumber = this.employerFormGroup.controls['bankAccNumber'].value;
+  //   bankDetail.bank = this.employerFormGroup.controls['bank'].value;
+  //   bankDetail.name = this.employerFormGroup.controls['bankAccName'].value;
+  //   return bankDetail;
+  // }
 
   _extractAddress(address?: Address) {
     if (address === undefined) {
@@ -338,7 +336,7 @@ export class NewEmployerComponent implements OnInit {
   _extractFacility(facility?: Facility) {
     const businessContact = this._extractBusinessContact();
     const itContact = this._extractITContact();
-    const bankDetails = this._extractBankDetail();
+    // const bankDetails = this._extractBankDetail();
     const address = this._extractAddress();
     const employer = this._extractEmployer();
 
@@ -346,7 +344,7 @@ export class NewEmployerComponent implements OnInit {
       facility = <Facility>{};
     }
     facility.address = address;
-    facility.bankDetails = bankDetails;
+    // facility.bankDetails = bankDetails;
     facility.businessContact = businessContact;
     facility.itContact = itContact;
     facility.employer = employer;
@@ -389,10 +387,8 @@ export class NewEmployerComponent implements OnInit {
           this._facilityService.update(facility).then((payload: any) => {
             console.log(payload);
             this._systemService.off();
-            this._toastr.info('Navigating to employer details page...', 'Navigate!');
-            setTimeout(e => {
-              this.navigateEmployers('/modules/employer/employers/' + payload._id);
-            }, 2000);
+            // this.employerFormGroup.reset();
+            this.navigateEmployers('/modules/employer/employers/' + payload._id);
             this._toastr.success('Employer has been updated successfully!', 'Success!');
             this.btnText = true;
             this.btnProcessing = false;
@@ -426,6 +422,7 @@ export class NewEmployerComponent implements OnInit {
               // this.employerFormGroup.reset();
               this._systemService.off();
               this._toastr.success('Employer has been created successfully!', 'Success!');
+              this.navigateEmployers('/modules/employer/employers');
               this.btnText = true;
               this.btnProcessing = false;
               this.disableBtn = false;
@@ -556,6 +553,18 @@ export class NewEmployerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
+    }
+  }
+
+  private _initImages(facility: Facility) {
+    if(!!facility.logo) {
+      this.logoImage.nativeElement.src = facility.logo;
+    }
+    if (!!facility.businessContact.image) {
+      this.bImage.nativeElement.src = facility.businessContact.image;
+    }
+    if (!!facility.itContact.image) {
+      this.itImage.nativeElement.src = facility.itContact.image;
     }
   }
 

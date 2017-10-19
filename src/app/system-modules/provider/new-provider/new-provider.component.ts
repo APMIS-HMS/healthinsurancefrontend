@@ -12,6 +12,7 @@ import {
 } from './../../../services/index';
 import { GRADES, HEFAMAA_STATUSES, CurrentPlaformShortName } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import { FORM_VALIDATION_ERROR_MESSAGE } from '../../../services/globals/config';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -25,8 +26,12 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-provider.component.scss']
 })
 export class NewProviderComponent implements OnInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
-  @ViewChild('blah') blah: ElementRef;
+  @ViewChild('logoInput') logoInput: ElementRef;
+  @ViewChild('logoImage') logoImage: ElementRef;
+  @ViewChild('bInput') bInput: ElementRef;
+  @ViewChild('bImage') bImage: ElementRef;
+  @ViewChild('itInput') itInput: ElementRef;
+  @ViewChild('itImage') itImage: ElementRef;
   providerFormGroup: FormGroup;
   positions: any = [];
   lgas: any = [];
@@ -43,13 +48,15 @@ export class NewProviderComponent implements OnInit {
   userTypes: any[] = [];
   contactPositions: any[] = [];
   HEFAMAA_STATUSES: any = <any>[];
-  saveBtn: string = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   selectedUserType: any;
   selectedCountry: any;
   facility: any;
   selectedFacilityId: string = '';
   selectedState: any;
   currentPlatform:any;
+  btnText: boolean = true;
+  btnProcessing: boolean = false;
+  disableBtn: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -114,6 +121,11 @@ export class NewProviderComponent implements OnInit {
       bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
       bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      hmo_lname: [this.facility != null ? this.facility.hmoContact.lastName : '', [<any>Validators.required]],
+      hmo_fname: [this.facility != null ? this.facility.hmoContact.firstName : '', [<any>Validators.required]],
+      hmo_phone: [this.facility != null ? this.facility.hmoContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      hmo_position: [this.facility != null ? this.facility.hmoContact.position : '', [<any>Validators.required]],
+      hmo_email: [this.facility != null ? this.facility.hmoContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
       it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
       it_phone: [this.facility != null ? this.facility.itContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
@@ -143,7 +155,6 @@ export class NewProviderComponent implements OnInit {
     });
 
     if (this.facility !== undefined) {
-      this.saveBtn = 'Update &nbsp; <i class="fa fa-edit"></i>';
       this.selectedState = this.facility.address.state;
       this.providerFormGroup.controls['classification'].setValue(this.facility.provider.facilityClass[0]);
     }
@@ -169,6 +180,7 @@ export class NewProviderComponent implements OnInit {
         this._systemService.off();
         this.facility = res;
         this._initialiseFormGroup();
+        this._initImages(res);
       }).catch(err => {
         this._systemService.off();
       });
@@ -338,6 +350,18 @@ export class NewProviderComponent implements OnInit {
     businessContact.position = this.providerFormGroup.controls['bc_position'].value;
     return businessContact;
   }
+  
+  _extractHMOContact(hmoContact?: Contact) {
+    if (hmoContact === undefined) {
+      hmoContact = <Contact>{};
+    }
+    hmoContact.lastName = this.providerFormGroup.controls['hmo_fname'].value;
+    hmoContact.firstName = this.providerFormGroup.controls['hmo_lname'].value;
+    hmoContact.email = this.providerFormGroup.controls['hmo_email'].value;
+    hmoContact.phoneNumber = this.providerFormGroup.controls['hmo_phone'].value;
+    hmoContact.position = this.providerFormGroup.controls['hmo_position'].value;
+    return hmoContact;
+  }
   _extractITContact(itContact?: Contact) {
     if (itContact === undefined) {
       itContact = <Contact>{};
@@ -388,6 +412,7 @@ export class NewProviderComponent implements OnInit {
 
   _extractFacility(facility?: Facility) {
     const businessContact = this._extractBusinessContact();
+    const hmoContact = this._extractHMOContact();
     const itContact = this._extractITContact();
     const bankDetails = this._extractBankDetail();
     const address = this._extractAddress();
@@ -432,88 +457,211 @@ export class NewProviderComponent implements OnInit {
   onClickSaveProvider(value: any, valid: boolean) {
     if (valid) {
       this._systemService.on();
-      this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+      this.btnText = false;
+      this.btnProcessing = true;
+      this.disableBtn = true;
+
       let facility = this._extractFacility();
       console.log(facility);
       if (!!this.facility) {
         // Edit Provider.
-        facility._id = this.selectedFacilityId;
-        facility.platformOwnerId = this.currentPlatform;
-        console.log(facility)
-        this._facilityService.update(facility).then((payload: any) => {
-          console.log(payload)
-          this._systemService.off();
-          this._toastr.info('Navigating to provider details page...', 'Navigate!');
-          setTimeout(e => {
-            this.navigateProviders('/modules/provider/providers/', + payload._id);
-          }, 2000);
-          this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-          this._toastr.success('Care Provider has been updated successfully!', 'Success!');
-          this.providerFormGroup.controls['classification'].setValue('primary');
-        }).catch(err => {
-          console.log(err);
-          this._systemService.off();
-          if (err == 'Error: This email already exist') {
-            this._toastr.error('This email alreay exist!', 'Email exists!');
-          } else {
-            this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+          console.log(allResult);
+          if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+            facility.logo = allResult[0].body[0].file;
           }
+          // Business Contact Image
+          if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+            facility.itContact.image = allResult[2].body[0].file;
+          }
+
+          facility._id = this.selectedFacilityId;
+          facility.platformOwnerId = this.currentPlatform;
+          facility.provider.providerId = this.facility.provider.providerId;
+          console.log(facility);
+          this._facilityService.update(facility).then((payload: any) => {
+            console.log(payload)
+            this._systemService.off();
+            this._toastr.info('Navigating to provider details page...', 'Navigate!');
+            this.navigateProviders('/modules/provider/providers/', + payload._id);
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
+            this._toastr.success('Care Provider has been updated successfully!', 'Success!');
+            this.providerFormGroup.controls['classification'].setValue('primary');
+          }).catch(err => {
+            console.log(err);
+            this._systemService.off();
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
+            if (err == 'Error: This email already exist') {
+              this._toastr.error('This email alreay exist!', 'Email exists!');
+            } else {
+              this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+            }
+          });
         });
       } else {
         // Create Provider
-        facility.platformOwnerId = this.currentPlatform;
-        this._facilityService.create(facility).then(payload => {
-          this._systemService.off();
-          this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-          this._toastr.success('Care Provider has been created successfully!', 'Success!');
-          this.providerFormGroup.controls['classification'].setValue('primary');
-          this._router.navigate(['/modules/provider/providers'])
-        }).catch(err => {
-          console.log(err);
-          this._systemService.off();
-          if (err == 'Error: This email already exist') {
-            this._toastr.error('This email alreay exist!', 'Email exists!');
-          } else {
-            this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+          console.log(allResult);
+          if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+            facility.logo = allResult[0].body[0].file;
           }
+          // Business Contact Image
+          if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+            facility.itContact.image = allResult[2].body[0].file;
+          }
+
+          facility.platformOwnerId = this.currentPlatform;
+          this._facilityService.create(facility).then(payload => {
+            this._systemService.off();
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
+            this._toastr.success('Care Provider has been created successfully!', 'Success!');
+            // this.providerFormGroup.reset();
+            this.providerFormGroup.controls['classification'].setValue('primary');
+            this._router.navigate(['/modules/provider/providers']);
+          }).catch(err => {
+            console.log(err);
+            this._systemService.off();
+            this.btnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
+            if (err == 'Error: This email already exist') {
+              this._toastr.error('This email alreay exist!', 'Email exists!');
+            } else {
+              this._toastr.error('We could not save your data. Something went wrong!', 'Error!');
+            }
+          });
         });
       }
     } else {
       this._systemService.off();
-      this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
+      let counter = 0;
+      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      Object.keys(this.providerFormGroup.controls).forEach((field, i) => {
+        const control = this.providerFormGroup.get(field);
+        if (!control.valid) {
+          control.markAsDirty({ onlySelf: true });
+          counter = counter + 1;
+        }
+      });
     }
   }
 
-  showImageBrowseDlg() {
-    this.fileInput.nativeElement.click();
+  showImageBrowseDlg(context) {
+    switch (context) {
+      case 'b-contact':
+        this.bInput.nativeElement.click();
+        break;
+      case 'it-contact':
+        this.itInput.nativeElement.click();
+        break;
+      case 'logo':
+        this.logoInput.nativeElement.click();
+        break;
+    }
   }
 
   readURL(input) {
     this._systemService.on();
-    input = this.fileInput.nativeElement;
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      let that = this;
-      reader.onload = function (e: any) {
-        that.blah.nativeElement.src = e.target.result;
-        that._systemService.off();
-      };
+    switch (input) {
+      case 'b-contact':
+        input = this.bInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.bImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
 
-      reader.readAsDataURL(input.files[0]);
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'it-contact':
+        input = this.itInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.itImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'logo':
+        input = this.logoInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            console.log(e);
+            that.logoImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
     }
   }
 
-  upload(image) {
-    if (image.files && image.files[0]) {
+  uploadLogo() {
+    let logoBrowser = this.logoInput.nativeElement;
+    if (logoBrowser.files && logoBrowser.files[0]) {
       const formData = new FormData();
-      formData.append('platform', image.files[0]);
+      formData.append("platform", logoBrowser.files[0]);
       return new Promise((resolve, reject) => {
-        this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
-          resolve(res);
-        }).catch(err => {
-          reject(err);
-        });
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
+    }
+  }
+
+  uploadItContact() {
+    let itBrowser = this.itInput.nativeElement;
+    if (itBrowser.files && itBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", itBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  uploadBContact() {
+    let bBrowser = this.bInput.nativeElement;
+    if (bBrowser.files && bBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", bBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  private _initImages(facility: Facility) {
+    if (!!facility.logo) {
+      this.logoImage.nativeElement.src = facility.logo;
+    }
+    if (!!facility.businessContact.image) {
+      this.bImage.nativeElement.src = facility.businessContact.image;
+    }
+    if (!!facility.itContact.image) {
+      this.itImage.nativeElement.src = facility.itContact.image;
     }
   }
 
