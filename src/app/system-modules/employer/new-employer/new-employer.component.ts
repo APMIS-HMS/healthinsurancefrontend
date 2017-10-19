@@ -111,9 +111,9 @@ export class NewEmployerComponent implements OnInit {
       it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
       it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       type: [this.facility != null ? this.facility.employer.industry : '', [<any>Validators.required]],
-      bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
-      bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
-      bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
+      // bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
+      // bankAccName: [this.facility != null ? this.facility.bankDetails.name : '', [<any>Validators.required]],
+      // bankAccNumber: [this.facility != null ? this.facility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]],
       cacNumber: [this.facility != null ? this.facility.employer.cacNumber : '', [<any>Validators.required]]
     });
 
@@ -301,15 +301,15 @@ export class NewEmployerComponent implements OnInit {
     itContact.position = this.employerFormGroup.controls['it_position'].value;
     return itContact;
   }
-  _extractBankDetail(bankDetail?: BankDetail) {
-    if (bankDetail === undefined) {
-      bankDetail = <BankDetail>{};
-    }
-    bankDetail.accountNumber = this.employerFormGroup.controls['bankAccNumber'].value;
-    bankDetail.bank = this.employerFormGroup.controls['bank'].value;
-    bankDetail.name = this.employerFormGroup.controls['bankAccName'].value;
-    return bankDetail;
-  }
+  // _extractBankDetail(bankDetail?: BankDetail) {
+  //   if (bankDetail === undefined) {
+  //     bankDetail = <BankDetail>{};
+  //   }
+  //   bankDetail.accountNumber = this.employerFormGroup.controls['bankAccNumber'].value;
+  //   bankDetail.bank = this.employerFormGroup.controls['bank'].value;
+  //   bankDetail.name = this.employerFormGroup.controls['bankAccName'].value;
+  //   return bankDetail;
+  // }
 
   _extractAddress(address?: Address) {
     if (address === undefined) {
@@ -336,7 +336,7 @@ export class NewEmployerComponent implements OnInit {
   _extractFacility(facility?: Facility) {
     const businessContact = this._extractBusinessContact();
     const itContact = this._extractITContact();
-    const bankDetails = this._extractBankDetail();
+    // const bankDetails = this._extractBankDetail();
     const address = this._extractAddress();
     const employer = this._extractEmployer();
 
@@ -344,7 +344,7 @@ export class NewEmployerComponent implements OnInit {
       facility = <Facility>{};
     }
     facility.address = address;
-    facility.bankDetails = bankDetails;
+    // facility.bankDetails = bankDetails;
     facility.businessContact = businessContact;
     facility.itContact = itContact;
     facility.employer = employer;
