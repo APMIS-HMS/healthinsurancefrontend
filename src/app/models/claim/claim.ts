@@ -1,6 +1,6 @@
 export interface Claim {
     checkedinDetail: any;
-    documentation: any[];
+    documentations: any[];
     CurentClaimStatus: any;
     approval: Date;
     claimNote: any;
