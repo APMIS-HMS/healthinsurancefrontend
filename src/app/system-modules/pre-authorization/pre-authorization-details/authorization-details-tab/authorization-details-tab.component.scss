@@ -11,10 +11,8 @@
 }
 .left-fixed{
     position: fixed;
-}
-.left-fixed{
-    position: fixed;
     width: 31%;
+    max-width: 400px;
     padding: 10px;
     box-sizing: border-box;
     background: lighten($brand-primary, 71%);
@@ -101,4 +99,8 @@
 .letering-name{
     font-weight: normal;
     font-style: italic;
+}
+.reply-wrap{
+    display: flex;
+    justify-content: flex-end;
 }
