@@ -16,8 +16,3 @@ export interface Claim {
     isQueuedForPayment?: Boolean;
     _id: any;
 }
-
-export interface ClaimDocument {
-    clinicalDocument: any;
-    response: any;
-}
