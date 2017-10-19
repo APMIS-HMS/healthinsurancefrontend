@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import differenceInYears from 'date-fns/difference_in_years';
 @Component({
   selector: 'app-authorization-details-tab',
   templateUrl: './authorization-details-tab.component.html',
@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthorizationDetailsTabComponent implements OnInit {
 
+  @Input() selectedAuthorization: any;
 
   modalApprove = false;
   modalReject = false;
@@ -16,7 +17,16 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.selectedAuthorization);
   }
+
+  getAge() {
+    return differenceInYears(
+      new Date(),
+      this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
+    )
+  }
+
   approveClaim() {
     this.modalApprove = true;
   }

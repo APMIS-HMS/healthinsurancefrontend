@@ -4,7 +4,7 @@
         <div class="nut-tab-topSect-wrap">
             <div></div>
 
-            <div class="btn btn-medium btn-grey-outline" (click)="navigate('/modules/pre-auth/pre-authorizations');">
+            <div class="btn btn-medium btn-grey-outline" (click)="navigateAuthorizationList()">
                 <i class="fa fa-times"></i> CANCEL
             </div>
         </div>
@@ -104,7 +104,7 @@
                 <div>
                     <div class="input-wrap" style="justify-content:flex-start; margin-bottom:20px;">
                         <span style="margin-right:10px;">
-                            <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="emergency" name="emergency">
+                            <input style="width: 30px;display: block;margin: 0 auto;"  type="checkbox" formControlName="emergency" name="emergency">
                         </span>
                     </div>
                 </div>
@@ -122,19 +122,21 @@
                     Choose state from the dropdown.
                 </small>
             </div>
+        </form>
 
-            <ul class="inpage-tabs">
-                <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
-                <li (click)="tabClinicalNotes_click()" [class.tab-active]="tab_clinicalNotes">Clinical Notes</li>
-                <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
-                <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
-                <li (click)="tabServices_click()" [class.tab-active]="tab_services">Investigations</li>
-                <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
-                <li (click)="tabNotes_click()" [class.tab-active]="tab_notes">Notes & Documentations</li>
-            </ul>
+        <ul class="inpage-tabs">
+            <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+            <li (click)="tabClinicalNotes_click()" [class.tab-active]="tab_clinicalNotes">Clinical Notes</li>
+            <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
+            <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
+            <li (click)="tabServices_click()" [class.tab-active]="tab_services">Investigations</li>
+            <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
+            <li (click)="tabNotes_click()" [class.tab-active]="tab_notes">Notes & Documentations</li>
+        </ul>
 
-            <div class="tab-content shadow-RB-lite">
-                <div *ngIf="tab_complaints" class="tab-pane fade show active">
+        <div class="tab-content shadow-RB-lite">
+            <div *ngIf="tab_complaints" class="tab-pane fade show active">
+                <form [formGroup]="symptomFormGroup" novalidate>
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Information - Complaints</div>
@@ -153,7 +155,7 @@
                                     <div class="input-wrap-x2">
                                         <div class="searchable-input">
                                             <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
-                                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.presentingComplaints.valid || preAuthFormGroup.controls.presentingComplaints.pristine">
+                                            <small class="alert-label" [hidden]="symptomFormGroup.controls.presentingComplaints.valid || symptomFormGroup.controls.presentingComplaints.pristine">
                                                 Complaint value is required.
                                             </small>
                                             <ul *ngIf="complaintSearchResult" class="search-results">
@@ -162,7 +164,7 @@
                                         </div>
                                         <div class="input-wrap-x2">
                                             <div>
-                                                <small class="alert-label" [hidden]="preAuthFormGroup.controls.complaintsDuration.valid || preAuthFormGroup.controls.complaintsDuration.pristine">
+                                                <small class="alert-label" [hidden]="symptomFormGroup.controls.complaintsDuration.valid || symptomFormGroup.controls.complaintsDuration.pristine">
                                                     Complaint duration value is required.
                                                 </small>
                                                 <input style="width:50px;" min="1" type="number" formControlName="complaintsDuration" class="form-control">
@@ -174,7 +176,7 @@
                                                     <option disabled value="" selected>Select...</option>
                                                     <option *ngFor="let duration of durations" [ngValue]="duration">{{duration.name}}</option>
                                                 </select>
-                                                <small class="alert-label" [hidden]="preAuthFormGroup.controls.complaintsUnit.valid || preAuthFormGroup.controls.complaintsUnit.pristine">
+                                                <small class="alert-label" [hidden]="symptomFormGroup.controls.complaintsUnit.valid || symptomFormGroup.controls.complaintsUnit.pristine">
                                                     Complaint unit value is required.
                                                 </small>
                                             </div>
@@ -218,9 +220,11 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </form>
+            </div>
 
-                <div *ngIf="tab_clinicalNotes" class="tab-pane fade show active">
+            <div *ngIf="tab_clinicalNotes" class="tab-pane fade show active">
+                <form [formGroup]="preAuthFormGroup" novalidate>
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Documentation</div>
@@ -244,9 +248,11 @@
                         </div>
 
                     </div>
-                </div>
+                </form>
+            </div>
 
-                <div *ngIf="tab_diagnosis" class="tab-pane fade show active">
+            <div *ngIf="tab_diagnosis" class="tab-pane fade show active">
+                <form [formGroup]="diagnosisFormGroup" novalidate>
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Information - Diagnosis</div>
@@ -263,7 +269,7 @@
                             <div class="input-wrap">
                                 <div class="searchable-input">
                                     <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
-                                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.diagnosis.valid || preAuthFormGroup.controls.diagnosis.pristine">
+                                    <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosis.valid || diagnosisFormGroup.controls.diagnosis.pristine">
                                         Diagnosis Type value is required.
                                     </small>
                                     <ul *ngIf="diagnosisSearchResult" class="search-results">
@@ -281,7 +287,7 @@
                                     <option disabled value="" selected>Select...</option>
                                     <option *ngFor="let type of diagnosisTypes" [ngValue]="type">{{type.name}}</option>
                                 </select>
-                                <small class="alert-label" [hidden]="preAuthFormGroup.controls.diagnosisType.valid || preAuthFormGroup.controls.diagnosisType.pristine">
+                                <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosisType.valid || diagnosisFormGroup.controls.diagnosisType.pristine">
                                     Diagnosis Type value is required.
                                 </small>
                             </div>
@@ -325,9 +331,11 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </form>
+            </div>
 
-                <div *ngIf="tab_procedures" class="tab-pane fade show active">
+            <div *ngIf="tab_procedures" class="tab-pane fade show active">
+                <form [formGroup]="procedureFormGroup" novalidate>
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Information - Procedure</div>
@@ -379,9 +387,11 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </form>
+            </div>
 
-                <div *ngIf="tab_services" class="tab-pane fade show active">
+            <div *ngIf="tab_services" class="tab-pane fade show active">
+                <form [formGroup]="investigationFormGroup" novalidate>
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Information - Investigations</div>
@@ -399,7 +409,7 @@
                                 <div class="searchable-input">
                                     <input style="width:300px;" type="text" formControlName="services" class="form-control">
 
-                                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.services.valid || preAuthFormGroup.controls.services.pristine">
+                                    <small class="alert-label" [hidden]="investigationFormGroup.controls.services.valid || investigationFormGroup.controls.services.pristine">
                                         Investigation value is required.
                                     </small>
                                     <ul *ngIf="investigationSearchResult" class="search-results">
@@ -437,9 +447,11 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </form>
+            </div>
 
-                <div *ngIf="tab_drugs" class="tab-pane fade show active">
+            <div *ngIf="tab_drugs" class="tab-pane fade show active">
+                <form [formGroup]="drugFormGroup" novalidate>
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Information - Drugs</div>
@@ -450,8 +462,6 @@
                         </div>
                     </div>
 
-
-
                     <div class="frm-subsect">
                         <div class="frm-item-wrap">
                             <label class="label">Drug</label>
@@ -460,7 +470,7 @@
                                     <div class="input-wrap-x2">
                                         <div class="searchable-input">
                                             <input style="width:155px;" type="text" formControlName="drug" class="form-control">
-                                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.drug.valid || preAuthFormGroup.controls.drug.pristine">
+                                            <small class="alert-label" [hidden]="drugFormGroup.controls.drug.valid || drugFormGroup.controls.drug.pristine">
                                                 Drug value is required.
                                             </small>
                                             <ul *ngIf="drugSearchResult" class="search-results">
@@ -469,7 +479,7 @@
                                         </div>
                                         <div class="input-wrap-x2">
                                             <input style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
-                                            <small class="alert-label" [hidden]="preAuthFormGroup.controls.drugQty.valid || preAuthFormGroup.controls.drugQty.pristine">
+                                            <small class="alert-label" [hidden]="drugFormGroup.controls.drugQty.valid || drugFormGroup.controls.drugQty.pristine">
                                                 Drug Quantity value is required.
                                             </small>
                                             <div>
@@ -477,7 +487,7 @@
                                                     <option disabled value="" selected>Select...</option>
                                                     <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
                                                 </select>
-                                                <small class="alert-label" [hidden]="preAuthFormGroup.controls.drugUnit.valid || preAuthFormGroup.controls.drugUnit.pristine">
+                                                <small class="alert-label" [hidden]="drugFormGroup.controls.drugUnit.valid || drugFormGroup.controls.drugUnit.pristine">
                                                     Drug Unit value is required.
                                                 </small>
                                             </div>
@@ -515,17 +525,11 @@
                             </table>
                         </div>
                     </div>
+                </form>
+            </div>
 
-
-
-
-
-
-
-
-                </div>
-
-                <div *ngIf="tab_notes" class="tab-pane fade show active">
+            <div *ngIf="tab_notes" class="tab-pane fade show active">
+                <form [formGroup]="preAuthFormGroup" novalidate>
                     <div class="content-top-bar">
                         <div class="bar-labels">
                             <div>Clinical Documentation</div>
@@ -567,54 +571,11 @@
                             This is a required field.
                         </small>
                     </div>
-                </div>
+                </form>
             </div>
-
-
-
-            <!-- <div class="frm-group">
-    <div class="frm-title">Upload Document</div>
-
-    <div class="frm-subsect">
-      <div class="frm-item-wrap">
-        <div class="input-wrap">
-          <button class="btn btn-medium btn-blue"><i class="fa fa-file"></i>Select File</button>
         </div>
-      </div>
-
-      <div class="tbl-wrap">
-        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-          <thead class="thead">
-            <tr class="tr">
-              <th class="th">File Name</th>
-              <th class="th"></th>
-            </tr>
-          </thead>
-
-          <tbody class="tbody">
-            <tr class="tr">
-              <td class="td">blahh.doc</td>
-              <td><i class="fa fa-times"></i></td>
-            </tr>
-
-            <tr class="tr">
-              <td class="td">blahh.doc</td>
-              <td><i class="fa fa-times"></i></td>
-            </tr>
-
-            <tr class="tr">
-              <td class="td">blahh.doc</td>
-              <td><i class="fa fa-times"></i></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div> -->
 
 
-
-            <button (click)="send()" class="btn btn-medium btn-blue cta">SEND</button>
-        </form>
+        <button (click)="send()" class="btn btn-medium btn-blue cta">SEND</button>
     </section>
 </div>

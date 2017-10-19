@@ -17,22 +17,22 @@
         <div class="input-wrap">
             <label>Responsible HIA</label>
             <select [formControl]="filterHiaControl" class="form-control">
-            <option value="All" selected>All</option>
-          </select>
+                <option value="All" selected>All</option>
+            </select>
         </div>
 
         <div class="input-wrap">
             <label>Hospital Name</label>
             <select [formControl]="hospitalControl">
-            <option>All</option>
-          </select>
+                <option>All</option>
+            </select>
         </div>
 
         <div class="input-wrap">
             <label>Health Care Plan</label>
             <select [formControl]="planControl">
-            <option>All</option>
-          </select>
+                <option>All</option>
+            </select>
         </div>
 
         <div class="btn btn-medium btn-blue-outline">RESET</div>
@@ -50,45 +50,33 @@
                 <th class="th">Reason for Request</th>
                 <th class="th">Emergency</th>
                 <th class="th"></th>
+                <th class="th"></th>
             </tr>
         </thead>
 
         <tbody class="tbody">
-            <tr class="tr">
-                <td class="td">12 - 10 - 2017</td>
-                <td class="td">Jonathan Nelson</td>
-                <td class="td">211.221.33.3</td>
+            <tr *ngFor="let auth of authorizations" class="tr">
+                <td class="td">{{auth.createdAt | date}}</td>
+                <td class="td">{{auth.checkedInDetails.beneficiaryObject.personId.lastName}} {{auth.checkedInDetails.beneficiaryObject.personId.firstName}} {{auth.checkedInDetails.beneficiaryObject.personId.otherNames}}</td>
+                <td class="td">{{auth.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</td>
                 <td class="td">Healthy Health LTD</td>
-                <td class="td">Foremost Hospital</td>
-                <td class="td"><span class="green">Approved</span></td>
-                <td class="td">Body Swelling</td>
-                <td class="td">Emergency
+                <td class="td">{{auth.checkedInDetails.providerFacilityId.name}}</td>
+                <td class="td">
+                    <span class="green">{{auth.approvedStatus.name}}</span>
+                </td>
+                <td class="td">
+                        <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    {{(auth.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
+                </td>
+                <td class="td">Emergency</td>
+                <td class="td tip-td">
+                    <i class="fa fa-info fa-circle"></i>
                     <div class="tooltip">
-                        <div class="tip-title"></div>
-                        <div class="tip-content"></div>
+                        <div class="tip-title">{{auth.documentation[0].document[1].type}}</div>
+                        <div class="tip-content">{{auth.documentation[0].document[1].clinicalDocumentation}}</div>
                     </div>
                 </td>
-                <td class="td td-icos" routerLink="/modules/pre-auth/pre-authorizations/11">
-                    <i class="fa fa-info fa-circle"></i>
-                    <i class="fa fa-chevron-right"></i>
-                </td>
-            </tr>
-            <tr class="tr">
-                <td class="td">12 - 10 - 2017</td>
-                <td class="td">Jonathan Nelson</td>
-                <td class="td">211.221.33.3</td>
-                <td class="td">Healthy Health LTD</td>
-                <td class="td">Foremost Hospital</td>
-                <td class="td"><span class="Red">Denied</span></td>
-                <td class="td">Body Swelling</td>
-                <td class="td">Emergency
-                    <div class="tooltip">
-                        <div class="tip-title"></div>
-                        <div class="tip-content"></div>
-                    </div>
-                </td>
-                <td class="td td-icos" routerLink="/modules/pre-auth/pre-authorizations/11">
-                    <i class="fa fa-info fa-circle"></i>
+                <td class="td td-icos" (click)="navigateDetail(auth)" >
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>

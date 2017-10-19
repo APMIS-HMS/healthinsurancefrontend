@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { SystemModuleService } from './../../../services/common/system-module.service';
+import { ActivatedRoute } from '@angular/router';
+import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-pre-authorization-details',
@@ -6,16 +9,39 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pre-authorization-details.component.scss']
 })
 export class PreAuthorizationDetailsComponent implements OnInit {
-  
-  tab_details = true;
+
+  tab_details = false;
   tab_other = false;
   tab_complaints = false;
   tab_referals = false;
-  
-  constructor() { }
+
+  selectedAuthorization: any;
+
+  constructor(private _preAuthorizationService: PreAuthorizationService,
+    private _systemService: SystemModuleService,
+    private _route: ActivatedRoute) { 
+      this._route.params.subscribe(param => {
+        if (param.id !== undefined) {
+          this._getAuthorizationDetails(param.id);
+        }
+      })
+    }
 
   ngOnInit() {
+   
   }
+
+  _getAuthorizationDetails(id) {
+    this._systemService.on();
+    this._preAuthorizationService.get(id, {}).then(payload => {
+      this._systemService.off();
+      this.selectedAuthorization = payload;      
+      this.tab_details = true;
+    }).catch(err => {
+      this._systemService.off();
+    })
+  }
+
   tabDetails_click() {
     this.tab_details = true;
     this.tab_other = false;
