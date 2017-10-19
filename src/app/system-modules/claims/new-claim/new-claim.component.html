@@ -224,6 +224,7 @@
                             <div class="input-wrap">
                                 <select formControlName="diagnosisType" class="form-control">
                                     <option value="" selected>Select...</option>
+                                    <option value="{{itm.name}}" *ngFor="let itm of diagnosisTypeLists">{{itm.name}}</option>
                                 </select>
                             </div>
                             <small class="alert-label" [hidden]="claimsFormGroup.controls.diagnosisType.valid || claimsFormGroup.controls.diagnosisType.pristine">
