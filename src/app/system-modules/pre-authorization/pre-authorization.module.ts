@@ -1,3 +1,4 @@
+import { PreAuthorizationService } from './../../services/pre-authorization/pre-authorization.service';
 import { PolicyService } from './../../services/policy/policy.service';
 import { DrugPackSizeService } from './../../services/common/drug-pack-size.service';
 import { DiagnosisTypeService } from './../../services/common/diagnosis-type.service';
@@ -25,6 +26,7 @@ import { ModalApproveAuthorizationComponent } from './pre-authorization-details/
 import { ModalRejectAuthorizationComponent } from './pre-authorization-details/modal-reject-authorization/modal-reject-authorization.component';
 import { ModalHoldAuthorizationComponent } from './pre-authorization-details/modal-hold-authorization/modal-hold-authorization.component';
 import { ModalQueryAuthorizationComponent } from './pre-authorization-details/modal-query-authorization/modal-query-authorization.component';
+import { NewPreauthTabsComponent } from './pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
 
 @NgModule({
     imports: [
@@ -42,8 +44,9 @@ import { ModalQueryAuthorizationComponent } from './pre-authorization-details/mo
         ModalApproveAuthorizationComponent,
         ModalRejectAuthorizationComponent,
         ModalHoldAuthorizationComponent,
-        ModalQueryAuthorizationComponent],
+        ModalQueryAuthorizationComponent,
+        NewPreauthTabsComponent],
     providers: [VisitTypeService, CheckInService, SymptomService,InvestigationService,DrugService,DiagnosisService,
-        ProcedureService, DiagnosisTypeService, ProcedureService, DrugPackSizeService, PolicyService]
+        ProcedureService, DiagnosisTypeService, ProcedureService, DrugPackSizeService, PolicyService, PreAuthorizationService]
 })
 export class PreAuthorizationModule { }

@@ -4,34 +4,34 @@
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Date of Birth:</div>
-          <div class="item-val">11th Oct 2000</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth | date}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Age:</div>
-          <div class="item-val">17</div>
+          <div class="item-val">{{getAge()}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Gender:</div>
-          <div class="item-val">Male</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject.personId.gender.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">LASRRA ID:</div>
-          <div class="item-val">123.333.32.33</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject?.stateID}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">LAASHMA ID:</div>
-          <div class="item-val">255.544.53.3</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</div>
         </div>
       </div>
 
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Hospital Name:</div>
-          <div class="item-val">Foremost Hospital</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.providerFacilityId.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Provider ID:</div>
-          <div class="item-val">122.22.122</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.providerFacilityId.provider.providerId}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Health Plan:</div>
@@ -39,24 +39,24 @@
         </div>
         <div class="group-item">
           <div class="item-label">Claim Type:</div>
-          <div class="item-val">Capitation</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.claimType.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Status:</div>
-          <div class="item-val"><span class="lemon--green">Filed</span>></div>
+          <div class="item-val"><span class="lemon--green">{{selectedAuthorization.checkedInDetails.claimStatus.name}}</span></div>
         </div>
         <div class="group-item">
           <div class="item-label">Date when patient was checked in:</div>
-          <div class="item-val">11th Oct 2017</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.confirmation | date}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Date when claims was filed:</div>
-          <div class="item-val">11th Oct 2017</div>
+          <div class="item-val"></div>
         </div>
       </div>
-      <div class="list-buttom" style="width: 175px;">
+      <!-- <div class="list-buttom" style="width: 175px;">
         <div class="btn btn-medium btn-yellow">Generate Authorization</div>
-      </div>
+      </div> -->
     </div>
 
   </div> 
@@ -82,6 +82,48 @@
       </div>
 
       <div class="doc-wrap">
+        <div class="doc-title">Complaint</div>
+
+        <ul class="doc-entries">
+          <div class="entry-wrap">
+            <li>
+              <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">Complaints</th>
+                              <th class="th">Duration</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td class="td">11 weeks</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td class="td">11 weeks</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td class="td">11 weeks</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+            </li>
+          </div>
+        </ul>
+      </div>
+
+      <div class="doc-wrap">
         <div class="doc-title">Clinical Findings</div>
 
         <ul class="doc-entries">
@@ -92,7 +134,71 @@
 
           <div class="entry-wrap">
             <li class="doc-subtitle">Diagnosis</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+            <li>
+              <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">Diagnosis</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Bilataral  signs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+            </li>
+          </div>
+
+          <div class="entry-wrap">
+            <li>
+              <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                      <thead class="thead">
+                          <tr class="tr">
+                              <th class="th">Drug</th>
+                              <th class="th">Quantity</th>
+                              <th class="th"></th>
+                          </tr>
+                      </thead>
+                
+                      <tbody class="tbody">
+                          <tr class="tr">
+                              <td class="td">Paraacetamol</td>
+                              <td class="td">2 Cards</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Tramadol</td>
+                              <td class="td">11 Packs</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+
+                          <tr class="tr">
+                              <td class="td">Quinin</td>
+                              <td class="td">1 Card</td>
+                              <td><i class="fa fa-times"></i></td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
+            </li>
           </div>
 
           <div class="entry-wrap">
@@ -116,7 +222,7 @@
           <div class="letering-2"><span class="letering-name">LASHMA</span> <span class="red">Denied</span> Request</div>
         </div>
       </div>
-      <div class="doc-wrap">
+      <div class="doc-wrap">  
         <ul class="doc-entries">
           <div class="entry-wrap">
             <li class="doc-subtitle">Reason for Denial:</li>

@@ -1,3 +1,5 @@
+import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,34 +17,57 @@ export class PreAuthorizationListComponent implements OnInit {
   filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
-  
+
+  authorizations: any[] = [];
+
   constructor(
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
-    private loadingService: LoadingBarService,
+    private _systemService: SystemModuleService,
+    private _preAuthorizationService: PreAuthorizationService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Pre-Authorization List');
     this._headerEventEmitter.setMinorRouteUrl('All pre-authorizations');
+    this._getPreAuthorizations();
+  }
+
+  _getPreAuthorizations() {
+    this._systemService.on();
+    this._preAuthorizationService.find({}).then((payload: any) => {
+      console.log(payload.data)
+      this.authorizations = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    })
   }
 
   navigate(url: string, id: string) {
     if (!!id) {
-      this.loadingService.startLoading();
+      this._systemService.on();
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     } else {
-      this.loadingService.startLoading();
+      this._systemService.on();
       this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     }
+  }
+
+  navigateDetail(auth) {
+    this._router.navigate(['/modules/pre-auth/pre-authorizations', auth._id]).then(payload =>{
+
+    }).catch(err =>{
+
+    })
   }
 
 }

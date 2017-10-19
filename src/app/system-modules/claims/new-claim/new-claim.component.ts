@@ -299,7 +299,7 @@ export class NewClaimComponent implements OnInit {
   }
 
   onSelectSymptom(symptom) {
-    this.claimsFormGroup.controls.symptom.setValue(symptom);
+    this.claimsFormGroup.controls.symptom.setValue(symptom.name);
     this.symptomSearchResult = false;
     this.selectedSymptom = symptom;
   }
@@ -427,7 +427,8 @@ export class NewClaimComponent implements OnInit {
     // if(this.claimItem.documentation == undefined){
     //   this.claimItem.documentation = [];
     // }
-    this.claimItem.documentation.push({
+    this.claimItem.documentations = [];
+    this.claimItem.documentations.push({
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
       "investigations": this.investigationList,
@@ -435,7 +436,7 @@ export class NewClaimComponent implements OnInit {
       "diagnosis": this.diagnosisLists,
       "symptoms": this.symptomLists,
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value,
-      "isResponse":false
+      "isRequest":true
     });
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
