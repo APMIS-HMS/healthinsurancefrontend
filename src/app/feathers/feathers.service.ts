@@ -11,7 +11,8 @@ import { Injectable } from '@angular/core';
 const rx = require('feathers-reactive');
 const RxJS = require('rxjs');
 
-const HOST = 'http://172.16.16.37:3031'; // Live
+// const HOST = 'http://172.16.16.37:3031'; // Live
+const HOST = 'http://192.168.10.4:3031'; // Live
 //const HOST = 'http://localhost:3031'; // Your base server URL here
 // const HOST = 'http://insuranceapi.azurewebsites.net';
 
