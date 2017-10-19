@@ -11,6 +11,7 @@ export interface Facility {
     phoneNumber: string;
     email: string;
     businessContact: Contact;
+    hmoContact: Contact;
     itContact: Contact;
     provider?: Provider;
     hia?: HIA;

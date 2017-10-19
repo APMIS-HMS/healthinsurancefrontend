@@ -30,6 +30,8 @@ export class NewProviderComponent implements OnInit {
   @ViewChild('logoImage') logoImage: ElementRef;
   @ViewChild('bInput') bInput: ElementRef;
   @ViewChild('bImage') bImage: ElementRef;
+  @ViewChild('hmoInput') hmoInput: ElementRef;
+  @ViewChild('hmoImage') hmoImage: ElementRef;
   @ViewChild('itInput') itInput: ElementRef;
   @ViewChild('itImage') itImage: ElementRef;
   providerFormGroup: FormGroup;
@@ -423,6 +425,7 @@ export class NewProviderComponent implements OnInit {
     }
     facility.address = address;
     facility.bankDetails = bankDetails;
+    facility.hmoContact = hmoContact;
     facility.businessContact = businessContact;
     facility.itContact = itContact;
     facility.provider = provider;
@@ -508,7 +511,7 @@ export class NewProviderComponent implements OnInit {
         });
       } else {
         // Create Provider
-        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadHmoContact(), this.uploadItContact()]).then((allResult: any) => {
           console.log(allResult);
           if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
             facility.logo = allResult[0].body[0].file;
@@ -568,6 +571,9 @@ export class NewProviderComponent implements OnInit {
       case 'it-contact':
         this.itInput.nativeElement.click();
         break;
+      case 'hmo-contact':
+        this.hmoInput.nativeElement.click();
+        break;
       case 'logo':
         this.logoInput.nativeElement.click();
         break;
@@ -603,6 +609,19 @@ export class NewProviderComponent implements OnInit {
           reader.readAsDataURL(input.files[0]);
         }
         break;
+      case 'hmo-contact':
+        input = this.hmoInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.hmoImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
       case 'logo':
         input = this.logoInput.nativeElement;
         if (input.files && input.files[0]) {
@@ -632,6 +651,17 @@ export class NewProviderComponent implements OnInit {
   }
 
   uploadItContact() {
+    let itBrowser = this.itInput.nativeElement;
+    if (itBrowser.files && itBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", itBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  uploadHmoContact() {
     let itBrowser = this.itInput.nativeElement;
     if (itBrowser.files && itBrowser.files[0]) {
       const formData = new FormData();
