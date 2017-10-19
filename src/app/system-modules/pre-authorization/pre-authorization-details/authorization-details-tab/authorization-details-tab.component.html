@@ -86,7 +86,7 @@
                     <tr class="tr">
                       <th class="th">Complaints</th>
                       <th class="th">Duration</th>
-                      <th class="th"></th>
+                      <th class="th">Approval Status</th>
                     </tr>
                   </thead>
 
@@ -95,7 +95,10 @@
                       <td class="td">{{cliDoc.symptom.name}}</td>
                       <td class="td">{{cliDoc.duration}} {{cliDoc.unit.name}}</td>
                       <td>
-                        <i class="fa fa-times"></i>
+                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <option value="" disabled selected>Select Encounter Type</option>
+                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                        </select>
                       </td>
                     </tr>
                   </tbody>
@@ -118,7 +121,7 @@
                     <tr class="tr">
                       <th class="th">Diagnosis</th>
                       <th class="th">Diagnosis Type</th>
-                      <th class="th"></th>
+                      <th class="th">Approval Status</th>
                     </tr>
                   </thead>
 
@@ -127,7 +130,10 @@
                       <td class="td">{{cliDoc.diagnosis.name}}</td>
                       <td class="td">{{cliDoc.diagnosisType.name}}</td>
                       <td>
-                        <i class="fa fa-times"></i>
+                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <option value="" disabled selected>Select Encounter Type</option>
+                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                        </select>
                       </td>
                     </tr>
                   </tbody>
@@ -144,7 +150,7 @@
                     <tr class="tr">
                       <th class="th">Investigation</th>
                       <th class="th">Amount</th>
-                      <th class="th"></th>
+                      <th class="th">Approval Status</th>
                     </tr>
                   </thead>
 
@@ -153,7 +159,10 @@
                       <td class="td">{{cliDoc.investigation.name}}</td>
                       <td class="td">{{cliDoc.investigation.Amount}}</td>
                       <td>
-                        <i class="fa fa-times"></i>
+                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <option value="" disabled selected>Select Encounter Type</option>
+                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                        </select>
                       </td>
                     </tr>
                   </tbody>
@@ -170,7 +179,7 @@
                     <tr class="tr">
                       <th class="th">Drug</th>
                       <th class="th">Quantity</th>
-                      <th class="th"></th>
+                      <th class="th">Approval Status</th>
                     </tr>
                   </thead>
 
@@ -179,7 +188,10 @@
                       <td class="td">{{cliDoc.drug.name}}</td>
                       <td class="td">{{cliDoc.quantity}} {{cliDoc.unit.name}}</td>
                       <td>
-                        <i class="fa fa-times"></i>
+                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <option value="" disabled selected>Select Encounter Type</option>
+                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                        </select>
                       </td>
                     </tr>
                   </tbody>
@@ -196,7 +208,7 @@
                     <tr class="tr">
                       <th class="th">Procedure</th>
                       <th class="th">Amount</th>
-                      <th class="th"></th>
+                      <th class="th">Approval Status</th>
                     </tr>
                   </thead>
 
@@ -205,7 +217,10 @@
                       <td class="td">{{cliDoc.procedure.name}}</td>
                       <td class="td">{{cliDoc.procedure.Amount}}</td>
                       <td>
-                        <i class="fa fa-times"></i>
+                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <option value="" disabled selected>Select Encounter Type</option>
+                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                        </select>
                       </td>
                     </tr>
                   </tbody>
@@ -232,6 +247,13 @@
         <div class="btn btn-medium btn-grey-outline">
           <i class="fa fa-reply"></i> REPLY
         </div>
+      </div>
+
+      <div class="action-wrap">
+        <div class="btn btn-medium btn-red" (click)="rejectClaim(transaction)">REJECT</div>
+        <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
+        <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
+        <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
       </div>
     </div>
 
@@ -264,12 +286,6 @@
   </div>
 </div>
 
-<div class="action-wrap">
-  <div class="btn btn-medium btn-red" (click)="rejectClaim()">REJECT</div>
-  <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
-  <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
-  <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
-</div>
 
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
@@ -281,7 +297,8 @@
 <div *ngIf="modalReject" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-reject-authorization (closeModal)="modal_close()"></app-modal-reject-authorization>
+    <app-modal-reject-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization"
+      (closeModal)="modal_close()"></app-modal-reject-authorization>
   </div>
 </div>
 
