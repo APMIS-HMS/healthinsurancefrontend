@@ -697,14 +697,11 @@ input[type="checkbox"].switch_1:checked:after {
     align-items: center;
     font-size: 12px;
 }
-
-td .tooltip {
-    width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    &:hover {
+.tip-td:hover{
+    .tooltip{
+        display: block;
         position: absolute;
+        right: 0;
         width: 300px;
         background: #fff;
         border: 1px solid $grey-2;
@@ -715,14 +712,19 @@ td .tooltip {
         -webkit-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
         -moz-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
         box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
-        .tip-title {
-            display: block;
-        }
     }
 }
 
-.tip-title {
+.tooltip {
     display: none;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: $font-x2;
+}
+
+.tip-title {
     font-size: 18px;
     margin-bottom: 20px;
     font-weight: bold;
