@@ -57,14 +57,13 @@
     </div>
   </div>
   <div class="right-sect">
-      <div *ngFor="let item of selectedClaim.documentations;let i=index">
-          <div class="request-sect card" *ngIf="item.isRequest == true">
-            <div class="headArea-1">
-              <div class="count">{{i+1}}</div>
-              <div class="letering">
-                <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
-                <div class="letering-2"><span class="letering-name">{{selectedClaim.medicalPersonelName}}</span> Requested Claims</div>
-              </div>
+    <div class="request-sect card">
+      <div class="headArea-1">
+        <div class="count">1</div>
+        <div class="letering">
+          <div class="letering-1">Request Sent 11-10.2017 11:20am</div>
+          <div class="letering-2"><span class="letering-name">Jonathan Nelson</span> Requested Claims</div>
+        </div>
       </div>
       <div class="doc-wrap">
         <div class="doc-title">Clinical Information</div>
