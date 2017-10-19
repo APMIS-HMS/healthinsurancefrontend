@@ -30,6 +30,8 @@ export class NewProviderComponent implements OnInit {
   @ViewChild('logoImage') logoImage: ElementRef;
   @ViewChild('bInput') bInput: ElementRef;
   @ViewChild('bImage') bImage: ElementRef;
+  @ViewChild('hmoInput') hmoInput: ElementRef;
+  @ViewChild('hmoImage') hmoImage: ElementRef;
   @ViewChild('itInput') itInput: ElementRef;
   @ViewChild('itImage') itImage: ElementRef;
   providerFormGroup: FormGroup;
@@ -119,12 +121,12 @@ export class NewProviderComponent implements OnInit {
       bc_lname: [this.facility != null ? this.facility.businessContact.lastName : '', [<any>Validators.required]],
       bc_fname: [this.facility != null ? this.facility.businessContact.firstName : '', [<any>Validators.required]],
       bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
+      // bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
       bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       hmo_lname: [this.facility != null ? this.facility.hmoContact.lastName : '', [<any>Validators.required]],
       hmo_fname: [this.facility != null ? this.facility.hmoContact.firstName : '', [<any>Validators.required]],
       hmo_phone: [this.facility != null ? this.facility.hmoContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      hmo_position: [this.facility != null ? this.facility.hmoContact.position : '', [<any>Validators.required]],
+      // hmo_position: [this.facility != null ? this.facility.hmoContact.position : '', [<any>Validators.required]],
       hmo_email: [this.facility != null ? this.facility.hmoContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
       it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
@@ -343,11 +345,11 @@ export class NewProviderComponent implements OnInit {
     if (businessContact === undefined) {
       businessContact = <Contact>{};
     }
-    businessContact.lastName = this.providerFormGroup.controls['bc_fname'].value;
-    businessContact.firstName = this.providerFormGroup.controls['bc_lname'].value;
+    businessContact.lastName = this.providerFormGroup.controls['bc_lname'].value;
+    businessContact.firstName = this.providerFormGroup.controls['bc_fname'].value;
     businessContact.email = this.providerFormGroup.controls['bc_email'].value;
     businessContact.phoneNumber = this.providerFormGroup.controls['bc_phone'].value;
-    businessContact.position = this.providerFormGroup.controls['bc_position'].value;
+    // businessContact.position = this.providerFormGroup.controls['bc_position'].value;
     return businessContact;
   }
   
@@ -355,19 +357,19 @@ export class NewProviderComponent implements OnInit {
     if (hmoContact === undefined) {
       hmoContact = <Contact>{};
     }
-    hmoContact.lastName = this.providerFormGroup.controls['hmo_fname'].value;
-    hmoContact.firstName = this.providerFormGroup.controls['hmo_lname'].value;
+    hmoContact.lastName = this.providerFormGroup.controls['hmo_lname'].value;
+    hmoContact.firstName = this.providerFormGroup.controls['hmo_fname'].value;
     hmoContact.email = this.providerFormGroup.controls['hmo_email'].value;
     hmoContact.phoneNumber = this.providerFormGroup.controls['hmo_phone'].value;
-    hmoContact.position = this.providerFormGroup.controls['hmo_position'].value;
+    // hmoContact.position = this.providerFormGroup.controls['hmo_position'].value;
     return hmoContact;
   }
   _extractITContact(itContact?: Contact) {
     if (itContact === undefined) {
       itContact = <Contact>{};
     }
-    itContact.lastName = this.providerFormGroup.controls['it_fname'].value;
-    itContact.firstName = this.providerFormGroup.controls['it_lname'].value;
+    itContact.lastName = this.providerFormGroup.controls['it_lname'].value;
+    itContact.firstName = this.providerFormGroup.controls['it_fname'].value;
     itContact.email = this.providerFormGroup.controls['it_email'].value;
     itContact.phoneNumber = this.providerFormGroup.controls['it_phone'].value;
     itContact.position = this.providerFormGroup.controls['it_position'].value;
@@ -423,6 +425,7 @@ export class NewProviderComponent implements OnInit {
     }
     facility.address = address;
     facility.bankDetails = bankDetails;
+    facility.hmoContact = hmoContact;
     facility.businessContact = businessContact;
     facility.itContact = itContact;
     facility.provider = provider;
@@ -465,7 +468,7 @@ export class NewProviderComponent implements OnInit {
       console.log(facility);
       if (!!this.facility) {
         // Edit Provider.
-        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadHmoContact(), this.uploadItContact()]).then((allResult: any) => {
           console.log(allResult);
           if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
             facility.logo = allResult[0].body[0].file;
@@ -474,9 +477,13 @@ export class NewProviderComponent implements OnInit {
           if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
             facility.businessContact.image = allResult[1].body[0].file;
           }
-          // IT Contact Image.
+          // HMO Contact Image.
           if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
-            facility.itContact.image = allResult[2].body[0].file;
+            facility.hmoContact.image = allResult[2].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
+            facility.itContact.image = allResult[3].body[0].file;
           }
 
           facility._id = this.selectedFacilityId;
@@ -508,7 +515,7 @@ export class NewProviderComponent implements OnInit {
         });
       } else {
         // Create Provider
-        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadHmoContact(), this.uploadItContact()]).then((allResult: any) => {
           console.log(allResult);
           if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
             facility.logo = allResult[0].body[0].file;
@@ -517,9 +524,13 @@ export class NewProviderComponent implements OnInit {
           if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
             facility.businessContact.image = allResult[1].body[0].file;
           }
-          // IT Contact Image.
+          // HMO Contact Image.
           if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
-            facility.itContact.image = allResult[2].body[0].file;
+            facility.hmoContact.image = allResult[2].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
+            facility.itContact.image = allResult[3].body[0].file;
           }
 
           facility.platformOwnerId = this.currentPlatform;
@@ -568,6 +579,9 @@ export class NewProviderComponent implements OnInit {
       case 'it-contact':
         this.itInput.nativeElement.click();
         break;
+      case 'hmo-contact':
+        this.hmoInput.nativeElement.click();
+        break;
       case 'logo':
         this.logoInput.nativeElement.click();
         break;
@@ -597,6 +611,19 @@ export class NewProviderComponent implements OnInit {
           let that = this;
           reader.onload = function (e: any) {
             that.itImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'hmo-contact':
+        input = this.hmoInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.hmoImage.nativeElement.src = e.target.result;
             that._systemService.off();
           };
 
@@ -642,6 +669,17 @@ export class NewProviderComponent implements OnInit {
     }
   }
 
+  uploadHmoContact() {
+    let itBrowser = this.itInput.nativeElement;
+    if (itBrowser.files && itBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", itBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
   uploadBContact() {
     let bBrowser = this.bInput.nativeElement;
     if (bBrowser.files && bBrowser.files[0]) {
@@ -652,6 +690,10 @@ export class NewProviderComponent implements OnInit {
       });
     }
   }
+
+  // myAnyPromise(promises) {
+  //   let promise = deferred.promise();
+  // }
 
   private _initImages(facility: Facility) {
     if (!!facility.logo) {
