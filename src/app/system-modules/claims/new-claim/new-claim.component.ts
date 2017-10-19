@@ -115,6 +115,7 @@ export class NewClaimComponent implements OnInit {
       symptomDuration: [''],
       symptomUnit: [''],
       diagnosis: [''],
+      diagnosisType: [''],
       drug: [''],
       drugQty: [''],
       drugUnit: [''],
@@ -127,7 +128,7 @@ export class NewClaimComponent implements OnInit {
       visitClass: [''],
       visitDate: [''],
       investigations: [''],
-      procedure: [''],
+      procedure: ['']
     });
     this._getClaimTypes();
     this._getVisitTypes();
@@ -487,7 +488,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  tabInvestigations_click(){
+  tabInvestigation_click(){
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = true;
@@ -496,7 +497,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  tabDrugs_click(){
+  tabDrug_click(){
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = false;
@@ -505,7 +506,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  tabProcedures_click(){
+  tabProcedure_click(){
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = false;
