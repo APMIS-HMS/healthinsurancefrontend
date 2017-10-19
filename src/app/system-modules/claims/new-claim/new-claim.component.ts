@@ -101,9 +101,7 @@ export class NewClaimComponent implements OnInit {
       }
     });
 
-    this.claimDocItem.clinicalDocument = {};
-    this.claimDocItem.clinicalDocument.symptom = []
-    this.symptomLists = [];
+    
     this.claimsFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
       lashmaid: ['', [<any>Validators.required]],
@@ -117,6 +115,7 @@ export class NewClaimComponent implements OnInit {
       symptomDuration: [''],
       symptomUnit: [''],
       diagnosis: [''],
+      diagnosisType: [''],
       drug: [''],
       drugQty: [''],
       drugUnit: [''],
@@ -129,7 +128,7 @@ export class NewClaimComponent implements OnInit {
       visitClass: [''],
       visitDate: [''],
       investigations: [''],
-      procedure: [''],
+      procedure: ['']
     });
     this._getClaimTypes();
     this._getVisitTypes();
@@ -310,7 +309,7 @@ export class NewClaimComponent implements OnInit {
     let duration = this.claimsFormGroup.controls.symptomDuration;
     let unit = this.claimsFormGroup.controls.symptomUnit;
     if (name.valid) {
-      this.drugList.push({
+      this.symptomLists.push({
         "symptom": typeof (this.selectedSymptom.symptom) === 'object' ? this.selectedSymptom.symptom : name.value,
         "duration": typeof (this.selectedSymptom.duration) === 'object' ? this.selectedSymptom.duration : duration.value,
         "unit": typeof (this.selectedSymptom.unit) === 'object' ? this.selectedSymptom.unit : unit.value,
@@ -412,18 +411,32 @@ export class NewClaimComponent implements OnInit {
 
 
   onSendClaim() {
-    this.claimDocItem.clinicalDocument = {};
-    this.claimDocItem.clinicalDocument = {
+    // this.claimDocItem.clinicalDocument = {};
+    // this.claimDocItem.clinicalDocument = {
+    //   "visitType": this.claimsFormGroup.controls.visitClass.value,
+    //   "drugs": this.drugList,
+    //   "investigations": this.investigationList,
+    //   "procedures": this.procedureList,
+    //   "diagnosis": this.diagnosisLists,
+    //   "symptoms": this.symptomLists,
+    //   "clinicNote": this.claimsFormGroup.controls.clinicalNote.value,
+    //   "isResponse":false
+    // };
+    // console.log(this.claimDocItem);
+    // console.log(this.claimItem.documentation);
+    // if(this.claimItem.documentation == undefined){
+    //   this.claimItem.documentation = [];
+    // }
+    this.claimItem.documentation.push({
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
       "investigations": this.investigationList,
       "procedures": this.procedureList,
       "diagnosis": this.diagnosisLists,
       "symptoms": this.symptomLists,
-      "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
-    };
-    console.log(this.claimDocItem);
-    this.claimItem.documentation.push(this.claimDocItem.clinicalDocument);
+      "clinicNote": this.claimsFormGroup.controls.clinicalNote.value,
+      "isResponse":false
+    });
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
@@ -475,7 +488,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  tabInvestigations_click(){
+  tabInvestigation_click(){
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = true;
@@ -484,7 +497,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  tabDrugs_click(){
+  tabDrug_click(){
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = false;
@@ -493,7 +506,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  tabProcedures_click(){
+  tabProcedure_click(){
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = false;
