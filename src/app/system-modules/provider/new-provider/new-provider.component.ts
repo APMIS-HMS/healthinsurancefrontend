@@ -345,8 +345,8 @@ export class NewProviderComponent implements OnInit {
     if (businessContact === undefined) {
       businessContact = <Contact>{};
     }
-    businessContact.lastName = this.providerFormGroup.controls['bc_fname'].value;
-    businessContact.firstName = this.providerFormGroup.controls['bc_lname'].value;
+    businessContact.lastName = this.providerFormGroup.controls['bc_lname'].value;
+    businessContact.firstName = this.providerFormGroup.controls['bc_fname'].value;
     businessContact.email = this.providerFormGroup.controls['bc_email'].value;
     businessContact.phoneNumber = this.providerFormGroup.controls['bc_phone'].value;
     // businessContact.position = this.providerFormGroup.controls['bc_position'].value;
@@ -357,8 +357,8 @@ export class NewProviderComponent implements OnInit {
     if (hmoContact === undefined) {
       hmoContact = <Contact>{};
     }
-    hmoContact.lastName = this.providerFormGroup.controls['hmo_fname'].value;
-    hmoContact.firstName = this.providerFormGroup.controls['hmo_lname'].value;
+    hmoContact.lastName = this.providerFormGroup.controls['hmo_lname'].value;
+    hmoContact.firstName = this.providerFormGroup.controls['hmo_fname'].value;
     hmoContact.email = this.providerFormGroup.controls['hmo_email'].value;
     hmoContact.phoneNumber = this.providerFormGroup.controls['hmo_phone'].value;
     // hmoContact.position = this.providerFormGroup.controls['hmo_position'].value;
@@ -368,8 +368,8 @@ export class NewProviderComponent implements OnInit {
     if (itContact === undefined) {
       itContact = <Contact>{};
     }
-    itContact.lastName = this.providerFormGroup.controls['it_fname'].value;
-    itContact.firstName = this.providerFormGroup.controls['it_lname'].value;
+    itContact.lastName = this.providerFormGroup.controls['it_lname'].value;
+    itContact.firstName = this.providerFormGroup.controls['it_fname'].value;
     itContact.email = this.providerFormGroup.controls['it_email'].value;
     itContact.phoneNumber = this.providerFormGroup.controls['it_phone'].value;
     itContact.position = this.providerFormGroup.controls['it_position'].value;
@@ -468,7 +468,7 @@ export class NewProviderComponent implements OnInit {
       console.log(facility);
       if (!!this.facility) {
         // Edit Provider.
-        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadHmoContact(), this.uploadItContact()]).then((allResult: any) => {
           console.log(allResult);
           if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
             facility.logo = allResult[0].body[0].file;
@@ -477,9 +477,13 @@ export class NewProviderComponent implements OnInit {
           if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
             facility.businessContact.image = allResult[1].body[0].file;
           }
-          // IT Contact Image.
+          // HMO Contact Image.
           if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
-            facility.itContact.image = allResult[2].body[0].file;
+            facility.hmoContact.image = allResult[2].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
+            facility.itContact.image = allResult[3].body[0].file;
           }
 
           facility._id = this.selectedFacilityId;
@@ -520,9 +524,13 @@ export class NewProviderComponent implements OnInit {
           if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
             facility.businessContact.image = allResult[1].body[0].file;
           }
-          // IT Contact Image.
+          // HMO Contact Image.
           if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
-            facility.itContact.image = allResult[2].body[0].file;
+            facility.hmoContact.image = allResult[2].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
+            facility.itContact.image = allResult[3].body[0].file;
           }
 
           facility.platformOwnerId = this.currentPlatform;
@@ -682,6 +690,10 @@ export class NewProviderComponent implements OnInit {
       });
     }
   }
+
+  // myAnyPromise(promises) {
+  //   let promise = deferred.promise();
+  // }
 
   private _initImages(facility: Facility) {
     if (!!facility.logo) {
