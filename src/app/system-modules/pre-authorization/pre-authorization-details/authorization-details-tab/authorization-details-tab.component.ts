@@ -27,6 +27,13 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     )
   }
 
+  orderDocuments(documents){
+    console.log(documents)
+    return documents.sort(function(a, b) {
+      return parseFloat(a.order) - parseFloat(b.order);
+  });
+  }
+
   isObject(doc){
     return typeof(doc.clinicalDocumentation) === 'object';
   }

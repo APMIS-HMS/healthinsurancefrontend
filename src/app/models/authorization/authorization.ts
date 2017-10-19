@@ -3,6 +3,7 @@ export interface Authorization {
     documentation: PreAuthorizationDocument[];
     approval?: Date;
     medicalPersonelName: any;
+    medicalPersonelUnit:any;
     authorizationCode?: any;
     approvedDocumentation: any[];
     notificationMessage?: any;
