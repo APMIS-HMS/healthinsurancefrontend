@@ -262,7 +262,7 @@ button {
 .inpage-tabs li {
     list-style: none;
     border: 1px solid #004f8f;
-    padding: 10px 35px;
+    padding: 10px;
     cursor: pointer;
     font-size: 14px;
     color: #004f8f;
@@ -697,14 +697,11 @@ input[type="checkbox"].switch_1:checked:after {
     align-items: center;
     font-size: 12px;
 }
-
-td .tooltip {
-    width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    &:hover {
+.tip-td:hover{
+    .tooltip{
+        display: block;
         position: absolute;
+        right: 0;
         width: 300px;
         background: #fff;
         border: 1px solid $grey-2;
@@ -715,16 +712,57 @@ td .tooltip {
         -webkit-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
         -moz-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
         box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
-        .tip-title {
-            display: block;
-        }
     }
 }
 
-.tip-title {
+.tooltip {
     display: none;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: $font-x2;
+}
+
+.tip-title {
     font-size: 18px;
     margin-bottom: 20px;
+    font-weight: bold;
+}
+.bar-right{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.icons-wrap{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: 20px;
+}
+.icons-wrap i{
+    cursor: pointer;
+    font-size: $font-x4;
+    color: #fff;
+    padding: 3px;
+    position: relative;
+}
+.icons-wrap i:hover{
+    color: lighten($brand-primary, 60%);
+}
+.notify-count{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    background: $red;
+    border-radius: 100%;
+    color: #fff;
+    font-size: $font-x2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-weight: bold;
 }
 
