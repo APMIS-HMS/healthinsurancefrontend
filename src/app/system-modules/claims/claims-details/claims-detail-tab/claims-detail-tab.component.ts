@@ -56,8 +56,7 @@ export class ClaimsDetailTabComponent implements OnInit {
     this._claimService.get(id, {}).then((payload: any) => {
       this.selectedClaim = payload;
       console.log(this.selectedClaim);
-      this.displayAge = differenceInYears(new Date(),this.selectedClaim.checkedinDetail.personObject.dateOfBirth)
-     // console.log(this.displayAge);
+      this.displayAge = differenceInYears(new Date(),this.selectedClaim.checkedinDetail.personObject.dateOfBirth);
     });
   }
 
