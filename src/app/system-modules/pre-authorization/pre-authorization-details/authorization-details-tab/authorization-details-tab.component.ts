@@ -27,6 +27,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     )
   }
 
+  isObject(doc){
+    return typeof(doc.clinicalDocumentation) === 'object';
+  }
   approveClaim() {
     this.modalApprove = true;
   }

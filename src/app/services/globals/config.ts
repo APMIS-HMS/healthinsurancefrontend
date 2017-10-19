@@ -16,7 +16,7 @@ export const DURATIONS = [
 ];
 
 export const REQUEST_STATUS = [
-    { 'id': 1, 'name': 'UnAttendedTo', 'past': 'UnAttendedTo' },
+    { 'id': 1, 'name': 'Pending', 'past': 'Pending' },
     { 'id': 2, 'name': 'Approve', 'past': 'Approved' },
     { 'id': 3, 'name': 'Reject', 'past': 'Rejected' },
     { 'id': 4, 'name': 'Query', 'past': 'Queried' },

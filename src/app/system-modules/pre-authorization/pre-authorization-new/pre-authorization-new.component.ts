@@ -575,24 +575,27 @@ export class PreAuthorizationNewComponent implements OnInit {
         //note start here
         preAuthDoc.document.push(
           <Document>{
-            type: "Clinical Note",
+            type: "Clinical Findings",
             clinicalDocumentation: this.preAuthFormGroup.controls.clinicalNote.value,
-             approvedStatus:this.requestStatus[0]
+             approvedStatus:this.requestStatus[0],
+             order:2
           }
         );
         preAuthDoc.document.push(
           <Document>{
-            type: "Request Reason",
+            type: "Reason for Request",
             clinicalDocumentation: this.preAuthFormGroup.controls.requestReason.value,
-            approvedStatus:this.requestStatus[0]
+            approvedStatus:this.requestStatus[0],
+            order:7
           }
         );
   
         preAuthDoc.document.push(
           <Document>{
-            type: "Authorization Note",
+            type: "Pre Authorization Note",
             clinicalDocumentation: this.preAuthFormGroup.controls.preAuthorizationNote.value,
-            approvedStatus:this.requestStatus[0]
+            approvedStatus:this.requestStatus[0],
+            order:8
           }
         )
   
@@ -604,7 +607,8 @@ export class PreAuthorizationNewComponent implements OnInit {
             <Document>{
               type: "Symptoms",
               clinicalDocumentation: this.complaintLists,
-              approvedStatus:this.requestStatus[0]
+              approvedStatus:this.requestStatus[0],
+              order:1
             }
           );
         }
@@ -614,7 +618,8 @@ export class PreAuthorizationNewComponent implements OnInit {
             <Document>{
               type: "Procedures",
               clinicalDocumentation: this.procedureList,
-              approvedStatus:this.requestStatus[0]
+              approvedStatus:this.requestStatus[0],
+              order:6
             }
           );
         }
@@ -624,7 +629,8 @@ export class PreAuthorizationNewComponent implements OnInit {
             <Document>{
               type: "Investigations",
               clinicalDocumentation: this.investigationList,
-              approvedStatus:this.requestStatus[0]
+              approvedStatus:this.requestStatus[0],
+              order:4
             }
           );
         }
@@ -634,7 +640,8 @@ export class PreAuthorizationNewComponent implements OnInit {
             <Document>{
               type: "Diagnosis",
               clinicalDocumentation: this.diagnosisLists,
-              approvedStatus:this.requestStatus[0]
+              approvedStatus:this.requestStatus[0],
+              order:3
             }
           );
         }
@@ -644,7 +651,8 @@ export class PreAuthorizationNewComponent implements OnInit {
             <Document>{
               type: "Drugs",
               clinicalDocumentation: this.drugList,
-              approvedStatus:this.requestStatus[0]
+              approvedStatus:this.requestStatus[0],
+              order:5
             }
           );
         }
@@ -656,6 +664,7 @@ export class PreAuthorizationNewComponent implements OnInit {
         authorizationObject.dateOfRequest = this.preAuthFormGroup.controls.requestDate.value.jsdate;
         authorizationObject.documentation = [];
         authorizationObject.documentation.push(preAuthDoc);
+        authorizationObject.policyId = this.selectedPolicy;
   
         authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
         authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;

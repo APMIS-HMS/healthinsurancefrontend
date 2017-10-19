@@ -12,6 +12,7 @@ export interface Authorization {
     isEmergency: boolean;
     visityClassId: any;
     approvedStatus:any;
+    policyId:any;
     _id: any;
 }
 
@@ -25,4 +26,5 @@ export interface Document {
     type: any;
     clinicalDocumentation: any;
     approvedStatus:any;
+    order:number;
 }
