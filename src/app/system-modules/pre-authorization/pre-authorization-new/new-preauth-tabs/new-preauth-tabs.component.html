@@ -9,440 +9,457 @@
 </ul>
 
 <form [formGroup]="preAuthFormGroup" novalidate>
-  <div class="tab-content shadow-RB-lite">
-      <div *ngIf="tab_complaints" class="tab-pane fade show active">
-          <div class="content-top-bar">
-              <div class="bar-labels">
-                  <div>Clinical Information - Complaints</div>
-              </div>
+    <div class="tab-content">
+        <div *ngIf="tab_complaints" class="tab-pane fade show active">
+            <form [formGroup]="symptomFormGroup" novalidate>
+                <div class="content-top-bar">
+                    <div class="bar-labels">
+                        <div>Clinical Information - Complaints</div>
+                    </div>
 
-              <div class="bar-icos">
-                  <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-          </div>
+                    <div class="bar-icos">
+                        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </div>
 
-          <div class="frm-subsect">
-              <div class="frm-item-wrap">
-                  <label class="label">Complaint</label>
-                  <div class="input-wrap">
-                      <div>
-                          <div class="input-wrap-x2">
-                              <div class="searchable-input">
-                                  <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
-                                  <small class="alert-label" [hidden]="preAuthFormGroup.controls.presentingComplaints.valid || preAuthFormGroup.controls.presentingComplaints.pristine">
-                                      Complaint value is required.
-                                  </small>
-                                  <ul *ngIf="complaintSearchResult" class="search-results">
-                                      <li (click)="onSelectComplain(result)" *ngFor="let result of symptomItems">{{result.name}}</li>
-                                  </ul>
-                              </div>
-                              <div class="input-wrap-x2">
-                                  <div>
-                                      <small class="alert-label" [hidden]="preAuthFormGroup.controls.complaintsDuration.valid || preAuthFormGroup.controls.complaintsDuration.pristine">
-                                          Complaint duration value is required.
-                                      </small>
-                                      <input style="width:50px;" min="1" type="number" formControlName="complaintsDuration" class="form-control">
+                <div class="frm-subsect">
+                    <div class="frm-item-wrap">
+                        <label class="label">Complaint</label>
+                        <div class="input-wrap">
+                            <div>
+                                <div class="input-wrap-x2">
+                                    <div class="searchable-input">
+                                        <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
+                                        <small class="alert-label" [hidden]="symptomFormGroup.controls.presentingComplaints.valid || symptomFormGroup.controls.presentingComplaints.pristine">
+                                            Complaint value is required.
+                                        </small>
+                                        <ul *ngIf="complaintSearchResult" class="search-results">
+                                            <li (click)="onSelectComplain(result)" *ngFor="let result of symptomItems">{{result.name}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="input-wrap-x2">
+                                        <div>
+                                            <small class="alert-label" [hidden]="symptomFormGroup.controls.complaintsDuration.valid || symptomFormGroup.controls.complaintsDuration.pristine">
+                                                Complaint duration value is required.
+                                            </small>
+                                            <input style="width:50px;" min="1" type="number" formControlName="complaintsDuration" class="form-control">
 
-                                  </div>
+                                        </div>
 
-                                  <div>
-                                      <select formControlName="complaintsUnit" class="form-control">
-                                          <option disabled value="" selected>Select...</option>
-                                          <option *ngFor="let duration of durations" [ngValue]="duration">{{duration.name}}</option>
-                                      </select>
-                                      <small class="alert-label" [hidden]="preAuthFormGroup.controls.complaintsUnit.valid || preAuthFormGroup.controls.complaintsUnit.pristine">
-                                          Complaint unit value is required.
-                                      </small>
-                                  </div>
+                                        <div>
+                                            <select formControlName="complaintsUnit" class="form-control">
+                                                <option disabled value="" selected>Select...</option>
+                                                <option *ngFor="let duration of durations" [ngValue]="duration">{{duration.name}}</option>
+                                            </select>
+                                            <small class="alert-label" [hidden]="symptomFormGroup.controls.complaintsUnit.valid || symptomFormGroup.controls.complaintsUnit.pristine">
+                                                Complaint unit value is required.
+                                            </small>
+                                        </div>
 
-                              </div>
-                          </div>
+                                    </div>
+                                </div>
 
-                          <div (click)="onAddComplaint()" class="btn btn-medium btn-blue-outline">
-                              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD COMPLAINTS
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                                <div (click)="onAddComplaint()" class="btn btn-medium btn-blue-outline">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD COMPLAINTS
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Complaints</th>
-                              <th class="th">Duration</th>
-                              <th class="th">Authorization Need</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
+                    <div class="tbl-wrap">
+                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">Complaints</th>
+                                    <th class="th">Duration</th>
+                                    <th class="th">Authorization Need</th>
+                                    <th class="th"></th>
+                                </tr>
+                            </thead>
 
-                      <tbody class="tbody">
-                          <tr *ngFor="let complaint of complaintLists; let i=index" class="tr">
-                              <td class="td">
-                                  <span *ngIf="complaint?.symptom?.name !== undefined">{{complaint?.symptom?.name}}</span>
-                                  <span *ngIf="complaint?.symptom?.name === undefined">{{complaint.symptom}}</span>
-                              </td>
-                              <td class="td">{{complaint.duration}} {{complaint.unit.name}}</td>
-                              <td class="td">
-                                  <input type="checkbox" disabled="disabled">
-                              </td>
-                              <td>
-                                  <i (click)="removeComplain(complaint, i)" class="fa fa-times"></i>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
+                            <tbody class="tbody">
+                                <tr *ngFor="let complaint of complaintLists; let i=index" class="tr">
+                                    <td class="td">
+                                        <span *ngIf="complaint?.symptom?.name !== undefined">{{complaint?.symptom?.name}}</span>
+                                        <span *ngIf="complaint?.symptom?.name === undefined">{{complaint.symptom}}</span>
+                                    </td>
+                                    <td class="td">{{complaint.duration}} {{complaint.unit.name}}</td>
+                                    <td class="td">
+                                        <input type="checkbox" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <i (click)="removeComplain(complaint, i)" class="fa fa-times"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-      <div *ngIf="tab_clinicalNotes" class="tab-pane fade show active">
-          <div class="content-top-bar">
-              <div class="bar-labels">
-                  <div>Clinical Documentation</div>
-              </div>
+        <div *ngIf="tab_clinicalNotes" class="tab-pane fade show active">
+            <form [formGroup]="preAuthFormGroup" novalidate>
+                <div class="content-top-bar">
+                    <div class="bar-labels">
+                        <div>Clinical Documentation</div>
+                    </div>
 
-              <div class="bar-icos">
-                  <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-          </div>
+                    <div class="bar-icos">
+                        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </div>
 
-          <div class="frm-group">
+                <div class="frm-group">
 
-              <div class="frm-item-wrap">
-                  <label class="label">Clinical Note</label>
-                  <div class="input-wrap" style="width:100%;">
-                      <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
-                  </div>
-                  <small class="alert-label" [hidden]="preAuthFormGroup.controls.clinicalNote.valid || preAuthFormGroup.controls.clinicalNote.pristine">
-                      This is a required field.
-                  </small>
-              </div>
+                    <div class="frm-item-wrap">
+                        <label class="label">Clinical Note</label>
+                        <div class="input-wrap" style="width:100%;">
+                            <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
+                        </div>
+                        <small class="alert-label" [hidden]="preAuthFormGroup.controls.clinicalNote.valid || preAuthFormGroup.controls.clinicalNote.pristine">
+                            This is a required field.
+                        </small>
+                    </div>
 
-          </div>
-      </div>
+                </div>
+            </form>
+        </div>
 
-      <div *ngIf="tab_diagnosis" class="tab-pane fade show active">
-          <div class="content-top-bar">
-              <div class="bar-labels">
-                  <div>Clinical Information - Diagnosis</div>
-              </div>
+        <div *ngIf="tab_diagnosis" class="tab-pane fade show active">
+            <form [formGroup]="diagnosisFormGroup" novalidate>
+                <div class="content-top-bar">
+                    <div class="bar-labels">
+                        <div>Clinical Information - Diagnosis</div>
+                    </div>
 
-              <div class="bar-icos">
-                  <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-          </div>
+                    <div class="bar-icos">
+                        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </div>
 
-          <div class="frm-subsect">
-              <div class="frm-item-wrap">
-                  <label class="label">Diagnosis</label>
-                  <div class="input-wrap">
-                      <div class="searchable-input">
-                          <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
-                          <small class="alert-label" [hidden]="preAuthFormGroup.controls.diagnosis.valid || preAuthFormGroup.controls.diagnosis.pristine">
-                              Diagnosis Type value is required.
-                          </small>
-                          <ul *ngIf="diagnosisSearchResult" class="search-results">
-                              <li (click)="onSelectDiagnosis(result)" *ngFor="let result of diagnosisItems">{{result.name}}</li>
-                          </ul>
+                <div class="frm-subsect">
+                    <div class="frm-item-wrap">
+                        <label class="label">Diagnosis</label>
+                        <div class="input-wrap">
+                            <div class="searchable-input">
+                                <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
+                                <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosis.valid || diagnosisFormGroup.controls.diagnosis.pristine">
+                                    Diagnosis Type value is required.
+                                </small>
+                                <ul *ngIf="diagnosisSearchResult" class="search-results">
+                                    <li (click)="onSelectDiagnosis(result)" *ngFor="let result of diagnosisItems">{{result.name}}</li>
+                                </ul>
 
-                      </div>
-                  </div>
-              </div>
+                            </div>
+                        </div>
+                    </div>
 
-              <div class="frm-item-wrap">
-                  <label class="label">Diagnosis Type</label>
-                  <div class="inputWrap">
-                      <select formControlName="diagnosisType" class="form-control">
-                          <option disabled value="" selected>Select...</option>
-                          <option *ngFor="let type of diagnosisTypes" [ngValue]="type">{{type.name}}</option>
-                      </select>
-                      <small class="alert-label" [hidden]="preAuthFormGroup.controls.diagnosisType.valid || preAuthFormGroup.controls.diagnosisType.pristine">
-                          Diagnosis Type value is required.
-                      </small>
-                  </div>
-              </div>
-
-
-              <div class="frm-item-wrap">
-                  <label class="label"></label>
-                  <div class="inputWrap">
-                      <div class="searchable-input">
-                          <div (click)="onAddDiagnosis()" class="btn btn-medium btn-blue-outline">
-                              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DIAGNOSIS
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Diagnosis</th>
-                              <th class="th">Diagnosis Type</th>
-                              <th class="th">Authorization Needed</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
-
-                      <tbody class="tbody">
-                          <tr *ngFor="let diagnosis of diagnosisLists; let i=index" class="tr">
-                              <td class="td">{{diagnosis.diagnosis.name}}</td>
-                              <td class="td">{{diagnosis.diagnosisType.name}}</td>
-                              <td class="td">
-                                  <input type="checkbox" disabled="disabled">
-                              </td>
-                              <td>
-                                  <i (click)="removeDiagnosis(diagnosis, i)" class="fa fa-times"></i>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-
-      <div *ngIf="tab_procedures" class="tab-pane fade show active">
-          <div class="content-top-bar">
-              <div class="bar-labels">
-                  <div>Clinical Information - Procedure</div>
-              </div>
-
-              <div class="bar-icos">
-                  <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-          </div>
-
-          <div class="frm-subsect">
-              <div class="frm-item-wrap">
-                  <label class="label">Procedures</label>
-                  <div class="input-wrap">
-                      <div class="searchable-input">
-                          <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
-                          <ul *ngIf="procedureSearchResult" class="search-results">
-                              <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
-                          </ul>
-
-                          <div (click)="onAddProcedure()" class="btn btn-medium btn-blue-outline">
-                              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Procedures</th>
-                              <th class="th">Authorization Needed</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
-
-                      <tbody class="tbody">
-                          <tr *ngFor="let procedure of procedureList; let i=index" class="tr">
-                              <td class="td">{{procedure.procedure.name}}</td>
-                              <td class="td">
-                                  <input [checked]="needAuthorization(procedure)" type="checkbox" disabled="disabled">
-                              </td>
-                              <td>
-                                  <i (click)="removeProcedure(i)" class="fa fa-times"></i>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-
-      <div *ngIf="tab_services" class="tab-pane fade show active">
-          <div class="content-top-bar">
-              <div class="bar-labels">
-                  <div>Clinical Information - Investigations</div>
-              </div>
-
-              <div class="bar-icos">
-                  <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-          </div>
-
-          <div class="frm-subsect">
-              <div class="frm-item-wrap">
-                  <label class="label">Services</label>
-                  <div class="input-wrap">
-                      <div class="searchable-input">
-                          <input style="width:300px;" type="text" formControlName="services" class="form-control">
-
-                          <small class="alert-label" [hidden]="preAuthFormGroup.controls.services.valid || preAuthFormGroup.controls.services.pristine">
-                              Investigation value is required.
-                          </small>
-                          <ul *ngIf="investigationSearchResult" class="search-results">
-                              <li (click)="onSelectInvestigation(result)" *ngFor="let result of investigationItems">{{result.name}}</li>
-                          </ul>
-
-                          <div (click)="onAddInvestigation()" class="btn btn-medium btn-blue-outline">
-                              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD SERVICES
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Services</th>
-                              <th class="th">Authorization Needed</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
-
-                      <tbody class="tbody">
-                          <tr *ngFor="let investigation of investigationList; let i=index" class="tr">
-                              <td class="td">{{investigation.investigation.name}}</td>
-                              <td class="td">
-                                  <input type="checkbox" disabled="disabled">
-                              </td>
-                              <td>
-                                  <i (click)="removeInvestigation(i)" class="fa fa-times"></i>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-
-      <div *ngIf="tab_drugs" class="tab-pane fade show active">
-          <div class="content-top-bar">
-              <div class="bar-labels">
-                  <div>Clinical Information - Drugs</div>
-              </div>
-
-              <div class="bar-icos">
-                  <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-          </div>
+                    <div class="frm-item-wrap">
+                        <label class="label">Diagnosis Type</label>
+                        <div class="inputWrap">
+                            <select formControlName="diagnosisType" class="form-control">
+                                <option disabled value="" selected>Select...</option>
+                                <option *ngFor="let type of diagnosisTypes" [ngValue]="type">{{type.name}}</option>
+                            </select>
+                            <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosisType.valid || diagnosisFormGroup.controls.diagnosisType.pristine">
+                                Diagnosis Type value is required.
+                            </small>
+                        </div>
+                    </div>
 
 
+                    <div class="frm-item-wrap">
+                        <label class="label"></label>
+                        <div class="inputWrap">
+                            <div class="searchable-input">
+                                <div (click)="onAddDiagnosis()" class="btn btn-medium btn-blue-outline">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DIAGNOSIS
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="frm-subsect">
-              <div class="frm-item-wrap">
-                  <label class="label">Drug</label>
-                  <div class="input-wrap">
-                      <div>
-                          <div class="input-wrap-x2">
-                              <div class="searchable-input">
-                                  <input style="width:155px;" type="text" formControlName="drug" class="form-control">
-                                  <small class="alert-label" [hidden]="preAuthFormGroup.controls.drug.valid || preAuthFormGroup.controls.drug.pristine">
-                                      Drug value is required.
-                                  </small>
-                                  <ul *ngIf="drugSearchResult" class="search-results">
-                                      <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
-                                  </ul>
-                              </div>
-                              <div class="input-wrap-x2">
-                                  <input style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
-                                  <small class="alert-label" [hidden]="preAuthFormGroup.controls.drugQty.valid || preAuthFormGroup.controls.drugQty.pristine">
-                                      Drug Quantity value is required.
-                                  </small>
-                                  <div>
-                                      <select formControlName="drugUnit" class="form-control">
-                                          <option disabled value="" selected>Select...</option>
-                                          <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
-                                      </select>
-                                      <small class="alert-label" [hidden]="preAuthFormGroup.controls.drugUnit.valid || preAuthFormGroup.controls.drugUnit.pristine">
-                                          Drug Unit value is required.
-                                      </small>
-                                  </div>
+                    <div class="tbl-wrap">
+                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">Diagnosis</th>
+                                    <th class="th">Diagnosis Type</th>
+                                    <th class="th">Authorization Needed</th>
+                                    <th class="th"></th>
+                                </tr>
+                            </thead>
 
-                              </div>
-                          </div>
+                            <tbody class="tbody">
+                                <tr *ngFor="let diagnosis of diagnosisLists; let i=index" class="tr">
+                                    <td class="td">{{diagnosis.diagnosis.name}}</td>
+                                    <td class="td">{{diagnosis.diagnosisType.name}}</td>
+                                    <td class="td">
+                                        <input type="checkbox" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <i (click)="removeDiagnosis(diagnosis, i)" class="fa fa-times"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-                          <div class="btn btn-medium btn-blue-outline" (click)="onAddDrug()">
-                              <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DRUG
-                          </div>
-                      </div>
-                  </div>
-              </div>
+        <div *ngIf="tab_procedures" class="tab-pane fade show active">
+            <form [formGroup]="procedureFormGroup" novalidate>
+                <div class="content-top-bar">
+                    <div class="bar-labels">
+                        <div>Clinical Information - Procedure</div>
+                    </div>
 
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Drug</th>
-                              <th class="th">Quantity</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
+                    <div class="bar-icos">
+                        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </div>
 
-                      <tbody class="tbody">
-                          <tr class="tr" *ngFor="let item of drugList;let i=index">
-                              <th class="td">{{item.drug.name}}</th>
-                              <th class="td">{{item.quantity}} {{item.unit.name}}</th>
-                              <td>
-                                  <i class="fa fa-times" (click)="removeDrug(i)"></i>
-                              </td>
-                          </tr>
+                <div class="frm-subsect">
+                    <div class="frm-item-wrap">
+                        <label class="label">Procedures</label>
+                        <div class="input-wrap">
+                            <div class="searchable-input">
+                                <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
+                                <ul *ngIf="procedureSearchResult" class="search-results">
+                                    <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
+                                </ul>
 
-                      </tbody>
-                  </table>
-              </div>
-          </div>
+                                <div (click)="onAddProcedure()" class="btn btn-medium btn-blue-outline">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURES
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="tbl-wrap">
+                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">Procedures</th>
+                                    <th class="th">Authorization Needed</th>
+                                    <th class="th"></th>
+                                </tr>
+                            </thead>
 
+                            <tbody class="tbody">
+                                <tr *ngFor="let procedure of procedureList; let i=index" class="tr">
+                                    <td class="td">{{procedure.procedure.name}}</td>
+                                    <td class="td">
+                                        <input [checked]="needAuthorization(procedure)" type="checkbox" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <i (click)="removeProcedure(i)" class="fa fa-times"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
 
+        </div>
 
+        <div *ngIf="tab_services" class="tab-pane fade show active">
+            <form [formGroup]="investigationFormGroup" novalidate>
+                <div class="content-top-bar">
+                    <div class="bar-labels">
+                        <div>Clinical Information - Investigations</div>
+                    </div>
 
+                    <div class="bar-icos">
+                        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </div>
 
+                <div class="frm-subsect">
+                    <div class="frm-item-wrap">
+                        <label class="label">Services</label>
+                        <div class="input-wrap">
+                            <div class="searchable-input">
+                                <input style="width:300px;" type="text" formControlName="services" class="form-control">
 
+                                <small class="alert-label" [hidden]="investigationFormGroup.controls.services.valid || investigationFormGroup.controls.services.pristine">
+                                    Investigation value is required.
+                                </small>
+                                <ul *ngIf="investigationSearchResult" class="search-results">
+                                    <li (click)="onSelectInvestigation(result)" *ngFor="let result of investigationItems">{{result.name}}</li>
+                                </ul>
 
-      </div>
+                                <div (click)="onAddInvestigation()" class="btn btn-medium btn-blue-outline">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD SERVICES
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-      <div *ngIf="tab_notes" class="tab-pane fade show active">
-          <div class="content-top-bar">
-              <div class="bar-labels">
-                  <div>Clinical Documentation</div>
-              </div>
+                    <div class="tbl-wrap">
+                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">Services</th>
+                                    <th class="th">Authorization Needed</th>
+                                    <th class="th"></th>
+                                </tr>
+                            </thead>
 
-              <div class="bar-icos">
-                  <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-          </div>
+                            <tbody class="tbody">
+                                <tr *ngFor="let investigation of investigationList; let i=index" class="tr">
+                                    <td class="td">{{investigation.investigation.name}}</td>
+                                    <td class="td">
+                                        <input type="checkbox" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <i (click)="removeInvestigation(i)" class="fa fa-times"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-          <div class="frm-group">
+        <div *ngIf="tab_drugs" class="tab-pane fade show active">
+            <form [formGroup]="drugFormGroup" novalidate>
+                <div class="content-top-bar">
+                    <div class="bar-labels">
+                        <div>Clinical Information - Drugs</div>
+                    </div>
 
-              <div class="frm-item-wrap">
-                  <label class="label">Reason for Request</label>
-                  <div class="input-wrap" style="width:100%;">
-                      <textarea formControlName="requestReason" class="form-control-textArea"></textarea>
-                  </div>
-                  <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestReason.valid || preAuthFormGroup.controls.requestReason.pristine">
-                      This is a required field.
-                  </small>
-              </div>
+                    <div class="bar-icos">
+                        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </div>
 
-          </div>
-          <div class="frm-item-wrap">
-              <label class="label">Pre-Authorization Note</label>
-              <div class="input-wrap" style="width:100%;">
-                  <textarea formControlName="preAuthorizationNote" class="form-control-textArea"></textarea>
-              </div>
-              <small class="alert-label" [hidden]="preAuthFormGroup.controls.preAuthorizationNote.valid || preAuthFormGroup.controls.preAuthorizationNote.pristine">
-                  This is a required field.
-              </small>
-          </div>
-          <div class="frm-item-wrap">
-              <label class="label">Name of Doctor</label>
-              <div class="input-wrap">
-                  <input type="email" formControlName="docName" class="form-control">
-              </div>
-              <small class="alert-label" [hidden]="preAuthFormGroup.controls.docName.valid || preAuthFormGroup.controls.docName.pristine">
-                  This is a required field.
-              </small>
-          </div>
-      </div>
-  </div>
+                <div class="frm-subsect">
+                    <div class="frm-item-wrap">
+                        <label class="label">Drug</label>
+                        <div class="input-wrap">
+                            <div>
+                                <div class="input-wrap-x2">
+                                    <div class="searchable-input">
+                                        <input style="width:155px;" type="text" formControlName="drug" class="form-control">
+                                        <small class="alert-label" [hidden]="drugFormGroup.controls.drug.valid || drugFormGroup.controls.drug.pristine">
+                                            Drug value is required.
+                                        </small>
+                                        <ul *ngIf="drugSearchResult" class="search-results">
+                                            <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="input-wrap-x2">
+                                        <input style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
+                                        <small class="alert-label" [hidden]="drugFormGroup.controls.drugQty.valid || drugFormGroup.controls.drugQty.pristine">
+                                            Drug Quantity value is required.
+                                        </small>
+                                        <div>
+                                            <select formControlName="drugUnit" class="form-control">
+                                                <option disabled value="" selected>Select...</option>
+                                                <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
+                                            </select>
+                                            <small class="alert-label" [hidden]="drugFormGroup.controls.drugUnit.valid || drugFormGroup.controls.drugUnit.pristine">
+                                                Drug Unit value is required.
+                                            </small>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="btn btn-medium btn-blue-outline" (click)="onAddDrug()">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DRUG
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tbl-wrap">
+                        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">Drug</th>
+                                    <th class="th">Quantity</th>
+                                    <th class="th"></th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="tbody">
+                                <tr class="tr" *ngFor="let item of drugList;let i=index">
+                                    <th class="td">{{item.drug.name}}</th>
+                                    <th class="td">{{item.quantity}} {{item.unit.name}}</th>
+                                    <td>
+                                        <i class="fa fa-times" (click)="removeDrug(i)"></i>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="tab_notes" class="tab-pane fade show active">
+            <form [formGroup]="preAuthFormGroup" novalidate>
+                <div class="content-top-bar">
+                    <div class="bar-labels">
+                        <div>Clinical Documentation</div>
+                    </div>
+
+                    <div class="bar-icos">
+                        <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                    </div>
+                </div>
+
+                <div class="frm-group">
+
+                    <div class="frm-item-wrap">
+                        <label class="label">Reason for Request</label>
+                        <div class="input-wrap" style="width:100%;">
+                            <textarea formControlName="requestReason" class="form-control-textArea"></textarea>
+                        </div>
+                        <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestReason.valid || preAuthFormGroup.controls.requestReason.pristine">
+                            This is a required field.
+                        </small>
+                    </div>
+
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Pre-Authorization Note</label>
+                    <div class="input-wrap" style="width:100%;">
+                        <textarea formControlName="preAuthorizationNote" class="form-control-textArea"></textarea>
+                    </div>
+                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.preAuthorizationNote.valid || preAuthFormGroup.controls.preAuthorizationNote.pristine">
+                        This is a required field.
+                    </small>
+                </div>
+                <div class="frm-item-wrap">
+
+                    <label class="label">Name of Doctor</label>
+                    <div class="input-wrap">
+                        <input type="email" formControlName="docName" class="form-control">
+                    </div>
+                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.docName.valid || preAuthFormGroup.controls.docName.pristine">
+                        This is a required field.
+                    </small>
+
+                </div>
+                <div class="frm-item-wrap">
+
+                    <label class="label">Doctor's Unit</label>
+                    <div class="input-wrap">
+                        <input type="email" formControlName="docUnit" class="form-control">
+                    </div>
+                    <small class="alert-label" [hidden]="preAuthFormGroup.controls.docUnit.valid || preAuthFormGroup.controls.docUnit.pristine">
+                        This is a required field.
+                    </small>
+                </div>
+            </form>
+        </div>
+    </div>
 </form>

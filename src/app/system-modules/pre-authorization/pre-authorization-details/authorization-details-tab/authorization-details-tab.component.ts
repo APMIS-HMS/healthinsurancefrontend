@@ -14,9 +14,10 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   modalReject = false;
   modalHold = false;
   modalQuery = false;
-  requestStatus= REQUEST_STATUS;
+  requestStatus = REQUEST_STATUS;
 
-  selectedTransaction:any;
+  selectedTransaction: any;
+  reply = false;
 
   constructor() { }
 
@@ -30,20 +31,25 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
     )
   }
+  replyOk(selectedTransaction) {
+    this.selectedTransaction = selectedTransaction;
+    this.reply = true;
+    console.log(this.reply)
+  }
   compare(l1: any, l2: any) {
     if (l1 !== null && l2 !== null) {
       return l1.id === l2.id;
     }
     return false;
   }
-  orderDocuments(documents){
-    return documents.sort(function(a, b) {
+  orderDocuments(documents) {
+    return documents.sort(function (a, b) {
       return parseFloat(a.order) - parseFloat(b.order);
-  });
+    });
   }
 
-  isObject(doc){
-    return typeof(doc.clinicalDocumentation) === 'object';
+  isObject(doc) {
+    return typeof (doc.clinicalDocumentation) === 'object';
   }
   approveClaim() {
     this.modalApprove = true;
