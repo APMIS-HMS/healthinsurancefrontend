@@ -101,9 +101,7 @@ export class NewClaimComponent implements OnInit {
       }
     });
 
-    this.claimDocItem.clinicalDocument = {};
-    this.claimDocItem.clinicalDocument.symptom = []
-    this.symptomLists = [];
+    
     this.claimsFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
       lashmaid: ['', [<any>Validators.required]],
@@ -310,7 +308,7 @@ export class NewClaimComponent implements OnInit {
     let duration = this.claimsFormGroup.controls.symptomDuration;
     let unit = this.claimsFormGroup.controls.symptomUnit;
     if (name.valid) {
-      this.drugList.push({
+      this.symptomLists.push({
         "symptom": typeof (this.selectedSymptom.symptom) === 'object' ? this.selectedSymptom.symptom : name.value,
         "duration": typeof (this.selectedSymptom.duration) === 'object' ? this.selectedSymptom.duration : duration.value,
         "unit": typeof (this.selectedSymptom.unit) === 'object' ? this.selectedSymptom.unit : unit.value,
@@ -423,6 +421,10 @@ export class NewClaimComponent implements OnInit {
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
     console.log(this.claimDocItem);
+    console.log(this.claimItem.documentation);
+    if(this.claimItem.documentation == undefined){
+      this.claimItem.documentation = [];
+    }
     this.claimItem.documentation.push(this.claimDocItem.clinicalDocument);
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
