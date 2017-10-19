@@ -8,6 +8,7 @@ import { CheckInService } from './../../../services/common/check-in.service';
 import { ClaimService } from './../../../services/common/claim.service';
 import { ClaimTypeService } from './../../../services/common/claim-type.service';
 import { VisitTypeService } from './../../../services/common/visit-type.service';
+import { DiagnosisTypeService } from './../../../services/common/diagnosis-type.service';
 import { SymptomService } from './../../../services/common/symptoms.service';
 import { ProcedureService } from './../../../services/common/procedure.service';
 import { DiagnosisService } from './../../../services/common/diagnosis.service';
@@ -67,6 +68,7 @@ export class NewClaimComponent implements OnInit {
   diagnosisItems: any = <any>[];
   investigationItems: any = <any>[];
   drugItems: any = <any>[];
+  diagnosisTypeLists: any = <any>[];
   user: any;
   isOutpatient: boolean = false;
   isInpatient: boolean = false;
@@ -87,6 +89,7 @@ export class NewClaimComponent implements OnInit {
     private _symptomService: SymptomService,
     private _procedureService: ProcedureService,
     private _diagnosisService: DiagnosisService,
+    private _diagnosisTypeService:DiagnosisTypeService,
     private _route: ActivatedRoute,
     private _drugService: DrugService,
     private _checkInService: CheckInService,
@@ -132,6 +135,7 @@ export class NewClaimComponent implements OnInit {
     });
     this._getClaimTypes();
     this._getVisitTypes();
+    this._getDiagnosisType();
 
     this.claimsFormGroup.controls.drug.valueChanges
       .debounceTime(250)
@@ -166,7 +170,17 @@ export class NewClaimComponent implements OnInit {
       console.log(error)
     });
 
-    this.claimsFormGroup.controls.procedure.valueChanges
+    this.claimsFormGroup.controls.diagnosisType.valueChanges
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        this._getProcedures(value);
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
+      this.claimsFormGroup.controls.procedure.valueChanges
       .debounceTime(250)
       .distinctUntilChanged()
       .subscribe(value => {
@@ -186,6 +200,7 @@ export class NewClaimComponent implements OnInit {
         console.log(error)
       });
   }
+  
 
   _getSelectedCheckinItem(checkinId) {
     this._checkInService.find({ query: { _id: checkinId } }).then((payload: any) => {
@@ -245,6 +260,15 @@ export class NewClaimComponent implements OnInit {
 
       })
     }
+  }
+
+  _getDiagnosisType() {
+    this._diagnosisTypeService.find({}).then((payload: any) => {
+      if (payload.data.length > 0) {
+        this.diagnosisTypeLists = payload.data;
+      }
+
+    })
   }
 
   _getDrugs(value) {
@@ -331,6 +355,7 @@ export class NewClaimComponent implements OnInit {
     if (name.valid) {
       this.diagnosisLists.push({
         "diagnosis": typeof (this.selectedDiagnosis.name) === 'object' ? this.selectedDiagnosis : name.value,
+        "type":this.claimsFormGroup.controls.diagnosisType.value
       });
       this.claimsFormGroup.controls.diagnosis.reset();
     } else {
