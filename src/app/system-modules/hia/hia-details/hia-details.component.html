@@ -24,7 +24,9 @@
                     <div class="item-label item-head">Health Insurance Agent Detail</div>
 
                     <div class="detail-content">
-                        <img class="hia-logo" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)">
+                        <!-- <img class="hia-logo" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)"> -->
+                        <img *ngIf="selectedFacility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)">
+                        <img *ngIf="selectedFacility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
                         <div class="group-wrap">
                             <div class="item-label">{{selectedFacility?.name}}</div>
                             <div class="item-val">{{selectedFacility?.hia.type.name}}</div>
@@ -67,7 +69,8 @@
 
                     <div class="detail-content">
                         <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
+                            <img *ngIf="selectedFacility?.businessContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility?.businessContact?.image?.thumbnail)">
+                            <img *ngIf="selectedFacility?.businessContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
                         </div>
                         <div class="group-wrap">
                             <div class="item-val">{{selectedFacility?.businessContact.lastName}} {{selectedFacility?.businessContact.firstName}}</div>
@@ -84,7 +87,8 @@
 
                     <div class="detail-content">
                         <div class="hia-user">
-                            <img src="../../../../assets/img/users/default.png">
+                            <img *ngIf="selectedFacility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility?.itContact?.image?.thumbnail)">
+                            <img *ngIf="selectedFacility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
                         </div>
                         <div class="group-wrap">
                             <div class="item-val">{{selectedFacility?.itContact.lastName}} {{selectedFacility?.itContact.firstName}}</div>
