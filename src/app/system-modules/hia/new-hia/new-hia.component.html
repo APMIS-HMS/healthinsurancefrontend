@@ -92,15 +92,6 @@
                 </small>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">Business Contact Last Name</label>
-                <div class="input-wrap">
-                    <input type="text" formControlName="businessContactName" class="form-control">
-                </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactName.valid || hiaFormGroup.controls.businessContactName.pristine">
-                    This is a required field.
-                </small>
-            </div>
-            <div class="frm-item-wrap">
                 <label class="label">Business Contact Photo</label>
                 <div class="input-wrap">
                     <div class="img-box">
@@ -120,6 +111,15 @@
                     <input type="text" formControlName="businessContactFirstName" class="form-control">
                 </div>
                 <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactFirstName.valid || hiaFormGroup.controls.businessContactFirstName.pristine">
+                    This is a required field.
+                </small>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Business Contact Last Name</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="businessContactName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactName.valid || hiaFormGroup.controls.businessContactName.pristine">
                     This is a required field.
                 </small>
             </div>
@@ -278,7 +278,7 @@
                     This is a required field.
                 </small>
             </div>
-            <div class="frm-item-wrap">
+            <!-- <div class="frm-item-wrap">
                 <label class="label">CIN Number</label>
                 <div class="input-wrap">
                     <input type="text" formControlName="cinNumber" class="form-control">
@@ -286,7 +286,7 @@
                 <small class="alert-label" [hidden]="hiaFormGroup.controls.cinNumber.valid || hiaFormGroup.controls.cinNumber.pristine">
                     This is a required field.
                 </small>
-            </div>
+            </div> -->
             <div class="frm-item-wrap">
                 <label class="label">Registration Date </label>
                 <div style="width:300px;" class="input-wrap">
@@ -313,6 +313,7 @@
             <button class="btn btn-medium btn-blue cta" [disabled]="disableBtn" (click)="save(hiaFormGroup.valid, hiaFormGroup.value)">
                 <span *ngIf="btnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
                 <span *ngIf="btnText">SAVE &nbsp; <i class="fa fa-check"></i></span>
+                <span *ngIf="updateBtnText">Update &nbsp; <i class="fa fa-check"></i></span>
             </button>
         </form>
     </section>

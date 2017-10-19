@@ -46,6 +46,7 @@ export class NewHiaComponent implements OnInit {
   banks: any[] = [];
   btnText: boolean = true;
   btnProcessing: boolean = false;
+  updateBtnText: boolean = false;
   disableBtn: boolean = false;
 
   selectedUserType: any;
@@ -90,6 +91,10 @@ export class NewHiaComponent implements OnInit {
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
+        this.updateBtnText = true;
+        this.btnProcessing = false;
+        this.btnText = false;
+
         this._getHIA(param.id);
       } else {
         this._initialiseFormGroup();
@@ -131,6 +136,7 @@ export class NewHiaComponent implements OnInit {
       this.selectedFacility = payload;
       console.log(this.selectedFacility)
       this._initialiseFormGroup();
+      this._initImages(payload);
       this._systemService.off();
     }).catch(err => {
       console.log(err)
@@ -186,7 +192,7 @@ export class NewHiaComponent implements OnInit {
       bankAccName: [this.selectedFacility.bankDetails != null ? this.selectedFacility.bankDetails.name : '', [<any>Validators.required]],
       bankAccNumber: [this.selectedFacility.bankDetails != null ? this.selectedFacility.bankDetails.accountNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       nhisNumber: [this.selectedFacility.hia != null ? this.selectedFacility.hia.nhisNumber : '', [<any>Validators.required]],
-      cinNumber: [this.selectedFacility.hia != null ? this.selectedFacility.hia.cin : '', [<any>Validators.required]],
+      // cinNumber: [this.selectedFacility.hia != null ? this.selectedFacility.hia.cin : '', [<any>Validators.required]],
       registrationDate: [this.selectedFacility.hia != null ? this.selectedFacility.hia.registrationDate : this.today, [<any>Validators.required]]
     });
     console.log(this.selectedFacility);
@@ -330,7 +336,7 @@ export class NewHiaComponent implements OnInit {
       hia = <HIA>{};
     }
     hia.nhisNumber = this.hiaFormGroup.controls['nhisNumber'].value;
-    hia.cin = this.hiaFormGroup.controls['cinNumber'].value;
+    // hia.cin = this.hiaFormGroup.controls['cinNumber'].value;
     hia.type = this.hiaFormGroup.controls['type'].value;
     hia.grade = this.hiaFormGroup.controls['grade'].value;
     hia.registrationDate = this.hiaFormGroup.controls['registrationDate'].value.jsdate;
@@ -389,6 +395,7 @@ export class NewHiaComponent implements OnInit {
     if (valid) {
       this._systemService.on();
       this.btnText = false;
+      this.updateBtnText = false;
       this.btnProcessing = true;
       this.disableBtn = true;
 
@@ -407,13 +414,18 @@ export class NewHiaComponent implements OnInit {
           if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
             facility.itContact.image = allResult[2].body[0].file;
           }
+          // facility.hia.cin = this.selectedFacility.hia.cin;
           this._facilityService.create(facility).then((payload: Facility) => {
             this._systemService.off();
             this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
             this.hiaFormGroup.reset();
             this._router.navigate(['/modules/hia/hias']);
           }).catch(err => {
-            console.log(err)
+            console.log(err);
+            this.btnText = true;
+            this.updateBtnText = false;
+            this.btnProcessing = false;
+            this.disableBtn = false;
             this._systemService.off();
           });
         });
@@ -430,42 +442,50 @@ export class NewHiaComponent implements OnInit {
         //     this._systemService.off();
         //   });
         // }
-      } 
-      // else {
-      //   console.log(5)
-      //   if (fileBrowser.files && fileBrowser.files[0]) {
-      //     this.upload().then((result: any) => {
-      //       if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-      //         console.log(result.body[0].file)
-      //         facility.logo = result.body[0].file;
-      //         this._facilityService.update(facility).then((payload: Facility) => {
-      //           this._systemService.off();
-      //           this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-      //           this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-      //           this.hiaFormGroup.reset();
-      //           this._router.navigate(['/modules/hia/hias']);
-      //         }).catch(err => {
-      //           this._systemService.off();
-      //         });
-      //       }
-      //     }).catch(err => {
-      //       this._systemService.off();
-      //     })
+      } else {
+        Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+          console.log(allResult);
+          if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+            facility.logo = allResult[0].body[0].file;
+          }
+          // Business Contact Image
+          if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // IT Contact Image.
+          if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+            facility.itContact.image = allResult[2].body[0].file;
+          }
 
+          facility.hia.cin = this.selectedFacility.hia.cin;
+          this._facilityService.update(facility).then((payload: Facility) => {
+            this._systemService.off();
+            this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+            this.hiaFormGroup.reset();
+            this._router.navigate(['/modules/hia/hias']);
+          }).catch(err => {
+            console.log(err);
+            this.btnText = false;
+            this.updateBtnText = true;
+            this.btnProcessing = false;
+            this.disableBtn = false;
+            this._systemService.off();
+          });
+        });
 
-      //   } else {
-      //     console.log(6)
-      //     this._facilityService.update(facility).then((payload: Facility) => {
-      //       this._systemService.off();
-      //       // this.hiaFormGroup.reset();
-      //       this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-      //       this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
-      //       this._router.navigate(['/modules/hia/hias']);
-      //     }).catch(err => {
-      //       this._systemService.off();
-      //     });
-      //   }
-      // }
+        // } else {
+        //   console.log(6)
+        //   this._facilityService.update(facility).then((payload: Facility) => {
+        //     this._systemService.off();
+        //     // this.hiaFormGroup.reset();
+        //     this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+        //     this._toastr.success('Health Insurance Agent has been created successfully!', 'Success!');
+        //     this._router.navigate(['/modules/hia/hias']);
+        //   }).catch(err => {
+        //     this._systemService.off();
+        //   });
+        // }
+      }
     } else {
       this._systemService.off();
       let counter = 0;
