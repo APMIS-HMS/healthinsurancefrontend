@@ -119,12 +119,12 @@ export class NewProviderComponent implements OnInit {
       bc_lname: [this.facility != null ? this.facility.businessContact.lastName : '', [<any>Validators.required]],
       bc_fname: [this.facility != null ? this.facility.businessContact.firstName : '', [<any>Validators.required]],
       bc_phone: [this.facility != null ? this.facility.businessContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
+      // bc_position: [this.facility != null ? this.facility.businessContact.position : '', [<any>Validators.required]],
       bc_email: [this.facility != null ? this.facility.businessContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       hmo_lname: [this.facility != null ? this.facility.hmoContact.lastName : '', [<any>Validators.required]],
       hmo_fname: [this.facility != null ? this.facility.hmoContact.firstName : '', [<any>Validators.required]],
       hmo_phone: [this.facility != null ? this.facility.hmoContact.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-      hmo_position: [this.facility != null ? this.facility.hmoContact.position : '', [<any>Validators.required]],
+      // hmo_position: [this.facility != null ? this.facility.hmoContact.position : '', [<any>Validators.required]],
       hmo_email: [this.facility != null ? this.facility.hmoContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       it_lname: [this.facility != null ? this.facility.itContact.lastName : '', [<any>Validators.required]],
       it_fname: [this.facility != null ? this.facility.itContact.firstName : '', [<any>Validators.required]],
@@ -347,7 +347,7 @@ export class NewProviderComponent implements OnInit {
     businessContact.firstName = this.providerFormGroup.controls['bc_lname'].value;
     businessContact.email = this.providerFormGroup.controls['bc_email'].value;
     businessContact.phoneNumber = this.providerFormGroup.controls['bc_phone'].value;
-    businessContact.position = this.providerFormGroup.controls['bc_position'].value;
+    // businessContact.position = this.providerFormGroup.controls['bc_position'].value;
     return businessContact;
   }
   
@@ -359,7 +359,7 @@ export class NewProviderComponent implements OnInit {
     hmoContact.firstName = this.providerFormGroup.controls['hmo_lname'].value;
     hmoContact.email = this.providerFormGroup.controls['hmo_email'].value;
     hmoContact.phoneNumber = this.providerFormGroup.controls['hmo_phone'].value;
-    hmoContact.position = this.providerFormGroup.controls['hmo_position'].value;
+    // hmoContact.position = this.providerFormGroup.controls['hmo_position'].value;
     return hmoContact;
   }
   _extractITContact(itContact?: Contact) {
