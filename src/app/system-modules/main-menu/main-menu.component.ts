@@ -57,14 +57,20 @@ export class MainMenuComponent implements OnInit {
     this._authService.find({ query: { email: email } })
       .then(payload => {
         let currentUser = payload.data[0];
-        currentUser.loggedInUserStatus = {
-          "isLoggedIn": loggInState
-        };
-
-        this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
+        if(currentUser !== undefined){
+          currentUser.loggedInUserStatus = {
+            "isLoggedIn": loggInState
+          };
+  
+          this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
+            this._authService.checkAuth();
+            this._router.navigate(['/auth']);
+          });
+        }else{
           this._authService.checkAuth();
           this._router.navigate(['/auth']);
-        });
+        }
+
       })
   }
 
@@ -139,25 +145,6 @@ export class MainMenuComponent implements OnInit {
       }
     });
 
-
-    this.hasBeneficiary = true;
-    this.hasProvider = true;
-    this.hasOrganisation = true;
-    this.hasHIA = true;
-    this.hasPlan = true;
-    this.hasCheckIn = true;
-    this.hasPremiumPayment = true;
-    this.hasClaim = true;
-    this.hasClaimPayment = true;
-    this.hasReferral = true;
-    this.hasAuthorization = true;
-    this.hasComplaint = true;
-    this.hasFundManagement = true;
-    this.hasAnalytics = true;
-    this.hasPlatform = true;
-    this.hasRoleManagement = true;
-    this.hasAccessManagement = true;
-    this.hasUserManagement = true;
   }
 
   close_onClick() {

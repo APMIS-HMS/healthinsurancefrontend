@@ -36,7 +36,8 @@
                         <img src="../../../assets/img/users/default.png">
                     </div>
                     <div class="user-text-wrap">
-                        <div class="user-name">{{user?.lastName}} {{user?.firstName}}</div>
+                        <div *ngIf="user?.facilityId !== undefined" class="user-name">{{user?.lastName}} {{user?.firstName}}</div>
+                        <div *ngIf="user?.facilityId === undefined" class="user-name">{{user?.email}}</div>
                         <div class="user-others">{{user?.facilityId?.name}}</div>
                     </div>
                 </div>

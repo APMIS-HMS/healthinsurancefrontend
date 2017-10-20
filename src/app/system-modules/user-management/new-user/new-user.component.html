@@ -12,7 +12,7 @@
         <form [formGroup]="userFormGroup" novalidate>
             <div class="frm-item-wrap">
                 <label class="label">User Type</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="userType" class="form-control">
                 <option value=" " disabled selected>Select User Type</option>
                 <option *ngFor="let user of userTypes" [ngValue]="user">{{user.name}}</option>
@@ -22,7 +22,7 @@
 
             <div *ngIf="showHIA" class="frm-item-wrap">
                 <label class="label">Facilities</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="facilityId" class="form-control">
                 <option value=" " disabled selected>Select Facility</option>
                 <option *ngFor="let user of facilities" [ngValue]="user">{{user.name}}</option>
@@ -32,7 +32,7 @@
 
             <div *ngIf="showPlatformOwner" class="frm-item-wrap">
                 <label class="label">Facilities</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="facilityId" class="form-control">
                     <option value=" " disabled selected>Select Facility</option>
                     <option *ngFor="let user of facilities" [ngValue]="user">{{user.name}}</option>
@@ -42,16 +42,16 @@
 
             <div class="frm-item-wrap">
                 <label class="label">First Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="firstName" class="form-control">
+                    <small class="alert-label" [hidden]="userFormGroup.controls.firstName.valid || userFormGroup.controls.firstName.pristine">
+                              This is a required field (minimum 3 and max of 50 characters).
+                          </small>
                 </div>
-                <small class="alert-label" [hidden]="userFormGroup.controls.firstName.valid || userFormGroup.controls.firstName.pristine">
-                          This is a required field (minimum 3 and max of 50 characters).
-                      </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Last Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="lastName" class="form-control">
                 </div>
                 <small class="alert-label" [hidden]="userFormGroup.controls.lastName.valid || userFormGroup.controls.lastName.pristine">
@@ -61,12 +61,12 @@
 
             <div class="frm-item-wrap">
                 <label class="label">Other Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="otherName" class="form-control">
+                    <small class="alert-label" [hidden]="userFormGroup.controls.otherName.valid || userFormGroup.controls.otherName.pristine">
+                              This is a required field (minimum 3 and max of 50 characters).
+                          </small>
                 </div>
-                <small class="alert-label" [hidden]="userFormGroup.controls.otherName.valid || userFormGroup.controls.otherName.pristine">
-                          This is a required field (minimum 3 and max of 50 characters).
-                      </small>
             </div>
             <!-- <div class="frm-item-wrap">
         <label class="label">Gender</label>
@@ -78,7 +78,7 @@
       </div>
       <div class="frm-item-wrap">
         <label class="label">Date of Birth </label>
-        <div class="input-wrap">
+        <div class="inputWrap">
           <my-date-picker name="dob" [options]="myDatePickerOptions" [selDate]="today" formControlName="dob"></my-date-picker>
           <small class="alert-label" [hidden]="userFormGroup.controls.dob.valid || userFormGroup.controls.dob.pristine">
                         This is a required field.
@@ -87,25 +87,25 @@
       </div> -->
             <div class="frm-item-wrap">
                 <label class="label">Phone Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="phoneNumber" class="form-control">
+                    <small class="alert-label" [hidden]="userFormGroup.controls.phoneNumber.valid || userFormGroup.controls.phoneNumber.pristine">
+                This is a required field (minimum 3 and max of 50 characters).
+            </small>
                 </div>
-                <small class="alert-label" [hidden]="userFormGroup.controls.phoneNumber.valid || userFormGroup.controls.phoneNumber.pristine">
-            This is a required field (minimum 3 and max of 50 characters).
-        </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Email Address</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="email" class="form-control">
+                    <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
+                              This is a required field (minimum 3 and max of 50 characters).
+                          </small>
                 </div>
-                <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
-                          This is a required field (minimum 3 and max of 50 characters).
-                      </small>
             </div>
             <!-- <div class="frm-item-wrap">
         <label class="label">Mother's Maiden Name</label>
-        <div class="input-wrap">
+        <div class="inputWrap">
           <input type="text" formControlName="mothersMaidenName" class="form-control">
           <small [hidden]="userFormGroup.controls.mothersMaidenName.valid || userFormGroup.controls.mothersMaidenName.pristine">
                         This is a required field (minimum 3 and max of 50 characters).

@@ -12,7 +12,7 @@
         <form [formGroup]="platformFormGroup" novalidate>
             <div class="frm-item-wrap">
                 <label class="label">Platform Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="platformName" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.platformName.valid || platformFormGroup.controls.platformName.pristine">
                             This is a required field.
@@ -21,7 +21,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Platform Short Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="shortName" class="form-control">
                 </div>
                 <small class="alert-label" [hidden]="platformFormGroup.controls.shortName.valid || platformFormGroup.controls.shortName.pristine">
@@ -30,7 +30,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Email</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="email" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.email.valid || platformFormGroup.controls.email.pristine">
                         Enter a valid email address.
@@ -39,7 +39,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Website</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="website" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.website.valid || platformFormGroup.controls.website.pristine">
                         Enter a valid website address. (e.g http://websitename.com)
@@ -49,7 +49,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Address (Street)</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="address" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.address.valid || platformFormGroup.controls.address.pristine">
                         Enter a valid address
@@ -58,7 +58,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">State</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="state" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select State</option>
                         <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
@@ -70,7 +70,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Local Government</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="lga" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Local Government</option>
                         <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
@@ -82,7 +82,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">City</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="city" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select City</option>
                         <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
@@ -94,7 +94,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Neighbourhood</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="neighbourhood" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.neighbourhood.valid || platformFormGroup.controls.neighbourhood.pristine">
                         This is a required field.
@@ -103,7 +103,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Banker</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="bank" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
@@ -115,7 +115,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank Account Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="bankAccName" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bankAccName.valid || platformFormGroup.controls.bankAccName.pristine">
                         Enter a valid bank account name.
@@ -124,7 +124,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank Account Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="bankAccNumber" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bankAccNumber.valid || platformFormGroup.controls.bankAccNumber.pristine">
                         Enter a valid bank account number.
@@ -133,7 +133,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's First Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="bc_fname" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bc_fname.valid || platformFormGroup.controls.bc_fname.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
@@ -142,7 +142,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's Last Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="bc_lname" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bc_lname.valid || platformFormGroup.controls.bc_lname.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
@@ -151,7 +151,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's position</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="bc_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
@@ -163,7 +163,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's Email Address</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="email" formControlName="bc_email" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bc_email.valid || platformFormGroup.controls.bc_email.pristine">
                         Enter a valid email address.
@@ -172,7 +172,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact's  Phone number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="bc_phone" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bc_phone.valid || platformFormGroup.controls.bc_phone.pristine">
                         Enter a valid phone number.
@@ -181,7 +181,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's First Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="it_fname" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.it_fname.valid || platformFormGroup.controls.it_fname.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
@@ -190,7 +190,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Last Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="it_lname" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.it_lname.valid || platformFormGroup.controls.it_lname.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
@@ -199,7 +199,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Position</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="it_position" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position" selected>{{position.name}}</option>
@@ -211,7 +211,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Email Address</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="email" formControlName="it_email" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.it_email.valid || platformFormGroup.controls.it_email.pristine">
                         Enter a valid email address.
@@ -220,7 +220,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact's Phone number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="it_phone" class="form-control">
                     <small class="alert-label" [hidden]="platformFormGroup.controls.it_phone.valid || platformFormGroup.controls.it_phone.pristine">
                         Enter a valid phone number.
@@ -229,7 +229,7 @@
             </div>
             <!-- <div class="frm-item-wrap">
                 <label class="label">Registration Date</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="date" formControlName="registrationDate" class="form-control">
                 </div>
                 <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
@@ -238,7 +238,7 @@
             </div> -->
             <div class="frm-item-wrap">
                 <label class="label">Registration Date </label>
-                <div style="width:300px;" class="input-wrap">
+                <div style="width:300px;" class="inputWrap">
                     <my-date-picker name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
                     <small class="alert-label" [hidden]="platformFormGroup.controls.registrationDate.valid || platformFormGroup.controls.registrationDate.pristine">
                         This is a required field.
@@ -249,7 +249,7 @@
                 <label class="label">
                     <button (click)="showImageBrowseDlg()" class="btn btn-medium btn-blue">Search Photo</button>
                 </label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <div class="">
                         <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this)">
                     </div>

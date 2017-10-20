@@ -97,7 +97,11 @@ button {
     font-size: 14px;
     padding: 10px 20px;
 }
-
+.btn-center-flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .btn-blue {
     background: $brand-primary;
     color: #fff;
