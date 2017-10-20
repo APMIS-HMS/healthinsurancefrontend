@@ -25,9 +25,9 @@
                 <div class="frm-subsect">
                     <div class="frm-item-wrap">
                         <label class="label">Complaint</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <div>
-                                <div class="input-wrap-x2">
+                                <div class="inputWrap-x2">
                                     <div class="searchable-input">
                                         <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
                                         <small class="alert-label" [hidden]="symptomFormGroup.controls.presentingComplaints.valid || symptomFormGroup.controls.presentingComplaints.pristine">
@@ -37,7 +37,7 @@
                                             <li (click)="onSelectComplain(result)" *ngFor="let result of symptomItems">{{result.name}}</li>
                                         </ul>
                                     </div>
-                                    <div class="input-wrap-x2">
+                                    <div class="inputWrap-x2">
                                         <div>
                                             <small class="alert-label" [hidden]="symptomFormGroup.controls.complaintsDuration.valid || symptomFormGroup.controls.complaintsDuration.pristine">
                                                 Complaint duration value is required.
@@ -114,7 +114,7 @@
 
                     <div class="frm-item-wrap">
                         <label class="label">Clinical Note</label>
-                        <div class="input-wrap" style="width:100%;">
+                        <div class="inputWrap" style="width:100%;">
                             <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
                         </div>
                         <small class="alert-label" [hidden]="preAuthFormGroup.controls.clinicalNote.valid || preAuthFormGroup.controls.clinicalNote.pristine">
@@ -141,7 +141,7 @@
                 <div class="frm-subsect">
                     <div class="frm-item-wrap">
                         <label class="label">Diagnosis</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <div class="searchable-input">
                                 <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
                                 <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosis.valid || diagnosisFormGroup.controls.diagnosis.pristine">
@@ -224,7 +224,7 @@
                 <div class="frm-subsect">
                     <div class="frm-item-wrap">
                         <label class="label">Procedures</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <div class="searchable-input">
                                 <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
                                 <ul *ngIf="procedureSearchResult" class="search-results">
@@ -281,7 +281,7 @@
                 <div class="frm-subsect">
                     <div class="frm-item-wrap">
                         <label class="label">Services</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <div class="searchable-input">
                                 <input style="width:300px;" type="text" formControlName="services" class="form-control">
 
@@ -341,9 +341,9 @@
                 <div class="frm-subsect">
                     <div class="frm-item-wrap">
                         <label class="label">Drug</label>
-                        <div class="input-wrap">
+                        <div class="inputWrap">
                             <div>
-                                <div class="input-wrap-x2">
+                                <div class="inputWrap-x2">
                                     <div class="searchable-input">
                                         <input style="width:155px;" type="text" formControlName="drug" class="form-control">
                                         <small class="alert-label" [hidden]="drugFormGroup.controls.drug.valid || drugFormGroup.controls.drug.pristine">
@@ -353,7 +353,7 @@
                                             <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
                                         </ul>
                                     </div>
-                                    <div class="input-wrap-x2">
+                                    <div class="inputWrap-x2">
                                         <input style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
                                         <small class="alert-label" [hidden]="drugFormGroup.controls.drugQty.valid || drugFormGroup.controls.drugQty.pristine">
                                             Drug Quantity value is required.
@@ -420,7 +420,7 @@
 
                     <div class="frm-item-wrap">
                         <label class="label">Reason for Request</label>
-                        <div class="input-wrap" style="width:100%;">
+                        <div class="inputWrap" style="width:100%;">
                             <textarea formControlName="requestReason" class="form-control-textArea"></textarea>
                         </div>
                         <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestReason.valid || preAuthFormGroup.controls.requestReason.pristine">
@@ -431,7 +431,7 @@
                 </div>
                 <div class="frm-item-wrap">
                     <label class="label">Pre-Authorization Note</label>
-                    <div class="input-wrap" style="width:100%;">
+                    <div class="inputWrap" style="width:100%;">
                         <textarea formControlName="preAuthorizationNote" class="form-control-textArea"></textarea>
                     </div>
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.preAuthorizationNote.valid || preAuthFormGroup.controls.preAuthorizationNote.pristine">
@@ -441,7 +441,7 @@
                 <div class="frm-item-wrap">
 
                     <label class="label">Name of Doctor</label>
-                    <div class="input-wrap">
+                    <div class="inputWrap">
                         <input type="email" formControlName="docName" class="form-control">
                     </div>
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.docName.valid || preAuthFormGroup.controls.docName.pristine">
@@ -452,7 +452,7 @@
                 <div class="frm-item-wrap">
 
                     <label class="label">Doctor's Unit</label>
-                    <div class="input-wrap">
+                    <div class="inputWrap">
                         <input type="email" formControlName="docUnit" class="form-control">
                     </div>
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.docUnit.valid || preAuthFormGroup.controls.docUnit.pristine">
