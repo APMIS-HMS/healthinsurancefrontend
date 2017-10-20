@@ -57,14 +57,20 @@ export class MainMenuComponent implements OnInit {
     this._authService.find({ query: { email: email } })
       .then(payload => {
         let currentUser = payload.data[0];
-        currentUser.loggedInUserStatus = {
-          "isLoggedIn": loggInState
-        };
-
-        this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
+        if(currentUser !== undefined){
+          currentUser.loggedInUserStatus = {
+            "isLoggedIn": loggInState
+          };
+  
+          this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
+            this._authService.checkAuth();
+            this._router.navigate(['/auth']);
+          });
+        }else{
           this._authService.checkAuth();
           this._router.navigate(['/auth']);
-        });
+        }
+
       })
   }
 
