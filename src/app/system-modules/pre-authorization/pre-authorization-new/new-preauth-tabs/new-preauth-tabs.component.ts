@@ -108,7 +108,6 @@ export class NewPreauthTabsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.selectedAuthorization)
     this._initializeFormGroup();
   }
 
@@ -126,7 +125,7 @@ export class NewPreauthTabsComponent implements OnInit {
         day: new Date().getDate()
       }
     }
-    
+
     let symptomObj = this.selectedTransaction.document[0];
     let clinicalNoteObj = this.selectedTransaction.document[1];
     let diagnosisObj = this.selectedTransaction.document[2];
@@ -134,26 +133,20 @@ export class NewPreauthTabsComponent implements OnInit {
     let drugObj = this.selectedTransaction.document[4];
     let procedureObj = this.selectedTransaction.document[5];
     let reasonObj = this.selectedTransaction.document[6];
-    let preAuthObj = this.selectedTransaction.document[7]; 
-    
-    this.preAuthFormGroup = this._fb.group({
+    let preAuthObj = this.selectedTransaction.document[7];
 
-      patientName: [this.selectedCheckIn != null ? this.selectedCheckIn.beneficiaryObject.personId.lastName + ' ' + this.selectedCheckIn.beneficiaryObject.personId.firstName + ' ' + this.selectedCheckIn.beneficiaryObject.personId.otherNames : '', [<any>Validators.required]],
-      gender: [this.selectedCheckIn != null ? this.selectedCheckIn.beneficiaryObject.personId.gender.name : '', [<any>Validators.required]],
-      age: [this.selectedCheckIn != null ? this._getAge() : 0, [<any>Validators.required]],
-      address: [this.selectedCheckIn != null ? this._getAddress() : '', [<any>Validators.required]],
-      healthCareProvider: [this.selectedCheckIn != null ? this.selectedCheckIn.providerFacilityId.name : '', [<any>Validators.required]],
-      hia: [this.selectedPolicy != null ? this.selectedPolicy.hiaId.name : '', [<any>Validators.required]],
-      visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+    this.preAuthFormGroup = this._fb.group({
       clinicalNote: [clinicalNoteObj != null ? clinicalNoteObj.clinicalDocumentation : '', [<any>Validators.required]],
-      emergency: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : false, [<any>Validators.required]],
       requestReason: [reasonObj != null ? reasonObj.clinicalDocumentation : '', [<any>Validators.required]],
-      preAuthorizationNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      docName: [this.selectedAuthorization != null ? this.selectedAuthorization.medicalPersonelName : '', [<any>Validators.required]],
-      docUnit: [this.selectedAuthorization != null ? this.selectedAuthorization.medicalPersonelUnit : '', [<any>Validators.required]],
+      preAuthorizationNote: [preAuthObj != null ? preAuthObj.clinicalDocumentation : '', [<any>Validators.required]],
+      docName: [this.selectedAuthorization != null ? this.selectedAuthorization.medicalPersonelName : '', []],
+      docUnit: [this.selectedAuthorization != null ? this.selectedAuthorization.medicalPersonelUnit : '', []],
     });
+
+    let ctrlDocUnit = this.preAuthFormGroup.get('docUnit');
+    let ctrlDocName = this.preAuthFormGroup.get('docName');
+    ctrlDocUnit.disable();
+    ctrlDocName.disable();
 
     this.symptomFormGroup = this._fb.group({
       presentingComplaints: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -384,8 +377,8 @@ export class NewPreauthTabsComponent implements OnInit {
       if (this.preAuthFormGroup.valid) {
         console.log(this.complaintLists);
         console.log(this.procedureList);
-  
-  
+
+
         let preAuthDoc: PreAuthorizationDocument = <PreAuthorizationDocument>{};
         preAuthDoc.approvedStatus = this.requestStatus[0];
         preAuthDoc.document = [];
@@ -394,113 +387,113 @@ export class NewPreauthTabsComponent implements OnInit {
           <Document>{
             type: "Clinical Findings",
             clinicalDocumentation: this.preAuthFormGroup.controls.clinicalNote.value,
-             approvedStatus:this.requestStatus[0],
-             order:2
+            approvedStatus: this.requestStatus[0],
+            order: 2
           }
         );
         preAuthDoc.document.push(
           <Document>{
             type: "Reason for Request",
             clinicalDocumentation: this.preAuthFormGroup.controls.requestReason.value,
-            approvedStatus:this.requestStatus[0],
-            order:7
+            approvedStatus: this.requestStatus[0],
+            order: 7
           }
         );
-  
+
         preAuthDoc.document.push(
           <Document>{
             type: "Pre Authorization Note",
             clinicalDocumentation: this.preAuthFormGroup.controls.preAuthorizationNote.value,
-            approvedStatus:this.requestStatus[0],
-            order:8
+            approvedStatus: this.requestStatus[0],
+            order: 8
           }
         )
-  
+
         //note ends here
         //others
-  
+
         if (this.complaintLists.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Symptoms",
               clinicalDocumentation: this.complaintLists,
-              approvedStatus:this.requestStatus[0],
-              order:1
+              approvedStatus: this.requestStatus[0],
+              order: 1
             }
           );
         }
-  
+
         if (this.procedureList.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Procedures",
               clinicalDocumentation: this.procedureList,
-              approvedStatus:this.requestStatus[0],
-              order:6
+              approvedStatus: this.requestStatus[0],
+              order: 6
             }
           );
         }
-  
+
         if (this.investigationList.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Investigations",
               clinicalDocumentation: this.investigationList,
-              approvedStatus:this.requestStatus[0],
-              order:4
+              approvedStatus: this.requestStatus[0],
+              order: 4
             }
           );
         }
-  
+
         if (this.diagnosisLists.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Diagnosis",
               clinicalDocumentation: this.diagnosisLists,
-              approvedStatus:this.requestStatus[0],
-              order:3
+              approvedStatus: this.requestStatus[0],
+              order: 3
             }
           );
         }
-  
+
         if (this.drugList.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Drugs",
               clinicalDocumentation: this.drugList,
-              approvedStatus:this.requestStatus[0],
-              order:5
+              approvedStatus: this.requestStatus[0],
+              order: 5
             }
           );
         }
-  
-  
-  
+
+
+
         let authorizationObject = this.selectedAuthorization;
         // authorizationObject.checkedInDetails = this.selectedCheckIn;
         // authorizationObject.dateOfRequest = this.preAuthFormGroup.controls.requestDate.value.jsdate;
         // authorizationObject.documentation = [];
         authorizationObject.documentation.push(preAuthDoc);
         // authorizationObject.policyId = this.selectedPolicy;
-  
-        authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
-        authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;
-        authorizationObject.medicalPersonelUnit = this.preAuthFormGroup.controls.docUnit.value;
-        authorizationObject.providerFacilityId = this.user.facilityId;
-        authorizationObject.visityClassId = this.preAuthFormGroup.controls.visitClass.value;
-        authorizationObject.approvedStatus = this.requestStatus[0];
-  
+
+        // authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
+        // authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;
+        // authorizationObject.medicalPersonelUnit = this.preAuthFormGroup.controls.docUnit.value;
+        // authorizationObject.providerFacilityId = this.user.facilityId;
+        // authorizationObject.visityClassId = this.preAuthFormGroup.controls.visitClass.value;
+        // authorizationObject.approvedStatus = this.requestStatus[0];
+
         console.log(authorizationObject);
-        this._preAuthorizationService.create(authorizationObject).then(payload =>{
+        this._preAuthorizationService.update(authorizationObject).then(payload => {
           console.log(payload);
           this._router.navigate(['/modules/pre-auth/pre-authorizations']);
           this._systemService.off();
-        }).catch(err =>{
+        }).catch(err => {
           this._systemService.off();
           console.log(err);
         })
-  
-  
+
+
       } else {
         console.log(this.preAuthFormGroup.errors)
         this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);

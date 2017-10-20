@@ -63,234 +63,235 @@
 
   </div>
 
-  <div class="right-sect" *ngFor="let transaction of selectedAuthorization.documentation">
-    <div class="request-sect card">
-      <div class="headArea-1">
-        <div class="count">1</div>
-        <div class="letering">
-          <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
-          <div class="letering-2">
-            <span class="letering-name">{{selectedAuthorization.medicalPersonelName}}</span> Requested Pre-Authorization</div>
+  <div class="right-sect" >
+    <div *ngFor="let transaction of selectedAuthorization?.documentation">
+      <div class="request-sect card">
+        <div class="headArea-1">
+          <div class="count">1</div>
+          <div class="letering">
+            <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
+            <div class="letering-2">
+              <span class="letering-name">{{selectedAuthorization.medicalPersonelName}}</span> Requested Pre-Authorization</div>
+          </div>
+        </div>
+        <div class="doc-wrap">
+          <div class="doc-title">Clinical Information</div>
+
+          <ul *ngFor="let doc of orderDocuments(transaction.document)" class="doc-entries">
+            <div *ngIf="doc.order === 1" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Complaints</th>
+                        <th class="th">Duration</th>
+                        <th class="th">Approval Status</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.symptom.name}}</td>
+                        <td class="td">{{cliDoc.duration}} {{cliDoc.unit.name}}</td>
+                        <td>
+                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 2" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                {{doc.clinicalDocumentation}}
+              </li>
+            </div>
+            <div *ngIf="doc.order === 3" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Diagnosis</th>
+                        <th class="th">Diagnosis Type</th>
+                        <th class="th">Approval Status</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.diagnosis.name}}</td>
+                        <td class="td">{{cliDoc.diagnosisType.name}}</td>
+                        <td>
+                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 4" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Investigation</th>
+                        <th class="th">Amount</th>
+                        <th class="th">Approval Status</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.investigation.name}}</td>
+                        <td class="td">{{cliDoc.investigation.Amount}}</td>
+                        <td>
+                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 5" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Drug</th>
+                        <th class="th">Quantity</th>
+                        <th class="th">Approval Status</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.drug.name}}</td>
+                        <td class="td">{{cliDoc.quantity}} {{cliDoc.unit.name}}</td>
+                        <td>
+                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 6" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Procedure</th>
+                        <th class="th">Amount</th>
+                        <th class="th">Approval Status</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.procedure.name}}</td>
+                        <td class="td">{{cliDoc.procedure.Amount}}</td>
+                        <td>
+                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 7" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                {{doc.clinicalDocumentation}}
+              </li>
+            </div>
+            <div *ngIf="doc.order === 8" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                {{doc.clinicalDocumentation}}
+              </li>
+            </div>
+          </ul>
+        </div>
+
+
+        <div class="action-wrap">
+          <div class="btn btn-medium btn-red" (click)="rejectClaim(transaction)">REJECT</div>
+          <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
+          <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
+          <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
         </div>
       </div>
-      <div class="doc-wrap">
-        <div class="doc-title">Clinical Information</div>
 
-        <ul *ngFor="let doc of orderDocuments(transaction.document)" class="doc-entries">
-          <div *ngIf="doc.order === 1" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              <div class="tbl-wrap">
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                  <thead class="thead">
-                    <tr class="tr">
-                      <th class="th">Complaints</th>
-                      <th class="th">Duration</th>
-                      <th class="th">Approval Status</th>
-                    </tr>
-                  </thead>
+      <div *ngIf="transaction.response!== undefined" class="response-sect card">
+        <div class="headArea-2">
+          <div class="count">2</div>
+          <div class="letering">
+            <div class="letering-1">Reaction Sent {{transaction.response.createdAt | date:'short'}}</div>
+            <div class="letering-2">
+              <span class="letering-name">LASHMA</span>
+              <span class="red">{{transaction.approvedStatus.past}}</span> Request</div>
+          </div>
+        </div>
+        <div class="doc-wrap">
+          <ul class="doc-entries">
+            <div class="entry-wrap">
+              <li class="doc-subtitle">Reason for Denial:</li>
+              <li>{{transaction.response.reason}}</li>
+            </div>
 
-                  <tbody class="tbody">
-                    <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
-                      <td class="td">{{cliDoc.symptom.name}}</td>
-                      <td class="td">{{cliDoc.duration}} {{cliDoc.unit.name}}</td>
-                      <td>
-                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
-                          <option value="" disabled selected>Select Encounter Type</option>
-                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </li>
-          </div>
-          <div *ngIf="doc.order === 2" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              {{doc.clinicalDocumentation}}
-            </li>
-          </div>
-          <div *ngIf="doc.order === 3" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              <div class="tbl-wrap">
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                  <thead class="thead">
-                    <tr class="tr">
-                      <th class="th">Diagnosis</th>
-                      <th class="th">Diagnosis Type</th>
-                      <th class="th">Approval Status</th>
-                    </tr>
-                  </thead>
+            <div class="entry-wrap">
+              <li class="doc-subtitle">Name:</li>
+              <li>{{transaction.response.by}}</li>
+              <li>Lashma</li>
+            </div>
+          </ul>
+        </div><hr>
 
-                  <tbody class="tbody">
-                    <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
-                      <td class="td">{{cliDoc.diagnosis.name}}</td>
-                      <td class="td">{{cliDoc.diagnosisType.name}}</td>
-                      <td>
-                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
-                          <option value="" disabled selected>Select Encounter Type</option>
-                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </li>
-          </div>
-          <div *ngIf="doc.order === 4" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              <div class="tbl-wrap">
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                  <thead class="thead">
-                    <tr class="tr">
-                      <th class="th">Investigation</th>
-                      <th class="th">Amount</th>
-                      <th class="th">Approval Status</th>
-                    </tr>
-                  </thead>
+        <div *ngIf="reply && selectedTransaction._id !== undefined">
+            <app-new-preauth-tabs #child  [selectedAuthorization]="selectedAuthorization" [selectedTransaction]="selectedTransaction"></app-new-preauth-tabs>
+        </div>
 
-                  <tbody class="tbody">
-                    <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
-                      <td class="td">{{cliDoc.investigation.name}}</td>
-                      <td class="td">{{cliDoc.investigation.Amount}}</td>
-                      <td>
-                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
-                          <option value="" disabled selected>Select Encounter Type</option>
-                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </li>
+        <div (click)="replyOk(transaction)" class="reply-wrap">
+          <div *ngIf="!reply" class="btn btn-medium btn-grey-outline">
+            <i  class="fa fa-reply"></i> REPLY
           </div>
-          <div *ngIf="doc.order === 5" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              <div class="tbl-wrap">
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                  <thead class="thead">
-                    <tr class="tr">
-                      <th class="th">Drug</th>
-                      <th class="th">Quantity</th>
-                      <th class="th">Approval Status</th>
-                    </tr>
-                  </thead>
-
-                  <tbody class="tbody">
-                    <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
-                      <td class="td">{{cliDoc.drug.name}}</td>
-                      <td class="td">{{cliDoc.quantity}} {{cliDoc.unit.name}}</td>
-                      <td>
-                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
-                          <option value="" disabled selected>Select Encounter Type</option>
-                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </li>
+          <div *ngIf="reply" class="btn btn-medium btn-blue" (click)="sendReply()">
+              <i  class="fa fa-save"></i>  SEND
           </div>
-          <div *ngIf="doc.order === 6" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              <div class="tbl-wrap">
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                  <thead class="thead">
-                    <tr class="tr">
-                      <th class="th">Procedure</th>
-                      <th class="th">Amount</th>
-                      <th class="th">Approval Status</th>
-                    </tr>
-                  </thead>
-
-                  <tbody class="tbody">
-                    <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
-                      <td class="td">{{cliDoc.procedure.name}}</td>
-                      <td class="td">{{cliDoc.procedure.Amount}}</td>
-                      <td>
-                        <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
-                          <option value="" disabled selected>Select Encounter Type</option>
-                          <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
-                        </select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </li>
-          </div>
-          <div *ngIf="doc.order === 7" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              {{doc.clinicalDocumentation}}
-            </li>
-          </div>
-          <div *ngIf="doc.order === 8" class="entry-wrap">
-            <li class="doc-subtitle">{{doc.type}}</li>
-            <li>
-              {{doc.clinicalDocumentation}}
-            </li>
-          </div>
-        </ul>
-      </div>
-
-
-      <div class="action-wrap">
-        <div class="btn btn-medium btn-red" (click)="rejectClaim(transaction)">REJECT</div>
-        <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
-        <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
-        <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
+        </div>
       </div>
     </div>
-
-    <div *ngIf="transaction.response!== undefined" class="response-sect card">
-      <div class="headArea-2">
-        <div class="count">2</div>
-        <div class="letering">
-          <div class="letering-1">Reaction Sent {{transaction.response.createdAt | date:'short'}}</div>
-          <div class="letering-2">
-            <span class="letering-name">LASHMA</span>
-            <span class="red">{{transaction.approvedStatus.past}}</span> Request</div>
-        </div>
-      </div>
-      <div class="doc-wrap">
-        <ul class="doc-entries">
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Reason for Denial:</li>
-            <li>{{transaction.response.reason}}</li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Name:</li>
-            <li>{{transaction.response.by}}</li>
-            <li>Lashma</li>
-          </div>
-        </ul>
-      </div><hr>
-
-      <div *ngIf="reply && selectedTransaction._id !== undefined">
-          <app-new-preauth-tabs [selectedAuthorization]="selectedAuthorization" [selectedTransaction]="selectedTransaction"></app-new-preauth-tabs>
-      </div>
-
-      <div (click)="replyOk(transaction)" class="reply-wrap">
-        <div *ngIf="!reply" class="btn btn-medium btn-grey-outline">
-          <i  class="fa fa-reply"></i> REPLY
-        </div>
-        <div *ngIf="reply" class="btn btn-medium btn-blue" (click)="approveClaim()">
-            <i  class="fa fa-save"></i>  SEND
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -313,7 +314,7 @@
 <div *ngIf="modalQuery" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-query-authorization (closeModal)="modal_close()"></app-modal-query-authorization>
+    <app-modal-query-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-query-authorization>
   </div>
 </div>
 
