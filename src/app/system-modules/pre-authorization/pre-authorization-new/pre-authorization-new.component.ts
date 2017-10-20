@@ -419,6 +419,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       this._systemService.off();
     })
   }
+  
 
   removeComplain(complain, i) {
     this.complaintLists.splice(i);

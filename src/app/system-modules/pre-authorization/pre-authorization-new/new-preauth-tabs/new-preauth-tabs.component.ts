@@ -1,4 +1,4 @@
-import { FORM_VALIDATION_ERROR_MESSAGE, REQUEST_STATUS } from './../../../../services/globals/config';
+import { FORM_VALIDATION_ERROR_MESSAGE, REQUEST_STATUS, DURATIONS } from './../../../../services/globals/config';
 import { Authorization, PreAuthorizationDocument, Document } from './../../../../models/authorization/authorization';
 import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -59,6 +59,7 @@ export class NewPreauthTabsComponent implements OnInit {
   investigationItems: any[] = [];
   drugItems: any[] = [];
   packSizes: any[] = [];
+  diagnosisTypes: any[] = [];
   requestStatus = REQUEST_STATUS;
 
 
@@ -109,6 +110,10 @@ export class NewPreauthTabsComponent implements OnInit {
 
   ngOnInit() {
     this._initializeFormGroup();
+    this.durations = DURATIONS;
+    this._getVisitTypes();
+    this._getDiagnosisTypes();
+    this._getDrugPackSizes();
   }
 
   _initializeFormGroup() {
@@ -245,7 +250,16 @@ export class NewPreauthTabsComponent implements OnInit {
       });
 
   }
-
+  _getDiagnosisTypes() {
+    this._systemService.on();
+    this._diagnosisTypeService.find({}).then((payload: any) => {
+      this.diagnosisTypes = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
+  }
   _getSymptoms(value) {
     if (value && value.length > 1) {
       this._symptomService.find({
@@ -367,6 +381,139 @@ export class NewPreauthTabsComponent implements OnInit {
       return false;
     }
   }
+
+  removeComplain(complain, i) {
+    this.complaintLists.splice(i);
+  }
+
+  removeDiagnosis(diagnosis, i) {
+    this.diagnosisLists.splice(i);
+  }
+  removeProcedure(i) {
+    this.procedureList.splice(i);
+  }
+  removeInvestigation(i) {
+    this.investigationList.splice(i);
+  }
+  removeDrug(i) {
+    this.drugList.splice(i);
+  }
+
+  onSelectComplain(complain) {
+    this.symptomFormGroup.controls.presentingComplaints.setValue(complain.name);
+    this.complaintSearchResult = false;
+    this.selectedComplain = complain;
+  }
+  onSelectDiagnosis(diagnosis) {
+    this.diagnosisFormGroup.controls.diagnosis.setValue(diagnosis.name);
+    this.diagnosisSearchResult = false;
+    this.selectedDiagnosis = diagnosis;
+  }
+  onSelectProcedure(procedure) {
+    this.procedureFormGroup.controls.procedures.setValue(procedure.name);
+    this.procedureSearchResult = false;
+    this.selectedProcedure = procedure;
+  }
+  onSelectInvestigation(investigation) {
+    this.investigationFormGroup.controls.services.setValue(investigation.name);
+    this.investigationSearchResult = false;
+    this.selectedInvestigation = investigation;
+  }
+  onSelectDrug(drug) {
+    this.drugFormGroup.controls.drug.setValue(drug.name);
+    this.drugSearchResult = false;
+    this.selectedDrug = drug;
+  }
+  onAddDrug() {
+    let name = this.drugFormGroup.controls.drug;
+    let unit = this.drugFormGroup.controls.drugUnit;
+    let quantity = this.drugFormGroup.controls.drugQty;
+    if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
+      this.drugList.push({
+        "drug": typeof (this.selectedDrug) === 'object' ? this.selectedDrug : name.value,
+        "unit": unit.value,
+        "quantity": quantity.value,
+        "checked":false,
+        "approvedStatus":this.requestStatus[0]
+      });
+      this.drugFormGroup.controls.drug.reset();
+      unit.reset();
+      quantity.reset(1);
+    } else {
+      name.markAsDirty({ onlySelf: true });
+      unit.markAsDirty({ onlySelf: true });
+      quantity.markAsDirty({ onlySelf: true });
+    }
+  }
+  onAddInvestigation() {
+    let name = this.investigationFormGroup.controls.services;
+
+    if (name.valid) {
+      this.investigationList.push({
+        "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
+        "checked":false,
+        "approvedStatus":this.requestStatus[0]
+      });
+      this.investigationFormGroup.controls.services.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
+  }
+  onAddProcedure() {
+    let name = this.procedureFormGroup.controls.procedures;
+    if (name.valid) {
+      this.procedureList.push({
+        "procedure": typeof (this.selectedProcedure) === 'object' ? this.selectedProcedure : name.value,
+        "checked":false,
+        "approvedStatus":this.requestStatus[0]
+      });
+      this.procedureFormGroup.controls.procedures.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+    }
+
+  }
+  onAddDiagnosis() {
+    let name = this.diagnosisFormGroup.controls.diagnosis;
+    let diagnosisType = this.diagnosisFormGroup.controls.diagnosisType;
+    if (name.valid && diagnosisType.valid) {
+      this.diagnosisLists.push({
+        "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
+        "diagnosisType": diagnosisType.value,
+        "checked":false,
+        "approvedStatus":this.requestStatus[0]
+      });
+      this.diagnosisFormGroup.controls.diagnosis.reset();
+      diagnosisType.reset();
+    } else {
+      name.markAsDirty({ onlySelf: true });
+      diagnosisType.markAsDirty({ onlySelf: true })
+    }
+
+  }
+  onAddComplaint() {
+    let name = this.symptomFormGroup.controls.presentingComplaints;
+    let duration = this.symptomFormGroup.controls.complaintsDuration;
+    let unit = this.symptomFormGroup.controls.complaintsUnit;
+    if (name.valid && duration.valid && unit.valid) {
+      this.complaintLists.push({
+        "symptom": typeof (this.selectedComplain) === 'object' ? this.selectedComplain : name.value,
+        "duration": duration.value,
+        "unit": unit.value,
+        "checked":false,
+        "approvedStatus":this.requestStatus[0]
+      });
+      name.reset();
+      duration.reset(1);
+      unit.reset(this.durations[0]);
+    } else {
+      name.markAsDirty({ onlySelf: true });
+      duration.markAsDirty({ onlySelf: true });
+      unit.markAsDirty({ onlySelf: true });
+    }
+
+  }
+
 
   send() {
     console.log(this.preAuthFormGroup.valid);
