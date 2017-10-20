@@ -222,29 +222,32 @@
       
       <div *ngIf="item.response !=undefined" class="response-sect card">
           <div class="headArea-2">
-            <div class="count">2</div>
+            <div class="count">{{i+2}}</div>
             <div class="letering">
-              <div class="letering-1">Reaction Sent 11-10.2017 11:20am</div>
+              <div class="letering-1">Reaction Sent {{item.response.createdAt|date:'medium'}}</div>
               <div class="letering-2">
                 <span class="letering-name">LASHMA</span>
-                <span class="red">Denied</span> Request</div>
+                <span class="red" *ngIf="item.response.isReject == true">Reject</span>
+                <span class="red" *ngIf="item.response.isQuery == true">Query</span>
+                <span class="red" *ngIf="item.response.isHold == true">Hold</span>
+                <span class="red" *ngIf="item.response.isApprove == true">Approve</span> Request</div>
             </div>
           </div>
           <div class="doc-wrap">
             <ul class="doc-entries">
               <div class="entry-wrap">
                 <li class="doc-subtitle">Reason for Denial:</li>
-                <li>in the name of the king comes the big fat bully of the year o be kidding right</li>
+                <li>{{item.response.reason}}</li>
               </div>
     
               <div class="entry-wrap">
                 <li class="doc-subtitle">Name:</li>
-                <li>Sam Edwin</li>
+                <li>{{item.response.name}}</li>
                 <li>Lashma</li>
               </div>
             </ul>
           </div>
-          <div class="reply-wrap">
+          <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1">
               <div class="btn btn-medium btn-grey-outline">
                   <i class="fa fa-reply"></i> REPLY
               </div>
