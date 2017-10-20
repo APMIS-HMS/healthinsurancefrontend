@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { NewPreauthTabsComponent } from './../../pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
+import { REQUEST_STATUS } from './../../../../services/globals/config';
+import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
 import differenceInYears from 'date-fns/difference_in_years';
 @Component({
   selector: 'app-authorization-details-tab',
@@ -6,19 +8,22 @@ import differenceInYears from 'date-fns/difference_in_years';
   styleUrls: ['./authorization-details-tab.component.scss']
 })
 export class AuthorizationDetailsTabComponent implements OnInit {
-
+  @ViewChild('child')
+  private child: NewPreauthTabsComponent;
   @Input() selectedAuthorization: any;
 
   modalApprove = false;
   modalReject = false;
   modalHold = false;
   modalQuery = false;
+  requestStatus = REQUEST_STATUS;
+
+  selectedTransaction: any;
+  reply = false;
 
   constructor() { }
 
-  ngOnInit() {
-    console.log(this.selectedAuthorization);
-  }
+  ngOnInit() { }
 
   getAge() {
     return differenceInYears(
@@ -26,14 +31,33 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
     )
   }
+  replyOk(selectedTransaction) {
+    this.selectedTransaction = selectedTransaction;
+    this.reply = true;
+  }
+  sendReply(){
+    this.child.send();
+  }
+  compare(l1: any, l2: any) {
+    if (l1 !== null && l2 !== null) {
+      return l1.id === l2.id;
+    }
+    return false;
+  }
+  orderDocuments(documents) {
+    return documents.sort(function (a, b) {
+      return parseFloat(a.order) - parseFloat(b.order);
+    });
+  }
 
-  isObject(doc){
-    return typeof(doc.clinicalDocumentation) === 'object';
+  isObject(doc) {
+    return typeof (doc.clinicalDocumentation) === 'object';
   }
   approveClaim() {
     this.modalApprove = true;
   }
-  rejectClaim() {
+  rejectClaim(transaction) {
+    this.selectedTransaction = transaction;
     this.modalReject = true;
   }
   holdClaim() {
@@ -41,6 +65,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   }
   queryClaim() {
     this.modalQuery = true;
+  }
+  save_authorization() {
+
   }
   modal_close() {
     this.modalApprove = false;

@@ -1,3 +1,4 @@
+import { authModulesRoutes } from './../../../auth/auth.route';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Authorization, PreAuthorizationDocument, Document } from './../../../models/authorization/authorization';
@@ -163,7 +164,8 @@ export class PreAuthorizationNewComponent implements OnInit {
       emergency: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : false, [<any>Validators.required]],
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       preAuthorizationNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      docName: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]]
+      docName: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      docUnit:[this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
     });
 
     this.symptomFormGroup = this._fb.group({
@@ -668,13 +670,15 @@ export class PreAuthorizationNewComponent implements OnInit {
   
         authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
         authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;
+        authorizationObject.medicalPersonelUnit = this.preAuthFormGroup.controls.docUnit.value;
         authorizationObject.providerFacilityId = this.user.facilityId;
         authorizationObject.visityClassId = this.preAuthFormGroup.controls.visitClass.value;
-        authorizationObject.approvedStatus = this.requestStatus[0]
+        authorizationObject.approvedStatus = this.requestStatus[0];
   
         console.log(authorizationObject);
         this._preAuthorizationService.create(authorizationObject).then(payload =>{
           console.log(payload);
+          this._router.navigate(['/modules/pre-auth/pre-authorizations']);
           this._systemService.off();
         }).catch(err =>{
           this._systemService.off();

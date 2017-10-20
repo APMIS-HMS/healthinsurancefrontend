@@ -13,7 +13,6 @@
 <div class="shadow-RB">
     <div class="list-filter-wrap">
         <div class="label-xx">Filters:</div>
-
         <div class="input-wrap">
             <label>Type</label>
             <select [formControl]="filterTypeControl" class="form-control">
@@ -82,14 +81,20 @@
                 <td class="td hover" (click)="navigateToDetails(provider._id);">{{ provider.provider.facilityType.name }}</td>
                 <td class="td hover" (click)="navigateToDetails(provider._id);">{{ provider.businessContact.lastName }} {{ provider.businessContact.firstName }}</td>
                 <td class="td hover" (click)="navigateToDetails(provider._id);">{{ provider.businessContact.phoneNumber }}</td>
-                <td class="td hover" (click)="navigateToDetails(provider._id);">
-                    <input type="checkbox" disabled [attr.checked]="provider.provider.facilityClass.includes('primary') ? true : null">
+                <td class="td hover text-center" (click)="navigateToDetails(provider._id);">
+                    <i *ngIf="provider.provider.facilityClass.includes('primary')" class="fa fa-check green" aria-hidden="true"></i>
+                    <i *ngIf="!provider.provider.facilityClass.includes('primary')" class="fa fa-times red" aria-hidden="true"></i>
+                    <!-- <input type="checkbox" disabled [attr.checked]="provider.provider.facilityClass.includes('primary') ? true : false"> -->
                 </td>
-                <td class="td hover" (click)="navigateToDetails(provider._id);">
-                    <input type="checkbox" disabled [attr.checked]="provider.provider.facilityClass.includes('secondary') ? true : null ">
+                <td class="td hover text-center" (click)="navigateToDetails(provider._id);">
+                    <i *ngIf="provider.provider.facilityClass.includes('secondary')" class="fa fa-check green" aria-hidden="true"></i>
+                    <i *ngIf="!provider.provider.facilityClass.includes('secondary')" class="fa fa-times red" aria-hidden="true"></i>
+                    <!-- <input type="checkbox" disabled [attr.checked]="provider.provider.facilityClass.includes('secondary') ? true : null "> -->
                 </td>
-                <td class="td hover" (click)="navigateToDetails(provider._id);">
-                    <input type="checkbox" disabled [attr.checked]="provider.provider.facilityClass.includes('tertiary') ? true : null ">
+                <td class="td hover text-center" (click)="navigateToDetails(provider._id);">
+                    <i *ngIf="provider.provider.facilityClass.includes('tertiary')" class="fa fa-check green" aria-hidden="true"></i>
+                    <i *ngIf="!provider.provider.facilityClass.includes('tertiary')" class="fa fa-times red" aria-hidden="true"></i>
+                    <!-- <input type="checkbox" disabled [attr.checked]="provider.provider.facilityClass.includes('tertiary') ? true : null "> -->
                 </td>
                 <td (click)="navigateToDetails(provider._id); " class="td hover {{ provider.isConfirmed ? ' tbl-status-active': ' tbl-status-inactive' }} ">
                     {{ provider.isConfirmed ? 'Active': 'Inactive' }}

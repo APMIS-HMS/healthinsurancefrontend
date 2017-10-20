@@ -3,6 +3,7 @@ export interface Authorization {
     documentation: PreAuthorizationDocument[];
     approval?: Date;
     medicalPersonelName: any;
+    medicalPersonelUnit:any;
     authorizationCode?: any;
     approvedDocumentation: any[];
     notificationMessage?: any;
@@ -18,8 +19,9 @@ export interface Authorization {
 
 export interface PreAuthorizationDocument {
     document: Document[];
-    response?: any[];
+    response?: any;
     approvedStatus:any;
+    _id: any;
 }
 
 export interface Document {
@@ -27,4 +29,5 @@ export interface Document {
     clinicalDocumentation: any;
     approvedStatus:any;
     order:number;
+    _id: any;
 }
