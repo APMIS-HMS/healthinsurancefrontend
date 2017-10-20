@@ -20,7 +20,7 @@ export const REQUEST_STATUS = [
     { 'id': 2, 'name': 'Approve', 'past': 'Approved' },
     { 'id': 3, 'name': 'Reject', 'past': 'Rejected' },
     { 'id': 4, 'name': 'Query', 'past': 'Queried' },
-    { 'id': 5, 'name': 'Hold', 'past': 'Hold' }
+    { 'id': 5, 'name': 'Hold', 'past': 'Held' }
 ];
 
 export const CurrentPlaformShortName = 'LASHMA';
