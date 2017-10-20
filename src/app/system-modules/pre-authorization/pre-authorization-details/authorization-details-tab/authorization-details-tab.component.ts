@@ -1,3 +1,4 @@
+import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
 import { NewPreauthTabsComponent } from './../../pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
 import { REQUEST_STATUS } from './../../../../services/globals/config';
 import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
@@ -18,8 +19,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   modalQuery = false;
   requestStatus = REQUEST_STATUS;
 
-  selectedTransaction: any;
+  selectedTransaction: PreAuthorizationDocument;
   reply = false;
+  lastI: number = 0;
 
   constructor() { }
 
@@ -33,10 +35,14 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   }
   replyOk(selectedTransaction) {
     this.selectedTransaction = selectedTransaction;
+    console.log(this.selectedTransaction.document);
     this.reply = true;
   }
-  sendReply(){
+  sendReply() {
     this.child.send();
+  }
+  cancelReply() {
+    this.reply = false;
   }
   compare(l1: any, l2: any) {
     if (l1 !== null && l2 !== null) {
@@ -53,21 +59,41 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   isObject(doc) {
     return typeof (doc.clinicalDocumentation) === 'object';
   }
-  approveClaim() {
+  approveClaim(transaction) {
+    this.selectedTransaction = transaction;
     this.modalApprove = true;
   }
   rejectClaim(transaction) {
     this.selectedTransaction = transaction;
     this.modalReject = true;
   }
-  holdClaim() {
+  holdClaim(transaction) {
+    this.selectedTransaction = transaction;
     this.modalHold = true;
   }
-  queryClaim() {
+  queryClaim(transaction) {
+    this.selectedTransaction = transaction;
     this.modalQuery = true;
   }
   save_authorization() {
 
+  }
+  isOdd(num) {
+    return num % 2;
+  }
+  getCount(i: number) {
+    if (i === 0) {
+      this.lastI = i + 1;
+      return this.lastI;
+    } else if (this.isOdd(i)) {
+
+      this.lastI = i + 2;
+      return this.lastI;
+    } else {
+
+      this.lastI = i + 3;
+      return this.lastI;
+    }
   }
   modal_close() {
     this.modalApprove = false;

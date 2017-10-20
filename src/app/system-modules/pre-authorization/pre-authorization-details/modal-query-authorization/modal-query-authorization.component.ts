@@ -28,7 +28,7 @@ export class ModalQueryAuthorizationComponent implements OnInit {
     this.preAuthQueryFormGroup = this._pa.group({
       name: ['', [<any>Validators.required]],
       reason: ['', [<any>Validators.required]],
-      institution: ['', [<any>Validators.required]]
+      institution: ['', []]
     });
   }
 
@@ -44,13 +44,14 @@ export class ModalQueryAuthorizationComponent implements OnInit {
         reason: this.preAuthQueryFormGroup.controls.reason.value
       }
       this.selectedTransaction.response = response;
-      this.selectedTransaction.approvedStatus = this.approvedStatus[2];
+      this.selectedTransaction.approvedStatus = this.approvedStatus[3];
       const index = this.selectedAuthorization.documentation.findIndex(x => x._id === this.selectedTransaction._id);
       this.selectedAuthorization.documentation[index] = this.selectedTransaction;
 
       this._preAuthorizationService.update(this.selectedAuthorization).then(payload => {
         console.log(payload);
         this._systemService.off();
+        this.modalClose_event();
       }).catch(err => {
         console.log(err)
         this._systemService.off();
@@ -64,7 +65,9 @@ export class ModalQueryAuthorizationComponent implements OnInit {
           control.markAsDirty({ onlySelf: true });
         }
       });
+      this._systemService.off();
     }
   }
+  
 
 }
