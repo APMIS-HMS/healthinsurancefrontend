@@ -10,6 +10,7 @@
         <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
         <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li>
         <li (click)="tabCheckin_click()" [class.tab-active]="tab_checkin">Check In</li>
+        <li (click)="tabCheckinDetail_click()" [class.tab-active]="tab_checkinHistory">Check In History</li>
     </ul>
 
     <div class="tab-content shadow-RB">
@@ -133,6 +134,9 @@
         </div>
         <div *ngIf="tab_checkin" class="tab-pane fade show active">
             <app-checkin-details [beneficiary]="beneficiary"></app-checkin-details>
+        </div>
+        <div *ngIf="tab_checkinHistory" class="tab-pane fade show active">
+            <app-checkin-history></app-checkin-history>
         </div>
         <div *ngIf="tab_claims" class="tab-pane fade show active">
             <app-beneficiary-top-bar></app-beneficiary-top-bar>

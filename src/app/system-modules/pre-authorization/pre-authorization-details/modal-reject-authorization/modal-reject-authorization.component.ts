@@ -2,7 +2,7 @@ import { SystemModuleService } from './../../../../services/common/system-module
 import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
 import { PreAuthorizationDocument, Authorization } from './../../../../models/authorization/authorization';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
+import { FORM_VALIDATION_ERROR_MESSAGE, REQUEST_STATUS } from './../../../../services/globals/config';
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -17,6 +17,7 @@ export class ModalRejectAuthorizationComponent implements OnInit {
   @Input() selectedAuthorization: Authorization;
 
   preAuthRejectFormGroup: FormGroup;
+  approvedStatus = REQUEST_STATUS;
 
   constructor(private _pa: FormBuilder,
     private _toastr: ToastsManager,
@@ -43,9 +44,10 @@ export class ModalRejectAuthorizationComponent implements OnInit {
     if (this.preAuthRejectFormGroup.valid) {
       let response: any = {
         by: this.preAuthRejectFormGroup.controls.name.value,
-        reaons: this.preAuthRejectFormGroup.controls.reason.value
+        reason: this.preAuthRejectFormGroup.controls.reason.value
       }
       this.selectedTransaction.response = response;
+      this.selectedTransaction.approvedStatus = this.approvedStatus[2];
       const index = this.selectedAuthorization.documentation.findIndex(x => x._id === this.selectedTransaction._id);
       this.selectedAuthorization.documentation[index] = this.selectedTransaction;
 
