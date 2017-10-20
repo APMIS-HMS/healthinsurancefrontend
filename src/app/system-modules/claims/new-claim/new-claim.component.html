@@ -260,7 +260,7 @@
                                 <tbody class="tbody">
                                     <tr class="tr" *ngFor="let item of diagnosisLists;let i=index;">
                                         <td class="td">{{item.diagnosis}}</td>
-                                        <td class="td"></td>
+                                        <td class="td">{{item.type}}</td>
                                         <td><i class="fa fa-times" (click)="onRemove(diagnosisLists,item)"></i></td>
                                     </tr>
                                 </tbody>
@@ -505,9 +505,6 @@
                     </div>
                 </div>
             </div>
-
-            <app-new-claim-tabs></app-new-claim-tabs>
-                <!-- <div class="frm-title">Treatment</div> -->
             <button class="btn btn-medium btn-blue cta" [disabled]="isProcessing" (click)="onSendClaim()">
                 <span>
                     <div [hidden] = "isProcessing">

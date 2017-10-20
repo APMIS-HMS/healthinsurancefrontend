@@ -44,8 +44,8 @@ export class ModalQueryClaimComponent implements OnInit {
       "Institution": this.claimsQueryFormGroup.controls.institution.value,
       "isQuery": true
     };
-    if(this.claimDetail.documentations[this.claimDetail.documentations.length].response == undefined){
-      this.claimDetail.documentations[this.claimDetail.documentations.length].response = response;
+    if(this.claimDetail.documentations[this.claimDetail.documentations.length-1].response == undefined){
+      this.claimDetail.documentations[this.claimDetail.documentations.length-1].response = response;
     }else{
       this.claimDetail.documentations.push({"response":response});
     }

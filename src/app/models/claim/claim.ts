@@ -15,4 +15,7 @@ export interface Claim {
     providerFacilityId: any;
     isQueuedForPayment?: Boolean;
     _id: any;
+    visitClass:any;
+    index:any;
+    claimNo:any;
 }
