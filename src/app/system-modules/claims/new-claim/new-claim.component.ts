@@ -51,6 +51,8 @@ export class NewClaimComponent implements OnInit {
   diagnosisSearchResult = false;
   symptomSearchResult = false;
   investigationSearchResult = false;
+
+  checkInDate: any = <any>{};
   currentCheckIn: CheckIn = <CheckIn>{};
   claimItem: Claim = <Claim>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
@@ -198,6 +200,7 @@ export class NewClaimComponent implements OnInit {
         this._systemService.off();
         console.log(error)
       });
+
   }
   
 
@@ -463,6 +466,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.documentations = [{
       "request": request
     }];
+    this.claimItem.claimNo = 1;
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
