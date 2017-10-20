@@ -461,8 +461,7 @@ export class NewClaimComponent implements OnInit {
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
     this.claimItem.documentations = [{
-      "request": request,
-      "isRequest": true
+      "request": request
     }];
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
