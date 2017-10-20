@@ -76,7 +76,7 @@
                                     <my-date-picker name="dischargeDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="dischargeDate"></my-date-picker>
                                 </div>
                             </div>
-                            <div *ngIf="SelectedCheckinItem?.encounterType?.name == Out-Patient">
+                            <div *ngIf="SelectedCheckinItem?.encounterType?.name == 'Out-Patient'">
                                 <div style="width:150px">
                                     <span class="inner-label">Date of Visit:</span>
                                     <my-date-picker name="visitDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="visitDate"></my-date-picker>
@@ -505,6 +505,8 @@
                     </div>
                 </div>
             </div>
+
+            <app-new-claim-tabs></app-new-claim-tabs>
                 <!-- <div class="frm-title">Treatment</div> -->
             <button class="btn btn-medium btn-blue cta" [disabled]="isProcessing" (click)="onSendClaim()">
                 <span>

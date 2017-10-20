@@ -12,84 +12,84 @@
         <form [formGroup]="hiaFormGroup" novalidate>
             <div class="frm-item-wrap">
                 <label class="label">Name of Organization</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="agentName" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.agentName.valid || hiaFormGroup.controls.agentName.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.agentName.valid || hiaFormGroup.controls.agentName.pristine">
-                    This is a required field (minimum 3 and max of 50 characters).
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Call Center Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="phone" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.phone.valid || hiaFormGroup.controls.phone.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.phone.valid || hiaFormGroup.controls.phone.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Email</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="email" formControlName="email" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.email.valid || hiaFormGroup.controls.email.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.email.valid || hiaFormGroup.controls.email.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Address</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="email" formControlName="address" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.address.valid || hiaFormGroup.controls.address.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.address.valid || hiaFormGroup.controls.address.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">State</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="state" class="form-control" [compareWith]='compare'>
-                            <option value="" selected>Select State</option>
-                            <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
-                        </select>
-                </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.state.valid || hiaFormGroup.controls.state.pristine">
+                        <option value="" selected>Select State</option>
+                        <option *ngFor="let state of states" [ngValue]="state">{{ state.name }}</option>
+                    </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.state.valid || hiaFormGroup.controls.state.pristine">
                         Choose state from the dropdown.
                     </small>
+                </div>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">L.G.A</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="lga" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Local Government</option>
                         <option *ngFor="let lg of lgs" [ngValue]="lg">{{ lg.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.lga.valid || hiaFormGroup.controls.lga.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.lga.valid || hiaFormGroup.controls.lga.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">City</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="city" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select City</option>
                         <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.city.valid || hiaFormGroup.controls.city.pristine">
+                        Choose city from the dropdown.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.city.valid || hiaFormGroup.controls.city.pristine">
-                    Choose city from the dropdown.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Neighbourhood</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="neighbourhood" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.neighbourhood.valid || hiaFormGroup.controls.neighbourhood.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.neighbourhood.valid || hiaFormGroup.controls.neighbourhood.pristine">
-                    This is a required field (minimum 3 and max of 50 characters).
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact Photo</label>
@@ -107,51 +107,51 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact First Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="businessContactFirstName" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactFirstName.valid || hiaFormGroup.controls.businessContactFirstName.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactFirstName.valid || hiaFormGroup.controls.businessContactFirstName.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact Last Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="businessContactName" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactName.valid || hiaFormGroup.controls.businessContactName.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactName.valid || hiaFormGroup.controls.businessContactName.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact Phone Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="businessContactNumber" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactNumber.valid || hiaFormGroup.controls.businessContactNumber.pristine">
+                         Enter a valid phone number.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactNumber.valid || hiaFormGroup.controls.businessContactNumber.pristine">
-                     Enter a valid phone number.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact position</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="businessContactPosition" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactPosition.valid || hiaFormGroup.controls.businessContactPosition.pristine">
+                        Choose position from the dropdown.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactPosition.valid || hiaFormGroup.controls.businessContactPosition.pristine">
-                    Choose position from the dropdown.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Business Contact Email</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="email" formControlName="businessContactEmail" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactEmail.valid || hiaFormGroup.controls.businessContactEmail.pristine">
+                        Enter a valid email address.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.businessContactEmail.valid || hiaFormGroup.controls.businessContactEmail.pristine">
-                    Enter a valid email address.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">It Contact Photo</label>
@@ -169,118 +169,118 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact First Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="iTContactFirstName" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactFirstName.valid || hiaFormGroup.controls.iTContactFirstName.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactFirstName.valid || hiaFormGroup.controls.iTContactFirstName.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact Last Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="iTContactName" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactName.valid || hiaFormGroup.controls.iTContactName.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactName.valid || hiaFormGroup.controls.iTContactName.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact Phone Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="iTContactNumber" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactNumber.valid || hiaFormGroup.controls.iTContactNumber.pristine">
+                        This is a required field (minimum 3 and max of 50 characters).
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactNumber.valid || hiaFormGroup.controls.iTContactNumber.pristine">
-                    This is a required field (minimum 3 and max of 50 characters).
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact Position</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="iTContactPosition" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Position</option>
                         <option *ngFor="let position of contactPositions" [ngValue]="position">{{ position.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactPosition.valid || hiaFormGroup.controls.iTContactPosition.pristine">
+                        Choose position from the dropdown.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactPosition.valid || hiaFormGroup.controls.iTContactPosition.pristine">
-                      Choose position from the dropdown.
-                  </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">IT Contact Email</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="email" formControlName="iTContactEmail" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactEmail.valid || hiaFormGroup.controls.iTContactEmail.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.iTContactEmail.valid || hiaFormGroup.controls.iTContactEmail.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Type</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="type" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Type</option>
                         <option *ngFor="let type of hiaTypes" [ngValue]="type">{{ type.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.type.valid || hiaFormGroup.controls.type.pristine">
+                        Choose type from the dropdown.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.type.valid || hiaFormGroup.controls.type.pristine">
-                    Choose type from the dropdown.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Grade</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="grade" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Grade</option>
                         <option *ngFor="let grade of hiaGrades" [ngValue]="grade">{{ grade.name }}</option>
                     </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.grade.valid || hiaFormGroup.controls.grade.pristine">
+                        Choose grade from the dropdown.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.grade.valid || hiaFormGroup.controls.grade.pristine">
-                    Choose grade from the dropdown.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="bank" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select Bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank" selected>{{bank.name}}</option>
                     </select>
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.bank.valid || hiaFormGroup.controls.bank.pristine">
+                        Choose bank from the dropdown.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.bank.valid || hiaFormGroup.controls.bank.pristine">
-                    Choose bank from the dropdown.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank Account Name</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="bankAccName" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.bankAccName.valid || hiaFormGroup.controls.bankAccName.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.bankAccName.valid || hiaFormGroup.controls.bankAccName.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Bank Account Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="bankAccNumber" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.bankAccNumber.valid || hiaFormGroup.controls.bankAccNumber.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.bankAccNumber.valid || hiaFormGroup.controls.bankAccNumber.pristine">
-                    This is a required field.
-                </small>
             </div>
             <div class="frm-item-wrap">
                 <label class="label">NHIS Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="nhisNumber" class="form-control">
+                    <small class="alert-label" [hidden]="hiaFormGroup.controls.nhisNumber.valid || hiaFormGroup.controls.nhisNumber.pristine">
+                        This is a required field.
+                    </small>
                 </div>
-                <small class="alert-label" [hidden]="hiaFormGroup.controls.nhisNumber.valid || hiaFormGroup.controls.nhisNumber.pristine">
-                    This is a required field.
-                </small>
             </div>
             <!-- <div class="frm-item-wrap">
                 <label class="label">CIN Number</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="cinNumber" class="form-control">
                 </div>
                 <small class="alert-label" [hidden]="hiaFormGroup.controls.cinNumber.valid || hiaFormGroup.controls.cinNumber.pristine">
@@ -289,7 +289,7 @@
             </div> -->
             <div class="frm-item-wrap">
                 <label class="label">Registration Date </label>
-                <div style="width:300px;" class="input-wrap">
+                <div style="width:300px;" class="inputWrap">
                     <my-date-picker name="registrationDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="registrationDate"></my-date-picker>
                     <small class="alert-label" [hidden]="hiaFormGroup.controls.registrationDate.valid || hiaFormGroup.controls.registrationDate.pristine">
                         This is a required field.

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { Claim, ClaimDocument } from './../../../models/index';
+import { Claim } from './../../../models/index';
 import { CheckIn } from './../../../models/check-in/check-in';
 import { CheckInService } from './../../../services/common/check-in.service';
 import { ClaimService } from './../../../services/common/claim.service';
@@ -53,7 +53,6 @@ export class NewClaimComponent implements OnInit {
   investigationSearchResult = false;
   currentCheckIn: CheckIn = <CheckIn>{};
   claimItem: Claim = <Claim>{};
-  claimDocItem: ClaimDocument = <ClaimDocument>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
   SelectedCheckinItemPlan: any = <any>{};
   symptomLists: any = <any>[];
@@ -452,17 +451,18 @@ export class NewClaimComponent implements OnInit {
     // if(this.claimItem.documentation == undefined){
     //   this.claimItem.documentation = [];
     // }
-    this.claimItem.documentations = [];
-    this.claimItem.documentations.push({
+    var request = {
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
       "investigations": this.investigationList,
       "procedures": this.procedureList,
       "diagnosis": this.diagnosisLists,
       "symptoms": this.symptomLists,
-      "clinicNote": this.claimsFormGroup.controls.clinicalNote.value,
-      "isRequest":true
-    });
+      "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
+    };
+    this.claimItem.documentations = [{
+      "request": request
+    }];
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;

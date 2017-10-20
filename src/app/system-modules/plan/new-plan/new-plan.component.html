@@ -90,7 +90,7 @@
         <form [formGroup]="planDetailFormGroup" novalidate>
             <div class="frm-item-wrap">
                 <label class="label">Name of Health Plan</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="text" formControlName="planName" class="form-control">
                     <small [hidden]="planDetailFormGroup.controls.planName.valid || planDetailFormGroup.controls.planName.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
@@ -99,7 +99,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Type </label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="planType" class="form-control" [compareWith]="compare">
                         <option value="" disabled selected>Select Plan Type</option>
                         <option [ngValue]="planType" *ngFor="let planType of planTypes;">{{ planType.name }}</option>
@@ -135,7 +135,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Amount</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="number" formControlName="planAmount" class="form-control" placeholder="Amount">
                     <small [hidden]="planPremiumFormGroup.controls.planAmount.valid || planPremiumFormGroup.controls.planAmount.pristine">
                         This is a required field.
@@ -144,7 +144,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Duration Length</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <input type="number" min="1" formControlName="planDuration" class="form-control" placeholder="Duration">
                     <small [hidden]="planPremiumFormGroup.controls.planDuration.valid || planPremiumFormGroup.controls.planDuration.pristine">
                             This is a required field.
@@ -153,7 +153,7 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Duration Interval</label>
-                <div class="input-wrap">
+                <div class="inputWrap">
                     <select formControlName="planUnit" class="form-control" [compareWith]="compareDuration">
                             <option value="" disabled>Select Unit</option>
                             <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
