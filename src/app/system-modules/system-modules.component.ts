@@ -32,31 +32,36 @@ export class SystemModulesComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.user = (<any> this._locker.getObject('auth')).user;
-		this._systemService.announceLoggedInUser(this.user);
+		try {
+			this.user = (<any>this._locker.getObject('auth')).user;
+			this._systemService.announceLoggedInUser(this.user);
 
-		this._systemService.notificationAnnounced$.subscribe((value: any) => {
-			if (value.status === 'On') {
-				this.loadingService.startLoading();
-			} else {
-				this.loadingService.endLoading();
-			}
-		});
-		this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
-			if (value.status === 'On') {
-				this.online = true;
-			} else {
-				this.loadingService.endLoading();
-				this.online = false;
-			}
-		});
-		this._headerEventEmitter.announcedUrl.subscribe(url => {
-			this.pageInView = url;
-		});
-		this._headerEventEmitter.announcedMinorUrl.subscribe(url => {
-			this.minorPageInView = url;
-		});
-		this.online = this._uploadService.checkOnlineStatus();
+			this._systemService.notificationAnnounced$.subscribe((value: any) => {
+				if (value.status === 'On') {
+					this.loadingService.startLoading();
+				} else {
+					this.loadingService.endLoading();
+				}
+			});
+			this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
+				if (value.status === 'On') {
+					this.online = true;
+				} else {
+					this.loadingService.endLoading();
+					this.online = false;
+				}
+			});
+			this._headerEventEmitter.announcedUrl.subscribe(url => {
+				this.pageInView = url;
+			});
+			this._headerEventEmitter.announcedMinorUrl.subscribe(url => {
+				this.minorPageInView = url;
+			});
+			this.online = this._uploadService.checkOnlineStatus();
+		} catch (error) {
+			this._router.navigate(['auth/login']);
+		}
+
 	}
 
 	close_onClick(message: boolean) {
