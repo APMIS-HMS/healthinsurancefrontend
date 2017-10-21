@@ -22,6 +22,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   selectedTransaction: PreAuthorizationDocument;
   reply = false;
   lastI: number = 0;
+  lastJ: number = 0;
 
   constructor() { }
 
@@ -81,19 +82,28 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   isOdd(num) {
     return num % 2;
   }
-  getCount(i: number) {
+  getCount(i: number, isSecond = false) {
+
     if (i === 0) {
-      this.lastI = i + 1;
-      return this.lastI;
-    } else if (this.isOdd(i)) {
+      if (isSecond === false) {
+        this.lastI = i + 1;
+        let k = i + 1;
+        return k;
+      } else {
+        this.lastJ = i + 2;
+        return i + 2;
+      }
 
-      this.lastI = i + 2;
-      return this.lastI;
     } else {
-
-      this.lastI = i + 3;
-      return this.lastI;
+      if (isSecond === false) {
+        this.lastI = i + 1;
+        return this.lastI + i;
+      } else {
+        this.lastJ = this.lastJ + 2;
+        return this.lastJ;
+      }
     }
+
   }
   modal_close() {
     this.modalApprove = false;

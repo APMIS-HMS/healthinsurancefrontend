@@ -255,7 +255,7 @@
 
       <div *ngIf="transaction.response!== undefined" class="response-sect card">
         <div class="headArea-2">
-          <div class="count">{{getCount(i)+1}}</div>
+          <div class="count">{{getCount(i,true)}}</div>
           <div class="letering">
             <div class="letering-1">Reaction Sent {{transaction.response.createdAt | date:'short'}}</div>
             <div class="letering-2">
@@ -303,7 +303,7 @@
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-approve-authorization (closeModal)="modal_close()"></app-modal-approve-authorization>
+    <app-modal-approve-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-approve-authorization>
   </div>
 </div>
 

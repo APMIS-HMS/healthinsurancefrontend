@@ -25,9 +25,9 @@
                 <div class="frm-subsect">
                     <div class="frm-item-wrap">
                         <label class="label">Complaint</label>
-                        <div class="inputWrap">
+                        <div class="input-wrap">
                             <div>
-                                <div class="inputWrap-x2">
+                                <div class="input-wrap-x2">
                                     <div class="searchable-input">
                                         <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
                                         <small class="alert-label" [hidden]="symptomFormGroup.controls.presentingComplaints.valid || symptomFormGroup.controls.presentingComplaints.pristine">
@@ -37,7 +37,7 @@
                                             <li (click)="onSelectComplain(result)" *ngFor="let result of symptomItems">{{result.name}}</li>
                                         </ul>
                                     </div>
-                                    <div class="inputWrap-x2">
+                                    <div class="input-wrap-x2">
                                         <div>
                                             <small class="alert-label" [hidden]="symptomFormGroup.controls.complaintsDuration.valid || symptomFormGroup.controls.complaintsDuration.pristine">
                                                 Complaint duration value is required.
@@ -341,9 +341,9 @@
                 <div class="frm-subsect">
                     <div class="frm-item-wrap">
                         <label class="label">Drug</label>
-                        <div class="inputWrap">
+                        <div class="input-wrap">
                             <div>
-                                <div class="inputWrap-x2">
+                                <div class="input-wrap-x2">
                                     <div class="searchable-input">
                                         <input style="width:155px;" type="text" formControlName="drug" class="form-control">
                                         <small class="alert-label" [hidden]="drugFormGroup.controls.drug.valid || drugFormGroup.controls.drug.pristine">
@@ -353,7 +353,7 @@
                                             <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
                                         </ul>
                                     </div>
-                                    <div class="inputWrap-x2">
+                                    <div class="input-wrap-x2">
                                         <input style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
                                         <small class="alert-label" [hidden]="drugFormGroup.controls.drugQty.valid || drugFormGroup.controls.drugQty.pristine">
                                             Drug Quantity value is required.

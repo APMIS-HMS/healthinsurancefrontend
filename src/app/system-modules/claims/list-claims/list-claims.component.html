@@ -55,8 +55,8 @@
 
       <tbody class="tbody">
           <tr class="tr" *ngFor="let item of listOfClaims">
-              <td class="td">{{item.checkedinDetail.beneficiaryObject.platformOwnerNumber}}</td>
-              <td class="td">{{item.personObject.firstName}} {{item.personObject.lastName}}</td>
+              <td class="td">{{item.checkedinDetail?.beneficiaryObject?.platformOwnerNumber}}</td>
+              <td class="td">{{item.checkedinDetail?.beneficiaryObject?.personId?.firstName}} {{item.checkedinDetail?.beneficiaryObject?.personId?.lastName}}</td>
               <td class="td">{{item.dateClaimCreated|date}}</td>
               <td class="td">{{item?.checkedinDetail?.policyObject?.hiaId?.name}}</td>
               <td class="td">{{item?.checkedinDetail?.policyObject?.planId?.name}}</td>

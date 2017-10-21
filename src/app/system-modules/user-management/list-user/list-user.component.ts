@@ -1,3 +1,4 @@
+import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Router } from '@angular/router';
@@ -29,6 +30,7 @@ export class ListUserComponent implements OnInit {
   closeResult: String;
   selectedUser: any = <any>{};
   auth: any = <any>{};
+  currentPlatform:any;
 
   constructor(
     private _fb: FormBuilder,
@@ -38,6 +40,7 @@ export class ListUserComponent implements OnInit {
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
     private loadingService: LoadingBarService,
+    private _facilityService:FacilityService,
     private _locker: CoolLocalStorage
   ) { }
 
@@ -45,9 +48,16 @@ export class ListUserComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('User List');
     this._headerEventEmitter.setMinorRouteUrl('List all all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
-    this._getUsers();
+    this._getCurrentPlatform();
   }
-
+	private _getCurrentPlatform() {
+		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+			if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._getUsers();
+			}
+		}).catch(err => console.log(err));
+	}
   _getUsers() {
     this._systemService.on();
     if (this.auth.userType === undefined) {
@@ -60,8 +70,8 @@ export class ListUserComponent implements OnInit {
         this._systemService.off();
       });
     } else if (this.auth.userType.name === 'Platform Owner') {
-      console.log(this.auth)
-      this._userService.find({ query: { 'platformOwnerId._id': this.auth.platformOwnerId._id } }).then((payload: any) => {
+      console.log(this.auth.userType)
+      this._userService.find({ query: { 'platformOwnerId._id': this.currentPlatform._id } }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
         this.users = payload.data;

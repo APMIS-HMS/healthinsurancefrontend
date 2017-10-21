@@ -51,6 +51,8 @@ export class NewClaimComponent implements OnInit {
   diagnosisSearchResult = false;
   symptomSearchResult = false;
   investigationSearchResult = false;
+
+  checkInDate: any = <any>{};
   currentCheckIn: CheckIn = <CheckIn>{};
   claimItem: Claim = <Claim>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
@@ -198,6 +200,7 @@ export class NewClaimComponent implements OnInit {
         this._systemService.off();
         console.log(error)
       });
+
   }
   
 
@@ -463,6 +466,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.documentations = [{
       "request": request
     }];
+    this.claimItem.claimNo = 1;
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
@@ -495,5 +499,78 @@ export class NewClaimComponent implements OnInit {
       this._systemService.off();
     });
   }
+
+   
+  tabDiagnosis_click() {
+    console.log(this.claimItem);
+    this.tab_symptoms = false;
+    this.tab_diagnosis = true;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+  
+  tabDrug_click() {
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = true;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+  
+  tabUpload_click() {
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = true;
+    this.tab_notes = false;
+  }
+  
+  tabSymptoms_click(){
+    this.tab_symptoms = true;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+  
+  tabInvestigation_click(){
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = true;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+  
+  tabProcedure_click(){
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = true;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+  
+  tabNotes_click(){
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = true;
+  }
+
 
 }

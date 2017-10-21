@@ -57,14 +57,20 @@ export class MainMenuComponent implements OnInit {
     this._authService.find({ query: { email: email } })
       .then(payload => {
         let currentUser = payload.data[0];
-        currentUser.loggedInUserStatus = {
-          "isLoggedIn": loggInState
-        };
-
-        this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
+        if(currentUser !== undefined){
+          currentUser.loggedInUserStatus = {
+            "isLoggedIn": loggInState
+          };
+  
+          this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
+            this._authService.checkAuth();
+            this._router.navigate(['/auth']);
+          });
+        }else{
           this._authService.checkAuth();
           this._router.navigate(['/auth']);
-        });
+        }
+
       })
   }
 
@@ -75,65 +81,68 @@ export class MainMenuComponent implements OnInit {
         const accessibilities = roleItem.accessibilities;
         accessibilities.forEach(access => {
           if (!!access.module) {
-            switch (access.module.name.toLowerCase()) {
-              case 'beneficiary':
-                this.hasBeneficiary = true;
-                break;
-              case 'care provider':
-                this.hasProvider = true;
-                break;
-              case 'employer':
-                this.hasOrganisation = true;
-                break;
-              case 'platform':
-                this.hasPlatform = true;
-                break;
-              case 'health insurance agent':
-                this.hasHIA = true;
-                break;
-              case 'premium payment':
-                this.hasPremiumPayment = true;
-                break;
-              case 'claims':
-                this.hasClaim = true;
-                break;
-              case 'claims (and capitation) payment':
-                this.hasClaimPayment = true;
-                break;
-              case 'check-in':
-                this.hasCheckIn = true;
-                break;
-              case 'user management':
-                this.hasUserManagement = true;
-                break;
-              case 'health plan management':
-                this.hasPlan = true;
-                break;
-              case 'pre-authorization':
-                this.hasAuthorization = true;
-                break;
-              case 'analytics':
-                this.hasAnalytics = true;
-                break;
-              case 'funds management':
-                this.hasFundManagement = true;
-                break;
-              case 'complaints':
-                this.hasComplaint = true;
-                break;
-              case 'referral':
-                this.hasReferral = true;
-                break;
-              case 'roles':
-                this.hasRoleManagement = true;
-                break;
-              case 'platform':
-                this.hasPlatform = true;
-                break;
-              case 'access':
-                this.hasAccessManagement = true;
-                break;
-            }
+            // switch (access.module.name.toLowerCase()) {
+            //   case 'beneficiary':
+            //     this.hasBeneficiary = true;
+            //     break;
+            //   case 'care provider':
+            //     this.hasProvider = true;
+            //     break;
+            //   case 'employer':
+            //     this.hasOrganisation = true;
+            //     break;
+            //   case 'platform':
+            //     this.hasPlatform = true;
+            //     break;
+            //   case 'health insurance agent':
+            //     this.hasHIA = true;
+            //     break;
+            //   case 'premium payment':
+            //     this.hasPremiumPayment = true;
+            //     break;
+            //   case 'claims':
+            //     this.hasClaim = true;
+            //     break;
+            //   case 'claims (and capitation) payment':
+            //     this.hasClaimPayment = true;
+            //     break;
+            //   case 'check-in':
+            //     this.hasCheckIn = true;
+            //     break;
+            //   case 'user management':
+            //     this.hasUserManagement = true;
+            //     break;
+            //   case 'health plan management':
+            //     this.hasPlan = true;
+            //     break;
+            //   case 'pre-authorization':
+            //     this.hasAuthorization = true;
+            //     break;
+            //   case 'analytics':
+            //     this.hasAnalytics = true;
+            //     break;
+            //   case 'funds management':
+            //     this.hasFundManagement = true;
+            //     break;
+            //   case 'complaints':
+            //     this.hasComplaint = true;
+            //     break;
+            //   case 'referral':
+            //     this.hasReferral = true;
+            //     break;
+            //   case 'roles':
+            //     this.hasRoleManagement = true;
+            //     break;
+            //   case 'platform':
+            //     this.hasPlatform = true;
+            //     break;
+            //   case 'access':
+            //     this.hasAccessManagement = true;
+            //     break;
+            // }
+
+            this.hasBeneficiary = true;this.hasProvider = true;this.hasOrganisation = true;this.hasPlatform = true;this.hasHIA = true;this.hasPremiumPayment = true;this.hasClaim = true;this.hasClaimPayment = true;this.hasCheckIn = true;this.hasUserManagement = true;this.hasPlan = true;this.hasAuthorization = true;this.hasAnalytics = true;this.hasFundManagement = true;this.hasComplaint = true;this.hasReferral = true;this.hasRoleManagement = true;this.hasPlatform = true;
+            this.hasAccessManagement = true;
           }
         });
       }
