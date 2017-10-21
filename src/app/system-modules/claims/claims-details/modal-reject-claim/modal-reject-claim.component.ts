@@ -50,6 +50,7 @@ export class ModalRejectClaimComponent implements OnInit {
     console.log(this.claimDetail);
     this._claimService.update(this.claimDetail).then((payload: any) => {
       console.log(payload);
+      this.closeModal.emit(true);
     });
   }
 

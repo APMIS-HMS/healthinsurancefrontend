@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 
@@ -24,9 +24,9 @@ import { SystemModuleService } from './../../../../services/index';
   styleUrls: ['./new-claim-tabs.component.scss']
 })
 export class NewClaimTabsComponent implements OnInit {
+  @Output() closeDialog: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() claimItem: Claim = <Claim>{};
   claimsFormGroup: FormGroup;
-
   tab_symptoms = true;
   tab_diagnosis = false;
   tab_investigation = false;
@@ -61,6 +61,7 @@ export class NewClaimTabsComponent implements OnInit {
   procedureList: any = <any>[];
 
   clinicNote: any = <any>{};
+  claimNote: any = <any>{};
   claimTypesItems: any = <any>[];
   visitTypesItems: any = <any>[];
   symptomItems: any = <any>[];
@@ -73,7 +74,7 @@ export class NewClaimTabsComponent implements OnInit {
   isOutpatient: boolean = false;
   isInpatient: boolean = false;
 
-  
+
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -101,6 +102,7 @@ export class NewClaimTabsComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.claimItem);
     this.claimsFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
       lashmaid: ['', [<any>Validators.required]],
@@ -129,13 +131,20 @@ export class NewClaimTabsComponent implements OnInit {
       investigations: [''],
       procedure: ['']
     });
+
     if (this.claimItem.documentations != undefined) {
-      this.diagnosisLists = this.claimItem.documentations[this.claimItem.index].diagnosis;
-      this.drugList = this.claimItem.documentations[this.claimItem.index].drugs;
-      this.investigationList = this.claimItem.documentations[this.claimItem.index].investigations;
-      this.procedureList = this.claimItem.documentations[this.claimItem.index].procedures;
-      this.symptomLists = this.claimItem.documentations[this.claimItem.index].symptoms;
-      this.clinicNote = this.claimItem.documentations[this.claimItem.index].clinicNote;
+      console.log(this.claimItem.documentations);
+      this.diagnosisLists = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.diagnosis;
+      this.drugList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.drugs;
+      this.investigationList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.investigations;
+      this.procedureList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.procedures;
+      this.symptomLists = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.symptoms;
+      this.clinicNote = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.clinicNote;
+      this.claimNote = this.claimItem.claimNote;
+      this.claimsFormGroup.controls.clinicalNote.setValue(this.clinicNote);
+      this.claimsFormGroup.controls.claimsNote.setValue(this.claimNote);
+      let fullName = this.user.firstName + " " + this.user.lastName;
+      this.claimsFormGroup.controls.medicalPersonelName.setValue(fullName);
     }
     // "visitType": this.claimsFormGroup.controls.visitClass.value,
     // "drugs": this.drugList,
@@ -419,7 +428,7 @@ export class NewClaimTabsComponent implements OnInit {
 
 
   onSendClaim() {
-console.log("test");
+    console.log("test");
     var request = {
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
@@ -429,55 +438,29 @@ console.log("test");
       "symptoms": this.symptomLists,
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
-    this.claimItem.claimNo = 1;
-    this.claimItem.providerFacilityId = this.user.facilityId._id;
-    this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
-    this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
-    this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
-    this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
     this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
-    //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
-    this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
-    this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
-    console.log(this.claimItem);
     this.isProcessing = true;
-    if (this.claimItem.documentations == undefined) {
-      this.claimItem.documentations = [{
-        "request": request
-      }];
 
-      this._claimService.create(this.claimItem).then((payload: any) => {
-        console.log(payload);
-        this.claimsFormGroup.reset();
-        this.isProcessing = false;
-        this.navigateListClaim();
-      }, error => {
-        console.log(error);
-        this.isProcessing = false;
-      })
+    if (this.claimItem.documentations[this.claimItem.documentations.length - 1].request == undefined) {
+      this.claimItem.documentations[this.claimItem.documentations.length - 1].request = request;
     } else {
-      if (this.claimItem.documentations[this.claimItem.documentations.length - 1].request == undefined) {
-        this.claimItem.documentations[this.claimItem.documentations.length - 1].request = request;
-      } else {
-        this.claimItem.documentations.push({ "request": request });
-      }
-      this._claimService.update(this.claimItem).then((payload: any) => {
-        console.log(payload);
-        this.claimsFormGroup.reset();
-        this.isProcessing = false;
-        this.navigateListClaim();
-      }, error => {
-        console.log(error);
-        this.isProcessing = false;
-      })
+      this.claimItem.documentations.push({ "request": request });
     }
-
+    this._claimService.update(this.claimItem).then((payload: any) => {
+      console.log(payload);
+      this.claimsFormGroup.reset();
+      this.isProcessing = false;
+      this.onCloseDialog();
+    }, error => {
+      console.log(error);
+      this.isProcessing = false;
+    })
   }
 
   navigateListClaim() {
     this._systemService.on();
-    this._router.navigate(['/modules/claim']).then(res => {
+    this._router.navigate(['/modules/claim/claims', this.claimItem._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
       console.log(err)
@@ -486,132 +469,78 @@ console.log("test");
   }
 
 
-  // tabSymptoms_click() {
-  //   this.tab_symptoms = true;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabDiagnosis_click() {
-  //   console.log(this.claimItem);
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = true;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabInvestigation_click() {
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = true;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabDrug_click() {
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = true;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabProcedure_click() {
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = true;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabUpload_click() {
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = true;
-  //   this.tab_notes = false;
-  // }
-  // tabNotes_click() {
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = true;
-  // }
-  // tabSymptoms_click(){
-  //   this.tab_symptoms = true;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabDiagnosis_click(){
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = true;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabInvestigation_click(){
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = true;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabDrug_click(){
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = true;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabProcedure_click(){
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = true;
-  //   this.tab_upload = false;
-  //   this.tab_notes = false;
-  // }
-  // tabUpload_click(){
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = true;
-  //   this.tab_notes = false;
-  // }
-  // tabNotes_click(){
-  //   this.tab_symptoms = false;
-  //   this.tab_diagnosis = false;
-  //   this.tab_investigation = false;
-  //   this.tab_drug = false;
-  //   this.tab_procedure = false;
-  //   this.tab_upload = false;
-  //   this.tab_notes = true;
-  // }
+  tabDiagnosis_click() {
+    console.log(this.claimItem);
+    this.tab_symptoms = false;
+    this.tab_diagnosis = true;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+
+  tabUpload_click() {
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = true;
+    this.tab_notes = false;
+  }
+
+  tabSymptoms_click() {
+    this.tab_symptoms = true;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+
+
+  tabInvestigation_click() {
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = true;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+  tabDrug_click() {
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = true;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+  tabProcedure_click() {
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = true;
+    this.tab_upload = false;
+    this.tab_notes = false;
+  }
+
+  tabNotes_click() {
+    this.tab_symptoms = false;
+    this.tab_diagnosis = false;
+    this.tab_investigation = false;
+    this.tab_drug = false;
+    this.tab_procedure = false;
+    this.tab_upload = false;
+    this.tab_notes = true;
+  }
+
+  onCloseDialog(){
+    this.closeDialog.emit(true);
+  }
 
 }
