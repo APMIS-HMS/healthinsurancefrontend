@@ -28,16 +28,6 @@ export class ListDetailsClaimsComponent implements OnInit {
   selectedClaims: any = [];
   loading: boolean = true;
 
-  claims:any = [
-    {
-      date: '11th Oct 2017',
-      amount: '1400 NGN',
-      isQueuedForPayment: false,
-      claimNo: '324234 - AC',
-      
-    }
-  ]
-
   constructor(
     private _router: Router,
     private _toastr: ToastsManager,
@@ -67,7 +57,7 @@ export class ListDetailsClaimsComponent implements OnInit {
         'facilityType._id': this.user.facilityId._id, $limit: 200
     }}).then((payload: any) => {
       this.loading = false;
-      // this.claims = payload.data;
+      this.claims = payload.data;
       console.log(this.claims);
       this._systemService.off();
     }).catch(error => {
