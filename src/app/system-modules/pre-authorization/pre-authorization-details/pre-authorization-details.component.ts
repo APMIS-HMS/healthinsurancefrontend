@@ -10,7 +10,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 })
 export class PreAuthorizationDetailsComponent implements OnInit {
 
-  tab_details = false;
+  tab_details = true;
   tab_other = false;
   tab_complaints = false;
   tab_referals = false;

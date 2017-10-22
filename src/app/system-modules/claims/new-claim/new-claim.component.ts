@@ -27,6 +27,9 @@ import { Observable, Subscription } from 'rxjs/Rx';
 })
 export class NewClaimComponent implements OnInit {
 
+  newClaim = true;
+  newClaimConfirm = false;
+
   claimsFormGroup: FormGroup;
   searchResults = false;
   selectedDiagnosis:any;
@@ -466,7 +469,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.documentations = [{
       "request": request
     }];
-    this.claimItem.claimNo = 1;
+    this.claimItem.claimNo = 1; 
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
@@ -572,5 +575,13 @@ export class NewClaimComponent implements OnInit {
     this.tab_notes = true;
   }
 
+  newClaim_click(){
+    this.newClaim = true;
+    this.newClaimConfirm = false;
+  }
+  newClaimConfirm_click(){
+    this.newClaim = false;
+    this.newClaimConfirm = true;
+  }
 
 }
