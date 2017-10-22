@@ -20,13 +20,14 @@ export class ListDetailsClaimsComponent implements OnInit {
   filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
-  ffsTabActive: boolean = true;
-  cTabActive: boolean = false;
   user: any;
   currentPlatform: any;
   claims: any = [];
   selectedClaims: any = [];
   loading: boolean = true;
+  payClaimBtnText: boolean = true;
+  payClaimBtnProcessing: boolean = false;
+  disablePayBtn: boolean = false;
 
   constructor(
     private _router: Router,
@@ -101,15 +102,15 @@ export class ListDetailsClaimsComponent implements OnInit {
     }
   }
 
-  onClickTab(tabName: string) {
-    if (tabName === 'feeForService') {
-      this.ffsTabActive = true;
-      this.cTabActive = false;
-    } else {
-      this.ffsTabActive = false;
-      this.cTabActive = true;
-    }
-  }
+  // onClickTab(tabName: string) {
+  //   if (tabName === 'feeForService') {
+  //     this.ffsTabActive = true;
+  //     this.cTabActive = false;
+  //   } else {
+  //     this.ffsTabActive = false;
+  //     this.cTabActive = true;
+  //   }
+  // }
 
   navigate(url: string, id: string) {
     if (!!id) {

@@ -98,25 +98,22 @@ export class ListClaimsPaymentComponent implements OnInit {
     });
   }
 
-  onCheckFFSQueue(index, event, claim: Claim) {
-    console.log(claim);
-    // event.srcElement.checked
+  onCheckFFSQueue(index, claim: Claim) {
     if (!claim.isChecked) {
       claim.isChecked = true;
       claim.isQueuedForPayment = true;
       this.selectedFFSClaims.push(claim);
-      console.log(this.selectedFFSClaims);
     } else {
       // Remove from the selected Claim
+      console.log(index);
       claim.isChecked = false;
       claim.isQueuedForPayment = false;
-      // if (this.selectedFFSClaims.length > 0) {
+      if (this.selectedFFSClaims.length > 0) {
         this.selectedFFSClaims.splice(index, 1);
-        console.log(this.selectedFFSClaims);
-      //}
+      }
     }
   }
-  
+
   onCheckCQueue(index, event, claim: Claim) {
     console.log(claim);
     if (event.srcElement.checked) {
@@ -127,19 +124,7 @@ export class ListClaimsPaymentComponent implements OnInit {
         this.selectedCClaims.splice(index, 1);
       }
     }
-    console.log(this.selectedCClaims);
   }
-
-  // onClickQueueForService() {
-  //   if (this.selectedCClaims.length > 0) {
-  //     // Save into the Claims Queued Service
-  //     this._claimsPaymentService.create(this.selectedCClaims).then(res => {
-  //       console.log(res);
-  //     }).catch(err => console.log(err));
-  //   } else {
-  //     this._toastr.error('Please check items on the list', 'Checkbox Validation!');
-  //   }
-  // }
 
   onClickFFSQueueItemsSelected() {
     console.log(this.selectedFFSClaims);
@@ -148,7 +133,7 @@ export class ListClaimsPaymentComponent implements OnInit {
     this.qFFSDisableBtn = true;
     const body = {
       claims: this.selectedFFSClaims
-    }
+    };
     this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
       console.log(res);
       this.qFFSBtnText = true;
@@ -168,14 +153,14 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   onCheckAllFFSToQueue(event) {
-    this.claims.forEach((claim, i) => {
-      console.log(claim);
+    this.claims.forEach( (claim, i) => {
       if (event.srcElement.checked) {
-        claim.isChecked = false;
-      } else {
         claim.isChecked = true;
+        this.selectedFFSClaims.push(claim);
+      } else {
+        claim.isChecked = false;
+        this.selectedFFSClaims = [];
       }
-      this.onCheckFFSQueue(i, {}, claim);
     });
   }
 

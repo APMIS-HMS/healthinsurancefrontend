@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DummyClaimService {
     data: any = [{
+        _id: 1,
         claimNo: 'sdpa3-4-3423',
         providerFacilityId: 'iasda0342k3n2on3',
         platformOwnerId: { id: '302309230923fusd8230'},
@@ -25,6 +26,7 @@ export class DummyClaimService {
         totalAmount: 55500
     },
         {
+            _id: 2,
             claimNo: 'sdpa3-4-3423',
             providerFacilityId: 'iasda0342k3n2on3',
             platformOwnerId: { id: '302309230923fusd8230' },
