@@ -255,7 +255,7 @@
                                         <input [checked]="needAuthorization(procedure)" type="checkbox" disabled="disabled">
                                     </td>
                                     <td>
-                                        <i (click)="removeProcedure(i)" class="fa fa-times"></i>
+                                        <i *ngIf="investigation.approvedStatus.id !== 2" (click)="removeProcedure(i)" class="fa fa-times"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -316,7 +316,7 @@
                                         <input type="checkbox" disabled="disabled">
                                     </td>
                                     <td>
-                                        <i (click)="removeInvestigation(i)" class="fa fa-times"></i>
+                                        <i *ngIf="investigation.approvedStatus.id !== 2" (click)="removeInvestigation(i)" class="fa fa-times"></i>
                                     </td>
                                 </tr>
                             </tbody>
@@ -393,7 +393,7 @@
                                     <th class="td">{{item.drug.name}}</th>
                                     <th class="td">{{item.quantity}} {{item.unit.name}}</th>
                                     <td>
-                                        <i class="fa fa-times" (click)="removeDrug(i)"></i>
+                                        <i *ngIf="investigation.approvedStatus.id !== 2" class="fa fa-times" (click)="removeDrug(i)"></i>
                                     </td>
                                 </tr>
 
