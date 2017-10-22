@@ -8,8 +8,8 @@
     <div class="btn btn-medium btn-blue" routerLink="/modules/claim/new">
         <i class="fa fa-plus-circle" aria-hidden="true"></i> QUEUE CLAIM FOR PAYMENT
     </div> -->
-    <div (click)="navigate('/modules/claims/claims-payment');" class="back-btn">
-        <i class="fa fa-chevron-left"></i> BACK TO UNPAID CLAIMS PAYMENT
+    <div (click)="navigate('/modules/claims/queued-claims');" class="back-btn">
+        <i class="fa fa-chevron-left"></i> BACK TO QUEUED CLAIMS
     </div>
 </div>
 
@@ -42,7 +42,14 @@
             <div class="btn btn-medium btn-blue-outline">RESET</div>
         </div>
         <div class="payment-box">
-            <button class="btn btn-medium btn-yellow" (click)="onClickPayClaim();">PAY CLAIM</button>
+            <div class="tab">
+            </div>
+            <div class="queue-btn-box">
+                <button *ngIf="selectedClaims.length > 0" [disabled]="disablePayBtn" (click)="onClickPayClaim();" class="btn btn-medium btn-yellow">
+                    <span *ngIf="payClaimBtnText">Pay Claim</span>
+                    <span *ngIf="payClaimBtnProcessing">Paying Claim...&nbsp; <i class="fa fa-spinner fa-spin"></i></span>
+                </button>
+            </div>
         </div>
     </div>
 

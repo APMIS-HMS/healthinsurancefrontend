@@ -26,6 +26,9 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   claims: any = [];
   selectedClaims: any = [];
   loading: boolean = true;
+  payClaimBtnText: boolean = true;
+  payClaimBtnProcessing: boolean = false;
+  disablePayBtn: boolean = false;
 
   constructor(
     private _router: Router,
@@ -47,9 +50,9 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     this._getClaimsPayments();
   }
 
-  onCheckQueue(index, event, claim: Claim) {
+  onCheckSelectedItem(index, claim: Claim) {
     console.log(claim);
-    if (event.srcElement.checked) {
+    if (!claim.isChecked) {
       this.selectedClaims.push(claim);
     } else {
       // Remove from the selected Claim
@@ -58,17 +61,6 @@ export class QueuedClaimsPaymentComponent implements OnInit {
       }
     }
     console.log(this.selectedClaims);
-  }
-
-  onClickQueueForService() {
-    if (this.selectedClaims.length > 0) {
-      // Save into the Claims Queued Service
-      // this._claimsPaymentService.create(this.selectedClaims).then(res => {
-      //   console.log(res);
-      // }).catch(err => console.log(err));
-    } else {
-      this._toastr.error('Please check items on the list', 'Checkbox Validation!');
-    }
   }
 
   private _getClaimsPayments() {
@@ -95,6 +87,18 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   //     this._systemService.off();
   //   });
   // }
+
+  onCheckAllSelectedItemsToPay(event) {
+    this.claims.forEach( (claim, i) => {
+      if (event.srcElement.checked) {
+        claim.isChecked = true;
+        this.selectedClaims.push(claim);
+      } else {
+        claim.isChecked = false;
+        this.selectedClaims = [];
+      }
+    });
+  }
 
   onClickPayClaim() {
     if (this.selectedClaims.length > 0) {

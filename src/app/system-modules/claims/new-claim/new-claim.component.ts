@@ -441,22 +441,7 @@ export class NewClaimComponent implements OnInit {
 
 
   onSendClaim() {
-    // this.claimDocItem.clinicalDocument = {};
-    // this.claimDocItem.clinicalDocument = {
-    //   "visitType": this.claimsFormGroup.controls.visitClass.value,
-    //   "drugs": this.drugList,
-    //   "investigations": this.investigationList,
-    //   "procedures": this.procedureList,
-    //   "diagnosis": this.diagnosisLists,
-    //   "symptoms": this.symptomLists,
-    //   "clinicNote": this.claimsFormGroup.controls.clinicalNote.value,
-    //   "isResponse":false
-    // };
-    // console.log(this.claimDocItem);
-    // console.log(this.claimItem.documentation);
-    // if(this.claimItem.documentation == undefined){
-    //   this.claimItem.documentation = [];
-    // }
+    
     var request = {
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
@@ -469,7 +454,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.documentations = [{
       "request": request
     }];
-    this.claimItem.claimNo = 1; 
+    //this.claimItem.claimNo = 1;
     this.claimItem.providerFacilityId = this.user.facilityId._id;
     this.claimItem.checkedinDetail = this.SelectedCheckinItem;
     this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;

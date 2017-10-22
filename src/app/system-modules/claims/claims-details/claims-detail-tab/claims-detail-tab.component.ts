@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ClaimService } from './../../../../services/common/claim.service';
@@ -17,6 +17,7 @@ export class ClaimsDetailTabComponent implements OnInit {
   modalQuery = false;
   selectedClaim: any = <any>{};
   displayAge:number;
+  isReply = false;
 
 
   constructor(private _route: ActivatedRoute,
@@ -49,6 +50,10 @@ export class ClaimsDetailTabComponent implements OnInit {
     this.modalReject = false;
     this.modalQuery = false;
     this.modalHold = false;
+  }
+
+  onReply(){
+    this.isReply = true;
   }
 
   
