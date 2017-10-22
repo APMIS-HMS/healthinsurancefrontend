@@ -29,6 +29,12 @@ export class ListClaimsPaymentComponent implements OnInit {
   selectedFFSClaims: any = [];
   selectedCClaims: any = [];
   loading: boolean = true;
+  qFFSBtnText: boolean = true;
+  qFFSBtnProcessing: boolean = false;
+  qFFSDisableBtn: boolean = false;
+  qCBtnText: boolean = true;
+  qCBtnProcessing: boolean = false;
+  qCDisableBtn: boolean = false;
 
   constructor(
     private _router: Router,
@@ -53,31 +59,32 @@ export class ListClaimsPaymentComponent implements OnInit {
     this._getCurrentPlatform();
   }
 
-  // private _getClaimsPayments() {
-  //   this._getDummyData.get().then((res: Claim) => {
-  //     console.log(res);
-  //     this.loading = false;
-  //     this.claims = res;
-  //   });
-  // }
-
   private _getClaimsPayments() {
-    console.log(this.currentPlatform);
-    this._systemService.on();
-    this._claimService.find({
-      query: {
-        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
-        // 'facilityType._id': this.user.facilityId._id, $limit: 200
-    }}).then((payload: any) => {
-      console.log(payload);
+    this._getDummyData.get().then((res: Claim[]) => {
+      console.log(res);
       this.loading = false;
-      this.claims = payload.data;
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
+      this.claims = res.filter(e => !e.isQueuedForPayment);
     });
   }
+
+  // private _getClaimsPayments() {
+  //   console.log(this.currentPlatform);
+  //   this._systemService.on();
+  //   this._claimService.find({
+  //     query: {
+  //       'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
+  //        isQueuesForPayment: false,
+  //       // 'facilityType._id': this.user.facilityId._id, $limit: 200
+  //   }}).then((payload: any) => {
+  //     console.log(payload);
+  //     this.loading = false;
+  //     this.claims = payload.data;
+  //     this._systemService.off();
+  //   }).catch(error => {
+  //     console.log(error);
+  //     this._systemService.off();
+  //   });
+  // }
 
   _getCurrentPlatform() {
     this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
@@ -93,14 +100,20 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   onCheckFFSQueue(index, event, claim: Claim) {
     console.log(claim);
-    if (event.srcElement.checked) {
+    // event.srcElement.checked
+    if (!claim.isChecked) {
+      claim.isChecked = true;
       claim.isQueuedForPayment = true;
       this.selectedFFSClaims.push(claim);
+      console.log(this.selectedFFSClaims);
     } else {
       // Remove from the selected Claim
-      if (this.selectedFFSClaims.length > 0) {
+      claim.isChecked = false;
+      claim.isQueuedForPayment = false;
+      // if (this.selectedFFSClaims.length > 0) {
         this.selectedFFSClaims.splice(index, 1);
-      }
+        console.log(this.selectedFFSClaims);
+      //}
     }
   }
   
@@ -118,11 +131,11 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   // onClickQueueForService() {
-  //   if (this.selectedClaims.length > 0) {
+  //   if (this.selectedCClaims.length > 0) {
   //     // Save into the Claims Queued Service
-  //     // this._claimsPaymentService.create(this.selectedClaims).then(res => {
-  //     //   console.log(res);
-  //     // }).catch(err => console.log(err));
+  //     this._claimsPaymentService.create(this.selectedCClaims).then(res => {
+  //       console.log(res);
+  //     }).catch(err => console.log(err));
   //   } else {
   //     this._toastr.error('Please check items on the list', 'Checkbox Validation!');
   //   }
@@ -130,13 +143,40 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   onClickFFSQueueItemsSelected() {
     console.log(this.selectedFFSClaims);
-    // this._claimService.patch(this.selectedCClaims).then(res => {
-    //   console.log(res);
-    // }).catch(err => console.log(err));
+    this.qFFSBtnText = false;
+    this.qFFSBtnProcessing = true;
+    this.qFFSDisableBtn = true;
+    const body = {
+      claims: this.selectedFFSClaims
+    }
+    this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
+      console.log(res);
+      this.qFFSBtnText = true;
+      this.qFFSBtnProcessing = false;
+      this.qFFSDisableBtn = false;
+      if (res.status && res.statusCode === 200) {
+        this._toastr.success('Selected claims has been queued successfully!', 'Queueing Success!');
+        this._getClaimsPayments();
+      } else {
+        this._toastr.error('There was a problem queueing claims. Please try again later!', 'Queueing Error!');
+      }
+    }).catch(err => console.log(err));
   }
 
   onClickCQueueItemsSelected() {
     console.log(this.selectedCClaims);
+  }
+
+  onCheckAllFFSToQueue(event) {
+    this.claims.forEach((claim, i) => {
+      console.log(claim);
+      if (event.srcElement.checked) {
+        claim.isChecked = false;
+      } else {
+        claim.isChecked = true;
+      }
+      this.onCheckFFSQueue(i, {}, claim);
+    });
   }
 
   onClickTab(tabName: string) {

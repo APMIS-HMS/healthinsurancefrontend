@@ -13,6 +13,7 @@ export interface Claim {
     approvedDocumentation: any[];
     notificationMessage: any;
     providerFacilityId: any;
+    isChecked?: Boolean;
     isQueuedForPayment?: Boolean;
     _id: any;
     visitClass:any;
