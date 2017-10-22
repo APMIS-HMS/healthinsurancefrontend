@@ -1,3 +1,5 @@
+import { SystemModuleService } from './../../../../services/common/system-module.service';
+import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
 import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
 import { NewPreauthTabsComponent } from './../../pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
 import { REQUEST_STATUS } from './../../../../services/globals/config';
@@ -19,14 +21,30 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   modalQuery = false;
   requestStatus = REQUEST_STATUS;
 
+  disableReject = true;
+  disableHold = true;
+  disableQuery = true;
+  disableApprove = true;
+
   selectedTransaction: PreAuthorizationDocument;
   reply = false;
   lastI: number = 0;
   lastJ: number = 0;
 
-  constructor() { }
+  constructor(private _preAuthorizationService: PreAuthorizationService,
+    private _systemService: SystemModuleService) { }
 
   ngOnInit() { }
+
+  _getAuthorizationDetails(id) {
+    this._systemService.on();
+    this._preAuthorizationService.get(id, {}).then(payload => {
+      this._systemService.off();
+      this.selectedAuthorization = payload;  
+    }).catch(err => {
+      this._systemService.off();
+    })
+  }
 
   getAge() {
     return differenceInYears(
@@ -34,9 +52,61 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
     )
   }
+  disableAll() {
+    this.disableReject = true;
+    this.disableHold = true;
+    this.disableQuery = true;
+    this.disableApprove = true;
+  }
+  validateResponse(doc, cliDoc, transaction: PreAuthorizationDocument) {
+    this.disableAll();
+    let validDocs = transaction.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+    let pendingDocs: any[] = [];
+    let approvedDocs: any[] = [];
+    let rejectedDocs: any[] = [];
+    let queriedDocs: any[] = [];
+    let heldDocs: any[] = [];
+
+    let counter = 0;
+    validDocs.forEach(doc => {
+      doc.clinicalDocumentation.forEach(cliDoc => {
+        counter = counter + 1;
+        if (cliDoc.approvedStatus.id === 1) {
+          pendingDocs.push(cliDoc);
+        } else if (cliDoc.approvedStatus.id === 2) {
+          approvedDocs.push(cliDoc);
+        } else if (cliDoc.approvedStatus.id === 3) {
+          rejectedDocs.push(cliDoc);
+        } else if (cliDoc.approvedStatus.id === 4) {
+          queriedDocs.push(cliDoc);
+        } else if (cliDoc.approvedStatus.id === 5) {
+          heldDocs.push(cliDoc);
+        }
+      });
+    });
+    let hasDecided = false;
+    if (approvedDocs.length === counter) {
+      this.disableApprove = false;
+      hasDecided = true;
+    } else if (rejectedDocs.length === counter) {
+      this.disableReject = false;
+      hasDecided = true;
+    } else if (queriedDocs.length === counter) {
+      this.disableQuery = false;
+      hasDecided = true;
+    } else if (heldDocs.length === counter) {
+      this.disableHold = false;
+      hasDecided = true;
+    }
+    if (hasDecided === false) {
+
+      if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
+        this.disableQuery = false;
+      }
+    }
+  }
   replyOk(selectedTransaction) {
-    this.selectedTransaction = selectedTransaction;
-    console.log(this.selectedTransaction.document);
+    this.selectedTransaction = JSON.parse(JSON.stringify(selectedTransaction));
     this.reply = true;
   }
   sendReply() {
@@ -50,6 +120,10 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       return l1.id === l2.id;
     }
     return false;
+  }
+  cancel(){
+    this.disableAll();
+    this._getAuthorizationDetails(this.selectedAuthorization._id);
   }
   orderDocuments(documents) {
     return documents.sort(function (a, b) {

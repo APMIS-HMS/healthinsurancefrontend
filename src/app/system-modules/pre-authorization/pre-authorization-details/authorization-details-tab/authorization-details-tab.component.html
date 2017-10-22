@@ -87,7 +87,7 @@
                       <tr class="tr">
                         <th class="th">Complaints</th>
                         <th class="th">Duration</th>
-                        <th class="th">Approval Status</th>
+                        <!-- <th class="th">Approval Status</th> -->
                       </tr>
                     </thead>
 
@@ -95,12 +95,12 @@
                       <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
                         <td class="td">{{cliDoc.symptom.name}}</td>
                         <td class="td">{{cliDoc.duration}} {{cliDoc.unit.name}}</td>
-                        <td>
+                        <!-- <td>
                           <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
-                        </td>
+                        </td> -->
                       </tr>
                     </tbody>
                   </table>
@@ -122,7 +122,7 @@
                       <tr class="tr">
                         <th class="th">Diagnosis</th>
                         <th class="th">Diagnosis Type</th>
-                        <th class="th">Approval Status</th>
+                        <!-- <th class="th">Approval Status</th> -->
                       </tr>
                     </thead>
 
@@ -130,12 +130,12 @@
                       <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
                         <td class="td">{{cliDoc.diagnosis.name}}</td>
                         <td class="td">{{cliDoc.diagnosisType.name}}</td>
-                        <td>
+                        <!-- <td>
                           <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
-                        </td>
+                        </td> -->
                       </tr>
                     </tbody>
                   </table>
@@ -160,7 +160,8 @@
                         <td class="td">{{cliDoc.investigation.name}}</td>
                         <td class="td">{{cliDoc.investigation.Amount}}</td>
                         <td>
-                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus"
+                            class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
@@ -189,7 +190,7 @@
                         <td class="td">{{cliDoc.drug.name}}</td>
                         <td class="td">{{cliDoc.quantity}} {{cliDoc.unit.name}}</td>
                         <td>
-                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
@@ -218,7 +219,7 @@
                         <td class="td">{{cliDoc.procedure.name}}</td>
                         <td class="td">{{cliDoc.procedure.Amount}}</td>
                         <td>
-                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
@@ -246,10 +247,11 @@
 
 
         <div class="action-wrap" *ngIf="transaction.response=== undefined">
-          <div class="btn btn-medium btn-red" (click)="rejectClaim(transaction)">REJECT</div>
-          <div class="btn btn-medium btn-red" (click)="queryClaim(transaction)">QUERY</div>
-          <div class="btn btn-medium btn-yellow" (click)="holdClaim(transaction)">HOLD</div>
-          <div class="btn btn-medium btn-blue" (click)="approveClaim(transaction)">APPROVE</div>
+          <button class="btn btn-medium btn-red" [disabled]="disableReject" (click)="rejectClaim(transaction)">REJECT</button>
+          <button class="btn btn-medium btn-red" [disabled]="disableQuery" (click)="queryClaim(transaction)">QUERY</button>
+          <button class="btn btn-medium btn-yellow" [disabled]="disableHold" (click)="holdClaim(transaction)">HOLD</button>
+          <button class="btn btn-medium btn-blue" [disabled]="disableApprove" (click)="approveClaim(transaction)">APPROVE</button>
+          <button class="btn btn-medium btn-red"  (click)="cancel()">CANCEL</button>
         </div>
       </div>
 
@@ -284,15 +286,16 @@
         </div>
 
         <div class="reply-wrap">
-          <div  (click)="replyOk(transaction)" *ngIf="!reply && i === (selectedAuthorization?.documentation.length-1)" class="btn btn-medium btn-grey-outline">
+          <div (click)="replyOk(transaction)" *ngIf="!reply && i === (selectedAuthorization?.documentation.length-1) && transaction.approvedStatus.id !== 2"
+            class="btn btn-medium btn-grey-outline">
             <i class="fa fa-reply"></i> REPLY
           </div>
           <div *ngIf="reply && i === (selectedAuthorization?.documentation.length-1)" class="btn btn-medium btn-blue" (click)="sendReply()">
             <i class="fa fa-save"></i> SEND
           </div>
           <div *ngIf="reply && i === (selectedAuthorization?.documentation.length-1)" class="btn btn-medium btn-blue" (click)="cancelReply()">
-              <i class="fa fa-ban"></i> CANCEL
-            </div>
+            <i class="fa fa-ban"></i> CANCEL
+          </div>
         </div>
       </div>
     </div>
@@ -303,7 +306,8 @@
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-approve-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-approve-authorization>
+    <app-modal-approve-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization"
+      (closeModal)="modal_close()"></app-modal-approve-authorization>
   </div>
 </div>
 
@@ -326,6 +330,7 @@
 <div *ngIf="modalHold" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-hold-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-hold-authorization>
+    <app-modal-hold-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization"
+      (closeModal)="modal_close()"></app-modal-hold-authorization>
   </div>
 </div>
