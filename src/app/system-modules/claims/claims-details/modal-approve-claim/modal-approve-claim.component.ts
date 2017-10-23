@@ -40,7 +40,7 @@ export class ModalApproveClaimComponent implements OnInit {
       "reason": this.claimsApproveFormGroup.controls.reason.value,
       "name": this.claimsApproveFormGroup.controls.name.value,
       "Institution": this.claimsApproveFormGroup.controls.institution.value,
-      "isReject": true
+      "isApprove": true
     }
     if(this.claimDetail.documentations[this.claimDetail.documentations.length-1].response == undefined){
       this.claimDetail.documentations[this.claimDetail.documentations.length-1].response = response;
