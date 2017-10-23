@@ -44,8 +44,10 @@ export class ModalApproveClaimComponent implements OnInit {
     }
     if(this.claimDetail.documentations[this.claimDetail.documentations.length-1].response == undefined){
       this.claimDetail.documentations[this.claimDetail.documentations.length-1].response = response;
+      this.claimDetail.approvedDocumentation = this.claimDetail.documentations[this.claimDetail.documentations.length-1];
     }else{
       this.claimDetail.documentations.push({"response":response});
+      this.claimDetail.approvedDocumentation = this.claimDetail.documentations[this.claimDetail.documentations.length-1];
     }
     this.claimDetail.documentations[0].response = response;
     console.log(this.claimDetail);
