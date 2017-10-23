@@ -688,7 +688,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   
   
       } else {
-        console.log(this.preAuthFormGroup.errors)
+        this._systemService.off();
         this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
         Object.keys(this.preAuthFormGroup.controls).forEach((field, i) => { // {1}
           const control = this.preAuthFormGroup.get(field);

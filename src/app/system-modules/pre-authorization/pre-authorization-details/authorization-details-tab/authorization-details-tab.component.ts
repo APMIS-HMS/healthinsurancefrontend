@@ -34,7 +34,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   constructor(private _preAuthorizationService: PreAuthorizationService,
     private _systemService: SystemModuleService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.selectedAuthorization)
+   }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
