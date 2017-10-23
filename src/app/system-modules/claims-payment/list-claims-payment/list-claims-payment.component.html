@@ -86,12 +86,14 @@
                     <td class="td">{{ i+1 }}</td>
                     <td class="td">{{ claim?.dateClaimCreated | date }}</td>
                     <td class="td">{{ claim?.costingApprovalDocumentation }} NGN</td>
-                    <td class="td">324234 - AC</td>
-                    <td class="td">Hosp 18B</td>
-                    <td class="td">Formal Sector</td>
-                    <td class="td">Healthcare Security Limited</td>
-                    <td class="td">
-                        <input type="checkbox">
+                    <td class="td">{{ claim?.claimNo }}</td>
+                    <td class="td">{{ claim?.checkedinDetail?.policyObject?.providerId?.provider?.providerId}}</td>
+                    <td class="td">{{ claim?.checkedinDetail?.policyObject?.planId?.name }}</td>
+                    <td class="td">{{ claim?.checkedinDetail?.policyObject?.hiaId?.name}}</td>
+                    <td class="td text-center">
+                        <i class="fa fa-check green" aria-hidden="true"></i>
+                        <!-- <i *ngIf="provider.provider.facilityClass.includes('secondary')" class="fa fa-check green" aria-hidden="true"></i> -->
+                        <!-- <i *ngIf="!provider.provider.facilityClass.includes('secondary')" class="fa fa-times red" aria-hidden="true"></i> -->
                     </td>
                     <td class="td"><span class="red">Not Paid</span></td>
                     <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">

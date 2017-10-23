@@ -58,7 +58,13 @@ export class ClaimsPaymentService {
   }
 
   createMultipleItem(claims: any) {
-    const path = this._restService.getHost() + '/queue-claims-payment';
+    console.log(claims);
+    // let host = this._restService.getHost();
+    // let path = host + '/queue-claims-payment';
+    // return request
+    //   .post(path)
+    //   .send(claims);
+    let path = this._restService.getHost() + '/queue-claims-payment';
     return request.post(path).send(claims).then((res: Response | any) => {
       return new Promise((resolve, reject) => {
         resolve(res.body);
