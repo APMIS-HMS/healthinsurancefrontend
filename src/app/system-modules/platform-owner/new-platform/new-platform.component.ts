@@ -28,7 +28,6 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   @ViewChild('bImage') bImage: ElementRef;
   @ViewChild('itInput') itInput: ElementRef;
   @ViewChild('itImage') itImage: ElementRef;
-  saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   platformFormGroup: FormGroup;
   hiaPlans: any[] = [];
   contactPositions: any[] = [];
@@ -42,6 +41,11 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   selectedCountry: any;
   canAddImage = true;
   selectedFacility: any = <any>{};
+  saveBtnProcessing = false;
+  saveBtnText = true;
+  updateBtnText = false;
+  disableBtn = false;
+
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
     dateFormat: 'dd-mmm-yyyy',
@@ -174,10 +178,10 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       }
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
   _getStates(_id) {
-    console.log('call states')
+    console.log('call states');
     console.log(_id);
     this._systemService.on();
     this._countriesService.find({
@@ -221,7 +225,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
 
     }).catch(error => {
       this._systemService.off();
-    })
+    });
   }
   _getBanks() {
     this._systemService.on();
@@ -234,7 +238,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
   _getUserTypes() {
     this._systemService.on();
@@ -250,7 +254,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       }
     }, error => {
       this._systemService.off();
-    })
+    });
   }
 
   _getContactPositions() {
@@ -260,7 +264,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
   _extractBusinessContact(businessContact?: Contact) {
     if (businessContact === undefined) {
@@ -330,21 +334,21 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   }
 
   compare(l1: any, l2: any) {
-    if(l1 !== null && l2 !== null){
+    if (l1 !== null && l2 !== null) {
       return l1._id === l2._id;
-    }else{
+    } else {
       return false;
     }
-    
   }
 
-  save(valid, value, image) {
+  save(valid, value) {
     if (valid) {
-      if (image.files && image.files[0]) {
         this._systemService.on();
-        this.saveBtn = 'Please wait... &nbsp; <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+        this.saveBtnText = false;
+        this.saveBtnProcessing = true;
+        this.disableBtn = true;
+
         let facility = this._extractFacility();
-  
         if (!!facility._id) {
           // Save image to the DB before going to save facility.
           Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
@@ -357,18 +361,23 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
               facility.businessContact.image = allResult[1].body[0].file;
             }
             // IT Contact Image.
-            if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
-              facility.itContact.image = allResult[3].body[0].file;
+            if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+              facility.itContact.image = allResult[2].body[0].file;
             }
 
             this._facilityService.update(facility).then((payload: Facility) => {
               this._systemService.off();
-              this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+              this.saveBtnText = true;
+              this.saveBtnProcessing = false;
+              this.disableBtn = false;
               this._toastr.success('Platform has been created successfully!', 'Success!');
               this.platformFormGroup.reset();
               this._router.navigate(['/modules/platform/platforms', payload._id]);
             }).catch(err => {
               this._systemService.off();
+              this.saveBtnText = true;
+              this.saveBtnProcessing = false;
+              this.disableBtn = false;
             });
           }).catch(err => {
             console.log(err);
@@ -385,19 +394,21 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
               facility.businessContact.image = allResult[1].body[0].file;
             }
             // IT Contact Image.
-            if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
-              facility.itContact.image = allResult[3].body[0].file;
+            if (allResult[2] !== undefined && allResult[2].body[0] !== undefined && allResult[2].body.length > 0) {
+              facility.itContact.image = allResult[2].body[0].file;
             }
 
             this._facilityService.create(facility).then((payload: Facility) => {
               console.log(payload);
               this._systemService.off();
               this.platformFormGroup.reset();
-              this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+              this.saveBtnText = true;
+              this.saveBtnProcessing = false;
+              this.disableBtn = false;
               this._toastr.success('Platform has been created successfully!', 'Success!');
               this._router.navigate(['/modules/platform/platforms', payload._id]);
             }).catch(err => {
-              console.log(err)
+              console.log(err);
               this._systemService.off();
             });
           }).catch(err => {
@@ -405,10 +416,6 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
             this._systemService.off();
           });
         }
-      } else {
-        this._systemService.off();
-        this._toastr.error('Please select an image!', 'Form Validation Error!');
-      }
     } else {
       this._systemService.off();
       this._toastr.error('Some required fields are empty!', 'Form Validation Error!');
@@ -479,7 +486,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     let logoBrowser = this.logoInput.nativeElement;
     if (logoBrowser.files && logoBrowser.files[0]) {
       const formData = new FormData();
-      formData.append("platform", logoBrowser.files[0]);
+      formData.append('platform', logoBrowser.files[0]);
       return new Promise((resolve, reject) => {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
@@ -490,18 +497,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     let itBrowser = this.itInput.nativeElement;
     if (itBrowser.files && itBrowser.files[0]) {
       const formData = new FormData();
-      formData.append("platform", itBrowser.files[0]);
-      return new Promise((resolve, reject) => {
-        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
-      });
-    }
-  }
-
-  uploadHmoContact() {
-    let itBrowser = this.itInput.nativeElement;
-    if (itBrowser.files && itBrowser.files[0]) {
-      const formData = new FormData();
-      formData.append("platform", itBrowser.files[0]);
+      formData.append('platform', itBrowser.files[0]);
       return new Promise((resolve, reject) => {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
@@ -512,7 +508,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     let bBrowser = this.bInput.nativeElement;
     if (bBrowser.files && bBrowser.files[0]) {
       const formData = new FormData();
-      formData.append("platform", bBrowser.files[0]);
+      formData.append('platform', bBrowser.files[0]);
       return new Promise((resolve, reject) => {
         resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });

@@ -57,24 +57,23 @@ export class MainMenuComponent implements OnInit {
   }
 
   setLoggedInUser(email: String, loggInState: boolean) {
-    this._authService.find({ query: { email: email } })
-      .then(payload => {
+    this._authService.find({ query: { email: email } }).then(payload => {
         let currentUser = payload.data[0];
-        if(currentUser !== undefined){
+        if (currentUser !== undefined) {
           currentUser.loggedInUserStatus = {
-            "isLoggedIn": loggInState
+            'isLoggedIn': loggInState
           };
-  
-          this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
+
+          this._authService.patch(currentUser._id, currentUser, {}).then(res => {
             this._authService.checkAuth();
             this._router.navigate(['/auth']);
           });
-        }else{
+        } else {
           this._authService.checkAuth();
           this._router.navigate(['/auth']);
         }
 
-      })
+      });
   }
 
   private _checkRole() {

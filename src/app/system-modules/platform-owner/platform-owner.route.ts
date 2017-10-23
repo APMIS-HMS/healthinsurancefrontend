@@ -10,7 +10,7 @@ const PLATFORM_ROUTES: Routes = [
         path: '', component: PlatformOwnerComponent, children: [
             { path: '', redirectTo: 'platforms', pathMatch: 'full' },
             { path: 'platforms', component: ListPlatformComponent },
-            { path: 'platforms/:platform-id', component: PlatformDetailsComponent },
+            { path: 'platforms/:id', component: PlatformDetailsComponent },
             { path: 'new', component: NewPlatformComponent },
             { path: 'new/:id', component: NewPlatformComponent },
         ]

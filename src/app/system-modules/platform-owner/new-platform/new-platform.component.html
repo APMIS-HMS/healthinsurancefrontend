@@ -132,16 +132,14 @@
                 </div>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">MD's Photo</label>
+                <label class="label">Business Contact's Photo</label>
                 <div class="input-wrap">
                     <div class="img-box">
                         <button (click)="showImageBrowseDlg('b-contact')" class="btn btn-medium btn-blue">Search Photo</button>
                     </div>
                     <div class="img-holder-box">
                         <input accept="image/x-png,image/jpeg" style="display:none;" #bInput type="file" id="bUploadResult" (change)="readURL('b-contact')">
-                        <div style="width:100%;" class="placehold-wrap">
-                            <img #bImage id="bImage" class="image-holder" src="assets/img/users/default.png" />
-                        </div>
+                        <img #bImage id="bImage" class="image-holder" src="assets/img/users/default.png" />
                     </div>
                 </div>
             </div>
@@ -201,9 +199,7 @@
                     </div>
                     <div class="img-holder-box">
                         <input accept="image/x-png,image/jpeg" style="display:none;" #itInput type="file" id="itUploadResult" (change)="readURL('it-contact')">
-                        <div style="width:100%;" class="placehold-wrap">
-                            <img #itImage id="logoImage" class="image-holder" src="assets/img/users/default.png" />
-                        </div>
+                        <img #itImage id="logoImage" class="image-holder" src="assets/img/users/default.png" />
                     </div>
                 </div>
             </div>
@@ -281,13 +277,15 @@
                     </div>
                     <div class="img-holder-box">
                         <input accept="image/x-png,image/jpeg" style="display:none;" #logoInput type="file" id="uploadResult" (change)="readURL('logo')">
-                        <div style="width:100%;" class="placehold-wrap">
-                            <img #logoImage id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
-                        </div>
+                        <img #logoImage id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
                     </div>
                 </div>
             </div>
-            <button class="btn btn-medium btn-blue cta" [disabled]="!platformFormGroup.valid" (click)="save(platformFormGroup.valid, platformFormGroup.value, fileInput)" [innerHtml]="saveBtn"></button>
+            <button class="btn btn-medium btn-blue cta" [disabled]="!platformFormGroup.valid || disableBtn" (click)="save(platformFormGroup.valid, platformFormGroup.value)">
+                <span *ngIf="saveBtnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                <span *ngIf="saveBtnText">SAVE &nbsp; <i class="fa fa-check"></i></span>
+                <span *ngIf="updateBtnText">UPDATE &nbsp; <i class="fa fa-check"></i></span>
+            </button>
             <!-- <button (click)="onClickAddPlan(platformFormGroup.valid, platformFormGroup.value)" class="btn btn-medium btn-blue"> NEXT</button> -->
         </form>
     </section>
