@@ -168,7 +168,7 @@ export class CheckinDetailsComponent implements OnInit {
       console.log(err);
       this._systemService.off();
       this._toastr.error('Error(s) occured while generting token, please try again!!!', 'Token Error');
-    })
+    });
   }
   checkin_click() {
     this._systemService.on();

@@ -42,7 +42,7 @@
             <div class="btn btn-medium btn-blue-outline">RESET</div>
         </div>
         <div class="payment-box">
-          <button *ngIf="selectedClaims.length > 0" [disabled]="disablePayBtn" (click)="onClickPayClaim();" class="btn btn-medium btn-yellow">
+            <button *ngIf="selectedClaims.length > 0" [disabled]="disablePayBtn" (click)="onClickPayClaim();" class="btn btn-medium btn-yellow">
             <span *ngIf="payClaimBtnText">Pay Claim</span>
             <span *ngIf="payClaimBtnProcessing">Paying Claim...&nbsp; <i class="fa fa-spinner fa-spin"></i></span>
           </button>
@@ -52,7 +52,7 @@
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
             <tr class="tr">
-                <th class="th" (change)="onCheckAllSelectedItemsToPay($event);"><input type="checkbox"></th>
+                <th class="th" *ngIf="claims.length > 0" (change)="onCheckAllSelectedItemsToPay($event);"><input type="checkbox"></th>
                 <th class="th">No</th>
                 <th class="th">Date</th>
                 <th class="th">Amount Due</th>
@@ -60,6 +60,7 @@
                 <th class="th">Provider ID</th>
                 <th class="th">Health Care Plan</th>
                 <th class="th">Responsible HIA</th>
+                <th class="th">Fee for Service</th>
                 <th class="th">Status</th>
                 <th class="th"></th>
             </tr>
@@ -76,17 +77,22 @@
             </tr>
             <tr *ngFor="let claim of claims; let i = index;" class="tr">
                 <td class="td">
-                  <input (change)="onCheckSelectedItem(i, claim);" [attr.checked]="claim.isChecked ? true : null" type="checkbox">
+                    <input (change)="onCheckSelectedItem(i, claim);" [attr.checked]="claim.isChecked ? true : null" type="checkbox">
                 </td>
-                <td class="td">{{ i + 1 }}</td>
-                <td class="td">{{ '22/09/2017' }}</td>
+                <td class="td">{{ i+1 }}</td>
+                <td class="td">{{ claim?.dateClaimCreated | date }}</td>
                 <td class="td">{{ claim?.costingApprovalDocumentation }} NGN</td>
                 <td class="td">5</td>
-                <td class="td">Hosp 18B</td>
-                <td class="td">Formal Sector</td>
-                <td class="td">Healthcare Security Limited</td>
+                <td class="td">{{ claim?.checkedinDetail?.policyObject?.providerId?.provider?.providerId}}</td>
+                <td class="td">{{ claim?.checkedinDetail?.policyObject?.planId?.name }}</td>
+                <td class="td">{{ claim?.checkedinDetail?.policyObject?.hiaId?.name}}</td>
+                <td class="td text-center">
+                    <i class="fa fa-check green" aria-hidden="true"></i>
+                    <!-- <i *ngIf="provider.provider.facilityClass.includes('secondary')" class="fa fa-check green" aria-hidden="true"></i> -->
+                    <!-- <i *ngIf="!provider.provider.facilityClass.includes('secondary')" class="fa fa-times red" aria-hidden="true"></i> -->
+                </td>
                 <td class="td"><span class="red">Not Paid</span></td>
-                <td class="td td-icos" routerLink="/modules/claims/queued-claims/23">
+                <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>

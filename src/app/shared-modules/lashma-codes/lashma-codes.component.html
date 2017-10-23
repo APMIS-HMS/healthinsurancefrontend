@@ -1,0 +1,333 @@
+<ul class="inpage-tabs">
+  <li (click)="tabDrug_click()" [class.tab-active]="tab_drug">Drug</li>
+  <li (click)="tabInvestigation_click()" [class.tab-active]="tab_investigation">Investigation</li>
+  <li (click)="tabProcedure_click()" [class.tab-active]="tab_procedure">Procedure</li>
+  <li (click)="tabVisit_click()" [class.tab-active]="tab_visit">Visit Class</li>
+</ul>
+
+<div class="tab-content">
+  <div *ngIf="tab_drug" class="tab-pane fade show active">
+    <div class="content-top-bar">
+        <div class="bar-labels">
+            <div>Lashma Codes - Drugs</div>
+        </div>
+
+        <div class="bar-icos">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">Drug Class</th>
+                <th class="th">Drug</th>
+                <th class="th">Code</th>
+                <th class="th">Quantity Required</th>
+                <th class="th">PA</th>
+                <th class="th">Prefered Primary</th>
+                <th class="th">Amount</th>
+                <th class="th">Secondary</th>
+                <th class="th">P</th>
+                <th class="th">R</th>
+            </tr>
+        </thead>
+  
+        <tbody class="tbody">
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="tab_investigation" class="tab-pane fade show active">
+    <div class="content-top-bar">
+        <div class="bar-labels">
+            <div>Lashma Codes - Investigations</div>
+        </div>
+
+        <div class="bar-icos">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">Investigation Class</th>
+                <th class="th">Investigation</th>
+                <th class="th">Code</th>
+                <th class="th">Quantity Required</th>
+                <th class="th">PA</th>
+                <th class="th">Prefered Primary</th>
+                <th class="th">Amount</th>
+                <th class="th">Secondary</th>
+                <th class="th">P</th>
+                <th class="th">R</th>
+            </tr>
+        </thead>
+  
+        <tbody class="tbody">
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="tab_procedure" class="tab-pane fade show active">
+    <div class="content-top-bar">
+        <div class="bar-labels">
+            <div>Lashma Codes - Procedures</div>
+        </div>
+
+        <div class="bar-icos">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">Procedure Class</th>
+                <th class="th">Procedure</th>
+                <th class="th">Code</th>
+                <th class="th">Quantity Required</th>
+                <th class="th">PA</th>
+                <th class="th">Prefered Primary</th>
+                <th class="th">Amount</th>
+                <th class="th">Secondary</th>
+                <th class="th">P</th>
+                <th class="th">R</th>
+            </tr>
+        </thead>
+  
+        <tbody class="tbody">
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="tab_visit" class="tab-pane fade show active">
+    <div class="content-top-bar">
+        <div class="bar-labels">
+            <div>Lashma Codes - Visit Classes</div>
+        </div>
+
+        <div class="bar-icos">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">Class</th>
+                <th class="th">Fixed Rates</th>
+                <th class="th">Code</th>
+                <th class="th">FR Type</th>
+                <th class="th">PA</th>
+                <th class="th">Prefered Primary</th>
+                <th class="th">Amount</th>
+                <th class="th">Secondary</th>
+                <th class="th">P</th>
+                <th class="th">R</th>
+                <th class="th"></th>
+            </tr>
+        </thead>
+  
+        <tbody class="tbody">
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+                <td class="td">Limits/contents of service</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+                <td class="td">Limits/contents of service</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+                <td class="td">Limits/contents of service</td>
+            </tr>
+            <tr class="tr">
+                <td class="td">EMERGENCIES</td>
+                <td class="td">Blood transfusion (regular) - per pint</td>
+                <td class="td">V4004</td>
+                <td class="td">Y</td>
+                <td class="td">Y</td>
+                <td class="td">C</td>
+                <td class="td">14,850</td>
+                <td class="td">Fr</td>
+                <td class="td">P</td>
+                <td class="td">R</td>
+                <td class="td">Limits/contents of service</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+</div>

@@ -131,6 +131,10 @@
                 </small>
             </div>
 
+            <div class="link-right">
+                <div (click)="pop_codes()" class="link-item">Lashma Codes</div>
+            </div>
+            
             <ul class="inpage-tabs">
                 <li (click)="tabSymptoms_click()" [class.tab-active]="tab_symptoms">Symptoms</li>
                 <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
@@ -533,3 +537,10 @@
         </button>
     </section>
 </div>
+
+<div *ngIf="showCodes" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-lashma-codes (closeModal)="modal_close()"></app-lashma-codes>
+    </div>
+</div> 

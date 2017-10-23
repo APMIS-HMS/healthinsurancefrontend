@@ -59,32 +59,31 @@ export class ListClaimsPaymentComponent implements OnInit {
     this._getCurrentPlatform();
   }
 
-  private _getClaimsPayments() {
-    this._getDummyData.get().then((res: Claim[]) => {
-      console.log(res);
-      this.loading = false;
-      this.claims = res.filter(e => !e.isQueuedForPayment);
-    });
-  }
-
   // private _getClaimsPayments() {
-  //   console.log(this.currentPlatform);
-  //   this._systemService.on();
-  //   this._claimService.find({
-  //     query: {
-  //       'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
-  //        isQueuesForPayment: false,
-  //       // 'facilityType._id': this.user.facilityId._id, $limit: 200
-  //   }}).then((payload: any) => {
-  //     console.log(payload);
+  //   this._getDummyData.get().then((res: Claim[]) => {
+  //     console.log(res);
   //     this.loading = false;
-  //     this.claims = payload.data;
-  //     this._systemService.off();
-  //   }).catch(error => {
-  //     console.log(error);
-  //     this._systemService.off();
+  //     this.claims = res.filter(e => !e.isQueuedForPayment);
   //   });
   // }
+
+  private _getClaimsPayments() {
+    this._systemService.on();
+    this._claimService.find({
+      query: {
+        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
+         isQueuedForPayment: false,
+         'approvedDocumentation.response.isApprove': true
+    }}).then((payload: any) => {
+      console.log(payload);
+      this.loading = false;
+      this.claims = payload.data;
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
+  }
 
   _getCurrentPlatform() {
     this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
@@ -115,7 +114,6 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   onCheckCQueue(index, event, claim: Claim) {
-    console.log(claim);
     if (event.srcElement.checked) {
       this.selectedCClaims.push(claim);
     } else {
@@ -127,13 +125,18 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   onClickFFSQueueItemsSelected() {
-    console.log(this.selectedFFSClaims);
     this.qFFSBtnText = false;
     this.qFFSBtnProcessing = true;
     this.qFFSDisableBtn = true;
+    const claimsIds = [];
+    this.selectedFFSClaims.forEach(claim => {
+      claimsIds.push(claim._id);
+    });
+
     const body = {
-      claims: this.selectedFFSClaims
+      claims: claimsIds
     };
+
     this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
       console.log(res);
       this.qFFSBtnText = true;
