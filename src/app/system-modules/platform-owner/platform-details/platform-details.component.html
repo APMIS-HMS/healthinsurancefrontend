@@ -9,6 +9,7 @@
         <li (click)="tabClick('provider')" [class.tab-active]="tabProvider">Providers</li>
         <li (click)="tabClick('employer')" [class.tab-active]="tabEmployer">Employers</li>
         <li (click)="tabClick('beneficiary')" [class.tab-active]="tabBeneficiary">Beneficiaries</li>
+        <li (click)="tabClick('capitation')" [class.tab-active]="tabCapitation">Capitation Fee</li>
     </ul>
 
     <div>
@@ -133,6 +134,80 @@
                 </div>
             </div>
             <app-list-beneficiary class="tab-content"></app-list-beneficiary>
+        </div>
+        <div *ngIf="tabCapitation" class="tab-pane fade tab-content-box shadow-RB">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Capitation</div>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="list-boxes">
+                    <div class="box-left">
+                        <div *ngIf="true" style="padding: 10px 0px;">
+                            <form [formGroup]="capitationFormGroup" novalidate>
+                                <div class="form-item-wrap">
+                                    <label class="label">Amount</label>
+                                    <div class="input-wrap">
+                                        <input type="number" min="1" formControlName="amount" class="form-control" placeholder="Amount">
+                                    </div>
+                                </div>
+                                <div class="form-item-wrap">
+                                    <label class="label">End Date</label>
+                                    <div class="input-wrap">
+                                        <my-date-picker [options]="myDatePickerOptions" [selDate]="today" formControlName="endDate"></my-date-picker>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="btn-box">
+                                <button class="btn btn-medium btn-green" style="float:left;" [disabled]="disableActiveCapitation" (click)="onClickApprove(capitationFormGroup.valid, capitationFormGroup.value);">
+                                    <span *ngIf="activateCapitationBtnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                                    <span *ngIf="activateCapitationBtnText">ACTIVATE FEE &nbsp; <i class="fa fa-check"></i></span>
+                                </button>
+                                <button class="btn btn-medium" style="float:right;" (click)="onClickCancelCapitation();">Cancel</button>
+                            </div>
+                        </div>
+                        <div *ngIf="false" style="padding: 70px 0px;">
+                            <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivateCapitation();">DEACTIVATE FEE</button>
+                        </div>
+                    </div>
+
+                    <div class="box-right">
+                        <div class="text-center">
+                            <span>List of Previous Licenses</span>
+                        </div>
+                        <div class="box">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">No</th>
+                                        <th class="th">Duration</th>
+                                        <th class="th">Created At</th>
+                                        <th class="th">Valid Till</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="tbody">
+                                    <!-- <tr class="tr" *ngIf="selectedCapitation?.hia?.validityPeriods?.length === 0 && !loading">
+                                        <td class="text-center" colspan="4">No data available in table</td>
+                                    </tr>
+                                    <tr class="tr" *ngIf="selectedCapitation?.length === 0 && loading">
+                                        <td class="text-center" colspan="4">
+                                            <i class="fa fa-spinner fa-spin"></i>
+                                        </td>
+                                    </tr> -->
+                                    <tr *ngFor="let hia of selectedCapitation; let i = index;" class="tr">
+                                        <td class="td hover">{{ '1' }}</td>
+                                        <td class="td hover">{{ 'Amount' }}</td>
+                                        <td class="td hover">{{ 'date' }}</td>
+                                        <td class="td hover">{{ 'date' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

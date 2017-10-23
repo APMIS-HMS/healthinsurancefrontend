@@ -4,7 +4,8 @@ import { SharedModule } from '../../shared-modules/shared.module';
 import {
     ContactPositionService,
     PlatformOwnerService,
-    CountryService
+    CountryService,
+    CapitationFeeService
 } from '../../services/index';
 
 import { BankService } from '../../services/common/bank.service';
@@ -22,6 +23,6 @@ import { PlatformDetailsComponent } from './platform-details/platform-details.co
         MyDatePickerModule
     ],
     declarations: [PlatformOwnerComponent, ListPlatformComponent, NewPlatformComponent, PlatformDetailsComponent],
-    providers: [ContactPositionService, PlatformOwnerService, CountryService, BankService ]
+    providers: [ContactPositionService, PlatformOwnerService, CountryService, BankService, CapitationFeeService ]
 })
 export class PlatformOwnerModule { }

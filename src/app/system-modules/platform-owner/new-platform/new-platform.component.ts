@@ -22,8 +22,12 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ['./new-platform.component.scss']
 })
 export class NewPlatformComponent implements OnInit, AfterViewInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
-  @ViewChild('blah') blah: ElementRef;
+  @ViewChild('logoInput') logoInput: ElementRef;
+  @ViewChild('logoImage') logoImage: ElementRef;
+  @ViewChild('bInput') bInput: ElementRef;
+  @ViewChild('bImage') bImage: ElementRef;
+  @ViewChild('itInput') itInput: ElementRef;
+  @ViewChild('itImage') itImage: ElementRef;
   saveBtn: String = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
   platformFormGroup: FormGroup;
   hiaPlans: any[] = [];
@@ -131,9 +135,7 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
 
     if (this.selectedFacility.name !== undefined) {
       this._getLgaAndCities(this.selectedFacility.address.state);
-      if(this.selectedFacility.logo !== undefined){
-        this.blah.nativeElement.src = this._uploadService.transform(this.selectedFacility.logo.thumbnail);
-      }
+      this._initImages(this.selectedFacility);
     }
 
     this.platformFormGroup.controls['state'].valueChanges.subscribe(value => {
@@ -150,9 +152,9 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
       this._initialiseFormGroup();
       this._systemService.off();
     }).catch(err => {
-      console.log(err)
+      console.log(err);
       this._systemService.off();
-    })
+    });
   }
 
   _getCountries() {
@@ -185,24 +187,24 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
         $select: { 'states.cities': 0, 'states.lgs': 0 }
       }
     }).then((payload: any) => {
-      console.log(payload)
+      console.log(payload);
       this._systemService.off();
       if (payload.data.length > 0) {
         this.states = payload.data[0].states;
-        console.log(this.states)
+        console.log(this.states);
       }
 
     }).catch(error => {
-      console.log(error)
+      console.log(error);
       this._systemService.off();
-    })
+    });
   }
 
   _getLgaAndCities(state, _id?) {
     this._systemService.on();
     this._countriesService.find({
       query: {
-        "states.name": state.name,
+        'states.name': state.name,
         $select: { 'states.$': 1 }
 
 
@@ -345,43 +347,59 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
   
         if (!!facility._id) {
           // Save image to the DB before going to save facility.
-          this.upload(image).then((result: any) => {
-            console.log(result);
-            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-              console.log(result.body[0].file)
-              facility.logo = result.body[0].file;
-              this._facilityService.update(facility).then((payload: Facility) => {
-                this._systemService.off();
-                this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
-                this._toastr.success('Platform has been created successfully!', 'Success!');
-                this.platformFormGroup.reset();
-                this._router.navigate(['/modules/platform/platforms', payload._id]);
-              }).catch(err => {
-                this._systemService.off();
-              });
+          Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+            console.log(allResult);
+            if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+              facility.logo = allResult[0].body[0].file;
             }
+            // Business Contact Image
+            if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+              facility.businessContact.image = allResult[1].body[0].file;
+            }
+            // IT Contact Image.
+            if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
+              facility.itContact.image = allResult[3].body[0].file;
+            }
+
+            this._facilityService.update(facility).then((payload: Facility) => {
+              this._systemService.off();
+              this.saveBtn = 'SAVE &nbsp; <i class="fa fa-check" aria-hidden="true"></i>';
+              this._toastr.success('Platform has been created successfully!', 'Success!');
+              this.platformFormGroup.reset();
+              this._router.navigate(['/modules/platform/platforms', payload._id]);
+            }).catch(err => {
+              this._systemService.off();
+            });
           }).catch(err => {
             console.log(err);
             this._systemService.off();
           });
         } else {
-          this.upload(image).then((result: any) => {
-            console.log(result);
-            if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-              console.log(result.body[0].file)
-              facility.logo = result.body[0].file;
-              this._facilityService.create(facility).then((payload: Facility) => {
-                console.log(payload);
-                this._systemService.off();
-                this.platformFormGroup.reset();
-                this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
-                this._toastr.success('Platform has been created successfully!', 'Success!');
-                this._router.navigate(['/modules/platform/platforms', payload._id]);
-              }).catch(err => {
-                console.log(err)
-                this._systemService.off();
-              });
+          Promise.all([this.uploadLogo(), this.uploadBContact(), this.uploadItContact()]).then((allResult: any) => {
+            console.log(allResult);
+            if (allResult[0] !== undefined && allResult[0].body[0] !== undefined && allResult[0].body.length > 0) {
+              facility.logo = allResult[0].body[0].file;
             }
+            // Business Contact Image
+            if (allResult[1] !== undefined && allResult[1].body[0] !== undefined && allResult[1].body.length > 0) {
+              facility.businessContact.image = allResult[1].body[0].file;
+            }
+            // IT Contact Image.
+            if (allResult[3] !== undefined && allResult[3].body[0] !== undefined && allResult[3].body.length > 0) {
+              facility.itContact.image = allResult[3].body[0].file;
+            }
+
+            this._facilityService.create(facility).then((payload: Facility) => {
+              console.log(payload);
+              this._systemService.off();
+              this.platformFormGroup.reset();
+              this.saveBtn = "SAVE &nbsp; <i class='fa fa-check' aria-hidden='true'></i>";
+              this._toastr.success('Platform has been created successfully!', 'Success!');
+              this._router.navigate(['/modules/platform/platforms', payload._id]);
+            }).catch(err => {
+              console.log(err)
+              this._systemService.off();
+            });
           }).catch(err => {
             console.log(err);
             this._systemService.off();
@@ -397,55 +415,127 @@ export class NewPlatformComponent implements OnInit, AfterViewInit {
     }
   }
 
-  showImageBrowseDlg() {
-    this.fileInput.nativeElement.click()
+  showImageBrowseDlg(context) {
+    switch (context) {
+      case 'b-contact':
+        this.bInput.nativeElement.click();
+        break;
+      case 'it-contact':
+        this.itInput.nativeElement.click();
+        break;
+      case 'logo':
+        this.logoInput.nativeElement.click();
+        break;
+    }
   }
+
   readURL(input) {
     this._systemService.on();
-    input = this.fileInput.nativeElement;
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      let that = this;
-      reader.onload = function (e: any) {
-        that.blah.nativeElement.src = e.target.result;
-        that._systemService.off();
-      };
+    switch (input) {
+      case 'b-contact':
+        input = this.bInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.bImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
 
-      reader.readAsDataURL(input.files[0]);
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'it-contact':
+        input = this.itInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            that.itImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
+      case 'logo':
+        input = this.logoInput.nativeElement;
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          let that = this;
+          reader.onload = function (e: any) {
+            console.log(e);
+            that.logoImage.nativeElement.src = e.target.result;
+            that._systemService.off();
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        }
+        break;
     }
   }
 
-  upload(image) {
-    // this._systemService.on();
-    // let fileBrowser = this.fileInput.nativeElement;
-    if (image.files && image.files[0]) {
+  uploadLogo() {
+    let logoBrowser = this.logoInput.nativeElement;
+    if (logoBrowser.files && logoBrowser.files[0]) {
       const formData = new FormData();
-      formData.append('platform', image.files[0]);
-      // return new Promise((resolve, reject) => {
-      //   resolve(this._uploadService.upload(formData, this.selectedUserType._id));
-      // });
+      formData.append("platform", logoBrowser.files[0]);
       return new Promise((resolve, reject) => {
-        this._uploadService.upload(formData, this.selectedUserType._id).then(res => {
-          resolve(res);
-        }).catch(err => {
-          reject(err);
-        });
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
       });
-
-
-
-
-      // this._systemService.upload(formData, this.selectedUserType._id).then(res => {
-      //   this._systemService.off();
-      //   console.log(res);
-      //   let enrolleeList: any[] = [];
-      //   if (res.body !== undefined && res.body.error_code === 0) {
-      //   }
-      // }).catch(err => {
-      //   this._systemService.off();
-      // })
     }
   }
+
+  uploadItContact() {
+    let itBrowser = this.itInput.nativeElement;
+    if (itBrowser.files && itBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", itBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  uploadHmoContact() {
+    let itBrowser = this.itInput.nativeElement;
+    if (itBrowser.files && itBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", itBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  uploadBContact() {
+    let bBrowser = this.bInput.nativeElement;
+    if (bBrowser.files && bBrowser.files[0]) {
+      const formData = new FormData();
+      formData.append("platform", bBrowser.files[0]);
+      return new Promise((resolve, reject) => {
+        resolve(this._uploadService.upload(formData, this.selectedUserType._id));
+      });
+    }
+  }
+
+  // myAnyPromise(promises) {
+  //   let promise = deferred.promise();
+  // }
+
+  private _initImages(facility: Facility) {
+    if (!!facility.logo) {
+      this.logoImage.nativeElement.src = facility.logo;
+    }
+    if (!!facility.businessContact.image) {
+      this.bImage.nativeElement.src = facility.businessContact.image;
+    }
+    if (!!facility.itContact.image) {
+      this.itImage.nativeElement.src = facility.itContact.image;
+    }
+  }
+
+
   // onDateChanged(event: IMyDateModel) {
   //   //this.renewalDate = event.formatted;
   //   this.platformFormGroup.patchValue({
