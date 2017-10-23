@@ -251,7 +251,7 @@ export class EmployerDetailsComponent implements OnInit {
       });
   }
 
-  navigateEmployers(url, id) {
+  navigateEmployers(url, id?) {
     this.loadingService.startLoading();
     if (!!id) {
       this._router.navigate([url + id]).then(res => {

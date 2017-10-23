@@ -48,7 +48,7 @@
         <div class="btn btn-medium btn-blue-outline">RESET</div>
     </div>
 
-    <table *ngIf="!inActiveBeneficiaries.length > 0" class="table" cellpadding="0" cellspacing="0" border="0.5">
+    <table  class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
             <tr class="tr">
                 <th class="th">No</th>
@@ -65,7 +65,7 @@
             </tr>
         </thead>
 
-        <tbody class="tbody">
+        <tbody *ngIf="!(inActiveBeneficiaries.length > 0)" class="tbody">
             <tr class="tr" *ngIf="beneficiaries.length === 0 && !loading">
                 <td class="text-center" colspan="11">No data available in table</td>
             </tr>
@@ -102,33 +102,6 @@
             </tr>
         </tbody>
     </table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <table *ngIf="inActiveBeneficiaries.length > 0" class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
@@ -175,31 +148,6 @@
             </tr>
         </tbody>
     </table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <div class="list-buttom" *ngIf="beneficiaries.length > 0">
         <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>

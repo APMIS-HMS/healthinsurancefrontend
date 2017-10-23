@@ -25,5 +25,8 @@ export class ReferalDetailTabComponent implements OnInit {
     this.modalApprove = false;
     this.modalReject = false;
   }
+  holdClaim(){
+    
+  }
 
 }

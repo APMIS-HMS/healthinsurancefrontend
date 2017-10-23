@@ -170,7 +170,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.addApproval = true;
   }
 
-  navigateBeneficiary(url, id) {
+  navigateBeneficiary(url, id?) {
     this.loadingService.startLoading();
     if (!!id) {
       this._router.navigate([url + id]).then(res => {

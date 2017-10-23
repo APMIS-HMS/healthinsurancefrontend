@@ -487,6 +487,9 @@ export class NewClaimTabsComponent implements OnInit {
       this._systemService.off();
     });
   }
+  onCloseEditDialog(e){
+    
+  }
 
 
   tabDiagnosis_click() {

@@ -707,7 +707,7 @@ export class NewProviderComponent implements OnInit {
     }
   }
 
-  navigateProviders(path, routeId) {
+  navigateProviders(path, routeId?) {
     if (!!routeId) {
       this.loadingService.startLoading();
       this._router.navigate([path + routeId]).then(res => {

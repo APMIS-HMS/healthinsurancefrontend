@@ -174,7 +174,7 @@ export class ListClaimsPaymentComponent implements OnInit {
     }
   }
 
-  navigate(url: string, id: string) {
+  navigate(url: string, id?: string) {
     if (!!id) {
       this.loadingService.startLoading();
       this._router.navigate([url + id]).then(res => {
