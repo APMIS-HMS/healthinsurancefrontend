@@ -53,7 +53,11 @@ export class ClaimsDetailTabComponent implements OnInit {
   }
 
   onReply(){
-    this.isReply = true;
+    if(this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response != undefined){
+      this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response.isReply = true;
+    }else{
+      this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].request.isReply = true;
+    }
   }
 
   
