@@ -114,7 +114,6 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   onCheckCQueue(index, event, claim: Claim) {
-    console.log(claim);
     if (event.srcElement.checked) {
       this.selectedCClaims.push(claim);
     } else {
@@ -126,33 +125,30 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   onClickFFSQueueItemsSelected() {
-    console.log(this.selectedFFSClaims);
     this.qFFSBtnText = false;
     this.qFFSBtnProcessing = true;
     this.qFFSDisableBtn = true;
     const claimsIds = [];
     this.selectedFFSClaims.forEach(claim => {
-      console.log(claim);
       claimsIds.push(claim._id);
     });
 
     const body = {
       claims: claimsIds
     };
-    console.log(body);
 
-    // this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
-    //   console.log(res);
-    //   this.qFFSBtnText = true;
-    //   this.qFFSBtnProcessing = false;
-    //   this.qFFSDisableBtn = false;
-    //   if (res.status && res.statusCode === 200) {
-    //     this._toastr.success('Selected claims has been queued successfully!', 'Queueing Success!');
-    //     this._getClaimsPayments();
-    //   } else {
-    //     this._toastr.error('There was a problem queueing claims. Please try again later!', 'Queueing Error!');
-    //   }
-    // }).catch(err => console.log(err));
+    this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
+      console.log(res);
+      this.qFFSBtnText = true;
+      this.qFFSBtnProcessing = false;
+      this.qFFSDisableBtn = false;
+      if (res.status && res.statusCode === 200) {
+        this._toastr.success('Selected claims has been queued successfully!', 'Queueing Success!');
+        this._getClaimsPayments();
+      } else {
+        this._toastr.error('There was a problem queueing claims. Please try again later!', 'Queueing Error!');
+      }
+    }).catch(err => console.log(err));
   }
 
   onClickCQueueItemsSelected() {

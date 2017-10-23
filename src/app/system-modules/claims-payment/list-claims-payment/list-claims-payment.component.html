@@ -56,7 +56,7 @@
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
                 <tr class="tr">
-                    <th class="th" (change)="onCheckAllFFSToQueue($event);"><input type="checkbox"></th>
+                    <th class="th" *ngIf="claims.length > 0" (change)="onCheckAllFFSToQueue($event);"><input type="checkbox"></th>
                     <th class="th">No</th>
                     <th class="th">Date</th>
                     <th class="th">Amount Due</th>
