@@ -84,8 +84,10 @@ export class MainMenuComponent implements OnInit {
     Observable.of().delay(5000);
     role.forEach(roleItem => {
       if (!!roleItem.accessibilities) {
+        console.log(roleItem.accessibilities);
         const accessibilities = roleItem.accessibilities;
         accessibilities.forEach(access => {
+          console.log(access);
           if (!!access.module) {
         //     this.hasBeneficiary = true;
         //     //break;
@@ -203,8 +205,9 @@ export class MainMenuComponent implements OnInit {
                 break;
             }
           }
-
-          this.hasPlatform = true;
+          // this.hasAccessManagement = true;
+          // this.hasRoleManagement = true;
+          // this.hasUserManagement = true;
         });
       }
     });

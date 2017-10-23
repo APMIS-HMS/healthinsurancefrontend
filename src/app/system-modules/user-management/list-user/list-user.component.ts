@@ -48,6 +48,7 @@ export class ListUserComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('User List');
     this._headerEventEmitter.setMinorRouteUrl('List all all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
+    console.log(this.auth);
     this._getCurrentPlatform();
   }
 	private _getCurrentPlatform() {
@@ -70,7 +71,7 @@ export class ListUserComponent implements OnInit {
         this._systemService.off();
       });
     } else if (this.auth.userType.name === 'Platform Owner') {
-      console.log(this.auth.userType)
+      console.log(this.auth.userType);
       this._userService.find({ query: { 'platformOwnerId._id': this.currentPlatform._id } }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
@@ -78,7 +79,7 @@ export class ListUserComponent implements OnInit {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
-      })
+      });
     }
 
 
@@ -89,7 +90,7 @@ export class ListUserComponent implements OnInit {
     this._router.navigate(['/modules/user/users', user._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
-      console.log(err)
+      console.log(err);
       this._systemService.off();
     });
   }
