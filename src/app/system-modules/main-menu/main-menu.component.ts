@@ -199,6 +199,8 @@ export class MainMenuComponent implements OnInit {
                 break;
             }
           }
+
+          this.hasPlatform = true;
         });
       }
     });
