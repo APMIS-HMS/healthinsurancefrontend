@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Rx';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../services/common/system-module.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -33,6 +34,8 @@ export class MainMenuComponent implements OnInit {
   hasRoleManagement: boolean = false;
   hasAccessManagement: boolean = false;
   hasUserManagement: boolean = false;
+
+  ready:boolean = false;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -78,6 +81,7 @@ export class MainMenuComponent implements OnInit {
 
   private _checkRole() {
     const role = this.user.roles;
+    Observable.of().delay(5000);
     role.forEach(roleItem => {
       if (!!roleItem.accessibilities) {
         const accessibilities = roleItem.accessibilities;
@@ -204,7 +208,7 @@ export class MainMenuComponent implements OnInit {
         });
       }
     });
-
+    this.ready = true;
   }
 
   close_onClick() {

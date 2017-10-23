@@ -22,6 +22,17 @@
           <div class="item-label">LAASHMA ID:</div>
           <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</div>
         </div>
+        <div class="group-item">
+          <div class="item-label">POLICY ID:</div>
+          <div class="item-val">{{selectedAuthorization.policyId.policyId}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">POLICY STATUS:</div>
+          <div class="item-val">
+            <span *ngIf="selectedAuthorization.policyId.isActive">Active</span>
+            <span *ngIf="!selectedAuthorization.policyId.isActive">InActive</span>
+          </div>
+        </div>
       </div>
 
       <div class="group-wrap">
@@ -33,13 +44,10 @@
           <div class="item-label">Provider ID:</div>
           <div class="item-val">{{selectedAuthorization.checkedInDetails.providerFacilityId.provider.providerId}}</div>
         </div>
+
         <div class="group-item">
-          <div class="item-label">Health Plan:</div>
-          <div class="item-val">Formal Sector Plan</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Claim Type:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.claimType.name}}</div>
+          <div class="item-label">Encounter Type:</div>
+          <div class="item-val">{{selectedAuthorization.checkedInDetails.encounterType.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Status:</div>
@@ -52,13 +60,31 @@
           <div class="item-val">{{selectedAuthorization.checkedInDetails.confirmation | date}}</div>
         </div>
         <div class="group-item">
-          <div class="item-label">Date when claims was filed:</div>
+          <div class="item-label">Date when claims was checked out:</div>
           <div class="item-val"></div>
         </div>
       </div>
-      <!-- <div class="list-buttom" style="width: 175px;">
-        <div class="btn btn-medium btn-yellow">Generate Authorization</div>
-      </div> -->
+
+
+      <div class="group-wrap">
+        <div class="group-item">
+          <div class="item-label">Health Insurance Agency:</div>
+          <div class="item-val">{{selectedAuthorization.policyId.hiaId.name}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">HIA ID:</div>
+          <div class="item-val">{{selectedAuthorization.policyId.hiaId.hia.cin}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Health Plan:</div>
+          <div class="item-val">{{selectedAuthorization?.policyId.planId.name}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Health Plan:</div>
+          <div class="item-val">{{selectedAuthorization?.policyId.planId.name}}</div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -160,8 +186,8 @@
                         <td class="td">{{cliDoc.investigation.name}}</td>
                         <td class="td">{{cliDoc.investigation.Amount}}</td>
                         <td>
-                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus"
-                            class="form-control" [compareWith]='compare'>
+                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)"
+                            [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
@@ -190,7 +216,8 @@
                         <td class="td">{{cliDoc.drug.name}}</td>
                         <td class="td">{{cliDoc.quantity}} {{cliDoc.unit.name}}</td>
                         <td>
-                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)"
+                            [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
@@ -219,7 +246,8 @@
                         <td class="td">{{cliDoc.procedure.name}}</td>
                         <td class="td">{{cliDoc.procedure.Amount}}</td>
                         <td>
-                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                          <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)"
+                            [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
                             <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
                           </select>
@@ -251,7 +279,7 @@
           <button class="btn btn-medium btn-red" [disabled]="disableQuery" (click)="queryClaim(transaction)">QUERY</button>
           <button class="btn btn-medium btn-yellow" [disabled]="disableHold" (click)="holdClaim(transaction)">HOLD</button>
           <button class="btn btn-medium btn-blue" [disabled]="disableApprove" (click)="approveClaim(transaction)">APPROVE</button>
-          <button class="btn btn-medium btn-red"  (click)="cancel()">CANCEL</button>
+          <button class="btn btn-medium btn-red" (click)="cancel()">CANCEL</button>
         </div>
       </div>
 

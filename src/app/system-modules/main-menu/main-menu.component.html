@@ -13,7 +13,7 @@
     <div (click)="signOut()" class="user-logout">Logout</div>
 </div>
 
-<ul class="menu-links">
+<ul class="menu-links" *ngIf="ready">
     <div class="menu-group">
         <li routerLink="/modules/welcome" (click)="close_onClick()" class="menu-link">HOME</li>
         <li *ngIf="hasBeneficiary" routerLink="/modules/beneficiary/beneficiaries" (click)="close_onClick()" class="menu-link">BENEFICIARIES</li>
@@ -35,4 +35,9 @@
         <li *ngIf="hasAccessManagement" routerLink="/modules/access" (click)="close_onClick()" class="menu-link">ACCESS MANAGEMENT</li>
         <li *ngIf="hasUserManagement" routerLink="/modules/user/users" (click)="close_onClick()" class="menu-link">USER MANAGEMENT</li>
     </div>
+</ul>
+<ul class="ready" *ngIf="!ready">
+    <li>
+        Loading menu....
+    </li>
 </ul>
