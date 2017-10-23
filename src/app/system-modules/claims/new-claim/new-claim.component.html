@@ -1,5 +1,5 @@
 <div style="padding-top:2px;">
-    <section class="app-content-wrap content shadow-RB">
+    <section *ngIf="newClaim" class="app-content-wrap content shadow-RB">
 
         <div class="nut-tab-topSect-wrap">
             <div></div>
@@ -506,7 +506,7 @@
                 </div>
             </div>
                 <!-- <div class="frm-title">Treatment</div> -->
-            <button class="btn btn-medium btn-blue cta" [disabled]="isProcessing" (click)="onSendClaim()">
+            <button class="btn btn-medium btn-blue cta" [disabled]="isProcessing" (click)="newClaimConfirm_click()">
                 <span>
                     <div [hidden] = "isProcessing">
                             Save
@@ -517,5 +517,19 @@
                 </span>
             </button>
         </form>
+    </section>
+
+    <section *ngIf="newClaimConfirm" class="app-content-wrap content shadow-RB">
+        <app-new-claim-confirm></app-new-claim-confirm>
+        <button class="btn btn-medium btn-blue cta" (click)="onSendClaim()">
+            <span>
+                <div [hidden] = "isProcessing">
+                        Save
+                </div>
+                <div [hidden] = "!isProcessing">
+                        Processing... <i class='fa fa-spinner fa-spin'></i>
+                </div>
+            </span>
+        </button>
     </section>
 </div>

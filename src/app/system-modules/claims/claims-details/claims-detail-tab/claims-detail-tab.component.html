@@ -268,7 +268,7 @@
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-approve-claim (closeModal)="modal_close()"></app-modal-approve-claim>
+    <app-modal-approve-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-approve-claim>
   </div>
 </div>
 
@@ -282,13 +282,13 @@
 <div *ngIf="modalQuery" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-query-claim (closeModal)="modal_close()"></app-modal-query-claim>
+    <app-modal-query-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-query-claim>
   </div>
 </div>
 
 <div *ngIf="modalHold" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-hold-claim (closeModal)="modal_close()"></app-modal-hold-claim>
+    <app-modal-hold-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-hold-claim>
   </div>
 </div>
