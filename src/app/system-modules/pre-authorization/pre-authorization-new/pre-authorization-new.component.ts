@@ -35,6 +35,8 @@ export class PreAuthorizationNewComponent implements OnInit {
   newAuth = true;
   newAuthConfirm = false;
 
+  showCodes = false;
+
   preAuthFormGroup: FormGroup;
   symptomFormGroup: FormGroup;
   diagnosisFormGroup: FormGroup;
@@ -789,5 +791,11 @@ export class PreAuthorizationNewComponent implements OnInit {
   newAuthConfirm_click(){
     this.newAuth = false;
     this.newAuthConfirm = true;
+  }
+  modal_close() {
+    this.showCodes = false;
+  }
+  pop_codes(){
+    this.showCodes = true;
   }
 }

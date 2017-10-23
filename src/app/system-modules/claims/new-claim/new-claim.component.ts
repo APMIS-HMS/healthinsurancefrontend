@@ -30,6 +30,8 @@ export class NewClaimComponent implements OnInit {
   newClaim = true;
   newClaimConfirm = false;
 
+  showCodes = false;
+
   claimsFormGroup: FormGroup;
   searchResults = false;
   selectedDiagnosis:any;
@@ -567,6 +569,13 @@ export class NewClaimComponent implements OnInit {
   newClaimConfirm_click(){
     this.newClaim = false;
     this.newClaimConfirm = true;
+  }
+
+  modal_close() {
+    this.showCodes = false;
+  }
+  pop_codes(){
+    this.showCodes = true;
   }
 
 }
