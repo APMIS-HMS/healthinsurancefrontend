@@ -247,7 +247,7 @@
               </div>
             </ul>
           </div>
-          <app-new-claim-tabs [claimItem]="selectedClaim" (closeDialog)="onReply($event)" *ngIf="isReply == true"></app-new-claim-tabs>
+          <app-new-claim-tabs [claimItem]="selectedClaim" (closeDialog)="onReply($event)" *ngIf="item.response.isReply == true"></app-new-claim-tabs>
           <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1 && isReply==false">
               <div class="btn btn-medium btn-grey-outline" (click)="onReply()">
                   <i class="fa fa-reply"></i> REPLY

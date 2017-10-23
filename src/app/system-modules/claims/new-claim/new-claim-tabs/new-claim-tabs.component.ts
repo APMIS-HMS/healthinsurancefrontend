@@ -132,20 +132,39 @@ export class NewClaimTabsComponent implements OnInit {
       procedure: ['']
     });
 
-    if (this.claimItem.documentations != undefined) {
-      console.log(this.claimItem.documentations);
-      this.diagnosisLists = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.diagnosis;
-      this.drugList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.drugs;
-      this.investigationList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.investigations;
-      this.procedureList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.procedures;
-      this.symptomLists = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.symptoms;
-      this.clinicNote = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.clinicNote;
-      this.claimNote = this.claimItem.claimNote;
-      this.claimsFormGroup.controls.clinicalNote.setValue(this.clinicNote);
-      this.claimsFormGroup.controls.claimsNote.setValue(this.claimNote);
-      let fullName = this.user.firstName + " " + this.user.lastName;
-      this.claimsFormGroup.controls.medicalPersonelName.setValue(fullName);
+    for (var i = this.claimItem.documentations.length - 1; i >= 0; i--) {
+      if (this.claimItem.documentations[i].request != undefined) {
+        this.diagnosisLists = this.claimItem.documentations[i].request.diagnosis;
+        this.drugList = this.claimItem.documentations[i].request.drugs;
+        this.investigationList = this.claimItem.documentations[i].request.investigations;
+        this.procedureList = this.claimItem.documentations[i].request.procedures;
+        this.symptomLists = this.claimItem.documentations[i].request.symptoms;
+        this.clinicNote = this.claimItem.documentations[i].request.clinicNote;
+        this.claimNote = this.claimItem.claimNote;
+        this.claimsFormGroup.controls.clinicalNote.setValue(this.clinicNote);
+        this.claimsFormGroup.controls.claimsNote.setValue(this.claimNote);
+        let fullName = this.user.firstName + " " + this.user.lastName;
+        this.claimsFormGroup.controls.medicalPersonelName.setValue(fullName);
+        break;
+      }
     }
+    console.log(this.claimItem);
+
+    // if (this.claimItem.documentations != undefined) {
+    //   console.log(this.claimItem.documentations);
+    //   this.diagnosisLists = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.diagnosis;
+    //   this.drugList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.drugs;
+    //   this.investigationList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.investigations;
+    //   this.procedureList = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.procedures;
+    //   this.symptomLists = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.symptoms;
+    //   this.clinicNote = this.claimItem.documentations[this.claimItem.documentations.length - 1].request.clinicNote;
+    //   this.claimNote = this.claimItem.claimNote;
+    //   this.claimsFormGroup.controls.clinicalNote.setValue(this.clinicNote);
+    //   this.claimsFormGroup.controls.claimsNote.setValue(this.claimNote);
+    //   let fullName = this.user.firstName + " " + this.user.lastName;
+    //   this.claimsFormGroup.controls.medicalPersonelName.setValue(fullName);
+    // }
+
     // "visitType": this.claimsFormGroup.controls.visitClass.value,
     // "drugs": this.drugList,
     // "investigations": this.investigationList,
@@ -447,7 +466,8 @@ export class NewClaimTabsComponent implements OnInit {
     } else {
       this.claimItem.documentations.push({ "request": request });
     }
-    this._claimService.update(this.claimItem).then((payload: any) => {
+    console.log(this.claimItem.documentations);
+    this._claimService.patch(this.claimItem._id,this.claimItem,{}).then((payload: any) => {
       console.log(payload);
       this.claimsFormGroup.reset();
       this.isProcessing = false;
@@ -539,7 +559,7 @@ export class NewClaimTabsComponent implements OnInit {
     this.tab_notes = true;
   }
 
-  onCloseDialog(){
+  onCloseDialog() {
     this.closeDialog.emit(true);
   }
 
