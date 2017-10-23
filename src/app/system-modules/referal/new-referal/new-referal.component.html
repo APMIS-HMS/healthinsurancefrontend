@@ -1,5 +1,5 @@
 <div style="padding-top:2px;">
-    <section class="app-content-wrap content shadow-RB">
+    <section *ngIf="newRef" class="app-content-wrap content shadow-RB">
 
         <div class="nut-tab-topSect-wrap">
             <div></div>
@@ -462,7 +462,12 @@
                 </div>
             </div>
 
-            <button class="btn btn-medium btn-blue cta">SEND</button>
+            <button (click)="newRefConfirm_click()" class="btn btn-medium btn-blue cta">SEND</button>
         </form>
+    </section>
+
+    <section *ngIf="newRefConfirm" class="app-content-wrap content shadow-RB">
+        <app-new-referal-confirm></app-new-referal-confirm>
+        <button (click)="send()" class="btn btn-medium btn-blue cta">SEND</button>
     </section>
 </div>

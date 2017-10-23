@@ -22,7 +22,7 @@ export class HiaDetailsComponent implements OnInit {
   createdByControl = new FormControl();
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
-  
+
   selectedFacility: Facility = <Facility>{};
   addApproval: boolean = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';

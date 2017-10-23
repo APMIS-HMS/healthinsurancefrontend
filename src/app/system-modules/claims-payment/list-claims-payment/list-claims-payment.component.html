@@ -81,7 +81,7 @@
                 </tr>
                 <tr *ngFor="let claim of claims; let i = index;" class="tr">
                     <td class="td">
-                        <input (change)="onCheckFFSQueue(i, $event, claim);" [attr.checked]="claim.isChecked ? true : null" type="checkbox">
+                        <input (change)="onCheckFFSQueue(i, claim);" [attr.checked]="claim.isChecked ? true : null" type="checkbox">
                     </td>
                     <td class="td">{{ i+1 }}</td>
                     <td class="td">{{ claim?.dateClaimCreated | date }}</td>

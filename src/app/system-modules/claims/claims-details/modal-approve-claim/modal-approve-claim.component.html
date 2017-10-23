@@ -24,13 +24,11 @@
     <div class="frm-item-wrap">
         <label class="label">Institution</label>
         <div class="input-wrap">
-            <select formControlName="institution" class="form-control">
-                <option value="" selected>Select...</option>
-            </select>
+            <input type="text" formControlName="institution" class="form-control">
         </div>
         <small class="alert-label" [hidden]="claimsApproveFormGroup.controls.institution.valid || claimsApproveFormGroup.controls.institution.pristine">
             Choose state from the dropdown.
         </small>
     </div>
-    <button class="btn btn-medium btn-blue cta">OK</button>
+    <button class="btn btn-medium btn-blue cta" (click)="onResponse()">OK</button>
 </form>

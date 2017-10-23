@@ -12,6 +12,9 @@ import { IMyDpOptions, IMyDate } from 'mydatepicker';
 })
 export class NewReferalComponent implements OnInit {
 
+  newRef = true;
+  newRefConfirm = false;
+
   referalFormGroup: FormGroup;
   searchResults = false;
 
@@ -80,6 +83,15 @@ export class NewReferalComponent implements OnInit {
         this.loadingService.endLoading();
       });
     }
+  }
+
+  newRef_click(){
+    this.newRef = true;
+    this.newRefConfirm = false;
+  }
+  newRefConfirm_click(){
+    this.newRef = false;
+    this.newRefConfirm = true;
   }
 
 }

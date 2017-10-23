@@ -32,6 +32,7 @@ export * from './common/investigation.service';
 export * from './common/check-in.service';
 export * from './common/claim.service';
 export * from './common/diagnosis-type.service';
+export * from './common/capitation-fee.service';
 
 export * from './hia/hia-type.service';
 export * from './hia/hia-grade.service';

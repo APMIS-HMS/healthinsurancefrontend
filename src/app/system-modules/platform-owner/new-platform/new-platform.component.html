@@ -132,6 +132,18 @@
                 </div>
             </div>
             <div class="frm-item-wrap">
+                <label class="label">Business Contact's Photo</label>
+                <div class="input-wrap">
+                    <div class="img-box">
+                        <button (click)="showImageBrowseDlg('b-contact')" class="btn btn-medium btn-blue">Search Photo</button>
+                    </div>
+                    <div class="img-holder-box">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #bInput type="file" id="bUploadResult" (change)="readURL('b-contact')">
+                        <img #bImage id="bImage" class="image-holder" src="assets/img/users/default.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="frm-item-wrap">
                 <label class="label">Business Contact's First Name</label>
                 <div class="inputWrap">
                     <input type="text" formControlName="bc_fname" class="form-control">
@@ -177,6 +189,18 @@
                     <small class="alert-label" [hidden]="platformFormGroup.controls.bc_phone.valid || platformFormGroup.controls.bc_phone.pristine">
                         Enter a valid phone number.
                     </small>
+                </div>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">It Contact Photo</label>
+                <div class="input-wrap">
+                    <div class="img-box">
+                        <button (click)="showImageBrowseDlg('it-contact')" class="btn btn-medium btn-blue">Search Photo</button>
+                    </div>
+                    <div class="img-holder-box">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #itInput type="file" id="itUploadResult" (change)="readURL('it-contact')">
+                        <img #itImage id="logoImage" class="image-holder" src="assets/img/users/default.png" />
+                    </div>
                 </div>
             </div>
             <div class="frm-item-wrap">
@@ -246,21 +270,22 @@
                 </div>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">
-                    <button (click)="showImageBrowseDlg()" class="btn btn-medium btn-blue">Search Photo</button>
-                </label>
-                <div class="inputWrap">
-                    <div class="">
-                        <input accept="image/x-png,image/jpeg" style="display:none;" #fileInput type="file" id="uploadResult" (change)="readURL(this)">
+                <label class="label">Logo</label>
+                <div class="input-wrap">
+                    <div class="img-box">
+                        <button (click)="showImageBrowseDlg('logo')" class="btn btn-medium btn-blue">Search Photo</button>
                     </div>
-                    <div style="width:100%;">
-                        <div style="width:100%;" class="placehold-wrap">
-                            <img #blah id="blah" src="http://placehold.it/180" alt="your image" />
-                        </div>
+                    <div class="img-holder-box">
+                        <input accept="image/x-png,image/jpeg" style="display:none;" #logoInput type="file" id="uploadResult" (change)="readURL('logo')">
+                        <img #logoImage id="logoImage" class="image-holder" src="assets/img/logos/logo-placeholder.png" />
                     </div>
                 </div>
             </div>
-            <button class="btn btn-medium btn-blue cta" [disabled]="!platformFormGroup.valid" (click)="save(platformFormGroup.valid, platformFormGroup.value, fileInput)" [innerHtml]="saveBtn"></button>
+            <button class="btn btn-medium btn-blue cta" [disabled]="!platformFormGroup.valid || disableBtn" (click)="save(platformFormGroup.valid, platformFormGroup.value)">
+                <span *ngIf="saveBtnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                <span *ngIf="saveBtnText">SAVE &nbsp; <i class="fa fa-check"></i></span>
+                <span *ngIf="updateBtnText">UPDATE &nbsp; <i class="fa fa-check"></i></span>
+            </button>
             <!-- <button (click)="onClickAddPlan(platformFormGroup.valid, platformFormGroup.value)" class="btn btn-medium btn-blue"> NEXT</button> -->
         </form>
     </section>

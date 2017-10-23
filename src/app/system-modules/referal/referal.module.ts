@@ -10,6 +10,7 @@ import { ReferalTopBarComponent } from './referal-details/referal-top-bar/refera
 import { ReferalDetailTabComponent } from './referal-details/referal-detail-tab/referal-detail-tab.component';
 import { ModalApproveReferalComponent } from './referal-details/modal-approve-referal/modal-approve-referal.component';
 import { ModalRejectReferalComponent } from './referal-details/modal-reject-referal/modal-reject-referal.component';
+import { NewReferalConfirmComponent } from './new-referal/new-referal-confirm/new-referal-confirm.component';
 
 @NgModule({
     imports: [
@@ -24,7 +25,8 @@ import { ModalRejectReferalComponent } from './referal-details/modal-reject-refe
         ReferalTopBarComponent,
         ReferalDetailTabComponent,
         ModalApproveReferalComponent,
-        ModalRejectReferalComponent],
+        ModalRejectReferalComponent,
+        NewReferalConfirmComponent],
     providers: []
 })
 export class ReferalModule { }

@@ -18,6 +18,7 @@ import { ModalHoldClaimComponent } from './claims-details/modal-hold-claim/modal
 import { ModalQueryClaimComponent } from './claims-details/modal-query-claim/modal-query-claim.component';
 import { ClaimsOthersTabComponent } from './claims-details/claims-others-tab/claims-others-tab.component';
 import { NewClaimTabsComponent } from './new-claim/new-claim-tabs/new-claim-tabs.component';
+import { NewClaimConfirmComponent } from './new-claim/new-claim-confirm/new-claim-confirm.component';
 
 @NgModule({
     imports: [
@@ -25,7 +26,7 @@ import { NewClaimTabsComponent } from './new-claim/new-claim-tabs/new-claim-tabs
         claimsRoutes,
         MyDatePickerModule
     ],
-    declarations: [ClaimsComponent, ClaimsDetailsComponent, NewClaimComponent, ClaimsTopBarComponent, ClaimsDetailTabComponent, ModalApproveClaimComponent, ModalRejectClaimComponent, ModalHoldClaimComponent, ModalQueryClaimComponent, ClaimsOthersTabComponent, NewClaimTabsComponent],
+    declarations: [ClaimsComponent, ClaimsDetailsComponent, NewClaimComponent, ClaimsTopBarComponent, ClaimsDetailTabComponent, ModalApproveClaimComponent, ModalRejectClaimComponent, ModalHoldClaimComponent, ModalQueryClaimComponent, ClaimsOthersTabComponent, NewClaimTabsComponent, NewClaimConfirmComponent],
     providers: [ClaimTypeService,VisitTypeService,SymptomService,InvestigationService,DrugService,DiagnosisService,
         ProcedureService,CheckInService, ClaimService,DiagnosisTypeService]
 })

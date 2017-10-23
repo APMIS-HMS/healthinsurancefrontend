@@ -32,6 +32,9 @@ import { DURATIONS } from '../../../services/globals/config';
 })
 export class PreAuthorizationNewComponent implements OnInit {
 
+  newAuth = true;
+  newAuthConfirm = false;
+
   preAuthFormGroup: FormGroup;
   symptomFormGroup: FormGroup;
   diagnosisFormGroup: FormGroup;
@@ -777,5 +780,14 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_notes = false;
     this.tab_drugs = false;
     this.tab_clinicalNotes = true;
+  }
+
+  newAuth_click(){
+    this.newAuth = true;
+    this.newAuthConfirm = false;
+  }
+  newAuthConfirm_click(){
+    this.newAuth = false;
+    this.newAuthConfirm = true;
   }
 }

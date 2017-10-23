@@ -97,11 +97,13 @@ button {
     font-size: 14px;
     padding: 10px 20px;
 }
-.btn-center-flex{
+
+.btn-center-flex {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .btn-blue {
     background: $brand-primary;
     color: #fff;
@@ -232,7 +234,7 @@ button {
     box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.1);
 }
 
-.shadow-b { 
+.shadow-b {
     -webkit-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
     -moz-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
     box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.54);
@@ -343,8 +345,13 @@ button {
     justify-content: center;
 }
 
-.tab-logo img {
-    width: 50px;
+.tab-logo {
+    width: 100px;
+    height: 70px;
+    img {
+        width: 50px;
+        height: 50px;
+    }
 }
 
 .nut-tab-topSect-wrap {

@@ -27,6 +27,7 @@ import { ModalRejectAuthorizationComponent } from './pre-authorization-details/m
 import { ModalHoldAuthorizationComponent } from './pre-authorization-details/modal-hold-authorization/modal-hold-authorization.component';
 import { ModalQueryAuthorizationComponent } from './pre-authorization-details/modal-query-authorization/modal-query-authorization.component';
 import { NewPreauthTabsComponent } from './pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
+import { NewAuthConfirmComponent } from './pre-authorization-new/new-auth-confirm/new-auth-confirm.component';
 
 @NgModule({
     imports: [
@@ -45,7 +46,8 @@ import { NewPreauthTabsComponent } from './pre-authorization-new/new-preauth-tab
         ModalRejectAuthorizationComponent,
         ModalHoldAuthorizationComponent,
         ModalQueryAuthorizationComponent,
-        NewPreauthTabsComponent],
+        NewPreauthTabsComponent,
+        NewAuthConfirmComponent],
     providers: [VisitTypeService, CheckInService, SymptomService,InvestigationService,DrugService,DiagnosisService,
         ProcedureService, DiagnosisTypeService, ProcedureService, DrugPackSizeService, PolicyService, PreAuthorizationService]
 })
