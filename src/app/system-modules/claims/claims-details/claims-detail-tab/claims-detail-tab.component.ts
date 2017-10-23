@@ -56,10 +56,8 @@ export class ClaimsDetailTabComponent implements OnInit {
     if(this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response != undefined){
       this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response.isReply = true;
       console.log(this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response);
-      console.log("a");
     }else{
       this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response.isReply = true;
-      console.log("b");
     }
   }
 
