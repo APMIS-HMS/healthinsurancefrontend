@@ -27,6 +27,27 @@ export class ListClaimsComponent implements OnInit {
         providerFacilityId: this.user.facilityId._id
       }
     }).then((payload: any) => {
+
+      payload.data.forEach(element => {
+        for (var i = element.documentations.length - 1; i >= 0; i--) {
+          if (element.documentations[i].response != undefined) {
+            if (element.documentations[i].response.isReject == true) {
+              element.status = "Reject";
+            }
+            else if (element.documentations[i].response.isQuery == true) {
+              element.status = "Query";
+            }
+            else if (element.documentations[i].response.isHold == true) {
+              element.status = "Hold";
+            }
+            else if (element.documentations[i].response.isApprove == true) {
+              element.status = "Approved";
+            }
+            break;
+          }
+        }
+
+      });
       this.listOfClaims = payload.data;
       console.log(this.listOfClaims);
     });

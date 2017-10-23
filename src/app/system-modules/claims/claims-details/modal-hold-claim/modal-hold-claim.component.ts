@@ -43,7 +43,7 @@ export class ModalHoldClaimComponent implements OnInit {
       "reason": this.claimsHoldFormGroup.controls.reason.value,
       "name": this.claimsHoldFormGroup.controls.name.value,
       "Institution": this.claimsHoldFormGroup.controls.institution.value,
-      "isQuery": true
+      "isHold": true
     };
     if(this.claimDetail.documentations[this.claimDetail.documentations.length-1].response == undefined){
       this.claimDetail.documentations[this.claimDetail.documentations.length-1].response = response;
