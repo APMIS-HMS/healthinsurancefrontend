@@ -8,6 +8,7 @@ import { ListEmployerComponent } from '../system-modules/employer/list-employer/
 import { ListBeneficiaryComponent } from '../system-modules/beneficiary/list-beneficiary/list-beneficiary.component';
 import { ListClaimsComponent } from '../system-modules/claims/list-claims/list-claims.component';
 import { ListReferalsComponent } from '../system-modules/referal/list-referals/list-referals.component';
+import { LashmaCodesComponent } from './lashma-codes/lashma-codes.component';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { ListReferalsComponent } from '../system-modules/referal/list-referals/l
         ListEmployerComponent,
         ListBeneficiaryComponent,
         ListClaimsComponent,
-        ListReferalsComponent
+        ListReferalsComponent,
+        LashmaCodesComponent
     ],
     exports: [
         CommonModule,
@@ -27,7 +29,8 @@ import { ListReferalsComponent } from '../system-modules/referal/list-referals/l
         ListEmployerComponent,
         ListBeneficiaryComponent,
         ListClaimsComponent,
-        ListReferalsComponent
+        ListReferalsComponent,
+        LashmaCodesComponent
     ],
     imports: [
         RouterModule,
