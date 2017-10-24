@@ -96,7 +96,7 @@
                         <!-- <i *ngIf="!provider.provider.facilityClass.includes('secondary')" class="fa fa-times red" aria-hidden="true"></i> -->
                     </td>
                     <td class="td"><span class="red">Not Paid</span></td>
-                    <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">
+                    <td class="td td-icos" routerLink="/modules/claims/claims-payment/{{claim._id}}">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>
@@ -154,7 +154,7 @@
                     <td class="td">
                         <input (change)="onCheckCQueue(i, $event, claim);" type="checkbox">
                     </td>
-                    <td class="td td-icos" routerLink="/modules/claims/claims-payment/23">
+                    <td class="td td-icos" routerLink="/modules/claims/claims-payment/{{claim._id}}">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>
