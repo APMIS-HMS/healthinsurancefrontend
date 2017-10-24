@@ -11,7 +11,6 @@ import {
   CapitationFeeService, PolicyService
 } from '../../../services/index';
 import { Claim } from '../../../models/index';
-import { DummyClaimService } from './claims';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({

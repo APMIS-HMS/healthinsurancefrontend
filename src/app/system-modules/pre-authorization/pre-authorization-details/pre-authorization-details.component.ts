@@ -17,29 +17,31 @@ export class PreAuthorizationDetailsComponent implements OnInit {
 
   selectedAuthorization: any;
 
-  constructor(private _preAuthorizationService: PreAuthorizationService,
+  constructor(
+    private _preAuthorizationService: PreAuthorizationService,
     private _systemService: SystemModuleService,
-    private _route: ActivatedRoute) { 
+    private _route: ActivatedRoute
+  ) {
       this._route.params.subscribe(param => {
         if (param.id !== undefined) {
           this._getAuthorizationDetails(param.id);
         }
-      })
+      });
     }
 
   ngOnInit() {
-   
+
   }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
     this._preAuthorizationService.get(id, {}).then(payload => {
       this._systemService.off();
-      this.selectedAuthorization = payload;      
+      this.selectedAuthorization = payload;
       this.tab_details = true;
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
   tabDetails_click() {

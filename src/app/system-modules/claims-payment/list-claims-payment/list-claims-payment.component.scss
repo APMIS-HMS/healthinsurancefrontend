@@ -11,6 +11,7 @@
     .payment-box {
         width: 100%;
         padding-top: 10px;
+        margin-left: -20px;
         display: flex;
         justify-content: space-between;
         .tab {
@@ -22,8 +23,7 @@
                 justify-content: center;
                 align-items: center;
                 border: 1px solid #474747;
-                margin-right: 5px;
-                padding: 5px;
+                padding: 10px;
             }
             .tab-ffs {
                 &.claim-tab-active {
