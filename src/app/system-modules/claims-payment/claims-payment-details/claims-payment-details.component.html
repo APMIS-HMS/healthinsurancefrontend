@@ -225,7 +225,7 @@
 
                                 <div class="entry-wrap">
                                     <li class="doc-subtitle">Amount</li>
-                                    <li>N20,000</li>
+                                    <li> &#x20A6; {{ selectedClaim?.costingApprovalDocumentation }}</li>
                                 </div>
                             </ul>
                         </div>
@@ -261,8 +261,8 @@
                 </div>
             </div>
 
-            <div class="action-wrap">
-                <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
+            <div class="action-wrap" *ngIf="!selectedClaim?.isQueuedForPayment">
+                <div class="btn btn-medium btn-yellow" (click)="onClickQueueForPayment()">Queue For Payment</div>
             </div>
         </div>
     </div>

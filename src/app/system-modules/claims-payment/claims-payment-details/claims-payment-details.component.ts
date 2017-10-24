@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SystemModuleService, ClaimService } from '../../../services/index';
+import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-claims-payment-details',
@@ -18,7 +19,8 @@ export class ClaimsPaymentDetailsComponent implements OnInit {
   constructor(
     private _claimService: ClaimService,
     private _systemService: SystemModuleService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _headerEventEmitter: HeaderEventEmitterService,
   ) {
     this._route.params.subscribe(param => {
       if (!!param.id) {
@@ -28,6 +30,8 @@ export class ClaimsPaymentDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Claims Payment Details');
+    this._headerEventEmitter.setMinorRouteUrl('Detials page');
     console.log('Ran');
   }
 
@@ -42,6 +46,10 @@ export class ClaimsPaymentDetailsComponent implements OnInit {
       console.log(err);
       this._systemService.off();
     });
+  }
+
+  onClickQueueForPayment() {
+    console.log('Payment');
   }
 
   tabDetails_click() {
