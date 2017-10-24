@@ -66,7 +66,9 @@ export class LoginComponent implements OnInit {
 			this.loginBtnProcessing = true;
 			this.disableBtn = true;
 
+
 			this._authService.login(value).then(payload => {
+				console.log(payload.user.roles)
 				this._locker.setObject('auth', payload);
 				this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
 				this.loginBtnText = true;
