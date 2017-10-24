@@ -1,0 +1,116 @@
+
+<div style="padding-top:2px;">
+  <section class="app-content-wrap content shadow-RB">
+    <div class="nut-tab-topSect-wrap">
+      <div class="btn btn-medium btn-grey-outline" (click)="navigate('/modules/premium/individual');">
+        <i class="fa fa-times"></i> CANCEL
+      </div>
+    </div>
+
+    <div class="content-top-bar">
+      <div class="bar-labels">
+        <div>
+          <label>Agric International Technology & Trade</label>
+        </div>
+      </div>
+      <div class="bar-icons">
+        <div>CIN Number:
+          <span >000834-11</span>
+        </div>
+      </div>
+      <div class="bar-icos">
+        <div>Registration Date:
+          <span>12th Jun, 2017.</span>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="organizationPayFormGroup" novalidate>
+      <div class="frm-subsect">
+        <div class="frm-item-wrap">
+           <div class="input-wrap">
+              <div>
+                <div class="input-wrap-x2">                 
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tbl-wrap">
+                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                  <thead class="thead">
+                    <tr class="tr">
+                      <th class="th"></th>
+                      <th class="th">Plans</th>
+                      <th class="th">No Of Beneficiaries</th>
+                      <th class="th">Premium</th>
+                      <td class="th">Action</td>
+                    </tr>
+                  </thead>
+
+                  <tbody class="tbody">
+                    <tr class="tr">
+                      <td class="td">
+                        <input type="checkbox" class="form-control">
+                      </td>
+                      <td class="td">Plan Name</td>
+                      <td class="td">50</td>
+                      <td class="td">500,000</td>
+                      <td class="td td-icos" (click)="addOrganizationPay_click()">
+                        <i class="fa fa-edit"></i>
+                      </td>
+                    </tr>
+                    <tr class="tr">
+                      <td class="td">
+                        <input type="checkbox" class="form-control">
+                      </td>
+                      <td class="td">Plan Name</td>
+                      <td class="td">25</td>
+                      <td class="td">170,000</td>
+                      <td class="td td-icos" (click)="addOrganizationPay_click()">
+                        <i class="fa fa-edit"></i>
+                      </td>
+                    </tr>
+
+                    <tr class="tr">
+                      <td class="td">
+                        <input type="checkbox" class="form-control">
+                      </td>
+                      <td class="td">Plan Name</td>
+                      <td class="td">120</td>
+                      <td class="td">120,000,000</td>
+                      <td class="td td-icos" (click)="addOrganizationPay_click()">
+                        <i class="fa fa-edit"></i>
+                      </td>
+                    </tr>                    
+                  </tbody>
+                </table>
+                <div class="table">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Total Premium</th>
+                        <th class="th">120,670,000</th>
+                      </tr>
+                    </thead>
+                </div>
+              </div>
+            </div>
+
+    </form>
+      <button class="btn btn-medium btn-blue cta" style="margin-top: 20px" (click)=" addPaymentMode_click()"> PAY MODE </button>
+  </section>
+</div>
+
+<div *ngIf="addOrganizationPay" class="modal-overlay">
+  <div class="modal-wrap shadow-RB" style="min-height:400px" >
+    <div (click)="modal_close()" class="close-modal">X</div>
+    <app-modal-add-organization-payment (closeModal)="modal_close()"></app-modal-add-organization-payment>
+  </div>
+</div>
+
+<div *ngIf="addPaymentMode" class="modal-overlay">
+  <div class="modal-wrap shadow-RB" style="max-width:150px">
+    <div (click)="modal_close()" class="close-modal">X</div>
+    <app-modal-payment-mode (closeModal)="modal_close()"></app-modal-payment-mode>
+  </div>
+</div>

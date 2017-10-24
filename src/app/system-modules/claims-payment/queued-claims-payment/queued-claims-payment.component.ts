@@ -111,8 +111,10 @@ export class QueuedClaimsPaymentComponent implements OnInit {
         claimsIds.push(claim._id);
       });
 
+      delete this.user.roles;
       const body = {
-        claims: claimsIds
+        claims: claimsIds,
+        paidBy: this.user
       };
 
       this._claimsPaymentService.payMultipleItem(body).then(res => {
