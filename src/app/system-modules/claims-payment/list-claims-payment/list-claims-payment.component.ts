@@ -6,7 +6,9 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
-import { SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService } from '../../../services/index';
+import {
+  SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService, CapitationFeeService
+} from '../../../services/index';
 import { Claim } from '../../../models/index';
 import { DummyClaimService } from './claims';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -26,6 +28,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   user: any;
   currentPlatform: any;
   claims: any = [];
+  claimsCapitation: any = [];
   selectedFFSClaims: any = [];
   selectedCClaims: any = [];
   loading: boolean = true;
@@ -35,6 +38,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   qCBtnText: boolean = true;
   qCBtnProcessing: boolean = false;
   qCDisableBtn: boolean = false;
+  capitationPrice: any;
 
   constructor(
     private _router: Router,
@@ -47,7 +51,8 @@ export class ListClaimsPaymentComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _claimsPaymentService: ClaimsPaymentService,
     private _getDummyData: DummyClaimService,
-    private _claimService: ClaimService
+    private _claimService: ClaimService,
+    private _capitationFeeService: CapitationFeeService
   ) { }
 
   ngOnInit() {
@@ -78,6 +83,39 @@ export class ListClaimsPaymentComponent implements OnInit {
       console.log(payload);
       this.loading = false;
       this.claims = payload.data;
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
+  }
+
+
+  private _getClaimsCapitationPayments() {
+    this._systemService.on();
+    this._claimService.find({
+      query: {
+        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
+         isQueuedForPayment: false,
+         'approvedDocumentation.response.isApprove': true
+    }}).then((payload: any) => {
+      console.log(payload);
+      this.loading = false;
+      this.claims = payload.data;
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
+  }
+
+  private _getClaimsCapitationPrice() {
+    this._systemService.on();
+    this._capitationFeeService.find({
+      query: {'platformOwnerId._id': this.currentPlatform._id, isActive: true,}
+    }).then((res: any) => {
+      console.log(res);
+      this.capitationPrice = res;
       this._systemService.off();
     }).catch(error => {
       console.log(error);
