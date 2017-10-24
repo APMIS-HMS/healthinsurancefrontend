@@ -26,6 +26,7 @@ import { SystemModuleService } from './../../../../services/index';
 export class NewClaimTabsComponent implements OnInit {
   @Output() closeDialog: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() claimItem: Claim = <Claim>{};
+  cloneClaimItem: any = <any>{};
   claimsFormGroup: FormGroup;
   tab_symptoms = true;
   tab_diagnosis = false;
@@ -103,6 +104,8 @@ export class NewClaimTabsComponent implements OnInit {
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.claimItem);
+    this.replyOk(this.claimItem);
+    console.log(this.cloneClaimItem);
     this.claimsFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
       lashmaid: ['', [<any>Validators.required]],
@@ -299,6 +302,10 @@ export class NewClaimTabsComponent implements OnInit {
     }
   }
 
+  replyOk(selectedClaim) {
+    this.cloneClaimItem = JSON.parse(JSON.stringify(selectedClaim));
+  }
+
   _getDiagnosises(value) {
     if (value && value.length > 1) {
       this._diagnosisService.find({
@@ -457,21 +464,21 @@ export class NewClaimTabsComponent implements OnInit {
       "symptoms": this.symptomLists,
       "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
     };
-    this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
-    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
+    this.cloneClaimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
+    this.cloneClaimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
     this.isProcessing = true;
-
-    if (this.claimItem.documentations[this.claimItem.documentations.length - 1].request == undefined) {
-      this.claimItem.documentations[this.claimItem.documentations.length - 1].request = request;
+    if (this.cloneClaimItem.documentations[this.cloneClaimItem.documentations.length - 1].request == undefined) {
+      this.cloneClaimItem.documentations[this.cloneClaimItem.documentations.length - 1].request = request;
     } else {
-      this.claimItem.documentations.push({ "request": request });
+      this.cloneClaimItem.documentations.push({ "request": request });
     }
-    console.log(this.claimItem.documentations);
-    this._claimService.patch(this.claimItem._id,this.claimItem,{}).then((payload: any) => {
+    console.log(this.cloneClaimItem.documentations);
+    this._claimService.update(this.cloneClaimItem).then((payload: any) => {
       console.log(payload);
       this.claimsFormGroup.reset();
       this.isProcessing = false;
       this.onCloseDialog();
+      window.location.reload();
     }, error => {
       console.log(error);
       this.isProcessing = false;
@@ -486,6 +493,9 @@ export class NewClaimTabsComponent implements OnInit {
       console.log(err)
       this._systemService.off();
     });
+  }
+  onCloseEditDialog(e){
+    
   }
 
 

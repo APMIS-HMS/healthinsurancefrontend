@@ -6,7 +6,7 @@
 <form [formGroup]="frmDependants" novalidate>
 
     <div formArrayName="dependantArray" class="frmArrayWrap">
-        <div class="frmArray" *ngFor="let dependant of frmDependants.controls['dependantArray'].controls; let i = index;">
+        <div class="frmArray" *ngFor="let dependant of frmDependants['controls'].dependantArray['controls']; let i = index;">
             <div (click)="closeDependant(dependant, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
             <div formGroupName="{{i}}">
                 <div class="frm-item-wrap">

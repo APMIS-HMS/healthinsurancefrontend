@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Rx';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../services/common/system-module.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -35,7 +34,7 @@ export class MainMenuComponent implements OnInit {
   hasAccessManagement: boolean = false;
   hasUserManagement: boolean = false;
 
-  ready:boolean = false;
+  ready:boolean = true;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -60,89 +59,33 @@ export class MainMenuComponent implements OnInit {
   }
 
   setLoggedInUser(email: String, loggInState: boolean) {
-    this._authService.find({ query: { email: email } }).then(payload => {
+    this._authService.find({ query: { email: email } })
+      .then(payload => {
         let currentUser = payload.data[0];
-        if (currentUser !== undefined) {
+        if(currentUser !== undefined){
           currentUser.loggedInUserStatus = {
-            'isLoggedIn': loggInState
+            "isLoggedIn": loggInState
           };
-
-          this._authService.patch(currentUser._id, currentUser, {}).then(res => {
+  
+          this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
             this._authService.checkAuth();
             this._router.navigate(['/auth']);
           });
-        } else {
+        }else{
           this._authService.checkAuth();
           this._router.navigate(['/auth']);
         }
 
-      });
+      })
   }
 
   private _checkRole() {
     const role = this.user.roles;
-    Observable.of().delay(5000);
     role.forEach(roleItem => {
       if (!!roleItem.accessibilities) {
         const accessibilities = roleItem.accessibilities;
         accessibilities.forEach(access => {
           if (!!access.module) {
-        //     this.hasBeneficiary = true;
-        //     //break;
-        //   //case 'care provider':
-        //     this.hasProvider = true;
-        //    // break;
-        //   //case 'employer':
-        //     this.hasOrganisation = true;
-        //   //  break;
-        //  // case 'platform':
-        //     this.hasPlatform = true;
-        //   //  break;
-        //   //case 'health insurance agent':
-        //     this.hasHIA = true;
-        //    // break;
-        //   //case 'premium payment':
-        //     this.hasPremiumPayment = true;
-        //    // break;
-        //   //case 'claims':
-        //     this.hasClaim = true;
-        //   //  break;
-        //  // case 'claims (and capitation) payment':
-        //     this.hasClaimPayment = true;
-        //  //   break;
-        //  // case 'check-in':
-        //     this.hasCheckIn = true;
-        //    // break;
-        //   //case 'user management':
-        //     this.hasUserManagement = true;
-        //     //break;
-        //   //case 'health plan management':
-        //     this.hasPlan = true;
-        //     //break;
-        //   //case 'pre-authorization':
-        //     this.hasAuthorization = true;
-        //     //break;
-        //   //case 'analytics':
-        //     this.hasAnalytics = true;
-        //     //break;
-        //   //case 'funds management':
-        //     this.hasFundManagement = true;
-        //     //break;
-        //   //case 'complaints':
-        //     this.hasComplaint = true;
-        //     //break;
-        //   //case 'referral':
-        //     this.hasReferral = true;
-        //     //break;
-        //   //case 'roles':
-        //     this.hasRoleManagement = true;
-        //     //break;
-        //   //case 'platform':
-        //     this.hasPlatform = true;
-        //     //break;
-        //   //case 'access':
-        //     this.hasAccessManagement = true;
-        //     //break;
             switch (access.module.name.toLowerCase()) {
               case 'beneficiary':
                 this.hasBeneficiary = true;
@@ -206,7 +149,7 @@ export class MainMenuComponent implements OnInit {
         });
       }
     });
-    this.ready = true;
+
   }
 
   close_onClick() {

@@ -138,20 +138,20 @@ export class ListProviderComponent implements OnInit {
   }
 
   navigateNewProvider() {
-    this.loadingService.startLoading();
+   this._systemService.on()
     this._router.navigate(['/modules/provider/new']).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 
   navigateToDetails(id: string) {
-    this.loadingService.startLoading();
+   this._systemService.on()
     this._router.navigate(['/modules/provider/providers/' + id]).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 

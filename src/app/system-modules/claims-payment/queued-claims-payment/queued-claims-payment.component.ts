@@ -47,7 +47,7 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Queued Claims Payment List');
     this._headerEventEmitter.setMinorRouteUrl('Queued claims payment list');
 
-    this._getClaimsPayments();
+    this._getCurrentPlatform();
   }
 
   onCheckSelectedItem(index, claim: Claim) {
@@ -63,30 +63,30 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     console.log(this.selectedClaims);
   }
 
-  private _getClaimsPayments() {
-    this._getDummyData.get().then((res: Claim) => {
-      console.log(res);
-      this.loading = false;
-      this.claims = res;
-    });
-  }
-
   // private _getClaimsPayments() {
-  //   this._systemService.on();
-  //   this._facilityService.find({
-  //     query: {
-  //       'platformOwnerId._id': this.currentPlatform,
-  //       'facilityType._id': this.user.facilityId._id, $limit: 200
-  //   }}).then((payload: any) => {
+  //   this._getDummyData.get().then((res: Claim) => {
+  //     console.log(res);
   //     this.loading = false;
-  //     this.claims = payload.data;
-  //     console.log(this.claims);
-  //     this._systemService.off();
-  //   }).catch(error => {
-  //     console.log(error);
-  //     this._systemService.off();
+  //     this.claims = res;
   //   });
   // }
+
+  private _getClaimsPayments() {
+    console.log(this.currentPlatform);
+    this._systemService.on();
+    this._claimsPaymentService.find({
+      query: {
+        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id
+    }}).then((res: any) => {
+      console.log(res);
+      this.loading = false;
+      this.claims = res.data;
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
+  }
 
   onCheckAllSelectedItemsToPay(event) {
     this.claims.forEach( (claim, i) => {
@@ -119,20 +119,20 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     });
   }
 
-  navigate(url: string, id: string) {
+  navigate(url: string, id?: string) {
     if (!!id) {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     } else {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     }
   }

@@ -48,6 +48,11 @@ export class ClaimService {
       }))
     });
   }
+
+  update2(claim: any) {
+    return this._socket.update(claim._id, claim);
+  }
+
   patch(_id: any, data: any, param: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('claims').then((socket: any) => {
