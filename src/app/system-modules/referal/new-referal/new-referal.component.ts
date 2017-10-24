@@ -42,6 +42,14 @@ export class NewReferalComponent implements OnInit {
   drugSearchResult = false;
   Disabled = false;
 
+  tab_complaints = true;
+  tab_upload = false;
+  tab_notes = false;
+  tab_clinicalNotes = false;
+  tab_diagnosis = false;
+  tab_treatment = false;
+  tab_drug = false;
+
   public today: IMyDate;
   selectedPreAuthorization: any;
   selectedCheckIn: any;
@@ -485,6 +493,71 @@ export class NewReferalComponent implements OnInit {
   newRefConfirm_click(){
     this.newRef = false;
     this.newRefConfirm = true;
+  }
+
+  tabComplaints_click() {
+    this.tab_complaints = true;
+    this.tab_upload = false;
+    this.tab_notes = false;
+    this.tab_clinicalNotes = false;
+    this.tab_diagnosis = false;
+    this.tab_treatment = false;
+    this.tab_drug = false;
+  }
+  tabUpload_click() {
+    this.tab_complaints = false;
+    this.tab_upload = true;
+    this.tab_notes = false;
+    this.tab_clinicalNotes = false;
+    this.tab_diagnosis = false;
+    this.tab_treatment = false;
+    this.tab_drug = false;
+  }
+  tabNotes_click() {
+    this.tab_complaints = false;
+    this.tab_upload = false;
+    this.tab_notes = true;
+    this.tab_clinicalNotes = false;
+    this.tab_diagnosis = false;
+    this.tab_treatment = false;
+    this.tab_drug = false;
+  }
+
+  tabClinicalNotes_click() {
+    this.tab_complaints = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+    this.tab_clinicalNotes = true;
+    this.tab_diagnosis = false;
+    this.tab_treatment = false;
+    this.tab_drug = false;
+  }
+  tabDiagnosiss_click() {
+    this.tab_complaints = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+    this.tab_clinicalNotes = false;
+    this.tab_diagnosis = true;
+    this.tab_treatment = false;
+    this.tab_drug = false;
+  }
+  tabTreatment_click() {
+    this.tab_complaints = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+    this.tab_clinicalNotes = false;
+    this.tab_diagnosis = false;
+    this.tab_treatment = true;
+    this.tab_drug = false;
+  }
+  tabDrug_click() {
+    this.tab_complaints = false;
+    this.tab_upload = false;
+    this.tab_notes = false;
+    this.tab_clinicalNotes = false;
+    this.tab_diagnosis = false;
+    this.tab_treatment = false;
+    this.tab_drug = true;
   }
 
 }
