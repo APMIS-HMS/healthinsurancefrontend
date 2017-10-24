@@ -284,7 +284,7 @@ export class CheckinDetailsComponent implements OnInit {
     })
   }
 
-  otp_regenerate(){
+  otp_regenerate() {
     this.selectedCheckIn = undefined;
   }
 
@@ -297,11 +297,19 @@ export class CheckinDetailsComponent implements OnInit {
       this._systemService.off();
     });
   }
-  navigateToNewAuthorization(){
+  navigateToNewAuthorization() {
     this._systemService.on();
-    this._router.navigate(['/modules/pre-auth/new', this.selectedCheckIn._id]).then(res =>{
+    this._router.navigate(['/modules/pre-auth/new', this.selectedCheckIn._id]).then(res => {
       this._systemService.off();
-    }).catch(err =>{
+    }).catch(err => {
+      this._systemService.off();
+    })
+  }
+  navigateToNewReferal() {
+    this._systemService.on();
+    this._router.navigate(['/modules/referal/new', this.selectedCheckIn._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
       this._systemService.off();
     })
   }

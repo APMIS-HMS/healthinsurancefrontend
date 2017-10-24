@@ -1,3 +1,4 @@
+import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -18,6 +19,7 @@ export class ReferalDetailsComponent implements OnInit {
     private _router: Router,
     private loadingService: LoadingBarService,
     private _headerEventEmitter: HeaderEventEmitterService,
+    private _systemService:SystemModuleService
   ) { }
 
   ngOnInit() {
@@ -43,18 +45,18 @@ export class ReferalDetailsComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     } else {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     }
   }
