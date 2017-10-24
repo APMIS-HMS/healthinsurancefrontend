@@ -76,7 +76,8 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     this._systemService.on();
     this._claimsPaymentService.find({
       query: {
-        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id
+        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
+        isPaymentMade: false
     }}).then((res: any) => {
       console.log(res);
       this.loading = false;
@@ -102,7 +103,25 @@ export class QueuedClaimsPaymentComponent implements OnInit {
 
   onClickPayClaim() {
     if (this.selectedClaims.length > 0) {
-      console.log(this.selectedClaims);
+      this.payClaimBtnText = false;
+      this.payClaimBtnProcessing = true;
+      this.disablePayBtn = true;
+      const claimsIds = [];
+      this.selectedClaims.forEach(claim => {
+        claimsIds.push(claim._id);
+      });
+
+      const body = {
+        claims: claimsIds
+      };
+
+      this._claimsPaymentService.payMultipleItem(body).then(res => {
+        console.log(res);
+        this.payClaimBtnText = true;
+        this.payClaimBtnProcessing = false;
+        this.disablePayBtn = false;
+        this._getClaimsPayments();
+      }).catch(err => console.log(err));
     } else {
       this._toastr.error('Please select at least one item to pay.', 'No selected Item!');
     }

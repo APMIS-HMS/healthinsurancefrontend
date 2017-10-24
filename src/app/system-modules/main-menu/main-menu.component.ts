@@ -67,7 +67,7 @@ export class MainMenuComponent implements OnInit {
         let currentUser = payload.data[0];
         if (currentUser !== undefined) {
           currentUser.loggedInUserStatus = {
-            "isLoggedIn": loggInState
+            'isLoggedIn': loggInState
           };
 
           this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
@@ -78,19 +78,15 @@ export class MainMenuComponent implements OnInit {
           this._authService.checkAuth();
           this._router.navigate(['/auth']);
         }
-
-      })
+      });
   }
 
   private _checkRole() {
     const roles = this.user.roles;
-    // console.log(this.user)
-    // console.log(role)
     const roleIds: any[] = [];
     roles.forEach(x => {
       roleIds.push(x._id);
     })
-    console.log(roleIds)
 
     this._roleService.find({
       query: {
@@ -99,11 +95,9 @@ export class MainMenuComponent implements OnInit {
         }
       }
     }).then((pays: any) => {
-      console.log(pays)
       pays.data.forEach(roleItem => {
         if (!!roleItem.accessibilities) {
           const accessibilities = roleItem.accessibilities;
-          console.log(accessibilities)
           accessibilities.forEach(access => {
             if (!!access.module) {
               switch (access.module.name.toLowerCase()) {
@@ -151,8 +145,6 @@ export class MainMenuComponent implements OnInit {
                   break;
                 case 'complaints':
                   this.hasComplaint = true;
-                  console.log(access.module)
-                  console.log('has me')
                   break;
                 case 'referral':
                   this.hasReferral = true;
