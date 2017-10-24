@@ -59,6 +59,10 @@ const SYSTEMMODULES_ROUTES: Routes = [
                 path: 'referal',
                 loadChildren: './referal/referal.module#ReferalModule'
             },
+            {
+                path: 'premium-payment',
+                loadChildren: './premium-payment/premium-payment.module#PremiumPaymentModule'
+            },
             { path: 'access', component: AccessManagementComponent },
             { path: 'welcome', component: WelcomeComponent }
         ]

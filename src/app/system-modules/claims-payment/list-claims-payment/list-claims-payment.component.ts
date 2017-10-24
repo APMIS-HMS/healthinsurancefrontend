@@ -7,7 +7,8 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import {
-  SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService, CapitationFeeService
+  SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService,
+  CapitationFeeService, PolicyService
 } from '../../../services/index';
 import { Claim } from '../../../models/index';
 import { DummyClaimService } from './claims';
@@ -28,7 +29,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   user: any;
   currentPlatform: any;
   claims: any = [];
-  claimsCapitation: any = [];
+  capitationClaims: any = [];
   selectedFFSClaims: any = [];
   selectedCClaims: any = [];
   loading: boolean = true;
@@ -50,9 +51,9 @@ export class ListClaimsPaymentComponent implements OnInit {
     private _userTypeService: UserTypeService,
     private _locker: CoolLocalStorage,
     private _claimsPaymentService: ClaimsPaymentService,
-    private _getDummyData: DummyClaimService,
     private _claimService: ClaimService,
-    private _capitationFeeService: CapitationFeeService
+    private _capitationFeeService: CapitationFeeService,
+    private _policyService: PolicyService
   ) { }
 
   ngOnInit() {
@@ -91,17 +92,16 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
 
-  private _getClaimsCapitationPayments() {
+  private _getClaimsCapitationFromPolicy() {
     this._systemService.on();
-    this._claimService.find({
+    this._policyService.find({
       query: {
-        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
-         isQueuedForPayment: false,
-         'approvedDocumentation.response.isApprove': true
-    }}).then((payload: any) => {
-      console.log(payload);
+        'platformOwnerId._id': this.currentPlatform._id,
+         isActive: true,
+    }}).then((res: any) => {
+      console.log(res);
       this.loading = false;
-      this.claims = payload.data;
+      this.capitationClaims = res.data;
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -112,10 +112,11 @@ export class ListClaimsPaymentComponent implements OnInit {
   private _getClaimsCapitationPrice() {
     this._systemService.on();
     this._capitationFeeService.find({
-      query: {'platformOwnerId._id': this.currentPlatform._id, isActive: true,}
+      query: {'platformOwnerId._id': this.currentPlatform._id, isActive: true}
     }).then((res: any) => {
       console.log(res);
       this.capitationPrice = res;
+      this._getClaimsCapitationFromPolicy();
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -129,6 +130,7 @@ export class ListClaimsPaymentComponent implements OnInit {
         console.log(res);
         this.currentPlatform = res.data[0];
         this._getClaimsPayments();
+        this._getClaimsCapitationPrice();
       }
     }).catch(err => {
       console.log(err);
@@ -171,8 +173,10 @@ export class ListClaimsPaymentComponent implements OnInit {
       claimsIds.push(claim._id);
     });
 
+    delete this.user.roles;
     const body = {
-      claims: claimsIds
+      claims: claimsIds,
+      queuedBy: this.user
     };
 
     this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
@@ -203,6 +207,14 @@ export class ListClaimsPaymentComponent implements OnInit {
         this.selectedFFSClaims = [];
       }
     });
+  }
+
+  onCheckPayAllCapitation() {
+    console.log('Capitation Payment');
+  }
+
+  onCheckPayItemCapitation() {
+    console.log('Item Capitation');
   }
 
   onClickTab(tabName: string) {
