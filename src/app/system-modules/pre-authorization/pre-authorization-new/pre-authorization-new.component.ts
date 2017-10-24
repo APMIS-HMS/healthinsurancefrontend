@@ -718,7 +718,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       this._systemService.off();
     });
   }
-
+ 
   tabComplaints_click() {
     this.tab_complaints = true;
     this.tab_diagnosis = false;
