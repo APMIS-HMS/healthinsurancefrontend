@@ -1,3 +1,4 @@
+import { RoleService } from './../../services/auth/role/role.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../services/common/system-module.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -34,7 +35,7 @@ export class MainMenuComponent implements OnInit {
   hasAccessManagement: boolean = false;
   hasUserManagement: boolean = false;
 
-  ready:boolean = true;
+  ready: boolean = true;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -43,14 +44,16 @@ export class MainMenuComponent implements OnInit {
     private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
+    private _roleService: RoleService,
     private _locker: CoolLocalStorage,
     private _facilityService: FacilityService
   ) {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._checkRole();
-   }
+  }
 
   ngOnInit() {
+    // console.log('am here')
     // this.user = (<any>this._locker.getObject('auth')).user;
     // this._systemService.loggedInUserAnnounced.subscribe(userObj => {
     //   console.log(userObj);
@@ -67,7 +70,7 @@ export class MainMenuComponent implements OnInit {
             'isLoggedIn': loggInState
           };
 
-          this._authService.patch(currentUser._id, currentUser, {}).then(res => {
+          this._authService.patch(currentUser._id, currentUser, {}).then(payload => {
             this._authService.checkAuth();
             this._router.navigate(['/auth']);
           });
@@ -79,75 +82,91 @@ export class MainMenuComponent implements OnInit {
   }
 
   private _checkRole() {
-    const role = this.user.roles;
-    role.forEach(roleItem => {
-      if (!!roleItem.accessibilities) {
-        const accessibilities = roleItem.accessibilities;
-        accessibilities.forEach(access => {
-          if (!!access.module) {
-            switch (access.module.name.toLowerCase()) {
-              case 'beneficiary':
-                this.hasBeneficiary = true;
-                break;
-              case 'care provider':
-                this.hasProvider = true;
-                break;
-              case 'employer':
-                this.hasOrganisation = true;
-                break;
-              case 'platform':
-                this.hasPlatform = true;
-                break;
-              case 'health insurance agent':
-                this.hasHIA = true;
-                break;
-              case 'premium payment':
-                this.hasPremiumPayment = true;
-                break;
-              case 'claims':
-                this.hasClaim = true;
-                break;
-              case 'claims (and capitation) payment':
-                this.hasClaimPayment = true;
-                break;
-              case 'check-in':
-                this.hasCheckIn = true;
-                break;
-              case 'user management':
-                this.hasUserManagement = true;
-                break;
-              case 'health plan management':
-                this.hasPlan = true;
-                break;
-              case 'pre-authorization':
-                this.hasAuthorization = true;
-                break;
-              case 'analytics':
-                this.hasAnalytics = true;
-                break;
-              case 'funds management':
-                this.hasFundManagement = true;
-                break;
-              case 'complaints':
-                this.hasComplaint = true;
-                break;
-              case 'referral':
-                this.hasReferral = true;
-                break;
-              case 'roles':
-                this.hasRoleManagement = true;
-                break;
-              case 'platform':
-                this.hasPlatform = true;
-                break;
-              case 'access':
-                this.hasAccessManagement = true;
-                break;
-            }
-          }
-        });
+    const roles = this.user.roles;
+    const roleIds: any[] = [];
+    roles.forEach(x => {
+      roleIds.push(x._id);
+    })
+
+    this._roleService.find({
+      query: {
+        _id: {
+          $in: roleIds
+        }
       }
-    });
+    }).then((pays: any) => {
+      pays.data.forEach(roleItem => {
+        if (!!roleItem.accessibilities) {
+          const accessibilities = roleItem.accessibilities;
+          accessibilities.forEach(access => {
+            if (!!access.module) {
+              switch (access.module.name.toLowerCase()) {
+                case 'beneficiary':
+                  this.hasBeneficiary = true;
+                  break;
+                case 'care provider':
+                  this.hasProvider = true;
+                  break;
+                case 'employer':
+                  this.hasOrganisation = true;
+                  break;
+                case 'platform':
+                  this.hasPlatform = true;
+                  break;
+                case 'health insurance agent':
+                  this.hasHIA = true;
+                  break;
+                case 'premium payment':
+                  this.hasPremiumPayment = true;
+                  break;
+                case 'claims':
+                  this.hasClaim = true;
+                  break;
+                case 'claims (and capitation) payment':
+                  this.hasClaimPayment = true;
+                  break;
+                case 'check-in':
+                  this.hasCheckIn = true;
+                  break;
+                case 'user management':
+                  this.hasUserManagement = true;
+                  break;
+                case 'health plan management':
+                  this.hasPlan = true;
+                  break;
+                case 'pre-authorization':
+                  this.hasAuthorization = true;
+                  break;
+                case 'analytics':
+                  this.hasAnalytics = true;
+                  break;
+                case 'funds management':
+                  this.hasFundManagement = true;
+                  break;
+                case 'complaints':
+                  this.hasComplaint = true;
+                  break;
+                case 'referral':
+                  this.hasReferral = true;
+                  break;
+                case 'roles':
+                  this.hasRoleManagement = true;
+                  break;
+                case 'platform':
+                  this.hasPlatform = true;
+                  break;
+                case 'access':
+                  this.hasAccessManagement = true;
+                  break;
+              }
+            }
+          });
+        }
+      });
+    })
+
+
+
   }
 
   close_onClick() {
