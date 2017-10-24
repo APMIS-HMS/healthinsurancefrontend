@@ -121,18 +121,18 @@ export class QueuedClaimsPaymentComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     } else {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     }
   }

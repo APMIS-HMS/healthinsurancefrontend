@@ -118,21 +118,21 @@ export class ListPlatformComponent implements OnInit {
   }
 
   navigateNewPlatform() {
-    this.loadingService.startLoading();
+   this._systemService.on()
     this._router.navigate(['/modules/platform/new']).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 
 
   navigateEditPlatform(platform) {
-    this.loadingService.startLoading();
+   this._systemService.on()
     this._router.navigate(['/modules/platform/new', platform._id]).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 }

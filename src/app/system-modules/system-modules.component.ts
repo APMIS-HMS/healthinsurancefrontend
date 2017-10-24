@@ -1,9 +1,10 @@
+import { Subscription } from 'rxjs/Rx';
 import { AuthService } from './../auth/services/auth.service';
 import { HeaderEventEmitterService } from './../services/event-emitters/header-event-emitter.service';
 import { UploadService } from './../services/common/upload.service';
 import { SystemModuleService } from './../services/common/system-module.service';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -12,13 +13,17 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 	templateUrl: './system-modules.component.html',
 	styleUrls: ['./system-modules.component.scss']
 })
-export class SystemModulesComponent implements OnInit {
+export class SystemModulesComponent implements OnInit, OnDestroy {
+	ngOnDestroy(): void {
+		// this.sub.unsubscribe();
+	}
 	user: any = <any>{};
 	menuToggle = false;
 	online = false;
 	pageInView: String = '';
 	minorPageInView: String = '';
 
+	sub:Subscription;
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
 		private _authService: AuthService,
@@ -38,16 +43,16 @@ export class SystemModulesComponent implements OnInit {
 
 			this._systemService.notificationAnnounced$.subscribe((value: any) => {
 				if (value.status === 'On') {
-					this.loadingService.startLoading();
+					this.loadingService.start();
 				} else {
-					this.loadingService.endLoading();
+					this.loadingService.complete();
 				}
 			});
 			this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
 				if (value.status === 'On') {
 					this.online = true;
 				} else {
-					this.loadingService.endLoading();
+					this._systemService.off();
 					this.online = false;
 				}
 			});
@@ -59,7 +64,7 @@ export class SystemModulesComponent implements OnInit {
 			});
 			this.online = this._uploadService.checkOnlineStatus();
 		} catch (error) {
-			this._router.navigate(['auth/login']);
+			// this._router.navigate(['auth/login']);
 		}
 
 	}
