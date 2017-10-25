@@ -26,6 +26,7 @@ export class DetailsPlanComponent implements OnInit {
 	tab_tests = false;
 	tab_procedures = false;
 	tab_diagnosis = false;
+	tab_detail = false;
 
 	selectedPlan:any;
 
@@ -82,6 +83,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_tests = false;
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
+		this.tab_detail = false;
 	}
 	tabPremiums_click() {
 		this.tab_hias = false;
@@ -90,6 +92,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_tests = false;
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
+		this.tab_detail = false;
 	}
 	tabDrugs_click() {
 		this.tab_hias = false;
@@ -98,6 +101,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_tests = false;
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
+		this.tab_detail = false;
 	}
 	tabTests_click() {
 		this.tab_hias = false;
@@ -106,6 +110,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_tests = true;
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
+		this.tab_detail = false;
 	}
 	tabProcedures_click() {
 		this.tab_hias = false;
@@ -114,6 +119,7 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_tests = false;
 		this.tab_procedures = true;
 		this.tab_diagnosis = false;
+		this.tab_detail = false;
 	}
 	tabDiagnosis_click() {
 		this.tab_hias = false;
@@ -122,6 +128,16 @@ export class DetailsPlanComponent implements OnInit {
 		this.tab_tests = false;
 		this.tab_procedures = false;
 		this.tab_diagnosis = true;
+		this.tab_detail = false;
+	}
+	tabDetail_click() {
+		this.tab_hias = false;
+		this.tab_premiums = false;
+		this.tab_drugs = false;
+		this.tab_tests = false;
+		this.tab_procedures = false;
+		this.tab_diagnosis = false;
+		this.tab_detail = true;
 	}
 
 }

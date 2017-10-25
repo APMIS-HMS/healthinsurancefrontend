@@ -4,12 +4,13 @@
     </div>
 
     <ul class="inpage-tabs">
+        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">HIAS</li>
         <li (click)="tabPremiums_click()" [class.tab-active]="tab_premiums">Premiums</li>
-        <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
+        <li (click)="tabDetail_click()" [class.tab-active]="tab_detail">Plan Detail</li>
+        <!-- <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
         <li (click)="tabTests_click()" [class.tab-active]="tab_tests">Tests</li>
         <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
-        <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
-        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">HIAS</li>
+        <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li> -->
     </ul>
 
     <div class="tab-content shadow-RB">
@@ -128,6 +129,9 @@
                     </div>
                 </section>
             </div>
+        </div>
+        <div *ngIf="tab_detail" class="tab-pane fade show active">
+            <app-lashma-codes-list></app-lashma-codes-list>
         </div>
     </div>
 </div>

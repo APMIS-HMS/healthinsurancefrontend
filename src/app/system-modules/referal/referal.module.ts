@@ -1,3 +1,4 @@
+import { ReferralService } from './../../services/referral/referral.service';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
@@ -32,6 +33,6 @@ import { PreAuthorizationService } from '../../services/pre-authorization/pre-au
         ModalRejectReferalComponent,
         NewReferalConfirmComponent],
     providers: [VisitTypeService, CheckInService, SymptomService,InvestigationService,DrugService,DiagnosisService,
-        ProcedureService, DiagnosisTypeService, DrugPackSizeService, PolicyService, PreAuthorizationService]
+        ProcedureService, DiagnosisTypeService, DrugPackSizeService, PolicyService, ReferralService]
 })
 export class ReferalModule { }
