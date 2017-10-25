@@ -43,7 +43,7 @@ export class TopBarComponent implements OnInit {
   }
 
   _getCurrentPlatform() {
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }

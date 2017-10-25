@@ -81,9 +81,9 @@ export class SocketService {
         if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
             return new Promise((resolve, reject) => {
                 let token:any = this.locker.getItem('auth');
-                // const copyToken = JSON.parse(token);
+                const copyToken = JSON.parse(token);
                 // console.log(copyToken.accessToken)
-                resolve(this._app.authenticate({ strategy: 'jwt', accessToken: token.accessToken }).then(payload => {
+                resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyToken.accessToken }).then(payload => {
                     this.socket = this.getService(service);
                     return Promise.resolve(this.socket);
                 }, error => {

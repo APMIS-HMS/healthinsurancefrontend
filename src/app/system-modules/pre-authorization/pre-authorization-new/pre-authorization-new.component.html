@@ -274,7 +274,7 @@
                                 <div class="searchable-input">
                                     <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
                                     <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosis.valid || diagnosisFormGroup.controls.diagnosis.pristine">
-                                        Diagnosis Type value is required.
+                                        Diagnosis value is required.
                                     </small>
                                     <ul *ngIf="diagnosisSearchResult" class="search-results">
                                         <li (click)="onSelectDiagnosis(result)" *ngFor="let result of diagnosisItems">{{result.name}}</li>
