@@ -20,7 +20,7 @@
     <div class="frm-item-wrap">
         <label class="label">Provider Name</label>
         <div class="inputWrap">
-                <select formControlName="providerName" class="form-control">
+            <select formControlName="providerName" class="form-control">
                     <option  value="" disabled selected>Provider</option>
                     <option *ngFor="let provider of providers"  [ngValue]="provider">{{provider.name}}</option>
                 </select>
@@ -54,6 +54,24 @@
         <div class="inputWrap">
             <select formControlName="premiumCategory" class="form-control">
                 <option  value="" disabled selected>Premium Category</option>
+                <option *ngFor="let premiumType of premiumTypes"  [ngValue]="premiumType">{{premiumType.name}}</option>
+                </select>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Premium Package</label>
+        <div class="inputWrap">
+            <select formControlName="premiumPackage" class="form-control">
+                <option  value="" disabled selected>Premium Package</option>
+                <option *ngFor="let premiumType of premiumTypes"  [ngValue]="premiumType">{{premiumType.name}}</option>
+                </select>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Sponsorship</label>
+        <div class="inputWrap">
+            <select formControlName="sponsorship" class="form-control">
+                <option  value="" disabled selected>Sponsorship</option>
                 <option *ngFor="let premiumType of premiumTypes"  [ngValue]="premiumType">{{premiumType.name}}</option>
                 </select>
         </div>
