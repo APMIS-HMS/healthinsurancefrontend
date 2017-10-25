@@ -132,6 +132,9 @@
                 </div>
             </div>
         </div>
+        <div *ngIf="tab_payment" class="tab-pane fade show active">
+            <app-payment-detail-beneficiary></app-payment-detail-beneficiary>
+        </div>
         <div *ngIf="tab_checkin" class="tab-pane fade show active">
             <app-checkin-details [beneficiary]="beneficiary"></app-checkin-details>
         </div>

@@ -8,7 +8,6 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService } from '../../../services/index';
 import { Claim } from '../../../models/index';
-import { DummyClaimService } from '../list-claims-payment/claims';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -40,14 +39,13 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     private _userTypeService: UserTypeService,
     private _locker: CoolLocalStorage,
     private _claimsPaymentService: ClaimsPaymentService,
-    private _getDummyData: DummyClaimService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Queued Claims Payment List');
     this._headerEventEmitter.setMinorRouteUrl('Queued claims payment list');
 
-    this._getClaimsPayments();
+    this._getCurrentPlatform();
   }
 
   onCheckSelectedItem(index, claim: Claim) {
@@ -64,29 +62,21 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   }
 
   private _getClaimsPayments() {
-    this._getDummyData.get().then((res: Claim) => {
+    this._systemService.on();
+    this._claimsPaymentService.find({
+      query: {
+        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
+        isPaymentMade: false
+    }}).then((res: any) => {
       console.log(res);
       this.loading = false;
-      this.claims = res;
+      this.claims = res.data;
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
     });
   }
-
-  // private _getClaimsPayments() {
-  //   this._systemService.on();
-  //   this._facilityService.find({
-  //     query: {
-  //       'platformOwnerId._id': this.currentPlatform,
-  //       'facilityType._id': this.user.facilityId._id, $limit: 200
-  //   }}).then((payload: any) => {
-  //     this.loading = false;
-  //     this.claims = payload.data;
-  //     console.log(this.claims);
-  //     this._systemService.off();
-  //   }).catch(error => {
-  //     console.log(error);
-  //     this._systemService.off();
-  //   });
-  // }
 
   onCheckAllSelectedItemsToPay(event) {
     this.claims.forEach( (claim, i) => {
@@ -102,7 +92,27 @@ export class QueuedClaimsPaymentComponent implements OnInit {
 
   onClickPayClaim() {
     if (this.selectedClaims.length > 0) {
-      console.log(this.selectedClaims);
+      this.payClaimBtnText = false;
+      this.payClaimBtnProcessing = true;
+      this.disablePayBtn = true;
+      const claimsIds = [];
+      this.selectedClaims.forEach(claim => {
+        claimsIds.push(claim._id);
+      });
+
+      delete this.user.roles;
+      const body = {
+        claims: claimsIds,
+        paidBy: this.user
+      };
+
+      this._claimsPaymentService.payMultipleItem(body).then(res => {
+        console.log(res);
+        this.payClaimBtnText = true;
+        this.payClaimBtnProcessing = false;
+        this.disablePayBtn = false;
+        this._getClaimsPayments();
+      }).catch(err => console.log(err));
     } else {
       this._toastr.error('Please select at least one item to pay.', 'No selected Item!');
     }
@@ -119,20 +129,20 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     });
   }
 
-  navigate(url: string, id: string) {
+  navigate(url: string, id?: string) {
     if (!!id) {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     } else {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     }
   }

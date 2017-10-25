@@ -27,7 +27,7 @@ export class ListBeneficiaryComponent implements OnInit {
   statusControl = new FormControl('All');
   beneficiaries: any = <any>[];
   inActiveBeneficiaries: any[] = [];
-  loading: Boolean = true;
+  loading: boolean = true;
   planTypes: any[] = [];
   currentPlatform: any;
 
@@ -76,7 +76,8 @@ export class ListBeneficiaryComponent implements OnInit {
     this._systemService.on();
     this._policyService.find({
       query: {
-        'platformOwnerId._id': platformId
+        'platformOwnerId._id': platformId,
+        $limit:200
       }
     }).then((res: any) => {
       this.loading = false;

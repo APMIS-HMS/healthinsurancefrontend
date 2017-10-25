@@ -11,6 +11,10 @@ import { ReferalDetailTabComponent } from './referal-details/referal-detail-tab/
 import { ModalApproveReferalComponent } from './referal-details/modal-approve-referal/modal-approve-referal.component';
 import { ModalRejectReferalComponent } from './referal-details/modal-reject-referal/modal-reject-referal.component';
 import { NewReferalConfirmComponent } from './new-referal/new-referal-confirm/new-referal-confirm.component';
+import { VisitTypeService, CheckInService, SymptomService, InvestigationService, DrugService, DiagnosisService, ProcedureService, DiagnosisTypeService } from '../../services/index';
+import { DrugPackSizeService } from '../../services/common/drug-pack-size.service';
+import { PolicyService } from '../../services/policy/policy.service';
+import { PreAuthorizationService } from '../../services/pre-authorization/pre-authorization.service';
 
 @NgModule({
     imports: [
@@ -27,6 +31,7 @@ import { NewReferalConfirmComponent } from './new-referal/new-referal-confirm/ne
         ModalApproveReferalComponent,
         ModalRejectReferalComponent,
         NewReferalConfirmComponent],
-    providers: []
+    providers: [VisitTypeService, CheckInService, SymptomService,InvestigationService,DrugService,DiagnosisService,
+        ProcedureService, DiagnosisTypeService, DrugPackSizeService, PolicyService, PreAuthorizationService]
 })
 export class ReferalModule { }

@@ -153,22 +153,22 @@ export class ListEmployerComponent implements OnInit {
   }
 
   navigateToDetails(id: string) {
-    this.loadingService.startLoading();
+   this._systemService.on()
     console.log(id)
     this._router.navigate(['/modules/employer/employers/' + id]).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
       console.log(err)
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 
   navigateNewEmployer() {
-    this.loadingService.startLoading();
+   this._systemService.on()
     this._router.navigate(['/modules/employer/new']).then(res => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     }).catch(err => {
-      this.loadingService.endLoading();
+      this._systemService.off();
     });
   }
 }

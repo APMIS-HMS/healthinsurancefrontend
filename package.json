@@ -24,6 +24,7 @@
     "@ngx-loading-bar/http": "^1.0.0-alpha.8",
     "@types/date-fns": "^2.6.0",
     "angular2-cool-storage": "^3.0.2",
+    "angular4-paystack": "^1.2.1",
     "breakpoint-sass": "^2.7.1",
     "date-fns": "^1.29.0",
     "feathers-authentication-client": "^0.3.2",
@@ -49,7 +50,7 @@
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular/cli": "1.2.6",
+    "@angular/cli": "^1.4.9",
     "@angular/compiler-cli": "^4.0.0",
     "@angular/language-service": "^4.0.0",
     "@types/core-js": "^0.9.43",

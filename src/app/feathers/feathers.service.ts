@@ -14,7 +14,7 @@ const RxJS = require('rxjs');
 // const HOST = 'http://172.16.16.37:3031'; // Live
 // const HOST = 'http://192.168.10.8:3031'; // Live
 const HOST = 'http://localhost:3031'; // Your base server URL here
-//const HOST = 'http://insuranceapi.azurewebsites.net';
+// const HOST = 'http://insuranceapi.azurewebsites.net';
 
 @Injectable()
 export class SocketService {
@@ -80,9 +80,10 @@ export class SocketService {
     authenticateUser(service) {
         if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
             return new Promise((resolve, reject) => {
-                let token = this.locker.getItem('auth');
-                const copyToken = JSON.parse(token);
-                resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyToken.accessToken }).then(payload => {
+                let token:any = this.locker.getItem('auth');
+                // const copyToken = JSON.parse(token);
+                // console.log(copyToken.accessToken)
+                resolve(this._app.authenticate({ strategy: 'jwt', accessToken: token.accessToken }).then(payload => {
                     this.socket = this.getService(service);
                     return Promise.resolve(this.socket);
                 }, error => {

@@ -70,7 +70,7 @@ export class ListUserComponent implements OnInit {
         this._systemService.off();
       });
     } else if (this.auth.userType.name === 'Platform Owner') {
-      console.log(this.auth.userType)
+      console.log(this.auth.userType);
       this._userService.find({ query: { 'platformOwnerId._id': this.currentPlatform._id } }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
@@ -78,7 +78,7 @@ export class ListUserComponent implements OnInit {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
-      })
+      });
     }
 
 
@@ -89,25 +89,25 @@ export class ListUserComponent implements OnInit {
     this._router.navigate(['/modules/user/users', user._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
-      console.log(err)
+      console.log(err);
       this._systemService.off();
     });
   }
 
-  navigate(url: string, id: string) {
+  navigate(url: string, id?: string) {
     if (!!id) {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     } else {
-      this.loadingService.startLoading();
+     this._systemService.on()
       this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     }
   }

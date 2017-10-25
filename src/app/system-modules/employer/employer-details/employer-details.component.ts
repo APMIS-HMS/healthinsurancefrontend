@@ -250,19 +250,19 @@ export class EmployerDetailsComponent implements OnInit {
       });
   }
 
-  navigateEmployers(url, id) {
-    this.loadingService.startLoading();
+  navigateEmployers(url, id?) {
+   this._systemService.on()
     if (!!id) {
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     } else {
       this._router.navigate([url]).then(res => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       }).catch(err => {
-        this.loadingService.endLoading();
+        this._systemService.off();
       });
     }
   }

@@ -46,9 +46,9 @@ export class SignupComponent implements OnInit {
 	ngOnInit() {
 		this._systemService.notificationAnnounced$.subscribe((value: any) => {
 			if (value.status === 'On') {
-				this.loadingService.startLoading();
+				this._systemService.off();
 			} else {
-				this.loadingService.endLoading();
+				this._systemService.off();
 			}
 		});
 		this.signupFormGroup = this._fb.group({
