@@ -32,7 +32,6 @@ export class ClaimsPaymentDetailsComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Claims Payment Details');
     this._headerEventEmitter.setMinorRouteUrl('Detials page');
-    console.log('Ran');
   }
 
   private _getClaimsDetails(id) {

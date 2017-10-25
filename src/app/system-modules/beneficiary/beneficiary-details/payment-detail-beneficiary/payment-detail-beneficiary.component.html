@@ -1,0 +1,219 @@
+<div>
+    <div class="content-top-bar">
+        <div class="bar-labels">
+            <div>
+                <label>Registered by:</label>
+                <span>{{ policy?.platformOwnerId?.shortName }}</span>
+            </div>
+        </div>
+        <div class="bar-icons">
+            <div>Household ID:
+                <span>{{ policy?.policyId }}</span>
+            </div>
+        </div>
+        <div class="bar-icos">
+            <div>Status:
+                <span *ngIf="policy?.isActive" style="color: green;">Active</span>
+                <span *ngIf="!policy?.isActive" style="color: red;">Inactive</span>
+            </div>
+        </div>
+        <div class="bar-icons">
+            <div>Program:
+                <span>{{ policy?.planId?.name }}</span>
+            </div>
+        </div>
+        <!-- <div class="bar-labels" style="font-size: 10px">
+            <div>
+                <label>Formal sector plan</label>
+            </div>
+        </div> -->
+    </div>
+    <div class="align-chac">
+        <div class="chac-box">
+            <form [formGroup]="" novalidate>
+
+                <div class="frm-inner-title">Health Insurance Agent</div>
+                <div class="frm-item-wrap">
+                    <label class="label">HIA</label>
+                    <div class="inputWrap">
+                        <select>
+                    <option value="" disabled selected>HIA</option>
+                  </select>
+                    </div>
+                </div>
+
+                <div class="frm-inner-title">Primary Health Care Provider</div>
+                <div class="frm-item-wrap">
+                    <label class="label">Provider Name</label>
+                    <div class="inputWrap">
+                        <select>
+                    <option value="" disabled selected>Provider</option>
+                  </select>
+                    </div>
+                </div>
+
+                <div class="frm-inner-title">Plan</div>
+                <div class="frm-item-wrap">
+                    <label class="label">Type</label>
+                    <div class="inputWrap">
+                        <select>
+                    <option value="" disabled selected>Plan Type</option>
+                  </select>
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Name</label>
+                    <div class="inputWrap">
+                        <select>
+                    <option value="" disabled selected>Plan</option>
+                  </select>
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Premium Category</label>
+                    <div class="inputWrap">
+                        <select>
+                    <option value="" disabled selected>Premium Category</option>
+                  </select>
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Premium Pacckage</label>
+                    <div class="inputWrap">
+                        <select>
+                    <option value="">Select..</option>
+                  </select>
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Sponsorship</label>
+                    <div class="inputWrap">
+                        <select>
+                    <option value="">Self</option>
+                    <option value="">Organization</option>
+                  </select>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+
+        <div class="chac-box-right">
+            <form style="margin-top:10px" [formGroup]="" novalidate>
+                <div class="pay-detail-wrap">
+                    <label style="font-size:12px" class="label">Payment Period: </label>
+                    <div style="font-size:12px" class="inputWrap">
+                        <label>4 Months</label>
+                    </div>
+                </div>
+                <div class="pay-detail-wrap">
+                    <label style="font-size:12px" class="label">Amount to be paid: </label>
+                    <div style="font-size:12px" class="inputWrap">
+                        <label>50,000 NGN</label>
+                    </div>
+                </div>
+                <div class="pay-detail-wrap">
+                    <label style="font-size:12px" class="label">Payment Method: </label>
+                    <div>
+                        <div class="pay-label-detail-wrap">
+                            <span style="margin-right:10px;">
+                        <label style="font-size:12px">
+                          <input style="width: 30px;display: block;margin: 0 auto;" type="checkBox"> Cash
+                        </label>
+                      </span>
+                            <span>
+                        <label style="font-size:12px">
+                          <input style="width: 30px;display: block;margin: 0 auto;" type="checkBox"> Cheque
+                        </label>
+                      </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="pay-btn-detail-wrap">
+            <angular4-paystack [key]="'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85'" [email]="'mailexample@mail.com'" [amount]="5000000" [ref]="'263745869231'" [class]="'btn btn-primary btn-ePay'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+            <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
+            <button class="btn btn-medium btn-blue cta" style="width:150px; height:30px"> PAY </button>
+        </div>
+        <div>
+        </div>
+
+    </div>
+    <div>
+        <div class="text-center" style="font-weight: bold">
+            <span>List of Previous History</span>
+        </div>
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">Due Date</th>
+                    <th class="th">LASHMA ID</th>
+                    <th class="th">Amount Paid</th>
+                    <th class="th">Duration Policy</th>
+                    <th class="th">Policy ID</th>
+                    <th class="th">Health Plan</th>
+                    <th class="th">Responsible HIA</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+                <tr class="tr">
+                    <td class="td">11th Oct 2017</td>
+                    <td class="td">203.276.1000</td>
+                    <td class="td" style="color: green;">750 NGN</td>
+                    <td class="td">10 Months</td>
+                    <td class="td">223.45.67.11</td>
+                    <td class="td">Formal Sector Plan</td>
+                    <td class="td">Healthcare Security Limited</td>
+                    <td class="td td-icos">
+                        <i class="fa fa-chevron-right"></i>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tbody class="tbody">
+                <tr class="tr">
+                    <td class="td">11th Oct 2017</td>
+                    <td class="td">203.276.1000</td>
+                    <td class="td" style="color: green;">750 NGN</td>
+                    <td class="td">10 Months</td>
+                    <td class="td">223.45.67.11</td>
+                    <td class="td">Formal Sector Plan</td>
+                    <td class="td">Healthcare Security Limited</td>
+                    <td class="td td-icos">
+                        <i class="fa fa-chevron-right"></i>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tbody class="tbody">
+                <tr class="tr">
+                    <td class="td">11th Oct 2017</td>
+                    <td class="td">203.276.1000</td>
+                    <td class="td" style="color: green;">750 NGN</td>
+                    <td class="td">10 Months</td>
+                    <td class="td">223.45.67.11</td>
+                    <td class="td">Formal Sector Plan</td>
+                    <td class="td">Healthcare Security Limited</td>
+                    <td class="td td-icos">
+                        <i class="fa fa-chevron-right"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="list-buttom">
+        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+        <div class="btn btn-medium btn-yellow">Load More</div>
+    </div>
+
+    <!-- (click)=" addPaymentMode_click()" -->
+</div>

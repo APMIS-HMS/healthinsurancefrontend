@@ -4,10 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Observable } from 'rxjs/Observable';
-import { UploadService } from './../../../services/common/upload.service';
-import { PolicyService } from './../../../services/policy/policy.service';
 import { DURATIONS } from '../../../services/globals/config';
-import { FacilityService, SystemModuleService, BeneficiaryService } from './../../../services/index';
+import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, UploadService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
@@ -30,7 +28,6 @@ export class BeneficiaryDetailsComponent implements OnInit {
   addApproval: boolean = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
   durations: any = DURATIONS;
-
   dependants: any[] = [];
   isCheckIn = false;
 
@@ -53,7 +50,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('Details page');
 
     this._route.params.subscribe(param => {
-      if (param.id !== undefined) {
+      if (!!param.id) {
         this._getBeneficiaryDetails(param.id);
       }
     });
@@ -65,10 +62,28 @@ export class BeneficiaryDetailsComponent implements OnInit {
     });
 
     this._route.data.subscribe(data => {
-      if(data.goCheckIn !== undefined && data.goCheckIn === true){
+      if (!!data.goCheckIn && data.goCheckIn) {
         this.isCheckIn = true;
+        this.tab_payment = false;
+        this.tab_details = false;
+        this.tab_claims = false;
+        this.tab_complaints = false;
+        this.tab_referals = false;
+        this.tab_checkinHistory = false;
       }
-    })
+    });
+
+    this._route.data.subscribe(data => {
+      if (!!data.goPayment && data.goPayment) {
+        this.tab_payment = true;
+        this.isCheckIn = false;
+        this.tab_details = false;
+        this.tab_claims = false;
+        this.tab_complaints = false;
+        this.tab_referals = false;
+        this.tab_checkinHistory = false;
+      }
+    });
   }
 
   private _getBeneficiaryDetails(routeId) {

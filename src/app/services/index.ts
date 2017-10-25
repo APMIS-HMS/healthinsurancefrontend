@@ -38,3 +38,4 @@ export * from './hia/hia-type.service';
 export * from './hia/hia-grade.service';
 export * from './claim/claims-payment.service';
 export * from './policy/policy.service';
+export * from './premium-payment/premium-payment.service';

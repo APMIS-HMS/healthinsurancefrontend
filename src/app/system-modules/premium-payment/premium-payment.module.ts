@@ -9,6 +9,7 @@ import { ListIndividualComponent } from './list-individual/list-individual.compo
 import { NewOrganizationPaymentComponent } from './new-organization-payment/new-organization-payment.component';
 import { ModalAddOrganizationPaymentComponent } from './list-oraganization/modal-add-organization-payment/modal-add-organization-payment.component';
 import { ModalPaymentModeComponent } from './new-organization-payment/modal-payment-mode/modal-payment-mode.component';
+import { PolicyService } from '../../services/index';
 
 
 @NgModule({
@@ -23,6 +24,6 @@ import { ModalPaymentModeComponent } from './new-organization-payment/modal-paym
         NewOrganizationPaymentComponent,
         ModalAddOrganizationPaymentComponent,
         ModalPaymentModeComponent],
-    providers: []
+    providers: [PolicyService]
 })
 export class PremiumPaymentModule { }
