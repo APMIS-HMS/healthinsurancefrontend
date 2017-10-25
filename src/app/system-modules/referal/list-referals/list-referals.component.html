@@ -46,6 +46,8 @@
                 <th class="th">Destination Provider</th>
                 <th class="th">Status</th>
                 <th class="th">Reason</th>
+                <th class="th">Emergency</th>
+                <th class="th"></th>
                 <th class="th"></th>
             </tr>
         </thead>
@@ -63,13 +65,18 @@
                     <span *ngIf="!referral.hiaApproved" class="red">Active</span>
                 </td>
                 <td class="td">
+                        <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    {{(referral.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
+                </td>
+                <td class="td">Emergency</td>
+                <td class="td tip-td">
+                    <i class="fa fa-info fa-circle"></i>
                     <div class="tooltip">
                         <div class="tip-title">{{referral.documentation[0].document[1].type}}</div>
                         <div class="tip-content">{{referral.documentation[0].document[1].clinicalDocumentation}}</div>
                     </div>
                 </td>
                 <td class="td td-icos"(click)="navigateDetail(referral)">
-                    <i class="fa fa-info fa-circle"></i>
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>
