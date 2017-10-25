@@ -245,12 +245,6 @@
 
           </ul>
         </div>
-
-        <div class="reply-wrap">
-          <div (click)="replyOk(transaction)" class="btn btn-medium btn-grey-outline">
-            <i class="fa fa-reply"></i> REPLY
-          </div>
-        </div>
       </div>
 
       <div *ngIf="transaction.response!== undefined" class="response-sect card">
@@ -277,6 +271,11 @@
             </div>
           </ul>
         </div>
+        <div class="reply-wrap">
+          <div (click)="replyOk(transaction)" class="btn btn-medium btn-grey-outline">
+            <i class="fa fa-reply"></i> REPLY
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -290,7 +289,7 @@
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-approve-referal (closeModal)="modal_close()"></app-modal-approve-referal>
+    <app-modal-approve-referal [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-approve-referal>
   </div>
 </div>
 

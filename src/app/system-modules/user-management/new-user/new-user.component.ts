@@ -46,7 +46,6 @@ export class NewUserComponent implements OnInit {
   genders: any[] = [];
   userTypes: any[] = [];
   facilities: any[] = [];
-  user: any = <any>{};
   selectedUserType: any = <any>{};
   auth: any;
   showHIA = false;
@@ -129,7 +128,7 @@ export class NewUserComponent implements OnInit {
       if (payload.data.length > 0) {
         payload.data.forEach((item, i) => {
           if (item.name === 'Platform Owner') {
-            if(this.auth.user.userType === undefined){
+            if (this.auth.user.userType === undefined) {
               this.userTypes.push(item);
             }
           } else {
@@ -181,15 +180,16 @@ export class NewUserComponent implements OnInit {
       if (this.auth.user.userType === undefined) {
         value.platformOwnerId = value.facilityId;
       } else {
-        value.platformOwnerId = this.user.platformOwnerId;
+        value.platformOwnerId = this.auth.user.platformOwnerId;
       }
 
       this._userService.create(value).then(payload => {
         console.log(payload);
+        this._systemService.off();
         this._toastr.success('You have successfully created a user!', 'Success!');
         this.userFormGroup.reset();
         this._router.navigate(['/modules/user/users']).then(res => {
-          this._systemService.off();
+       
         }).catch(exp => {
           this._systemService.off();
         });
@@ -210,14 +210,14 @@ export class NewUserComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
     } else {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url]).then(res => {
         this._systemService.off();
       }).catch(err => {
