@@ -11,10 +11,11 @@ import { PlanService } from './../../services/plan/plan.service';
 import { RelationshipService } from './../../services/common/relationship.service';
 import { BankService } from './../../services/common/bank.service';
 import { NgModule } from '@angular/core';
+import { Angular4PaystackModule } from 'angular4-paystack';
 import { SharedModule } from '../../shared-modules/shared.module';
 import {
     CountryService, UserTypeService, GenderService, TitleService, MaritalStatusService,
-    PlanTypeService, BeneficiaryService, UploadService, SystemModuleService, FacilityService
+    PlanTypeService, BeneficiaryService, UploadService, SystemModuleService, FacilityService, PremiumPaymentService
 } from '../../services/index';
 import { beneficiaryRoutes } from './beneficiary.route';
 import { BeneficiaryComponent } from '../beneficiary/beneficiary.component';
@@ -29,19 +30,27 @@ import { NewBeneficiaryConfirmComponent } from './new-beneficiary/new-beneficiar
 import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-nok/new-beneficiary-nok.component';
 import { CheckinDetailsComponent } from './beneficiary-details/checkin-details/checkin-details.component';
 import { CheckinHistoryComponent } from './beneficiary-details/checkin-history/checkin-history.component';
+import { PaymentDetailBeneficiaryComponent } from './beneficiary-details/payment-detail-beneficiary/payment-detail-beneficiary.component';
 
 @NgModule({
     imports: [
         SharedModule,
         beneficiaryRoutes,
-        MyDatePickerModule
+        MyDatePickerModule,
+        Angular4PaystackModule
     ],
-    declarations: [BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent, BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent, NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent, CheckinDetailsComponent, CheckinHistoryComponent],
+    declarations: [
+        BeneficiaryComponent, NewBeneficiaryComponent, BeneficiaryDetailsComponent,
+        BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent,
+        NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent, CheckinDetailsComponent, CheckinHistoryComponent,
+        PaymentDetailBeneficiaryComponent
+    ],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService, PlanService, PremiumTypeService,
         PlanTypeService, BeneficiaryService, BankService, RelationshipService, JsonDataService, PolicyService,     ClaimTypeService,
         ClaimStatusService,
         EncounterStatusService,
         EncounterTypeService,
+        PremiumPaymentService,
         ClaimService,
         CheckInService]
 })

@@ -8,7 +8,6 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService } from '../../../services/index';
 import { Claim } from '../../../models/index';
-import { DummyClaimService } from '../list-claims-payment/claims';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -40,7 +39,6 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     private _userTypeService: UserTypeService,
     private _locker: CoolLocalStorage,
     private _claimsPaymentService: ClaimsPaymentService,
-    private _getDummyData: DummyClaimService
   ) { }
 
   ngOnInit() {
@@ -63,16 +61,7 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     console.log(this.selectedClaims);
   }
 
-  // private _getClaimsPayments() {
-  //   this._getDummyData.get().then((res: Claim) => {
-  //     console.log(res);
-  //     this.loading = false;
-  //     this.claims = res;
-  //   });
-  // }
-
   private _getClaimsPayments() {
-    console.log(this.currentPlatform);
     this._systemService.on();
     this._claimsPaymentService.find({
       query: {
@@ -111,8 +100,10 @@ export class QueuedClaimsPaymentComponent implements OnInit {
         claimsIds.push(claim._id);
       });
 
+      delete this.user.roles;
       const body = {
-        claims: claimsIds
+        claims: claimsIds,
+        paidBy: this.user
       };
 
       this._claimsPaymentService.payMultipleItem(body).then(res => {

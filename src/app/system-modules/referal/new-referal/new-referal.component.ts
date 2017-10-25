@@ -147,11 +147,11 @@ export class NewReferalComponent implements OnInit {
     this._getDiagnosisTypes();
     this._getDrugPackSizes();
    
-
+    this._initializeFormGroup();
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
         this._getCheckedIn(param.id);
-        this._initializeFormGroup();
+       
       }
     })
   }

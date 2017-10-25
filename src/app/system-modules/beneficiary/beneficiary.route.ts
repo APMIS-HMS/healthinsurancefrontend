@@ -13,7 +13,8 @@ const BENEFICIARY_ROUTES: Routes = [
             { path: 'beneficiaries/:id', component: BeneficiaryDetailsComponent },
             { path: 'new', component: NewBeneficiaryComponent },
             { path: 'new/:id', component: NewBeneficiaryComponent },
-            { path: 'check-in/:id', component: BeneficiaryDetailsComponent, data: { goCheckIn: true } }
+            { path: 'check-in/:id', component: BeneficiaryDetailsComponent, data: { goCheckIn: true } },
+            { path: 'payment/:id', component: BeneficiaryDetailsComponent, data: { goPayment: true } }
         ]
     }
 ];

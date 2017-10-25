@@ -1,0 +1,105 @@
+@import '../../../../assets/libs/variables.scss';
+@import '../../hia/hia-details/hia-details.component.scss';
+.modal-wrap {
+    height: 150px;
+    width: 450px;
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.btn-box {
+    width: 260px;
+    padding: 30px 100px;
+}
+.cta{
+    margin: 0 auto;
+}
+.frm-title{
+    font-weight: bold;
+    margin: 40px 0 20px 0;
+    font-size: $font-x3;
+}
+.input-wrap-x2{
+    width: 100%;
+    display: flex;
+}
+.frm-group .frm-item-wrap .input-wrap input, .frm-group .frm-item-wrap .input-wrap select {
+    width: auto; 
+    margin-right: 5px;
+}
+.btn-blue-outline{
+    width: 265px;
+    margin-top: 20px;
+}
+.frm-subsect{
+    background:  $grey-1;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto
+}
+.tbl-wrap{
+    background: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.fa-times{
+    color: $red;
+    font-size: $font-x4;
+    cursor: pointer;
+}
+.searchable-input{
+    position: relative;
+}
+.search-results{
+    padding: 10px;
+    font-size: $font-x3;
+    z-index: 2;
+    box-sizing: border-box;
+    width: 300px;
+    position: absolute;
+    top: 120%;
+    background: #fff;
+    -webkit-box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
+    -moz-box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
+    box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
+    border: 1px solid $grey-2;
+}
+.search-results li{
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid $grey-2;
+}
+.search-results li:hover{
+    background: $grey-1;
+}
+.form-control-textArea{
+    min-width: 89%;
+    min-height: 100px;
+}
+.inner-label{
+    font-size: $font-x3;
+    color: $grey-3;
+}
+.pay-wrap{
+     display: flex;
+        justify-content: space-evenly;
+        // width: 100%;
+        float: left;
+        margin-right: 20px;
+}
+.btn-add{
+    margin-left:250px;
+}
+.total{
+    align-content: right;
+    justify-content: space-evenly;
+    background: #474747;
+    font-family: "Josefin Sans", sans-serif;
+    color: #f8f8f8;
+    border: 0 solid transparent;
+    text-align: left;
+    padding: 10px;
+    margin: 0px 10px 10px 10px;
+    font-weight: normal;
+}
