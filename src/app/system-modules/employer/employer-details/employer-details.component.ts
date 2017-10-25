@@ -190,8 +190,7 @@ export class EmployerDetailsComponent implements OnInit {
       const formData = new FormData();
       formData.append("excelfile", fileBrowser.files[0]);
       formData.append("facilityId", this.facility._id);
-      this._uploadService.upload(formData, this.facility._id).then(res => {
-        console.log(res.body.data.Sheet1)
+      this._uploadService.uploadExcelFile(formData).then(res => {
         let enrolleeList: any[] = [];
         if (res.body !== undefined && res.body.error_code === 0) {
           res.body.data.Sheet1.forEach(row => {
