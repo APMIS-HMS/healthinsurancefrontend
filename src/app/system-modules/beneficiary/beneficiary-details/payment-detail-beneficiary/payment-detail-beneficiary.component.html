@@ -75,17 +75,17 @@
                     <label class="label">Premium Category</label>
                     <div class="inputWrap">
                         <select>
-                    <option value="" disabled selected>Premium Category</option>
-                  </select>
+                          <option value="" disabled selected>Premium Category</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="frm-item-wrap">
-                    <label class="label">Premium Pacckage</label>
+                    <label class="label">Premium Package</label>
                     <div class="inputWrap">
                         <select>
-                    <option value="">Select..</option>
-                  </select>
+                          <option value="">Select..</option>
+                        </select>
                     </div>
                 </div>
 
@@ -98,8 +98,6 @@
                   </select>
                     </div>
                 </div>
-
-
             </form>
         </div>
 
@@ -137,7 +135,7 @@
             </form>
         </div>
         <div class="pay-btn-detail-wrap">
-            <angular4-paystack [key]="'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85'" [email]="'mailexample@mail.com'" [amount]="5000000" [ref]="'263745869231'" [class]="'btn btn-primary btn-ePay'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+            <angular4-paystack [key]="'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85'" [email]="'mailexample@mail.com'" [amount]="5000000" [ref]="'2637458692312'" [class]="'btn btn-primary btn-ePay'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
             <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
             <button class="btn btn-medium btn-blue cta" style="width:150px; height:30px"> PAY </button>
         </div>
