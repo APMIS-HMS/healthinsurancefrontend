@@ -14,9 +14,11 @@ import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService
 })
 export class PaymentDetailBeneficiaryComponent implements OnInit {
   policy: any;
+  previousPolicies: any = [];
   currentPlatform: any;
   user: any;
   withPaystack: boolean = false;
+  previousPolicyLoading: boolean = true;
 
   constructor(
     private _fb: FormBuilder,
@@ -38,6 +40,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     this._route.params.subscribe(param => {
       if (!!param.id) {
         this._getPolicyDetails(param.id);
+        this._getPreviousPolicies(param.id);
         this._getCurrentPlatform();
       }
     });
@@ -47,6 +50,19 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }).then((res: any) => {
       if (res.data.length > 0) {
         this.policy = res.data[0];
+        console.log(this.policy);
+      }
+    }).catch(err => console.log(err));
+  }
+
+  private _getPreviousPolicies(routeId) {
+    this._policyService.find({
+      query: { 'principalBeneficiary._id': routeId, isPaid: true, $sort: { createdAt: -1 } }
+    }).then((res: any) => {
+      this.previousPolicyLoading = false;
+      if (res.data.length > 0) {
+        console.log(res.data);
+        this.previousPolicies = res.data[0];
         console.log(this.policy);
       }
     }).catch(err => console.log(err));
@@ -92,6 +108,10 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     }).catch(err => {
       console.log(err);
     });
+  }
+
+  onChangePaymentType(value: String) {
+    console.log(value);
   }
 
   paymentCancel() {

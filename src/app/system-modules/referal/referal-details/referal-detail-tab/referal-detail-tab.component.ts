@@ -46,7 +46,7 @@ export class ReferalDetailTabComponent implements OnInit {
     return differenceInYears(
       new Date(),
       this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
-    )
+    );
   }
   approveReferal() {
     this.modalApprove = true;
@@ -141,9 +141,15 @@ export class ReferalDetailTabComponent implements OnInit {
     this.selectedTransaction = transaction;
     this.modalReject = true;
   }
+
   save_authorization() {
 
   }
+
+  holdClaim() {
+
+  }
+
   isOdd(num) {
     return num % 2;
   }

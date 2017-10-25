@@ -101,7 +101,7 @@ export class ListIndividualComponent implements OnInit {
 
 
   navigate(url: string, id: string) {
-    if (!!id) {
+    if (!!id && id !== '') {
       this.loadingService.start();
       this._router.navigate([url + id]).then(res => {
         this.loadingService.complete();

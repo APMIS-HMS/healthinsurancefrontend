@@ -48,6 +48,10 @@ export class ReplyReferalTabsComponent implements OnInit {
     });
   }
 
+  send() {
+    
+  }
+
   tabComplaints_click() {
     this.tab_complaints = true;
     this.tab_upload = false;
