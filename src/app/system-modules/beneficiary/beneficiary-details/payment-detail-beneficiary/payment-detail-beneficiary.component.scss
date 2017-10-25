@@ -75,12 +75,12 @@
 }
 
 .pay-btn-detail-wrap {
+    width: 100%;
     display: inline-flex;
-    // justify-content: space-around;
-    // -webkit-box-align: center;
+    justify-content: center;
+    -webkit-box-align: center;
     align-items: center;
     position: relative;
     text-align: center !important;
-    padding: 10px;
-    // margin-left: 400px;
+    padding: 10px 0px;
 }

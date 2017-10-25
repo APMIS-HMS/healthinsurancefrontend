@@ -36,9 +36,10 @@
                 <div class="frm-item-wrap">
                     <label class="label">HIA</label>
                     <div class="inputWrap">
-                        <select>
-                    <option value="" disabled selected>HIA</option>
-                  </select>
+                        {{ policy?.hiaId?.name }}
+                        <!-- <select>
+                          <option value="" disabled selected>HIA</option>
+                        </select> -->
                     </div>
                 </div>
 
@@ -46,9 +47,10 @@
                 <div class="frm-item-wrap">
                     <label class="label">Provider Name</label>
                     <div class="inputWrap">
-                        <select>
-                    <option value="" disabled selected>Provider</option>
-                  </select>
+                        {{ policy?.providerId?.name }}
+                        <!-- <select>
+                          <option value="" disabled selected>Provider</option>
+                        </select> -->
                     </div>
                 </div>
 
@@ -56,46 +58,51 @@
                 <div class="frm-item-wrap">
                     <label class="label">Type</label>
                     <div class="inputWrap">
-                        <select>
-                    <option value="" disabled selected>Plan Type</option>
-                  </select>
+                        {{ policy?.planTypeId?.name }}
+                        <!-- <select>
+                          <option value="" disabled selected>Plan Type</option>
+                        </select> -->
                     </div>
                 </div>
 
                 <div class="frm-item-wrap">
                     <label class="label">Name</label>
                     <div class="inputWrap">
-                        <select>
-                    <option value="" disabled selected>Plan</option>
-                  </select>
+                        {{ policy?.planId?.name }}
+                        <!-- <select>
+                          <option value="" disabled selected>Plan</option>
+                        </select> -->
                     </div>
                 </div>
 
                 <div class="frm-item-wrap">
                     <label class="label">Premium Category</label>
                     <div class="inputWrap">
-                        <select>
+                        {{ policy?.premiumCategoryId?.name }}
+                        <!-- <select>
                           <option value="" disabled selected>Premium Category</option>
-                        </select>
+                        </select> -->
                     </div>
                 </div>
 
                 <div class="frm-item-wrap">
                     <label class="label">Premium Package</label>
                     <div class="inputWrap">
-                        <select>
+                        {{ policy?.premiumCategoryId?.name }}
+                        <!-- <select>
                           <option value="">Select..</option>
-                        </select>
+                        </select> -->
                     </div>
                 </div>
 
                 <div class="frm-item-wrap">
                     <label class="label">Sponsorship</label>
                     <div class="inputWrap">
-                        <select>
-                    <option value="">Self</option>
-                    <option value="">Organization</option>
-                  </select>
+                        {{ policy?.premiumCategoryId?.name }}
+                        <!-- <select>
+                          <option value="">Self</option>
+                          <option value="">Organization</option>
+                        </select> -->
                     </div>
                 </div>
             </form>
@@ -120,24 +127,24 @@
                     <div>
                         <div class="pay-label-detail-wrap">
                             <span style="margin-right:10px;">
-                        <label style="font-size:12px">
-                          <input style="width: 30px;display: block;margin: 0 auto;" type="checkBox"> Cash
-                        </label>
-                      </span>
+                            <label>
+                              <input (change)="onChangePaymentType($event.target.value)" value="cash" type="checkBox"> Cash
+                            </label>
+                          </span>
                             <span>
-                        <label style="font-size:12px">
-                          <input style="width: 30px;display: block;margin: 0 auto;" type="checkBox"> Cheque
-                        </label>
-                      </span>
+                            <label>
+                              <input (change)="onChangePaymentType($event.target.value)" value="cheque" type="checkBox"> Cheque
+                            </label>
+                          </span>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
         <div class="pay-btn-detail-wrap">
-            <angular4-paystack [key]="'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85'" [email]="'mailexample@mail.com'" [amount]="5000000" [ref]="'2637458692312'" [class]="'btn btn-primary btn-ePay'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+            <angular4-paystack [key]="'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85'" [email]="'mailexample@mail.com'" [amount]="5000000" [ref]="'2637458692312'" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
             <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
-            <button class="btn btn-medium btn-blue cta" style="width:150px; height:30px"> PAY </button>
+            <button class="btn btn-medium btn-blue cta" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
         </div>
         <div>
         </div>
@@ -150,6 +157,7 @@
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
                 <tr class="tr">
+                    <th class="th">No</th>
                     <th class="th">Due Date</th>
                     <th class="th">LASHMA ID</th>
                     <th class="th">Amount Paid</th>
@@ -162,37 +170,16 @@
             </thead>
 
             <tbody class="tbody">
-                <tr class="tr">
-                    <td class="td">11th Oct 2017</td>
-                    <td class="td">203.276.1000</td>
-                    <td class="td" style="color: green;">750 NGN</td>
-                    <td class="td">10 Months</td>
-                    <td class="td">223.45.67.11</td>
-                    <td class="td">Formal Sector Plan</td>
-                    <td class="td">Healthcare Security Limited</td>
-                    <td class="td td-icos">
-                        <i class="fa fa-chevron-right"></i>
+                <tr class="tr" *ngIf="previousPolicies.length === 0 && !previousPolicyLoading">
+                    <td class="text-center" colspan="11">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="previousPolicies.length === 0 && previousPolicyLoading">
+                    <td class="text-center" colspan="11">
+                        <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
-            </tbody>
-
-            <tbody class="tbody">
-                <tr class="tr">
-                    <td class="td">11th Oct 2017</td>
-                    <td class="td">203.276.1000</td>
-                    <td class="td" style="color: green;">750 NGN</td>
-                    <td class="td">10 Months</td>
-                    <td class="td">223.45.67.11</td>
-                    <td class="td">Formal Sector Plan</td>
-                    <td class="td">Healthcare Security Limited</td>
-                    <td class="td td-icos">
-                        <i class="fa fa-chevron-right"></i>
-                    </td>
-                </tr>
-            </tbody>
-
-            <tbody class="tbody">
-                <tr class="tr">
+                <tr *ngFor="let policy of previousPolicies; let i = index;" class="tr">
+                    <td class="td">{{ i+1 }}</td>
                     <td class="td">11th Oct 2017</td>
                     <td class="td">203.276.1000</td>
                     <td class="td" style="color: green;">750 NGN</td>
