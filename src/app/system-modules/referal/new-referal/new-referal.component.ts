@@ -227,7 +227,6 @@ export class NewReferalComponent implements OnInit {
       unit: ['', [<any>Validators.required]],
       clinicalNote: ['', [<any>Validators.required]]
     });
-    console.log(this.selectedCheckIn)
 
     this.referalFormGroup.controls.destinationHospital.valueChanges.subscribe(value =>{
       if(value !== null && value._id === this.user.facilityId._id){

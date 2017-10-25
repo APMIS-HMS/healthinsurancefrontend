@@ -16,6 +16,7 @@ import { VisitTypeService, CheckInService, SymptomService, InvestigationService,
 import { DrugPackSizeService } from '../../services/common/drug-pack-size.service';
 import { PolicyService } from '../../services/policy/policy.service';
 import { PreAuthorizationService } from '../../services/pre-authorization/pre-authorization.service';
+import { ReplyReferalTabsComponent } from './referal-details/reply-referal-tabs/reply-referal-tabs.component';
 
 @NgModule({
     imports: [
@@ -31,7 +32,8 @@ import { PreAuthorizationService } from '../../services/pre-authorization/pre-au
         ReferalDetailTabComponent,
         ModalApproveReferalComponent,
         ModalRejectReferalComponent,
-        NewReferalConfirmComponent],
+        NewReferalConfirmComponent,
+        ReplyReferalTabsComponent],
     providers: [VisitTypeService, CheckInService, SymptomService,InvestigationService,DrugService,DiagnosisService,
         ProcedureService, DiagnosisTypeService, DrugPackSizeService, PolicyService, ReferralService]
 })
