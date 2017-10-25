@@ -67,22 +67,26 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       programType: ['', [<any>Validators.required]],
       premiumCategory: ['', [<any>Validators.required]],
       programName: ['', [<any>Validators.required]],
-      providerName: ['', [<any>Validators.required]]
+      providerName: ['', [<any>Validators.required]],
+      premiumPackage: ['', [<any>Validators.required]],
+      sponsorship: ['', [<any>Validators.required]]
     });
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
+      console.log(value);
       this._getPlanByType(value._id);
     });
     this._getCurrentPlatform();
     this._getPlanTypes();
     this._getPremiumTypes();
-    console.log(this.dependants)
+    console.log(this.dependants);
   }
 
   _getPlanByType(id) {
     this._systemService.on();
     this._planService.find({ query: { 'planType._id': id } }).then((res: any) => {
       this._systemService.off();
+      console.log(res.data);
       this.plans = res.data;
     }).catch(err => {
       this._systemService.off();
@@ -116,7 +120,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
   _getHIAs(platformOwnerId) {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType.name': 'Health Insurance Agent', 'platformOwnerId._id': platformOwnerId } }).then((res: any) => {
+    this._facilityService.find({
+      query: { 'facilityType.name': 'Health Insurance Agent', 'platformOwnerId._id': platformOwnerId }
+    }).then((res: any) => {
       this._systemService.off();
       this.hias = res.data;
     }).catch(err => {
@@ -127,7 +133,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
   _getProviders(platformOwnerId) {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId } }).then((res: any) => {
+    this._facilityService.find({
+      query: { 'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId }
+    }).then((res: any) => {
       this._systemService.off();
       this.providers = res.data;
     }).catch(err => {
@@ -146,15 +154,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       console.log(err);
     });
   }
+
   onClickStepFour(value, valid) {
-    console.log(value)
+    console.log(value);
     if (valid) {
-
-
-
-
-
-
       let policy: any = <any>{};
       policy.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
       policy.principalBeneficiary = this.selectedBeneficiary;
@@ -169,22 +172,19 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         persons: this.dependants,
         policy: policy,
         platform: this.selectedBeneficiary.platformOwnerId
-      }
+      };
       console.log(body);
 
       this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
-        console.log(payload)
-
+        console.log(payload);
         this._systemService.announceBeneficiaryTabNotification({
           tab: 'Five',
           policy: payload.body.policyObject
         });
-
-
       }).catch(err => {
-        console.log(err)
+        console.log(err);
       });
-    }else{
+    } else {
       let counter = 0;
       this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
       Object.keys(this.frmProgram.controls).forEach((field, i) => { // {1}
