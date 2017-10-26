@@ -103,6 +103,12 @@ button {
     justify-content: center;
     align-items: center;
 }
+.btn-radius-x1{
+    border-radius: 10px;
+}
+.btn-radius-x2{
+    border-radius: 20px;
+}
 
 .btn-blue {
     background: $brand-primary;
@@ -121,6 +127,25 @@ button {
 .btn-blue-outline:hover {
     border: 1px solid lighten($brand-primary, 5%);
     color: lighten($brand-primary, 5%);
+}
+
+.btn-white {
+    background: #fff;
+    color: $brand-primary;
+}
+
+.btn-white:hover {
+    background: lighten($brand-primary, 50%);
+}
+
+.btn-white-outline {
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.btn-white-outline:hover {
+    border: 1px solid lighten($brand-primary, 50%);
+    color: lighten($brand-primary, 50%);
 }
 
 .btn-green {
