@@ -15,8 +15,8 @@ export interface ReferralAuthorization {
     visityClassId: any;
     approvedStatus: any;
     policyId: any;
-    hiaApproved:boolean;
-    referingProvider:any;
-    destinationProvider:any;
+    referingProvider: any;
+    destinationProvider: any;
+    hiaApproved: any
     _id: any;
 }

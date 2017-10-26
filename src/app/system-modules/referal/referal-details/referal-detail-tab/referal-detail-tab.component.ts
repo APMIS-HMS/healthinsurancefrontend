@@ -1,3 +1,6 @@
+import { REQUEST_STATUS } from './../../../../services/globals/config';
+import { ReferralAuthorization } from './../../../../models/referral/referral';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
 import differenceInYears from 'date-fns/difference_in_years';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
@@ -12,7 +15,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ReferalDetailTabComponent implements OnInit {
   // @ViewChild('child')
   // private child: NewPreauthTabsComponent;
-  @Input() selectedAuthorization: any;
+  @Input() selectedAuthorization: ReferralAuthorization;
 
   modalApprove = false;
   modalReject = false;
@@ -24,20 +27,25 @@ export class ReferalDetailTabComponent implements OnInit {
   disableReject = true;
   disableApprove = true;
 
+  user: any;
   selectedTransaction: PreAuthorizationDocument;
+  requestStatus = REQUEST_STATUS;
 
   constructor(
     private _referralService: ReferralService,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private _locker: CoolLocalStorage
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
   }
   _getAuthorizationDetails(id) {
     this._systemService.on();
-    this._referralService.get(id, {}).then(payload => {
+    this._referralService.get(id, {}).then((payload: any) => {
       this._systemService.off();
       this.selectedAuthorization = payload;
+      console.log(payload)
     }).catch(err => {
       this._systemService.off();
     })
@@ -48,12 +56,35 @@ export class ReferalDetailTabComponent implements OnInit {
       this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
     );
   }
-  approveReferal() {
+  approveReferal(transaction) {
     this.modalApprove = true;
+    this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
   }
-  rejectReferal() {
+  rejectReferal(transaction) {
     this.modalReject = true;
+    this.selectedTransaction = JSON.parse(JSON.stringify(transaction));
   }
+  getDestinationApprovalStatus() {
+    if (this.selectedAuthorization !== undefined) {
+      if (this.selectedAuthorization.documentation.length > 0) {
+        let documentations = this.selectedAuthorization.documentation;
+        // const index = documentations.findIndex(x =>x.destinationProvider._id === this.user.facilityId._id);
+        // (this.selectedAuthorization.documentation.filter(x => x.destinationProvider._id === this.user.facilityId._id))
+        let doc = this.selectedAuthorization.documentation[documentations.length - 1];
+        if(doc !== undefined){
+          return doc.approvedStatus.past;
+        }
+      } else {
+        return 'Pending';
+      }
+    } else {
+      return 'Pending';
+    }
+
+  }
+  // isAmongDestinationProviders(transaction) {
+  //   return (this.selectedAuthorization.documentation.filter(x => x.destinationProvider._id === this.user.facilityId._id)).length > 0
+  // }
   modal_close() {
     this.modalApprove = false;
     this.modalReject = false;
@@ -62,6 +93,49 @@ export class ReferalDetailTabComponent implements OnInit {
   disableAll() {
     this.disableReject = true;
     this.disableApprove = true;
+  }
+  checkVisibility(transaction) {
+    if (this.user.userType.name === 'Health Insurance Agent' && this.selectedAuthorization !== undefined && this.selectedAuthorization.hiaApproved !== undefined) {
+      if (this.selectedAuthorization.hiaApproved.approvedStatus.id === 2) {
+        return false;
+      } else {
+        return true;
+      }
+
+    } else if (this.user.userType.name === 'Provider' && this.selectedAuthorization !== undefined) {
+      if (this.user.facilityId._id === this.selectedAuthorization.referingProvider._id) {
+        return false;
+      } else if (this.user.facilityId._id === this.selectedAuthorization.destinationProvider._id) {
+        if (transaction.response !== undefined) {
+          return false;
+        } else {
+          return true;
+        }
+
+      } else if (this.isAmongDestinationProviders(transaction)) {
+        if (transaction.response !== undefined) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return false;
+      }
+
+    } else {
+      return true;
+    }
+  }
+  isAmongDestinationProviders(transaction) {
+    return (this.selectedAuthorization.documentation.filter(x => x.destinationProvider._id === this.user.facilityId._id)).length > 0
+  }
+  canReply(transaction) {
+    let hiaStatus = (this.selectedAuthorization.hiaApproved !== undefined && this.selectedAuthorization.hiaApproved.approvedStatus.id === 3) ? false : true
+    let providerStatus = transaction.response.approvedStatus.id === 3 ? false : true;
+    if ((!hiaStatus || !providerStatus) && this.user.facilityId._id === this.selectedAuthorization.referingProvider._id && !this.reply) {
+      return true;
+    }
+    return false;
   }
   validateResponse(doc, cliDoc, transaction: PreAuthorizationDocument) {
     this.disableAll();

@@ -42,6 +42,10 @@ export class ReferalDetailsComponent implements OnInit {
       this.selectedAuthorization = payload;
       this.tab_details = true;
     }).catch(err => {
+      if(err.code === 404){
+        this._router.navigate(['/modules/referal/referals']);
+      }
+      console.log(err)
       this._systemService.off();
     });
   }
