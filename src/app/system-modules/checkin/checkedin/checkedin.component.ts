@@ -79,13 +79,13 @@ export class CheckedinComponent implements OnInit {
   
   routeBeneficiaryDetails(check) {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/check-in', check.beneficiaryId])
+    this._router.navigate(['/modules/beneficiary/beneficiaries/'+check.beneficiaryId+'/checkin'])
       .then(payload => {
         this._systemService.off();
       }).catch(err => {
         console.log(err)
         this._systemService.off();
-      })
+      });
   }
 
   navigate(url: string, id?: string) {
