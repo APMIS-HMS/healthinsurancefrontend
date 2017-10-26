@@ -36,7 +36,6 @@ export class CheckedinComponent implements OnInit {
     private _checkInService: CheckInService,
     private _uploadService: UploadService,
     private _locker: CoolLocalStorage,
-    private loadingService: LoadingBarService,
     private _router: Router
   ) { }
 

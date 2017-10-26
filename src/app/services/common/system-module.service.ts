@@ -21,6 +21,7 @@ export class SystemModuleService {
   constructor(private locker: CoolLocalStorage) {
   }
   announceNotification(notification: Object) {
+    console.log(notification)
     this.notificationAnnouncedSource.next(notification);
   }
 

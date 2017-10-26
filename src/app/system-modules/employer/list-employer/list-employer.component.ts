@@ -31,7 +31,6 @@ export class ListEmployerComponent implements OnInit {
   constructor(
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
-    private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
