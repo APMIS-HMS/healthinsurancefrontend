@@ -264,12 +264,12 @@
                                                 </ul>
                                             </div>
                                             <div class="inputWrap-x2">
-                                                <input style="width:50px;" min="1" type="number" formControlName="drugQty" class="form-control">
+                                                <input style="width:50px;" placeholder="Qty" min="1" type="number" formControlName="drugQty" class="form-control">
                                                 <small class="alert-label" [hidden]="drugFormGroup.controls.drugQty.valid || drugFormGroup.controls.drugQty.pristine">
                                                     Drug Quantity value is required.
                                                 </small>
                                                 <select formControlName="drugUnit" class="form-control">
-                                                    <option disabled value="" selected>Route</option>
+                                                    <option disabled value="" selected>Presentation</option>
                                                     <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
                                                 </select>
                                                 <small class="alert-label" [hidden]="drugFormGroup.controls.drugUnit.valid || drugFormGroup.controls.drugUnit.pristine">

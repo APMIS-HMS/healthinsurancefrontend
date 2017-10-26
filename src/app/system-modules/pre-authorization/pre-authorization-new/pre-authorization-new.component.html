@@ -132,9 +132,9 @@
             <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
             <li (click)="tabClinicalNotes_click()" [class.tab-active]="tab_clinicalNotes">Clinical Notes</li>
             <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
-            <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
             <li (click)="tabServices_click()" [class.tab-active]="tab_services">Investigations</li>
             <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
+            <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
             <li (click)="tabNotes_click()" [class.tab-active]="tab_notes">Notes & Documentations</li>
         </ul>
 
@@ -488,7 +488,7 @@
                                             </small>
                                             <div>
                                                 <select formControlName="drugUnit" class="form-control">
-                                                    <option disabled value="" selected>Route</option>
+                                                    <option disabled value="" selected>Presentation</option>
                                                     <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
                                                 </select>
                                                 <small class="alert-label" [hidden]="drugFormGroup.controls.drugUnit.valid || drugFormGroup.controls.drugUnit.pristine">
