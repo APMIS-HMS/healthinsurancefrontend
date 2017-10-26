@@ -218,7 +218,9 @@ export class NewClaimComponent implements OnInit {
   _getSelectedCheckinItem(checkinId) {
     this._preAuthorizationService.find({ query: { "checkedInDetails._id": checkinId } }).then((preauth_callback: any) => {
       if (preauth_callback.data.length > 0) { 
-        
+        preauth_callback.data.forEach(element => {
+          
+        });
       }
     })
     this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
