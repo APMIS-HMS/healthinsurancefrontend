@@ -55,7 +55,6 @@ export class EmployerDetailsComponent implements OnInit {
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _uploadService:UploadService,
     private _titleService:TitleService,
     private _genderService:GenderService,

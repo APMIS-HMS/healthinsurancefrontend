@@ -39,7 +39,6 @@ export class ListUserComponent implements OnInit {
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _facilityService:FacilityService,
     private _locker: CoolLocalStorage
   ) { }

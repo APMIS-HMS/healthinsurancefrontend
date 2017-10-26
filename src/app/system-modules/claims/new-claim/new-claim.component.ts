@@ -36,13 +36,13 @@ export class NewClaimComponent implements OnInit {
 
   claimsFormGroup: FormGroup;
   searchResults = false;
-  selectedDiagnosis:any;
-  selectedProcedure:any;
-  selectedInvestigation:any;
-  selectedDrug:any;
-  selectedSymptom:any;
+  selectedDiagnosis: any;
+  selectedProcedure: any;
+  selectedInvestigation: any;
+  selectedDrug: any;
+  selectedSymptom: any;
 
-  isProcessing=false;
+  isProcessing = false;
   isItemselected = true;
 
   tab_symptoms = true;
@@ -52,7 +52,7 @@ export class NewClaimComponent implements OnInit {
   tab_procedure = false;
   tab_upload = false;
   tab_notes = false;
-  
+
   procedureSearchResult = false;
   drugSearchResult = false;
   diagnosisSearchResult = false;
@@ -64,7 +64,7 @@ export class NewClaimComponent implements OnInit {
   claimItem: Claim = <Claim>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
   SelectedCheckinItemPlan: any = <any>{};
-  packSizes:any=<any>[];
+  packSizes: any = <any>[];
   symptomLists: any = <any>[];
   diagnosisLists: any = <any>[];
   investigationList: any = <any>[];
@@ -99,8 +99,8 @@ export class NewClaimComponent implements OnInit {
     private _drugPackSizeService: DrugPackSizeService,
     private _procedureService: ProcedureService,
     private _diagnosisService: DiagnosisService,
-    private _preAuthorizationService:PreAuthorizationService,
-    private _diagnosisTypeService:DiagnosisTypeService,
+    private _preAuthorizationService: PreAuthorizationService,
+    private _diagnosisTypeService: DiagnosisTypeService,
     private _route: ActivatedRoute,
     private _drugService: DrugService,
     private _checkInService: CheckInService,
@@ -115,7 +115,7 @@ export class NewClaimComponent implements OnInit {
       }
     });
 
-    
+
     this.claimsFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
       lashmaid: ['', [<any>Validators.required]],
@@ -170,17 +170,17 @@ export class NewClaimComponent implements OnInit {
       });
 
     this.claimsFormGroup.controls.diagnosis.valueChanges
-    .debounceTime(250)
-    .distinctUntilChanged()
-    .subscribe(value => {
-      if (!(this.diagnosisItems.filter(x => x.name === value).length > 0)) {
-        this.selectedDiagnosis = undefined;
-        this._getDiagnosises(value);
-      }
-    }, error => {
-      this._systemService.off();
-      console.log(error)
-    });
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        if (!(this.diagnosisItems.filter(x => x.name === value).length > 0)) {
+          this.selectedDiagnosis = undefined;
+          this._getDiagnosises(value);
+        }
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
 
     this.claimsFormGroup.controls.diagnosisType.valueChanges
       .debounceTime(250)
@@ -192,7 +192,7 @@ export class NewClaimComponent implements OnInit {
         console.log(error)
       });
 
-      this.claimsFormGroup.controls.procedure.valueChanges
+    this.claimsFormGroup.controls.procedure.valueChanges
       .debounceTime(250)
       .distinctUntilChanged()
       .subscribe(value => {
@@ -213,11 +213,15 @@ export class NewClaimComponent implements OnInit {
       });
 
   }
-  
+
 
   _getSelectedCheckinItem(checkinId) {
-
-    this._checkInService.find({ query: { _id: checkinId,$limit:1 } }).then((payload: any) => {
+    this._preAuthorizationService.find({ query: { "checkedInDetails._id": checkinId } }).then((preauth_callback: any) => {
+      if (preauth_callback.data.length > 0) { 
+        
+      }
+    })
+    this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
       this.SelectedCheckinItem = payload.data[0];
       if (this.SelectedCheckinItem.encounterType == "In-Patient") {
         this.isInpatient = true;
@@ -381,7 +385,7 @@ export class NewClaimComponent implements OnInit {
     }
   }
 
-  onSelectDiagnosis(diagnosis){
+  onSelectDiagnosis(diagnosis) {
     this.claimsFormGroup.controls.diagnosis.setValue(diagnosis.name);
     this.diagnosisSearchResult = false;
     this.selectedDiagnosis = diagnosis;
@@ -392,7 +396,7 @@ export class NewClaimComponent implements OnInit {
     if (name.valid) {
       this.diagnosisLists.push({
         "diagnosis": typeof (this.selectedDiagnosis.name) === 'object' ? this.selectedDiagnosis : name.value,
-        "type":this.claimsFormGroup.controls.diagnosisType.value
+        "type": this.claimsFormGroup.controls.diagnosisType.value
       });
       this.claimsFormGroup.controls.diagnosis.reset();
     } else {
@@ -428,7 +432,7 @@ export class NewClaimComponent implements OnInit {
     let name = this.claimsFormGroup.controls.drug;
     let qty = this.claimsFormGroup.controls.drugQty;
     let unit = this.claimsFormGroup.controls.drugUnit;
-    if (name.valid && qty.value.length>0) {
+    if (name.valid && qty.value.length > 0) {
       this.drugList.push({
         "drug": typeof (this.selectedDrug.name) === 'object' ? this.selectedDrug : name.value,
         "quantity": qty.value,
@@ -443,7 +447,7 @@ export class NewClaimComponent implements OnInit {
 
   onSelectProcedure(procedure) {
     this.claimsFormGroup.controls.procedure.setValue(procedure.name);
-    this.procedureSearchResult =false;
+    this.procedureSearchResult = false;
     this.selectedProcedure = procedure;
   }
 
@@ -464,16 +468,16 @@ export class NewClaimComponent implements OnInit {
     var acronym = matches.join('');
   }
 
-  onRemove(data:any[],item:any) {
+  onRemove(data: any[], item: any) {
     const index: number = data.indexOf(item);
     if (index !== -1) {
-        data.splice(index, 1);
-    }        
-}
+      data.splice(index, 1);
+    }
+  }
 
 
   onSendClaim() {
-    
+
     var request = {
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
@@ -520,7 +524,7 @@ export class NewClaimComponent implements OnInit {
     });
   }
 
-   
+
   tabDiagnosis_click() {
     console.log(this.claimItem);
     this.tab_symptoms = false;
@@ -531,7 +535,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  
+
   tabDrug_click() {
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
@@ -541,7 +545,7 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  
+
   tabUpload_click() {
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
@@ -551,8 +555,8 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = true;
     this.tab_notes = false;
   }
-  
-  tabSymptoms_click(){
+
+  tabSymptoms_click() {
     this.tab_symptoms = true;
     this.tab_diagnosis = false;
     this.tab_investigation = false;
@@ -561,8 +565,8 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  
-  tabInvestigation_click(){
+
+  tabInvestigation_click() {
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = true;
@@ -571,8 +575,8 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  
-  tabProcedure_click(){
+
+  tabProcedure_click() {
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = false;
@@ -581,8 +585,8 @@ export class NewClaimComponent implements OnInit {
     this.tab_upload = false;
     this.tab_notes = false;
   }
-  
-  tabNotes_click(){
+
+  tabNotes_click() {
     this.tab_symptoms = false;
     this.tab_diagnosis = false;
     this.tab_investigation = false;
@@ -592,11 +596,11 @@ export class NewClaimComponent implements OnInit {
     this.tab_notes = true;
   }
 
-  newClaim_click(){
+  newClaim_click() {
     this.newClaim = true;
     this.newClaimConfirm = false;
   }
-  newClaimConfirm_click(){
+  newClaimConfirm_click() {
     this.newClaim = false;
     this.newClaimConfirm = true;
   }
@@ -604,7 +608,7 @@ export class NewClaimComponent implements OnInit {
   modal_close() {
     this.showCodes = false;
   }
-  pop_codes(){
+  pop_codes() {
     this.showCodes = true;
   }
 

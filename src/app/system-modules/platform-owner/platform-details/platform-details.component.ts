@@ -42,7 +42,6 @@ export class PlatformDetailsComponent implements OnInit {
     private _toastr: ToastsManager,
     private _uploadService: UploadService,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _capitationFeeService: CapitationFeeService,
     private _headerEventEmitter: HeaderEventEmitterService,
   ) { }
