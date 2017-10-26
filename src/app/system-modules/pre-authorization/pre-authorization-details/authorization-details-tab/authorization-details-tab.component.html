@@ -4,33 +4,33 @@
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Date of Birth:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth | date}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.dateOfBirth | date}}</div>
         </div>
-        <div class="group-item">
+        <div *ngIf="selectedAuthorization !== undefined" class="group-item">
           <div class="item-label">Age:</div>
           <div class="item-val">{{getAge()}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Gender:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject.personId.gender.name}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.gender.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">LASRRA ID:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject?.stateID}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject?.stateID}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">LAASHMA ID:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">POLICY ID:</div>
-          <div class="item-val">{{selectedAuthorization.policyId.policyId}}</div>
+          <div class="item-val">{{selectedAuthorization?.policyId.policyId}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">POLICY STATUS:</div>
           <div class="item-val">
-            <span *ngIf="selectedAuthorization.policyId.isActive">Active</span>
-            <span *ngIf="!selectedAuthorization.policyId.isActive">InActive</span>
+            <span *ngIf="selectedAuthorization?.policyId.isActive">Active</span>
+            <span *ngIf="!selectedAuthorization?.policyId.isActive">InActive</span>
           </div>
         </div>
       </div>
@@ -38,26 +38,26 @@
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Hospital Name:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.providerFacilityId.name}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.providerFacilityId.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Provider ID:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.providerFacilityId.provider.providerId}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.providerFacilityId.provider.providerId}}</div>
         </div>
 
         <div class="group-item">
           <div class="item-label">Encounter Type:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.encounterType.name}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.encounterType.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Status:</div>
           <div class="item-val">
-            <span class="lemon--green">{{selectedAuthorization.checkedInDetails.claimStatus.name}}</span>
+            <span class="lemon--green">{{selectedAuthorization?.checkedInDetails.claimStatus.name}}</span>
           </div>
         </div>
         <div class="group-item">
           <div class="item-label">Date when patient was checked in:</div>
-          <div class="item-val">{{selectedAuthorization.checkedInDetails.confirmation | date}}</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.confirmation | date}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Date when claims was checked out:</div>
@@ -69,11 +69,11 @@
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Health Insurance Agency:</div>
-          <div class="item-val">{{selectedAuthorization.policyId.hiaId.name}}</div>
+          <div class="item-val">{{selectedAuthorization?.policyId.hiaId.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">HIA ID:</div>
-          <div class="item-val">{{selectedAuthorization.policyId.hiaId.hia.cin}}</div>
+          <div class="item-val">{{selectedAuthorization?.policyId.hiaId.hia.cin}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">Health Plan:</div>
@@ -97,7 +97,7 @@
           <div class="letering">
             <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
             <div class="letering-2">
-              <span class="letering-name">{{selectedAuthorization.medicalPersonelName}}</span> Requested Pre-Authorization</div>
+              <span class="letering-name">{{selectedAuthorization?.medicalPersonelName}}</span> Requested Pre-Authorization</div>
           </div>
         </div>
         <div class="doc-wrap">
@@ -329,7 +329,6 @@
     </div>
   </div>
 </div>
-
 
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">

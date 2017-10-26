@@ -1,3 +1,4 @@
+import { RoleService } from './../services/auth/role/role.service';
 import { Subscription } from 'rxjs/Rx';
 import { AuthService } from './../auth/services/auth.service';
 import { HeaderEventEmitterService } from './../services/event-emitters/header-event-emitter.service';
@@ -31,6 +32,7 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 		private _locker: CoolLocalStorage,
 		private loadingService: LoadingBarService,
 		private _systemService: SystemModuleService,
+		private _roleService:RoleService,
 		private _uploadService: UploadService,
 	) {
 		this.online = this._uploadService.checkOnlineStatus();
@@ -66,9 +68,33 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 		} catch (error) {
 			// this._router.navigate(['auth/login']);
 		}
-
+		this._checkRole();
 	}
-
+	private _checkRole() {
+		const roles = this.user.roles;
+		const roleIds: any[] = [];
+		roles.forEach(x => {
+		  roleIds.push(x._id);
+		})
+	
+		this._roleService.find({
+		  query: {
+			_id: {
+			  $in: roleIds
+			}
+		  }
+		}).then((pays: any) => {
+		  pays.data.forEach(roleItem => {
+			if (!!roleItem.accessibilities) {
+			  const accessibilities = roleItem.accessibilities;
+			  this._locker.setObject('accessibilities', accessibilities);
+			}
+		  });
+		})
+	
+	
+	
+	  }
 	close_onClick(message: boolean) {
 		this.menuToggle = false;
 	}

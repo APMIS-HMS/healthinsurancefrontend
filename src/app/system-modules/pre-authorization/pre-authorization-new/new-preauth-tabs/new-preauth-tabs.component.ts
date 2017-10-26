@@ -131,6 +131,7 @@ export class NewPreauthTabsComponent implements OnInit {
       }
     }
 
+  
     let symptomObj = this.selectedTransaction.document[0];
     let clinicalNoteObj = this.selectedTransaction.document[1];
     let diagnosisObj = this.selectedTransaction.document[2];

@@ -67,4 +67,5 @@ export class ModalApproveAuthorizationComponent implements OnInit {
       this._systemService.off();
     }
   }
+  
 }

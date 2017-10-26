@@ -1,301 +1,281 @@
 <div class="claims-inner-wrap">
   <div class="left-sect">
-      <div class="left-fixed shadow-b">
-        <div class="group-wrap">
-          <div class="group-item">
-            <div class="item-label">Date of Birth:</div>
-            <div class="item-val">11th Oct 2000</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">Age:</div>
-            <div class="item-val">17</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">Gender:</div>
-            <div class="item-val">Male</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">LASRRA ID:</div>
-            <div class="item-val">123.333.32.33</div>
-          </div>
-          <div class="group-item">
-              <div class="item-label">LAASHMA ID:</div>
-              <div class="item-val">255.544.53.3</div>
-            </div>
+    <div class="left-fixed shadow-b">
+      <div class="group-wrap">
+        <div class="group-item">
+          <div class="item-label">Date of Birth:</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.dateOfBirth | date}}</div>
         </div>
-
-        <div class="group-wrap">
-          <div class="group-item">
-            <div class="item-label">Refering Hospital:</div>
-            <div class="item-val">Foremost Hospital</div>
-          </div>
-          <div class="group-item">
-              <div class="item-label">Destination Hospital:</div>
-              <div class="item-val">Lagoos University Teaching Hospital</div>
-            </div>
-          <div class="group-item">
-            <div class="item-label">Health Plan:</div>
-            <div class="item-val">Formal Sector Plan</div>
-          </div>
-          <div class="group-item">
-            <div class="item-label">Health Care Facility LASHMA ID:</div>
-            <div class="item-val">122.221.22.1</div>
-          </div>
-
-          <div class="btn-wrap">
-              <div class="btn btn-medium btn-yellow" (click)="holdClaim()">GENERATE CLAIM</div>
-              <div class="btn btn-medium btn-yellow" (click)="holdClaim()">CHECK IN DESTINATION</div>
+        <div *ngIf="selectedAuthorization !== undefined" class="group-item">
+          <div class="item-label">Age:</div>
+          <div class="item-val">{{getAge()}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Gender:</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.gender.name}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">LASRRA ID:</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject?.stateID}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">LAASHMA ID:</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">POLICY ID:</div>
+          <div class="item-val">{{selectedAuthorization?.policyId.policyId}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">POLICY STATUS:</div>
+          <div class="item-val">
+            <span *ngIf="selectedAuthorization?.policyId.isActive">Active</span>
+            <span *ngIf="!selectedAuthorization?.policyId.isActive">InActive</span>
           </div>
         </div>
       </div>
+
+      <div class="group-wrap">
+        <div class="group-item">
+          <div class="item-label">Refering Hospital:</div>
+          <div class="item-val">{{selectedAuthorization?.referingProvider.name}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Destination Hospital:</div>
+          <div class="item-val">{{selectedAuthorization?.destinationProvider.name}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Health Plan:</div>
+          <div class="item-val">{{selectedAuthorization?.policyId.planId.name}}</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Health Care Facility LASHMA ID:</div>
+          <div class="item-val">{{selectedAuthorization?.checkedInDetails.providerFacilityId.provider.providerId}}</div>
+        </div>
+      </div>
+
+      <div class="group-wrap">
+        <div class="group-item">
+          <div class="item-label">HIA Approval Status:</div>
+          <div *ngIf="selectedAuthorization?.hiaApproved !== undefined" class="item-val">{{selectedAuthorization?.hiaApproved.approvedStatus.past}}</div>
+          <div *ngIf="selectedAuthorization?.hiaApproved === undefined" class="item-val">Pending</div>
+        </div>
+        <div class="group-item">
+          <div class="item-label">Destination Hospital Approval:</div>
+          <div class="item-val">{{getDestinationApprovalStatus()}}</div>
+        </div>
+
+        <div class="btn-wrap">
+          <div class="btn btn-medium btn-yellow" (click)="holdClaim()">GENERATE CLAIM</div>
+          <div class="btn btn-medium btn-yellow" (click)="holdClaim()">CHECK IN DESTINATION</div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="right-sect">
-    <div class="request-sect card">
-      <div class="headArea-1">
-        <div class="count">1</div>
-        <div class="letering">
-          <div class="letering-1">Request Sent 11-10.2017 11:20am</div>
-          <div class="letering-2"><span class="letering-name">Jonathan Nelson</span> Requested Claims</div>
+    <div *ngFor="let transaction of selectedAuthorization?.documentation; let i=index">
+      <div class="request-sect card">
+        <div class="headArea-1">
+          <div class="count">{{getCount(i)}}</div>
+          <div class="letering">
+            <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
+            <div class="letering-2">
+              <span class="letering-name">{{selectedAuthorization.medicalPersonelName}}</span> Requested Referral Authorization</div>
+          </div>
+        </div>
+        <div class="doc-wrap">
+          <div class="doc-title">Clinical Information</div>
+
+          <ul *ngFor="let doc of orderDocuments(transaction.document)" class="doc-entries">
+            <div *ngIf="doc.order === 1" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Complaints</th>
+                        <th class="th">Duration</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.symptom.name}}</td>
+                        <td class="td">{{cliDoc.duration}} {{cliDoc.unit.name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 2" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                {{doc.clinicalDocumentation}}
+              </li>
+            </div>
+            <div *ngIf="doc.order === 3" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Diagnosis</th>
+                        <th class="th">Diagnosis Type</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.diagnosis.name}}</td>
+                        <td class="td">{{cliDoc.diagnosisType.name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 4" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Investigation</th>
+                        <th class="th">Amount</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.investigation.name}}</td>
+                        <td class="td">{{cliDoc.investigation.Amount}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 5" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Drug</th>
+                        <th class="th">Quantity</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.drug.name}}</td>
+                        <td class="td">{{cliDoc.quantity}} {{cliDoc.unit.name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 6" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                <div class="tbl-wrap">
+                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                      <tr class="tr">
+                        <th class="th">Procedure</th>
+                        <th class="th">Amount</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                      <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                        <td class="td">{{cliDoc.procedure.name}}</td>
+                        <td class="td">{{cliDoc.procedure.Amount}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </li>
+            </div>
+            <div *ngIf="doc.order === 7" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                {{doc.clinicalDocumentation}}
+              </li>
+            </div>
+            <div *ngIf="doc.order === 8" class="entry-wrap">
+              <li class="doc-subtitle">{{doc.type}}</li>
+              <li>
+                {{doc.clinicalDocumentation}}
+              </li>
+            </div>
+
+
+          </ul>
         </div>
       </div>
-      <div class="doc-wrap">
-        <div class="doc-title">Clinical Information</div>
 
-        <ul class="doc-entries">
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Presenting Complaints</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+      <div *ngIf="transaction.response!== undefined" class="response-sect card">
+        <div class="headArea-2">
+          <div class="count">{{getCount(i,true)}}</div>
+          <div class="letering">
+            <div class="letering-1">Reaction Sent {{transaction.response.createdAt | date:'short'}}</div>
+            <div class="letering-2">
+              <span class="letering-name">{{transaction?.destinationProvider.name}}</span>
+              <span class="red">{{transaction.approvedStatus.past}}</span> Request</div>
           </div>
-        </ul>
-      </div>
+        </div>
+        <div class="doc-wrap">
+          <ul class="doc-entries">
+            <div class="entry-wrap">
+              <li class="doc-subtitle">Reason for Reaction:</li>
+              <li>{{transaction.response.reason}}</li>
+            </div>
 
-      <div class="doc-wrap">
-        <div class="doc-title">Complaint</div>
-
-        <ul class="doc-entries">
-          <div class="entry-wrap">
-            <li>
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Complaints</th>
-                              <th class="th">Duration</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
-                
-                      <tbody class="tbody">
-                          <tr class="tr">
-                              <td class="td">Bilataral  signs</td>
-                              <td class="td">11 weeks</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-
-                          <tr class="tr">
-                              <td class="td">Bilataral  signs</td>
-                              <td class="td">11 weeks</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-
-                          <tr class="tr">
-                              <td class="td">Bilataral  signs</td>
-                              <td class="td">11 weeks</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-                      </tbody>
-                  </table>
-                </div>
-            </li>
-          </div>
-        </ul>
-      </div>
-
-      <div class="doc-wrap">
-        <div class="doc-title">Clinical Findings</div>
-
-        <ul class="doc-entries">
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Examination Findings</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Diagnosis</li>
-            <li>
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Diagnosis</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
-                
-                      <tbody class="tbody">
-                          <tr class="tr">
-                              <td class="td">Bilataral  signs</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-
-                          <tr class="tr">
-                              <td class="td">Bilataral  signs</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-
-                          <tr class="tr">
-                              <td class="td">Bilataral  signs</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-                      </tbody>
-                  </table>
-                </div>
-            </li>
-          </div>
-
-          <div class="entry-wrap">
-            <li>
-              <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                          <tr class="tr">
-                              <th class="th">Drug</th>
-                              <th class="th">Quantity</th>
-                              <th class="th"></th>
-                          </tr>
-                      </thead>
-                
-                      <tbody class="tbody">
-                          <tr class="tr">
-                              <td class="td">Paraacetamol</td>
-                              <td class="td">2 Cards</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-
-                          <tr class="tr">
-                              <td class="td">Tramadol</td>
-                              <td class="td">11 Packs</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-
-                          <tr class="tr">
-                              <td class="td">Quinin</td>
-                              <td class="td">1 Card</td>
-                              <td><i class="fa fa-times"></i></td>
-                          </tr>
-                      </tbody>
-                  </table>
-                </div>
-            </li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Investigations</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Amount</li>
-            <li>N20,000</li>
-          </div>
-        </ul>
-      </div>
-
-      <div class="reply-wrap">
-        <div class="btn btn-medium btn-grey-outline">
+            <div class="entry-wrap">
+              <li class="doc-subtitle">Name:</li>
+              <li>{{transaction.response.by}}</li>
+              <li>{{transaction?.destinationProvider.name}}</li>
+            </div>
+          </ul>
+        </div>
+        <div *ngIf="reply && i === (selectedAuthorization?.documentation.length-1)">
+          <app-reply-referal-tabs #child [selectedAuthorization]="selectedAuthorization" [selectedTransaction]="selectedTransaction"></app-reply-referal-tabs>
+        </div>
+        <div *ngIf="canReply(transaction) && i === (selectedAuthorization?.documentation.length-1) && transaction.approvedStatus.id !== 2"
+          class="reply-wrap">
+          <div (click)="replyOk(transaction)" class="btn btn-medium btn-grey-outline">
             <i class="fa fa-reply"></i> REPLY
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="response-sect card">
-      <div class="headArea-2">
-        <div class="count">2</div>
-        <div class="letering">
-          <div class="letering-1">Reaction Sent 11-10.2017 11:20am</div>
-          <div class="letering-2"><span class="letering-name">LASHMA</span> <span class="red">Denied</span> Request</div>
-        </div>
-      </div>
-      <div class="doc-wrap">  
-        <ul class="doc-entries">
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Reason for Denial:</li>
-            <li>in the name of the king comes the big fat bully of the year o be kidding right</li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Name:</li>
-            <li>Sam Edwin</li>
-            <li>Lashma</li>
-          </div>
-        </ul>
-      </div>
-    </div>
-
-    <div class="request-sect card">
-      <div class="headArea-1">
-        <div class="count">3</div>
-        <div class="letering">
-          <div class="letering-1">Request Updated 11-10.2017 11:20am</div>
-          <div class="letering-2"><span class="letering-name">Jonathan Nelson</span> Requested Claims</div>
-        </div>
-      </div>
-      <div class="doc-wrap">
-        <div class="doc-title">Clinical Information</div>
-
-        <ul class="doc-entries">
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Presenting Complaints</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
-          </div>
-        </ul>
-      </div>
-
-      <div class="doc-wrap">
-        <div class="doc-title">Clinical Findings</div>
-
-        <ul class="doc-entries">
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Examination Findings</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Diagnosis</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Investigations</li>
-            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
-          </div>
-
-          <div class="entry-wrap">
-            <li class="doc-subtitle">Amount</li>
-            <li>N20,000</li>
-          </div>
-        </ul>
+      <div *ngIf="checkVisibility(transaction) && ((transaction.response=== undefined || selectedAuthorization.hiaApproved === undefined))"
+        class="action-wrap">
+        <div class="btn btn-medium btn-red" (click)="rejectReferal(transaction)">REJECT</div>
+        <div class="btn btn-medium btn-blue" (click)="approveReferal(transaction)">APPROVE</div>
       </div>
     </div>
   </div>
 </div>
-  
-<div class="action-wrap">
-    <div class="btn btn-medium btn-red" (click)="rejectReferal()">REJECT</div>
-    <div class="btn btn-medium btn-blue" (click)="approveReferal()">APPROVE</div>
-</div>
+
+
 
 <div *ngIf="modalApprove" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-      <app-modal-approve-referal (closeModal)="modal_close()"></app-modal-approve-referal>
+    <app-modal-approve-referal [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-approve-referal>
   </div>
-</div> 
+</div>
 
 <div *ngIf="modalReject" class="modal-overlay">
   <div class="modal-wrap shadow-RB">
     <div (click)="modal_close()" class="close-modal">X</div>
-      <app-modal-reject-referal (closeModal)="modal_close()"></app-modal-reject-referal>
+    <app-modal-reject-referal [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-reject-referal>
   </div>
-</div> 
-  
+</div>

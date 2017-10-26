@@ -1,5 +1,5 @@
 <div class="in-content-wrap">
-    <div (click)="navigate('/modules/referral/referals')" class="back-btn">
+    <div (click)="navigate('/modules/referral/referals', '')" class="back-btn">
         <i class="fa fa-chevron-left"></i> BACK TO REFERALS
     </div>
 
@@ -14,7 +14,7 @@
             <app-referal-top-bar></app-referal-top-bar>
 
             <div class="details-wrap">
-                <app-referal-detail-tab style="width:100%;"></app-referal-detail-tab>
+                <app-referal-detail-tab [selectedAuthorization]="selectedAuthorization" style="width:100%;"></app-referal-detail-tab>
             </div>
         </div>
 

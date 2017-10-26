@@ -31,6 +31,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   lastI: number = 0;
   lastJ: number = 0;
 
+  
   constructor(private _preAuthorizationService: PreAuthorizationService,
     private _systemService: SystemModuleService) { }
 

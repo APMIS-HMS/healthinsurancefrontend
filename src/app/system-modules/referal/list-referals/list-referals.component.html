@@ -4,40 +4,37 @@
         <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
-  
-    <div class="btn btn-medium btn-blue"  routerLink="/modules/referal/new">
-        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD REFERAL
-    </div>
-  </div>
-  
-  <div class="shadow-RB">
+
+</div>
+
+<div class="shadow-RB">
     <div class="list-filter-wrap">
         <div class="label-xx">Filters:</div>
-  
+
         <div class="input-wrap">
             <label>Responsible HIA</label>
             <select [formControl]="filterHiaControl" class="form-control">
-              <option value="All" selected>All</option>
+                <option value="All" selected>All</option>
             </select>
         </div>
-  
+
         <div class="input-wrap">
             <label>Hospital Name</label>
             <select [formControl]="hospitalControl">
-              <option>All</option>
+                <option>All</option>
             </select>
         </div>
-  
+
         <div class="input-wrap">
             <label>Health Care Plan</label>
             <select [formControl]="planControl">
-              <option>All</option>
+                <option>All</option>
             </select>
         </div>
-  
+
         <div class="btn btn-medium btn-blue-outline">RESET</div>
     </div>
-  
+
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
             <tr class="tr">
@@ -49,54 +46,45 @@
                 <th class="th">Destination Provider</th>
                 <th class="th">Status</th>
                 <th class="th">Reason</th>
+                <th class="th">Emergency</th>
+                <th class="th"></th>
                 <th class="th"></th>
             </tr>
         </thead>
-  
+
         <tbody class="tbody">
-            <tr class="tr">
-                <td class="td">122.122.12.1</td>
-                <td class="td">Jonathan Nelson</td>
-                <td class="td">11th Oct 2017</td>
-                <td class="td">22122-AC</td>
-                <td class="td">Healthy Health LTD</td>
-                <td class="td">Foremost Hospital</td>
-                <td class="td"><span class="green">Active</span></td>
+            <tr *ngFor="let referral of authorizations" class="tr">
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject.platformOwnerNumber}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject.personId.lastName}} {{referral.checkedInDetails?.beneficiaryObject.personId.firstName}}</td>
+                <td class="td">{{referral.timeOfRequest|date:'short'}}</td>
+                <td class="td">{{referral.authorizationCode}}</td>
+                <td class="td">{{referral.referingProvider.name}}</td>
+                <td class="td">{{referral.destinationProvider.name}}</td>
                 <td class="td">
-                  <div class="tooltip">
-                    <div class="tip-title"></div>
-                    <div class="tip-content"></div>
-                  </div>
+                    <span *ngIf="referral.hiaApproved" class="green">Active</span>
+                    <span *ngIf="!referral.hiaApproved" class="red">Active</span>
                 </td>
-                <td class="td td-icos" routerLink="/modules/referal/referals/11">
+                <td class="td">
+                        <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    {{(referral.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
+                </td>
+                <td class="td">Emergency</td>
+                <td class="td tip-td">
                     <i class="fa fa-info fa-circle"></i>
+                    <div class="tooltip">
+                        <div class="tip-title">{{referral.documentation[0].document[1].type}}</div>
+                        <div class="tip-content">{{referral.documentation[0].document[1].clinicalDocumentation}}</div>
+                    </div>
+                </td>
+                <td class="td td-icos"(click)="navigateDetail(referral)">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>
-            <tr class="tr">
-              <td class="td">122.122.12.1</td>
-              <td class="td">Jonathan Nelson</td>
-              <td class="td">11th Oct 2017</td>
-              <td class="td">22122-AC</td>
-              <td class="td">Healthy Health LTD</td>
-              <td class="td">Foremost Hospital</td>
-              <td class="td"><span class="blue">Planned In</span></td>
-              <td class="td">
-                <div class="tooltip">
-                  <div class="tip-title">Reason: Refferal Required</div>
-                  <div class="tip-content">there is a reason for everthing that happens under the sun. so therefoe, the onq who must succeed in life must be he who chooses to take charge of his own destiny, the one who takes ownership of all that concerns him.</div>
-                </div>
-              </td>
-              <td class="td td-icos" routerLink="/modules/referal/referals/11">
-                  <i class="fa fa-info fa-circle"></i>
-                  <i class="fa fa-chevron-right"></i>
-              </td>
-          </tr>
         </tbody>
     </table>
-  
+
     <div class="list-buttom">
         <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
         <div class="btn btn-medium btn-yellow">Load More</div>
     </div>
-  </div>
+</div>

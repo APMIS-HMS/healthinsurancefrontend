@@ -20,7 +20,8 @@
     background: grey;
     color: #fff;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    flex-direction: column;
     width: 100%;
     float: left;
     padding: 10px 10px 0px 10px;
@@ -61,7 +62,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-size: 12px;
 }
 
@@ -75,12 +76,12 @@
 }
 
 .pay-btn-detail-wrap {
+    width: 100%;
     display: inline-flex;
-    // justify-content: space-around;
-    // -webkit-box-align: center;
+    justify-content: center;
+    -webkit-box-align: center;
     align-items: center;
     position: relative;
     text-align: center !important;
-    padding: 10px;
-    // margin-left: 400px;
+    padding: 10px 0px;
 }

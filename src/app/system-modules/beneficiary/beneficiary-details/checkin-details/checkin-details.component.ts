@@ -211,7 +211,7 @@ export class CheckinDetailsComponent implements OnInit {
       query: {
         beneficiaryId: this.beneficiary._id,
         $client: {
-          hasCheckInToday: true
+          hasCheckInToday: false
         }
       }
     }).then((payload: any) => {

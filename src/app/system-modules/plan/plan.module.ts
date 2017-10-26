@@ -10,6 +10,11 @@ import { NewPlanComponent } from './new-plan/new-plan.component';
 import { planRoutes } from './plan.route';
 import { PlanComponent } from './plan.component';
 import { UserTypeService } from '../../services/common/user-type.service';
+import { LashmaCodesListComponent } from './details-plan/lashma-codes-list/lashma-codes-list.component';
+import { EditDrugCodeComponent } from './details-plan/lashma-codes-list/edit-drug-code/edit-drug-code.component';
+import { EditInvestigationCodeComponent } from './details-plan/lashma-codes-list/edit-investigation-code/edit-investigation-code.component';
+import { EditProcedureCodeComponent } from './details-plan/lashma-codes-list/edit-procedure-code/edit-procedure-code.component';
+import { EditVisitCodeComponent } from './details-plan/lashma-codes-list/edit-visit-code/edit-visit-code.component';
 
 @NgModule({
   imports: [
@@ -18,7 +23,7 @@ import { UserTypeService } from '../../services/common/user-type.service';
     ReactiveFormsModule,
     planRoutes
 ],
-  declarations: [PlanComponent, DetailsPlanComponent, ListPlansComponent, NewPlanComponent],
+  declarations: [PlanComponent, DetailsPlanComponent, ListPlansComponent, NewPlanComponent, LashmaCodesListComponent, EditDrugCodeComponent, EditInvestigationCodeComponent, EditProcedureCodeComponent, EditVisitCodeComponent],
   providers: [PlanService, PlanTypeService]
 })
 export class PlanModule { }
