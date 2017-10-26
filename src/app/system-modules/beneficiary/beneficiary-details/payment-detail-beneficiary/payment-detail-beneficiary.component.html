@@ -128,12 +128,17 @@
                         <div class="pay-label-detail-wrap">
                             <span style="margin-right:10px;">
                             <label>
-                              <input (change)="onChangePaymentType($event.target.value)" value="cash" type="checkBox"> Cash
+                              <input name="premiumType" (change)="onChangePaymentType($event.target.value)" value="cash" type="radio"> Cash
+                            </label>
+                          </span>
+                            <span style="margin-right:10px;">
+                            <label>
+                              <input name="premiumType" (change)="onChangePaymentType($event.target.value)" value="cheque" type="radio"> Cheque
                             </label>
                           </span>
                             <span>
                             <label>
-                              <input (change)="onChangePaymentType($event.target.value)" value="cheque" type="checkBox"> Cheque
+                              <input name="premiumType" (change)="onChangePaymentType($event.target.value)" value="e-payment" type="radio"> e-payment
                             </label>
                           </span>
                         </div>
@@ -142,13 +147,10 @@
             </form>
         </div>
         <div class="pay-btn-detail-wrap">
-            <angular4-paystack [key]="'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85'" [email]="'mailexample@mail.com'" [amount]="5000000" [ref]="'2637458692312'" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+            <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.person?.email" [amount]="5000000" [ref]="'refKey'" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
             <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
-            <button class="btn btn-medium btn-blue cta" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
+            <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
         </div>
-        <div>
-        </div>
-
     </div>
     <div>
         <div class="text-center" style="font-weight: bold">

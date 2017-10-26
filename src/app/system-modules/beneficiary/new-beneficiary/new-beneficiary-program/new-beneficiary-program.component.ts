@@ -13,8 +13,10 @@ import { GenderService } from './../../../../services/common/gender.service';
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName } from '../../../../services/globals/config';
-import { UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService } from '../../../../services/index';
+import { CurrentPlaformShortName, SPONSORSHIP } from '../../../../services/globals/config';
+import {
+  UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService
+} from '../../../../services/index';
 
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -38,6 +40,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   planTypes: any[] = [];
   plans: any[] = [];
   premiumTypes: any[] = [];
+  premiumPackages: any[] = [];
+  filteredPremiumPackages: any[] = [];
+  sponsorships: any[] = SPONSORSHIP;
 
   constructor(
     private _fb: FormBuilder,
@@ -75,6 +80,18 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
       console.log(value);
       this._getPlanByType(value._id);
+    });
+
+    this.frmProgram.controls['programName'].valueChanges.subscribe(value => {
+      console.log(value);
+      this.premiumPackages = value.premiums;
+      this.filteredPremiumPackages = value.premiums;
+    });
+
+    this.frmProgram.controls['premiumCategory'].valueChanges.subscribe(value => {
+      if (this.filteredPremiumPackages.length > 0) {
+        this.premiumPackages = this.filteredPremiumPackages.filter(e => e.category.name.toLowerCase() === value.name.toLowerCase());
+      }
     });
     this._getCurrentPlatform();
     this._getPlanTypes();
@@ -166,6 +183,8 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.planTypeId = value.programType;
       policy.planId = value.programName;
       policy.premiumCategoryId = value.premiumCategory;
+      policy.premiumPackageId = value.premiumPackage;
+      policy.sponsorshipId = value.sponsorship;
 
       let body = {
         principal: this.selectedBeneficiary,

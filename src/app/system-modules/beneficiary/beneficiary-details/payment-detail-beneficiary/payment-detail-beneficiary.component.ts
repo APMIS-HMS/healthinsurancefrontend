@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName } from '../../../../services/globals/config';
+import { CurrentPlaformShortName, paystackClientKey } from '../../../../services/globals/config';
 import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService } from '../../../../services/index';
 
 @Component({
@@ -17,7 +17,12 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   previousPolicies: any = [];
   currentPlatform: any;
   user: any;
-  withPaystack: boolean = false;
+  paystackClientKey: string = paystackClientKey;
+  withPaystack: boolean = true;
+  cashPayment: boolean = false;
+  chequePayment: boolean = false;
+  refKey: string;
+  paymentType: string;
   previousPolicyLoading: boolean = true;
 
   constructor(
@@ -44,6 +49,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         this._getCurrentPlatform();
       }
     });
+
+    this.refKey = new Date().getTime().toString() + (this.user ? this.user._id.substr(20) : '');
   }
 
   private _getPolicyDetails(routeId) {
@@ -87,7 +94,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       policy: this.policy,
       paidBy: this.user,
       requestedAmount: 500000,
-      amountPaid: 500000
+      amountPaid: 500000,
+      paymentType: this.paymentType
     };
     // Save into the Premium Payment Service
     this._premiumPaymentService.create(ref).then((res: any) => {
@@ -110,8 +118,18 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     });
   }
 
-  onChangePaymentType(value: String) {
+  onChangePaymentType(value: string) {
     console.log(value);
+    this.paymentType = value;
+    if (value === 'cash' || value === 'cheque') {
+      this.cashPayment = true;
+      this.chequePayment = true;
+      this.withPaystack = false;
+    } else {
+      this.withPaystack = true;
+      this.cashPayment = false;
+      this.chequePayment = false;
+    }
   }
 
   paymentCancel() {
