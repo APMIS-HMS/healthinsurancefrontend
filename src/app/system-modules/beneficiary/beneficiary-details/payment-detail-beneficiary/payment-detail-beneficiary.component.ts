@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName, paystackClientKey } from '../../../../services/globals/config';
+import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
 import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService } from '../../../../services/index';
 
 @Component({
@@ -21,9 +21,10 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   withPaystack: boolean = true;
   cashPayment: boolean = false;
   chequePayment: boolean = false;
-  refKey: string;
-  paymentType: string;
+  refKey: number;
+  paymentType: string = 'e-Payment';
   previousPolicyLoading: boolean = true;
+  paymentTypes: any = PAYMENTTYPES;
 
   constructor(
     private _fb: FormBuilder,
@@ -49,13 +50,16 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         this._getCurrentPlatform();
       }
     });
+    console.log(this.paymentType);
 
-    this.refKey = new Date().getTime().toString() + (this.user ? this.user._id.substr(20) : '');
+    this.refKey = parseFloat((this.user ? this.user._id.substr(20) : ''))  * new Date().getTime();
+    console.log(this.refKey);
   }
 
   private _getPolicyDetails(routeId) {
     this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }).then((res: any) => {
       if (res.data.length > 0) {
+        res.data[0].premiumPackageId.amountInKobo = res.data[0].premiumPackageId.amount * 100;
         this.policy = res.data[0];
         console.log(this.policy);
       }
@@ -66,11 +70,15 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     this._policyService.find({
       query: { 'principalBeneficiary._id': routeId, isPaid: true, $sort: { createdAt: -1 } }
     }).then((res: any) => {
+      console.log(res);
       this.previousPolicyLoading = false;
       if (res.data.length > 0) {
         console.log(res.data);
-        this.previousPolicies = res.data[0];
-        console.log(this.policy);
+        res.data.forEach(policy => {
+          policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
+          this.previousPolicies.push(policy);
+        });
+        // this.previousPolicies = res.data;
       }
     }).catch(err => console.log(err));
   }
@@ -88,26 +96,36 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
   paymentDone(data) {
     console.log(data);
+    let policies = [];
+    // All policies that is being paid for.
+    policies.push({
+      policyId: this.policy.policyId,
+      policyCollectionId: this.policy._id
+    });
+
     let ref = {
       platformOwnerId: this.currentPlatform,
       reference: data,
-      policy: this.policy,
+      policies: policies,
       paidBy: this.user,
-      requestedAmount: 500000,
-      amountPaid: 500000,
+      requestedAmount: this.policy.premiumPackageId.amount,
+      amountPaid: this.policy.premiumPackageId.amount,
       paymentType: this.paymentType
     };
     // Save into the Premium Payment Service
     this._premiumPaymentService.create(ref).then((res: any) => {
       console.log(res);
+      
+
       let verificationData = {
         reference: res.reference,
-        premiumPolicyId: res._id
+        premiumId: res._id
       };
       // Call paystack verification API
       this._premiumPaymentService.verifyPaystackWithMiddleWare(verificationData).then((verifyRes: any) => {
         console.log(verifyRes);
         if (!!verifyRes) {
+          this._getPolicyDetails(res._id);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
@@ -118,10 +136,16 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     });
   }
 
+  addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result.toDateString(); // .toISOString();
+  }
+
   onChangePaymentType(value: string) {
     console.log(value);
     this.paymentType = value;
-    if (value === 'cash' || value === 'cheque') {
+    if (value === 'Cash' || value === 'Cheque') {
       this.cashPayment = true;
       this.chequePayment = true;
       this.withPaystack = false;

@@ -27,6 +27,11 @@ export const SPONSORSHIP = [
     { 'id': 1, 'name': 'Self' },
     { 'id': 2, 'name': 'Organization' }
 ];
+export const PAYMENTTYPES = [
+    { 'id': 1, 'name': 'Cash', default: false },
+    { 'id': 2, 'name': 'Cheque', default: false },
+    { 'id': 3, 'name': 'e-Payment', default: true }
+];
 
 export const CurrentPlaformShortName = 'LASHMA';
 export const FORM_VALIDATION_ERROR_MESSAGE = 'One or more required fields are missing!';
