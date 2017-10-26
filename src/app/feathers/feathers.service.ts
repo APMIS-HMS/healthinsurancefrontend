@@ -13,8 +13,8 @@ const RxJS = require('rxjs');
 
 //const HOST = 'http://172.16.16.29:3031'; // Live
 // const HOST = 'http://192.168.10.8:3031'; // Live
-//const HOST = 'http://localhost:3031'; // Your base server URL here
-const HOST = 'http://insuranceapi.azurewebsites.net';
+const HOST = 'http://localhost:3031'; // Your base server URL here
+// const HOST = 'http://insuranceapi.azurewebsites.net';
 
 @Injectable()
 export class SocketService {

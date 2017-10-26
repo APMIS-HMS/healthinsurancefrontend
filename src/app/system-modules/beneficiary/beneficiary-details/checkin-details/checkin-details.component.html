@@ -18,7 +18,7 @@
                         <div class="item-label">Date of Birth:</div>
                         <div class="item-val">{{beneficiary?.person.dateOfBirth | date}}</div>
                     </div>
-                    <div class="group-item">
+                    <div *ngIf="beneficiary !== undefined" class="group-item">
                         <div class="item-label">Age:</div>
                         <div class="item-val">{{getAge()}}</div>
                     </div>
@@ -63,16 +63,6 @@
         <div *ngIf="checkinSect" class="right-content">
             <div class="sect-title">Check In</div>
             <form *ngIf="otp_show" [formGroup]="otpFormGroup" novalidate>
-                <!-- <div class="frm-title">Patient Information</div>
-          <div class="frm-item-wrap">
-              <label class="label">Patient Name</label>
-              <div class="input-wrap">
-                  <input type="text" formControlName="patient" class="form-control">
-                  <small [hidden]="otpFormGroup.controls.patient.valid || otpFormGroup.controls.patient.pristine">
-                      This is a required field (minimum 3 and max of 50 characters).
-                  </small>
-              </div>
-          </div> -->
                 <div class="frm-item-wrap">
                     <label class="label">Verify OTP Code</label>
                     <div class="input-wrap">
