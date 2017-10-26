@@ -76,13 +76,14 @@ export class ListBeneficiaryComponent implements OnInit {
     this._systemService.on();
     this._policyService.find({
       query: {
-        'platformOwnerId._id': platformId,
+        'platformOwnerId': platformId,
         $limit:200
       }
     }).then((res: any) => {
       this.loading = false;
       console.log(res);
       if (res.data.length > 0) {
+        console.log(res);
         res.data.forEach(policy => {
           let principal = policy.principalBeneficiary;
           principal.isPrincipal = true;
@@ -99,6 +100,7 @@ export class ListBeneficiaryComponent implements OnInit {
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
         });
+        console.log(this.beneficiaries);
       }
       this._systemService.off();
     }).catch(err => {

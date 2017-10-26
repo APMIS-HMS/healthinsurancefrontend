@@ -70,18 +70,18 @@ export class ListOrganizationComponent implements OnInit {
 
   navigate(url: string, id: string) {
     if (!!id) {
-      this.loadingService.start();
+      this.loadingService.startLoading();
       this._router.navigate([url + id]).then(res => {
-        this.loadingService.complete();
+        this.loadingService.endLoading();
       }).catch(err => {
-        this.loadingService.complete();
+        this.loadingService.startLoading();
       });
     } else {
-      this.loadingService.start();
+      this.loadingService.startLoading();
       this._router.navigate([url]).then(res => {
-        this.loadingService.complete();
+        this.loadingService.endLoading();
       }).catch(err => {
-        this.loadingService.complete();
+        this.loadingService.startLoading();
       });
     }
   }
