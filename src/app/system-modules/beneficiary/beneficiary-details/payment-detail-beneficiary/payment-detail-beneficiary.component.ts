@@ -50,7 +50,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         this._getCurrentPlatform();
       }
     });
-    this._router.
 
     this.refKey = parseFloat((this.user ? this.user._id.substr(20) : ''))  * new Date().getTime();
     console.log(this.refKey);
