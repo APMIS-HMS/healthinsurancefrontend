@@ -43,13 +43,13 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._route.params.subscribe(param => {
+      console.log(param);
       if (!!param.id) {
         this._getPolicyDetails(param.id);
         this._getPreviousPolicies(param.id);
         this._getCurrentPlatform();
       }
     });
-    console.log(this.paymentType);
 
     this.refKey = parseFloat((this.user ? this.user._id.substr(20) : ''))  * new Date().getTime();
     console.log(this.refKey);
