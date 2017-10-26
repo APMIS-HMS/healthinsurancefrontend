@@ -22,9 +22,7 @@ const BENEFICIARY_ROUTES: Routes = [
                 ]
             },
             { path: 'new', component: NewBeneficiaryComponent },
-            { path: 'new/:id', component: NewBeneficiaryComponent },
-            // { path: 'check-in/:id', component: BeneficiaryDetailsComponent, data: { goCheckIn: true } },
-            // { path: 'payment/:id', component: BeneficiaryDetailsComponent, data: { goPayment: true } }
+            { path: 'new/:id', component: NewBeneficiaryComponent }
         ]
     }
 ];
