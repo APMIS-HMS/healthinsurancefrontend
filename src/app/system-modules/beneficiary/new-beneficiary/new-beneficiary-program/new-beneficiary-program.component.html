@@ -63,7 +63,7 @@
         <div class="inputWrap">
             <select formControlName="premiumPackage" class="form-control">
                 <option  value="" disabled selected>Premium Package</option>
-                <option *ngFor="let premiumType of premiumTypes"  [ngValue]="premiumType">{{premiumType.name}}</option>
+                <option *ngFor="let premiumPackage of premiumPackages"  [ngValue]="premiumPackage">{{premiumPackage.category?.name}} ({{premiumPackage.duration}} {{premiumPackage.unit?.name}} {{premiumPackage.amount}})</option>
                 </select>
         </div>
     </div>
@@ -72,7 +72,7 @@
         <div class="inputWrap">
             <select formControlName="sponsorship" class="form-control">
                 <option  value="" disabled selected>Sponsorship</option>
-                <option *ngFor="let premiumType of premiumTypes"  [ngValue]="premiumType">{{premiumType.name}}</option>
+                <option *ngFor="let sponsorship of sponsorships"  [ngValue]="sponsorship">{{sponsorship.name}}</option>
                 </select>
         </div>
     </div>
