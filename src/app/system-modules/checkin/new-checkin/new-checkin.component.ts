@@ -27,7 +27,6 @@ export class NewCheckinComponent implements OnInit {
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
     private _uploadService: UploadService

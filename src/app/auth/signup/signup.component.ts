@@ -39,18 +39,10 @@ export class SignupComponent implements OnInit {
 		private _facilityService: FacilityService,
 		private _systemService: SystemModuleService,
 		private _genderService: GenderService,
-		private loadingService: LoadingBarService,
 		private _userTypeService: UserTypeService,
 		private _userService: UserService) { }
 
 	ngOnInit() {
-		this._systemService.notificationAnnounced$.subscribe((value: any) => {
-			if (value.status === 'On') {
-				this._systemService.off();
-			} else {
-				this._systemService.off();
-			}
-		});
 		this.signupFormGroup = this._fb.group({
 			firstName: ['', [<any>Validators.required]],
 			lastName: ['', [<any>Validators.required]],

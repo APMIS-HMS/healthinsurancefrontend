@@ -41,7 +41,6 @@ export class MainMenuComponent implements OnInit {
     private _headerEventEmitter: HeaderEventEmitterService,
     private _authService: AuthService,
     private _router: Router,
-    private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
     private _roleService: RoleService,
