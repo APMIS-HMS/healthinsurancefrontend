@@ -80,7 +80,6 @@ export class SignupComponent implements OnInit {
 				this.signupFormGroup.controls['email'].setErrors({ 'duplicate': true });
 				console.log(this.signupFormGroup.controls['email'].errors);
 			}
-			console.log(results);
 		}, error => {
 			console.log(error);
 			this._systemService.off();

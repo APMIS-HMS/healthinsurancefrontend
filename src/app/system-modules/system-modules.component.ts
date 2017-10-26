@@ -45,19 +45,19 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 
 			this._systemService.notificationAnnounced$.subscribe((value: any) => {
 				if (value.status === 'On') {
-					this.loadingService.startLoading();
+					this.loadingService.start();
 				} else {
-					this.loadingService.endLoading();
+					this.loadingService.complete();
 				}
 			});
-			this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
-				if (value.status === 'On') {
-					this.online = true;
-				} else {
-					this._systemService.off();
-					this.online = false;
-				}
-			});
+			// this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
+			// 	if (value.status === 'On') {
+			// 		this.online = true;
+			// 	} else {
+			// 		this._systemService.off();
+			// 		this.online = false;
+			// 	}
+			// });
 			this._headerEventEmitter.announcedUrl.subscribe(url => {
 				this.pageInView = url;
 			});
