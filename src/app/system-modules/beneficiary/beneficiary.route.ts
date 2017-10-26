@@ -1,3 +1,6 @@
+import { PaymentDetailBeneficiaryComponent } from './beneficiary-details/payment-detail-beneficiary/payment-detail-beneficiary.component';
+import { CheckinDetailsComponent } from './beneficiary-details/checkin-details/checkin-details.component';
+import { PersonalDetailsComponent } from './beneficiary-details/personal-details/personal-details.component';
 import { RouterModule, Routes } from '@angular/router';
 
 import { BeneficiaryComponent } from './beneficiary.component';
@@ -10,11 +13,18 @@ const BENEFICIARY_ROUTES: Routes = [
         path: '', component: BeneficiaryComponent, children: [
             { path: '', redirectTo: 'beneficiaries', pathMatch: 'full' },
             { path: 'beneficiaries', component: ListBeneficiaryComponent },
-            { path: 'beneficiaries/:id', component: BeneficiaryDetailsComponent },
+            {
+                path: 'beneficiaries/:id', component: BeneficiaryDetailsComponent,
+                children: [
+                    { path: '', component: PersonalDetailsComponent },
+                    { path: 'checkin', component: CheckinDetailsComponent },
+                    { path: 'payment', component: PaymentDetailBeneficiaryComponent }
+                ]
+            },
             { path: 'new', component: NewBeneficiaryComponent },
             { path: 'new/:id', component: NewBeneficiaryComponent },
-            { path: 'check-in/:id', component: BeneficiaryDetailsComponent, data: { goCheckIn: true } },
-            { path: 'payment/:id', component: BeneficiaryDetailsComponent, data: { goPayment: true } }
+            // { path: 'check-in/:id', component: BeneficiaryDetailsComponent, data: { goCheckIn: true } },
+            // { path: 'payment/:id', component: BeneficiaryDetailsComponent, data: { goPayment: true } }
         ]
     }
 ];

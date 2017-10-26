@@ -1,3 +1,6 @@
+import { PolicyService } from './../../../../services/policy/policy.service';
+import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
+import { Observable } from 'rxjs/Observable';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { UploadService } from './../../../../services/common/upload.service';
 import { CheckIn } from './../../../../models/check-in/check-in';
@@ -12,7 +15,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import differenceInYears from 'date-fns/difference_in_years';
 
 @Component({
@@ -62,10 +65,22 @@ export class CheckinDetailsComponent implements OnInit {
     private _checkInService: CheckInService,
     private _uploadService: UploadService,
     private _locker: CoolLocalStorage,
+    private _route: ActivatedRoute,
+    private _beneficiaryService: BeneficiaryService,
+    private _policyService: PolicyService,
     private _router: Router,
   ) { }
 
   ngOnInit() {
+    // this._route.params.subscribe(param => {
+    //   if (!!param.id) {
+    //     console.log('am routed')
+    //     //this._getBeneficiaryDetails(param.id);
+    //   }
+    // });
+    this._route.parent.params.subscribe(params => {
+      this._getBeneficiaryDetails(params.id);
+    });
     this.today = {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
@@ -84,10 +99,35 @@ export class CheckinDetailsComponent implements OnInit {
     this._getEncounterStatuses();
     this._getEncounterTypes();
 
-    this._hasCheckInToday();
+    // this._hasCheckInToday();
 
   }
+  private _getBeneficiaryDetails(routeId) {
+    this._systemService.on();
 
+    let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
+    let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }));
+
+    Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
+      this._headerEventEmitter.setMinorRouteUrl(results[0].name);
+      this.beneficiary = results[0];
+      // if (this.isCheckIn) {
+      //   this.tabCheckin_click();
+      // }
+      this._hasCheckInToday();
+
+      if (results[1].data.length > 0) {
+        // this.dependants = results[1].data[0].dependantBeneficiaries;
+        // this.policy = results[1].data[0];
+        // console.log(this.dependants)
+        // console.log(this.policy)
+      }
+
+      this._systemService.off();
+    }, error => {
+      this._systemService.off();
+    });
+  }
   _initializedForm() {
     if (this.selectedCheckIn !== undefined && this.selectedCheckIn._id !== undefined) {
       this.today = {

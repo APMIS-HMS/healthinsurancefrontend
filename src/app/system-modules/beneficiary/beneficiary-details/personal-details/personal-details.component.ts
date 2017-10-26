@@ -1,22 +1,27 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Facility } from './../../../../models/organisation/facility';
+import { DURATIONS } from './../../../../services/globals/config';
 import { Observable } from 'rxjs/Observable';
-import { DURATIONS } from '../../../services/globals/config';
-import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, UploadService } from './../../../services/index';
-import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
-import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import { UploadService } from './../../../../services/common/upload.service';
+import { PolicyService } from './../../../../services/policy/policy.service';
+import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { SystemModuleService } from './../../../../services/common/system-module.service';
+import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import { FacilityService } from '../../../../services/index';
 
 @Component({
-  selector: 'app-beneficiary-details',
-  templateUrl: './beneficiary-details.component.html',
-  styleUrls: ['./beneficiary-details.component.scss']
+  selector: 'app-personal-details',
+  templateUrl: './personal-details.component.html',
+  styleUrls: ['./personal-details.component.scss']
 })
-export class BeneficiaryDetailsComponent implements OnInit {
+export class PersonalDetailsComponent implements OnInit {
+  @Input() beneficiary;
+
   approvalFormGroup: FormGroup;
-  beneficiary: any;
   policy: any;
   tab_details = false;
   tab_payment = false;
@@ -30,7 +35,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   durations: any = DURATIONS;
   dependants: any[] = [];
   isCheckIn = false;
-
+  
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
@@ -39,53 +44,18 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
     private _uploadService: UploadService
-  ) {
-    this._route.data.subscribe(data => {
-      if (!!data.goCheckIn && data.goCheckIn) {
-        this.isCheckIn = true;
-        this.tab_payment = false;
-        this.tab_details = false;
-        this.tab_claims = false;
-        this.tab_complaints = false;
-        this.tab_referals = false;
-        this.tab_checkinHistory = false;
-      }
-    });
-
-    this._route.data.subscribe(data => {
-      if (!!data.goPayment && data.goPayment) {
-        this.tab_payment = true;
-        this.isCheckIn = false;
-        this.tab_details = false;
-        this.tab_claims = false;
-        this.tab_complaints = false;
-        this.tab_referals = false;
-        this.tab_checkinHistory = false;
-      }
-    });
-   }
+  ) { }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Beneficiary Details');
-    this._headerEventEmitter.setMinorRouteUrl('Details page');
-
     this._route.params.subscribe(param => {
       if (!!param.id) {
         this._getBeneficiaryDetails(param.id);
       }
     });
-
-    this.approvalFormGroup = this._fb.group({
-      duration: [1, [<any>Validators.required]],
-      unit: ['', [<any>Validators.required]],
-      startDate: [new Date(), [<any>Validators.required]]
-    });
   }
-
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
 
@@ -102,6 +72,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
       if (results[1].data.length > 0) {
         this.dependants = results[1].data[0].dependantBeneficiaries;
         this.policy = results[1].data[0];
+        console.log(this.dependants)
+        console.log(this.policy)
       }
 
       this._systemService.off();
@@ -110,6 +82,19 @@ export class BeneficiaryDetailsComponent implements OnInit {
     });
   }
 
+  tabCheckin_click() {
+    this.tab_details = false;
+    this.tab_payment = false;
+    this.tab_claims = false;
+    this.tab_complaints = false;
+    this.tab_referals = false;
+    this.tab_checkin = true;
+    this.tab_checkinHistory = false;
+  }
+  openModal(e) {
+    this.addApproval = true;
+  }
+  
   onClickApprove(valid: boolean, value: any) {
     if (valid) {
       const validity = {
@@ -179,10 +164,6 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.addApproval = !this.addApproval;
   }
 
-  openModal(e) {
-    this.addApproval = true;
-  }
-
   navigateBeneficiary(url, id?) {
    this._systemService.on()
     if (!!id) {
@@ -199,70 +180,4 @@ export class BeneficiaryDetailsComponent implements OnInit {
       });
     }
   }
-
-
-  tabDetails_click() {
-    this.tab_details = true;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
-  }
-  tabPayment_click() {
-    this.tab_details = false;
-    this.tab_payment = true;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
-  }
-  tabClaims_click() {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = true;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
-  }
-  tabComplaints_click() {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = true;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
-  }
-  tabReferals_click() {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = true;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
-  }
-  tabCheckin_click() {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = true;
-    this.tab_checkinHistory = false;
-  }
-  tabCheckinDetail_click() {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = true;
-  }
-
 }
