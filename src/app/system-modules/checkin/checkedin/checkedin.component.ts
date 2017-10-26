@@ -83,6 +83,7 @@ export class CheckedinComponent implements OnInit {
       .then(payload => {
         this._systemService.off();
       }).catch(err => {
+        console.log(err)
         this._systemService.off();
       })
   }
