@@ -269,7 +269,7 @@
                                                     Drug Quantity value is required.
                                                 </small>
                                                 <select formControlName="drugUnit" class="form-control">
-                                                    <option disabled value="" selected>Route</option>
+                                                    <option disabled value="" selected>Presentation</option>
                                                     <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
                                                 </select>
                                                 <small class="alert-label" [hidden]="drugFormGroup.controls.drugUnit.valid || drugFormGroup.controls.drugUnit.pristine">
