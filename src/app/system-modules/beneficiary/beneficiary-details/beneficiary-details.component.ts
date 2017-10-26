@@ -18,7 +18,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   approvalFormGroup: FormGroup;
   beneficiary: any;
   policy: any;
-  tab_details = true;
+  tab_details = false;
   tab_payment = false;
   tab_claims = false;
   tab_complaints = false;
@@ -43,24 +43,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
     private _uploadService: UploadService
-  ) { }
-
-  ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Beneficiary Details');
-    this._headerEventEmitter.setMinorRouteUrl('Details page');
-
-    this._route.params.subscribe(param => {
-      if (!!param.id) {
-        this._getBeneficiaryDetails(param.id);
-      }
-    });
-
-    this.approvalFormGroup = this._fb.group({
-      duration: [1, [<any>Validators.required]],
-      unit: ['', [<any>Validators.required]],
-      startDate: [new Date(), [<any>Validators.required]]
-    });
-
+  ) {
     this._route.data.subscribe(data => {
       if (!!data.goCheckIn && data.goCheckIn) {
         this.isCheckIn = true;
@@ -83,6 +66,23 @@ export class BeneficiaryDetailsComponent implements OnInit {
         this.tab_referals = false;
         this.tab_checkinHistory = false;
       }
+    });
+   }
+
+  ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Beneficiary Details');
+    this._headerEventEmitter.setMinorRouteUrl('Details page');
+
+    this._route.params.subscribe(param => {
+      if (!!param.id) {
+        this._getBeneficiaryDetails(param.id);
+      }
+    });
+
+    this.approvalFormGroup = this._fb.group({
+      duration: [1, [<any>Validators.required]],
+      unit: ['', [<any>Validators.required]],
+      startDate: [new Date(), [<any>Validators.required]]
     });
   }
 
