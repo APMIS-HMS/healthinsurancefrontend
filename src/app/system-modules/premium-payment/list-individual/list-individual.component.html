@@ -68,12 +68,20 @@
                 </tr>
             </thead>
             <tbody class="tbody">
+                <tr class="tr" *ngIf="individualPolicies.length === 0 && !individualLoading">
+                    <td class="text-center" colspan="9">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="individualPolicies.length === 0 && individualLoading">
+                    <td class="text-center" colspan="9">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
                 <tr *ngFor="let policy of individualPolicies; let i = index;" class="tr">
                     <td class="td">{{i+1}}</td>
-                    <td class="td">11th Oct 2017</td>
-                    <td class="td">203.276.1000</td>
-                    <td class="td" style="color: red;">750 NGN</td>
-                    <td class="td">6 Months</td>
+                    <td class="td">{{ policy?.dueDate }}</td>
+                    <td class="td">{{ policy?.principalBeneficiary?.platformOwnerNumber }}</td>
+                    <td class="td" style="color: red;">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
+                    <td class="td">{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}</td>
                     <td class="td">{{ policy?.policyId }}</td>
                     <td class="td">{{ policy?.planId?.name }}</td>
                     <td class="td">{{ policy?.hiaId?.name }}</td>

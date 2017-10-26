@@ -60,18 +60,28 @@ export class ListIndividualComponent implements OnInit {
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
-        isActive: false,
+        isPaid: false,
         $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
       console.log(res);
       this.individualLoading = false;
-      this.individualPolicies = res.data;
+      res.data.forEach(policy => {
+        policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
+        this.individualPolicies.push(policy);
+      });
+      // this.individualPolicies = res.data;
       this._systemService.off();
     }).catch(error => {
       console.log(error);
       this._systemService.off();
     });
+  }
+
+  addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result.toDateString(); // .toISOString();
   }
 
 

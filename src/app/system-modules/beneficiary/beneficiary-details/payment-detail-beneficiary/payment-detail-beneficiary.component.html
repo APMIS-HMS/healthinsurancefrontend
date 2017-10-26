@@ -88,7 +88,7 @@
                 <div class="frm-item-wrap">
                     <label class="label">Premium Package</label>
                     <div class="inputWrap">
-                        {{ policy?.premiumCategoryId?.name }}
+                        {{ policy?.premiumPackageId?.category?.name }} ({{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }} {{ policy?.premiumPackageId?.amount }})
                         <!-- <select>
                           <option value="">Select..</option>
                         </select> -->
@@ -98,7 +98,7 @@
                 <div class="frm-item-wrap">
                     <label class="label">Sponsorship</label>
                     <div class="inputWrap">
-                        {{ policy?.premiumCategoryId?.name }}
+                        {{ policy?.sponsorshipId?.name }}
                         <!-- <select>
                           <option value="">Self</option>
                           <option value="">Organization</option>
@@ -109,45 +109,36 @@
         </div>
 
         <div class="chac-box-right">
-            <form style="margin-top:10px" [formGroup]="" novalidate>
-                <div class="pay-detail-wrap">
-                    <label style="font-size:12px" class="label">Payment Period: </label>
-                    <div style="font-size:12px" class="inputWrap">
-                        <label>4 Months</label>
-                    </div>
+            <!-- <form style="margin-top:10px" [formGroup]="" novalidate> -->
+            <div class="pay-detail-wrap">
+                <label style="font-size:12px" class="label">Payment Period: </label>
+                <div style="font-size:12px" class="inputWrap">
+                    <label>{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}(s)</label>
                 </div>
-                <div class="pay-detail-wrap">
-                    <label style="font-size:12px" class="label">Amount to be paid: </label>
-                    <div style="font-size:12px" class="inputWrap">
-                        <label>50,000 NGN</label>
-                    </div>
+            </div>
+            <div class="pay-detail-wrap">
+                <label style="font-size:12px" class="label">Amount to be paid: </label>
+                <div style="font-size:12px" class="inputWrap">
+                    <label>&#x20A6;{{ policy?.premiumPackageId?.amount }}</label>
                 </div>
-                <div class="pay-detail-wrap">
-                    <label style="font-size:12px" class="label">Payment Method: </label>
-                    <div>
-                        <div class="pay-label-detail-wrap">
-                            <span style="margin-right:10px;">
+            </div>
+            <div class="pay-detail-wrap">
+                <label style="font-size:12px" class="label">Payment Method: </label>
+                <div>
+                    <div class="pay-label-detail-wrap">
+                        <span *ngFor="let paymentType of paymentTypes" style="margin-right:10px;">
                             <label>
-                              <input name="premiumType" (change)="onChangePaymentType($event.target.value)" value="cash" type="radio"> Cash
+                              <input name="paymentType" (change)="onChangePaymentType(paymentType.name)" [attr.checked]="(paymentType.default) ? true : null" value="{{ paymentType.name }}" type="radio"> &nbsp;&nbsp;{{ paymentType.name }}
                             </label>
                           </span>
-                            <span style="margin-right:10px;">
-                            <label>
-                              <input name="premiumType" (change)="onChangePaymentType($event.target.value)" value="cheque" type="radio"> Cheque
-                            </label>
-                          </span>
-                            <span>
-                            <label>
-                              <input name="premiumType" (change)="onChangePaymentType($event.target.value)" value="e-payment" type="radio"> e-payment
-                            </label>
-                          </span>
-                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
+            <!-- </form> -->
         </div>
         <div class="pay-btn-detail-wrap">
-            <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.person?.email" [amount]="5000000" [ref]="'refKey'" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+            <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.person?.email" [amount]="policy?.premiumPackageId?.amountInKobo" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()"
+                (callback)="paymentDone($event)">e-Payment</angular4-paystack>
             <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
             <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
         </div>
@@ -167,31 +158,27 @@
                     <th class="th">Policy ID</th>
                     <th class="th">Health Plan</th>
                     <th class="th">Responsible HIA</th>
-                    <th class="th"></th>
                 </tr>
             </thead>
 
             <tbody class="tbody">
                 <tr class="tr" *ngIf="previousPolicies.length === 0 && !previousPolicyLoading">
-                    <td class="text-center" colspan="11">No data available in table</td>
+                    <td class="text-center" colspan="8">No data available in table</td>
                 </tr>
                 <tr class="tr" *ngIf="previousPolicies.length === 0 && previousPolicyLoading">
-                    <td class="text-center" colspan="11">
+                    <td class="text-center" colspan="8">
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
                 <tr *ngFor="let policy of previousPolicies; let i = index;" class="tr">
-                    <td class="td">{{ i+1 }}</td>
-                    <td class="td">11th Oct 2017</td>
-                    <td class="td">203.276.1000</td>
-                    <td class="td" style="color: green;">750 NGN</td>
-                    <td class="td">10 Months</td>
-                    <td class="td">223.45.67.11</td>
-                    <td class="td">Formal Sector Plan</td>
-                    <td class="td">Healthcare Security Limited</td>
-                    <td class="td td-icos">
-                        <i class="fa fa-chevron-right"></i>
-                    </td>
+                    <td class="td">{{i+1}}</td>
+                    <td class="td">{{ policy?.dueDate }}</td>
+                    <td class="td">{{ policy?.principalBeneficiary?.platformOwnerNumber }}</td>
+                    <td class="td" style="color: green;">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
+                    <td class="td">{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}</td>
+                    <td class="td">{{ policy?.policyId }}</td>
+                    <td class="td">{{ policy?.planId?.name }}</td>
+                    <td class="td">{{ policy?.hiaId?.name }}</td>
                 </tr>
             </tbody>
         </table>
