@@ -20,7 +20,7 @@ const HOST = 'http://insuranceapi.azurewebsites.net';
 export class SocketService {
     public socket: any;
     public _app: any;
-    public onlineStatus = false;
+    public onlineStatus = false; 
 
     constructor(
         private locker: CoolLocalStorage, private _systemService: SystemModuleService
