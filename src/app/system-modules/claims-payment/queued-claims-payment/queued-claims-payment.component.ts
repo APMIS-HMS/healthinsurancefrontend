@@ -69,6 +69,12 @@ export class QueuedClaimsPaymentComponent implements OnInit {
     }}).then((res: any) => {
       console.log(res);
       this.loading = false;
+      res.data.forEach(claim => {
+        console.log(claim);
+        if (claim.checkedinDetail.providerFacilityId._id) {
+
+        }
+      });
       this.claims = res.data;
       this._systemService.off();
     }).catch(error => {
@@ -111,6 +117,7 @@ export class QueuedClaimsPaymentComponent implements OnInit {
         this.payClaimBtnProcessing = false;
         this.disablePayBtn = false;
         this._getClaimsPayments();
+        this._toastr.error('Payment completed successfully.', 'Payment completed!');
       }).catch(err => console.log(err));
     } else {
       this._toastr.error('Please select at least one item to pay.', 'No selected Item!');
