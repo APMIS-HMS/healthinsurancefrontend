@@ -34,7 +34,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _policyService: PolicyService,
     private _premiumPaymentService: PremiumPaymentService
   ) {

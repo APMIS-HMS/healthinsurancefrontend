@@ -62,7 +62,6 @@ export class NewUserComponent implements OnInit {
     private _authService: AuthService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
-    private loadingService: LoadingBarService,
     private _userTypeService: UserTypeService,
     private _genderService: GenderService,
     private _locker: CoolLocalStorage,

@@ -36,7 +36,6 @@ export class ListPlatformComponent implements OnInit {
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _authService: AuthService,
-    private loadingService: LoadingBarService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,

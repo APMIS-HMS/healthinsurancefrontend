@@ -63,7 +63,6 @@ export class NewEmployerComponent implements OnInit {
     private _countriesService: CountryService,
     private _route: ActivatedRoute,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _uploadService: UploadService
   ) { }
   ngAfterViewInit() {

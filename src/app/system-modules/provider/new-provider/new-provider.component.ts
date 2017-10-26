@@ -77,7 +77,6 @@ export class NewProviderComponent implements OnInit {
     private _uploadService: UploadService,
     private _router: Router,
     private _route: ActivatedRoute,
-    private loadingService: LoadingBarService,
     private _providerGradesService: ProviderGradesService,
     private _providerStatusesService: ProviderStatusesService
   ) { }

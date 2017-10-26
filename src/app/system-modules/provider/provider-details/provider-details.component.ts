@@ -43,7 +43,6 @@ export class ProviderDetailsComponent implements OnInit {
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
-    private loadingService: LoadingBarService,
     private _uploadService: UploadService,
   ) { }
 

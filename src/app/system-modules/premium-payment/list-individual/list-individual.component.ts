@@ -39,7 +39,6 @@ export class ListIndividualComponent implements OnInit {
   constructor(
     private _router: Router,
     private _toastr: ToastsManager,
-    private loadingService: LoadingBarService,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
