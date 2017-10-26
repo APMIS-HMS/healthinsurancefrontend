@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Health Plan</label>
                 <div class="input-wrap">
-                    <input type="email" formControlName="plan" class="form-control" value="{{SelectedCheckinItem?.policyObject?.planId?.name}}">
+                    <input type="text" formControlName="plan" class="form-control" value="{{SelectedCheckinItem?.policyObject?.planId?.name}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.plan.valid || claimsFormGroup.controls.plan.pristine">
                     This is a required field.
