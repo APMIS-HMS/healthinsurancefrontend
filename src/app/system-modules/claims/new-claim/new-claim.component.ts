@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Claim } from './../../../models/index';
@@ -14,6 +15,7 @@ import { ProcedureService } from './../../../services/common/procedure.service';
 import { DiagnosisService } from './../../../services/common/diagnosis.service';
 import { InvestigationService } from './../../../services/common/investigation.service';
 import { DrugService } from './../../../services/common/drug.service';
+import { DrugPackSizeService } from '../../../services/common/drug-pack-size.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SystemModuleService } from './../../../services/index';
 
@@ -62,6 +64,7 @@ export class NewClaimComponent implements OnInit {
   claimItem: Claim = <Claim>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
   SelectedCheckinItemPlan: any = <any>{};
+  packSizes:any=<any>[];
   symptomLists: any = <any>[];
   diagnosisLists: any = <any>[];
   investigationList: any = <any>[];
@@ -93,8 +96,10 @@ export class NewClaimComponent implements OnInit {
     private _claimTypeService: ClaimTypeService,
     private _visitTypeService: VisitTypeService,
     private _symptomService: SymptomService,
+    private _drugPackSizeService: DrugPackSizeService,
     private _procedureService: ProcedureService,
     private _diagnosisService: DiagnosisService,
+    private _preAuthorizationService:PreAuthorizationService,
     private _diagnosisTypeService:DiagnosisTypeService,
     private _route: ActivatedRoute,
     private _drugService: DrugService,
@@ -116,9 +121,9 @@ export class NewClaimComponent implements OnInit {
       lashmaid: ['', [<any>Validators.required]],
       hospital: ['', [<any>Validators.required]],
       medicalPersonelName: ['', [<any>Validators.required]],
-      plan: ['', [<any>Validators.required]],
+      plan: [''],
       auth: [''],
-      entryDate: ['', [<any>Validators.required]],
+      entryDate: [''],
       claimType: ['', [<any>Validators.required]],
       symptom: [''],
       symptomDuration: [''],
@@ -142,6 +147,7 @@ export class NewClaimComponent implements OnInit {
     this._getClaimTypes();
     this._getVisitTypes();
     this._getDiagnosisType();
+    this._getDrugPackSizes();
 
     this.claimsFormGroup.controls.drug.valueChanges
       .debounceTime(250)
@@ -210,7 +216,8 @@ export class NewClaimComponent implements OnInit {
   
 
   _getSelectedCheckinItem(checkinId) {
-    this._checkInService.find({ query: { _id: checkinId } }).then((payload: any) => {
+
+    this._checkInService.find({ query: { _id: checkinId,$limit:1 } }).then((payload: any) => {
       this.SelectedCheckinItem = payload.data[0];
       if (this.SelectedCheckinItem.encounterType == "In-Patient") {
         this.isInpatient = true;
@@ -224,14 +231,35 @@ export class NewClaimComponent implements OnInit {
   }
 
   _getClaimTypes() {
-    this._claimTypeService.find({}).then((payload: any) => {
+    this._systemService.on();
+    this._visitTypeService.find({}).then((payload: any) => {
       this.claimTypesItems = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
     })
   }
 
   _getVisitTypes() {
+    this._systemService.on();
     this._visitTypeService.find({}).then((payload: any) => {
       this.visitTypesItems = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
+  }
+
+  _getDrugPackSizes() {
+    this._systemService.on();
+    this._drugPackSizeService.find({}).then((payload: any) => {
+      this.packSizes = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
     })
   }
 
@@ -270,11 +298,13 @@ export class NewClaimComponent implements OnInit {
   }
 
   _getDiagnosisType() {
+    this._systemService.on();
     this._diagnosisTypeService.find({}).then((payload: any) => {
-      if (payload.data.length > 0) {
-        this.diagnosisTypeLists = payload.data;
-      }
-
+      this.diagnosisTypeLists = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
     })
   }
 

@@ -346,9 +346,9 @@
                                         <div class="input-wrap-x2">
                                             <input style="width:50px;" type="text" formControlName="drugQty" class="form-control">
                                             <select formControlName="drugUnit" class="form-control">
-                                        <option value="Packs" selected>Packs</option>
-                                        <option value="Sacket">Sacket</option>
-                                    </select>
+                                                <option disabled value="" selected>Route</option>
+                                                <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
+                                            </select>
                                         </div>
                                     </div>
     
