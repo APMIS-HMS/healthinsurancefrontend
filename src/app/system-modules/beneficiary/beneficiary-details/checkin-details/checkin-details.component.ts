@@ -72,12 +72,6 @@ export class CheckinDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this._route.params.subscribe(param => {
-    //   if (!!param.id) {
-    //     console.log('am routed')
-    //     //this._getBeneficiaryDetails(param.id);
-    //   }
-    // });
     this._route.parent.params.subscribe(params => {
       this._getBeneficiaryDetails(params.id);
     });

@@ -247,7 +247,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       streetName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.street : '', [<any>Validators.required]],
       lga: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.lga : '', [<any>Validators.required]],
       neighbourhood: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.neighbourhood : '', [<any>Validators.required]],
-      mothermaidenname: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.mothersMaidenName : '', [<any>Validators.required]]
+      mothermaidenname: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.mothersMaidenName : '', []]
     });
 
     if (this.selectedBeneficiary._id !== undefined) {
@@ -364,6 +364,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         address.lga = value.lga;
         address.neighbourhood = value.neighbourhood;
         address.state = this.selectedState;
+        delete address.state.cities;
+        delete address.state.lgs;
         address.street = value.streetName;
 
         person.dateOfBirth = value.dob.jsdate;
@@ -444,6 +446,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         address.lga = value.lga;
         address.neighbourhood = value.neighbourhood;
         address.state = this.selectedState;
+        delete address.state.cities;
+        delete address.state.lgs;
         address.street = value.streetName;
 
         person.dateOfBirth = value.dob.jsdate;
@@ -463,7 +467,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
         let beneficiary: Beneficiary = <Beneficiary>{};
         beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-        beneficiary.platformOwnerId = this.currentPlatform;
+        beneficiary.platformOwnerId = this.currentPlatform._id;
 
         let policy: any = <any>{};
 
