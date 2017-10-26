@@ -43,7 +43,8 @@ export class ListReferalsComponent implements OnInit {
         query:{
           $or: [
             { 'referingProvider._id': this.user.facilityId._id },
-            { 'destinationProvider._id':this.user.facilityId._id }
+            { 'destinationProvider._id':this.user.facilityId._id },
+            { 'documentation.destinationProvider._id':this.user.facilityId._id }
           ]
         }
       }).then((payload: any) => {

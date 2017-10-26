@@ -21,7 +21,9 @@ export interface PreAuthorizationDocument {
     document: Document[];
     response?: any;
     approvedStatus:any;
+    destinationProvider?:any;
     _id: any;
+    createdAt:Date;
 }
 
 export interface Document {

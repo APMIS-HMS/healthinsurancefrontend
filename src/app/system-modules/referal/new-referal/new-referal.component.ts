@@ -642,6 +642,7 @@ export class NewReferalComponent implements OnInit {
   
         let preAuthDoc: PreAuthorizationDocument = <PreAuthorizationDocument>{};
         preAuthDoc.approvedStatus = this.requestStatus[0];
+        preAuthDoc.destinationProvider = this.referalFormGroup.controls.destinationHospital.value;
         preAuthDoc.document = [];
         //note start here
         preAuthDoc.document.push(
