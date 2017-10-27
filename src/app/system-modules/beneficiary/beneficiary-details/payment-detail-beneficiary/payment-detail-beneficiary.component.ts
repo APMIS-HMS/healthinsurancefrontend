@@ -78,11 +78,12 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       }
     });
 
-    this.refKey = parseFloat((this.user ? this.user._id.substr(20) : ''))  * new Date().getTime();
+    this.refKey = (this.user ? this.user._id.substr(20) : '')  + new Date().getTime();
+    console.log(this.refKey)
   }
 
   private _getPolicyDetails(routeId) {
-    this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }).then((res: any) => {
+    this._policyService.find({ query: { 'principalBeneficiary': routeId } }).then((res: any) => {
       if (res.data.length > 0) {
         res.data[0].premiumPackageId.amountInKobo = res.data[0].premiumPackageId.amount * 100;
         res.data[0].dueDate = this.addDays(new Date(), res.data[0].premiumPackageId.durationInDay);
@@ -152,8 +153,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         if (!!verifyRes) {
           this.showPayment = false;
           this.isForRenewal = true;
-          this._getPolicyDetails(verifyRes.body.principalBeneficiary._id);
-          this._getPreviousPolicies(verifyRes.body.principalBeneficiary._id);
+          this._getPolicyDetails(verifyRes.body.principalBeneficiary);
+          this._getPreviousPolicies(verifyRes.body.principalBeneficiary);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {

@@ -374,11 +374,11 @@ export class PreAuthorizationNewComponent implements OnInit {
         }
       }
     ).then((results: any) => {
-      console.log(results);
-      let policyResult = results[0];
-      console.log(policyResult);
-      if (policyResult.data.length > 0) {
-        this.selectedPolicy = policyResult.data[0];
+      // console.log(results);
+      // let policyResult = results[0];
+      // console.log(policyResult);
+      if (results.data.length > 0) {
+        this.selectedPolicy = results.data[0];
         this.preAuthFormGroup.controls.hia.setValue(this.selectedPolicy.hiaId.name);
       }
 
@@ -492,6 +492,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     let name = this.investigationFormGroup.controls.services;
 
     if (name.valid) {
+      console.log(this.selectedInvestigation);
+      console.log(this.selectedCheckIn.providerFacilityId)
       this.investigationList.push({
         "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
         "checked": false,
