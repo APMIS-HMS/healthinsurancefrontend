@@ -6,14 +6,14 @@
 
                         <div class="detail-content">
                             <div class="hia-user">
-                                <img *ngIf="beneficiary?.person?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
-                                <img *ngIf="beneficiary?.person?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.person?.profileImageObject.thumbnail)">
+                                <img *ngIf="beneficiary?.personId?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
+                                <img *ngIf="beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)">
                                 <div class="pd-tag">P</div>
                             </div>
                             <div class="group-wrap">
                                 <div class="group-item">
                                     <div class="item-label">Date of Birth:</div>
-                                    <div class="item-val">{{ beneficiary?.person?.dateOfBirth | date }}</div>
+                                    <div class="item-val">{{ beneficiary?.personId?.dateOfBirth | date }}</div>
                                 </div>
 
                                 <!-- <div class="group-item">
@@ -22,23 +22,23 @@
                                 </div> -->
                                 <div class="group-item">
                                     <div class="item-label">Email:</div>
-                                    <div class="item-val">{{ beneficiary?.person?.email }}</div>
+                                    <div class="item-val">{{ beneficiary?.personId?.email }}</div>
                                 </div>
                                 <div class="group-item">
                                     <div class="item-label">LASHMA ID:</div>
                                     <div class="item-val">{{ beneficiary?.platformOwnerNumber }}</div>
                                 </div>
-                                <div class="group-item">
+                                <!-- <div class="group-item">
                                     <div class="item-label">CIN:</div>
                                     <div class="item-val">{{ 'CI3430490' }}</div>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="group-wrap">
                                 <div class="item-val">
-                                    {{ beneficiary?.person?.title?.name }} {{ beneficiary?.person?.firstName }} {{ beneficiary?.person?.otherNames }} {{ beneficiary?.person?.lastName }}
+                                    {{ beneficiary?.personId?.title?.name }} {{ beneficiary?.personId?.firstName }} {{ beneficiary?.personId?.otherNames }} {{ beneficiary?.personId?.lastName }}
                                 </div>
-                                <div class="item-val">{{ beneficiary?.person?.phoneNumber }}</div>
+                                <div class="item-val">{{ beneficiary?.personId?.phoneNumber }}</div>
                             </div>
                             <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class="ico-cirle fa fa-pencil"></i>
                         </div>
@@ -53,7 +53,7 @@
                             <div class="group-wrap">
                                 <div class="group-item">
                                     <div class="item-label">Date of Birth:</div>
-                                    <div class="item-val">{{ dependant.beneficiary?.personId?.dateOfBirth | date }}</div>
+                                    <div class="item-val">{{ dependant.beneficiary?.personIdId?.dateOfBirth | date }}</div>
                                 </div>
                                 <div class="group-item">
                                     <div class="item-label">LASRRA ID:</div>
@@ -66,8 +66,8 @@
                             </div>
 
                             <div class="group-wrap">
-                                <div class="item-val">{{dependant.beneficiary?.personId?.lastName}} {{dependant.beneficiary?.personId?.firstName}} {{dependant.beneficiary?.personId?.otherNames}}</div>
-                                <div class="item-val">{{ dependant.beneficiary?.personId?.phoneNumber }}</div>
+                                <div class="item-val">{{dependant.beneficiary?.personIdId?.lastName}} {{dependant.beneficiary?.personIdId?.firstName}} {{dependant.beneficiary?.personIdId?.otherNames}}</div>
+                                <div class="item-val">{{ dependant.beneficiary?.personIdId?.phoneNumber }}</div>
                                 <div class="item-val">Relationship: {{ dependant?.relationshipId?.name }}</div>
                             </div>
                             <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class=" ico-cirle fa fa-pencil "></i>
