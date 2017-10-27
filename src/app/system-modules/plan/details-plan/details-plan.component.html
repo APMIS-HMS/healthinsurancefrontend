@@ -39,11 +39,13 @@
                             <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name of Health Insurance Agent">
                             <i class="fa fa-search" aria-hidden="true"></i> -->
                         </div>
-                        <div (click)="navigateEditPlan(selectedPlan)" class="btn btn-medium btn-blue">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PREMIUM
-                        </div>
-                        <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PLAN
+                        <div class="cta-right">
+                            <div style="margin-right:3px;" (click)="navigateEditPlan(selectedPlan)" class="btn btn-medium btn-blue">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PREMIUM
+                            </div>
+                            <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PLAN
+                            </div>
                         </div>
                     </div>
                     <section>

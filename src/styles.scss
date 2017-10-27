@@ -72,6 +72,10 @@ select {
     align-items: center;
     padding: 20px 0;
 }
+.cta-right{
+    display: flex;
+    justify-content: flex-end;
+}
 
 .btn {
     cursor: pointer;
