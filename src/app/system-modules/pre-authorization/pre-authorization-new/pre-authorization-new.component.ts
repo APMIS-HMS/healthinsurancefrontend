@@ -493,9 +493,9 @@ export class PreAuthorizationNewComponent implements OnInit {
     console.log(fc);
     console.log(resource)
     if (fc === 'primary') {
-      if (resource.P.toLowerCase() == "p") {
+      if (resource.P.toLowerCase().trim() == "p") {
         console.log(1)
-        if (resource.PA.toLowerCase() == "n") {
+        if (resource.PA.toLowerCase().trim() == "n") {
           console.log(2)
           // its approved
           let copyInvestigation = resource;
@@ -506,7 +506,7 @@ export class PreAuthorizationNewComponent implements OnInit {
             'checked':false
           }
         } else {
-          if (resource.Preferred.toLowerCase() == 'c') {
+          if (resource.Prefered.toLowerCase().trim() == 'c') {
             console.log(3)
             // cover by capitation, dont put amount
             //requires authorization
@@ -530,7 +530,7 @@ export class PreAuthorizationNewComponent implements OnInit {
           }
           
         }
-      }else if(resource.P.toLowerCase() == "e"){
+      }else if(resource.P.toLowerCase().trim() == "e"){
         let copyInvestigation = resource;
         delete copyInvestigation.Amount;
         return {
@@ -740,6 +740,8 @@ export class PreAuthorizationNewComponent implements OnInit {
         authorizationObject.visityClassId = this.preAuthFormGroup.controls.visitClass.value;
         authorizationObject.approvedStatus = this.requestStatus[0];
         authorizationObject.personId = this.selectedCheckIn.beneficiaryObject.personId._id;
+        authorizationObject.principalBeneficiaryId = this.selectedCheckIn.principalBeneficiaryId;
+        authorizationObject.beneficiaryId = this.selectedCheckIn.beneficiaryId
 
         console.log(authorizationObject);
         this._preAuthorizationService.create(authorizationObject).then(payload => {

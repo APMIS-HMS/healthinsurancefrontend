@@ -52,7 +52,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   getAge() {
     return differenceInYears(
       new Date(),
-      this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
+      this.selectedAuthorization.personId.dateOfBirth
     )
   }
   disableAll() {
