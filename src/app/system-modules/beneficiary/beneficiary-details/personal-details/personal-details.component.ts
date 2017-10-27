@@ -60,7 +60,7 @@ export class PersonalDetailsComponent implements OnInit {
     this._systemService.on();
 
     let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
-    let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }));
+    let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary': routeId } }));
 
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
@@ -72,6 +72,7 @@ export class PersonalDetailsComponent implements OnInit {
       if (results[1].data.length > 0) {
         this.dependants = results[1].data[0].dependantBeneficiaries;
         this.policy = results[1].data[0];
+        console.log(this.policy);
         console.log(this.dependants)
         console.log(this.policy)
       }

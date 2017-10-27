@@ -165,6 +165,7 @@ export class CheckinDetailsComponent implements OnInit {
   }
 
   otp_verify() {
+    console.log(this.beneficiary._id);
     this._systemService.on();
     this._checkInService.find({
       query: {

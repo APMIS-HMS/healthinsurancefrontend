@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
 import { PremiumTypeService } from './../../../../services/common/premium-type.service';
@@ -43,7 +44,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   premiumPackages: any[] = [];
   filteredPremiumPackages: any[] = [];
   sponsorships: any[] = SPONSORSHIP;
-
+  user: any;
   constructor(
     private _fb: FormBuilder,
     private _genderService: GenderService,
@@ -63,7 +64,8 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     private _planService: PlanService,
     private _premiumTypeService: PremiumTypeService,
     private _beneficiaryService: BeneficiaryService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _locker:CoolLocalStorage
   ) { }
 
   ngOnInit() {
@@ -76,6 +78,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       premiumPackage: ['', [<any>Validators.required]],
       sponsorship: ['', [<any>Validators.required]]
     });
+    this.user = (<any>this._locker.getObject('auth')).user;
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
       console.log(value);
@@ -122,7 +125,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
   _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query:   { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] } }).then((res: any) => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] } }).then((res: any) => {
       this._systemService.off();
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
@@ -138,9 +141,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   _getHIAs(platformOwnerId) {
     this._systemService.on();
     this._facilityService.find({
-      query: { 'facilityType.name': 'Health Insurance Agent', 'platformOwnerId._id': platformOwnerId,
-      $select: ['name','hia']
-     }
+      query: {
+        'facilityType.name': 'Health Insurance Agent', 'platformOwnerId._id': platformOwnerId,
+        $select: ['name', 'hia']
+      }
     }).then((res: any) => {
       this._systemService.off();
       this.hias = res.data;
@@ -153,9 +157,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   _getProviders(platformOwnerId) {
     this._systemService.on();
     this._facilityService.find({
-      query: { 'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId,
-      $select: ['name','provider.providerId']
-     }
+      query: {
+        'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId,
+        $select: ['name', 'provider.providerId']
+      }
     }).then((res: any) => {
       this._systemService.off();
       this.providers = res.data;
@@ -189,6 +194,11 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.premiumCategoryId = value.premiumCategory;
       policy.premiumPackageId = value.premiumPackage;
       policy.sponsorshipId = value.sponsorship;
+      if(policy.sponsorshipId.id === 2){
+        console.log('am in')
+        policy.sponsor = this.user.facilityId;
+      }
+     
 
       let body = {
         principal: this.selectedBeneficiary,

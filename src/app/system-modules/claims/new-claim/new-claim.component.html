@@ -48,21 +48,26 @@
             </div>
             <div class="frm-item-wrap">
                 <label class="label">Encounter Type</label>
+                <div class="input-wrap">
+                    <span>{{this.SelectedCheckinItem?.encounterType?.name}}</span>
+                    <br>
+                </div>
                 <div>
-                    <div class="input-wrap" style="justify-content:flex-start; margin-bottom:20px;">
+                    <!-- <div class="input-wrap" style="justify-content:flex-start; margin-bottom:20px;">
                         <span style="margin-right:10px">
                           <label for="outPatient">
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" [checked]="isOutPatient" formControlName="outPatient" name="outPatient" checked>
+                              <input style="width: 30px;display: block;margin: 0 auto;" id="outPatient" checked="" type="checkbox" formControlName="outPatient" name="outPatient" checked>
                               Outpatient
                           </label>
                       </span>
                         <span>
                           <label for="inPatient" >
-                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio"  [checked]="isInpatient" formControlName="inPatient" name="inPatient" checked>
+                              <input style="width: 30px;display: block;margin: 0 auto;" type="radio" formControlName="inPatient" id="inPatient" name="inPatient" checked>
                               Inpatient
                           </label>
                       </span>
-                    </div>
+                    </div> -->
+                    <br>
                     <div class="input-wrap">
                         <div class="input-wrap-x2">
                             <div *ngIf="SelectedCheckinItem?.encounterType?.name == 'In-Patient'">
@@ -100,13 +105,14 @@
                 <label class="label">Claim Type</label>
                 <div class="input-wrap">
                     <select formControlName="claimType" class="form-control">
-                        <option value="" selected>Select...</option>
-                        <option *ngFor="let item of claimTypesItems" [ngValue]="item.name" >{{ item.name }}</option>
+                        <option value="" selected *ngIf="isAuthorize">Free for Service</option>
+                        <option value="" selected *ngIf="!isAuthorize">Capitation</option>
+                        <!-- <option *ngFor="let item of claimTypesItems" [ngValue]="item.name">{{ item.name }}</option> -->
                     </select>
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.claimType.valid || claimsFormGroup.controls.claimType.pristine">
-                        Choose state from the dropdown.
-                    </small>
+                    Choose state from the dropdown.
+                </small>
             </div>
             <div class="frm-item-wrap" *ngIf="claimsFormGroup.controls.claimType.value == 'Fees for Service'">
                 <label class="label">Authorization Code</label>
@@ -123,7 +129,7 @@
                 <div class="input-wrap">
                     <select formControlName="visitClass" class="form-control">
                         <option value="" selected>Select...</option>
-                        <option *ngFor="let item of visitTypesItems" [ngValue]="item.name" >{{ item.name }}</option>
+                        <option *ngFor="let item of visitTypesItems" [ngValue]="item.name">{{ item.name }}</option>
                     </select>
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.visitClass.valid || claimsFormGroup.controls.visitClass.pristine">
@@ -134,7 +140,7 @@
             <div class="link-right">
                 <div (click)="pop_codes()" class="link-item">Lashma Codes</div>
             </div>
-            
+
             <ul class="inpage-tabs">
                 <li (click)="tabSymptoms_click()" [class.tab-active]="tab_symptoms">Symptoms</li>
                 <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
@@ -172,13 +178,13 @@
                                         <div class="input-wrap-x2">
                                             <input style="width:50px;" type="text" formControlName="symptomDuration" class="form-control">
                                             <select formControlName="symptomUnit" class="form-control">
-                                            <option value="Hour" selected>Minute</option>
-                                            <option value="Hour">Hour</option>
-                                            <option value="Hour">Day</option>
-                                            <option value="Week">Week</option>
-                                            <option value="Month">Month</option>
-                                            <option value="Year">Year</option>
-                                    </select>
+                                                <option value="Hour" selected>Minute</option>
+                                                <option value="Hour">Hour</option>
+                                                <option value="Hour">Day</option>
+                                                <option value="Week">Week</option>
+                                                <option value="Month">Month</option>
+                                                <option value="Year">Year</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -203,7 +209,9 @@
                                     <tr class="tr" *ngFor="let item of symptomLists;let i=index;">
                                         <td class="td">{{item.symptom}}</td>
                                         <td class="td">{{item.duration}} {{item.unit}}</td>
-                                        <td><i class="fa fa-times" (click)="onRemove(symptomLists,item)"></i></td>
+                                        <td>
+                                            <i class="fa fa-times" (click)="onRemove(symptomLists,item)"></i>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -232,8 +240,8 @@
                                 </select>
                             </div>
                             <small class="alert-label" [hidden]="claimsFormGroup.controls.diagnosisType.valid || claimsFormGroup.controls.diagnosisType.pristine">
-                                    Choose state from the dropdown.
-                                </small>
+                                Choose state from the dropdown.
+                            </small>
                         </div>
                         <div class="frm-item-wrap">
                             <label class="label">Diagnosis</label>
@@ -243,14 +251,14 @@
                                     <ul *ngIf="diagnosisSearchResult" class="search-results">
                                         <li (click)="onSelectDiagnosis(result)" *ngFor="let result of diagnosisItems">{{result.name}}</li>
                                     </ul>
-    
+
                                     <div class="btn btn-medium btn-blue-outline" (click)="onAddDiagnosis()">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DIAGNOSIS
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="tbl-wrap">
                             <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                                 <thead class="thead">
@@ -260,12 +268,14 @@
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
-    
+
                                 <tbody class="tbody">
                                     <tr class="tr" *ngFor="let item of diagnosisLists;let i=index;">
                                         <td class="td">{{item.diagnosis}}</td>
                                         <td class="td">{{item.type}}</td>
-                                        <td><i class="fa fa-times" (click)="onRemove(diagnosisLists,item)"></i></td>
+                                        <td>
+                                            <i class="fa fa-times" (click)="onRemove(diagnosisLists,item)"></i>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -299,7 +309,7 @@
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="tbl-wrap">
                             <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                                 <thead class="thead">
@@ -308,11 +318,13 @@
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
-    
+
                                 <tbody class="tbody">
                                     <tr class="tr" *ngFor="let item of investigationList">
                                         <td class="td">{{item.investigation}}</td>
-                                        <td><i class="fa fa-times" (click)="onRemove(investigationList,item)"></i></td>
+                                        <td>
+                                            <i class="fa fa-times" (click)="onRemove(investigationList,item)"></i>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -351,14 +363,14 @@
                                             </select>
                                         </div>
                                     </div>
-    
+
                                     <div class="btn btn-medium btn-blue-outline" (click)="onAddDrug()">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD DRUG
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="tbl-wrap">
                             <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                                 <thead class="thead">
@@ -368,14 +380,16 @@
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
-    
+
                                 <tbody class="tbody">
                                     <tr class="tr" *ngFor="let item of drugList;let i=index">
                                         <th class="td">{{item.drug}}</th>
                                         <th class="td">{{item.quantity}} {{item.unit}}</th>
-                                        <td><i class="fa fa-times" (click)="onRemove(drugList,item)"></i></td>
+                                        <td>
+                                            <i class="fa fa-times" (click)="onRemove(drugList,item)"></i>
+                                        </td>
                                     </tr>
-    
+
                                 </tbody>
                             </table>
                         </div>
@@ -399,18 +413,18 @@
                             <div class="input-wrap">
                                 <div class="searchable-input">
                                     <input placeholder="Select..." style="width:300px;" type="text" formControlName="procedure" class="form-control">
-    
+
                                     <ul *ngIf="procedureSearchResult" class="search-results">
                                         <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
                                     </ul>
-    
+
                                     <div class="btn btn-medium btn-blue-outline" (click)="onAddProcedure()">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PROCEDURE
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="tbl-wrap">
                             <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                                 <thead class="thead">
@@ -419,11 +433,13 @@
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
-    
+
                                 <tbody class="tbody">
                                     <tr class="tr" *ngFor="let item of procedureList; let i=index;">
                                         <td class="td">{{item.procedure}}</td>
-                                        <td><i class="fa fa-times" (click)="onRemove(procedureList,item)"></i></td>
+                                        <td>
+                                            <i class="fa fa-times" (click)="onRemove(procedureList,item)"></i>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -445,10 +461,11 @@
                     <div class="frm-subsect">
                         <div class="frm-item-wrap">
                             <div class="input-wrap">
-                                <button class="btn btn-medium btn-blue"><i class="fa fa-file"></i>Select File</button>
+                                <button class="btn btn-medium btn-blue">
+                                    <i class="fa fa-file"></i>Select File</button>
                             </div>
                         </div>
-    
+
                         <div class="tbl-wrap">
                             <table class="table" cellpadding="0" cellspacing="0" border="0.5">
                                 <thead class="thead">
@@ -457,7 +474,7 @@
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
-    
+
                                 <tbody class="tbody">
                                     <tr class="tr">
                                         <!-- <td class="td"></td>
@@ -509,14 +526,15 @@
                     </div>
                 </div>
             </div>
-                <!-- <div class="frm-title">Treatment</div> -->
+            <!-- <div class="frm-title">Treatment</div> -->
             <button class="btn btn-medium btn-blue cta" [disabled]="isProcessing" (click)="newClaimConfirm_click()">
                 <span>
-                    <div [hidden] = "isProcessing">
-                            Save
+                    <div [hidden]="isProcessing">
+                        Save
                     </div>
-                    <div [hidden] = "!isProcessing">
-                            Processing... <i class='fa fa-spinner fa-spin'></i>
+                    <div [hidden]="!isProcessing">
+                        Processing...
+                        <i class='fa fa-spinner fa-spin'></i>
                     </div>
                 </span>
             </button>
@@ -527,11 +545,12 @@
         <app-new-claim-confirm></app-new-claim-confirm>
         <button class="btn btn-medium btn-blue cta" (click)="onSendClaim()">
             <span>
-                <div [hidden] = "isProcessing">
-                        Save
+                <div [hidden]="isProcessing">
+                    Save
                 </div>
-                <div [hidden] = "!isProcessing">
-                        Processing... <i class='fa fa-spinner fa-spin'></i>
+                <div [hidden]="!isProcessing">
+                    Processing...
+                    <i class='fa fa-spinner fa-spin'></i>
                 </div>
             </span>
         </button>
@@ -543,4 +562,4 @@
         <div (click)="modal_close()" class="close-modal">X</div>
         <app-lashma-codes (closeModal)="modal_close()"></app-lashma-codes>
     </div>
-</div> 
+</div>

@@ -44,6 +44,7 @@ export class NewClaimComponent implements OnInit {
 
   isProcessing = false;
   isItemselected = true;
+  isAuthorize = false;
 
   tab_symptoms = true;
   tab_diagnosis = false;
@@ -66,10 +67,10 @@ export class NewClaimComponent implements OnInit {
   SelectedCheckinItemPlan: any = <any>{};
   packSizes = [];
   symptomLists = [];
-  diagnosisLists =[];
-  investigationList=[];
-  drugList=[];
-  procedureList=[];
+  diagnosisLists = [];
+  investigationList = [];
+  drugList = [];
+  procedureList = [];
   claimTypesItems: any = <any>[];
   visitTypesItems: any = <any>[];
   symptomItems: any = <any>[];
@@ -216,29 +217,71 @@ export class NewClaimComponent implements OnInit {
 
 
   _getSelectedCheckinItem(checkinId) {
+    var clinicNote = "";
     this._preAuthorizationService.find({ query: { "checkedInDetails._id": checkinId } }).then((preauth_callback: any) => {
+      console.log(preauth_callback);
       if (preauth_callback.data.length > 0) {
+        this.isAuthorize = true;
+        this.SelectedCheckinItem = preauth_callback.data[0].checkedInDetails;
+        console.log(this.SelectedCheckinItem);
         preauth_callback.data.forEach(element => {
+          console.log("2" + element);
           element.documentation.forEach(element2 => {
-            for(var i = 0;i<element2.length;i++){
-              this.symptomLists.push(element2[3].clinicalDocumentation);
-              
-            }
+            console.log(element2);
+            element2.document[3].clinicalDocumentation.forEach(item => {
+              this.symptomLists.push({
+                "symptom": item.symptom.name,
+                "duration": item.duration,
+                "unit": item.unit.name
+              });
+            });
+            element2.document[4].clinicalDocumentation.forEach(item => {
+              this.procedureList.push({
+                "procedure": item.procedure.name
+              });
+            });
+
+            element2.document[5].clinicalDocumentation.forEach(item => {
+              this.investigationList.push({
+                "investigation": item.investigation.name
+              });
+            });
+
+            element2.document[6].clinicalDocumentation.forEach(item => {
+              this.diagnosisLists.push({
+                "diagnosis": item.diagnosis.name,
+                "type": item.diagnosisType.name
+              });
+            });
+
+            element2.document[7].clinicalDocumentation.forEach(item => {
+              this.drugList.push({
+                "drug": item.drug.name,
+                "quantity": item.quantity,
+                "unit": item.unit.name
+              });
+            });
+
+            clinicNote += element2.document[0].clinicalDocumentation + " ";
+            this.claimsFormGroup.controls.clinicalNote.setValue(clinicNote);
           })
         });
-      }
-    })
-    this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
-      this.SelectedCheckinItem = payload.data[0];
-      if (this.SelectedCheckinItem.encounterType == "In-Patient") {
-        this.isInpatient = true;
-        this.isOutpatient = false;
       } else {
-        this.isOutpatient = true;
-        this.isInpatient = false;
+        this.isAuthorize = false;
+        this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
+          this.SelectedCheckinItem = payload.data[0];
+          if (this.SelectedCheckinItem.encounterType == "In-Patient") {
+            this.isInpatient = true;
+            this.isOutpatient = false;
+          } else {
+            this.isOutpatient = true;
+            this.isInpatient = false;
+          }
+          console.log(this.SelectedCheckinItem);
+        })
       }
-      console.log(this.SelectedCheckinItem);
     })
+
   }
 
   _getClaimTypes() {
