@@ -195,6 +195,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.premiumPackageId = value.premiumPackage;
       policy.sponsorshipId = value.sponsorship;
       if(policy.sponsorshipId.id === 2){
+        console.log('am in')
         policy.sponsor = this.user.facilityId;
       }
      

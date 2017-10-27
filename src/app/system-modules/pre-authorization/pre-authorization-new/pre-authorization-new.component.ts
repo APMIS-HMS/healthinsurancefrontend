@@ -492,6 +492,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     let name = this.investigationFormGroup.controls.services;
 
     if (name.valid) {
+      console.log(this.selectedInvestigation);
+      console.log(this.selectedCheckIn.providerFacilityId)
       this.investigationList.push({
         "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
         "checked": false,
