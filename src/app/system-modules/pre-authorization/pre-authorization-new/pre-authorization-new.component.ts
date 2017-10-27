@@ -568,15 +568,10 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   send() {
-    console.log(this.preAuthFormGroup.valid);
-    console.log(this.preAuthFormGroup);
     let counter = 0;
     try {
       this._systemService.on();
       if (this.preAuthFormGroup.valid) {
-        console.log(this.complaintLists);
-        console.log(this.procedureList);
-  
   
         let preAuthDoc: PreAuthorizationDocument = <PreAuthorizationDocument>{};
         preAuthDoc.approvedStatus = this.requestStatus[0];
@@ -669,16 +664,16 @@ export class PreAuthorizationNewComponent implements OnInit {
   
   
         let authorizationObject = <Authorization>{};
-        authorizationObject.checkedInDetails = this.selectedCheckIn;
+        authorizationObject.checkedInDetails = this.selectedCheckIn._id;
         authorizationObject.dateOfRequest = this.preAuthFormGroup.controls.requestDate.value.jsdate;
         authorizationObject.documentation = [];
         authorizationObject.documentation.push(preAuthDoc);
-        authorizationObject.policyId = this.selectedPolicy;
+        authorizationObject.policyId = this.selectedPolicy._id;
   
         authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
         authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;
         authorizationObject.medicalPersonelUnit = this.preAuthFormGroup.controls.docUnit.value;
-        authorizationObject.providerFacilityId = this.user.facilityId;
+        authorizationObject.providerFacilityId = this.user.facilityId._id;
         authorizationObject.visityClassId = this.preAuthFormGroup.controls.visitClass.value;
         authorizationObject.approvedStatus = this.requestStatus[0];
   

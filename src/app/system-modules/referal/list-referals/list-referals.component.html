@@ -53,6 +53,14 @@
         </thead>
 
         <tbody class="tbody">
+            <tr class="tr" *ngIf="providers.length === 0 && !loading">
+                <td class="text-center" colspan="12">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="providers.length === 0 && loading">
+                <td class="text-center" colspan="12">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
             <tr *ngFor="let referral of authorizations" class="tr">
                 <td class="td">{{referral.checkedInDetails?.beneficiaryObject.platformOwnerNumber}}</td>
                 <td class="td">{{referral.checkedInDetails?.beneficiaryObject.personId.lastName}} {{referral.checkedInDetails?.beneficiaryObject.personId.firstName}}</td>
@@ -65,7 +73,7 @@
                     <span *ngIf="!referral.hiaApproved" class="red">Active</span>
                 </td>
                 <td class="td">
-                        <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
                     {{(referral.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
                 </td>
                 <td class="td">Emergency</td>
@@ -76,7 +84,7 @@
                         <div class="tip-content">{{referral.documentation[0].document[1].clinicalDocumentation}}</div>
                     </div>
                 </td>
-                <td class="td td-icos"(click)="navigateDetail(referral)">
+                <td class="td td-icos" (click)="navigateDetail(referral)">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>

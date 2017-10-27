@@ -4,19 +4,19 @@
         <div class="detail-item blue-bg">
             <div class="detail-content">
                 <div class="hia-user">
-                    <img *ngIf="beneficiary?.person?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
-                    <img *ngIf="beneficiary?.person?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.person?.profileImageObject.thumbnail)">
+                    <img *ngIf="beneficiary?.personId?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
+                    <!-- <img *ngIf="beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)"> -->
                 </div>
                 <div class="group-wrap">
-                    <div class="item-val">{{beneficiary?.person.title.name}} {{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}}
-                        {{beneficiary?.person.otherNames}}
+                    <div class="item-val">{{beneficiary?.personId.title.name}} {{beneficiary?.personId.lastName}} {{beneficiary?.personId.firstName}}
+                        {{beneficiary?.personId.otherNames}}
                     </div>
-                    <div class="item-val">{{beneficiary?.person.phoneNumber}}</div>
+                    <div class="item-val">{{beneficiary?.personId.phoneNumber}}</div>
                 </div>
                 <div class="group-wrap">
                     <div class="group-item">
                         <div class="item-label">Date of Birth:</div>
-                        <div class="item-val">{{beneficiary?.person.dateOfBirth | date}}</div>
+                        <div class="item-val">{{beneficiary?.personId.dateOfBirth | date}}</div>
                     </div>
                     <div *ngIf="beneficiary !== undefined" class="group-item">
                         <div class="item-label">Age:</div>
@@ -24,32 +24,32 @@
                     </div>
                     <div class="group-item">
                         <div class="item-label">Gender:</div>
-                        <div class="item-val">{{beneficiary?.person.gender.name}}</div>
+                        <div class="item-val">{{beneficiary?.personId.gender.name}}</div>
                     </div>
                     <div class="group-item">
                         <div class="item-label">Marital Status:</div>
-                        <div class="item-val">{{beneficiary?.person?.maritalStatus?.name}}</div>
+                        <div class="item-val">{{beneficiary?.personId?.maritalStatus?.name}}</div>
                     </div>
                     <div class="group-item">
                         <div class="item-label">LASHMA ID:</div>
                         <div class="item-val">{{beneficiary?.platformOwnerNumber}}</div>
                     </div>
-                    <div class="group-item">
+                    <div class="group-wrap">
+                        <div class="group-item">
+                            <div class="item-label">OTP Generated:</div>
+                            <div class="item-val">
+                                <span *ngIf="selectedCheckIn === undefined">No</span>
+                                <span *ngIf="selectedCheckIn !== undefined">Yes</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedCheckIn !== undefined" class="group-item">
                         <div class="item-label">Visit ID:</div>
                         <div class="item-val">2330</div>
                     </div>
-                    <div class="group-item">
+                    <div *ngIf="selectedCheckIn !== undefined" class="group-item">
                         <div class="item-label">Facility Name:</div>
-                        <div class="item-val">Lagos State Clinic</div>
-                    </div>
-                </div>
-                <div class="group-wrap">
-                    <div class="group-item">
-                        <div class="item-label">OTP Generated:</div>
-                        <div class="item-val">
-                            <span *ngIf="selectedCheckIn === undefined">No</span>
-                            <span *ngIf="selectedCheckIn !== undefined">Yes</span>
-                        </div>
+                        <div class="item-val">{{selectedCheckIn?.providerFacilityId.name}}</div>
                     </div>
                 </div>
             </div>
