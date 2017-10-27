@@ -158,7 +158,7 @@
                                 <div>
                                     <div class="input-wrap-x2">
                                         <div class="searchable-input">
-                                            <input style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
+                                            <input placeholder="Select..." style="width:155px;" type="text" formControlName="presentingComplaints" class="form-control">
                                             <small class="alert-label" [hidden]="symptomFormGroup.controls.presentingComplaints.valid || symptomFormGroup.controls.presentingComplaints.pristine">
                                                 Complaint value is required.
                                             </small>
@@ -171,7 +171,7 @@
                                                 <small class="alert-label" [hidden]="symptomFormGroup.controls.complaintsDuration.valid || symptomFormGroup.controls.complaintsDuration.pristine">
                                                     Complaint duration value is required.
                                                 </small>
-                                                <input style="width:50px;" min="1" type="number" formControlName="complaintsDuration" class="form-control">
+                                                <input placeholder="Qty" style="width:50px;" min="1" type="number" formControlName="complaintsDuration" class="form-control">
 
                                             </div>
 
@@ -272,7 +272,7 @@
                             <label class="label">Diagnosis</label>
                             <div class="inputWrap">
                                 <div class="searchable-input">
-                                    <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
+                                    <input placeholder="Select..." style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
                                     <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosis.valid || diagnosisFormGroup.controls.diagnosis.pristine">
                                         Diagnosis value is required.
                                     </small>
@@ -355,7 +355,7 @@
                             <label class="label">Procedures</label>
                             <div class="inputWrap">
                                 <div class="searchable-input">
-                                    <input style="width:300px;" type="text" formControlName="procedures" class="form-control">
+                                    <input placeholder="Select..." style="width:300px;" type="text" formControlName="procedures" class="form-control">
                                     <ul *ngIf="procedureSearchResult" class="search-results">
                                         <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
                                     </ul>
@@ -411,7 +411,7 @@
                             <label class="label">Services</label>
                             <div class="inputWrap">
                                 <div class="searchable-input">
-                                    <input style="width:300px;" type="text" formControlName="services" class="form-control">
+                                    <input placeholder="Select..." style="width:300px;" type="text" formControlName="services" class="form-control">
 
                                     <small class="alert-label" [hidden]="investigationFormGroup.controls.services.valid || investigationFormGroup.controls.services.pristine">
                                         Investigation value is required.
@@ -482,7 +482,7 @@
                                             </ul>
                                         </div>
                                         <div class="input-wrap-x2">
-                                            <input style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
+                                            <input placeholder="Qty" style="width:50px;" type="number" min="1" formControlName="drugQty" class="form-control">
                                             <small class="alert-label" [hidden]="drugFormGroup.controls.drugQty.valid || drugFormGroup.controls.drugQty.pristine">
                                                 Drug Quantity value is required.
                                             </small>
@@ -524,7 +524,6 @@
                                             <i class="fa fa-times" (click)="removeDrug(i)"></i>
                                         </td>
                                     </tr>
-
                                 </tbody>
                             </table>
                         </div>

@@ -257,7 +257,7 @@
                                     <div>
                                         <div class="input-wrap-x2">
                                             <div class="searchable-input">
-                                                <input style="width:155px;" type="text" formControlName="drug" class="form-control">
+                                                <input placeholder="Select..." style="width:155px;" type="text" formControlName="drug" class="form-control">
 
                                                 <ul *ngIf="drugSearchResult" class="search-results">
                                                     <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
@@ -327,7 +327,7 @@
                                 <label class="label">Treatment Before Referal</label>
                                 <div class="input-wrap">
                                     <div class="searchable-input">
-                                        <input style="width:300px;" type="text" formControlName="procedure" class="form-control">
+                                        <input placeholder="Select..." style="width:300px;" type="text" formControlName="procedure" class="form-control">
 
                                         <ul *ngIf="procedureSearchResult" class="search-results">
                                             <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
@@ -396,7 +396,7 @@
                                 <label class="label">Provisional Diagnosis</label>
                                 <div class="input-wrap">
                                     <div class="searchable-input">
-                                        <input style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
+                                        <input placeholder="Select..." style="width:300px;" type="text" formControlName="diagnosis" class="form-control">
 
                                         <small class="alert-label" [hidden]="diagnosisFormGroup.controls.diagnosis.valid || diagnosisFormGroup.controls.diagnosis.pristine">
                                             Diagnosis value is required.
@@ -460,7 +460,7 @@
                                 <label class="label">Services</label>
                                 <div class="inputWrap">
                                     <div class="searchable-input">
-                                        <input style="width:300px;" type="text" formControlName="services" class="form-control">
+                                        <input placeholder="select..." style="width:300px;" type="text" formControlName="services" class="form-control">
 
                                         <small class="alert-label" [hidden]="investigationFormGroup.controls.services.valid || investigationFormGroup.controls.services.pristine">
                                             Investigation value is required.

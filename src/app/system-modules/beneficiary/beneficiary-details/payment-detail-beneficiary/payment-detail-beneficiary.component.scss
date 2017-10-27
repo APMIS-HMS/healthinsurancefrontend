@@ -1,8 +1,13 @@
 @import '../../../hia/hia-details/hia-details.component.scss';
+.show-payment {
+    display: inline;
+}
+
 .align-chac {
     display: block;
     justify-content: space-between;
     margin-bottom: 10px;
+    padding: 10px;
 }
 
 .chac-box {

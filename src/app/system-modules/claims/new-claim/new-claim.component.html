@@ -164,7 +164,7 @@
                                 <div>
                                     <div class="input-wrap-x2">
                                         <div class="searchable-input">
-                                            <input style="width:155px;" type="text" formControlName="symptom" class="form-control">
+                                            <input placeholder="Select" style="width:155px;" type="text" formControlName="symptom" class="form-control">
                                             <ul *ngIf="symptomSearchResult" class="search-results">
                                                 <li (click)="onSelectSymptom(result)" *ngFor="let result of symptomItems">{{result.name}}</li>
                                             </ul>
@@ -239,7 +239,7 @@
                             <label class="label">Diagnosis</label>
                             <div class="input-wrap">
                                 <div class="searchable-input">
-                                    <input style="width:300px" type="text" formControlName="diagnosis" class="form-control">
+                                    <input placeholder="Select..." style="width:300px" type="text" formControlName="diagnosis" class="form-control">
                                     <ul *ngIf="diagnosisSearchResult" class="search-results">
                                         <li (click)="onSelectDiagnosis(result)" *ngFor="let result of diagnosisItems">{{result.name}}</li>
                                     </ul>
@@ -289,7 +289,7 @@
                             <label class="label">Investigations</label>
                             <div class="input-wrap">
                                 <div class="searchable-input">
-                                    <input style="width:300px;" type="text" formControlName="investigations" class="form-control">
+                                    <input placeholder="Select..." style="width:300px;" type="text" formControlName="investigations" class="form-control">
                                     <ul *ngIf="investigationSearchResult" class="search-results">
                                         <li (click)="onSelectInvestigation(result)" *ngFor="let result of investigationItems">{{result.name}}</li>
                                     </ul>
@@ -338,15 +338,15 @@
                                 <div>
                                     <div class="input-wrap-x2">
                                         <div class="searchable-input">
-                                            <input style="width:155px;" type="text" formControlName="drug" class="form-control">
+                                            <input placeholder="Select..." style="width:155px;" type="text" formControlName="drug" class="form-control">
                                             <ul *ngIf="drugSearchResult" class="search-results">
                                                 <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
                                             </ul>
                                         </div>
                                         <div class="input-wrap-x2">
-                                            <input style="width:50px;" type="text" formControlName="drugQty" class="form-control">
+                                            <input placeholder="Qty" style="width:50px;" type="text" formControlName="drugQty" class="form-control">
                                             <select formControlName="drugUnit" class="form-control">
-                                                <option disabled value="" selected>Route</option>
+                                                <option disabled value="" selected>Pack Size</option>
                                                 <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
                                             </select>
                                         </div>
@@ -398,7 +398,7 @@
                             <label class="label">Procedure</label>
                             <div class="input-wrap">
                                 <div class="searchable-input">
-                                    <input style="width:300px;" type="text" formControlName="procedure" class="form-control">
+                                    <input placeholder="Select..." style="width:300px;" type="text" formControlName="procedure" class="form-control">
     
                                     <ul *ngIf="procedureSearchResult" class="search-results">
                                         <li (click)="onSelectProcedure(result)" *ngFor="let result of procedureItems">{{result.name}}</li>
