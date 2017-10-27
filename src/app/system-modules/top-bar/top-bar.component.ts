@@ -12,6 +12,8 @@ import { CurrentPlaformShortName } from '../../services/globals/config';
   styleUrls: ['./top-bar.component.scss']
 })
 export class TopBarComponent implements OnInit {
+
+  notifier = false;
   @Output() showMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
   appsearchControl = new FormControl();
   pageInView: String = '';
@@ -57,6 +59,12 @@ export class TopBarComponent implements OnInit {
 
   menu_show() {
     this.showMenu.emit(true);
+  }
+  notifier_toggle(){
+    this.notifier = !this.notifier;
+  }
+  notifier_hide(){
+    this.notifier = false;
   }
 
 

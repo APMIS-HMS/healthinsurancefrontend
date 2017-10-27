@@ -28,90 +28,109 @@
             </div>
         </div> -->
     </div>
-    <div style="width:98%;text-align:right;padding:10px;">
-        <button (click)="onClickShowPayment();" class="btn btn-medium btn-blue cta show-payment">Pay Premium</button>
+    <div class="check-payment-status">
+        <div class="check-payment-left">
+            <div *ngIf="policy?.isPaid">
+                Payment status:<span class="green"> Paid</span>, Due Date: <span class="green">{{ policy?.dueDate }}</span>
+            </div>
+            <div *ngIf="!policy?.isPaid">
+                Payment status:<span class="red"> Not Paid</span>
+            </div>
+        </div>
+        <div class="check-payment-right">
+            <button (click)="onClickShowPayment();" class="btn btn-medium btn-blue cta show-payment">Pay Premium</button>
+        </div>
     </div>
     <div class="align-chac" *ngIf="showPayment">
         <div class="chac-box">
-            <form [formGroup]="" novalidate>
-                <div class="frm-inner-title">Health Insurance Agent</div>
-                <div class="frm-item-wrap">
-                    <label class="label">HIA</label>
-                    <div class="inputWrap">
-                        {{ policy?.hiaId?.name }}
-                        <!-- <select>
+            <div class="frm-inner-title">Health Insurance Agent</div>
+            <div class="frm-item-wrap">
+                <label class="label">HIA</label>
+                <div class="inputWrap">
+                    {{ policy?.hiaId?.name }}
+                    <!-- <select>
                           <option value="" disabled selected>HIA</option>
                         </select> -->
-                    </div>
                 </div>
+            </div>
 
-                <div class="frm-inner-title">Primary Health Care Provider</div>
-                <div class="frm-item-wrap">
-                    <label class="label">Provider Name</label>
-                    <div class="inputWrap">
-                        {{ policy?.providerId?.name }}
-                        <!-- <select>
+            <div class="frm-inner-title">Primary Health Care Provider</div>
+            <div class="frm-item-wrap">
+                <label class="label">Provider Name</label>
+                <div class="inputWrap">
+                    {{ policy?.providerId?.name }}
+                    <!-- <select>
                           <option value="" disabled selected>Provider</option>
                         </select> -->
-                    </div>
                 </div>
+            </div>
 
-                <div class="frm-inner-title">Plan</div>
-                <div class="frm-item-wrap">
-                    <label class="label">Type</label>
-                    <div class="inputWrap">
-                        {{ policy?.planTypeId?.name }}
-                        <!-- <select>
+            <!-- <div class="frm-inner-title">Plan Type</div> -->
+            <div class="frm-item-wrap">
+                <label class="label">Plan Type</label>
+                <div class="inputWrap">
+                    {{ policy?.planTypeId?.name }}
+                    <!-- <select>
                           <option value="" disabled selected>Plan Type</option>
                         </select> -->
-                    </div>
                 </div>
+            </div>
 
-                <div class="frm-item-wrap">
-                    <label class="label">Name</label>
-                    <div class="inputWrap">
-                        {{ policy?.planId?.name }}
-                        <!-- <select>
+            <div class="frm-item-wrap">
+                <label class="label">Plan Name:</label>
+                <div class="inputWrap">
+                    {{ policy?.planId?.name }}
+                    <!-- <select>
                           <option value="" disabled selected>Plan</option>
                         </select> -->
-                    </div>
                 </div>
+            </div>
 
-                <div class="frm-item-wrap">
-                    <label class="label">Premium Category</label>
-                    <div class="inputWrap">
-                        {{ policy?.premiumCategoryId?.name }}
-                        <!-- <select>
+            <div class="frm-item-wrap">
+                <label class="label">Premium Category:</label>
+                <div class="inputWrap">
+                    {{ policy?.premiumCategoryId?.name }}
+                    <!-- <select>
                           <option value="" disabled selected>Premium Category</option>
                         </select> -->
-                    </div>
                 </div>
+            </div>
 
-                <div class="frm-item-wrap">
-                    <label class="label">Premium Package</label>
-                    <div class="inputWrap">
-                        {{ policy?.premiumPackageId?.category?.name }} ({{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }} {{ policy?.premiumPackageId?.amount }})
-                        <!-- <select>
+            <div class="frm-item-wrap">
+                <label class="label">Premium Package:</label>
+                <div class="inputWrap">
+                    {{ policy?.premiumPackageId?.category?.name }} ({{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }} {{ policy?.premiumPackageId?.amount }})
+                    <!-- <select>
                           <option value="">Select..</option>
                         </select> -->
-                    </div>
                 </div>
+            </div>
 
-                <div class="frm-item-wrap">
-                    <label class="label">Sponsorship</label>
-                    <div class="inputWrap">
-                        {{ policy?.sponsorshipId?.name }}
-                        <!-- <select>
+            <div class="frm-item-wrap">
+                <label class="label">Sponsorship:</label>
+                <div class="inputWrap">
+                    {{ policy?.sponsorshipId?.name }}
+                    <!-- <select>
                           <option value="">Self</option>
                           <option value="">Organization</option>
                         </select> -->
-                    </div>
                 </div>
-            </form>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Payment Period:</label>
+                <div class="inputWrap">
+                    {{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}(s)
+                </div>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Amount to be paid:</label>
+                <div class="inputWrap">
+                    &#x20A6;{{ policy?.premiumPackageId?.amount }}
+                </div>
+            </div>
         </div>
 
-        <div class="chac-box-right">
-            <!-- <form style="margin-top:10px" [formGroup]="" novalidate> -->
+        <!-- <div class="chac-box-right">
             <div class="pay-detail-wrap">
                 <label style="font-size:12px" class="label">Payment Period: </label>
                 <div style="font-size:12px" class="inputWrap">
@@ -136,9 +155,17 @@
                     </div>
                 </div>
             </div>
-            <!-- </form> -->
-        </div>
+        </div> -->
         <div class="pay-btn-detail-wrap">
+            <div class="payment-option">
+                <form [formGroup]="paymentOptionGroup">
+                    <select formControlName="paymentOption">
+                        <option value="e-Payment" selected>e-Payment</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
+                </form>
+            </div>
             <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.person?.email" [amount]="policy?.premiumPackageId?.amountInKobo" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()"
                 (callback)="paymentDone($event)">e-Payment</angular4-paystack>
             <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->

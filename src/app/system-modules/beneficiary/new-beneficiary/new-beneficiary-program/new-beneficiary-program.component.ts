@@ -122,7 +122,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
   _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+    this._facilityService.find({ query:   { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] } }).then((res: any) => {
       this._systemService.off();
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
@@ -138,7 +138,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   _getHIAs(platformOwnerId) {
     this._systemService.on();
     this._facilityService.find({
-      query: { 'facilityType.name': 'Health Insurance Agent', 'platformOwnerId._id': platformOwnerId }
+      query: { 'facilityType.name': 'Health Insurance Agent', 'platformOwnerId._id': platformOwnerId,
+      $select: ['name','hia']
+     }
     }).then((res: any) => {
       this._systemService.off();
       this.hias = res.data;
@@ -151,7 +153,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   _getProviders(platformOwnerId) {
     this._systemService.on();
     this._facilityService.find({
-      query: { 'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId }
+      query: { 'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId,
+      $select: ['name','provider.providerId']
+     }
     }).then((res: any) => {
       this._systemService.off();
       this.providers = res.data;
@@ -177,11 +181,11 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     if (valid) {
       let policy: any = <any>{};
       policy.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
-      policy.principalBeneficiary = this.selectedBeneficiary;
+      policy.principalBeneficiary = this.selectedBeneficiary._id;
       policy.hiaId = value.hiaName;
       policy.providerId = value.providerName;
       policy.planTypeId = value.programType;
-      policy.planId = value.programName;
+      policy.planId = value.programName._id;
       policy.premiumCategoryId = value.premiumCategory;
       policy.premiumPackageId = value.premiumPackage;
       policy.sponsorshipId = value.sponsorship;

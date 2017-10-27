@@ -120,7 +120,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
 
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+    this._facilityService.findWithOutAuth({
+      query:
+      { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
+    }).then(res => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getLga(this.currentPlatform.address.state);
@@ -467,7 +470,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
         let beneficiary: Beneficiary = <Beneficiary>{};
         beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-        beneficiary.platformOwnerId = this.currentPlatform._id;
+        beneficiary.platformOwnerId = this.currentPlatform;
 
         let policy: any = <any>{};
 
@@ -511,11 +514,12 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
             })
           } else {
             this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
-
+              console.log(payload)
               if (payload.statusCode === 200 && payload.error === false) {
+                payload.body.beneficiary.person = payload.body.person;
                 this.selectedBeneficiary = payload.body.beneficiary;
+                this.selectedBeneficiary.person = payload.body.person;
                 this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-                this._systemService.announceBeneficiaryTabNotification('Two');
               }
               this._systemService.off();
             }).catch(err => {
@@ -527,9 +531,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
           this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
 
             if (payload.statusCode === 200 && payload.error === false) {
+              payload.body.beneficiary.person = payload.body.person;
               this.selectedBeneficiary = payload.body.beneficiary;
+              console.log(payload)
               this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-              this._systemService.announceBeneficiaryTabNotification('Two');
             }
             this._systemService.off();
           }).catch(err => {
