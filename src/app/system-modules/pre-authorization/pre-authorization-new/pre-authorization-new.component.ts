@@ -471,13 +471,14 @@ export class PreAuthorizationNewComponent implements OnInit {
     let name = this.drugFormGroup.controls.drug;
     let unit = this.drugFormGroup.controls.drugUnit;
     let quantity = this.drugFormGroup.controls.drugQty;
+    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
     if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
       this.drugList.push({
-        "drug": typeof (this.selectedDrug) === 'object' ? this.selectedDrug : name.value,
+        "drug": retObj.investigation,
         "unit": unit.value,
         "quantity": quantity.value,
-        "checked": false,
-        "approvedStatus": this.requestStatus[0]
+        "checked": retObj.checked,
+        "approvedStatus": retObj.approvedStatus
       });
       this.drugFormGroup.controls.drug.reset();
       unit.reset();
@@ -488,16 +489,77 @@ export class PreAuthorizationNewComponent implements OnInit {
       quantity.markAsDirty({ onlySelf: true });
     }
   }
+  checkProviderAuthorization(fc, resource) {
+    console.log(fc);
+    console.log(resource)
+    if (fc === 'primary') {
+      if (resource.P.toLowerCase().trim() == "p") {
+        console.log(1)
+        if (resource.PA.toLowerCase().trim() == "n") {
+          console.log(2)
+          // its approved
+          let copyInvestigation = resource;
+          delete copyInvestigation.Amount;
+          return {
+            'investigation':copyInvestigation,
+            'approvedStatus':this.requestStatus[1],
+            'checked':false
+          }
+        } else {
+          if (resource.Prefered.toLowerCase().trim() == 'c') {
+            console.log(3)
+            // cover by capitation, dont put amount
+            //requires authorization
+            let copyInvestigation = resource;
+            delete copyInvestigation.Amount;
+            return {
+              'investigation':copyInvestigation,
+              'approvedStatus':this.requestStatus[0],
+              'checked':true
+            }
+          } else {
+            console.log(4)
+            //set to approve and look for amount
+            //requires authorization
+            let copyInvestigation = resource;
+            return {
+              'investigation':copyInvestigation,
+              'approvedStatus':this.requestStatus[0],
+              'checked':true
+            }
+          }
+          
+        }
+      }else if(resource.P.toLowerCase().trim() == "e"){
+        let copyInvestigation = resource;
+        delete copyInvestigation.Amount;
+        return {
+          'investigation':copyInvestigation,
+          'approvedStatus':this.requestStatus[1],
+          'checked':false
+        }
+      }
+    }else if(fc === 'secondary'){
+      console.log(5)
+      // get authorization, check amount
+      let copyInvestigation = resource;
+      return {
+        'investigation':copyInvestigation,
+        'approvedStatus':this.requestStatus[0],
+        'checked':true
+      }
+    }
+  }
   onAddInvestigation() {
     let name = this.investigationFormGroup.controls.services;
-
+    console.log(this.selectedCheckIn)
+    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedInvestigation);
+    console.log(retObj)
     if (name.valid) {
-      console.log(this.selectedInvestigation);
-      console.log(this.selectedCheckIn.providerFacilityId)
       this.investigationList.push({
-        "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
-        "checked": false,
-        "approvedStatus": this.requestStatus[0]
+        "investigation": retObj.investigation,
+        "checked": retObj.checked,
+        "approvedStatus":retObj.approvedStatus
       });
       this.investigationFormGroup.controls.services.reset();
     } else {
@@ -506,10 +568,11 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
   onAddProcedure() {
     let name = this.procedureFormGroup.controls.procedures;
+    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedProcedure);
     if (name.valid) {
       this.procedureList.push({
-        "procedure": typeof (this.selectedProcedure) === 'object' ? this.selectedProcedure : name.value,
-        "checked": false,
+        "procedure":retObj.investigation,
+        "checked": retObj.checked,
         "approvedStatus": this.requestStatus[0]
       });
       this.procedureFormGroup.controls.procedures.reset();
@@ -676,6 +739,9 @@ export class PreAuthorizationNewComponent implements OnInit {
         authorizationObject.providerFacilityId = this.user.facilityId._id;
         authorizationObject.visityClassId = this.preAuthFormGroup.controls.visitClass.value;
         authorizationObject.approvedStatus = this.requestStatus[0];
+        authorizationObject.personId = this.selectedCheckIn.beneficiaryObject.personId._id;
+        authorizationObject.principalBeneficiaryId = this.selectedCheckIn.principalBeneficiaryId;
+        authorizationObject.beneficiaryId = this.selectedCheckIn.beneficiaryId
 
         console.log(authorizationObject);
         this._preAuthorizationService.create(authorizationObject).then(payload => {

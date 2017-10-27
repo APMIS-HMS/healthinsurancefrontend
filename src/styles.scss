@@ -72,6 +72,10 @@ select {
     align-items: center;
     padding: 20px 0;
 }
+.cta-right{
+    display: flex;
+    justify-content: flex-end;
+}
 
 .btn {
     cursor: pointer;
@@ -80,6 +84,12 @@ select {
     align-items: center;
     outline: 0;
     border: 0;
+}
+.logo-wrap img{
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+    overflow: hidden;
 }
 
 button {

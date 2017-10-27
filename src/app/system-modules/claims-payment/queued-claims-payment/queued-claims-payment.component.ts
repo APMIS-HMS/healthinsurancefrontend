@@ -43,6 +43,8 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Queued Claims Payment List');
     this._headerEventEmitter.setMinorRouteUrl('Queued claims payment list');
+    this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
 
     this._getCurrentPlatform();
   }
@@ -105,7 +107,7 @@ export class QueuedClaimsPaymentComponent implements OnInit {
         claimsIds.push(claim._id);
       });
 
-      delete this.user.roles;
+      console.log(this.user);
       const body = {
         claims: claimsIds,
         paidBy: this.user
@@ -116,8 +118,9 @@ export class QueuedClaimsPaymentComponent implements OnInit {
         this.payClaimBtnText = true;
         this.payClaimBtnProcessing = false;
         this.disablePayBtn = false;
+        this.selectedClaims = [];
         this._getClaimsPayments();
-        this._toastr.error('Payment completed successfully.', 'Payment completed!');
+        this._toastr.success('Payment completed successfully.', 'Payment completed!');
       }).catch(err => console.log(err));
     } else {
       this._toastr.error('Please select at least one item to pay.', 'No selected Item!');

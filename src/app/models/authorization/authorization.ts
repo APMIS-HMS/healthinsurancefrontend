@@ -13,6 +13,9 @@ export interface Authorization {
     isEmergency: boolean;
     visityClassId: any;
     approvedStatus:any;
+    personId:any;
+    principalBeneficiaryId:any;
+    beneficiaryId:any;
     policyId:any;
     _id: any;
 }

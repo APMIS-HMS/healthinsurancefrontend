@@ -4,7 +4,7 @@
       <div class="group-wrap">
         <div class="group-item">
           <div class="item-label">Date of Birth:</div>
-          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.dateOfBirth | date}}</div>
+          <div class="item-val">{{selectedAuthorization?.personId.dateOfBirth | date}}</div>
         </div>
         <div *ngIf="selectedAuthorization !== undefined" class="group-item">
           <div class="item-label">Age:</div>
@@ -12,7 +12,7 @@
         </div>
         <div class="group-item">
           <div class="item-label">Gender:</div>
-          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.gender.name}}</div>
+          <div class="item-val">{{selectedAuthorization?.personId.gender.name}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">LASRRA ID:</div>
@@ -20,7 +20,7 @@
         </div>
         <div class="group-item">
           <div class="item-label">LAASHMA ID:</div>
-          <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</div>
+          <div class="item-val">{{selectedAuthorization?.beneficiaryObject.platformOwnerNumber}}</div>
         </div>
         <div class="group-item">
           <div class="item-label">POLICY ID:</div>

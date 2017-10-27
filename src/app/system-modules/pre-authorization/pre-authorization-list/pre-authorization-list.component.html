@@ -53,8 +53,8 @@
         <tbody class="tbody">
             <tr *ngFor="let auth of authorizations" class="tr">
                 <td class="td">{{auth.createdAt | date}}</td>
-                <td class="td">{{auth.checkedInDetails.beneficiaryObject.personId.lastName}} {{auth.checkedInDetails.beneficiaryObject.personId.firstName}} {{auth.checkedInDetails.beneficiaryObject.personId.otherNames}}</td>
-                <td class="td">{{auth.checkedInDetails.beneficiaryObject.platformOwnerNumber}}</td>
+                <td class="td">{{auth.personId.lastName}} {{auth.personId.firstName}} {{auth.personId.otherNames}}</td>
+                <td class="td">{{auth.beneficiaryObject.platformOwnerNumber}}</td>
                 <td class="td">Healthy Health LTD</td>
                 <td class="td">{{auth.checkedInDetails.providerFacilityId.name}}</td>
                 <td class="td">

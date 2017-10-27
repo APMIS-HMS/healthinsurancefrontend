@@ -1,4 +1,5 @@
 import { Facility } from './../../../../models/organisation/facility';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DURATIONS } from './../../../../services/globals/config';
 import { Observable } from 'rxjs/Observable';
 import { UploadService } from './../../../../services/common/upload.service';
@@ -9,7 +10,6 @@ import { SystemModuleService } from './../../../../services/common/system-module
 import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input } from '@angular/core';
 import { FacilityService } from '../../../../services/index';
 
@@ -55,6 +55,12 @@ export class PersonalDetailsComponent implements OnInit {
         this._getBeneficiaryDetails(param.id);
       }
     });
+
+    this.approvalFormGroup = this._fb.group({
+      duration: [1, [<any>Validators.required]],
+      unit: ['', [<any>Validators.required]],
+      startDate: [new Date(), [<any>Validators.required]]
+    });
   }
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
@@ -63,6 +69,7 @@ export class PersonalDetailsComponent implements OnInit {
     let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary': routeId } }));
 
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
+      console.log(results);
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
       if (this.isCheckIn) {
@@ -95,8 +102,9 @@ export class PersonalDetailsComponent implements OnInit {
   openModal(e) {
     this.addApproval = true;
   }
-  
+
   onClickApprove(valid: boolean, value: any) {
+    console.log(value);
     if (valid) {
       const validity = {
         duration: value.duration,
@@ -106,6 +114,7 @@ export class PersonalDetailsComponent implements OnInit {
         validTill: this.addDays(new Date(), value.unit.days)
       };
 
+      console.log(this.policy);
       if (!!this.policy.validityPeriods) {
         this.policy.validityPeriods.push(validity);
       } else {
@@ -122,8 +131,8 @@ export class PersonalDetailsComponent implements OnInit {
         this._toastr.success(text, 'Confirmation!');
         // Send sms to Principal Beneficiary
         const smsData = {
-          content: 'Testing beneficiary',
-          sender: 'Me',
+          content: 'Policy has been activated.',
+          sender: 'LASHMA',
           receiver: '08056679920'
         };
 

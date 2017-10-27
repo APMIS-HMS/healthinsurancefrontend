@@ -73,6 +73,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('Details page');
 
     this._route.params.subscribe(param => {
+      console.log(param);
       if (!!param.id) {
         this._getBeneficiaryDetails(param.id);
       }
@@ -101,6 +102,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
       if (results[1].data.length > 0) {
         this.dependants = results[1].data[0].dependantBeneficiaries;
         this.policy = results[1].data[0];
+        console.log(this.policy);
       }
 
       this._systemService.off();
