@@ -36,7 +36,7 @@
     "feathers-socketio": "^2.0.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
-    "mydatepicker": "^2.0.31",
+    "mydatepicker": "^2.0.32",
     "ng2-toastr": "^4.0.1",
     "node-sass": "^4.5.3",
     "paystack": "^1.4.1",
