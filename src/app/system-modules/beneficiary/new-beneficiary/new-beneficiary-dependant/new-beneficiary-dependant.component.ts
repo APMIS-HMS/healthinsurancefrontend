@@ -25,7 +25,15 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   templateUrl: './new-beneficiary-dependant.component.html',
   styleUrls: ['./new-beneficiary-dependant.component.scss']
 })
-export class NewBeneficiaryDependantComponent implements OnInit {
+export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
+  ngAfterViewInit(): void {
+    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+      console.log(value)
+      if (value.beneficiary !== undefined) {
+        console.log(value);
+      }
+    });
+  }
   @Input() selectedBeneficiary: any;
   frmDependants: FormGroup;
   lgs: any[] = [];
@@ -61,12 +69,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _relationshipService: RelationshipService,
     private _route: ActivatedRoute
   ) {
-    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
-      console.log(value)
-      if (value.beneficiary !== undefined) {
-        console.log(value);
-      }
-    });
+   
   }
 
   ngOnInit() {
@@ -75,6 +78,13 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     this._getGenders();
     this._getRelationships();
     this._getTitles();
+    console.log(this.selectedBeneficiary)
+    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+      console.log(value)
+      if (value.beneficiary !== undefined) {
+        console.log(value);
+      }
+    });
   }
 
   _addNewDependant() {
@@ -102,9 +112,11 @@ export class NewBeneficiaryDependantComponent implements OnInit {
       ])
     });
   }
-
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+    this._facilityService.findWithOutAuth({
+      query:
+      { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
+    }).then(res => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }
@@ -175,9 +187,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
       );
   }
   push(dependant, valid) {
-    if(valid){
+    if (valid) {
       dependant.controls['readOnly'].setValue(true);
-    }else{
+    } else {
       let counter = 0;
       this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
       Object.keys(dependant.controls).forEach((field, i) => { // {1}
@@ -188,19 +200,19 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         }
       });
     }
-    
+
   }
 
   changeGender($event, gender, dependant) {
     dependant.controls['gender'].setValue(gender);
   }
 
-  moveBack(){
-    this._systemService.announceBeneficiaryTabNotification({tab:'One',beneficiary:this.selectedBeneficiary});
+  moveBack() {
+    this._systemService.announceBeneficiaryTabNotification({ tab: 'One', beneficiary: this.selectedBeneficiary });
   }
 
-  skip(){
-    this._systemService.announceBeneficiaryTabNotification({tab:'Three',beneficiary:this.selectedBeneficiary})
+  skip() {
+    this._systemService.announceBeneficiaryTabNotification({ tab: 'Three', beneficiary: this.selectedBeneficiary })
   }
 
   onClickStepTwo(dependants) {
@@ -220,20 +232,20 @@ export class NewBeneficiaryDependantComponent implements OnInit {
       person.phoneNumber = group.controls.phonenumber.value;
       person.platformOnwerId = this.currentPlatform._id;
       person.title = group.controls.title.value;
-    
+
 
       let beneficiary: Beneficiary = <Beneficiary>{};
       beneficiary.stateID = group.lasrraId;
       beneficiary.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
 
 
-      dependantList.push({person:person, beneficiary:beneficiary, relationship:group.controls.relationship.value});
+      dependantList.push({ person: person, beneficiary: beneficiary, relationship: group.controls.relationship.value });
 
       // console.log(group)
     });
     // console.log(dependantList);
 
-    this._systemService.announceBeneficiaryTabNotification({tab:'Four',beneficiary:this.selectedBeneficiary, dependants:dependantList})
+    this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList })
   }
 
   compare(l1: any, l2: any) {

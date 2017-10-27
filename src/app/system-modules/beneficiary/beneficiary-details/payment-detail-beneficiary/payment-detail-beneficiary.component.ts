@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+// import { Angular4PaystackComponent } from 'angular4-paystack';
 import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
 import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService } from '../../../../services/index';
 
@@ -13,6 +14,7 @@ import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService
   styleUrls: ['./payment-detail-beneficiary.component.scss']
 })
 export class PaymentDetailBeneficiaryComponent implements OnInit {
+  paymentOptionGroup: FormGroup;
   policy: any;
   previousPolicies: any = [];
   currentPlatform: any;
@@ -24,6 +26,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   refKey: number;
   paymentType: string = 'e-Payment';
   previousPolicyLoading: boolean = true;
+  showPayment: boolean = false;
+  isForRenewal: boolean = false;
   paymentTypes: any = PAYMENTTYPES;
 
   constructor(
@@ -32,6 +36,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _toastr: ToastsManager,
     private _route: ActivatedRoute,
+    // private _angular4Paystack: Angular4PaystackComponent,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private _policyService: PolicyService,
@@ -42,8 +47,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    this._route.params.subscribe(param => {
-      console.log(param);
+
+    this._route.parent.params.subscribe(param => {
       if (!!param.id) {
         this._getPolicyDetails(param.id);
         this._getPreviousPolicies(param.id);
@@ -51,14 +56,33 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       }
     });
 
+    this.paymentOptionGroup = this._fb.group({
+      paymentOption: ['e-Payment', [<any>Validators.required]]
+    });
+
+    this.paymentOptionGroup.controls['paymentOption'].valueChanges.subscribe(value => {
+      console.log(value);
+      this.paymentType = value;
+      if (value === 'Cash' || value === 'Cheque') {
+        this.cashPayment = true;
+        this.chequePayment = true;
+        this.withPaystack = false;
+      } else {
+        this.withPaystack = true;
+        this.cashPayment = false;
+        this.chequePayment = false;
+      }
+    });
+
     this.refKey = parseFloat((this.user ? this.user._id.substr(20) : ''))  * new Date().getTime();
-    console.log(this.refKey);
   }
 
   private _getPolicyDetails(routeId) {
     this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }).then((res: any) => {
       if (res.data.length > 0) {
         res.data[0].premiumPackageId.amountInKobo = res.data[0].premiumPackageId.amount * 100;
+        res.data[0].dueDate = this.addDays(new Date(), res.data[0].premiumPackageId.durationInDay);
+        this.isForRenewal = res.data[0].isPaid;
         this.policy = res.data[0];
         console.log(this.policy);
       }
@@ -69,7 +93,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     this._policyService.find({
       query: { 'principalBeneficiary._id': routeId, isPaid: true, $sort: { createdAt: -1 } }
     }).then((res: any) => {
-      console.log(res);
       this.previousPolicyLoading = false;
       if (res.data.length > 0) {
         console.log(res.data);
@@ -114,7 +137,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     // Save into the Premium Payment Service
     this._premiumPaymentService.create(ref).then((res: any) => {
       console.log(res);
-      
 
       let verificationData = {
         reference: res.reference,
@@ -124,7 +146,10 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       this._premiumPaymentService.verifyPaystackWithMiddleWare(verificationData).then((verifyRes: any) => {
         console.log(verifyRes);
         if (!!verifyRes) {
-          this._getPolicyDetails(res._id);
+          this.showPayment = false;
+          this.isForRenewal = true;
+          this._getPolicyDetails(verifyRes.body.principalBeneficiary._id);
+          this._getPreviousPolicies(verifyRes.body.principalBeneficiary._id);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
@@ -141,18 +166,12 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     return result.toDateString(); // .toISOString();
   }
 
-  onChangePaymentType(value: string) {
-    console.log(value);
-    this.paymentType = value;
-    if (value === 'Cash' || value === 'Cheque') {
-      this.cashPayment = true;
-      this.chequePayment = true;
-      this.withPaystack = false;
-    } else {
-      this.withPaystack = true;
-      this.cashPayment = false;
-      this.chequePayment = false;
-    }
+  onClickShowPayment() {
+    this.showPayment = !this.showPayment;
+  }
+
+  onClickRenewPremium() {
+    this.isForRenewal = !this.isForRenewal;
   }
 
   paymentCancel() {

@@ -120,7 +120,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
 
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+    this._facilityService.findWithOutAuth({
+      query:
+      { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
+    }).then(res => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getLga(this.currentPlatform.address.state);
@@ -247,7 +250,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       streetName: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.street : '', [<any>Validators.required]],
       lga: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.lga : '', [<any>Validators.required]],
       neighbourhood: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.homeAddress.neighbourhood : '', [<any>Validators.required]],
-      mothermaidenname: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.mothersMaidenName : '', [<any>Validators.required]]
+      mothermaidenname: [this.selectedBeneficiary.person != null ? this.selectedBeneficiary.person.mothersMaidenName : '', []]
     });
 
     if (this.selectedBeneficiary._id !== undefined) {
@@ -364,6 +367,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         address.lga = value.lga;
         address.neighbourhood = value.neighbourhood;
         address.state = this.selectedState;
+        delete address.state.cities;
+        delete address.state.lgs;
         address.street = value.streetName;
 
         person.dateOfBirth = value.dob.jsdate;
@@ -444,6 +449,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         address.lga = value.lga;
         address.neighbourhood = value.neighbourhood;
         address.state = this.selectedState;
+        delete address.state.cities;
+        delete address.state.lgs;
         address.street = value.streetName;
 
         person.dateOfBirth = value.dob.jsdate;
@@ -507,11 +514,12 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
             })
           } else {
             this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
-
+              console.log(payload)
               if (payload.statusCode === 200 && payload.error === false) {
+                payload.body.beneficiary.person = payload.body.person;
                 this.selectedBeneficiary = payload.body.beneficiary;
+                this.selectedBeneficiary.person = payload.body.person;
                 this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-                this._systemService.announceBeneficiaryTabNotification('Two');
               }
               this._systemService.off();
             }).catch(err => {
@@ -523,9 +531,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
           this._beneficiaryService.createWithMiddleWare({ person: person, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
 
             if (payload.statusCode === 200 && payload.error === false) {
+              payload.body.beneficiary.person = payload.body.person;
               this.selectedBeneficiary = payload.body.beneficiary;
+              console.log(payload)
               this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-              this._systemService.announceBeneficiaryTabNotification('Two');
             }
             this._systemService.off();
           }).catch(err => {

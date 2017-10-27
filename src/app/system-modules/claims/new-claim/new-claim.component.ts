@@ -64,12 +64,12 @@ export class NewClaimComponent implements OnInit {
   claimItem: Claim = <Claim>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
   SelectedCheckinItemPlan: any = <any>{};
-  packSizes: any = <any>[];
-  symptomLists: any = <any>[];
-  diagnosisLists: any = <any>[];
-  investigationList: any = <any>[];
-  drugList: any = <any>[];
-  procedureList: any = <any>[];
+  packSizes = [];
+  symptomLists = [];
+  diagnosisLists =[];
+  investigationList=[];
+  drugList=[];
+  procedureList=[];
   claimTypesItems: any = <any>[];
   visitTypesItems: any = <any>[];
   symptomItems: any = <any>[];
@@ -217,8 +217,15 @@ export class NewClaimComponent implements OnInit {
 
   _getSelectedCheckinItem(checkinId) {
     this._preAuthorizationService.find({ query: { "checkedInDetails._id": checkinId } }).then((preauth_callback: any) => {
-      if (preauth_callback.data.length > 0) { 
-        
+      if (preauth_callback.data.length > 0) {
+        preauth_callback.data.forEach(element => {
+          element.documentation.forEach(element2 => {
+            for(var i = 0;i<element2.length;i++){
+              this.symptomLists.push(element2[3].clinicalDocumentation);
+              
+            }
+          })
+        });
       }
     })
     this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
@@ -260,6 +267,7 @@ export class NewClaimComponent implements OnInit {
     this._systemService.on();
     this._drugPackSizeService.find({}).then((payload: any) => {
       this.packSizes = payload.data;
+      console.log(this.packSizes);
       this._systemService.off();
     }).catch(err => {
       console.log(err);

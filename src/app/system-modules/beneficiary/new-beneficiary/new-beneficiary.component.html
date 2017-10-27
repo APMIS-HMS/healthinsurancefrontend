@@ -56,11 +56,11 @@
                             <div class="stroke-2" style="display:none;"></div>
                         </div> -->
                     </div>
-                    <div class="nut-label">Confirm</div>
+                    <div class="nut-label">Complete</div>
                 </div>
             </div>
         
-            <div class="btn btn-medium btn-grey-outline" routerLink="/modules/beneficiary/beneficiaries">
+            <div *ngIf="!tab_confirm" class="btn btn-medium btn-grey-outline" routerLink="/modules/beneficiary/beneficiaries">
                 <i class="fa fa-times"></i> CANCEL
             </div>
         </div>
@@ -69,7 +69,7 @@
             <app-new-beneficiary-data></app-new-beneficiary-data>
         </div>
 
-        <div *ngIf="tab_dependants">
+        <div *ngIf="tab_dependants && selectedBeneficiary !== undefined">
             <app-new-beneficiary-dependant [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-dependant>
         </div>
 

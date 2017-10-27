@@ -1,4 +1,4 @@
-<div class="app-content-wrap">
+<div (click)="notifier_hide()" class="app-content-wrap">
     <div class="bar-wrap">
         <div class="sect-a">
             <div (click)="menu_show()" class="menuico">
@@ -26,12 +26,12 @@
 <div class="title-tab">
     <div class="app-content-wrap">
         <div class="bar-wrap">
-            <div class="bar-left">
+            <div (click)="notifier_hide()" class="bar-left">
                 <span class="title">{{ pageInView }}</span>
                 <span class="post-title">- {{ minorPageInView }}</span>
             </div>
             <div class="bar-right">
-                <div class="user-wrap">
+                <div (click)="notifier_hide()" class="user-wrap">
                     <div class="user-img-wrap">
                         <img src="../../../assets/img/users/default.png">
                     </div>
@@ -43,11 +43,26 @@
                 </div>
 
                 <div class="icons-wrap">
-                    <i class="fa fa-bell-o" aria-hidden="true">
+                    <i (click)="notifier_toggle()" class="fa fa-bell-o" aria-hidden="true">
                         <span class="notify-count">3</span>
                     </i>
                 </div>
             </div>
+
+            <ul *ngIf="notifier" class="notify-wrap shadow-b">
+                <li class="notify-item">
+                    <div class="notify-title">Notification Title Here</div>
+                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
+                </li>
+                <li class="notify-item">
+                    <div class="notify-title">Notification Title Here</div>
+                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
+                </li>
+                <li class="notify-item">
+                    <div class="notify-title">Notification Title Here</div>
+                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
