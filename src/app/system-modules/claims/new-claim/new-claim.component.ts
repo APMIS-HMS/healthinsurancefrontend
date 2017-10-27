@@ -276,7 +276,14 @@ export class NewClaimComponent implements OnInit {
           console.log(payload.data[0]);
           this.SelectedCheckinItem.checkedInDetails = payload.data[0];
           this.SelectedCheckinItem.providerFacilityId = payload.data[0].providerFacilityId;
-          // this._policyService.find({ query: { _id: checkinId, $limit: 1 } })
+          let policyId = this._locker.getObject('policyID');
+          console.log(policyId);
+          this.SelectedCheckinItem.policyId={};
+          this.SelectedCheckinItem.policyId.planId={};
+         
+          this._policyService.find({ query: { _id: policyId, $limit: 1 } }).then((payload2:any)=>{
+            this.SelectedCheckinItem.policyId.planId.name = payload2.data[0].planId.planType.name;
+          })
           delete payload.data[0].providerFacilityId;
           console.log(this.SelectedCheckinItem);
           if (this.SelectedCheckinItem.encounterType == "In-Patient") {

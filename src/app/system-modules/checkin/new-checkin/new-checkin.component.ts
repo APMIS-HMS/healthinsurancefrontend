@@ -2,6 +2,7 @@ import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { FormControl } from '@angular/forms';
 import { UploadService } from './../../../services/common/upload.service';
 import { Observable } from 'rxjs/Observable';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PolicyService } from './../../../services/policy/policy.service';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -23,6 +24,7 @@ export class NewCheckinComponent implements OnInit {
 
   constructor(
     private _router: Router,
+    private _locker: CoolLocalStorage,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
@@ -100,14 +102,17 @@ export class NewCheckinComponent implements OnInit {
         this.beneficiaries = [];
         if (res.data.length > 0) {
           res.data.forEach(policy => {
+            console.log(policy._id);
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
+            principal.policyId = policy._id;
             principal.isActive = policy.isActive;
             principal.dependantCount = policy.dependantBeneficiaries.length;
             this.beneficiaries.push(principal);
             policy.dependantBeneficiaries.forEach(innerPolicy => {
               innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+              innerPolicy.beneficiary.policyId = policy._id;
               innerPolicy.beneficiary.isPrincipal = false;
               innerPolicy.beneficiary.hia = policy.hiaId;
               innerPolicy.beneficiary.isActive = policy.isActive;
@@ -133,6 +138,8 @@ export class NewCheckinComponent implements OnInit {
 
   routeBeneficiaryDetails(beneficiary) {
     console.log(beneficiary._id);
+    console.log(beneficiary.policyId);
+    this._locker.setObject('policyID', beneficiary.policyId);
     this._systemService.on();
     this._router.navigate(['/modules/beneficiary/beneficiaries/'+beneficiary._id+'/checkin'])
       .then(payload => {
