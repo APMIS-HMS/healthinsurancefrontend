@@ -5,7 +5,7 @@
     <div class="detail-content">
       <img class="hia-user" src="../../../../assets/img/users/default.png">
       <div class="group-wrap">
-        <div class="item-val">Date of Birth: {{policyObject?.principalBeneficiary.person.dateOfBirth|date}}</div>
+        <div class="item-val">Date of Birth: {{policyObject?.principalBeneficiary.personId.dateOfBirth|date}}</div>
       </div>
       <div class="group-wrap">
         <div class="group-item">
@@ -54,10 +54,10 @@
 
 
   <div class="group-item">
-      <div class="item-val">{{policyObject?.principalBeneficiary.person.title.name}} {{policyObject?.principalBeneficiary.person.lastName}} {{policyObject?.principalBeneficiary.person.firstName}} {{policyObject?.principalBeneficiary.person.otherNames}}</div>
+      <div class="item-val">{{policyObject?.principalBeneficiary.personId.title.name}} {{policyObject?.principalBeneficiary.personId.lastName}} {{policyObject?.principalBeneficiary.personId.firstName}} {{policyObject?.principalBeneficiary.personId.otherNames}}</div>
   </div>
   <div class="group-item">
-      <div class="item-val">{{policyObject?.principalBeneficiary.person.phoneNumber}} </div>
+      <div class="item-val">{{policyObject?.principalBeneficiary.personId.phoneNumber}} </div>
   </div>
 
 
