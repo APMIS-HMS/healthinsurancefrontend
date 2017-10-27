@@ -133,7 +133,7 @@ export class NewProviderComponent implements OnInit {
       it_position: [this.facility != null ? this.facility.itContact.position : '', [<any>Validators.required]],
       it_email: [this.facility != null ? this.facility.itContact.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       type: [this.facility != null ? this.facility.provider.facilityType : '', [<any>Validators.required]],
-      lasrraId: [this.facility != null ? this.facility.provider.lasrraId : '', [<any>Validators.required]],
+      // providerId: [this.facility != null ? this.facility.provider.providerId : '', [<any>Validators.required]],
       hefeemaNumber: [this.facility != null ? this.facility.provider.hefeemaNumber : '', [<any>Validators.required]],
       hefeemaStatus: [this.facility != null ? this.facility.provider.hefeemaStatus : '', [<any>Validators.required]],
       bank: [this.facility != null ? this.facility.bankDetails.bank : '', [<any>Validators.required]],
@@ -406,7 +406,7 @@ export class NewProviderComponent implements OnInit {
     provider.facilityGrade = this.providerFormGroup.controls['grade'].value;
     provider.hefeemaNumber = this.providerFormGroup.controls['hefeemaNumber'].value;
     provider.hefeemaStatus = this.providerFormGroup.controls['hefeemaStatus'].value;
-    provider.lasrraId = this.providerFormGroup.controls['lasrraId'].value;
+    // provider.lasrraId = this.providerFormGroup.controls['lasrraId'].value;
     provider.comment = this.providerFormGroup.controls['comment'].value;
     return provider;
   }
