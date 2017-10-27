@@ -354,6 +354,7 @@ export class CheckinDetailsComponent implements OnInit {
     this._router.navigate(['/modules/pre-auth/new', this.selectedCheckIn._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     })
   }
