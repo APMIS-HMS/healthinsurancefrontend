@@ -53,10 +53,10 @@
         </thead>
 
         <tbody class="tbody">
-            <tr class="tr" *ngIf="providers.length === 0 && !loading">
+            <tr class="tr" *ngIf="authorizations.length === 0 && !loading">
                 <td class="text-center" colspan="12">No data available in table</td>
             </tr>
-            <tr class="tr" *ngIf="providers.length === 0 && loading">
+            <tr class="tr" *ngIf="authorizations.length === 0 && loading">
                 <td class="text-center" colspan="12">
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
@@ -91,8 +91,8 @@
         </tbody>
     </table>
 
-    <div class="list-buttom">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+    <div class="list-buttom" *ngIf="authorizations.length > 0">
+        <div class="list-summary">Showing 1 to {{ authorizations.length }} of {{ authorizations.length }} entries (filtered from {{ authorizations.length }} total entries)</div>
         <div class="btn btn-medium btn-yellow">Load More</div>
     </div>
 </div>

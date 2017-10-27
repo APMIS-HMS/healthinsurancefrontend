@@ -17,6 +17,7 @@ export class ListReferalsComponent implements OnInit {
   filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
+  loading: boolean = true;
 
   authorizations:any[] = [];
   user:any;
@@ -49,6 +50,7 @@ export class ListReferalsComponent implements OnInit {
           ]
         }
       }).then((payload: any) => {
+        this.loading = false;
         this.authorizations = payload.data;
         this._systemService.off();
       }).catch(err => {
@@ -64,13 +66,16 @@ export class ListReferalsComponent implements OnInit {
           ]
         }
       }).then((payload: any) => {
+        this.loading = false;
         this.authorizations = payload.data;
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
+    } else {
+      console.log('You are not required to view this content...');
+      this.loading = false;
     }
-
   }
 
   navigateDetail(auth) {
