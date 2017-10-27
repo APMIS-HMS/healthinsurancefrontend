@@ -74,7 +74,7 @@ export class FacilityService {
     let host = this._restService.getHost();
     let path = host + '/api/send-sms';
     return request
-      .put(path)
+      .post(path)
       .send(body);
   }
 
