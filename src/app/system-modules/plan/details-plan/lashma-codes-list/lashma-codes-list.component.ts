@@ -16,6 +16,10 @@ export class LashmaCodesListComponent implements OnInit {
   tab_investigation = false;
   tab_procedure = false;
   tab_visit = false;
+  drugLoading = true;
+  procedureLoading = true;
+  investigationLoading = true;
+  visitTypeLoading = true;
 
   constructor(
     private _systemService: SystemModuleService,
@@ -27,13 +31,53 @@ export class LashmaCodesListComponent implements OnInit {
 
   ngOnInit() {
     this._getDrugs();
+    this._getProcedures();
+    this._getInvestigations();
+    this._getVisitTypes();
   }
 
   private _getDrugs() {
     this._systemService.on();
     this._drugService.find({}).then((res: any) => {
       console.log(res);
-      this.drugs = res;
+      this.drugLoading = false;
+      this.drugs = res.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  private _getProcedures() {
+    this._systemService.on();
+    this._procedureService.find({}).then((res: any) => {
+      console.log(res);
+      this.procedureLoading = false;
+      this.procedures = res.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  private _getInvestigations() {
+    this._systemService.on();
+    this._investigationService.find({}).then((res: any) => {
+      console.log(res);
+      this.investigationLoading = false;
+      this.investigations = res.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  private _getVisitTypes() {
+    this._systemService.on();
+    this._visitTypeService.find({}).then((res: any) => {
+      console.log(res);
+      this.visitTypeLoading = false;
+      this.visitTypes = res.data;
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
