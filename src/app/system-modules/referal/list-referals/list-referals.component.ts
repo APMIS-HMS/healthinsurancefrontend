@@ -33,18 +33,19 @@ export class ListReferalsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Referral List');
     this._headerEventEmitter.setMinorRouteUrl('All Referrals');
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
     this._getReferrals();
   }
+
   _getReferrals() {
-   
-    if(this.user.userType.name === 'Provider'){
+    if (!!this.user.userType && this.user.userType.name === 'Provider') {
       this._systemService.on();
       this._referralService.find({
-        query:{
+        query: {
           $or: [
             { 'referingProvider._id': this.user.facilityId._id },
-            { 'destinationProvider._id':this.user.facilityId._id },
-            { 'documentation.destinationProvider._id':this.user.facilityId._id }
+            { 'destinationProvider._id': this.user.facilityId._id },
+            { 'documentation.destinationProvider._id': this.user.facilityId._id }
           ]
         }
       }).then((payload: any) => {
@@ -53,11 +54,11 @@ export class ListReferalsComponent implements OnInit {
       }).catch(err => {
         this._systemService.off();
       });
-    }else if(this.user.userType.name === 'Health Insurance Agent'){
+    } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
       console.log(this.user.facilityId._id)
       this._systemService.on();
       this._referralService.find({
-        query:{
+        query: {
           $or: [
             { 'policyId.hiaId._id': this.user.facilityId._id }
           ]
@@ -71,12 +72,12 @@ export class ListReferalsComponent implements OnInit {
     }
 
   }
-  
-  navigateDetail(auth) {
-    this._router.navigate(['/modules/referal/referals', auth._id]).then(payload =>{
 
-    }).catch(err =>{
-      console.log(err)
-    })
+  navigateDetail(auth) {
+    this._router.navigate(['/modules/referal/referals', auth._id]).then(payload => {
+
+    }).catch(err => {
+      console.log(err);
+    });
   }
 }

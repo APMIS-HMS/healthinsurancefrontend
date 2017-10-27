@@ -54,18 +54,18 @@
 
         <tbody class="tbody">
             <tr *ngFor="let referral of authorizations" class="tr">
-                <td class="td">{{referral.checkedInDetails?.beneficiaryObject.platformOwnerNumber}}</td>
-                <td class="td">{{referral.checkedInDetails?.beneficiaryObject.personId.lastName}} {{referral.checkedInDetails?.beneficiaryObject.personId.firstName}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.personId?.lastName}} {{referral.checkedInDetails?.beneficiaryObject?.personId?.firstName}}</td>
                 <td class="td">{{referral.timeOfRequest|date:'short'}}</td>
                 <td class="td">{{referral.authorizationCode}}</td>
-                <td class="td">{{referral.referingProvider.name}}</td>
-                <td class="td">{{referral.destinationProvider.name}}</td>
+                <td class="td">{{referral.referingProvider?.name}}</td>
+                <td class="td">{{referral.destinationProvider?.name}}</td>
                 <td class="td">
                     <span *ngIf="referral.hiaApproved" class="green">Active</span>
                     <span *ngIf="!referral.hiaApproved" class="red">Active</span>
                 </td>
                 <td class="td">
-                        <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
                     {{(referral.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
                 </td>
                 <td class="td">Emergency</td>
@@ -76,7 +76,7 @@
                         <div class="tip-content">{{referral.documentation[0].document[1].clinicalDocumentation}}</div>
                     </div>
                 </td>
-                <td class="td td-icos"(click)="navigateDetail(referral)">
+                <td class="td td-icos" (click)="navigateDetail(referral)">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>
