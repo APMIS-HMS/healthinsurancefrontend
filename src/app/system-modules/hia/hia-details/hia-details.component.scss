@@ -19,6 +19,10 @@
 .left-wrap {
     display: flex;
     justify-content: flex-start;
+    width: 80%;
+}
+.right-wrap{
+    width: 20%;
 }
 
 .detail-item {
@@ -36,7 +40,6 @@
 }
 
 .hia-logo {
-    width: 200px;
     margin: 10px 0;
 }
 
