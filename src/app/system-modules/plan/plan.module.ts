@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { PlanService, PlanTypeService } from '../../services/index';
+import { PlanService, PlanTypeService, DrugService, InvestigationService, VisitTypeService, ProcedureService } from '../../services/index';
 
 import { DetailsPlanComponent } from './details-plan/details-plan.component';
 import { ListPlansComponent } from './list-plans/list-plans.component';
@@ -20,6 +20,6 @@ import { LashmaCodesListComponent } from './details-plan/lashma-codes-list/lashm
     planRoutes
 ],
   declarations: [PlanComponent, DetailsPlanComponent, ListPlansComponent, NewPlanComponent, LashmaCodesListComponent],
-  providers: [PlanService, PlanTypeService]
+  providers: [PlanService, PlanTypeService, DrugService, InvestigationService, VisitTypeService, ProcedureService]
 })
 export class PlanModule { } 

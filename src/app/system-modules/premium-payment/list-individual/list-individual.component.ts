@@ -69,7 +69,6 @@ export class ListIndividualComponent implements OnInit {
         policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
         this.individualPolicies.push(policy);
       });
-      // this.individualPolicies = res.data;
       this._systemService.off();
     }).catch(error => {
       console.log(error);

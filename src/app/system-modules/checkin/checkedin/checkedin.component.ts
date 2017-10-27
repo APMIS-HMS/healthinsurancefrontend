@@ -26,7 +26,7 @@ export class CheckedinComponent implements OnInit {
   statusControl = new FormControl();
 
   checkedIns: CheckIn[] = [];
-  loading: boolean = true;
+  loading: boolean = false;
   user: any;
 
   constructor(
