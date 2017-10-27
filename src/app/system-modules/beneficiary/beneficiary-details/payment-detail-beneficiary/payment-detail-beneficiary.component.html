@@ -28,10 +28,12 @@
             </div>
         </div> -->
     </div>
-    <div class="align-chac">
+    <div style="width:98%;text-align:right;padding:10px;">
+        <button (click)="onClickShowPayment();" class="btn btn-medium btn-blue cta show-payment">Pay Premium</button>
+    </div>
+    <div class="align-chac" *ngIf="showPayment">
         <div class="chac-box">
             <form [formGroup]="" novalidate>
-
                 <div class="frm-inner-title">Health Insurance Agent</div>
                 <div class="frm-item-wrap">
                     <label class="label">HIA</label>
@@ -143,9 +145,9 @@
             <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
         </div>
     </div>
-    <div>
+    <div style="padding: 10px 10px 30px 10px;">
         <div class="text-center" style="font-weight: bold">
-            <span>List of Previous History</span>
+            <span>Payment History</span>
         </div>
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
@@ -184,8 +186,8 @@
         </table>
     </div>
 
-    <div class="list-buttom">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+    <div class="list-buttom" *ngIf="previousPolicies.length > 0">
+        <div class="list-summary">Showing 1 to {{ previousPolicies.length }} of {{ previousPolicies.length }} entries (filtered from {{ previousPolicies.length }} total entries)</div>
         <div class="btn btn-medium btn-yellow">Load More</div>
     </div>
 
