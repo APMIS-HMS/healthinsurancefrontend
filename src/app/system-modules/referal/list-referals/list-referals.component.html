@@ -53,6 +53,14 @@
         </thead>
 
         <tbody class="tbody">
+            <tr class="tr" *ngIf="providers.length === 0 && !loading">
+                <td class="text-center" colspan="12">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="providers.length === 0 && loading">
+                <td class="text-center" colspan="12">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
             <tr *ngFor="let referral of authorizations" class="tr">
                 <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
                 <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.personId?.lastName}} {{referral.checkedInDetails?.beneficiaryObject?.personId?.firstName}}</td>
