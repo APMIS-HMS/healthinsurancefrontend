@@ -195,7 +195,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.drugFormGroup = this._fb.group({
       drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : ''],
     });
 
     this.drugFormGroup.controls.drug.valueChanges
@@ -374,10 +374,11 @@ export class PreAuthorizationNewComponent implements OnInit {
         }
       }
     ));
-
-
+    
     Observable.forkJoin([policy$]).subscribe((results: any) => {
+      console.log(results);
       let policyResult = results[0];
+      console.log(policyResult);
       if (policyResult.data.length > 0) {
         this.selectedPolicy = policyResult.data[0];
         this.preAuthFormGroup.controls.hia.setValue(this.selectedPolicy.hiaId.name);
