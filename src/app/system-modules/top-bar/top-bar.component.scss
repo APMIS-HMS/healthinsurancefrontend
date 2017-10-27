@@ -99,6 +99,7 @@
       padding: 20px 0;
       max-height: 70vh;
       overflow-y: auto;
+      z-index: 2;
   }
   .notify-item{
       cursor: pointer;
@@ -119,4 +120,6 @@
   }
   .notify-content{
       padding-bottom: 10px;
+      line-height: 1.5;
+      font-style: italic;
   }
