@@ -77,7 +77,8 @@ export class ListBeneficiaryComponent implements OnInit {
     this._policyService.find({
       query: {
         'platformOwnerId._id': platformId,
-        $limit:200
+        $limit: 200,
+        $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
       this.loading = false;
