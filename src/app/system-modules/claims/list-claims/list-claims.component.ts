@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ClaimService } from './../../../services/common/claim.service';
+import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-list-claims',
@@ -15,11 +16,17 @@ export class ListClaimsComponent implements OnInit {
   hospitalControl = new FormControl();
   planControl = new FormControl();
   listOfClaims: any = <any>[];
+  loading: boolean = true;
   user: any;
 
-  constructor(private _claimService: ClaimService, private _locker: CoolLocalStorage) { }
+  constructor(private _claimService: ClaimService,
+    private _locker: CoolLocalStorage,
+    private _headerEventEmitter: HeaderEventEmitterService
+  ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Claim List');
+    this._headerEventEmitter.setMinorRouteUrl('List of all claims');
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.user._id);
     this._claimService.find({
@@ -48,6 +55,7 @@ export class ListClaimsComponent implements OnInit {
         }
 
       });
+      this.loading = false;
       this.listOfClaims = payload.data;
       console.log(this.listOfClaims);
     });

@@ -1,83 +1,95 @@
 <div class="list-search-wrap">
-  <div class="search-wrap">
-      <label class="label-xx">Search:</label>
-      <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
-      <i class="fa fa-search" aria-hidden="true"></i>
-  </div>
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
 
-  <!-- <div class="btn btn-medium btn-blue"  routerLink="/modules/claim/new">
+    <!-- <div class="btn btn-medium btn-blue"  routerLink="/modules/claim/new">
       <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD CLAIMS
   </div> -->
 </div>
 
 <div class="shadow-RB">
-  <div class="list-filter-wrap">
-      <div class="label-xx">Filters:</div>
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
 
-      <div class="input-wrap">
-          <label>Responsible HIA</label>
-          <select [formControl]="filterHiaControl" class="form-control">
+        <div class="input-wrap">
+            <label>Responsible HIA</label>
+            <select [formControl]="filterHiaControl" class="form-control">
             <option value="All" selected>All</option>
           </select>
-      </div>
+        </div>
 
-      <div class="input-wrap">
-          <label>Hospital Name</label>
-          <select [formControl]="hospitalControl">
+        <div class="input-wrap">
+            <label>Hospital Name</label>
+            <select [formControl]="hospitalControl">
             <option>All</option>
           </select>
-      </div>
+        </div>
 
-      <div class="input-wrap">
-          <label>Health Care Plan</label>
-          <select [formControl]="planControl">
+        <div class="input-wrap">
+            <label>Health Care Plan</label>
+            <select [formControl]="planControl">
             <option>All</option>
           </select>
-      </div>
+        </div>
 
-      <div class="btn btn-medium btn-blue-outline">RESET</div>
-  </div>
+        <div class="btn btn-medium btn-blue-outline">RESET</div>
+    </div>
 
-  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-      <thead class="thead">
-          <tr class="tr">
-              <th class="th">LASHMA ID</th>
-              <th class="th">Patient Name</th>
-              <th class="th">Date</th>
-              <th class="th">Responsible HIA</th>
-              <th class="th">Health Care Plan</th>
-              <th class="th">Hospital Name</th>
-              <th class="th">Status</th>
-              <th class="th">Reason</th>
-              <th class="th"></th>
-          </tr>
-      </thead>
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">No</th>
+                <th class="th">LASHMA ID</th>
+                <th class="th">Patient Name</th>
+                <th class="th">Date</th>
+                <th class="th">Responsible HIA</th>
+                <th class="th">Health Care Plan</th>
+                <th class="th">Hospital Name</th>
+                <th class="th">Status</th>
+                <th class="th">Reason</th>
+                <th class="th"></th>
+            </tr>
+        </thead>
 
-      <tbody class="tbody">
-          <tr class="tr" *ngFor="let item of listOfClaims">
-              <td class="td">{{item.checkedinDetail?.beneficiaryObject?.platformOwnerNumber}}</td>
-              <td class="td">{{item.checkedinDetail?.beneficiaryObject?.personId?.firstName}} {{item.checkedinDetail?.beneficiaryObject?.personId?.lastName}}</td>
-              <td class="td">{{item.dateClaimCreated|date}}</td>
-              <td class="td">{{item?.checkedinDetail?.policyObject?.hiaId?.name}}</td>
-              <td class="td">{{item?.checkedinDetail?.policyObject?.planId?.name}}</td>
-              <td class="td">{{item?.checkedinDetail?.providerFacilityId?.name}}</td>
-              <td class="td"><span class="green">{{item?.status}}</span></td>
-              <td class="td">
-                <div class="tooltip">
-                  <div class="tip-title"></div>
-                  <div class="tip-content"></div>
-                </div>
-              </td>
-              <td class="td td-icos" routerLink="/modules/claim/claims/{{item._id}}">
-                  <i class="fa fa-info fa-circle"></i>
-                  <i class="fa fa-chevron-right"></i>
-              </td>
-          </tr>
-      </tbody>
-  </table>
+        <tbody class="tbody">
+            <tr class="tr" *ngIf="listOfClaims.length === 0 && !loading">
+                <td class="text-center" colspan="14">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="listOfClaims.length === 0 && loading">
+                <td class="text-center" colspan="14">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
+            <tr class="tr" *ngFor="let item of listOfClaims; let i=index;">
+                <td class="td">{{ i+1 }}</td>
+                <td class="td">{{item.checkedinDetail?.beneficiaryObject?.platformOwnerNumber}}</td>
+                <td class="td">{{item.checkedinDetail?.beneficiaryObject?.personId?.firstName}} {{item.checkedinDetail?.beneficiaryObject?.personId?.lastName}}</td>
+                <td class="td">{{item.dateClaimCreated|date}}</td>
+                <td class="td">{{item?.checkedinDetail?.policyObject?.hiaId?.name}}</td>
+                <td class="td">{{item?.checkedinDetail?.policyObject?.planId?.name}}</td>
+                <td class="td">{{item?.checkedinDetail?.providerFacilityId?.name}}</td>
+                <td class="td"><span class="green">{{item?.status}}</span></td>
+                <td class="td">
+                    <div class="tooltip">
+                        <div class="tip-title"></div>
+                        <div class="tip-content"></div>
+                    </div>
+                </td>
+                <td class="td td-icos" routerLink="/modules/claim/claims/{{item._id}}">
+                    <i class="fa fa-info fa-circle"></i>
+                    <i class="fa fa-chevron-right"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-  <div class="list-buttom">
-      <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-      <div class="btn btn-medium btn-yellow">Load More</div>
-  </div>
+    <div class="list-buttom">
+        <div *ngIf="listOfClaims.length > 0">
+            <div class="list-summary">Showing 1 to {{ listOfClaims.length }} of {{ listOfClaims.length }} entries (filtered from {{ listOfClaims.length }} total entries)</div>
+            <div class="btn btn-medium btn-yellow">Load More</div>
+        </div>
+    </div>
 </div>
