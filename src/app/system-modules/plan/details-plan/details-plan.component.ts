@@ -21,14 +21,13 @@ export class DetailsPlanComponent implements OnInit {
 	premiumsearchControl = new FormControl();
 
 	tab_hias = true;
-	tab_premiums = false;
 	tab_drugs = false;
 	tab_tests = false;
 	tab_procedures = false;
 	tab_diagnosis = false;
 	tab_detail = false;
 
-	selectedPlan:any;
+	selectedPlan: any;
 
 	constructor(
 		private _toastr: ToastsManager,
@@ -46,8 +45,8 @@ export class DetailsPlanComponent implements OnInit {
 	ngOnInit() {
 		this._headerEventEmitter.setRouteUrl('Plan Details');
 		this._headerEventEmitter.setMinorRouteUrl('View Plan Details');
-		this._route.params.subscribe(param =>{
-			if(param.id !== undefined){
+		this._route.params.subscribe(param => {
+			if (param.id !== undefined) {
 				this._getPlan(param.id);
 			}
 		})
@@ -57,6 +56,7 @@ export class DetailsPlanComponent implements OnInit {
 		this._systemService.on();
 		this._planService.get(id, {}).then((payload: any) => {
 			this.selectedPlan = payload;
+			console.log(this.selectedPlan);
 			this._systemService.off();
 		}).catch(err => {
 			this._systemService.off();
@@ -67,36 +67,39 @@ export class DetailsPlanComponent implements OnInit {
 		this._router.navigate(['/modules/plan/new', plan._id]).then(res => {
 		  this._systemService.off();
 		}).catch(err => {
-		  console.log(err)
+		  console.log(err);
 		  this._systemService.off();
 		});
 	  }
 
 	navigateNewPlan() {
-		this._router.navigate(['/modules/plan/new']);
+		this._systemService.on();
+		this._router.navigate(['/modules/plan/new']).then(res => {
+			this._systemService.off();
+		}).catch(err => {
+			this._systemService.off();
+		});
+	}
+	navigate() {
+		this._systemService.on();
+		this._router.navigate(['/modules/plan/plans']).then(res => {
+			this._systemService.off();
+		}).catch(err => {
+			this._systemService.off();
+		});
 	}
 
 	tabHia_click() {
 		this.tab_hias = true;
-		this.tab_premiums = false;
 		this.tab_drugs = false;
 		this.tab_tests = false;
 		this.tab_procedures = false;
 		this.tab_diagnosis = false;
 		this.tab_detail = false;
 	}
-	tabPremiums_click() {
-		this.tab_hias = false;
-		this.tab_premiums = true;
-		this.tab_drugs = false;
-		this.tab_tests = false;
-		this.tab_procedures = false;
-		this.tab_diagnosis = false;
-		this.tab_detail = false;
-	}
+
 	tabDrugs_click() {
 		this.tab_hias = false;
-		this.tab_premiums = false;
 		this.tab_drugs = true;
 		this.tab_tests = false;
 		this.tab_procedures = false;
@@ -105,7 +108,6 @@ export class DetailsPlanComponent implements OnInit {
 	}
 	tabTests_click() {
 		this.tab_hias = false;
-		this.tab_premiums = false;
 		this.tab_drugs = false;
 		this.tab_tests = true;
 		this.tab_procedures = false;
@@ -114,7 +116,6 @@ export class DetailsPlanComponent implements OnInit {
 	}
 	tabProcedures_click() {
 		this.tab_hias = false;
-		this.tab_premiums = false;
 		this.tab_drugs = false;
 		this.tab_tests = false;
 		this.tab_procedures = true;
@@ -123,7 +124,6 @@ export class DetailsPlanComponent implements OnInit {
 	}
 	tabDiagnosis_click() {
 		this.tab_hias = false;
-		this.tab_premiums = false;
 		this.tab_drugs = false;
 		this.tab_tests = false;
 		this.tab_procedures = false;
@@ -132,7 +132,6 @@ export class DetailsPlanComponent implements OnInit {
 	}
 	tabDetail_click() {
 		this.tab_hias = false;
-		this.tab_premiums = false;
 		this.tab_drugs = false;
 		this.tab_tests = false;
 		this.tab_procedures = false;

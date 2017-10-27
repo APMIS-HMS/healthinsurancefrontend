@@ -110,7 +110,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     private _policyService: PolicyService,
     private _toastr: ToastsManager,
     private _locker: CoolLocalStorage,
-    private _preAuthorizationService:PreAuthorizationService
+    private _preAuthorizationService: PreAuthorizationService
   ) { }
 
   ngOnInit() {
@@ -170,7 +170,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       preAuthorizationNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       docName: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      docUnit:[this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      docUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
     });
 
     this.symptomFormGroup = this._fb.group({
@@ -359,23 +359,21 @@ export class PreAuthorizationNewComponent implements OnInit {
 
   _getPolicy() {
     this._systemService.on();
-    let policy$ = Observable.fromPromise(this._policyService.find(
+    this._policyService.find(
       {
         query: {
           $and: [
             { isActive: true },
             {
               $or: [
-                { 'principalBeneficiary._id': this.selectedCheckIn.beneficiaryId },
+                { 'principalBeneficiary': this.selectedCheckIn.beneficiaryId },
                 { 'dependantBeneficiaries.beneficiary._id': this.selectedCheckIn.beneficiaryId }
               ]
             }
           ]
         }
       }
-    ));
-    
-    Observable.forkJoin([policy$]).subscribe((results: any) => {
+    ).then((results: any) => {
       console.log(results);
       let policyResult = results[0];
       console.log(policyResult);
@@ -425,7 +423,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       this._systemService.off();
     })
   }
-  
+
 
   removeComplain(complain, i) {
     this.complaintLists.splice(i);
@@ -478,8 +476,8 @@ export class PreAuthorizationNewComponent implements OnInit {
         "drug": typeof (this.selectedDrug) === 'object' ? this.selectedDrug : name.value,
         "unit": unit.value,
         "quantity": quantity.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.drugFormGroup.controls.drug.reset();
       unit.reset();
@@ -496,8 +494,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     if (name.valid) {
       this.investigationList.push({
         "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.investigationFormGroup.controls.services.reset();
     } else {
@@ -509,8 +507,8 @@ export class PreAuthorizationNewComponent implements OnInit {
     if (name.valid) {
       this.procedureList.push({
         "procedure": typeof (this.selectedProcedure) === 'object' ? this.selectedProcedure : name.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.procedureFormGroup.controls.procedures.reset();
     } else {
@@ -525,8 +523,8 @@ export class PreAuthorizationNewComponent implements OnInit {
       this.diagnosisLists.push({
         "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
         "diagnosisType": diagnosisType.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.diagnosisFormGroup.controls.diagnosis.reset();
       diagnosisType.reset();
@@ -545,8 +543,8 @@ export class PreAuthorizationNewComponent implements OnInit {
         "symptom": typeof (this.selectedComplain) === 'object' ? this.selectedComplain : name.value,
         "duration": duration.value,
         "unit": unit.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       name.reset();
       duration.reset(1);
@@ -568,16 +566,11 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   send() {
-    console.log(this.preAuthFormGroup.valid);
-    console.log(this.preAuthFormGroup);
     let counter = 0;
     try {
       this._systemService.on();
       if (this.preAuthFormGroup.valid) {
-        console.log(this.complaintLists);
-        console.log(this.procedureList);
-  
-  
+
         let preAuthDoc: PreAuthorizationDocument = <PreAuthorizationDocument>{};
         preAuthDoc.approvedStatus = this.requestStatus[0];
         preAuthDoc.document = [];
@@ -586,113 +579,113 @@ export class PreAuthorizationNewComponent implements OnInit {
           <Document>{
             type: "Clinical Findings",
             clinicalDocumentation: this.preAuthFormGroup.controls.clinicalNote.value,
-             approvedStatus:this.requestStatus[0],
-             order:2
+            approvedStatus: this.requestStatus[0],
+            order: 2
           }
         );
         preAuthDoc.document.push(
           <Document>{
             type: "Reason for Request",
             clinicalDocumentation: this.preAuthFormGroup.controls.requestReason.value,
-            approvedStatus:this.requestStatus[0],
-            order:7
+            approvedStatus: this.requestStatus[0],
+            order: 7
           }
         );
-  
+
         preAuthDoc.document.push(
           <Document>{
             type: "Pre Authorization Note",
             clinicalDocumentation: this.preAuthFormGroup.controls.preAuthorizationNote.value,
-            approvedStatus:this.requestStatus[0],
-            order:8
+            approvedStatus: this.requestStatus[0],
+            order: 8
           }
         )
-  
+
         //note ends here
         //others
-  
+
         if (this.complaintLists.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Symptoms",
               clinicalDocumentation: this.complaintLists,
-              approvedStatus:this.requestStatus[0],
-              order:1
+              approvedStatus: this.requestStatus[0],
+              order: 1
             }
           );
         }
-  
+
         if (this.procedureList.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Procedures",
               clinicalDocumentation: this.procedureList,
-              approvedStatus:this.requestStatus[0],
-              order:6
+              approvedStatus: this.requestStatus[0],
+              order: 6
             }
           );
         }
-  
+
         if (this.investigationList.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Investigations",
               clinicalDocumentation: this.investigationList,
-              approvedStatus:this.requestStatus[0],
-              order:4
+              approvedStatus: this.requestStatus[0],
+              order: 4
             }
           );
         }
-  
+
         if (this.diagnosisLists.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Diagnosis",
               clinicalDocumentation: this.diagnosisLists,
-              approvedStatus:this.requestStatus[0],
-              order:3
+              approvedStatus: this.requestStatus[0],
+              order: 3
             }
           );
         }
-  
+
         if (this.drugList.length > 0) {
           preAuthDoc.document.push(
             <Document>{
               type: "Drugs",
               clinicalDocumentation: this.drugList,
-              approvedStatus:this.requestStatus[0],
-              order:5
+              approvedStatus: this.requestStatus[0],
+              order: 5
             }
           );
         }
-  
-  
-  
+
+
+
         let authorizationObject = <Authorization>{};
-        authorizationObject.checkedInDetails = this.selectedCheckIn;
+        authorizationObject.checkedInDetails = this.selectedCheckIn._id;
         authorizationObject.dateOfRequest = this.preAuthFormGroup.controls.requestDate.value.jsdate;
         authorizationObject.documentation = [];
         authorizationObject.documentation.push(preAuthDoc);
-        authorizationObject.policyId = this.selectedPolicy;
-  
+        authorizationObject.policyId = this.selectedPolicy._id;
+
         authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
         authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;
         authorizationObject.medicalPersonelUnit = this.preAuthFormGroup.controls.docUnit.value;
-        authorizationObject.providerFacilityId = this.user.facilityId;
+        authorizationObject.providerFacilityId = this.user.facilityId._id;
         authorizationObject.visityClassId = this.preAuthFormGroup.controls.visitClass.value;
         authorizationObject.approvedStatus = this.requestStatus[0];
-  
+
         console.log(authorizationObject);
-        this._preAuthorizationService.create(authorizationObject).then(payload =>{
+        this._preAuthorizationService.create(authorizationObject).then(payload => {
           console.log(payload);
           this._router.navigate(['/modules/pre-auth/pre-authorizations']);
           this._systemService.off();
-        }).catch(err =>{
+        }).catch(err => {
           this._systemService.off();
           console.log(err);
         })
-  
-  
+
+
       } else {
         this._systemService.off();
         this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
@@ -719,7 +712,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       this._systemService.off();
     });
   }
- 
+
   tabComplaints_click() {
     this.tab_complaints = true;
     this.tab_diagnosis = false;
@@ -785,18 +778,18 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.tab_clinicalNotes = true;
   }
 
-  newAuth_click(){
+  newAuth_click() {
     this.newAuth = true;
     this.newAuthConfirm = false;
   }
-  newAuthConfirm_click(){
+  newAuthConfirm_click() {
     this.newAuth = false;
     this.newAuthConfirm = true;
   }
   modal_close() {
     this.showCodes = false;
   }
-  pop_codes(){
+  pop_codes() {
     this.showCodes = true;
   }
 }

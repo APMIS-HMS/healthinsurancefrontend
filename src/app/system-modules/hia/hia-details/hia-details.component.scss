@@ -14,7 +14,6 @@
     padding: 20px;
     box-sizing: border-box;
     font-size: $font-x2;
-    min-height: 500px;
 }
 
 .left-wrap {
@@ -80,6 +79,12 @@
 .item-label {
     font-weight: bold;
     margin-right: 10px;
+}
+
+.item-label-x2 {
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 14px;
 }
 
 .item-val {

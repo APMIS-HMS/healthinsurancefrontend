@@ -53,19 +53,27 @@
         </thead>
 
         <tbody class="tbody">
+            <tr class="tr" *ngIf="authorizations.length === 0 && !loading">
+                <td class="text-center" colspan="12">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="authorizations.length === 0 && loading">
+                <td class="text-center" colspan="12">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
             <tr *ngFor="let referral of authorizations" class="tr">
-                <td class="td">{{referral.checkedInDetails?.beneficiaryObject.platformOwnerNumber}}</td>
-                <td class="td">{{referral.checkedInDetails?.beneficiaryObject.personId.lastName}} {{referral.checkedInDetails?.beneficiaryObject.personId.firstName}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.personId?.lastName}} {{referral.checkedInDetails?.beneficiaryObject?.personId?.firstName}}</td>
                 <td class="td">{{referral.timeOfRequest|date:'short'}}</td>
                 <td class="td">{{referral.authorizationCode}}</td>
-                <td class="td">{{referral.referingProvider.name}}</td>
-                <td class="td">{{referral.destinationProvider.name}}</td>
+                <td class="td">{{referral.referingProvider?.name}}</td>
+                <td class="td">{{referral.destinationProvider?.name}}</td>
                 <td class="td">
                     <span *ngIf="referral.hiaApproved" class="green">Active</span>
                     <span *ngIf="!referral.hiaApproved" class="red">Active</span>
                 </td>
                 <td class="td">
-                        <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
                     {{(referral.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
                 </td>
                 <td class="td">Emergency</td>
@@ -76,7 +84,7 @@
                         <div class="tip-content">{{referral.documentation[0].document[1].clinicalDocumentation}}</div>
                     </div>
                 </td>
-                <td class="td td-icos"(click)="navigateDetail(referral)">
+                <td class="td td-icos" (click)="navigateDetail(referral)">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>
@@ -84,7 +92,9 @@
     </table>
 
     <div class="list-buttom">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-        <div class="btn btn-medium btn-yellow">Load More</div>
+        <div *ngIf="authorizations.length > 0">
+            <div class="list-summary">Showing 1 to {{ authorizations.length }} of {{ authorizations.length }} entries (filtered from {{ authorizations.length }} total entries)</div>
+            <div class="btn btn-medium btn-yellow">Load More</div>
+        </div>
     </div>
 </div>

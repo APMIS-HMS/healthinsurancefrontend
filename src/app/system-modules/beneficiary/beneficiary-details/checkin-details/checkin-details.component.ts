@@ -100,11 +100,28 @@ export class CheckinDetailsComponent implements OnInit {
     this._systemService.on();
 
     let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
-    let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary._id': routeId } }));
+    let policy$ = Observable.fromPromise(this._policyService.find({
+      query:
+      {
+        $or: [
+          { principalBeneficiary: routeId },
+          { 'dependantBeneficiaries.beneficiary._id': routeId },
+        ]
+      }
+    }));
+
+    // query: {
+    //   $or: [
+    //     { platformOwnerNumber: { $regex: value, '$options': 'i' } },
+    //     { 'personId.lastName': { $regex: value, '$options': 'i' } },
+    //     { 'personId.firstName': { $regex: value, '$options': 'i' } },
+    //   ]
+    // }
 
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
+      console.log(results)
       // if (this.isCheckIn) {
       //   this.tabCheckin_click();
       // }
@@ -192,7 +209,7 @@ export class CheckinDetailsComponent implements OnInit {
     model.providerFacilityId = this.user.facilityId;
     model.otp = {};
     if (model.principalBeneficiaryId === model.beneficiaryId) {
-      model.otp.phoneNumbers = [this.beneficiary.person.phoneNumber];
+      model.otp.phoneNumbers = [this.beneficiary.personId.phoneNumber];
     }
 
     this._checkInService.create(model).then((payload: any) => {
@@ -230,7 +247,7 @@ export class CheckinDetailsComponent implements OnInit {
   getAge() {
     return differenceInYears(
       new Date(),
-      this.beneficiary.person.dateOfBirth
+      this.beneficiary.personId.dateOfBirth
     )
   }
   compare(l1: any, l2: any) {
