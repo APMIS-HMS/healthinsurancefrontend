@@ -114,6 +114,7 @@ export class NewCheckinComponent implements OnInit {
               this.beneficiaries.push(innerPolicy.beneficiary);
             })
           })
+          console.log(this.beneficiaries);
           this._systemService.off();
         } else {
           this._systemService.off();

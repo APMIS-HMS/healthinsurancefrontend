@@ -51,6 +51,8 @@ export class ListClaimsComponent implements OnInit {
               element.status = "Approved";
             }
             break;
+          }else{
+            element.status = "Pending";
           }
         }
 

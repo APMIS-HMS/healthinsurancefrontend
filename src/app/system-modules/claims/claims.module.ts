@@ -3,7 +3,7 @@ import { SharedModule } from '../../shared-modules/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
 import {
     ClaimTypeService, VisitTypeService,DiagnosisService,ProcedureService,DrugService,SymptomService,InvestigationService,
-    CheckInService, ClaimService,DiagnosisTypeService,DrugPackSizeService,PreAuthorizationService
+    CheckInService, ClaimService,DiagnosisTypeService,DrugPackSizeService,PreAuthorizationService,PolicyService
 } from '../../services/index';
 import { claimsRoutes } from './claims.route';
 import { ClaimsComponent } from './claims.component';
@@ -28,6 +28,6 @@ import { NewClaimConfirmComponent } from './new-claim/new-claim-confirm/new-clai
     ],
     declarations: [ClaimsComponent, ClaimsDetailsComponent, NewClaimComponent, ClaimsTopBarComponent, ClaimsDetailTabComponent, ModalApproveClaimComponent, ModalRejectClaimComponent, ModalHoldClaimComponent, ModalQueryClaimComponent, ClaimsOthersTabComponent, NewClaimTabsComponent, NewClaimConfirmComponent],
     providers: [ClaimTypeService,VisitTypeService,SymptomService,InvestigationService,DrugService,DiagnosisService,
-        ProcedureService,CheckInService, ClaimService,DiagnosisTypeService,DrugPackSizeService, PreAuthorizationService]
+        ProcedureService,CheckInService, ClaimService,DiagnosisTypeService,DrugPackSizeService, PreAuthorizationService,PolicyService]
 })
 export class ClaimsModule { }

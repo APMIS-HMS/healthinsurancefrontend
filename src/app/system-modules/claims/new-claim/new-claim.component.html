@@ -13,7 +13,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Patient Name</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="patientName" class="form-control" value="{{SelectedCheckinItem?.personObject?.firstName}} {{SelectedCheckinItem?.personObject?.lastName}} ">
+                    <input type="text" formControlName="patientName" class="form-control" value="{{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.personId?.firstName}} {{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.personId?.lastName}} ">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.patientName.valid || claimsFormGroup.controls.patientName.pristine">
                     This is a required field (minimum 3 and max of 50 characters).
@@ -22,7 +22,7 @@
             <div class="frm-item-wrap">
                 <label class="label">LASHMA ID</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="lashmaid" class="form-control" value="{{SelectedCheckinItem?.beneficiaryObject?.platformOwnerNumber}}">
+                    <input type="text" formControlName="lashmaid" class="form-control" value="{{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.lashmaid.valid || claimsFormGroup.controls.lashmaid.pristine">
                     This is a required field.
@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Health Plan</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="plan" class="form-control" value="{{SelectedCheckinItem?.policyObject?.planId?.name}}">
+                    <input type="text" formControlName="plan" class="form-control" value="{{SelectedCheckinItem?.policyId?.planId?.name}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.plan.valid || claimsFormGroup.controls.plan.pristine">
                     This is a required field.
@@ -105,8 +105,8 @@
                 <label class="label">Claim Type</label>
                 <div class="input-wrap">
                     <select formControlName="claimType" class="form-control">
-                        <option value="" selected *ngIf="isAuthorize">Free for Service</option>
-                        <option value="" selected *ngIf="!isAuthorize">Capitation</option>
+                        <option value="" selected *ngIf="isAuthorize==true">Free for Service</option>
+                        <option value="" selected *ngIf="isAuthorize ==false">Capitation</option>
                         <!-- <option *ngFor="let item of claimTypesItems" [ngValue]="item.name">{{ item.name }}</option> -->
                     </select>
                 </div>
@@ -124,7 +124,7 @@
                 </small>
             </div>
 
-            <div class="frm-item-wrap">
+            <div class="frm-item-wrap" *ngIf="isAuthorize == false">
                 <label class="label">Visit Class</label>
                 <div class="input-wrap">
                     <select formControlName="visitClass" class="form-control">
@@ -178,9 +178,9 @@
                                         <div class="input-wrap-x2">
                                             <input style="width:50px;" type="text" formControlName="symptomDuration" class="form-control">
                                             <select formControlName="symptomUnit" class="form-control">
-                                                <option value="Hour" selected>Minute</option>
+                                                <option value="Minute" selected>Minute</option>
                                                 <option value="Hour">Hour</option>
-                                                <option value="Hour">Day</option>
+                                                <option value="Day">Day</option>
                                                 <option value="Week">Week</option>
                                                 <option value="Month">Month</option>
                                                 <option value="Year">Year</option>
@@ -359,7 +359,7 @@
                                             <input placeholder="Qty" style="width:50px;" type="text" formControlName="drugQty" class="form-control">
                                             <select formControlName="drugUnit" class="form-control">
                                                 <option disabled value="" selected>Pack Size</option>
-                                                <option *ngFor="let pack of packSizes" [ngValue]="pack">{{pack.name}}</option>
+                                                <option *ngFor="let pack of packSizes" [ngValue]="pack.name">{{pack.name}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -527,7 +527,7 @@
                 </div>
             </div>
             <!-- <div class="frm-title">Treatment</div> -->
-            <button class="btn btn-medium btn-blue cta" [disabled]="isProcessing" (click)="newClaimConfirm_click()">
+            <!-- <button class="btn btn-medium btn-blue cta" [disabled]="isProcessing" (click)="newClaimConfirm_click()">
                 <span>
                     <div [hidden]="isProcessing">
                         Save
@@ -537,13 +537,13 @@
                         <i class='fa fa-spinner fa-spin'></i>
                     </div>
                 </span>
-            </button>
+            </button> -->
         </form>
     </section>
 
-    <section *ngIf="newClaimConfirm" class="app-content-wrap content shadow-RB">
-        <app-new-claim-confirm></app-new-claim-confirm>
-        <button class="btn btn-medium btn-blue cta" (click)="onSendClaim()">
+    <section class="app-content-wrap content shadow-RB">
+        <!-- <app-new-claim-confirm></app-new-claim-confirm> -->
+        <button class="btn btn-medium btn-blue cta" (click)="onSendClaim(claimsFormGroup.controls.valid)">
             <span>
                 <div [hidden]="isProcessing">
                     Save
