@@ -33,12 +33,43 @@
                                     <div class="item-val">{{ 'CI3430490' }}</div>
                                 </div>
                             </div>
-
+                           
                             <div class="group-wrap">
                                 <div class="item-val">
                                     {{ beneficiary?.person?.title?.name }} {{ beneficiary?.person?.firstName }} {{ beneficiary?.person?.otherNames }} {{ beneficiary?.person?.lastName }}
                                 </div>
                                 <div class="item-val">{{ beneficiary?.person?.phoneNumber }}</div>
+                            </div>
+
+                            <div class="group-wrap">
+                                <div class="group-item">
+                                    <div class="item-label">Card Status:
+                                        <span class="green">
+                                            Issued</span>
+                                    </div>
+                                    
+                                    <!-- <div style="color: green" class="item-val"> Issued</div> -->
+                                </div>
+                                <div class="group-item">
+                                    <div class="item-label">Card Issued By:</div>
+                                    <div class="item-val">Mr Aderotimi Onala</div>
+                                </div>
+                                <div class="group-item">
+                                    <div class="item-label">When Issued:</div>
+                                    <div class="item-val">11th April, 2017</div>
+                                </div>
+                                <div class="group-item">
+                                    <div class="item-label">Times Card was Issued or Re-Issued:</div>
+                                    <div class="item-val">6 Times</div>
+                                </div>
+                                <div class="group-item">
+                                    <div class="item-label">Where Card is Issued:</div>
+                                    <div class="item-val">Ministry of Health Lagos</div>
+                                </div>
+                                <div class="group-item">
+                                    <div class="item-label">Card Expiration Date:</div>
+                                    <div class="item-val">3rd Dec. 2017</div>
+                                </div>
                             </div>
                             <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class="ico-cirle fa fa-pencil"></i>
                         </div>
