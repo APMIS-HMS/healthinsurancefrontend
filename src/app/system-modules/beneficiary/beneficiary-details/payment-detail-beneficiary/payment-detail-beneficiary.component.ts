@@ -24,6 +24,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   refKey: number;
   paymentType: string = 'e-Payment';
   previousPolicyLoading: boolean = true;
+  showPayment: boolean = false;
   paymentTypes: any = PAYMENTTYPES;
 
   constructor(
@@ -42,8 +43,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    this._route.params.subscribe(param => {
-      console.log(param);
+
+    this._route.parent.params.subscribe(param => {
       if (!!param.id) {
         this._getPolicyDetails(param.id);
         this._getPreviousPolicies(param.id);
@@ -52,7 +53,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     });
 
     this.refKey = parseFloat((this.user ? this.user._id.substr(20) : ''))  * new Date().getTime();
-    console.log(this.refKey);
   }
 
   private _getPolicyDetails(routeId) {
@@ -139,6 +139,10 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result.toDateString(); // .toISOString();
+  }
+
+  onClickShowPayment() {
+    this.showPayment = !this.showPayment;
   }
 
   onChangePaymentType(value: string) {
