@@ -85,6 +85,7 @@ export class ListBeneficiaryComponent implements OnInit {
       if (res.data.length > 0) {
         console.log(res);
         res.data.forEach(policy => {
+          console.log(policy)
           let principal = policy.principalBeneficiary;
           principal.isPrincipal = true;
           principal.hia = policy.hiaId;
