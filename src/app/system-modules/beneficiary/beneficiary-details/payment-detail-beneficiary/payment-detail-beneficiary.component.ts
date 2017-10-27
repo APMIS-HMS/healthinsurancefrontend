@@ -27,6 +27,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   paymentType: string = 'e-Payment';
   previousPolicyLoading: boolean = true;
   showPayment: boolean = false;
+  isForRenewal: boolean = false;
   paymentTypes: any = PAYMENTTYPES;
 
   constructor(
@@ -81,6 +82,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       if (res.data.length > 0) {
         res.data[0].premiumPackageId.amountInKobo = res.data[0].premiumPackageId.amount * 100;
         res.data[0].dueDate = this.addDays(new Date(), res.data[0].premiumPackageId.durationInDay);
+        this.isForRenewal = res.data[0].isPaid;
         this.policy = res.data[0];
         console.log(this.policy);
       }
@@ -135,7 +137,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     // Save into the Premium Payment Service
     this._premiumPaymentService.create(ref).then((res: any) => {
       console.log(res);
-      
 
       let verificationData = {
         reference: res.reference,
@@ -146,8 +147,9 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         console.log(verifyRes);
         if (!!verifyRes) {
           this.showPayment = false;
-          this._getPolicyDetails(res._id);
-          this._getPreviousPolicies(res._id);
+          this.isForRenewal = true;
+          this._getPolicyDetails(verifyRes.body.principalBeneficiary._id);
+          this._getPreviousPolicies(verifyRes.body.principalBeneficiary._id);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
@@ -168,19 +170,9 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     this.showPayment = !this.showPayment;
   }
 
-  // onChangePaymentType(value: string) {
-  //   console.log(value);
-  //   this.paymentType = value;
-  //   if (value === 'Cash' || value === 'Cheque') {
-  //     this.cashPayment = true;
-  //     this.chequePayment = true;
-  //     this.withPaystack = false;
-  //   } else {
-  //     this.withPaystack = true;
-  //     this.cashPayment = false;
-  //     this.chequePayment = false;
-  //   }
-  // }
+  onClickRenewPremium() {
+    this.isForRenewal = !this.isForRenewal;
+  }
 
   paymentCancel() {
     console.log('Close');
