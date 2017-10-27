@@ -217,8 +217,14 @@ export class NewClaimComponent implements OnInit {
 
   _getSelectedCheckinItem(checkinId) {
     this._preAuthorizationService.find({ query: { "checkedInDetails._id": checkinId } }).then((preauth_callback: any) => {
-      if (preauth_callback.data.length > 0) { 
-        
+      if (preauth_callback.data.length > 0) {
+        preauth_callback.data.forEach(element => {
+          element.documentation.forEach(element2 => {
+            element2.documentation.forEach(element2 => {
+
+            })
+          })
+        });
       }
     })
     this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
@@ -260,6 +266,7 @@ export class NewClaimComponent implements OnInit {
     this._systemService.on();
     this._drugPackSizeService.find({}).then((payload: any) => {
       this.packSizes = payload.data;
+      console.log(this.packSizes);
       this._systemService.off();
     }).catch(err => {
       console.log(err);

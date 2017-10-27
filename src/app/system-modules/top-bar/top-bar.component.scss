@@ -7,6 +7,7 @@
     align-items: center;
     width: 100%;
     padding: 10px 0;
+    position: relative;
 }
 .sect-a{
     display: flex;
@@ -85,4 +86,37 @@
   }
   .user-others{
       color: lighten($brand-primary, 55%);
+  }
+  .notify-wrap{
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #fff;
+      font-size: $font-x2;
+      width: 270px;
+      border-radius: 30px;
+      border: 1px solid $grey-2;
+      padding: 20px 0;
+      max-height: 70vh;
+      overflow-y: auto;
+  }
+  .notify-item{
+      cursor: pointer;
+  }
+  .notify-item:hover{
+      background: $grey-1;
+  }
+  .notify-title, .notify-content{
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+  .notify-title{
+      padding-top: 10px;
+      border-bottom: 1px solid $grey-2;
+      font-weight: bold;
+      color: $brand-primary;
+  }
+  .notify-content{
+      padding-bottom: 10px;
   }
