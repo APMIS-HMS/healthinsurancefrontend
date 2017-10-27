@@ -48,7 +48,7 @@
         <div class="btn btn-medium btn-blue-outline">RESET</div>
     </div>
 
-    <table  class="table" cellpadding="0" cellspacing="0" border="0.5">
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
             <tr class="tr">
                 <th class="th">No</th>
@@ -89,8 +89,8 @@
                 <td class="td">{{beneficiary.personId.homeAddress.lga.name}}</td>
                 <td class="td">{{beneficiary.hia.name}}</td>
                 <td class="td">
-                    <span class="{{ beneficiary.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}">
-                        {{ beneficiary.isTokenVerified ? 'Active': 'Inactive' }}
+                    <span class="{{ beneficiary.isActive ? 'tbl-status-active': 'tbl-status-inactive' }}">
+                        {{ beneficiary.isActive ? 'Active': 'Inactive' }}
                     </span>
                 </td>
                 <td class="td td-icos">
@@ -149,8 +149,10 @@
         </tbody>
     </table>
 
-    <div class="list-buttom" *ngIf="beneficiaries.length > 0">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-        <div class="btn btn-medium btn-yellow">Load More</div>
+    <div class="list-buttom">
+        <div *ngIf="beneficiaries.length > 0">
+            <div class="list-summary">Showing 1 to {{ beneficiaries.length }} of {{ beneficiaries.length }} entries (filtered from {{ beneficiaries.length }} total entries)</div>
+            <div class="btn btn-medium btn-yellow">Load More</div>
+        </div>
     </div>
 </div>
