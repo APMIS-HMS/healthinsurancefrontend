@@ -64,12 +64,12 @@ export class NewClaimComponent implements OnInit {
   claimItem: Claim = <Claim>{};
   SelectedCheckinItem: CheckIn = <CheckIn>{};
   SelectedCheckinItemPlan: any = <any>{};
-  packSizes: any = <any>[];
-  symptomLists: any = <any>[];
-  diagnosisLists: any = <any>[];
-  investigationList: any = <any>[];
-  drugList: any = <any>[];
-  procedureList: any = <any>[];
+  packSizes = [];
+  symptomLists = [];
+  diagnosisLists =[];
+  investigationList=[];
+  drugList=[];
+  procedureList=[];
   claimTypesItems: any = <any>[];
   visitTypesItems: any = <any>[];
   symptomItems: any = <any>[];
@@ -220,9 +220,10 @@ export class NewClaimComponent implements OnInit {
       if (preauth_callback.data.length > 0) {
         preauth_callback.data.forEach(element => {
           element.documentation.forEach(element2 => {
-            element2.documentation.forEach(element2 => {
-
-            })
+            for(var i = 0;i<element2.length;i++){
+              this.symptomLists.push(element2[3].clinicalDocumentation);
+              
+            }
           })
         });
       }

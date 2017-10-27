@@ -131,9 +131,11 @@ export class NewCheckinComponent implements OnInit {
   }
 
   routeBeneficiaryDetails(beneficiary) {
+    console.log(beneficiary._id);
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/check-in', beneficiary._id])
+    this._router.navigate(['/modules/beneficiary/beneficiaries/'+beneficiary._id+'/checkin'])
       .then(payload => {
+        console.log(payload);
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
