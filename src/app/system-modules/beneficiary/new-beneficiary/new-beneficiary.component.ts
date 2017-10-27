@@ -28,6 +28,7 @@ export class NewBeneficiaryComponent implements OnInit {
   ) {
     this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
       this.selectedBeneficiary = value.beneficiary;
+      console.log(value);
       if(value.dependants !== undefined){
         this.dependants = value.dependants;
       }
