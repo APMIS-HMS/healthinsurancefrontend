@@ -114,14 +114,14 @@
                 <div class="right-wrap ">
                     <div class="detail-item ">
 
-                        <div class="detail-content ">
+                        <div *ngIf="policy?.sponsor !== undefined" class="detail-content ">
                             <div class="group-wrap ">
                                 <div class="item-label ">Employer:</div>
 
-                                <div class="item-val ">Heptamile Global Limited</div>
-                                <div class="item-val ">Block A4, Suit 76 Sura Shoping Complex</div>
-                                <div class="item-val ">Compile Simpson Street Lagos</div>
-                                <div class="item-val ">Ikoyi-Lagos.</div>
+                                <div class="item-val ">{{policy?.sponsor.name}}</div>
+                                <div class="item-val ">{{policy?.sponsor.address.street}}, {{policy?.sponsor.address.neighbourhood}}, </div>
+                                <div class="item-val ">{{policy?.sponsor.address.city.name}}</div>
+                                <div class="item-val ">{{policy?.sponsor.address.state.name}}.</div>
 
                                 <div style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
                             </div>
