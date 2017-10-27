@@ -6,6 +6,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 // import { Angular4PaystackComponent } from 'angular4-paystack';
 import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
+import { HeaderEventEmitterService } from '../../../../services/event-emitters/header-event-emitter.service';
 import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService } from '../../../../services/index';
 
 @Component({
@@ -36,6 +37,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _toastr: ToastsManager,
     private _route: ActivatedRoute,
+    private _headerEventEmitter: HeaderEventEmitterService,
     // private _angular4Paystack: Angular4PaystackComponent,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
@@ -46,6 +48,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Beneficiary Payment');
+    this._headerEventEmitter.setMinorRouteUrl('Payment and payment history for beneficiary');
     this.user = (<any>this._locker.getObject('auth')).user;
 
     this._route.parent.params.subscribe(param => {

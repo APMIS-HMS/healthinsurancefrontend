@@ -1,11 +1,11 @@
 <div class="in-content-wrap">
-    <div class="back-btn">
+    <div class="back-btn" (click)="navigate('/modules/plan/plans')">
         <i class="fa fa-chevron-left"></i> BACK TO HEALTHPLAN
     </div>
 
     <ul class="inpage-tabs">
-        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">HIAS</li>
-        <li (click)="tabPremiums_click()" [class.tab-active]="tab_premiums">Premiums</li>
+        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">Plan Details</li>
+        <!-- <li (click)="tabPremiums_click()" [class.tab-active]="tab_premiums">Premiums</li> -->
         <li (click)="tabDetail_click()" [class.tab-active]="tab_detail">Plan Detail</li>
         <!-- <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
         <li (click)="tabTests_click()" [class.tab-active]="tab_tests">Tests</li>
@@ -18,10 +18,10 @@
             <div>
                 <div class="content-top-bar">
                     <div class="bar-labels">
-                        <div class="tab-logo">
+                        <!-- <div class="tab-logo">
                             <img src="../../../../assets/img/logos/lagos-state-logo.jpg">
-                        </div>
-                        <div>{{selectedPlan?.name}}</div>
+                        </div> -->
+                        <div>Plan: {{selectedPlan?.name}}</div>
                         <div>Type: {{selectedPlan?.planType.name}}</div>
                         <div>Status:
                             <span *ngIf="selectedPlan?.isActive === true" class="active-status">Active</span>
@@ -35,52 +35,58 @@
                 <section class="tab-cont content">
                     <div class="list-search-wrap">
                         <div class="search-wrap">
-                            <label class="label-xx">Search:</label>
+                            <!-- <label class="label-xx">Search:</label>
                             <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name of Health Insurance Agent">
-                            <i class="fa fa-search" aria-hidden="true"></i>
+                            <i class="fa fa-search" aria-hidden="true"></i> -->
                         </div>
-
+                        <div (click)="navigateEditPlan(selectedPlan)" class="btn btn-medium btn-blue">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PREMIUM
+                        </div>
                         <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
                             <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PLAN
                         </div>
                     </div>
                     <section>
-                        <div class="table-responsive">
-                            <table class="table" cellspacing="0">
-                                <thead class="thead">
-                                    <tr class="tr">
-                                        <th class="th">Health Insurance Agent</th>
-                                        <th class="th">Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="tbody">
-                                    <tr class="tr">
-                                        <td class="td">Healthcare Security Limited</td>
-                                        <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
-                                    </tr>
-                                    <tr class="tr">
-                                        <td class="td">Multi Shield Nigeria Limited</td>
-                                        <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="list-buttom">
-                            <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+                        <table class="table">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">S/N</th>
+                                    <th class="th">Category</th>
+                                    <th class="th">Amount</th>
+                                    <th class="th">Duration</th>
+                                    <th class="th"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody">
+                                <tr class="tr" *ngIf="selectedPlan?.premiums?.length === 0">
+                                    <td class="td" style="text-align: center;" colspan="5">No data available in table</td>
+                                </tr>
+                                <tr class="tr" *ngFor="let premium of selectedPlan?.premiums; let i = index;">
+                                    <td class="td">{{ i+1 }}</td>
+                                    <td class="td">{{ premium.category.name }}</td>
+                                    <td class="td">{{ premium.amount }}</td>
+                                    <td class="td">{{ premium.duration }} {{ premium.unit.name }}</td>
+                                    <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="list-buttom" *ngIf="selectedPlan?.premiums?.length > 0">
+                            <div class="list-summary">Showing 1 to {{ selectedPlan?.premiums?.length }} of {{ selectedPlan?.premiums?.length }} entries (filtered from {{ selectedPlan?.premiums?.length }} total entries)</div>
                             <div class="btn btn-medium btn-yellow">Load More</div>
                         </div>
                     </section>
                 </section>
             </div>
         </div>
-        <div *ngIf="tab_premiums" class="tab-pane fade show active">
+        <!-- <div *ngIf="tab_premiums" class="tab-pane fade show active">
             <div class="row">
                 <div class="content-top-bar">
                     <div class="bar-labels">
                         <div class="tab-logo">
                             <img src="../../../../assets/img/logos/lagos-state-logo.jpg">
                         </div>
-                        <div>{{selectedPlan?.name}}</div>
+                        <div>Plan: {{selectedPlan?.name}}</div>
                         <div>Type: {{selectedPlan?.planType.name}}</div>
                         <div>Status:
                             <span *ngIf="selectedPlan?.isActive === true" class="active-status">Active</span>
@@ -91,7 +97,7 @@
                     <div class="bar-icos"></div>
                 </div>
 
-                <section class="tab-cont content">
+                <section class="tab-cont content" style="padding-bottom: 30px;">
                     <div class="list-search-wrap">
                         <div class="search-wrap">
                             <label class="label-xx">Search:</label>
@@ -103,33 +109,38 @@
                             <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PREMIUM
                         </div>
                     </div>
-                    <table class="table" cellspacing="0">
+
+                    <table class="table">
                         <thead class="thead">
                             <tr class="tr">
+                                <th class="th">S/N</th>
+                                <th class="th">Category</th>
                                 <th class="th">Amount</th>
                                 <th class="th">Duration</th>
                                 <th class="th"></th>
                             </tr>
                         </thead>
                         <tbody class="tbody">
-                            <tr *ngFor="let premium of selectedPlan.premiums" class="tr">
-                                <td class="td">{{premium.amount | number:'1.2-2'}}</td>
-                                <td class="td">{{premium.unit.name}}</td>
-                                <td class="td td-icos">
-                                    <i class="fa fa-edit"></i>
-                                    <i class="fa fa-trash"></i>
-                                </td>
+                            <tr class="tr" *ngIf="selectedPlan?.premiums?.length === 0">
+                                <td class="td" style="text-align: center;" colspan="5">No data available in table</td>
+                            </tr>
+                            <tr class="tr" *ngFor="let premium of selectedPlan?.premiums; let i = index;">
+                                <td class="td">{{ i+1 }}</td>
+                                <td class="td">{{ premium.category.name }}</td>
+                                <td class="td">{{ premium.amount }}</td>
+                                <td class="td">{{ premium.duration }} {{ premium.unit.name }}</td>
+                                <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <div class="list-buttom">
-                        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+                    <div class="list-buttom" *ngIf="selectedPlan?.premiums?.length > 0">
+                        <div class="list-summary">Showing 1 to {{ selectedPlan?.premiums?.length }} of {{ selectedPlan?.premiums?.length }} entries (filtered from {{ selectedPlan?.premiums?.length }} total entries)</div>
                         <div class="btn btn-medium btn-yellow">Load More</div>
                     </div>
                 </section>
             </div>
-        </div>
+        </div> -->
         <div *ngIf="tab_detail" class="tab-pane fade show active">
             <app-lashma-codes-list></app-lashma-codes-list>
         </div>
