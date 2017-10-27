@@ -80,9 +80,9 @@ export class DetailsPlanComponent implements OnInit {
 			this._systemService.off();
 		});
 	}
-	navigate() {
+	navigate(url) {
 		this._systemService.on();
-		this._router.navigate(['/modules/plan/plans']).then(res => {
+		this._router.navigate([url]).then(res => {
 			this._systemService.off();
 		}).catch(err => {
 			this._systemService.off();
