@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+// import { Angular4PaystackComponent } from 'angular4-paystack';
 import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
 import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService } from '../../../../services/index';
 
@@ -34,6 +35,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _toastr: ToastsManager,
     private _route: ActivatedRoute,
+    // private _angular4Paystack: Angular4PaystackComponent,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private _policyService: PolicyService,
