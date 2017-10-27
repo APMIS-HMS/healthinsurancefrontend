@@ -1,89 +1,89 @@
 <div class="details-wrap">
-  <div class="detail-item">
-    <div class="item-label item-head">Principal Detail</div>
+    <div class="detail-item">
+        <div class="item-label item-head">Principal Detail</div>
 
-    <div class="detail-content">
-      <img class="hia-user" src="../../../../assets/img/users/default.png">
-      <div class="group-wrap">
-        <div class="item-val">Date of Birth: {{policyObject?.principalBeneficiary.personId.dateOfBirth|date}}</div>
-      </div>
-      <div class="group-wrap">
-        <div class="group-item">
-          <div class="item-label">LASRRA ID:</div>
-          <div class="item-val">{{policyObject?.principalBeneficiary.stateID}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">LASHMA ID:</div>
-          <div class="item-val">{{policyObject?.principalBeneficiary.platformOwnerNumber}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">CIN Number:</div>
-          <div class="item-val"></div>
-        </div>
-      </div>
-      <i class="ico-cirle fa fa-pencil"></i>
-    </div>
-  </div>
-
-  <div class="detail-item" *ngFor="let dependant of policyObject?.dependantBeneficiaries">
-    <div class="item-label item-head">Dependant</div>
-
-    <div class="detail-content">
-      <div class="hia-user">
-        <img src="../../../../assets/img/users/default.png">
-      </div>
-      <div class="group-wrap">
-          <div class="item-val">Date of Birth: {{dependant.beneficiary.personId.dateOfBirth|date}}</div>
-        </div>
-        <div class="group-wrap">
-            <div class="group-item">
-              <div class="item-label">LASRRA ID:</div>
-              <div class="item-val">{{dependant.beneficiary.stateID}}</div>
+        <div class="detail-content">
+            <img class="hia-user" src="../../../../assets/img/users/default.png">
+            <div class="group-wrap">
+                <div class="item-val">Date of Birth: {{policyObject?.principalBeneficiary?.person?.dateOfBirth|date}}</div>
             </div>
-            <div class="group-item">
-              <div class="item-label">LASHMA ID:</div>
-              <div class="item-val">{{dependant.beneficiary.platformOwnerNumber}}</div>
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">LASRRA ID:</div>
+                    <div class="item-val">{{policyObject?.principalBeneficiary?.stateID}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">LASHMA ID:</div>
+                    <div class="item-val">{{policyObject?.principalBeneficiary?.platformOwnerNumber}}</div>
+                </div>
+                <div class="group-item">
+                    <!-- <div class="item-label">CIN Number:</div>
+          <div class="item-val"></div> -->
+                </div>
             </div>
-          </div>
-      <i class="ico-cirle fa fa-pencil"></i>
+            <i class="ico-cirle fa fa-pencil"></i>
+        </div>
     </div>
-  </div>
+
+    <div class="detail-item" *ngFor="let dependant of policyObject?.dependantBeneficiaries">
+        <div class="item-label item-head">Dependant</div>
+
+        <div class="detail-content">
+            <div class="hia-user">
+                <img src="../../../../assets/img/users/default.png">
+            </div>
+            <div class="group-wrap">
+                <div class="item-val">Date of Birth: {{dependant.beneficiary.personId.dateOfBirth|date}}</div>
+            </div>
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">LASRRA ID:</div>
+                    <div class="item-val">{{dependant.beneficiary.stateID}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">LASHMA ID:</div>
+                    <div class="item-val">{{dependant.beneficiary.platformOwnerNumber}}</div>
+                </div>
+            </div>
+            <i class="ico-cirle fa fa-pencil"></i>
+        </div>
+    </div>
 </div>
 
 <div class="sect-item">
 
 
-  <div class="group-item">
-      <div class="item-val">{{policyObject?.principalBeneficiary.personId.title.name}} {{policyObject?.principalBeneficiary.personId.lastName}} {{policyObject?.principalBeneficiary.personId.firstName}} {{policyObject?.principalBeneficiary.personId.otherNames}}</div>
-  </div>
-  <div class="group-item">
-      <div class="item-val">{{policyObject?.principalBeneficiary.personId.phoneNumber}} </div>
-  </div>
+    <div class="group-item">
+        <div class="item-val">{{policyObject?.principalBeneficiary.personId.title.name}} {{policyObject?.principalBeneficiary.personId.lastName}} {{policyObject?.principalBeneficiary.personId.firstName}} {{policyObject?.principalBeneficiary.personId.otherNames}}</div>
+    </div>
+    <div class="group-item">
+        <div class="item-val">{{policyObject?.principalBeneficiary.personId.phoneNumber}} </div>
+    </div>
 
 
 </div>
 
 
 <div class="sec-sect">
-  <div class="sect-item">
-    <div class="item-label item-head">Health Care Insurance Agent</div>
-    <div class="item-val">{{policyObject?.hiaId.name}}</div>
-    <i class="ico-cirle fa fa-pencil"></i>
-  </div>
-  <div class="sect-item">
-    <div class="item-label item-head">Program</div>
-    <div class="item-val">{{policyObject?.planId.name}}</div>
-    <i class="ico-cirle fa fa-pencil"></i>
-  </div>
-  <div class="sect-item">
-    <div class="item-label item-head">Care Provider Details</div>
-    <div class="item-val">{{policyObject?.providerId.name}}</div>
-    <i class="ico-cirle fa fa-pencil"></i>
-  </div>
+    <div class="sect-item">
+        <div class="item-label item-head">Health Care Insurance Agent</div>
+        <div class="item-val">{{policyObject?.hiaId.name}}</div>
+        <i class="ico-cirle fa fa-pencil"></i>
+    </div>
+    <div class="sect-item">
+        <div class="item-label item-head">Program</div>
+        <div class="item-val">{{policyObject?.planId.name}}</div>
+        <i class="ico-cirle fa fa-pencil"></i>
+    </div>
+    <div class="sect-item">
+        <div class="item-label item-head">Care Provider Details</div>
+        <div class="item-val">{{policyObject?.providerId.name}}</div>
+        <i class="ico-cirle fa fa-pencil"></i>
+    </div>
 </div>
 
 <div style="margin:40px auto;display:flex;justify-content:center;">
-  <button (click)="confirm()" class="btn btn-medium btn-blue">
+    <button (click)="confirm()" class="btn btn-medium btn-blue">
           CONFIRM
       </button>
 </div>
