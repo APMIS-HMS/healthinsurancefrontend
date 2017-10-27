@@ -31,7 +31,8 @@
     <div class="check-payment-status">
         <div class="check-payment-left">
             <div *ngIf="policy?.isPaid">
-                Payment status:<span class="green"> Paid</span>, Due Date: <span class="green">{{ policy?.dueDate }}</span>
+                Premium Category: {{ policy?.premiumCategoryId?.name }}
+                <br> Payment Status:<span class="green"> Paid</span>, Due Date: <span class="green">{{ policy?.dueDate }}</span>
             </div>
             <div *ngIf="!policy?.isPaid">
                 Payment status:<span class="red"> Not Paid</span>
