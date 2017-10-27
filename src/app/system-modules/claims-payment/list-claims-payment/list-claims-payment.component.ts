@@ -8,7 +8,7 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import {
   SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService,
-  CapitationFeeService, PolicyService
+  CapitationFeeService, PolicyService, BeneficiaryService
 } from '../../../services/index';
 import { Claim } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -50,6 +50,7 @@ export class ListClaimsPaymentComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _claimsPaymentService: ClaimsPaymentService,
     private _claimService: ClaimService,
+    private _beneficiaryService: BeneficiaryService,
     private _capitationFeeService: CapitationFeeService,
     private _policyService: PolicyService
   ) { }
@@ -90,9 +91,9 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
 
-  private _getClaimsCapitationFromPolicy() {
+  private _getClaimsCapitationFromBeneficiary() {
     this._systemService.on();
-    this._policyService.find({
+    this._beneficiaryService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
          isActive: true,
@@ -114,7 +115,7 @@ export class ListClaimsPaymentComponent implements OnInit {
     }).then((res: any) => {
       console.log(res);
       this.capitationPrice = res;
-      this._getClaimsCapitationFromPolicy();
+      this._getClaimsCapitationFromBeneficiary();
       this._systemService.off();
     }).catch(error => {
       console.log(error);
