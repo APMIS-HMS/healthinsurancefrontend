@@ -374,11 +374,11 @@ export class PreAuthorizationNewComponent implements OnInit {
         }
       }
     ).then((results: any) => {
-      console.log(results);
-      let policyResult = results[0];
-      console.log(policyResult);
-      if (policyResult.data.length > 0) {
-        this.selectedPolicy = policyResult.data[0];
+      // console.log(results);
+      // let policyResult = results[0];
+      // console.log(policyResult);
+      if (results.data.length > 0) {
+        this.selectedPolicy = results.data[0];
         this.preAuthFormGroup.controls.hia.setValue(this.selectedPolicy.hiaId.name);
       }
 
