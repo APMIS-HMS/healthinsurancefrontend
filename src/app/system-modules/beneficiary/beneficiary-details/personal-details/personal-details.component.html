@@ -77,7 +77,7 @@
                                 <label for="radioButtonInput"> </label>
                             </div> -->
 
-                            <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class="ico-cirle fa fa-pencil"></i>
+                            <i (click)="navigateEditBeneficiary(beneficiary)" class="ico-cirle fa fa-pencil"></i>
                         </div>
                     </div>
 
@@ -107,7 +107,7 @@
                                 <div class="item-val">{{ dependant.beneficiary?.personIdId?.phoneNumber }}</div>
                                 <div class="item-val">Relationship: {{ dependant?.relationshipId?.name }}</div>
                             </div>
-                            <i (click)="navigateBeneficiary('/modules/beneficiary/new', beneficiary._id);" class=" ico-cirle fa fa-pencil "></i>
+                            <i (click)="navigateEditBeneficiary(beneficiary)" class=" ico-cirle fa fa-pencil "></i>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                                 <div class="item-val ">{{policy?.sponsor.address.city.name}}</div>
                                 <div class="item-val ">{{policy?.sponsor.address.state.name}}.</div>
 
-                                <div style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
+                                <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
                             </div>
                             <i class="ico-cirle fa fa-trash "></i>
                         </div>
@@ -144,7 +144,7 @@
                                 <div class="item-val ">{{policy?.providerId.address.city.name}}-{{policy?.providerId.address.state.name}}.</div>
                                 <div class="item-val ">{{policy?.providerId.phoneNumber}}</div>
 
-                                <div style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
+                                <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
                             </div>
                             <i class="ico-cirle fa fa-trash "></i>
                         </div>

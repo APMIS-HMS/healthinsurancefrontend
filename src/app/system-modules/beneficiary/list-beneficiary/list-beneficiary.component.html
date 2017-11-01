@@ -23,7 +23,7 @@
         </div>
 
         <div class="input-wrap">
-            <label>Created By</label>
+            <label>Registered By</label>
             <select [formControl]="createdByControl">
                 <option>All</option>
             </select>
@@ -45,7 +45,7 @@
             </select>
         </div>
 
-        <div class="btn btn-medium btn-blue-outline">RESET</div>
+        <div (click)="reset()" class="btn btn-medium btn-blue-outline">RESET</div>
     </div>
 
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
