@@ -69,6 +69,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.selectedBeneficiary);
     this.frmProgram = this._fb.group({
       hiaName: [''],
       programType: ['', [<any>Validators.required]],

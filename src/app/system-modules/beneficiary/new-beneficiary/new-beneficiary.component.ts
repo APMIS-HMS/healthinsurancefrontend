@@ -27,6 +27,7 @@ export class NewBeneficiaryComponent implements OnInit {
     private _systemService: SystemModuleService
   ) {
     this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+      console.log(value);
       this.selectedBeneficiary = value.beneficiary;
       console.log(value);
       if(value.dependants !== undefined){
@@ -59,13 +60,15 @@ export class NewBeneficiaryComponent implements OnInit {
         this.tab_nok = false;
         this.tab_program = true;
         this.tab_confirm = false;
-      } else if (value.tab === 'Five') {
+      }else if (value.tab === 'Five') {
         this.tab_personalData = false;
         this.tab_dependants = false;
         this.tab_nok = false;
         this.tab_program = false;
         this.tab_confirm = true;
       }
+    },error=>{
+      console.log(error);
     })
   }
 

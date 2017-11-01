@@ -501,7 +501,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                   if (payload.statusCode === 200 && payload.error === false) {
                     console.log('am here oo')
                     delete payload.body.beneficiary.personId;
-                    payload.body.beneficiary.personId = payload.body.personId;
+                    payload.body.beneficiary.personId = payload.body.person;
                     this.selectedBeneficiary = payload.body.beneficiary;
                     // this._systemService.announceBeneficiaryTabNotification('Two');
                     this._systemService.off();
