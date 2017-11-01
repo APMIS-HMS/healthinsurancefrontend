@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Observable } from 'rxjs/Rx';
 import { Beneficiary } from './../../../models/setup/beneficiary';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
@@ -30,6 +31,7 @@ export class ListBeneficiaryComponent implements OnInit {
   loading: boolean = true;
   planTypes: any[] = [];
   currentPlatform: any;
+  user: any;
 
   constructor(
     private _router: Router,
@@ -38,7 +40,8 @@ export class ListBeneficiaryComponent implements OnInit {
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
     private _beneficiaryService: BeneficiaryService,
-    private _policyService: PolicyService
+    private _policyService: PolicyService,
+    private _locker: CoolLocalStorage
   ) {
     this._router.events
       .filter(event => event instanceof NavigationEnd)
@@ -49,10 +52,10 @@ export class ListBeneficiaryComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
-
-    this._userTypeService.find({}).then(payload => {
-      // console.log(payload);
-    });
+    this.user = (<any>this._locker.getObject('auth')).user;
+    // this._userTypeService.find({}).then(payload => {
+    //   // console.log(payload);
+    // });
 
     // this._getBeneficiaries();
     this._getCurrentPlatform();
@@ -63,7 +66,13 @@ export class ListBeneficiaryComponent implements OnInit {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        this._getBeneficiariesFromPolicy(this.currentPlatform._id);
+        console.log(this.user.userType)
+        if (this.user.userType.name === 'Provider') {
+          this._getBeneficiariesFromPolicyByProvider(this.user.facilityId._id);
+        } else if (this.user.userType.name === 'Health Insurance Agent') {
+          this._getBeneficiariesFromPolicyByHIA(this.user.facilityId._id);
+        }
+        // this._getBeneficiariesFromPolicy(this.currentPlatform._id);  
         // this._getInActiveBeneficiaries(this.currentPlatform._id);
       }
       this._systemService.off();
@@ -82,11 +91,8 @@ export class ListBeneficiaryComponent implements OnInit {
       }
     }).then((res: any) => {
       this.loading = false;
-      console.log(res);
       if (res.data.length > 0) {
-        console.log(res);
         res.data.forEach(policy => {
-          console.log(policy)
           let principal = policy.principalBeneficiary;
           principal.isPrincipal = true;
           principal.hia = policy.hiaId;
@@ -102,12 +108,78 @@ export class ListBeneficiaryComponent implements OnInit {
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
         });
-        console.log(this.beneficiaries);
       }
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
-      console.log(err);
+    });
+  }
+
+  _getBeneficiariesFromPolicyByProvider(providerId) {
+    this._systemService.on();
+    this._policyService.find({
+      query: {
+        'providerId._id': providerId,
+        $limit: 200,
+        $sort: { createdAt: -1 }
+      }
+    }).then((res: any) => {
+      this.loading = false;
+      if (res.data.length > 0) {
+        res.data.forEach(policy => {
+          let principal = policy.principalBeneficiary;
+          principal.isPrincipal = true;
+          principal.hia = policy.hiaId;
+          principal.isActive = policy.isActive;
+          principal.dependantCount = policy.dependantBeneficiaries.length;
+          this.beneficiaries.push(principal);
+          policy.dependantBeneficiaries.forEach(innerPolicy => {
+            innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+            innerPolicy.beneficiary.isPrincipal = false;
+            innerPolicy.beneficiary.principalId = principal._id;
+            innerPolicy.beneficiary.hia = policy.hiaId;
+            innerPolicy.beneficiary.isActive = policy.isActive;
+            this.beneficiaries.push(innerPolicy.beneficiary);
+          });
+        });
+      }
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  _getBeneficiariesFromPolicyByHIA(providerId) {
+    this._systemService.on();
+    this._policyService.find({
+      query: {
+        'hiaId._id': providerId,
+        $limit: 200,
+        $sort: { createdAt: -1 }
+      }
+    }).then((res: any) => {
+      this.loading = false;
+      if (res.data.length > 0) {
+        res.data.forEach(policy => {
+          let principal = policy.principalBeneficiary;
+          principal.isPrincipal = true;
+          principal.hia = policy.hiaId;
+          principal.isActive = policy.isActive;
+          principal.dependantCount = policy.dependantBeneficiaries.length;
+          this.beneficiaries.push(principal);
+          policy.dependantBeneficiaries.forEach(innerPolicy => {
+            innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+            innerPolicy.beneficiary.isPrincipal = false;
+            innerPolicy.beneficiary.principalId = principal._id;
+            innerPolicy.beneficiary.hia = policy.hiaId;
+            innerPolicy.beneficiary.isActive = policy.isActive;
+            this.beneficiaries.push(innerPolicy.beneficiary);
+          });
+        });
+      }
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
     });
   }
 

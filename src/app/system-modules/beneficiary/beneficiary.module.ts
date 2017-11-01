@@ -1,3 +1,4 @@
+import { ReferralService } from './../../services/referral/referral.service';
 import { ClaimService } from './../../services/common/claim.service';
 import { CheckInService } from './../../services/common/check-in.service';
 import { EncounterTypeService } from './../../services/common/encounter-type.service';
@@ -54,6 +55,7 @@ import { PersonalDetailsComponent } from './beneficiary-details/personal-details
         EncounterTypeService,
         PremiumPaymentService,
         ClaimService,
+        ReferralService,
         CheckInService]
 })
 export class BeneficiaryModule { }
