@@ -113,9 +113,22 @@
         </div>
 
         <div *ngIf='tab_beneficiaries' class="tab-pane fade show active">
-            <div class="btn btn-medium btn-blue" (click)="showImageBrowseDlg()">
+            <!-- <div class="btn btn-medium btn-white-outline" (click)="showImageBrowseDlg()">
                 <i class="fa fa-file-excel-o" aria-hidden="true"></i> UPLOAD BENEFICIARIES
                 <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
+            </div> -->
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>{{ facility?.name }}</div>
+                    <div>Status:
+                        <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span>
+                    </div>
+                </div>
+
+                <div class="bar-icos">
+                    <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2">  UPLOAD BENEFICIARIES</div>
+                    <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
+                </div>
             </div>
             <div *ngIf="!isUploading">
                 <app-list-beneficiary></app-list-beneficiary>
@@ -124,7 +137,6 @@
             <table *ngIf="isUploading" class="table" cellpadding="0" cellspacing="0" border="0.5">
                 <thead class="thead">
                     <tr class="tr">
-                        <td class="th">...</td>
                         <th class="th">No</th>
                         <th class="th">Name</th>
                         <th class="th">Gender</th>
@@ -140,39 +152,31 @@
                 </thead>
 
                 <tbody class="tbody">
-                    <tr class="tr" *ngIf="intendingBeneficiaries.length === 0 && !loading">
+                    <!-- <tr class="tr" *ngIf="intendingBeneficiaries.length === 0 && !loading">
                         <td class="text-center" colspan="11">No data available in table</td>
                     </tr>
                     <tr class="tr" *ngIf="intendingBeneficiaries.length === 0 && loading">
                         <td class="text-center" colspan="11">
                             <i class="fa fa-spinner fa-spin"></i>
                         </td>
-                    </tr>
-                    <tr *ngFor="let beneficiary of intendingBeneficiaries; let i = index;" class="tr">
-                        <td class="td"><input type="checkbox"></td>
-                        <td class="td">{{ i+1 }}</td>
-                        <td class="td">{{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}} {{beneficiary?.otherNames}}</td>
-                        <td class="td">{{beneficiary.person.gender.name}}</td>
+                    </tr> -->
+                    <tr class="tr">
+                        <td class="td">1</td>
+                        <td class="td">Jonathan Nelson</td>
+                        <td class="td">Male</td>
+                        <td class="td">P</td>
+                        <td class="td">122.22.22.1</td>
+                        <td class="td">11th Oct 1990</td>
+                        <td class="td">Oha Ozara</td>
+                        <td class="td">Hygeria</td>
                         <td class="td">
-                            <span *ngIf="beneficiary?.isPrincipal" class="baller">P</span>
-                            <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary?.dependantCount}}</span>
-                            <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
-                            <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
-                        </td>
-                        <td class="td">{{beneficiary.platformOwnerNumber}}</td>
-                        <td class="td">{{beneficiary.person.dateOfBirth | date}}</td>
-                        <td class="td">{{beneficiary.person.homeAddress.lga.name}}</td>
-                        <td class="td">{{beneficiary.hia.name}}</td>
-                        <td class="td">
-                            <span class="{{ beneficiary.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}">
-                                {{ beneficiary.isTokenVerified ? 'Active': 'Inactive' }}
-                            </span>
+                            <span class="tbl-status-active">Active</span>
                         </td>
                         <td class="td td-icos">
                             <i class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
                         </td>
-                        <td routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}">
-                            <i class="fa fa-chevron-right"></i>
+                        <td>
+                            <i class="fa fa-pencil-right"></i>
                         </td>
                     </tr>
                 </tbody>

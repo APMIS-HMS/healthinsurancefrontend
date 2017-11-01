@@ -45,9 +45,9 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 
 			this._systemService.notificationAnnounced$.subscribe((value: any) => {
 				if (value.status === 'On') {
-					this.loadingService.startLoading();
+					this.loadingService.start();
 				} else {
-					this.loadingService.endLoading();
+					this.loadingService.complete();
 				}
 			});
 			this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
