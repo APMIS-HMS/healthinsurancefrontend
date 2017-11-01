@@ -85,13 +85,16 @@ export class ListBeneficiaryComponent implements OnInit {
       console.log(this.beneficiaries)
     });
   }
-private _getPlanTypes(){
-  this._planTypeService.find({}).then((payload:any) =>{
-    this.planTypes = payload.data;
-  }).catch(err =>{
+  reset() {
+    this.ngOnInit();
+  }
+  private _getPlanTypes() {
+    this._planTypeService.find({}).then((payload: any) => {
+      this.planTypes = payload.data;
+    }).catch(err => {
 
-  })
-}
+    })
+  }
   private _getCurrentPlatform() {
     this._systemService.on();
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
@@ -182,7 +185,7 @@ private _getPlanTypes(){
             innerPolicy.beneficiary.planTypeId = policy.planTypeId;
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
-          
+
         });
         console.log(this.beneficiaries);
       }

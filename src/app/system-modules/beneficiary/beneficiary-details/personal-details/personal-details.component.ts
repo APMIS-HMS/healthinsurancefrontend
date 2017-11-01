@@ -161,6 +161,28 @@ export class PersonalDetailsComponent implements OnInit {
   addApprovalClick() {
     this.addApproval = !this.addApproval;
   }
+  navigateEditBeneficiary(beneficiary) {
+    this._systemService.on();
+    this._router.navigate(['/modules/beneficiary/new', beneficiary._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
+  }
+
+  navigateFacility(sponsor){
+    console.log(sponsor)
+    if(sponsor.facilityType.name === 'Provider'){
+      this._router.navigate(['/modules/provider/new', sponsor._id]);
+    } else if(sponsor.facilityType.name === 'Employer'){
+      this._router.navigate(['/modules/employer/new', sponsor._id]);
+    } else if(sponsor.facilityType.name === 'Health Insurance Agent'){
+      this._router.navigate(['/modules/hia/new', sponsor._id]);
+    }else if(sponsor.facilityType.name === 'Platform Owner'){
+      this._router.navigate(['/modules/provider/new', sponsor._id]);
+    }
+  }
 
   navigateBeneficiary(url, id?) {
    this._systemService.on()
