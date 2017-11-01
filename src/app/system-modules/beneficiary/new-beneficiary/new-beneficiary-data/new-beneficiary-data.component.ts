@@ -493,7 +493,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
               if (result !== undefined && result.body !== undefined && result.body.length > 0) {
                 personId.profileImageObject = result.body[0].file;
                 console.log('2d')
-                this._beneficiaryService.createWithMiddleWare({ personId: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+                this._beneficiaryService.createWithMiddleWare({ person: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
                   console.log('2e')
                   // should be sending selectedbeneficiary to steptwo
                   console.log(payload)
