@@ -82,6 +82,7 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   _getBeneficiariesFromPolicy(platformId) {
+    console.log(platformId);
     this._systemService.on();
     this._policyService.find({
       query: {
@@ -107,6 +108,7 @@ export class ListBeneficiaryComponent implements OnInit {
             innerPolicy.beneficiary.isActive = policy.isActive;
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
+          console.log(this.beneficiaries);
         });
       }
       this._systemService.off();
@@ -116,6 +118,7 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   _getBeneficiariesFromPolicyByProvider(providerId) {
+    console.log(providerId);
     this._systemService.on();
     this._policyService.find({
       query: {
@@ -141,7 +144,9 @@ export class ListBeneficiaryComponent implements OnInit {
             innerPolicy.beneficiary.isActive = policy.isActive;
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
+          
         });
+        console.log(this.beneficiaries);
       }
       this._systemService.off();
     }).catch(err => {
@@ -150,6 +155,7 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   _getBeneficiariesFromPolicyByHIA(providerId) {
+    console.log(providerId);
     this._systemService.on();
     this._policyService.find({
       query: {
@@ -176,6 +182,7 @@ export class ListBeneficiaryComponent implements OnInit {
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
         });
+        console.log(this.beneficiaries);
       }
       this._systemService.off();
     }).catch(err => {
