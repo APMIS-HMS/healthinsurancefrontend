@@ -71,6 +71,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getBeneficiariesFromPolicyByProvider(this.user.facilityId._id);
         } else if (this.user.userType.name === 'Health Insurance Agent') {
           this._getBeneficiariesFromPolicyByHIA(this.user.facilityId._id);
+        }else if (this.user.userType.name === 'Platform Owner') {
+          this._getBeneficiariesFromPolicy(this.user.facilityId._id);
         }
         // this._getBeneficiariesFromPolicy(this.currentPlatform._id);  
         // this._getInActiveBeneficiaries(this.currentPlatform._id);
