@@ -111,6 +111,7 @@ private _getPlanTypes(){
   }
 
   _getBeneficiariesFromPolicy(platformId) {
+    console.log(platformId);
     this._systemService.on();
     this._policyService.find({
       query: {
@@ -138,6 +139,7 @@ private _getPlanTypes(){
             innerPolicy.beneficiary.planTypeId = policy.planTypeId;
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
+          console.log(this.beneficiaries);
         });
       }
       this.mainBeneficiaries = this.beneficiaries;
@@ -148,6 +150,7 @@ private _getPlanTypes(){
   }
 
   _getBeneficiariesFromPolicyByProvider(providerId) {
+    console.log(providerId);
     this._systemService.on();
     this._policyService.find({
       query: {
@@ -175,7 +178,9 @@ private _getPlanTypes(){
             innerPolicy.beneficiary.planTypeId = policy.planTypeId;
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
+          
         });
+        console.log(this.beneficiaries);
       }
       this.mainBeneficiaries = this.beneficiaries;
       this._systemService.off();
@@ -185,6 +190,7 @@ private _getPlanTypes(){
   }
 
   _getBeneficiariesFromPolicyByHIA(providerId) {
+    console.log(providerId);
     this._systemService.on();
     this._policyService.find({
       query: {
@@ -211,6 +217,7 @@ private _getPlanTypes(){
             this.beneficiaries.push(innerPolicy.beneficiary);
           });
         });
+        console.log(this.beneficiaries);
       }
       this.mainBeneficiaries = this.beneficiaries;
       this._systemService.off();

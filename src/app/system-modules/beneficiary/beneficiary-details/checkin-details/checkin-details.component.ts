@@ -226,6 +226,8 @@ export class CheckinDetailsComponent implements OnInit {
     this._systemService.on();
     this.selectedCheckIn.encounterType = this.checkinFormGroup.controls['encounterType'].value;
     this.selectedCheckIn.encounterDateTime = this.checkinFormGroup.controls['encounterDate'].value.jsdate;
+    let policyId = this._locker.getObject('policyID');
+    this.selectedCheckIn.policyId = policyId;
     this._checkInService.patch(this.selectedCheckIn._id, this.selectedCheckIn, {
       $client: {
         confirmation: true
