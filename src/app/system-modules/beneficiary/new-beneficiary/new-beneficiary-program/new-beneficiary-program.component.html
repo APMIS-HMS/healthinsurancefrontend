@@ -1,11 +1,11 @@
 <div class="pg-title">
-    {{selectedBeneficiary?.person.lastName}} {{selectedBeneficiary?.person.firstName}}</div>
-<div class="pg-subtitle">{{selectedBeneficiary?.person.email}}</div>
+    {{selectedBeneficiary?.personId.lastName}} {{selectedBeneficiary?.personId.firstName}}</div>
+<div class="pg-subtitle">{{selectedBeneficiary?.personId.email}}</div>
 
 <form [formGroup]="frmProgram" novalidate>
     <div class="frm-inner-title">Health Insurance Agent</div>
 
-    <div class="frm-item-wrap">
+   <div class="frm-item-wrap">
         <label class="label">HIA</label>
         <div class="inputWrap">
             <select formControlName="hiaName" class="form-control">
@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="frm-inner-title">Primary Health Care Provider</div>
+     <div class="frm-inner-title">Primary Health Care Provider</div>
 
     <div class="frm-item-wrap">
         <label class="label">Provider Name</label>
@@ -77,7 +77,7 @@
         </div>
     </div>
 
-    <div style="margin:10px auto;display:flex;justify-content:center;">
+   <div style="margin:10px auto;display:flex;justify-content:center;">
         <button class="btn btn-medium btn-blue" (click)="onClickStepFour(frmProgram.value, frmProgram.valid);">
             NEXT &nbsp; <i class="fa fa-chevron-right"></i>
         </button>
