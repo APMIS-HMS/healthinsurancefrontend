@@ -26,39 +26,39 @@ export class EmployerDetailsComponent implements OnInit {
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
 
-	tab_details = true;
-	tab_preauthorization = false;
-	tab_plans = false;
-	tab_beneficiaries = false;
-	tab_employers = false;
+  tab_details = true;
+  tab_preauthorization = false;
+  tab_plans = false;
+  tab_beneficiaries = false;
+  tab_employers = false;
   tab_payment = false;
   tab_claims = false;
-	tab_complaints = false;
-	tab_referals = false;
+  tab_complaints = false;
+  tab_referals = false;
   facility: any = <any>{};
   addApproval: boolean = false;
   isUploading = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
-  intendingBeneficiaries:any[] = [];
-  states:any[] = [];
-  countries:any[] = [];
-  cities:any[] = [];
-  lgs:any[] = [];
-  currentPlatform:any;
-  selectedCountry:any;
-  selectedState:any;
+  intendingBeneficiaries: any[] = [];
+  states: any[] = [];
+  countries: any[] = [];
+  cities: any[] = [];
+  lgs: any[] = [];
+  currentPlatform: any;
+  selectedCountry: any;
+  selectedState: any;
 
-	constructor(
+  constructor(
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
-    private _uploadService:UploadService,
-    private _titleService:TitleService,
-    private _genderService:GenderService,
-    private _countryService:CountryService,
+    private _uploadService: UploadService,
+    private _titleService: TitleService,
+    private _genderService: GenderService,
+    private _countryService: CountryService,
 
   ) { }
 
@@ -74,11 +74,11 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-			if (res.data.length > 0) {
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-			}
-		}).catch(err => console.log(err));
+      }
+    }).catch(err => console.log(err));
   }
 
   _getCountries() {
@@ -103,7 +103,7 @@ export class EmployerDetailsComponent implements OnInit {
       this._systemService.off();
     })
   }
-  
+
   _getStates(_id) {
     this._systemService.on();
     this._countryService.find({
@@ -147,17 +147,17 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   onClickApprove() {
-      this.facility.isConfirmed = true;
-      this._facilityService.update(this.facility).then(res => {
-        console.log(res);
-        this.facility = res;
-        const status = this.facility.isConfirmed ? 'activated successfully' : 'deactivated successfully';
-        const text = this.facility.name + ' has been ' + status;
-        this._toastr.success(text, 'Confirmation!');
-        setTimeout(e => {
-          this.addApprovalClick();
-        }, 1000);
-      });
+    this.facility.isConfirmed = true;
+    this._facilityService.update(this.facility).then(res => {
+      console.log(res);
+      this.facility = res;
+      const status = this.facility.isConfirmed ? 'activated successfully' : 'deactivated successfully';
+      const text = this.facility.name + ' has been ' + status;
+      this._toastr.success(text, 'Confirmation!');
+      setTimeout(e => {
+        this.addApprovalClick();
+      }, 1000);
+    });
   }
 
   onClickDeactivate() {
@@ -189,42 +189,130 @@ export class EmployerDetailsComponent implements OnInit {
       const formData = new FormData();
       formData.append("excelfile", fileBrowser.files[0]);
       formData.append("facilityId", this.facility._id);
-      this._uploadService.uploadExcelFile(formData).then(res => {
+      this._uploadService.uploadExcelFile(formData).then(result => {
+        //console.log(result);
         let enrolleeList: any[] = [];
-        if (res.body !== undefined && res.body.error_code === 0) {
-          res.body.data.Sheet1.forEach(row => {
-            let rowObj: any = <any>{};
-            rowObj.serial = row.A;
-            rowObj.surname = row.B;
-            rowObj.firstName = row.C;
-            rowObj.gender = row.D;
-            rowObj.filNo = row.E;
-            rowObj.category = row.F;
-            rowObj.sponsor = row.G;
-            rowObj.plan = row.H;
-            rowObj.type = row.I;
-            // rowObj.date = this.excelDateToJSDate(row.J);
-            enrolleeList.push(rowObj);
+        var bodyObj = [];
+        var principal = {};
+        var beneficiaries = [];
+        var policy = {};
+        if (result.body !== undefined && result.error == false) {
+          // res.body.data.Sheet1.forEach(row => {
+          //   let rowObj: any = <any>{};
+          //   rowObj.serial = row.A;
+          //   rowObj.surname = row.B;
+          //   rowObj.firstName = row.C;
+          //   rowObj.gender = row.D;
+          //   rowObj.filNo = row.E;
+          //   rowObj.category = row.F;
+          //   rowObj.sponsor = row.G;
+          //   rowObj.plan = row.H;
+          //   rowObj.type = row.I;
+          //   // rowObj.date = this.excelDateToJSDate(row.J);
+          //   enrolleeList.push(rowObj);
+          // });
+          console.log(result);
+          result.body.Sheet1.forEach(function (item, index) {
+            if (index > 0) {
+              if (item.A != undefined && item.B != undefined && item.C != undefined
+                && item.D != undefined && item.E != undefined && item.F != undefined && item.G != undefined
+                && item.H != undefined && item.I != undefined
+                && item.J != undefined && item.K != undefined && item.L != undefined && item.M != undefined
+                && item.N != undefined && item.O != undefined && item.P != undefined && item.Q != undefined
+                && item.R != undefined && item.S != undefined && item.AL != undefined && item.AM != undefined
+                && item.AL != undefined && item.AM != undefined && item.AN != undefined && item.AO != undefined
+                && item.AP != undefined && item.AQ != undefined) {
+                console.log("A");
+                beneficiaries = [];
+                principal = {
+                  "dateOfBirth": item.A,
+                  "email": item.B,
+                  "numberOfUnderAge": item.C,
+                  "gender": item.D,
+                  "homeAddress": {
+                    "neighbourhood": item.E,
+                    "state": item.F,
+                    "lga": item.G,
+                    "street": item.H
+                  },
+                  "lastName": item.I,
+                  "firstName": item.J,
+                  "lgaOfOrigin": item.K,
+                  "maritalStatus": item.L,
+                  "mothersMaidenName": item.M,
+                  "otherNames": item.N,
+                  "phoneNumber": item.O,
+                  "platformOwnerId": item.P,
+                  "stateOfOrigin": item.Q,
+                  "title": item.S
+                };
+                policy = {
+                  "platformOwnerId": item.AL,
+                  "hiaId": item.AM,
+                  "providerId": item.AN,
+                  "planTypeId": item.AO,
+                  "planId": item.AP,
+                  "premiumCategoryId": item.AQ
+                };
+              }
+              console.log(policy);
+              if (item.S != undefined && item.T != undefined && item.U != undefined && item.V != undefined && item.W != undefined
+                && item.X != undefined && item.Y != undefined && item.Z != undefined && item.AA != undefined && item.AB != undefined
+                && item.AC != undefined && item.AD != undefined && item.AE != undefined && item.AF != undefined && item.AG != undefined) {
+                beneficiaries.push({
+                  "dateOfBirth": item.S,
+                  "email": item.T,
+                  "gender": item.U,
+                  "lastName": item.V,
+                  "firstName": item.W,
+                  "lgaOfOrigin": item.X,
+                  "numberOfUnderAge": item.Y,
+                  "maritalStatus": item.Z,
+                  "mothersMaidenName": item.AA,
+                  "otherNames": item.AB,
+                  "phoneNumber": item.AC,
+                  "platformOwnerId": item.AD,
+                  "stateOfOrigin": item.AE,
+                  "relationship": item.AF,
+                  "title": item.AG,
+                  "homeAddress": {
+                    "neighbourhood": item.AH,
+                    "state": item.AI,
+                    "lga": item.AJ,
+                    "street": item.AK
+                  }
+                }); console.log("B");
+              }
+              let counter = index + 1;
+              if (result.body.Sheet1.length == counter) {
+                console.log("c");
+                bodyObj.push({
+                  "principal": principal,
+                  "dependent": beneficiaries,
+                  "policy": policy
+                });
+                console.log(bodyObj);
+              } else {
+                try {
+                  if (result.body.Sheet1[counter].A != undefined
+                    && result.body.Sheet1[counter].B != undefined
+                    && result.body.Sheet1[counter].C != undefined
+                    && result.body.Sheet1[counter].D != undefined
+                    && result.body.Sheet1[counter].I != undefined
+                    && result.body.Sheet1[counter].J != undefined) {
+                    bodyObj.push({
+                      "principal": principal,
+                      "dependent": beneficiaries,
+                      "policy": policy
+                    });
+                  }
+                }
+                catch (Exception) {
+
+                }
+              }
+            }
           });
-          // const index = this.loginHMOListObject.hmos.findIndex(x => x._id === hmo._id);
-          // let facHmo = this.loginHMOListObject.hmos[index];
-          // let enrolleeItem = {
-          //   month: new Date().getMonth() + 1,
-          //   year: new Date().getFullYear(),
-          //   enrollees: enrolleeList
-          // }
-          // console.log(enrolleeItem);
-
-          // facHmo.enrolleeList.push(enrolleeItem);
-          // console.log(facHmo);
-          // this.loginHMOListObject.hmos[index] = facHmo;
-
-
-          // console.log(this.loginHMOListObject);
-          // this.hmoService.update(this.loginHMOListObject).then(pay => {
-          //   console.log(pay);
-          //   this.getLoginHMOList();
-          // })
         }
       }).catch(err => {
         // this._notification('Error', "There was an error uploading the file");
@@ -250,7 +338,7 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   navigateEmployers(url, id?) {
-   this._systemService.on()
+    this._systemService.on()
     if (!!id) {
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
@@ -265,7 +353,7 @@ export class EmployerDetailsComponent implements OnInit {
       });
     }
   }
-  
+
   tabDetails_click() {
     this.tab_details = true;
     this.tab_preauthorization = false;

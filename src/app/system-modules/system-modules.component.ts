@@ -24,7 +24,7 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 	pageInView: String = '';
 	minorPageInView: String = '';
 
-	sub:Subscription;
+	sub: Subscription;
 	constructor(
 		private _headerEventEmitter: HeaderEventEmitterService,
 		private _authService: AuthService,
@@ -32,7 +32,7 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 		private _locker: CoolLocalStorage,
 		private loadingService: LoadingBarService,
 		private _systemService: SystemModuleService,
-		private _roleService:RoleService,
+		private _roleService: RoleService,
 		private _uploadService: UploadService,
 	) {
 		this.online = this._uploadService.checkOnlineStatus();
@@ -45,9 +45,9 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 
 			this._systemService.notificationAnnounced$.subscribe((value: any) => {
 				if (value.status === 'On') {
-					this.loadingService.start();
+					this.loadingService.startLoading();
 				} else {
-					this.loadingService.complete();
+					this.loadingService.endLoading();
 				}
 			});
 			this._systemService.broadCastOnlineSource$.subscribe((value: any) => {
@@ -71,30 +71,33 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 		this._checkRole();
 	}
 	private _checkRole() {
-		const roles = this.user.roles;
-		const roleIds: any[] = [];
-		roles.forEach(x => {
-		  roleIds.push(x._id);
-		})
-	
-		this._roleService.find({
-		  query: {
-			_id: {
-			  $in: roleIds
-			}
-		  }
-		}).then((pays: any) => {
-		  pays.data.forEach(roleItem => {
-			if (!!roleItem.accessibilities) {
-			  const accessibilities = roleItem.accessibilities;
-			  this._locker.setObject('accessibilities', accessibilities);
-			}
-		  });
-		})
-	
-	
-	
-	  }
+		try {
+			const roles = this.user.roles;
+			const roleIds: any[] = [];
+			roles.forEach(x => {
+				roleIds.push(x._id);
+			})
+
+			this._roleService.find({
+				query: {
+					_id: {
+						$in: roleIds
+					}
+				}
+			}).then((pays: any) => {
+				pays.data.forEach(roleItem => {
+					if (!!roleItem.accessibilities) {
+						const accessibilities = roleItem.accessibilities;
+						this._locker.setObject('accessibilities', accessibilities);
+					}
+				});
+			}).catch(err => {
+
+			})
+		} catch (error) {
+
+		}
+	}
 	close_onClick(message: boolean) {
 		this.menuToggle = false;
 	}

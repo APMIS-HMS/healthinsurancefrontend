@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { PolicyService } from './../../../services/policy/policy.service';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Claim } from './../../../models/index';
 import { CheckIn } from './../../../models/check-in/check-in';
@@ -63,7 +64,7 @@ export class NewClaimComponent implements OnInit {
   checkInDate: any = <any>{};
   currentCheckIn: CheckIn = <CheckIn>{};
   claimItem: Claim = <Claim>{};
-  SelectedCheckinItem: CheckIn = <CheckIn>{};
+  SelectedCheckinItem: any = <any>{};
   SelectedCheckinItemPlan: any = <any>{};
   packSizes = [];
   symptomLists = [];
@@ -100,6 +101,7 @@ export class NewClaimComponent implements OnInit {
     private _drugPackSizeService: DrugPackSizeService,
     private _procedureService: ProcedureService,
     private _diagnosisService: DiagnosisService,
+    private _policyService:PolicyService,
     private _preAuthorizationService: PreAuthorizationService,
     private _diagnosisTypeService: DiagnosisTypeService,
     private _route: ActivatedRoute,
@@ -222,7 +224,7 @@ export class NewClaimComponent implements OnInit {
       console.log(preauth_callback);
       if (preauth_callback.data.length > 0) {
         this.isAuthorize = true;
-        this.SelectedCheckinItem = preauth_callback.data[0].checkedInDetails;
+        this.SelectedCheckinItem = preauth_callback.data[0];
         console.log(this.SelectedCheckinItem);
         preauth_callback.data.forEach(element => {
           console.log("2" + element);
@@ -268,8 +270,22 @@ export class NewClaimComponent implements OnInit {
         });
       } else {
         this.isAuthorize = false;
+        this.SelectedCheckinItem.checkedInDetails = {};
+        console.log(checkinId);
         this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
-          this.SelectedCheckinItem = payload.data[0];
+          console.log(payload.data[0]);
+          this.SelectedCheckinItem.checkedInDetails = payload.data[0];
+          this.SelectedCheckinItem.providerFacilityId = payload.data[0].providerFacilityId;
+          let policyId = this._locker.getObject('policyID');
+          console.log(policyId);
+          this.SelectedCheckinItem.policyId={};
+          this.SelectedCheckinItem.policyId.planId={};
+         
+          this._policyService.find({ query: { _id: policyId, $limit: 1 } }).then((payload2:any)=>{
+            this.SelectedCheckinItem.policyId.planId.name = payload2.data[0].planId.planType.name;
+          })
+          delete payload.data[0].providerFacilityId;
+          console.log(this.SelectedCheckinItem);
           if (this.SelectedCheckinItem.encounterType == "In-Patient") {
             this.isInpatient = true;
             this.isOutpatient = false;
@@ -527,8 +543,7 @@ export class NewClaimComponent implements OnInit {
   }
 
 
-  onSendClaim() {
-
+  onSendClaim(valid) {
     var request = {
       "visitType": this.claimsFormGroup.controls.visitClass.value,
       "drugs": this.drugList,
@@ -556,6 +571,7 @@ export class NewClaimComponent implements OnInit {
     this.isProcessing = true;
     this._claimService.create(this.claimItem).then((payload: any) => {
       console.log(payload);
+      this.SelectedCheckinItem
       this.claimsFormGroup.reset();
       this.isProcessing = false;
       this.navigateListClaim();
@@ -563,6 +579,7 @@ export class NewClaimComponent implements OnInit {
       console.log(error);
       this.isProcessing = false;
     })
+
   }
 
   navigateListClaim() {
