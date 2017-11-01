@@ -226,7 +226,7 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
       person.email = group.controls.email.value;
       person.firstName = group.controls.firstName.value;
       person.gender = group.controls.gender.value;
-      person.homeAddress = this.selectedBeneficiary.person.homeAddress;
+      person.homeAddress = this.selectedBeneficiary.personId.homeAddress;
       person.lastName = group.controls.lastName.value;
       person.otherNames = group.controls.middleName.value;
       person.phoneNumber = group.controls.phonenumber.value;
@@ -243,7 +243,7 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
 
       // console.log(group)
     });
-    // console.log(dependantList);
+    //console.log(this.selectedBeneficiary);
 
     this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList })
   }
