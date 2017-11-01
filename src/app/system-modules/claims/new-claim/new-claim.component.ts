@@ -225,6 +225,8 @@ export class NewClaimComponent implements OnInit {
       if (preauth_callback.data.length > 0) {
         this.isAuthorize = true;
         this.SelectedCheckinItem = preauth_callback.data[0];
+        this.SelectedCheckinItem.providerFacility = this.SelectedCheckinItem.providerFacilityId.name;
+        this.SelectedCheckinItem.plan = this.SelectedCheckinItem.policyId.planId.name;
         console.log(this.SelectedCheckinItem);
         preauth_callback.data.forEach(element => {
           console.log("2" + element);
@@ -275,15 +277,12 @@ export class NewClaimComponent implements OnInit {
         this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
           console.log(payload.data[0]);
           this.SelectedCheckinItem.checkedInDetails = payload.data[0];
-          this.SelectedCheckinItem.providerFacilityId = payload.data[0].providerFacilityId;
-          let policyId = this._locker.getObject('policyID');
-          console.log(policyId);
-          this.SelectedCheckinItem.policyId={};
-          this.SelectedCheckinItem.policyId.planId={};
+          this.SelectedCheckinItem.providerFacility = this.SelectedCheckinItem.policyObject.providerId.name;
+          this.SelectedCheckinItem.plan = this.SelectedCheckinItem.policyObject.planTypeId.name;
          
-          this._policyService.find({ query: { _id: policyId, $limit: 1 } }).then((payload2:any)=>{
-            this.SelectedCheckinItem.policyId.planId.name = payload2.data[0].planId.planType.name;
-          })
+          // this._policyService.find({ query: { _id: policyId, $limit: 1 } }).then((payload2:any)=>{
+          //   this.SelectedCheckinItem.policyId.planId.name = payload2.data[0].planId.planType.name;
+          // })
           delete payload.data[0].providerFacilityId;
           console.log(this.SelectedCheckinItem);
           if (this.SelectedCheckinItem.encounterType == "In-Patient") {
