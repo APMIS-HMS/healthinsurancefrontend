@@ -73,12 +73,16 @@ export class ListBeneficiaryComponent implements OnInit {
     });
 
     this.filterTypeControl.valueChanges.subscribe((value) => {
+      // console.log(value)
+      // console.log(this.beneficiaries);
+      this.beneficiaries = this.mainBeneficiaries;
       if (value === 'All') {
         this.beneficiaries = this.mainBeneficiaries;
       } else {
         let temp = this.beneficiaries.filter(x => x.planTypeId._id === value._id);
         this.beneficiaries = temp;
       }
+      console.log(this.beneficiaries)
     });
   }
 private _getPlanTypes(){
