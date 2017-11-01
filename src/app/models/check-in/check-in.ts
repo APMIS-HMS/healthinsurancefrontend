@@ -18,6 +18,7 @@ export interface CheckIn {
     _id:any;
     beneficiaryObject:any;
     policyObject:any;
+    policyId:any;
 }
 
 
