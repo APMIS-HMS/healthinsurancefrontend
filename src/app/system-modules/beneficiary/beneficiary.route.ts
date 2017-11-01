@@ -1,3 +1,6 @@
+import { ListReferalsComponent } from './../referal/list-referals/list-referals.component';
+import { ListClaimsComponent } from './../claims/list-claims/list-claims.component';
+import { CheckinHistoryComponent } from './beneficiary-details/checkin-history/checkin-history.component';
 import { PaymentDetailBeneficiaryComponent } from './beneficiary-details/payment-detail-beneficiary/payment-detail-beneficiary.component';
 import { CheckinDetailsComponent } from './beneficiary-details/checkin-details/checkin-details.component';
 import { PersonalDetailsComponent } from './beneficiary-details/personal-details/personal-details.component';
@@ -18,7 +21,10 @@ const BENEFICIARY_ROUTES: Routes = [
                 children: [
                     { path: '', component: PersonalDetailsComponent },
                     { path: 'checkin', component: CheckinDetailsComponent },
-                    { path: 'payment', component: PaymentDetailBeneficiaryComponent }
+                    { path: 'checkedin-history', component: CheckinHistoryComponent },
+                    { path: 'payment', component: PaymentDetailBeneficiaryComponent },
+                    { path: 'claims', component: ListClaimsComponent },
+                    { path: 'referrals', component: ListReferalsComponent }
                 ]
             },
             { path: 'new', component: NewBeneficiaryComponent },

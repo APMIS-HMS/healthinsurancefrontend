@@ -69,7 +69,6 @@ export class PersonalDetailsComponent implements OnInit {
     let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary': routeId } }));
 
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
-      console.log(results);
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
       if (this.isCheckIn) {
@@ -79,9 +78,6 @@ export class PersonalDetailsComponent implements OnInit {
       if (results[1].data.length > 0) {
         this.dependants = results[1].data[0].dependantBeneficiaries;
         this.policy = results[1].data[0];
-        console.log(this.policy);
-        console.log(this.dependants)
-        console.log(this.policy)
       }
 
       this._systemService.off();
@@ -104,7 +100,6 @@ export class PersonalDetailsComponent implements OnInit {
   }
 
   onClickApprove(valid: boolean, value: any) {
-    console.log(value);
     if (valid) {
       const validity = {
         duration: value.duration,
@@ -113,8 +108,6 @@ export class PersonalDetailsComponent implements OnInit {
         createdAt: new Date(),
         validTill: this.addDays(new Date(), value.unit.days)
       };
-
-      console.log(this.policy);
       if (!!this.policy.validityPeriods) {
         this.policy.validityPeriods.push(validity);
       } else {
@@ -123,9 +116,7 @@ export class PersonalDetailsComponent implements OnInit {
       }
 
       this.policy.isActive = true;
-      this._policyService.update(this.policy).then((res: any) => {
-        console.log(res);
-        this.policy = res;
+      this._policyService.update(this.policy).then((res: any) => {        this.policy = res;
         const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
         const text = 'Policy has been ' + status;
         this._toastr.success(text, 'Confirmation!');
@@ -137,7 +128,6 @@ export class PersonalDetailsComponent implements OnInit {
         };
 
         this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
-          console.log(res);
         }).catch(err => console.log(err));
 
         setTimeout(e => {
@@ -158,7 +148,6 @@ export class PersonalDetailsComponent implements OnInit {
   onClickDeactivate() {
     this.policy.isActive = false;
     this._policyService.update(this.policy).then((res: Facility) => {
-      console.log(res);
       this.beneficiary = res;
       const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
       const text = 'Policy has been ' + status;
@@ -170,7 +159,6 @@ export class PersonalDetailsComponent implements OnInit {
   }
 
   addApprovalClick() {
-    console.log(this.beneficiary);
     this.addApproval = !this.addApproval;
   }
 

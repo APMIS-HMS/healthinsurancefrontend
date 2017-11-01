@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit {
 		private _fb: FormBuilder,
 		private _router: Router,
 		private _authService: AuthService,
-		private _userTypeService: UserTypeService,
 		private _locker: CoolLocalStorage
 	) {
 	}
@@ -40,14 +39,7 @@ export class LoginComponent implements OnInit {
 			password: ['', [<any>Validators.required]]
 		});
 
-		this._authService.checkAuth();
-		// this.getUserTypes();
-	}
-
-	getUserTypes() {
-		this._userTypeService.find({}).then(payload => {
-			console.log(payload);
-		});
+		this._authService.logOut();
 	}
 
 	setLoggedInUser(email: String, loggInState: boolean) {
@@ -68,16 +60,22 @@ export class LoginComponent implements OnInit {
 
 
 			this._authService.login(value).then(payload => {
-				console.log(payload.user.roles)
 				this._locker.setObject('auth', payload);
-				this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
-				this.loginBtnText = true;
-				this.loginBtnProcessing = false;
-				this.disableBtn = false;
-				this._router.navigate(['/modules/welcome']).then(res => {
-					this._authService.announceMission({ status: 'On' });
-					this._toastr.success('You have successfully logged in!', 'Success!');
-				});
+				if (payload.user !== undefined && payload.user.roles !== undefined) {
+					this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
+					this.loginBtnText = true;
+					this.loginBtnProcessing = false;
+					this.disableBtn = false;
+					this._router.navigate(['/modules/welcome']).then(res => {
+						this._authService.announceMission({ status: 'On' });
+						this._toastr.success('You have successfully logged in!', 'Success!');
+					});
+				}else{
+					this.loginBtnText = true;
+					this.loginBtnProcessing = false;
+					this.disableBtn = false;
+					this._authService.logOut();
+				}
 			}).catch(err => {
 				this._toastr.error('Invalid email or password!', 'Error!');
 				this.loginFormGroup.controls['password'].reset();

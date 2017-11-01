@@ -9,8 +9,9 @@ import {
 	FacilityService, GenderService, UserService, SystemModuleService, UserTypeService, PersonService
 } from './../../services/index';
 import { AuthService } from './../services/auth.service';
-import { Facility, Person, User  } from './../../models/index';
+import { Facility, Person, User } from './../../models/index';
 import { CurrentPlaformShortName } from '../../services/globals/config';
+import { PasswordValidation } from '../../services/common/password-validation';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -49,8 +50,11 @@ export class SignupComponent implements OnInit {
 			phoneNumber: ['', [<any>Validators.pattern(PHONE_REGEX), <any>Validators.required]],
 			email: ['', [<any>Validators.pattern(EMAIL_REGEX), <any>Validators.required]],
 			mothersMaidenName: ['', [<any>Validators.required]],
-			password: ['', [<any>Validators.required]]
-		});
+			password: ['', [<any>Validators.required]],
+			cpassword: ['', [<any>Validators.required]]
+		}, {
+				validator: PasswordValidation.MatchPassword
+			});
 		this._getCurrentPlatform();
 		this._getUserType();
 
@@ -173,7 +177,7 @@ export class SignupComponent implements OnInit {
 		this._userTypeService.findWithOutAuth().then((res: any) => {
 			this._systemService.off();
 			if (res.data.length > 0) {
-				const index = res.data.findIndex(x => x.name === 'Platform Owner');
+				const index = res.data.findIndex(x => x.name === 'Beneficiary');
 				if (index > -1) {
 					this.userType = res.data[index];
 				}

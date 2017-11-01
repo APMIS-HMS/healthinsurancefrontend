@@ -412,10 +412,42 @@ export class NewReferalComponent implements OnInit {
     this._checkInService.get(id, {}).then((payload: any) => {
       this.selectedCheckIn = payload;
       this._initializeFormGroup();
-      this._getPolicy();
+      this._getPolicy2();
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
+    })
+  }
+
+  _getPolicy2() {
+    this._systemService.on();
+    this._policyService.find(
+      {
+        query: {
+          $and: [
+            { isActive: true },
+            {
+              $or: [
+                { 'principalBeneficiary': this.selectedCheckIn.beneficiaryId },
+                { 'dependantBeneficiaries.beneficiary._id': this.selectedCheckIn.beneficiaryId }
+              ]
+            }
+          ]
+        }
+      }
+    ).then((results: any) => {
+      // console.log(results);
+      // let policyResult = results[0];
+      // console.log(policyResult);
+      if (results.data.length > 0) {
+        this.selectedPolicy = results.data[0];
+        this.referalFormGroup.controls.hiaResponsible.setValue(this.selectedPolicy.hiaId.name);
+        console.log(this.selectedPolicy)
+      }
+
+      this._systemService.off();
+    }, error => {
+      console.log(error)
     })
   }
 
@@ -534,13 +566,14 @@ export class NewReferalComponent implements OnInit {
     let name = this.drugFormGroup.controls.drug;
     let unit = this.drugFormGroup.controls.drugUnit;
     let quantity = this.drugFormGroup.controls.drugQty;
+    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
     if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
       this.drugList.push({
-        "drug": typeof (this.selectedDrug) === 'object' ? this.selectedDrug : name.value,
+        "drug": retObj.investigation,
         "unit": unit.value,
         "quantity": quantity.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": retObj.checked,
+        "approvedStatus": retObj.approvedStatus
       });
       this.drugFormGroup.controls.drug.reset();
       unit.reset();
@@ -551,14 +584,75 @@ export class NewReferalComponent implements OnInit {
       quantity.markAsDirty({ onlySelf: true });
     }
   }
+  checkProviderAuthorization(fc, resource) {
+    console.log(fc);
+    console.log(resource)
+    if (fc === 'primary') {
+      if (resource.P.toLowerCase().trim() == "p") {
+        console.log(1)
+        if (resource.PA.toLowerCase().trim() == "n") {
+          console.log(2)
+          // its approved
+          let copyInvestigation = resource;
+          delete copyInvestigation.Amount;
+          return {
+            'investigation':copyInvestigation,
+            'approvedStatus':this.requestStatus[1],
+            'checked':false
+          }
+        } else {
+          if (resource.Prefered.toLowerCase().trim() == 'c') {
+            console.log(3)
+            // cover by capitation, dont put amount
+            //requires authorization
+            let copyInvestigation = resource;
+            delete copyInvestigation.Amount;
+            return {
+              'investigation':copyInvestigation,
+              'approvedStatus':this.requestStatus[0],
+              'checked':true
+            }
+          } else {
+            console.log(4)
+            //set to approve and look for amount
+            //requires authorization
+            let copyInvestigation = resource;
+            return {
+              'investigation':copyInvestigation,
+              'approvedStatus':this.requestStatus[0],
+              'checked':true
+            }
+          }
+          
+        }
+      }else if(resource.P.toLowerCase().trim() == "e"){
+        let copyInvestigation = resource;
+        delete copyInvestigation.Amount;
+        return {
+          'investigation':copyInvestigation,
+          'approvedStatus':this.requestStatus[1],
+          'checked':false
+        }
+      }
+    }else if(fc === 'secondary'){
+      console.log(5)
+      // get authorization, check amount
+      let copyInvestigation = resource;
+      return {
+        'investigation':copyInvestigation,
+        'approvedStatus':this.requestStatus[0],
+        'checked':true
+      }
+    }
+  }
   onAddInvestigation() {
     let name = this.investigationFormGroup.controls.services;
-
+    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedInvestigation);
     if (name.valid) {
       this.investigationList.push({
-        "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "investigation": retObj.investigation,
+        "checked": retObj.checked,
+        "approvedStatus":retObj.approvedStatus
       });
       this.investigationFormGroup.controls.services.reset();
     } else {
@@ -567,11 +661,12 @@ export class NewReferalComponent implements OnInit {
   }
   onAddProcedure() {
     let name = this.procedureFormGroup.controls.procedure;
+    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedProcedure);
     if (name.valid) {
       this.procedureList.push({
-        "procedure": typeof (this.selectedProcedure) === 'object' ? this.selectedProcedure : name.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "procedure":retObj.investigation,
+        "checked": retObj.checked,
+        "approvedStatus": this.requestStatus[0]
       });
       this.procedureFormGroup.controls.procedure.reset();
     } else {
