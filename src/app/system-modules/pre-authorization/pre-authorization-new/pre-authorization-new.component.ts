@@ -501,52 +501,53 @@ export class PreAuthorizationNewComponent implements OnInit {
           let copyInvestigation = resource;
           delete copyInvestigation.Amount;
           return {
-            'investigation':copyInvestigation,
-            'approvedStatus':this.requestStatus[1],
-            'checked':false
+            'investigation': copyInvestigation,
+            'approvedStatus': this.requestStatus[1],
+            'checked': false
           }
         } else {
-          if (resource.Prefered.toLowerCase().trim() == 'c') {
-            console.log(3)
-            // cover by capitation, dont put amount
-            //requires authorization
-            let copyInvestigation = resource;
-            delete copyInvestigation.Amount;
-            return {
-              'investigation':copyInvestigation,
-              'approvedStatus':this.requestStatus[0],
-              'checked':true
-            }
-          } else {
-            console.log(4)
-            //set to approve and look for amount
-            //requires authorization
-            let copyInvestigation = resource;
-            return {
-              'investigation':copyInvestigation,
-              'approvedStatus':this.requestStatus[0],
-              'checked':true
+          if (resource.Prefered != undefined) {
+            if (resource.Prefered.toLowerCase().trim() == 'c') {
+              console.log(3)
+              // cover by capitation, dont put amount
+              //requires authorization
+              let copyInvestigation = resource;
+              delete copyInvestigation.Amount;
+              return {
+                'investigation': copyInvestigation,
+                'approvedStatus': this.requestStatus[0],
+                'checked': true
+              }
+            } else {
+              console.log(4)
+              //set to approve and look for amount
+              //requires authorization
+              let copyInvestigation = resource;
+              return {
+                'investigation': copyInvestigation,
+                'approvedStatus': this.requestStatus[0],
+                'checked': true
+              }
             }
           }
-          
         }
-      }else if(resource.P.toLowerCase().trim() == "e"){
+      } else if (resource.P.toLowerCase().trim() == "e") {
         let copyInvestigation = resource;
         delete copyInvestigation.Amount;
         return {
-          'investigation':copyInvestigation,
-          'approvedStatus':this.requestStatus[1],
-          'checked':false
+          'investigation': copyInvestigation,
+          'approvedStatus': this.requestStatus[1],
+          'checked': false
         }
       }
-    }else if(fc === 'secondary'){
+    } else if (fc === 'secondary') {
       console.log(5)
       // get authorization, check amount
       let copyInvestigation = resource;
       return {
-        'investigation':copyInvestigation,
-        'approvedStatus':this.requestStatus[0],
-        'checked':true
+        'investigation': copyInvestigation,
+        'approvedStatus': this.requestStatus[0],
+        'checked': true
       }
     }
   }
@@ -559,7 +560,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       this.investigationList.push({
         "investigation": retObj.investigation,
         "checked": retObj.checked,
-        "approvedStatus":retObj.approvedStatus
+        "approvedStatus": retObj.approvedStatus
       });
       this.investigationFormGroup.controls.services.reset();
     } else {
@@ -571,7 +572,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedProcedure);
     if (name.valid) {
       this.procedureList.push({
-        "procedure":retObj.investigation,
+        "procedure": retObj.investigation,
         "checked": retObj.checked,
         "approvedStatus": this.requestStatus[0]
       });

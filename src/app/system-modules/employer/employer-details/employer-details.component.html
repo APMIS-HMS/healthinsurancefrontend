@@ -124,6 +124,7 @@
             <table *ngIf="isUploading" class="table" cellpadding="0" cellspacing="0" border="0.5">
                 <thead class="thead">
                     <tr class="tr">
+                        <td class="th">...</td>
                         <th class="th">No</th>
                         <th class="th">Name</th>
                         <th class="th">Gender</th>
@@ -148,6 +149,7 @@
                         </td>
                     </tr>
                     <tr *ngFor="let beneficiary of intendingBeneficiaries; let i = index;" class="tr">
+                        <td class="td"><input type="checkbox"></td>
                         <td class="td">{{ i+1 }}</td>
                         <td class="td">{{beneficiary?.person.lastName}} {{beneficiary?.person.firstName}} {{beneficiary?.otherNames}}</td>
                         <td class="td">{{beneficiary.person.gender.name}}</td>
