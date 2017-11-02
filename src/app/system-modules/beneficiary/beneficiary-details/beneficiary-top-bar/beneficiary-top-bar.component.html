@@ -6,7 +6,8 @@
         <!-- <div *ngIf="selectedFacility?.isConfirmed && selectedFacility?.hia?.validityPeriods.length > 0">Full License: Valid till {{ selectedFacility?.hia?.validityPeriods[selectedFacility?.hia?.validityPeriods.length - 1].validTill | date }}</div> -->
         <div>Plan Name: {{ policy?.planId?.name }}</div>
         <div>Status: <span class="{{ policy?.isActive ? 'text-green' : 'text-red' }}">{{ policy?.isActive ? 'Active' : 'Inactive' }}</span></div>
-        <div>Premium paid until: 11th Oct, 2018.</div>
+        <div *ngIf="policy?.isPaid">Premium paid until: {{ policy?.}}</div>
+        <div *ngIf="selectedFacility?.isConfirmed && selectedFacility?.hia?.validityPeriods.length > 0">Full License: Valid till {{ selectedFacility?.hia?.validityPeriods[selectedFacility?.hia?.validityPeriods.length - 1].validTill | date }}</div>
     </div>
 
     <div class="bar-icos">
