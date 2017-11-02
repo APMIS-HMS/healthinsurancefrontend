@@ -68,7 +68,7 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 		} catch (error) {
 			// this._router.navigate(['auth/login']);
 		}
-		this._checkRole();
+		// this._checkRole();
 	}
 	private _checkRole() {
 		try {

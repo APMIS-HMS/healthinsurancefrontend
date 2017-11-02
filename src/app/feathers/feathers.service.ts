@@ -61,7 +61,7 @@ export class SocketService {
     }
     logOut() {
         this.locker.clear();
-        this._app.logout();
+        return this._app.logout();
     }
     loginIntoApp(query: any) {
         return this._app.authenticate({

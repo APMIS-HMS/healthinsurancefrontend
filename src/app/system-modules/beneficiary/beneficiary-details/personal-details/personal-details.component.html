@@ -1,232 +1,238 @@
 <app-beneficiary-top-bar [policy]="policy" (closeModal)="openModal($event);"></app-beneficiary-top-bar>
 
-            <div class="details-wrap">
-                <div class="left-wrap">
-                    <div class="detail-item">
+<div class="details-wrap">
+    <div class="left-wrap">
+        <div class="detail-item">
 
-                        <div class="detail-content">
-                            <div class="hia-user">
-                                <img *ngIf="beneficiary?.personId?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
-                                <img *ngIf="beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)">
-                                <div class="pd-tag">P</div>
-                            </div>
-                            <div class="group-wrap">
-                                <div class="group-item">
-                                    <div class="item-label">Date of Birth:</div>
-                                    <div class="item-val">{{ beneficiary?.personId?.dateOfBirth | date }}</div>
-                                </div>
+            <div class="detail-content">
+                <div class="hia-user">
+                    <img *ngIf="beneficiary?.personId?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
+                    <img *ngIf="beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)">
+                    <div class="pd-tag">P</div>
+                </div>
+                <div class="group-wrap">
+                    <div class="group-item">
+                        <div class="item-label">Date of Birth:</div>
+                        <div class="item-val">{{ beneficiary?.personId?.dateOfBirth | date }}</div>
+                    </div>
 
-                                <!-- <div class="group-item">
+                    <!-- <div class="group-item">
                                     <div class="item-label">LASRRA ID:</div>
                                     <div class="item-val">133.23.22</div>
                                 </div> -->
-                                <div class="group-item">
-                                    <div class="item-label">Email:</div>
-                                    <div class="item-val">{{ beneficiary?.personId?.email }}</div>
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">LASHMA ID:</div>
-                                    <div class="item-val">{{ beneficiary?.platformOwnerNumber }}</div>
-                                </div>
-                                <!-- <div class="group-item">
+                    <div class="group-item">
+                        <div class="item-label">Email:</div>
+                        <div class="item-val">{{ beneficiary?.personId?.email }}</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">LASHMA ID:</div>
+                        <div class="item-val">{{ beneficiary?.platformOwnerNumber }}</div>
+                    </div>
+                    <!-- <div class="group-item">
                                     <div class="item-label">CIN:</div>
                                     <div class="item-val">{{ 'CI3430490' }}</div>
                                 </div> -->
-                            </div>
-                           
-                            <div class="group-wrap">
-                                <div class="item-val">
-                                    {{ beneficiary?.personId?.title?.name }} {{ beneficiary?.personId?.firstName }} {{ beneficiary?.personId?.otherNames }} {{ beneficiary?.personId?.lastName }}
-                                </div>
-                                <div class="item-val">{{ beneficiary?.personId?.phoneNumber }}</div>
-                            </div>
+                </div>
 
-                            <div class="group-wrap">
-                                <div class="group-item">
-                                    <div class="item-label">Card Status:
-                                        <span class="green">
-                                            Issued</span>
-                                    </div>
-                                    
-                                    <!-- <div style="color: green" class="item-val"> Issued</div> -->
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">Card Issued By:</div>
-                                    <div class="item-val">Mr Aderotimi Onala</div>
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">When Issued:</div>
-                                    <div class="item-val">11th April, 2017</div>
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">Times Card was Issued or Re-Issued:</div>
-                                    <div class="item-val">6 Times</div>
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">Where Card is Issued:</div>
-                                    <div class="item-val">Ministry of Health Lagos</div>
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">Card Expiration Date:</div>
-                                    <div class="item-val">3rd Dec. 2017</div>
-                                </div>
-                            </div>
+                <div class="group-wrap">
+                    <div class="item-val">
+                        {{ beneficiary?.personId?.title?.name }} {{ beneficiary?.personId?.firstName }} {{ beneficiary?.personId?.otherNames }} {{
+                        beneficiary?.personId?.lastName }}
+                    </div>
+                    <div class="item-val">{{ beneficiary?.personId?.phoneNumber }}</div>
+                </div>
 
-                            <!-- <div class="radioButton">
+                <div class="group-wrap">
+                    <div class="group-item">
+                        <div class="item-label">Card Status:
+                            <span class="green">
+                                Issued</span>
+                        </div>
+
+                        <!-- <div style="color: green" class="item-val"> Issued</div> -->
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Card Issued By:</div>
+                        <div class="item-val">Mr Aderotimi Onala</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">When Issued:</div>
+                        <div class="item-val">11th April, 2017</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Times Card was Issued or Re-Issued:</div>
+                        <div class="item-val">6 Times</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Where Card is Issued:</div>
+                        <div class="item-val">Ministry of Health Lagos</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Card Expiration Date:</div>
+                        <div class="item-val">3rd Dec. 2017</div>
+                    </div>
+                </div>
+
+                <!-- <div class="radioButton">
                                 <input type="radio" value="" id="radioButtonInput"/>
                                 <label for="radioButtonInput"> </label>
                             </div> -->
 
-                            <i (click)="navigateEditBeneficiary(beneficiary)" class="ico-cirle fa fa-pencil"></i>
-                        </div>
+                <i (click)="navigateEditBeneficiary(beneficiary)" class="ico-cirle fa fa-pencil"></i>
+            </div>
+        </div>
+
+        <div *ngFor="let dependant of dependants" class="detail-item">
+            <div class="detail-content">
+                <div class="hia-user">
+                    <img src="../../../../assets/img/users/default.png">
+                    <div class="pd-tag">D</div>
+                </div>
+                <div class="group-wrap">
+                    <div class="group-item">
+                        <div class="item-label">Date of Birth:</div>
+                        <div class="item-val">{{ dependant.beneficiary?.personIdId?.dateOfBirth | date }}</div>
                     </div>
-
-                    <div *ngFor="let dependant of dependants" class="detail-item">
-                        <div class="detail-content">
-                            <div class="hia-user">
-                                <img src="../../../../assets/img/users/default.png">
-                                <div class="pd-tag">D</div>
-                            </div>
-                            <div class="group-wrap">
-                                <div class="group-item">
-                                    <div class="item-label">Date of Birth:</div>
-                                    <div class="item-val">{{ dependant.beneficiary?.personIdId?.dateOfBirth | date }}</div>
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">LASRRA ID:</div>
-                                    <div class="item-val">{{ 'LS049300' }}</div>
-                                </div>
-                                <div class="group-item">
-                                    <div class="item-label">LASHMA ID:</div>
-                                    <div class="item-val">{{ dependant.beneficiary?.platformOwnerNumber }}</div>
-                                </div>
-                            </div>
-
-                            <div class="group-wrap">
-                                <div class="item-val">{{dependant.beneficiary?.personIdId?.lastName}} {{dependant.beneficiary?.personIdId?.firstName}} {{dependant.beneficiary?.personIdId?.otherNames}}</div>
-                                <div class="item-val">{{ dependant.beneficiary?.personIdId?.phoneNumber }}</div>
-                                <div class="item-val">Relationship: {{ dependant?.relationshipId?.name }}</div>
-                            </div>
-                            <i (click)="navigateEditBeneficiary(beneficiary)" class=" ico-cirle fa fa-pencil "></i>
-                        </div>
+                    <div class="group-item">
+                        <div class="item-label">LASRRA ID:</div>
+                        <div class="item-val">{{ 'LS049300' }}</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">LASHMA ID:</div>
+                        <div class="item-val">{{ dependant.beneficiary?.platformOwnerNumber }}</div>
                     </div>
                 </div>
-                <div class="right-wrap ">
-                    <div class="detail-item ">
 
-                        <div *ngIf="policy?.sponsor !== undefined" class="detail-content ">
-                            <div class="group-wrap ">
-                                <div class="item-label ">Employer:</div>
+                <div class="group-wrap">
+                    <div class="item-val">{{dependant.beneficiary?.personIdId?.lastName}} {{dependant.beneficiary?.personIdId?.firstName}} {{dependant.beneficiary?.personIdId?.otherNames}}</div>
+                    <div class="item-val">{{ dependant.beneficiary?.personIdId?.phoneNumber }}</div>
+                    <div class="item-val">Relationship: {{ dependant?.relationshipId?.name }}</div>
+                </div>
+                <i (click)="navigateEditBeneficiary(beneficiary)" class=" ico-cirle fa fa-pencil "></i>
+            </div>
+        </div>
+    </div>
+    <div class="right-wrap ">
 
-                                <div class="item-val ">{{policy?.sponsor.name}}</div>
-                                <div class="item-val ">{{policy?.sponsor.address.street}}, {{policy?.sponsor.address.neighbourhood}}, </div>
-                                <div class="item-val ">{{policy?.sponsor.address.city.name}}</div>
-                                <div class="item-val ">{{policy?.sponsor.address.state.name}}.</div>
+        <div class="detail-item ">
 
-                                <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
+            <div class="detail-content ">
+                <div class="hia-logo ">
+                    <img src="../../../../assets/img/logos/bridgeclinicbanner.jpg ">
+                </div>
+                <div class="group-wrap ">
+                    <div class="item-label ">Primary Healthcare Provider:</div>
+
+                    <div class="item-val ">{{policy?.providerId.name}}</div>
+                    <div class="item-val ">{{policy?.providerId.address.street}}</div>
+                    <div class="item-val ">{{policy?.providerId.address.neigbhourhood}}</div>
+                    <div class="item-val ">{{policy?.providerId.address.city.name}}-{{policy?.providerId.address.state.name}}.</div>
+                    <div class="item-val ">{{policy?.providerId.phoneNumber}}</div>
+
+                    <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
+                </div>
+                <i class="ico-cirle fa fa-trash "></i>
+            </div>
+        </div>
+
+        <div class="detail-item ">
+
+            <div *ngIf="policy?.sponsor !== undefined" class="detail-content ">
+                <div class="group-wrap ">
+                    <div class="item-label ">Employer:</div>
+
+                    <div class="item-val ">{{policy?.sponsor.name}}</div>
+                    <div class="item-val ">{{policy?.sponsor.address.street}}, {{policy?.sponsor.address.neighbourhood}}, </div>
+                    <div class="item-val ">{{policy?.sponsor.address.city.name}}</div>
+                    <div class="item-val ">{{policy?.sponsor.address.state.name}}.</div>
+
+                    <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
+                </div>
+                <i class="ico-cirle fa fa-trash "></i>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="addApproval" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="addApprovalClick();" class="close-modal">X</div>
+        <div class="modal-title">EDIT STATUS -
+            <em>Beneficiary</em>
+        </div>
+        <div class="list-boxes">
+            <div class="box-left">
+                <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">
+                    <form [formGroup]="approvalFormGroup" novalidate>
+                        <div class="form-item-wrap">
+                            <label class="label">Duration</label>
+                            <div class="input-wrap">
+                                <input type="number" min="1" formControlName="duration" class="form-control" placeholder="Duration">
                             </div>
-                            <i class="ico-cirle fa fa-trash "></i>
                         </div>
-                    </div>
-
-                    <div class="detail-item ">
-
-                        <div class="detail-content ">
-                            <div class="hia-logo ">
-                                <img src="../../../../assets/img/logos/bridgeclinicbanner.jpg ">
+                        <div class="form-item-wrap">
+                            <label class="label">Interval</label>
+                            <div class="input-wrap">
+                                <select formControlName="unit" class="form-control">
+                                    <option value="" disabled>Select Interval</option>
+                                    <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
+                                </select>
                             </div>
-                            <div class="group-wrap ">
-                                <div class="item-label ">Primary Healthcare Provider:</div>
-
-                                <div class="item-val ">{{policy?.providerId.name}}</div>
-                                <div class="item-val ">{{policy?.providerId.address.street}}</div>
-                                <div class="item-val ">{{policy?.providerId.address.neigbhourhood}}</div>
-                                <div class="item-val ">{{policy?.providerId.address.city.name}}-{{policy?.providerId.address.state.name}}.</div>
-                                <div class="item-val ">{{policy?.providerId.phoneNumber}}</div>
-
-                                <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
-                            </div>
-                            <i class="ico-cirle fa fa-trash "></i>
                         </div>
+                        <div class="form-item-wrap">
+                            <label class="label">Start Date</label>
+                            <div class="input-wrap">
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="today" formControlName="startDate"></my-date-picker>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="btn-box">
+                        <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);"
+                            [innerHtml]="approvalBtn"></button>
+                        <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
                     </div>
+                </div>
+                <div *ngIf="policy?.isActive" style="padding: 70px 0px;">
+                    <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DEACTIVATE POLICY</button>
                 </div>
             </div>
-            <div *ngIf="addApproval" class="modal-overlay">
-              <div class="modal-wrap shadow-RB">
-                  <div (click)="addApprovalClick();" class="close-modal">X</div>
-                  <div class="modal-title">EDIT STATUS - <em>Beneficiary</em></div>
-                  <div class="list-boxes">
-                      <div class="box-left">
-                          <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">
-                              <form [formGroup]="approvalFormGroup" novalidate>
-                                  <div class="form-item-wrap">
-                                      <label class="label">Duration</label>
-                                      <div class="input-wrap">
-                                          <input type="number" min="1" formControlName="duration" class="form-control" placeholder="Duration">
-                                      </div>
-                                  </div>
-                                  <div class="form-item-wrap">
-                                      <label class="label">Interval</label>
-                                      <div class="input-wrap">
-                                          <select formControlName="unit" class="form-control">
-                                              <option value="" disabled>Select Interval</option>
-                                              <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
-                                          </select>
-                                      </div>
-                                  </div>
-                                  <div class="form-item-wrap">
-                                      <label class="label">Start Date</label>
-                                      <div class="input-wrap">
-                                          <my-date-picker [options]="myDatePickerOptions" [selDate]="today" formControlName="startDate"></my-date-picker>
-                                      </div>
-                                  </div>
-                              </form>
-                              <div class="btn-box">
-                                  <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
-                                  <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
-                              </div>
-                          </div>
-                          <div *ngIf="policy?.isActive" style="padding: 70px 0px;">
-                              <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DEACTIVATE POLICY</button>
-                          </div>
-                      </div>
-          
-                      <div class="box-right">
-                          <div class="text-center">
-                              <span>List of Previous Policies</span>
-                          </div>
-                          <div class="box">
-                              <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                                  <thead class="thead">
-                                      <tr class="tr">
-                                          <th class="th">No</th>
-                                          <th class="th">Duration</th>
-                                          <th class="th">Start Date</th>
-                                          <th class="th">Created At</th>
-                                          <th class="th">Valid Till</th>
-                                      </tr>
-                                  </thead>
-          
-                                  <tbody class="tbody">
-                                      <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && !loading">
-                                          <td class="text-center" colspan="4">No data available in table</td>
-                                      </tr>
-                                      <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && loading">
-                                          <td class="text-center" colspan="4">
-                                              <i class="fa fa-spinner fa-spin"></i>
-                                          </td>
-                                      </tr>
-                                      <tr *ngFor="let pol of policy?.validityPeriods; let i = index;" class="tr">
-                                          <td class="td hover">{{ i+1 }}</td>
-                                          <td class="td hover">{{ pol.duration }} {{ pol.unit.name }}</td>
-                                          <td class="td hover">{{ pol.createdAt | date }}</td>
-                                          <td class="td hover">{{ pol.startDate?.jsdate | date }}</td>
-                                          <td class="td hover">{{ pol.validTill | date }}</td>
-                                      </tr>
-                                  </tbody>
-                              </table>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+
+            <div class="box-right">
+                <div class="text-center">
+                    <span>List of Previous Policies</span>
+                </div>
+                <div class="box">
+                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                        <thead class="thead">
+                            <tr class="tr">
+                                <th class="th">No</th>
+                                <th class="th">Duration</th>
+                                <th class="th">Start Date</th>
+                                <th class="th">Created At</th>
+                                <th class="th">Valid Till</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="tbody">
+                            <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && !loading">
+                                <td class="text-center" colspan="4">No data available in table</td>
+                            </tr>
+                            <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && loading">
+                                <td class="text-center" colspan="4">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let pol of policy?.validityPeriods; let i = index;" class="tr">
+                                <td class="td hover">{{ i+1 }}</td>
+                                <td class="td hover">{{ pol.duration }} {{ pol.unit.name }}</td>
+                                <td class="td hover">{{ pol.createdAt | date }}</td>
+                                <td class="td hover">{{ pol.startDate?.jsdate | date }}</td>
+                                <td class="td hover">{{ pol.validTill | date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

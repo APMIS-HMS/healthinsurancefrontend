@@ -1,3 +1,4 @@
+import { RoleService } from './../services/auth/role/role.service';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,7 +18,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
     ],
     exports: [],
     imports: [ReactiveFormsModule, authModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
-    providers: [AuthService, PersonService]
+    providers: [AuthService, PersonService, RoleService]
 })
 
 export class AuthModule {
