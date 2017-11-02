@@ -1,3 +1,4 @@
+import { PlanService } from './../../../services/plan/plan.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Observable } from 'rxjs/Rx';
 import { Beneficiary } from './../../../models/setup/beneficiary';
@@ -42,7 +43,7 @@ export class ListBeneficiaryComponent implements OnInit {
     private _userTypeService: UserTypeService,
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
-    private _planTypeService: PlanTypeService,
+    private _planService: PlanService,
     private _locker: CoolLocalStorage
   ) {
     this._router.events
@@ -60,7 +61,7 @@ export class ListBeneficiaryComponent implements OnInit {
     // });
 
     // this._getBeneficiaries();
-    this._getPlanTypes();
+    this._getPlans();
     this._getCurrentPlatform();
 
     this.statusControl.valueChanges.subscribe((value) => {
@@ -88,8 +89,8 @@ export class ListBeneficiaryComponent implements OnInit {
   reset() {
     this.ngOnInit();
   }
-  private _getPlanTypes() {
-    this._planTypeService.find({}).then((payload: any) => {
+  private _getPlans() {
+    this._planService.find({}).then((payload: any) => {
       this.planTypes = payload.data;
     }).catch(err => {
 

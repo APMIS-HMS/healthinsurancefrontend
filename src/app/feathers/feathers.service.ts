@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 const rx = require('feathers-reactive');
 const RxJS = require('rxjs');
 
-//const HOST = 'http://172.16.16.38:3031'; // Live
+// const HOST = 'http://172.16.16.38:3031'; // Live
 // const HOST = 'http://192.168.0.5:3031'; // Live
 const HOST = 'http://localhost:3031'; // Your base server URL here
 // const HOST = 'http://insuranceapi.azurewebsites.net';
@@ -61,7 +61,7 @@ export class SocketService {
     }
     logOut() {
         this.locker.clear();
-        this._app.logout();
+        return this._app.logout();
     }
     loginIntoApp(query: any) {
         return this._app.authenticate({

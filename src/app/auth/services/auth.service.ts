@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   logOut() {
-    this._socketService.logOut();
+    return this._socketService.logOut();
   }
   login(query: any) {
     return this._socketService.loginIntoApp(query);
