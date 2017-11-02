@@ -45,7 +45,7 @@ export class ListUserComponent implements OnInit {
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('User List');
-    this._headerEventEmitter.setMinorRouteUrl('List all all users');
+    this._headerEventEmitter.setMinorRouteUrl('List of all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
   }
