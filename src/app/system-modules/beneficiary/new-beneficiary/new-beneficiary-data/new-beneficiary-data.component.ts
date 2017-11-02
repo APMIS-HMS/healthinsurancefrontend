@@ -283,8 +283,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       query: {
         'states.name': state.name,
         $select: { 'states.$': 1 }
-
-
       }
     }).then((payload: any) => {
       this._systemService.off();
