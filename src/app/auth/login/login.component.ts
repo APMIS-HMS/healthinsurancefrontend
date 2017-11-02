@@ -100,7 +100,8 @@ export class LoginComponent implements OnInit {
 
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
-				if (payload.user !== undefined && payload.user.roles !== undefined) {
+				console.log(payload)
+				if (payload.user !== undefined && payload.user.roles !== undefined && payload.user.roles.length > 0) {
 					this.user = payload.user;
 					// this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
 					// this.loginBtnText = true;
@@ -112,11 +113,21 @@ export class LoginComponent implements OnInit {
 					// });
 					this._checkRole();
 				} else {
-					this.loginBtnText = true;
-					this.loginBtnProcessing = false;
-					this.disableBtn = false;
-					this._authService.logOut();
-					this.onClickLogin(value, valid);
+					if (payload.user !== undefined && payload.user.userType !== undefined) {
+						console.log('am here')
+						this._router.navigate(['/modules/beneficiary/new']).then(payload =>{
+
+						}).catch(err =>{
+							console.log(err)
+						})
+					} else {
+						this.loginBtnText = true;
+						this.loginBtnProcessing = false;
+						this.disableBtn = false;
+						this._authService.logOut();
+						this.onClickLogin(value, valid);
+					}
+
 				}
 			}).catch(err => {
 				this._toastr.error('Invalid email or password!', 'Error!');

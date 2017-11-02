@@ -111,7 +111,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }

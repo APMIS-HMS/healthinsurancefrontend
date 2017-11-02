@@ -138,16 +138,15 @@ export class SignupComponent implements OnInit {
 				this.createPerson(person).then(res => {
 					return this.createUser(user);
 				}).then(res => {
-					return this.logUser(user);
-				}).then(res => {
+					// return this.logUser(user);
 					this.signupBtnText = true;
 					this.signupBtnProcessing = false;
 					this.disableBtn = false;
 
-					this._locker.setObject('auth', res);
-					this._router.navigate(['/modules/beneficiary/new']).then(navRes => {
+					// this._locker.setObject('auth', res);
+					this._router.navigate(['/auth/login']).then(navRes => {
 						this._authService.announceMission({ status: 'On' });
-						this._toastr.success('You have successfully logged in!', 'Success!');
+						this._toastr.success('You have successfully signed up!', 'Success!');
 					});
 				}).catch(err => {
 					console.log(err);
@@ -155,6 +154,22 @@ export class SignupComponent implements OnInit {
 					this.signupBtnProcessing = false;
 					this.disableBtn = false;
 				});
+				// .then(res => {
+				// 	// this.signupBtnText = true;
+				// 	// this.signupBtnProcessing = false;
+				// 	// this.disableBtn = false;
+
+				// 	// this._locker.setObject('auth', res);
+				// 	// this._router.navigate(['/modules/beneficiary/new']).then(navRes => {
+				// 	// 	this._authService.announceMission({ status: 'On' });
+				// 	// 	this._toastr.success('You have successfully logged in!', 'Success!');
+				// 	// });
+				// }).catch(err => {
+				// 	console.log(err);
+				// 	this.signupBtnText = true;
+				// 	this.signupBtnProcessing = false;
+				// 	this.disableBtn = false;
+				// });
 			} else {
 				this._toastr.error('There is a connection error, Please try again later!', 'Error!');
 			}
