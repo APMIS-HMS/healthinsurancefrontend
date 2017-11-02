@@ -136,7 +136,7 @@
                 <app-list-beneficiary></app-list-beneficiary>
             </div>
 
-            <table *ngIf="isUploading" class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <!-- <table *ngIf="isUploading" class="table" cellpadding="0" cellspacing="0" border="0.5">
                 <thead class="thead">
                     <tr class="tr">
                         <th class="th">No</th>
@@ -154,14 +154,6 @@
                 </thead>
 
                 <tbody class="tbody">
-                    <!-- <tr class="tr" *ngIf="intendingBeneficiaries.length === 0 && !loading">
-                        <td class="text-center" colspan="11">No data available in table</td>
-                    </tr>
-                    <tr class="tr" *ngIf="intendingBeneficiaries.length === 0 && loading">
-                        <td class="text-center" colspan="11">
-                            <i class="fa fa-spinner fa-spin"></i>
-                        </td>
-                    </tr> -->
                     <tr class="tr">
                         <td class="td">1</td>
                         <td class="td">Jonathan Nelson</td>
@@ -182,7 +174,49 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> -->
+
+            <table *ngIf="isUploading" class="table" cellpadding="0" cellspacing="0" border="0.5">
+                <thead class="thead">
+                    <tr class="tr">
+                        <th class="th">No</th>
+                        <th class="th">Name</th>
+                        <th class="th">Gender</th>
+                        <th class="th">Type</th>
+                        <th class="th">LASHMA ID</th>
+                        <th class="th">DOB</th>
+                        <th class="th">L.G.A</th>
+                        <th class="th">HIA</th>
+                        <th class="th">Status</th>
+                        <td class="th">Action</td>
+                    </tr>
+                </thead>
+        
+                <tbody class="tbody">
+                    <tr class="tr">
+                        <td class="td">1</td>
+                        <td class="td">Jonathan Nelson</td>
+                        <td class="td">Male</td>
+                        <td class="td">
+                            <span class="baller">P</span>
+                            <!-- <span *ngIf="beneficiary?.isPrincipal" class="baller">P</span>
+                            <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary.dependantCount}}</span>
+                            <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
+                            <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span> -->
+                        </td>
+                        <td class="td">122.22.2.2</td>
+                        <td class="td">11th Oct 2010</td>
+                        <td class="td">Oha Ozara</td>
+                        <td class="td">Hygeria</td>
+                        <td class="td">
+                            <span class="tbl-status-active">Active</span>
+                        </td>
+                        <td class="td td-icos">
+                            <i class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
         </div>
     </div>
 </div>

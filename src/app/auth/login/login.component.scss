@@ -40,3 +40,9 @@
 .action-link:hover{
     color: $red;
 }
+
+@media only screen and (max-width: 600px) {
+    .onscreenModal{
+        padding: 20px;
+    }
+}
