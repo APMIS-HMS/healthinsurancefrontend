@@ -225,7 +225,6 @@ export class NewClaimComponent implements OnInit {
       if (preauth_callback.data.length > 0) {
         this.isAuthorize = true;
         this.SelectedCheckinItem = preauth_callback.data[0];
-        this.SelectedCheckinItem.providerFacility = preauth_callback.data[0].providerFacilityId.name;
         this.SelectedCheckinItem.providerFacility = this.SelectedCheckinItem.policyId.providerId.name;
         this.SelectedCheckinItem.plan = this.SelectedCheckinItem.policyId.planTypeId.name;
         console.log(this.SelectedCheckinItem);
