@@ -105,8 +105,8 @@
                 <label class="label">Claim Type</label>
                 <div class="input-wrap">
                     <select formControlName="claimType" class="form-control">
-                        <option value="" selected *ngIf="isAuthorize==true">Free for Service</option>
-                        <option value="" selected *ngIf="isAuthorize ==false">Capitation</option>
+                        <option value="Free for Service" selected *ngIf="isAuthorize==true">Free for Service</option>
+                        <option value="Capitation" selected *ngIf="isAuthorize ==false">Capitation</option>
                         <!-- <option *ngFor="let item of claimTypesItems" [ngValue]="item.name">{{ item.name }}</option> -->
                     </select>
                 </div>
