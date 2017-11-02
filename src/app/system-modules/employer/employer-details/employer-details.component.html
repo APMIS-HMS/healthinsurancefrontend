@@ -36,8 +36,10 @@
                     <div class="item-label item-head">Employer Detail</div>
 
                     <div class="detail-content">
-                        <img *ngIf="facility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility.logo.thumbnail)">
-                        <img *ngIf="facility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
+                        <div class="hia-user">
+                            <img *ngIf="facility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility.logo.thumbnail)">
+                            <img *ngIf="facility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
+                        </div>
                         <div class="group-wrap">
                             <div class="item-label">{{ facility?.name }}</div>
                             <div class="item-val">{{ facility?.employer?.industry?.name }}</div>
