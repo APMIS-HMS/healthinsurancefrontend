@@ -100,14 +100,19 @@ export class ListBeneficiaryComponent implements OnInit {
     this._systemService.on();
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
+        console.log(res);
         this.currentPlatform = res.data[0];
-        console.log(this.user.userType)
-        if (this.user.userType.name === 'Provider') {
+        console.log(this.user);
+
+        if (!!this.user.userType && this.user.userType.name === 'Provider') {
           this._getBeneficiariesFromPolicyByProvider(this.user.facilityId._id);
-        } else if (this.user.userType.name === 'Health Insurance Agent') {
+        } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
           this._getBeneficiariesFromPolicyByHIA(this.user.facilityId._id);
-        } else if (this.user.userType.name === 'Platform Owner') {
+        } else if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
           this._getBeneficiariesFromPolicy(this.user.facilityId._id);
+        } else {
+          this.loading = false;
+          this.beneficiaries = [];
         }
         // this._getBeneficiariesFromPolicy(this.currentPlatform._id);  
         // this._getInActiveBeneficiaries(this.currentPlatform._id);

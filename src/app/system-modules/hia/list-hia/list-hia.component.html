@@ -95,7 +95,9 @@
     </table>
 
     <div class="list-buttom">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-        <div class="btn btn-medium btn-yellow">Load More</div>
+        <div *ngIf="hias.length > 0">
+            <div class="list-summary">Showing 1 to {{ hias.length }} of {{ hias.length }} entries (filtered from {{ hias.length }} total entries)</div>
+            <div class="btn btn-medium btn-yellow">Load More</div>
+        </div>
     </div>
 </div>

@@ -68,9 +68,9 @@
                 <td class="td">{{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
                 <td class="td">{{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.firstName}} {{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.lastName}}</td>
                 <td class="td">{{item.dateClaimCreated|date}}</td>
-                <td class="td">{{item?.checkedinDetail?.policyId?.hiaId?.name}}</td>
-                <td class="td">{{item?.checkedinDetail?.policyId?.planId?.name}}</td>
-                <td class="td">{{item?.checkedinDetail?.providerFacilityId?.name}}</td>
+                <td class="td">{{item?.checkedinDetail.checkedInDetails.policyObject.hiaId.name}}</td>
+                <td class="td">{{item?.checkedinDetail.plan}}</td>
+                <td class="td">{{item?.checkedinDetail.providerFacility}}</td>
                 <td class="td"><span class="green">{{item?.status}}</span></td>
                 <td class="td">
                     <div class="tooltip">

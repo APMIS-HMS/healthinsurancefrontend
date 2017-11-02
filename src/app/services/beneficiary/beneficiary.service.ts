@@ -34,6 +34,7 @@ export class BeneficiaryService {
       }))
     });
   }
+
   create(param: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('beneficiaries').then((socket: any) => {
@@ -73,12 +74,10 @@ export class BeneficiaryService {
   }
 
   validateAge(body: any) {
-    console.log(body)
     let host = this._restService.getHost();
     let path = host + '/api/validate-age';
     return request
       .get(path)
       .query({ dateOfBirth: body.date });
   }
-
 }

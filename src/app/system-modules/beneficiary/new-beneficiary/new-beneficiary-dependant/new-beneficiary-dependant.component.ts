@@ -113,10 +113,10 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
     });
   }
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({
+    this._facilityService.find({
       query:
       { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
-    }).then(res => {
+    }).then((res:any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }

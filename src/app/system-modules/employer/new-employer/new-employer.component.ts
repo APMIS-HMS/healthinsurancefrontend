@@ -130,7 +130,7 @@ export class NewEmployerComponent implements OnInit {
   }
 
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
       console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
