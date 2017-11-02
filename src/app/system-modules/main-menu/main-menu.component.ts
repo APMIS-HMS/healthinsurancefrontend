@@ -82,27 +82,6 @@ export class MainMenuComponent implements OnInit {
   }
   private _bindRole() {
     const accessibilities = (<any>this._locker.getObject('accessibilities'));
-
-    // this.hasBeneficiary = true;
-    // this.hasProvider = true;
-    // this.hasOrganisation = true;
-    // this.hasPlatform = true;
-    // this.hasHIA = true;
-    // this.hasPremiumPayment = true;
-    // this.hasClaim = true;
-    // this.hasClaimPayment = true;
-    // this.hasCheckIn = true;
-    // this.hasUserManagement = true;
-    // this.hasPlan = true;
-    // this.hasAuthorization = true;
-    // this.hasAnalytics = true;
-    // this.hasFundManagement = true;
-    // this.hasComplaint = true;
-    // this.hasReferral = true;
-    // this.hasRoleManagement = true;
-    // this.hasPlatform = true;
-    // this.hasAccessManagement = true;
-
     if(accessibilities !== null && accessibilities !== undefined){
       accessibilities.forEach(access => {
         if (!!access.module) {
