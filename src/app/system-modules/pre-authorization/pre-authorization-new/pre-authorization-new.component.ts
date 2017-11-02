@@ -734,7 +734,7 @@ export class PreAuthorizationNewComponent implements OnInit {
         authorizationObject.dateOfRequest = this.preAuthFormGroup.controls.requestDate.value.jsdate;
         authorizationObject.documentation = [];
         authorizationObject.documentation.push(preAuthDoc);
-        authorizationObject.policyId = this.selectedPolicy._id;
+        authorizationObject.policyId = this.selectedCheckIn.policyObject._id;
 
         authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
         authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;
