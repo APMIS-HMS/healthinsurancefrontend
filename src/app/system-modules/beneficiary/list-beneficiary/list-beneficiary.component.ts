@@ -100,6 +100,7 @@ export class ListBeneficiaryComponent implements OnInit {
     this._systemService.on();
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
+        console.log(res);
         this.currentPlatform = res.data[0];
         console.log(this.user.userType)
         if (this.user.userType.name === 'Provider') {
