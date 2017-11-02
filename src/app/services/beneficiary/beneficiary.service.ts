@@ -72,4 +72,13 @@ export class BeneficiaryService {
       .send(body);
   }
 
+  validateAge(body: any) {
+    console.log(body)
+    let host = this._restService.getHost();
+    let path = host + '/api/validate-age';
+    return request
+      .get(path)
+      .query({ dateOfBirth: body.date });
+  }
+
 }

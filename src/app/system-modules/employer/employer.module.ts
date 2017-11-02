@@ -1,3 +1,4 @@
+import { PlanService } from './../../services/plan/plan.service';
 import { ClaimService } from './../../services/common/claim.service';
 import { TitleService } from './../../services/common/titles.service';
 import { PolicyService } from './../../services/policy/policy.service';
@@ -19,7 +20,7 @@ import { NewEmployerComponent } from './new-employer/new-employer.component';
         employerRoutes
     ],
     declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent],
-    providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
+    providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
         UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService]
 })
 export class EmployerModule { }
