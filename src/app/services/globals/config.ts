@@ -27,6 +27,12 @@ export const SPONSORSHIP = [
     { 'id': 1, 'name': 'Self' },
     { 'id': 2, 'name': 'Organization' }
 ];
+
+export const SPONSORSHIPTYPE = [
+    { 'id': 1, 'name': 'Employee' },
+    { 'id': 2, 'name': 'Sponsor' }
+];
+
 export const PAYMENTTYPES = [
     { 'id': 1, 'name': 'Cash', default: false },
     { 'id': 2, 'name': 'Cheque', default: false },

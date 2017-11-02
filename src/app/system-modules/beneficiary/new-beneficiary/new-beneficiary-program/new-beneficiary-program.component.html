@@ -5,7 +5,7 @@
 <form [formGroup]="frmProgram" novalidate>
     <div class="frm-inner-title">Health Insurance Agent</div>
 
-   <div class="frm-item-wrap">
+    <div class="frm-item-wrap">
         <label class="label">HIA</label>
         <div class="inputWrap">
             <select formControlName="hiaName" class="form-control">
@@ -15,7 +15,7 @@
         </div>
     </div>
 
-     <div class="frm-inner-title">Primary Health Care Provider</div>
+    <div class="frm-inner-title">Primary Health Care Provider</div>
 
     <div class="frm-item-wrap">
         <label class="label">Provider Name</label>
@@ -76,8 +76,26 @@
                 </select>
         </div>
     </div>
+    <div class="frm-item-wrap">
+        <label class="label">Organization</label>
+        <div class="inputWrap">
+            <select formControlName="organization" class="form-control">
+                <option  value="" disabled selected>Organization</option>
+                <option *ngFor="let organization of organizations"  [ngValue]="organization">{{organization.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Sponsorship Type</label>
+        <div class="inputWrap">
+            <select formControlName="sponsorshipType" class="form-control">
+                <option  value="" disabled selected>Sponsorship Type</option>
+                <option *ngFor="let sponsorshipType of sponsorshipTypes"  [ngValue]="sponsorshipType">{{sponsorshipType.name}}</option>
+            </select>
+        </div>
+    </div>
 
-   <div style="margin:10px auto;display:flex;justify-content:center;">
+    <div style="margin:10px auto;display:flex;justify-content:center;">
         <button class="btn btn-medium btn-blue" (click)="onClickStepFour(frmProgram.value, frmProgram.valid);">
             NEXT &nbsp; <i class="fa fa-chevron-right"></i>
         </button>

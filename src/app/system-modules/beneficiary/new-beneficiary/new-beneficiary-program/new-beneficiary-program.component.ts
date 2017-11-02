@@ -14,7 +14,7 @@ import { GenderService } from './../../../../services/common/gender.service';
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName, SPONSORSHIP } from '../../../../services/globals/config';
+import { CurrentPlaformShortName, SPONSORSHIP, SPONSORSHIPTYPE } from '../../../../services/globals/config';
 import {
   UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService
 } from '../../../../services/index';
@@ -44,6 +44,8 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   premiumPackages: any[] = [];
   filteredPremiumPackages: any[] = [];
   sponsorships: any[] = SPONSORSHIP;
+  sponsorshipTypes: any[] = SPONSORSHIPTYPE;
+  organizations: any[] = [];
   user: any;
   constructor(
     private _fb: FormBuilder,
@@ -77,7 +79,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       programName: ['', [<any>Validators.required]],
       providerName: ['', [<any>Validators.required]],
       premiumPackage: ['', [<any>Validators.required]],
-      sponsorship: ['', [<any>Validators.required]]
+      sponsorship: ['', [<any>Validators.required]],
+      organization: ['', [<any>Validators.required]],
+      sponsorshipType: ['', [<any>Validators.required]],
     });
     this.user = (<any>this._locker.getObject('auth')).user;
 
@@ -132,6 +136,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         this.currentPlatform = res.data[0];
         this._getHIAs(this.currentPlatform._id);
         this._getProviders(this.currentPlatform._id);
+        this._getOrganizations(this.currentPlatform._id);
       }
     }).catch(err => {
       this._systemService.off();
@@ -176,6 +181,23 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this._planTypeService.find({}).then((res: any) => {
       this._systemService.off();
       this.planTypes = res.data;
+    }).catch(err => {
+      this._systemService.off();
+      console.log(err);
+    });
+  }
+
+  _getOrganizations(platformOwnerId) {
+    this._systemService.on();
+    this._facilityService.find({
+      query: {
+        'facilityType.name': 'Employer', 'platformOwnerId._id': platformOwnerId,
+        // $select: ['name', 'Employer.providerId']
+      }
+    }).then((res: any) => {
+      this._systemService.off();
+      console.log(res);
+      this.organizations = res.data;
     }).catch(err => {
       this._systemService.off();
       console.log(err);
