@@ -833,18 +833,6 @@ input[type="checkbox"].switch_1:checked:after {
 .link-item:hover{
     color: $red;
 }
-
-@media only screen and (max-width: 1300px) {
-    .app-content-wrap {
-        width: 90%;
-    }
-}
-@media only screen and (max-width: 600px) {
-    .frm-wrap{
-        width: 90%;
-        margin: 0 auto;
-    }
-}
 .radioButton {
 	width: 20px;
 	height: 20px;
@@ -878,4 +866,55 @@ input[type="checkbox"].switch_1:checked:after {
  */
 .radioButton input[type=radio]:checked + label {
 	background: #7060ff;
+}
+
+
+@media only screen and (max-width: 1850px) {
+    .shadow-RB{
+        overflow-y: auto;
+    }
+}
+@media only screen and (max-width: 1300px) {
+    .app-content-wrap {
+        width: 90%;
+    }
+}
+@media only screen and (max-width: 780px){
+    .list-search-wrap{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+
+        .btn-medium{
+            width: 90%;
+        }
+        .search-wrap{
+            margin-top: 20px;
+            margin-bottom: -10px;
+        }
+    }
+    .nut-tab-topSect-wrap{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        .btn-grey-outline{
+            width: 90%;
+            margin-bottom: 20px;
+        }
+        .nut-label{
+            display: none;
+        }
+    }
+    .content{
+        padding: 10px;
+    }
+    
+}
+@media only screen and (max-width: 600px) {
+    .frm-wrap{
+        width: 90%;
+        margin: 0 auto;
+    }
 }
