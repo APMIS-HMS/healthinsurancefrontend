@@ -1,3 +1,4 @@
+import { RoleService } from './../../services/auth/role/role.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { UserTypeService } from './../../services/common/user-type.service';
 import { AuthService } from './../services/auth.service';
@@ -23,13 +24,15 @@ export class LoginComponent implements OnInit {
 	loginBtnText: boolean = true;
 	loginBtnProcessing: boolean = false;
 	disableBtn: boolean = false;
+	user: any;
 
 	constructor(
 		private _toastr: ToastsManager,
 		private _fb: FormBuilder,
 		private _router: Router,
 		private _authService: AuthService,
-		private _locker: CoolLocalStorage
+		private _locker: CoolLocalStorage,
+		private _roleService: RoleService
 	) {
 	}
 
@@ -51,6 +54,42 @@ export class LoginComponent implements OnInit {
 			this._authService.patch(currentUser._id, currentUser, {});
 		});
 	}
+	private _checkRole() {
+		try {
+			const roles = this.user.roles;
+			const roleIds: any[] = [];
+			roles.forEach(x => {
+				roleIds.push(x._id);
+			})
+
+			this._roleService.find({
+				query: {
+					_id: {
+						$in: roleIds
+					}
+				}
+			}).then((pays: any) => {
+				pays.data.forEach(roleItem => {
+					if (!!roleItem.accessibilities) {
+						const accessibilities = roleItem.accessibilities;
+						this._locker.setObject('accessibilities', accessibilities);
+					}
+					this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
+					this.loginBtnText = true;
+					this.loginBtnProcessing = false;
+					this.disableBtn = false;
+					this._router.navigate(['/modules/welcome']).then(res => {
+						this._authService.announceMission({ status: 'On' });
+						this._toastr.success('You have successfully logged in!', 'Success!');
+					});
+				});
+			}).catch(err => {
+
+			})
+		} catch (error) {
+
+		}
+	}
 
 	onClickLogin(value: any, valid: boolean) {
 		if (valid) {
@@ -62,19 +101,22 @@ export class LoginComponent implements OnInit {
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
 				if (payload.user !== undefined && payload.user.roles !== undefined) {
-					this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
-					this.loginBtnText = true;
-					this.loginBtnProcessing = false;
-					this.disableBtn = false;
-					this._router.navigate(['/modules/welcome']).then(res => {
-						this._authService.announceMission({ status: 'On' });
-						this._toastr.success('You have successfully logged in!', 'Success!');
-					});
-				}else{
+					this.user = payload.user;
+					// this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
+					// this.loginBtnText = true;
+					// this.loginBtnProcessing = false;
+					// this.disableBtn = false;
+					// this._router.navigate(['/modules/welcome']).then(res => {
+					// 	this._authService.announceMission({ status: 'On' });
+					// 	this._toastr.success('You have successfully logged in!', 'Success!');
+					// });
+					this._checkRole();
+				} else {
 					this.loginBtnText = true;
 					this.loginBtnProcessing = false;
 					this.disableBtn = false;
 					this._authService.logOut();
+					this.onClickLogin(value, valid);
 				}
 			}).catch(err => {
 				this._toastr.error('Invalid email or password!', 'Error!');

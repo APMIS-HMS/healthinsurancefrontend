@@ -1,3 +1,5 @@
+import { Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
 import { PersonService } from './../../../../services/person/person.service';
 import { Address } from './../../../../models/organisation/address';
@@ -10,11 +12,12 @@ import { HeaderEventEmitterService } from './../../../../services/event-emitters
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { GenderService } from './../../../../services/common/gender.service';
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, AfterViewChecked } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName } from '../../../../services/globals/config';
 import { UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService } from '../../../../services/index';
 import { Person } from '../../../../models/index';
+import AsyncValidator from '../../../../services/common/async-validator';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -126,7 +129,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     }).then(res => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        if(this.currentPlatform.address !== undefined){
+        if (this.currentPlatform.address !== undefined) {
           this._getLga(this.currentPlatform.address.state);
         }
       }
@@ -242,7 +245,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       phonenumber: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       secondaryPhone: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.secondaryPhoneNumber : '', [<any>Validators.pattern(PHONE_REGEX)]],
       email: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      dob: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.dateOfBirth : this.today, [<any>Validators.required]],
+      dob: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.dateOfBirth : this.today, [<any>Validators.required], this.validateEmailNotTaken.bind(this)],
       lashmaId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.platformOwnerNumber : '', []],
       lasrraId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.stateID : '', []],
       stateOfOrigin: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.stateOfOrigin : '', [<any>Validators.required]],
@@ -273,6 +276,17 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         this._getLgaAndCities(value, this.selectedCountry._id, );
       }
     });
+  }
+
+  validateEmailNotTaken(control: AbstractControl) {
+    if (control.value !== undefined && control.value.jsdate !== undefined) {
+      return this._beneficiaryService.validateAge(control.value).then(res => {
+        console.log(res)
+        return res.body.response >= 18 ? null : { underage: true };
+      });
+    } else {
+      return Observable.of(null);
+    }
   }
 
   _getLgaAndCities(state, _id?) {
