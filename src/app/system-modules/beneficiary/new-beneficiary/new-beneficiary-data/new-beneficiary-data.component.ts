@@ -120,13 +120,15 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
 
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({
+    this._facilityService.find({
       query:
       { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
-    }).then(res => {
+    }).then((res: any) => {
+      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        if(this.currentPlatform.address !== undefined){
+        console.log(this.currentPlatform);
+        if (this.currentPlatform.address !== undefined) {
           this._getLga(this.currentPlatform.address.state);
         }
       }
@@ -279,7 +281,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._systemService.on();
     this._countriesService.find({
       query: {
-        "states.name": state.name,
+        'states.name': state.name,
         $select: { 'states.$': 1 }
 
 
@@ -303,7 +305,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._systemService.on();
     this._countriesService.find({
       query: {
-        "states.name": state.name,
+        'states.name': state.name,
         $select: { 'states.$': 1 }
       }
     }).then((payload: any) => {
@@ -311,6 +313,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       if (payload.data.length > 0) {
         const states = payload.data[0].states;
         if (states.length > 0) {
+          console.log(states[0].lgs);
           this.residenceLgs = states[0].lgs;
           this.selectedState = states[0];
         }
