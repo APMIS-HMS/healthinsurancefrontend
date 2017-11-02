@@ -34,6 +34,7 @@ export class BeneficiaryService {
       }))
     });
   }
+
   create(param: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('beneficiaries').then((socket: any) => {
@@ -80,5 +81,4 @@ export class BeneficiaryService {
       .get(path)
       .query({ dateOfBirth: body.date });
   }
-
 }
