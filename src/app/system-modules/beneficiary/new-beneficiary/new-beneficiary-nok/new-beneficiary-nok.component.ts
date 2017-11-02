@@ -103,7 +103,7 @@ export class NewBeneficiaryNokComponent implements OnInit {
   }
 
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }
@@ -182,8 +182,8 @@ export class NewBeneficiaryNokComponent implements OnInit {
     dependant.controls['gender'].setValue(gender);
   }
 
-  moveBack(){
-    this._systemService.announceBeneficiaryTabNotification({tab:'Two',beneficiary:this.selectedBeneficiary});
+  moveBack() {
+    this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
   }
 
   onClickStepTwo(dependants) {
@@ -203,20 +203,20 @@ export class NewBeneficiaryNokComponent implements OnInit {
       person.phoneNumber = group.controls.phonenumber.value;
       person.platformOnwerId = this.currentPlatform._id;
       person.title = group.controls.title.value;
-    
+
 
       let beneficiary: Beneficiary = <Beneficiary>{};
       beneficiary.stateID = group.lasrraId;
       beneficiary.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
 
 
-      dependantList.push({person:person, beneficiary:beneficiary, relationship:group.controls.relationship.value});
+      dependantList.push({ person: person, beneficiary: beneficiary, relationship: group.controls.relationship.value });
 
       // console.log(group)
     });
     // console.log(dependantList);
 
-    this._systemService.announceBeneficiaryTabNotification({tab:'Four',beneficiary:this.selectedBeneficiary, dependants:dependantList})
+    this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList })
   }
 
   compare(l1: any, l2: any) {

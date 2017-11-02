@@ -74,7 +74,6 @@ export class BeneficiaryService {
   }
 
   validateAge(body: any) {
-    console.log(body)
     let host = this._restService.getHost();
     let path = host + '/api/validate-age';
     return request

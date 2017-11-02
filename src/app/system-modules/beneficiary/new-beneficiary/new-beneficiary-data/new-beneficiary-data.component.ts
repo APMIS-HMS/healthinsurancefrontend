@@ -1,3 +1,5 @@
+import { UserService } from './../../../../services/common/user.service';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
@@ -71,6 +73,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   selectedState: any;
   stream: any;
   btnCamera = 'Use Camera';
+  user: any;
+  person: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -88,10 +92,13 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     private _maritalService: MaritalStatusService,
     private _beneficiaryService: BeneficiaryService,
     private _personService: PersonService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _locker: CoolLocalStorage,
+    private _userService: UserService
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._initialiseFormGroup();
 
     this._getCurrentPlatform();
@@ -99,6 +106,11 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._getGenders();
     this._getTitles();
     this._getMaritalStatus();
+    console.log(this.user)
+    if (this.user.platformOwnerId._id === undefined) {
+      this._getUser();
+      this._getPerson();
+    }
   }
   ngAfterViewInit() {
     if (this.video !== undefined) {
@@ -121,13 +133,45 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     }
 
   }
+  _getUser() {
+    console.log(this.user._id)
+    this._userService.get(this.user._id, {}).then((payload: any) => {
+      console.log(payload);
+      this.stepOneFormGroup.controls.firstName.setValue(payload.firstName);
+      this.stepOneFormGroup.controls.lastName.setValue(payload.lastName);
+      this.stepOneFormGroup.controls.phonenumber.setValue(payload.phoneNumber);
+      this.stepOneFormGroup.controls.email.setValue(payload.email);
+
+      this.stepOneFormGroup.controls.firstName.disable();
+      this.stepOneFormGroup.controls.lastName.disable();
+      this.stepOneFormGroup.controls.phonenumber.disable();
+      this.stepOneFormGroup.controls.email.disable();
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  _getPerson() {
+    console.log(this.user._id)
+    this._personService.find({
+      query: {
+        email: this.user.email
+      }
+    }).then((payload: any) => {
+      console.log(payload);
+      if (payload.data.length > 0) {
+        this.person = payload.data[0];
+      }
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   _getCurrentPlatform() {
     this._facilityService.find({
       query:
       { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
     }).then((res: any) => {
-      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         if (this.currentPlatform.address !== undefined) {
@@ -282,7 +326,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   validateEmailNotTaken(control: AbstractControl) {
     if (control.value !== undefined && control.value.jsdate !== undefined) {
       return this._beneficiaryService.validateAge(control.value).then(res => {
-        console.log(res)
         return res.body.response >= 18 ? null : { underage: true };
       });
     } else {
@@ -378,31 +421,37 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
   onClickStepOne(value, valid) {
     if (valid) {
-      if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
-        console.log(1)
-        let personId: Person = this.selectedBeneficiary.personId;
-        let address: Address = this.selectedBeneficiary.personId.homeAddress;
-        address.lga = value.lga;
-        address.neighbourhood = value.neighbourhood;
-        address.state = this.selectedState;
-        delete address.state.cities;
-        delete address.state.lgs;
-        address.street = value.streetName;
+      if (this.user.platformOwnerId._id === undefined) {
+        //save image if available
+        //update user with complete platformownerid
+        //updaate person
+        // save beneficiary directly
+      } else {
+        if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
+          console.log(1)
+          let personId: Person = this.selectedBeneficiary.personId;
+          let address: Address = this.selectedBeneficiary.personId.homeAddress;
+          address.lga = value.lga;
+          address.neighbourhood = value.neighbourhood;
+          address.state = this.selectedState;
+          delete address.state.cities;
+          delete address.state.lgs;
+          address.street = value.streetName;
 
-        personId.dateOfBirth = value.dob.jsdate;
-        personId.email = value.email;
-        personId.firstName = value.firstName;
-        personId.gender = value.gender;
-        personId.homeAddress = address;
-        personId.lastName = value.lastName;
-        personId.lgaOfOrigin = value.lgaOfOrigin;
-        personId.maritalStatus = value.maritalStatus;
-        personId.mothersMaidenName = value.mothermaidenname;
-        personId.otherNames = value.otherNames;
-        personId.phoneNumber = value.phonenumber;
-        personId.platformOnwerId = this.currentPlatform._id;
-        personId.stateOfOrigin = value.stateOfOrigin;
-        personId.title = value.title;
+          personId.dateOfBirth = value.dob.jsdate;
+          personId.email = value.email;
+          personId.firstName = value.firstName;
+          personId.gender = value.gender;
+          personId.homeAddress = address;
+          personId.lastName = value.lastName;
+          personId.lgaOfOrigin = value.lgaOfOrigin;
+          personId.maritalStatus = value.maritalStatus;
+          personId.mothersMaidenName = value.mothermaidenname;
+          personId.otherNames = value.otherNames;
+          personId.phoneNumber = value.phonenumber;
+          personId.platformOnwerId = this.currentPlatform._id;
+          personId.stateOfOrigin = value.stateOfOrigin;
+          personId.title = value.title;
 
 
 
@@ -411,31 +460,41 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
 
 
-        let fileBrowser = this.fileInput.nativeElement;
-        this._systemService.on();
-        if (personId.profileImageObject === undefined) {
-          console.log('1a')
-          if (fileBrowser.files && fileBrowser.files[0]) {
-            console.log('1b')
-            this.upload().then((result: any) => {
-              console.log('1c')
-              if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-                console.log('1d')
-                personId.profileImageObject = result.body[0].file;
+          let fileBrowser = this.fileInput.nativeElement;
+          this._systemService.on();
+          if (personId.profileImageObject === undefined) {
+            console.log('1a')
+            if (fileBrowser.files && fileBrowser.files[0]) {
+              console.log('1b')
+              this.upload().then((result: any) => {
+                console.log('1c')
+                if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+                  console.log('1d')
+                  personId.profileImageObject = result.body[0].file;
 
-                this._personService.update(personId).then(payload => {
-                  console.log('1e')
-                  this._getBeneficiary(this.selectedBeneficiary._id);
-                  this._systemService.off();
-                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-                }).catch(err => {
-                  console.log(err);
-                  this._systemService.off();
-                })
-              }
-            }).catch(err => {
-              this._systemService.off();
-            })
+                  this._personService.update(personId).then(payload => {
+                    console.log('1e')
+                    this._getBeneficiary(this.selectedBeneficiary._id);
+                    this._systemService.off();
+                    this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                  }).catch(err => {
+                    console.log(err);
+                    this._systemService.off();
+                  })
+                }
+              }).catch(err => {
+                this._systemService.off();
+              })
+            } else {
+              this._personService.update(personId).then(payload => {
+                this._getBeneficiary(this.selectedBeneficiary._id);
+                this._systemService.off();
+                this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+              }).catch(err => {
+                console.log(err);
+                this._systemService.off();
+              })
+            }
           } else {
             this._personService.update(personId).then(payload => {
               this._getBeneficiary(this.selectedBeneficiary._id);
@@ -446,97 +505,102 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
               this._systemService.off();
             })
           }
+
+
+
+
         } else {
-          this._personService.update(personId).then(payload => {
-            this._getBeneficiary(this.selectedBeneficiary._id);
-            this._systemService.off();
-            this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-          }).catch(err => {
-            console.log(err);
-            this._systemService.off();
-          })
-        }
+          console.log(2)
+          let personId: Person = <Person>{};
+          let address: Address = <Address>{};
+          address.lga = value.lga;
+          address.neighbourhood = value.neighbourhood;
+          address.state = this.selectedState;
+          delete address.state.cities;
+          delete address.state.lgs;
+          address.street = value.streetName;
 
+          personId.dateOfBirth = value.dob.jsdate;
+          personId.email = value.email;
+          personId.firstName = value.firstName;
+          personId.gender = value.gender;
+          personId.homeAddress = address;
+          personId.lastName = value.lastName;
+          personId.lgaOfOrigin = value.lgaOfOrigin;
+          personId.maritalStatus = value.maritalStatus;
+          personId.mothersMaidenName = value.mothermaidenname;
+          personId.otherNames = value.otherNames;
+          personId.phoneNumber = value.phonenumber;
+          personId.platformOnwerId = this.currentPlatform._id;
+          personId.stateOfOrigin = value.stateOfOrigin;
+          personId.title = value.title;
 
+          let beneficiary: Beneficiary = <Beneficiary>{};
+          beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+          beneficiary.platformOwnerId = this.currentPlatform;
 
-
-      } else {
-        console.log(2)
-        let personId: Person = <Person>{};
-        let address: Address = <Address>{};
-        address.lga = value.lga;
-        address.neighbourhood = value.neighbourhood;
-        address.state = this.selectedState;
-        delete address.state.cities;
-        delete address.state.lgs;
-        address.street = value.streetName;
-
-        personId.dateOfBirth = value.dob.jsdate;
-        personId.email = value.email;
-        personId.firstName = value.firstName;
-        personId.gender = value.gender;
-        personId.homeAddress = address;
-        personId.lastName = value.lastName;
-        personId.lgaOfOrigin = value.lgaOfOrigin;
-        personId.maritalStatus = value.maritalStatus;
-        personId.mothersMaidenName = value.mothermaidenname;
-        personId.otherNames = value.otherNames;
-        personId.phoneNumber = value.phonenumber;
-        personId.platformOnwerId = this.currentPlatform._id;
-        personId.stateOfOrigin = value.stateOfOrigin;
-        personId.title = value.title;
-
-        let beneficiary: Beneficiary = <Beneficiary>{};
-        beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-        beneficiary.platformOwnerId = this.currentPlatform;
-
-        let policy: any = <any>{};
+          let policy: any = <any>{};
 
 
 
 
 
-        let fileBrowser = this.fileInput.nativeElement;
-        this._systemService.on();
-        if (personId.profileImageObject === undefined) {
-          console.log('2a')
-          if (fileBrowser.files && fileBrowser.files[0]) {
-            console.log('2b')
-            this.upload().then((result: any) => {
-              console.log('2c')
-              if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-                personId.profileImageObject = result.body[0].file;
-                console.log('2d')
-                this._beneficiaryService.createWithMiddleWare({ person: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
-                  console.log('2e')
-                  // should be sending selectedbeneficiary to steptwo
-                  console.log(payload)
+          let fileBrowser = this.fileInput.nativeElement;
+          this._systemService.on();
+          if (personId.profileImageObject === undefined) {
+            console.log('2a')
+            if (fileBrowser.files && fileBrowser.files[0]) {
+              console.log('2b')
+              this.upload().then((result: any) => {
+                console.log('2c')
+                if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+                  personId.profileImageObject = result.body[0].file;
+                  console.log('2d')
+                  this._beneficiaryService.createWithMiddleWare({ person: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+                    console.log('2e')
+                    // should be sending selectedbeneficiary to steptwo
+                    console.log(payload)
 
-                  if (payload.statusCode === 200 && payload.error === false) {
-                    console.log('am here oo')
-                    delete payload.body.beneficiary.personId;
-                    payload.body.beneficiary.personId = payload.body.person;
-                    this.selectedBeneficiary = payload.body.beneficiary;
-                    // this._systemService.announceBeneficiaryTabNotification('Two');
+                    if (payload.statusCode === 200 && payload.error === false) {
+                      console.log('am here oo')
+                      delete payload.body.beneficiary.personId;
+                      payload.body.beneficiary.personId = payload.body.person;
+                      this.selectedBeneficiary = payload.body.beneficiary;
+                      // this._systemService.announceBeneficiaryTabNotification('Two');
+                      this._systemService.off();
+                      this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                    }
+                  }).catch(err => {
                     this._systemService.off();
-                    this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-                  }
-                }).catch(err => {
-                  this._systemService.off();
-                  console.log(err);
-                })
-              }
-            }).catch(err => {
-              console.log(err);
-              this._systemService.off();
-            })
+                    console.log(err);
+                  })
+                }
+              }).catch(err => {
+                console.log(err);
+                this._systemService.off();
+              })
+            } else {
+              this._beneficiaryService.createWithMiddleWare({ personId: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+                console.log(payload)
+                if (payload.statusCode === 200 && payload.error === false) {
+                  payload.body.beneficiary.personId = payload.body.personId;
+                  this.selectedBeneficiary = payload.body.beneficiary;
+                  this.selectedBeneficiary.personId = payload.body.personId;
+                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                }
+                this._systemService.off();
+              }).catch(err => {
+                console.log(err);
+                this._systemService.off();
+              })
+            }
           } else {
             this._beneficiaryService.createWithMiddleWare({ personId: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
-              console.log(payload)
+
               if (payload.statusCode === 200 && payload.error === false) {
                 payload.body.beneficiary.personId = payload.body.personId;
                 this.selectedBeneficiary = payload.body.beneficiary;
-                this.selectedBeneficiary.personId = payload.body.personId;
+                console.log(payload)
                 this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
               }
               this._systemService.off();
@@ -545,23 +609,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
               this._systemService.off();
             })
           }
-        } else {
-          this._beneficiaryService.createWithMiddleWare({ personId: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
 
-            if (payload.statusCode === 200 && payload.error === false) {
-              payload.body.beneficiary.personId = payload.body.personId;
-              this.selectedBeneficiary = payload.body.beneficiary;
-              console.log(payload)
-              this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-            }
-            this._systemService.off();
-          }).catch(err => {
-            console.log(err);
-            this._systemService.off();
-          })
         }
-
       }
+
     } else {
       let counter = 0;
       this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);

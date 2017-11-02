@@ -67,7 +67,7 @@ export class ListDetailsClaimsComponent implements OnInit {
   }
 
   _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getClaimsPayments();
