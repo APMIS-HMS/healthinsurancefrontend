@@ -337,10 +337,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._systemService.on();
     this._countriesService.find({
       query: {
-        "states.name": state.name,
+        'states.name': state.name,
         $select: { 'states.$': 1 }
-
-
       }
     }).then((payload: any) => {
       this._systemService.off();
@@ -361,7 +359,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._systemService.on();
     this._countriesService.find({
       query: {
-        "states.name": state.name,
+        'states.name': state.name,
         $select: { 'states.$': 1 }
       }
     }).then((payload: any) => {
@@ -369,6 +367,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       if (payload.data.length > 0) {
         const states = payload.data[0].states;
         if (states.length > 0) {
+          console.log(states[0].lgs);
           this.residenceLgs = states[0].lgs;
           this.selectedState = states[0];
         }

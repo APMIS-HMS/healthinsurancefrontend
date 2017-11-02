@@ -20,8 +20,8 @@
                         <img *ngIf="selectedFacility.logo !== undefined" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)">
                         <img *ngIf="selectedFacility.logo === undefined" src="../../../../assets/img/logos/default.png">
                     </div>
-                    <div>Lagos State Health Management Agency</div>
-                    <div>Status: <span class="status">Active</span></div>
+                    <div>{{ selectedFacility?.name }}</div>
+                    <div>Status: <span class="{{ selectedFacility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ selectedFacility?.isConfirmed ? 'Active' : 'Inactive' }}</span></div>
                 </div>
 
                 <div class="bar-icos"></div>

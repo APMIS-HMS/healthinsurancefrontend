@@ -36,8 +36,7 @@
 
                 <div class="group-wrap">
                     <div class="item-val">
-                        {{ beneficiary?.personId?.title?.name }} {{ beneficiary?.personId?.firstName }} {{ beneficiary?.personId?.otherNames }} {{
-                        beneficiary?.personId?.lastName }}
+                        {{ beneficiary?.personId?.title?.name }} {{ beneficiary?.personId?.firstName }} {{ beneficiary?.personId?.otherNames }} {{ beneficiary?.personId?.lastName }}
                     </div>
                     <div class="item-val">{{ beneficiary?.personId?.phoneNumber }}</div>
                 </div>
@@ -107,6 +106,36 @@
                     <div class="item-val">{{dependant.beneficiary?.personIdId?.lastName}} {{dependant.beneficiary?.personIdId?.firstName}} {{dependant.beneficiary?.personIdId?.otherNames}}</div>
                     <div class="item-val">{{ dependant.beneficiary?.personIdId?.phoneNumber }}</div>
                     <div class="item-val">Relationship: {{ dependant?.relationshipId?.name }}</div>
+                </div>
+                <div class="group-wrap">
+                    <div class="group-item">
+                        <div class="item-label">Card Status:
+                            <span class="green">
+                                Issued</span>
+                        </div>
+
+                        <!-- <div style="color: green" class="item-val"> Issued</div> -->
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Card Issued By:</div>
+                        <div class="item-val">Mr Aderotimi Onala</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">When Issued:</div>
+                        <div class="item-val">11th April, 2017</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Times Card was Issued or Re-Issued:</div>
+                        <div class="item-val">6 Times</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Where Card is Issued:</div>
+                        <div class="item-val">Ministry of Health Lagos</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Card Expiration Date:</div>
+                        <div class="item-val">3rd Dec. 2017</div>
+                    </div>
                 </div>
                 <i (click)="navigateEditBeneficiary(beneficiary)" class=" ico-cirle fa fa-pencil "></i>
             </div>
@@ -187,8 +216,7 @@
                         </div>
                     </form>
                     <div class="btn-box">
-                        <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);"
-                            [innerHtml]="approvalBtn"></button>
+                        <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
                         <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
                     </div>
                 </div>
