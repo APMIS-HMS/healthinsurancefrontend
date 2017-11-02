@@ -82,7 +82,6 @@ export class MainMenuComponent implements OnInit {
   }
   private _bindRole() {
     const accessibilities = (<any>this._locker.getObject('accessibilities'));
-
     if(accessibilities !== null && accessibilities !== undefined){
       accessibilities.forEach(access => {
         if (!!access.module) {

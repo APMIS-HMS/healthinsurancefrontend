@@ -161,7 +161,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       age: [this.selectedCheckIn != null ? this._getAge() : 0, [<any>Validators.required]],
       address: [this.selectedCheckIn != null ? this._getAddress() : '', [<any>Validators.required]],
       healthCareProvider: [this.selectedCheckIn != null ? this.selectedCheckIn.providerFacilityId.name : '', [<any>Validators.required]],
-      hia: [this.selectedPolicy != null ? this.selectedPolicy.hiaId.name : '', [<any>Validators.required]],
+      hia: [this.selectedCheckIn != null ? this.selectedCheckIn.policyObject.hiaId.name : '', [<any>Validators.required]],
       visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -350,43 +350,45 @@ export class PreAuthorizationNewComponent implements OnInit {
     this._checkInService.get(id, {}).then((payload: any) => {
       this.selectedCheckIn = payload;
       this._initializeFormGroup();
-      this._getPolicy();
+      //this._getPolicy();
+      console.log(this.selectedCheckIn);
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
     })
   }
 
-  _getPolicy() {
-    this._systemService.on();
-    this._policyService.find(
-      {
-        query: {
-          $and: [
-            { isActive: true },
-            {
-              $or: [
-                { 'principalBeneficiary': this.selectedCheckIn.beneficiaryId },
-                { 'dependantBeneficiaries.beneficiary._id': this.selectedCheckIn.beneficiaryId }
-              ]
-            }
-          ]
-        }
-      }
-    ).then((results: any) => {
-      // console.log(results);
-      // let policyResult = results[0];
-      // console.log(policyResult);
-      if (results.data.length > 0) {
-        this.selectedPolicy = results.data[0];
-        this.preAuthFormGroup.controls.hia.setValue(this.selectedPolicy.hiaId.name);
-      }
+  // _getPolicy() {
+  //   console.log(this.selectedCheckIn);
+  //   this._systemService.on();
+  //   this._policyService.find(
+  //     {
+  //       query: {
+  //         $and: [
+  //           { isActive: false },
+  //           {
+  //             $or: [
+  //               { 'principalBeneficiary._id': this.selectedCheckIn.beneficiaryId },
+  //               { 'dependantBeneficiaries.beneficiary._id': this.selectedCheckIn.beneficiaryId }
+  //             ]
+  //           }
+  //         ]
+  //       }
+  //     }
+  //   ).then((results: any) => {
+  //     // console.log(results);
+  //     // let policyResult = results[0];
+  //     console.log(results.data);
+  //     if (results.data.length > 0) {
+  //       this.selectedPolicy = results.data[0];
+  //       this.preAuthFormGroup.controls.hia.setValue(this.selectedPolicy.hiaId.name);//.policyObject.hiaId.name
+  //     }
 
-      this._systemService.off();
-    }, error => {
-      console.log(error)
-    })
-  }
+  //     this._systemService.off();
+  //   }, error => {
+  //     console.log(error)
+  //   })
+  // }
 
 
   _getAge() {
@@ -732,7 +734,7 @@ export class PreAuthorizationNewComponent implements OnInit {
         authorizationObject.dateOfRequest = this.preAuthFormGroup.controls.requestDate.value.jsdate;
         authorizationObject.documentation = [];
         authorizationObject.documentation.push(preAuthDoc);
-        authorizationObject.policyId = this.selectedPolicy._id;
+        authorizationObject.policyId = this.selectedCheckIn.policyObject._id;
 
         authorizationObject.isEmergency = this.preAuthFormGroup.controls.emergency.value;
         authorizationObject.medicalPersonelName = this.preAuthFormGroup.controls.docName.value;
