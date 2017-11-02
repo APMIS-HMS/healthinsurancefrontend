@@ -46,6 +46,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   sponsorships: any[] = SPONSORSHIP;
   sponsorshipTypes: any[] = SPONSORSHIPTYPE;
   organizations: any[] = [];
+  isHIA: boolean = false;
   user: any;
   constructor(
     private _fb: FormBuilder,
@@ -84,6 +85,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       sponsorshipType: ['', [<any>Validators.required]],
     });
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
+    if (!!this.user.userType && this.user.userType.name === 'HIA') {
+      this.isHIA = true;
+    }
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
       console.log(value);

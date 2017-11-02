@@ -76,7 +76,7 @@
                 </select>
         </div>
     </div>
-    <div class="frm-item-wrap">
+    <div class="frm-item-wrap" *ngIf="isHIA">
         <label class="label">Organization</label>
         <div class="inputWrap">
             <select formControlName="organization" class="form-control">
@@ -85,7 +85,7 @@
             </select>
         </div>
     </div>
-    <div class="frm-item-wrap">
+    <div class="frm-item-wrap" *ngIf="isHIA">
         <label class="label">Sponsorship Type</label>
         <div class="inputWrap">
             <select formControlName="sponsorshipType" class="form-control">
