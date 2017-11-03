@@ -2,7 +2,7 @@
     <div class="frm-item-wrap">
         <label class="label">Gender</label>
         <div class="inputWrap">
-            <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
+            <span style="display:inline-block;margin:0 10px;" *ngFor="let gender of genders;  let i=index">
                 <label for="bene-male">
                     <input [checked]="selectedBeneficiary?.person?.gender?.name===gender.name" style="width: 30px;display: block;margin: 0 auto;"
                         (change)="changeGender($event, gender)" type="radio" formControlName="gender" name="gender" id="bene-male"

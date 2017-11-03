@@ -16,7 +16,6 @@ const RxJS = require('rxjs');
 const HOST = 'http://localhost:3031'; // Your base server URL here
 // const HOST = 'http://insuranceapi.azurewebsites.net';
 
-
 @Injectable()
 export class SocketService {
     public socket: any;
