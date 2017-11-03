@@ -76,11 +76,11 @@ export class SignupComponent implements OnInit {
 	_checkEmail(value) {
 		this._systemService.on();
 		let person$ = Observable.fromPromise(this._personService.findWithOutAuth({ query: { email: value } }));
-		let user$ = Observable.fromPromise(this._userService.findWithOutAuth({ query: { email: value } }));
+		// let user$ = Observable.fromPromise(this._userService.findWithOutAuth({ query: { email: value } }));
 
-		Observable.forkJoin([person$, user$]).subscribe((results: any) => {
+		Observable.forkJoin([person$]).subscribe((results: any) => {
 			this._systemService.off();
-			if (results[0].data.length > 0 || results[1].data.length > 0) {
+			if (results[0].data.length > 0) {
 				this.signupFormGroup.controls['email'].setErrors({ 'duplicate': true });
 				console.log(this.signupFormGroup.controls['email'].errors);
 			}
@@ -93,11 +93,11 @@ export class SignupComponent implements OnInit {
 	_checkPhoneNumber(value) {
 		this._systemService.on();
 		let person$ = Observable.fromPromise(this._personService.findWithOutAuth({ query: { phoneNumber: value } }));
-		let user$ = Observable.fromPromise(this._userService.findWithOutAuth({ query: { phoneNumber: value } }));
+		// let user$ = Observable.fromPromise(this._userService.findWithOutAuth({ query: { phoneNumber: value } }));
 
-		Observable.forkJoin([person$, user$]).subscribe((results: any) => {
+		Observable.forkJoin([person$]).subscribe((results: any) => {
 			this._systemService.off();
-			if (results[0].data.length > 0 || results[1].data.length > 0) {
+			if (results[0].data.length > 0) {
 				this.signupFormGroup.controls['phoneNumber'].setErrors({ 'duplicate': true });
 				console.log(this.signupFormGroup.controls['phoneNumber'].errors);
 			}
