@@ -240,9 +240,9 @@
                         <thead class="thead">
                             <tr class="tr">
                                 <th class="th">No</th>
+                                <th class="th">Category</th>
                                 <th class="th">Duration</th>
                                 <th class="th">Start Date</th>
-                                <th class="th">Created At</th>
                                 <th class="th">Status</th>
                                 <th class="th">Valid Till</th>
                             </tr>
@@ -252,12 +252,12 @@
                             <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0">
                                 <td class="text-center" colspan="6">No data available in table</td>
                             </tr>
-                            <tr *ngFor="let pol of policy?.validityPeriods; let i = index;" class="tr">
+                            <tr *ngFor="let pol of policy?.validityPeriods.reverse(); let i = index;" class="tr">
                                 <td class="td hover">{{ i+1 }}</td>
-                                <td class="td hover">{{ pol.duration }} {{ pol.unit.name }}</td>
-                                <td class="td hover">{{ pol.createdAt | date }}</td>
-                                <td class="td hover">{{ pol.startDate?.jsdate | date }}</td>
-                                <td class="td hover">{{ pol.isActive }}</td>
+                                <td class="td hover">{{ pol.category }}</td>
+                                <td class="td hover">{{ pol.duration }} {{ pol.unit }}</td>
+                                <td class="td hover">{{ pol.startDate | date }}</td>
+                                <td class="{{pol.isActive ? 'green': 'red'}}">{{ pol.isActive ? 'Active': 'Inactive' }}</td>
                                 <td class="td hover">{{ pol.validTill | date }}</td>
                             </tr>
                         </tbody>
