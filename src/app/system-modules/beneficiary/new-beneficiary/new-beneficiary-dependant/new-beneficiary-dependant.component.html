@@ -112,7 +112,7 @@
                         <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
                             Add &nbsp; <i class="fa fa-plus"></i>
                         </button>
-                        <button class="btn btn-medium btn-blue" (click)="skip();">
+                        <button [disabled]="frmDependants['controls'].dependantArray['controls'].length > 1" class="btn btn-medium btn-blue" (click)="skip();">
                             Skip &nbsp; <i class="fa fa-plus"></i>
                         </button>
                     </div>
@@ -121,7 +121,7 @@
 
 
             <div style="text-align:right;" *ngIf="dependant.controls.readOnly.value ===true && dependant.valid===true && (i+1)===frmDependants.controls['dependantArray'].controls.length">
-                <span (click)="pushNewDependant()" class="txt-link"><i class="fa fa-plus"></i> Another Dependant</span>
+                <span (click)="pushNewDependant(dependant)" class="txt-link"><i class="fa fa-plus"></i> Another Dependant</span>
             </div>
         </div>
     </div>

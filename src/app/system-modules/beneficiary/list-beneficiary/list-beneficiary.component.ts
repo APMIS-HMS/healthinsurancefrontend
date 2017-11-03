@@ -168,6 +168,7 @@ export class ListBeneficiaryComponent implements OnInit {
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
+            principal.policyId = policy._id;
             principal.isActive = policy.isActive;
             principal.dependantCount = policy.dependantBeneficiaries.length;
             principal.planTypeId = policy.planTypeId;
@@ -176,6 +177,7 @@ export class ListBeneficiaryComponent implements OnInit {
               innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
               innerPolicy.beneficiary.isPrincipal = false;
               innerPolicy.beneficiary.principalId = principal._id;
+              innerPolicy.beneficiary.policyId = policy._id;
               innerPolicy.beneficiary.hia = policy.hiaId;
               innerPolicy.beneficiary.isActive = policy.isActive;
               innerPolicy.beneficiary.planTypeId = policy.planTypeId;
@@ -245,14 +247,14 @@ export class ListBeneficiaryComponent implements OnInit {
   navigateDetailBeneficiary(beneficiary) {
     if (beneficiary.isPrincipal) {
       this._systemService.on();
-      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary._id]).then(res => {
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
     } else {
       this._systemService.on();
-      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.principalId]).then(res => {
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();

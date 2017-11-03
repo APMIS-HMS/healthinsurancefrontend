@@ -2,7 +2,7 @@ import { UserService } from './../../../../services/common/user.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
+import { FORM_VALIDATION_ERROR_MESSAGE, MAXIMUM_NUMBER_OF_DEPENDANTS } from './../../../../services/globals/config';
 import { PersonService } from './../../../../services/person/person.service';
 import { Address } from './../../../../models/organisation/address';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
@@ -54,7 +54,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   genders: any[] = [];
   titles: any[] = [];
   maritalStatuses: any[] = [];
-
+  maxNumberOfDependant: number = MAXIMUM_NUMBER_OF_DEPENDANTS
   _video: any;
   patCanvas: any;
   patData: any;
@@ -98,6 +98,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   ) { }
 
   ngOnInit() {
+    console.log(this.maxNumberOfDependant)
     this.user = (<any>this._locker.getObject('auth')).user;
     this._initialiseFormGroup();
 
@@ -110,6 +111,11 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     if (this.user.platformOwnerId._id === undefined) {
       this._getUser();
       this._getPerson();
+    }
+  }
+  getMax(e) {
+    if ((<number>e.target.value) > this.maxNumberOfDependant) {
+      return e.target.value = this.maxNumberOfDependant;
     }
   }
   ngAfterViewInit() {
@@ -262,7 +268,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
 
   _initialiseFormGroup() {
-    let date = this.selectedBeneficiary.personId === undefined ? new Date() : new Date(this.selectedBeneficiary.personId.dateOfBirth);
+    let date = (this.selectedBeneficiary.personId === undefined || this.selectedBeneficiary.personId === null) ? new Date() : new Date(this.selectedBeneficiary.personId.dateOfBirth);
     if (this.selectedBeneficiary.personId !== undefined) {
       let year = date.getFullYear();
       let month = date.getMonth() + 1;
@@ -290,7 +296,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       phonenumber: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       secondaryPhone: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.secondaryPhoneNumber : '', [<any>Validators.pattern(PHONE_REGEX)]],
       email: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      dob: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.dateOfBirth : this.today, [<any>Validators.required], this.validateEmailNotTaken.bind(this)],
+      dob: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.dateOfBirth : this.today, [<any>Validators.required], this.validateAgaintUnderAge.bind(this)],
       lashmaId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.platformOwnerNumber : '', []],
       lasrraId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.stateID : '', []],
       stateOfOrigin: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.stateOfOrigin : '', [<any>Validators.required]],
@@ -304,7 +310,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     });
 
     if (this.selectedBeneficiary._id !== undefined) {
-      if (this.selectedBeneficiary.personId !== undefined) {
+      if (this.selectedBeneficiary.personId !== null && this.selectedBeneficiary.personId !== undefined) {
         this._getLgaAndCities(this.selectedBeneficiary.personId.stateOfOrigin);
         this.stepOneFormGroup.controls['gender'].setValue(this.selectedBeneficiary.personId.gender);
         if (this.selectedBeneficiary.personId.profileImageObject !== undefined) {
@@ -323,7 +329,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     });
   }
 
-  validateEmailNotTaken(control: AbstractControl) {
+  validateAgaintUnderAge(control: AbstractControl) {
     if (control.value !== undefined && control.value.jsdate !== undefined) {
       return this._beneficiaryService.validateAge(control.value).then(res => {
         return res.body.response >= 18 ? null : { underage: true };
@@ -367,7 +373,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       if (payload.data.length > 0) {
         const states = payload.data[0].states;
         if (states.length > 0) {
-          console.log(states[0].lgs);
           this.residenceLgs = states[0].lgs;
           this.selectedState = states[0];
         }

@@ -89,17 +89,24 @@ export class BeneficiaryDetailsComponent implements OnInit {
     console.log(this._route)
     if (this._router.url.endsWith('checkin')) {
       this.tab_checkin = true;
+      this.isCheckIn = true;
+      console.log('showchecking')
     } else if (this._router.url.endsWith('payment')) {
       this.tab_payment = true;
+      this.isCheckIn = false;
     } else if (this._router.url.endsWith('claims')) {
       this.tab_claims = true;
+      this.isCheckIn = false;
     } else if (this._router.url.endsWith('checkedin-history')) {
       this.tab_checkinHistory = true;
+      this.isCheckIn = true;
     } else if (this._router.url.endsWith('referrals')) {
       this.tab_referals = true;
+      this.isCheckIn = false;
     }
     else {
       this.tab_details = true;
+      this.isCheckIn = false;
     }
   }
 

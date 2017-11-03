@@ -1,4 +1,5 @@
-import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
+import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
+import { FORM_VALIDATION_ERROR_MESSAGE, MAXIMUM_NUMBER_OF_DEPENDANTS } from './../../../../services/globals/config';
 import { Beneficiary } from './../../../../models/setup/beneficiary';
 import { Address } from './../../../../models/organisation/address';
 import { Person } from './../../../../models/person/person';
@@ -45,6 +46,7 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
   relationships: any[] = [];
 
   currentPlatform: any;
+  hasDependantAbove18 = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -67,9 +69,10 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
     private _router: Router,
     private _maritalService: MaritalStatusService,
     private _relationshipService: RelationshipService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _beneficiaryService: BeneficiaryService
   ) {
-   
+
   }
 
   ngOnInit() {
@@ -116,7 +119,7 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
     this._facilityService.find({
       query:
       { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
-    }).then((res:any) => {
+    }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }
@@ -162,44 +165,81 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
   }
 
   closeDependant(dependant, i) {
+    if ((<FormArray>this.frmDependants.controls['dependantArray']).controls.length > 1) {
+      (<FormArray>this.frmDependants.controls['dependantArray']).controls.splice(i);
+    }
   }
 
   pushNewDependant(dependant?, index?) {
-    if (dependant !== undefined && dependant.valid) {
+    // console.log((<FormArray>this.frmDependants.controls['dependantArray']).controls.length)
+    // console.log(dependant)
+    console.log(this.selectedBeneficiary.numberOfUnderAge)
+    if (dependant !== undefined && dependant.valid && (<FormArray>this.frmDependants.controls['dependantArray']).controls.length < (this.selectedBeneficiary.numberOfUnderAge)) {
       dependant.value.readOnly = true;
+
+      (<FormArray>this.frmDependants.controls['dependantArray'])
+        .push(
+        this._fb.group({
+          firstName: ['', [<any>Validators.required]],
+          title: ['', [<any>Validators.required]],
+          middleName: [''],
+          lastName: ['', [<any>Validators.required]],
+          phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+          secondaryPhone: [''],
+          email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+          dob: [this.today, [<any>Validators.required]],
+          gender: ['', [<any>Validators.required]],
+          relationship: ['', [<any>Validators.required]],
+          lasrraId: ['', []],
+          readOnly: [false]
+        })
+        );
+    } else {
+      this._toastr.warning("A Household cannot have more than 5 (Five) dependants!!!", "Warning")
     }
-    (<FormArray>this.frmDependants.controls['dependantArray'])
-      .push(
-      this._fb.group({
-        firstName: ['', [<any>Validators.required]],
-        title: ['', [<any>Validators.required]],
-        middleName: [''],
-        lastName: ['', [<any>Validators.required]],
-        phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-        secondaryPhone: [''],
-        email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-        dob: ['', [<any>Validators.required]],
-        gender: ['', [<any>Validators.required]],
-        relationship: ['', [<any>Validators.required]],
-        lasrraId: ['', []],
-        readOnly: [false]
-      })
-      );
   }
   push(dependant, valid) {
-    if (valid) {
-      dependant.controls['readOnly'].setValue(true);
-    } else {
-      let counter = 0;
-      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
-      Object.keys(dependant.controls).forEach((field, i) => { // {1}
-        const control = dependant.get(field);
-        if (!control.valid) {
-          control.markAsDirty({ onlySelf: true });
-          counter = counter + 1;
+    this._beneficiaryService.validateAge(dependant.value.dob).then(res => {
+      console.log(res)
+      if (res.body.response >= 18 && !this.hasDependantAbove18) {
+        this.hasDependantAbove18 = true;
+        if (valid) {
+          console.log(dependant.value)
+          dependant.controls['readOnly'].setValue(true);
+        } else {
+          let counter = 0;
+          this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+          Object.keys(dependant.controls).forEach((field, i) => { // {1}
+            const control = dependant.get(field);
+            if (!control.valid) {
+              control.markAsDirty({ onlySelf: true });
+              counter = counter + 1;
+            }
+          });
         }
-      });
-    }
+      } else if (res.body.response < 18) {
+        if (valid) {
+          console.log(dependant.value)
+          dependant.controls['readOnly'].setValue(true);
+        } else {
+          let counter = 0;
+          this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+          Object.keys(dependant.controls).forEach((field, i) => { // {1}
+            const control = dependant.get(field);
+            if (!control.valid) {
+              control.markAsDirty({ onlySelf: true });
+              counter = counter + 1;
+            }
+          });
+        }
+      }
+      else {
+        this._toastr.warning('A principal can only have one dependant that is above 18 years of age', 'Warning');
+        return;
+      }
+      // return res.body.response >= 18 ? null : { underage: true };
+    });
+
 
   }
 

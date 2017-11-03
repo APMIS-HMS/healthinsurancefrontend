@@ -4,7 +4,7 @@
         <div class="inputWrap">
             <span style="display:inline-block;margin:0 10px;" *ngFor="let gender of genders;  let i=index">
                 <label for="bene-male">
-                    <input [checked]="selectedBeneficiary?.person?.gender?.name===gender.name" style="width: 30px;display: block;margin: 0 auto;"
+                    <input [checked]="selectedBeneficiary?.personId?.gender?.name===gender.name" style="width: 30px;display: block;margin: 0 auto;"
                         (change)="changeGender($event, gender)" type="radio" formControlName="gender" name="gender" id="bene-male"
                         [value]="gender" checked>{{gender.name}}
                 </label>
@@ -149,7 +149,7 @@
     <div class="frm-item-wrap">
         <label class="label">Number of childern under 18</label>
         <div class="inputWrap">
-            <input type="number" min="0" formControlName="noOfChildrenU18" class="form-control">
+            <input type="number" min="0" (change)="getMax($event)" formControlName="noOfChildrenU18" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.noOfChildrenU18.valid || stepOneFormGroup.controls.noOfChildrenU18.pristine">
                 This field is required.
             </small>

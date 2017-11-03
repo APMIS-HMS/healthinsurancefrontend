@@ -9,8 +9,8 @@
         <li (click)="tabClaims_click()" [class.tab-active]="tab_claims">Claims</li>
         <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
         <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li>
-        <li (click)="tabCheckin_click()" [class.tab-active]="tab_checkin">Check In</li>
-        <li (click)="tabCheckinDetail_click()" [class.tab-active]="tab_checkinHistory">Check In History</li>
+        <li *ngIf="isCheckIn" (click)="tabCheckin_click()" [class.tab-active]="tab_checkin">Check In</li>
+        <li *ngIf="isCheckIn" (click)="tabCheckinDetail_click()" [class.tab-active]="tab_checkinHistory">Check In History</li>
     </ul>
 
     <div class="tab-content shadow-RB">
@@ -43,7 +43,9 @@
 <div *ngIf="addApproval" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="addApprovalClick();" class="close-modal">X</div>
-        <div class="modal-title">EDIT STATUS - <em>Beneficiary</em></div>
+        <div class="modal-title">EDIT STATUS -
+            <em>Beneficiary</em>
+        </div>
         <div class="list-boxes">
             <div class="box-left">
                 <!-- <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">

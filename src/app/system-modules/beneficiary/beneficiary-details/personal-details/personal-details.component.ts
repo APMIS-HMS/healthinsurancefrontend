@@ -35,7 +35,7 @@ export class PersonalDetailsComponent implements OnInit {
   durations: any = DURATIONS;
   dependants: any[] = [];
   isCheckIn = false;
-  
+
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
@@ -66,24 +66,25 @@ export class PersonalDetailsComponent implements OnInit {
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
 
-    let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
-    let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary': routeId } }));
+    // let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
+    let policy$ = Observable.fromPromise(this._policyService.get(routeId, {}));
 
-    Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
+    Observable.forkJoin([policy$]).subscribe((results: any) => {
       console.log(results);
-      this.beneficiary = results[0];
+      this.beneficiary = results[0].principalBeneficiary;
       if (this.isCheckIn) {
         this.tabCheckin_click();
       }
 
-      if (results[1].data.length > 0) {
-        this._headerEventEmitter.setMinorRouteUrl('Household: ' + results[1].data[0].policyId);
-        this.dependants = results[1].data[0].dependantBeneficiaries;
-        this.policy = results[1].data[0];
+      if (!!results) {
+        this._headerEventEmitter.setMinorRouteUrl('Household: ' + results[0].policyId);
+        this.dependants = results[0].dependantBeneficiaries;
+        this.policy = results[0];
       }
 
       this._systemService.off();
     }, error => {
+      console.log(error)
       this._systemService.off();
     });
   }
@@ -102,41 +103,41 @@ export class PersonalDetailsComponent implements OnInit {
   }
 
   onClickApprove() {
-      // const validity = {
-        // duration: value.duration,
-        // unit: value.unit,
-        // startDate: value.startDate,
-        // createdAt: new Date(),
-        // validTill: this.addDays(new Date(), value.unit.days)
+    // const validity = {
+    // duration: value.duration,
+    // unit: value.unit,
+    // startDate: value.startDate,
+    // createdAt: new Date(),
+    // validTill: this.addDays(new Date(), value.unit.days)
+    // };
+    // if (!!this.policy.validityPeriods) {
+    //   this.policy.validityPeriods.push(validity);
+    // } else {
+    //   this.policy.validityPeriods = [];
+    //   this.policy.validityPeriods.push(validity);
+    // }
+
+    this.policy.isActive = !this.policy.isActive;
+    this._policyService.update(this.policy).then((res: any) => {
+      this.policy = res;
+      const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
+      const text = 'Policy has been ' + status;
+      this._toastr.success(text, 'Confirmation!');
+      // Send sms to Principal Beneficiary
+      // const smsData = {
+      //   content: 'Policy has been activated.',
+      //   sender: 'LASHMA',
+      //   receiver: '08056679920'
       // };
-      // if (!!this.policy.validityPeriods) {
-      //   this.policy.validityPeriods.push(validity);
-      // } else {
-      //   this.policy.validityPeriods = [];
-      //   this.policy.validityPeriods.push(validity);
-      // }
 
-      this.policy.isActive = !this.policy.isActive;
-      this._policyService.update(this.policy).then((res: any) => {
-        this.policy = res;
-        const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
-        const text = 'Policy has been ' + status;
-        this._toastr.success(text, 'Confirmation!');
-        // Send sms to Principal Beneficiary
-        // const smsData = {
-        //   content: 'Policy has been activated.',
-        //   sender: 'LASHMA',
-        //   receiver: '08056679920'
-        // };
-
-        // this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
-        // }).catch(err => console.log(err));
-        setTimeout(e => {
-          this.addApprovalClick();
-        }, 1000);
-      }).catch(err => {
-        console.log(err);
-      });
+      // this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
+      // }).catch(err => console.log(err));
+      setTimeout(e => {
+        this.addApprovalClick();
+      }, 1000);
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   addDays(date, days) {
@@ -171,21 +172,21 @@ export class PersonalDetailsComponent implements OnInit {
     });
   }
 
-  navigateFacility(sponsor){
+  navigateFacility(sponsor) {
     console.log(sponsor)
-    if(sponsor.facilityType.name === 'Provider'){
+    if (sponsor.facilityType.name === 'Provider') {
       this._router.navigate(['/modules/provider/providers', sponsor._id]);
-    } else if(sponsor.facilityType.name === 'Employer'){
+    } else if (sponsor.facilityType.name === 'Employer') {
       this._router.navigate(['/modules/employer/employers', sponsor._id]);
-    } else if(sponsor.facilityType.name === 'Health Insurance Agent'){
+    } else if (sponsor.facilityType.name === 'Health Insurance Agent') {
       this._router.navigate(['/modules/hia/hias', sponsor._id]);
-    }else if(sponsor.facilityType.name === 'Platform Owner'){
+    } else if (sponsor.facilityType.name === 'Platform Owner') {
       this._router.navigate(['/modules/provider/new', sponsor._id]);
     }
   }
 
   navigateBeneficiary(url, id?) {
-   this._systemService.on()
+    this._systemService.on()
     if (!!id) {
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();

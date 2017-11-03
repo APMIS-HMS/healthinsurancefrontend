@@ -7,7 +7,7 @@
             <div class="detail-content">
                 <div class="hia-user">
                     <img *ngIf="beneficiary?.personId?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
-                    <img *ngIf="beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)">
+                    <img *ngIf="beneficiary !== undefined && beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)">
                     <div class="pd-tag">P</div>
                 </div>
                 <div class="group-wrap">
@@ -150,7 +150,8 @@
 
             <div class="detail-content ">
                 <div class="hia-logo ">
-                    <img src="../../../../assets/img/logos/bridgeclinicbanner.jpg ">
+                    <img *ngIf="policy?.providerId?.logo === undefined" src="../../../../assets/img/logos/logo-placeholder.png ">
+                    <img *ngIf="policy !== undefined && policy?.providerId?.logo !== undefined" class="" [src]="_uploadService.transform(policy?.providerId?.logo?.thumbnail)">
                 </div>
                 <div class="group-wrap ">
                     <div class="item-label ">Primary Healthcare Provider:</div>

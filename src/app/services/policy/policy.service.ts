@@ -29,7 +29,7 @@ export class PolicyService {
   get(id: string, query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('policies').then((socket: any) => {
-        return this._socket.get(id, query);
+        return this._rest.get(id, query);
       }));
     });
   }
