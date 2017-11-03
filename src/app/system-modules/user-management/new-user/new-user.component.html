@@ -103,15 +103,24 @@
                     </small>
                 </div>
             </div>
-            <!-- <div class="frm-item-wrap">
-        <label class="label">Mother's Maiden Name</label>
-        <div class="inputWrap">
-          <input type="text" formControlName="mothersMaidenName" class="form-control">
-          <small [hidden]="userFormGroup.controls.mothersMaidenName.valid || userFormGroup.controls.mothersMaidenName.pristine">
-                        This is a required field (minimum 3 and max of 50 characters).
-                    </small>
-        </div>
-      </div> -->
+            <div *ngIf="showProvider" class="frm-item-wrap">
+                <label class="label">Profession</label>
+                <div class="inputWrap">
+                    <select formControlName="profession" class="form-control">
+                        <option value=" " disabled selected>Select Profession</option>
+                        <option *ngFor="let profession of professions" [ngValue]="profession">{{profession.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div *ngIf="showProvider" class="frm-item-wrap">
+                <label class="label">Cader</label>
+                <div class="inputWrap">
+                    <select formControlName="cader" class="form-control">
+                        <option value=" " disabled selected>Select Cader</option>
+                        <option *ngFor="let cader of caders" [ngValue]="cader">{{cader.name}}</option>
+                    </select>
+                </div>
+            </div>
 
             <button (click)="onClickSaveUser(userFormGroup.valid, userFormGroup.value)" class="btn btn-medium btn-blue"> SAVE</button>
         </form>

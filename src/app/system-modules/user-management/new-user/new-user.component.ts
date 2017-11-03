@@ -1,20 +1,17 @@
 import { Router } from '@angular/router';
-import { UserService } from './../../../services/common/user.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { GenderService } from './../../../services/common/gender.service';
-
-import { PlanTypeService } from './../../../services/common/plan-type.service';
-import { UserTypeService } from './../../../services/common/user-type.service';
-import { UploadService } from './../../../services/common/upload.service';
-import { SystemModuleService } from './../../../services/common/system-module.service';
-import { AuthService } from './../../../auth/services/auth.service';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
-
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { FacilityService } from '../../../services/common/facility.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+
+import {
+  UserService, GenderService, PlanTypeService, UserTypeService, UploadService, SystemModuleService,
+  FacilityService, ProfessionService
+} from './../../../services/index';
+import { AuthService } from './../../../auth/services/auth.service';
+import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
@@ -41,13 +38,15 @@ export class NewUserComponent implements OnInit {
   disableSaveBtn: boolean = false;
   showOwnerDropdown: boolean = false;
   selectedDropdown: String = '';
-
   owners: any = <any>[];
   genders: any[] = [];
   userTypes: any[] = [];
   facilities: any[] = [];
+  professions: any[] = [];
+  caders: any[] = [];
   selectedUserType: any = <any>{};
   auth: any;
+  user: any;
   showHIA = false;
   showProvider = false;
   showEmployer = false;
@@ -67,7 +66,8 @@ export class NewUserComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _facilityService: FacilityService,
     private _userService: UserService,
-    private _router: Router
+    private _router: Router,
+    private _professionService: ProfessionService
   ) { }
 
   ngOnInit() {
@@ -82,11 +82,14 @@ export class NewUserComponent implements OnInit {
       otherName: [''],
       email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       phoneNumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+      profession: [''],
+      cader: ['']
     });
 
-    this.auth = this._locker.getObject('auth');
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._getGenders();
     this._getUserTypes();
+    this._getProfessions();
 
     this.userFormGroup.controls['userType'].valueChanges.subscribe(value => {
       this._systemService.on();
@@ -104,7 +107,13 @@ export class NewUserComponent implements OnInit {
           this._systemService.off();
         }).catch(err => {
           this._systemService.off();
-        })
+        });
+      }
+    });
+
+    this.userFormGroup.controls['profession'].valueChanges.subscribe(val => {
+      if (!!val._id) {
+        this.caders = val.caders;
       }
     });
 
@@ -117,7 +126,19 @@ export class NewUserComponent implements OnInit {
       if (payload.data.length > 0) {
         this.genders = payload.data;
       }
-    })
+    });
+  }
+
+  private _getProfessions() {
+    this._systemService.on();
+    this._professionService.find({}).then((res: any) => {
+      this._systemService.off();
+      if (res.data.length > 0) {
+        this.professions = res.data;
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   _getUserTypes() {
@@ -127,7 +148,7 @@ export class NewUserComponent implements OnInit {
       if (payload.data.length > 0) {
         payload.data.forEach((item, i) => {
           if (item.name === 'Platform Owner') {
-            if (this.auth.user.userType === undefined) {
+            if (this.user.userType === undefined) {
               this.userTypes.push(item);
             }
           } else {
@@ -135,7 +156,7 @@ export class NewUserComponent implements OnInit {
           }
         });
       }
-    })
+    });
   }
 
   _falseAllTypes() {
@@ -175,20 +196,31 @@ export class NewUserComponent implements OnInit {
 
   onClickSaveUser(valid, value: any) {
     if (valid) {
+      console.log(value);
       this._systemService.on();
-      if (this.auth.user.userType === undefined) {
+      if (this.user.userType === undefined) {
         value.platformOwnerId = value.facilityId;
       } else {
-        value.platformOwnerId = this.auth.user.platformOwnerId;
+        value.platformOwnerId = this.user.platformOwnerId;
+      }
+
+      if (value.userType.name === 'Provider') {
+        value.profession = {
+          name: value.profession.name,
+          _id: value.profession._id
+        };
+      } else {
+        delete value.profession;
+        delete value.cader;
       }
 
       this._userService.create(value).then(payload => {
         console.log(payload);
         this._systemService.off();
         this._toastr.success('You have successfully created a user!', 'Success!');
-        this.userFormGroup.reset();
+        // this.userFormGroup.reset();
         this._router.navigate(['/modules/user/users']).then(res => {
-       
+
         }).catch(exp => {
           this._systemService.off();
         });
@@ -197,9 +229,7 @@ export class NewUserComponent implements OnInit {
         this._toastr.error('Invalid email or password!', 'Error!');
         this._systemService.off();
       });
-
     }
-
   }
 
   clearDate(): void {
