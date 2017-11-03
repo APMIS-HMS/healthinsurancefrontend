@@ -60,7 +60,9 @@ export class ListUserComponent implements OnInit {
   _getUsers() {
     this._systemService.on();
     if (this.auth.userType === undefined) {
-      this._userService.find({}).then((payload: any) => {
+      this._userService.find({
+        query: { $sort: {createdAt: -1}}
+      }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
         this.users = payload.data;
@@ -70,7 +72,12 @@ export class ListUserComponent implements OnInit {
       });
     } else if (this.auth.userType.name === 'Platform Owner') {
       console.log(this.auth.userType);
-      this._userService.find({ query: { 'platformOwnerId._id': this.currentPlatform._id } }).then((payload: any) => {
+      this._userService.find({
+        query: {
+          'platformOwnerId._id': this.currentPlatform._id,
+          $sort: { createdAt: -1 }
+        }
+      }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
         this.users = payload.data;

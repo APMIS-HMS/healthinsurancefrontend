@@ -623,6 +623,18 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
           counter = counter + 1;
         }
       });
+      if (this.user.platformOwnerId._id === undefined) {
+        console.log('free')
+        // this.stepOneFormGroup.controls.firstName.setErrors(null);
+        // this.stepOneFormGroup.controls.lastName.setErrors(null);
+        // this.stepOneFormGroup.controls.phonenumber.setErrors(null);
+        // this.stepOneFormGroup.controls.email.setErrors(null);
+        this.stepOneFormGroup.controls.email.markAsUntouched()
+        // this.stepOneFormGroup.controls.email.mar()
+        console.log(this.stepOneFormGroup.controls.firstName)
+      }
+
+
     }
 
 

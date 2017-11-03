@@ -15,7 +15,7 @@
 
     <div class="tab-content shadow-RB">
         <router-outlet></router-outlet>
-      </div>
+    </div>
     <!-- <div class="tab-content shadow-RB">
         <div *ngIf="tab_details && beneficiary !== undefined" class="tab-pane fade show active">
             <app-personal-details [beneficiary]="beneficiary"></app-personal-details>
@@ -46,7 +46,7 @@
         <div class="modal-title">EDIT STATUS - <em>Beneficiary</em></div>
         <div class="list-boxes">
             <div class="box-left">
-                <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">
+                <!-- <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">
                     <form [formGroup]="approvalFormGroup" novalidate>
                         <div class="form-item-wrap">
                             <label class="label">Duration</label>
@@ -74,6 +74,9 @@
                         <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
                         <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
                     </div>
+                </div> -->
+                <div *ngIf="!policy?.isActive" style="padding: 70px 0px;">
+                    <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickDeactivate();">ACTIVATE POLICY</button>
                 </div>
                 <div *ngIf="policy?.isActive" style="padding: 70px 0px;">
                     <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DEACTIVATE POLICY</button>
