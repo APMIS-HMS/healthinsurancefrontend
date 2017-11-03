@@ -155,9 +155,7 @@ export class ListBeneficiaryComponent implements OnInit {
       this._policyService.find(query).then((res: any) => {
         this.loading = false;
         if (res.data.length > 0) {
-          console.log(1)
           res.data.forEach(policy => {
-            console.log(2)
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
@@ -166,7 +164,6 @@ export class ListBeneficiaryComponent implements OnInit {
             principal.planTypeId = policy.planTypeId;
             this.beneficiaries.push(principal);
             policy.dependantBeneficiaries.forEach(innerPolicy => {
-              console.log(3)
               innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
               innerPolicy.beneficiary.isPrincipal = false;
               innerPolicy.beneficiary.principalId = principal._id;
@@ -175,7 +172,6 @@ export class ListBeneficiaryComponent implements OnInit {
               innerPolicy.beneficiary.planTypeId = policy.planTypeId;
               this.beneficiaries.push(innerPolicy.beneficiary);
             });
-            console.log(this.beneficiaries);
           });
         }
         this.mainBeneficiaries = this.beneficiaries;
@@ -194,14 +190,12 @@ export class ListBeneficiaryComponent implements OnInit {
 
 
   private _getInActiveBeneficiaries(platformId) {
-    console.log(platformId)
     this._systemService.on();
     let policy$ = Observable.fromPromise(this._policyService.find({ 'platformOwnerId._id': platformId, isActive: true }));
     let benefic$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
 
     Observable.forkJoin([policy$, benefic$]).subscribe((results: any) => {
       let beneficiaryList: any[] = results[1].data;
-      console.log(results)
       results[0].data.forEach(policy => {
         let principal = policy.principalBeneficiary;
         const index = beneficiaryList.findIndex(x => x._id === principal._id);
@@ -218,7 +212,6 @@ export class ListBeneficiaryComponent implements OnInit {
       this.inActiveBeneficiaries = beneficiaryList;
       this._systemService.off();
     }, error => {
-      console.log(error)
     })
   }
 
@@ -236,19 +229,16 @@ export class ListBeneficiaryComponent implements OnInit {
     this._router.navigate(['/modules/beneficiary/new', beneficiary._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
-      console.log(err)
       this._systemService.off();
     });
   }
 
   navigateDetailBeneficiary(beneficiary) {
-    console.log(beneficiary)
     if (beneficiary.isPrincipal) {
       this._systemService.on();
       this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary._id]).then(res => {
         this._systemService.off();
       }).catch(err => {
-        console.log(err)
         this._systemService.off();
       });
     } else {
@@ -256,7 +246,6 @@ export class ListBeneficiaryComponent implements OnInit {
       this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.principalId]).then(res => {
         this._systemService.off();
       }).catch(err => {
-        console.log(err)
         this._systemService.off();
       });
     }
