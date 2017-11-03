@@ -80,11 +80,13 @@ export class ProviderDetailsComponent implements OnInit {
       const validity = {
         duration: value.duration,
         unit: value.unit,
+        isActive: true,
         createdAt: new Date(),
         validTill: this.addDays(new Date(), value.unit.days)
       };
 
-      if (!!this.facility.provider.validityPeriods) {
+      if (this.facility.provider.validityPeriods.length > 0) {
+        this.facility.provider.validityPeriods[this.facility.provider.validityPeriods.length - 1].isActive = false;
         this.facility.provider.validityPeriods.push(validity);
       } else {
         this.facility.provider.validityPeriods = [];
