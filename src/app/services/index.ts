@@ -34,6 +34,7 @@ export * from './common/claim.service';
 export * from './common/diagnosis-type.service';
 export * from './common/capitation-fee.service';
 export * from './common/drug-pack-size.service';
+export * from './common/profession.service';
 
 
 export * from './hia/hia-type.service';

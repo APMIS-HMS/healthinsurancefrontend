@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyDatePickerModule } from 'mydatepicker';
 
 import { userManagementRoutes } from './user-management.route';
+import { ProfessionService } from '../../services/index';
 
 import { UserManagementComponent } from './user-management.component';
 import { ListUserComponent } from './list-user/list-user.component';
@@ -28,7 +29,7 @@ import { ModalAddRoleComponent } from './details-user/modal-add-role/modal-add-r
         userManagementRoutes,
         MyDatePickerModule
     ],
-    providers: []
+    providers: [ProfessionService]
 })
 
 export class UserManagementModule {
