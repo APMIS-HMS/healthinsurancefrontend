@@ -17,8 +17,11 @@
                     <div *ngIf="facility?.isConfirmed && facility?.provider?.validityPeriods.length > 0">Full License: Valid till {{ facility?.provider?.validityPeriods[facility?.provider?.validityPeriods.length - 1].validTill | date }}</div>
                 </div>
 
-                <div class="bar-icos">
+                <!-- <div class="bar-icos">
                     <i (click)="addApprovalClick();" class="fa fa-pencil" aria-hidden="true"></i>
+                </div> -->
+                <div class="bar-icos">
+                    <div (click)="addApprovalClick();" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
                 </div>
             </div>
 
@@ -179,16 +182,17 @@
                                 <th class="th">No</th>
                                 <th class="th">Duration</th>
                                 <th class="th">Created At</th>
+                                <th class="th">Status</th>
                                 <th class="th">Valid Till</th>
                             </tr>
                         </thead>
 
                         <tbody class="tbody">
                             <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && !loading">
-                                <td class="text-center" colspan="4">No data available in table</td>
+                                <td class="text-center" colspan="5">No data available in table</td>
                             </tr>
                             <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && loading">
-                                <td class="text-center" colspan="4">
+                                <td class="text-center" colspan="5">
                                     <i class="fa fa-spinner fa-spin"></i>
                                 </td>
                             </tr>
@@ -196,6 +200,9 @@
                                 <td class="td hover">{{ i+1 }}</td>
                                 <td class="td hover">{{ provider.duration }} {{ provider.unit.name }}</td>
                                 <td class="td hover">{{ provider.createdAt | date }}</td>
+                                <td class="td hover">
+                                    <span class="{{provider.isActive ? 'green': 'red'}}">{{ provider.isActive ? 'Active': 'Inactive' }}</span>
+                                </td>
                                 <td class="td hover">{{ provider.validTill | date }}</td>
                             </tr>
                         </tbody>

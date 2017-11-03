@@ -35,6 +35,7 @@ export class ListBeneficiaryComponent implements OnInit {
   planTypes: any[] = [];
   currentPlatform: any;
   user: any;
+  hasCreateBeneficiary: Boolean = false;
 
   constructor(
     private _router: Router,
@@ -58,6 +59,14 @@ export class ListBeneficiaryComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
+    // Check if user has the role to create beneficiary
+    if (this.user.userType === undefined)  {
+      this.hasCreateBeneficiary = true;
+    } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
+      this.hasCreateBeneficiary = true;
+    }
+
     this._getPlans();
     this._getCurrentPlatform();
 

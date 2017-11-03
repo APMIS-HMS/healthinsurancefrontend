@@ -1,11 +1,11 @@
 <div class="list-search-wrap">
     <div class="search-wrap">
         <label class="label-xx">Search:</label>
-        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Beneficiary">
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
 
-    <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">
+    <div class="btn btn-medium btn-blue" *ngIf="hasCreateBeneficiary" (click)="navigateNewPlatform()">
         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD BENEFICIARY
     </div>
 </div>

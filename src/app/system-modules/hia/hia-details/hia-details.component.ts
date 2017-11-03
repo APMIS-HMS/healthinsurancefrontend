@@ -8,6 +8,7 @@ import { UploadService } from './../../../services/common/upload.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Facility } from './../../../models/organisation/facility';
 import { FacilityService } from '../../../services/index';
+import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-hia-details',
@@ -45,10 +46,13 @@ export class HiaDetailsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
-    private _router: Router
+    private _router: Router,
+    private _headerEventEmitter: HeaderEventEmitterService
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('HIA Details');
+    this._headerEventEmitter.setMinorRouteUrl('Hia Details');
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
         this._getHIADetails(param.id);
@@ -66,11 +70,13 @@ export class HiaDetailsComponent implements OnInit {
       const validity = {
         duration: value.duration,
         unit: value.unit,
+        isActive: true,
         createdAt: new Date(),
         validTill: this.addDays(new Date(), value.unit.days)
       };
 
-      if (!!this.selectedFacility.hia.validityPeriods) {
+      if (this.selectedFacility.hia.validityPeriods.length > 0) {
+        this.selectedFacility.hia.validityPeriods[this.selectedFacility.hia.validityPeriods.length - 1].isActive = false;
         this.selectedFacility.hia.validityPeriods.push(validity);
       } else {
         this.selectedFacility.hia.validityPeriods = [];
@@ -121,6 +127,7 @@ export class HiaDetailsComponent implements OnInit {
     this._systemService.on();
     this._facilityService.get(id, {}).then((payload: any) => {
       this.selectedFacility = payload;
+      this._headerEventEmitter.setMinorRouteUrl(this.selectedFacility.name);
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();

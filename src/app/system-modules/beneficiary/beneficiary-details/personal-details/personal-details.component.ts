@@ -103,11 +103,11 @@ export class PersonalDetailsComponent implements OnInit {
 
   onClickApprove() {
       // const validity = {
-      //   duration: value.duration,
-      //   unit: value.unit,
-      //   startDate: value.startDate,
-      //   createdAt: new Date(),
-      //   validTill: this.addDays(new Date(), value.unit.days)
+        // duration: value.duration,
+        // unit: value.unit,
+        // startDate: value.startDate,
+        // createdAt: new Date(),
+        // validTill: this.addDays(new Date(), value.unit.days)
       // };
       // if (!!this.policy.validityPeriods) {
       //   this.policy.validityPeriods.push(validity);

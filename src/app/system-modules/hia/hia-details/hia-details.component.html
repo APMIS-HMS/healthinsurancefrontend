@@ -156,16 +156,17 @@
                                 <th class="th">No</th>
                                 <th class="th">Duration</th>
                                 <th class="th">Created At</th>
+                                <th class="th">Status</th>
                                 <th class="th">Valid Till</th>
                             </tr>
                         </thead>
 
                         <tbody class="tbody">
                             <tr class="tr" *ngIf="selectedFacility?.hia?.validityPeriods?.length === 0 && !loading">
-                                <td class="text-center" colspan="4">No data available in table</td>
+                                <td class="text-center" colspan="5">No data available in table</td>
                             </tr>
                             <tr class="tr" *ngIf="selectedFacility?.hia?.validityPeriods?.length === 0 && loading">
-                                <td class="text-center" colspan="4">
+                                <td class="text-center" colspan="5">
                                     <i class="fa fa-spinner fa-spin"></i>
                                 </td>
                             </tr>
@@ -173,6 +174,9 @@
                                 <td class="td hover">{{ i+1 }}</td>
                                 <td class="td hover">{{ hia.duration }} {{ hia.unit.name }}</td>
                                 <td class="td hover">{{ hia.createdAt | date }}</td>
+                                <td class="td hover">
+                                    <span class="{{hia.isActive ? 'green': 'red'}}">{{ hia.isActive ? 'Active': 'Inactive' }}</span>
+                                </td>
                                 <td class="td hover">{{ hia.validTill | date }}</td>
                             </tr>
                         </tbody>
