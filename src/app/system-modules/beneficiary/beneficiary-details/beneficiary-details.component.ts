@@ -80,11 +80,11 @@ export class BeneficiaryDetailsComponent implements OnInit {
       }
     });
 
-    this.approvalFormGroup = this._fb.group({
-      duration: [1, [<any>Validators.required]],
-      unit: ['', [<any>Validators.required]],
-      startDate: [new Date(), [<any>Validators.required]]
-    });
+    // this.approvalFormGroup = this._fb.group({
+    //   duration: [1, [<any>Validators.required]],
+    //   unit: ['', [<any>Validators.required]],
+    //   startDate: [new Date(), [<any>Validators.required]]
+    // });
     console.log(this._router)
     console.log(this._route)
     if (this._router.url.endsWith('checkin')) {
