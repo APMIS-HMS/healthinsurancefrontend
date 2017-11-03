@@ -87,7 +87,6 @@ export class NewUserComponent implements OnInit {
     });
 
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
     this._getGenders();
     this._getUserTypes();
     this._getProfessions();
@@ -108,7 +107,7 @@ export class NewUserComponent implements OnInit {
           this._systemService.off();
         }).catch(err => {
           this._systemService.off();
-        })
+        });
       }
     });
 
@@ -127,14 +126,13 @@ export class NewUserComponent implements OnInit {
       if (payload.data.length > 0) {
         this.genders = payload.data;
       }
-    })
+    });
   }
 
   private _getProfessions() {
     this._systemService.on();
     this._professionService.find({}).then((res: any) => {
       this._systemService.off();
-      console.log(res);
       if (res.data.length > 0) {
         this.professions = res.data;
       }
@@ -158,7 +156,7 @@ export class NewUserComponent implements OnInit {
           }
         });
       }
-    })
+    });
   }
 
   _falseAllTypes() {
@@ -231,9 +229,7 @@ export class NewUserComponent implements OnInit {
         this._toastr.error('Invalid email or password!', 'Error!');
         this._systemService.off();
       });
-
     }
-
   }
 
   clearDate(): void {
