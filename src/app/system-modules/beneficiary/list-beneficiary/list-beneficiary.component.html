@@ -30,7 +30,7 @@
         </div>
 
         <div class="input-wrap">
-            <label>Utilized By</label>
+            <label>LGA By</label>
             <select [formControl]="utilizedByControl">
                 <option>All</option>
             </select>
@@ -84,6 +84,7 @@
                     <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
                     <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
                 </td>
+                
                 <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">{{beneficiary.platformOwnerNumber}}</td>
                 <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">{{beneficiary.personId?.dateOfBirth | date}}</td>
                 <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">{{beneficiary.personId?.homeAddress?.lga?.name}}</td>
