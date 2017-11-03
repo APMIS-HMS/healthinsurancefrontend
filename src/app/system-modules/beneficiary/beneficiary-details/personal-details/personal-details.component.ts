@@ -50,6 +50,7 @@ export class PersonalDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._route.params.subscribe(param => {
       if (!!param.id) {
         this._getBeneficiaryDetails(param.id);
@@ -69,13 +70,14 @@ export class PersonalDetailsComponent implements OnInit {
     let policy$ = Observable.fromPromise(this._policyService.find({ query: { 'principalBeneficiary': routeId } }));
 
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
-      this._headerEventEmitter.setMinorRouteUrl(results[0].name);
+      console.log(results);
       this.beneficiary = results[0];
       if (this.isCheckIn) {
         this.tabCheckin_click();
       }
 
       if (results[1].data.length > 0) {
+        this._headerEventEmitter.setMinorRouteUrl('Household: ' + results[1].data[0].policyId);
         this.dependants = results[1].data[0].dependantBeneficiaries;
         this.policy = results[1].data[0];
       }
@@ -99,44 +101,42 @@ export class PersonalDetailsComponent implements OnInit {
     this.addApproval = true;
   }
 
-  onClickApprove(valid: boolean, value: any) {
-    if (valid) {
-      const validity = {
-        duration: value.duration,
-        unit: value.unit,
-        startDate: value.startDate,
-        createdAt: new Date(),
-        validTill: this.addDays(new Date(), value.unit.days)
-      };
-      if (!!this.policy.validityPeriods) {
-        this.policy.validityPeriods.push(validity);
-      } else {
-        this.policy.validityPeriods = [];
-        this.policy.validityPeriods.push(validity);
-      }
+  onClickApprove() {
+      // const validity = {
+      //   duration: value.duration,
+      //   unit: value.unit,
+      //   startDate: value.startDate,
+      //   createdAt: new Date(),
+      //   validTill: this.addDays(new Date(), value.unit.days)
+      // };
+      // if (!!this.policy.validityPeriods) {
+      //   this.policy.validityPeriods.push(validity);
+      // } else {
+      //   this.policy.validityPeriods = [];
+      //   this.policy.validityPeriods.push(validity);
+      // }
 
-      this.policy.isActive = true;
-      this._policyService.update(this.policy).then((res: any) => {        this.policy = res;
+      this.policy.isActive = !this.policy.isActive;
+      this._policyService.update(this.policy).then((res: any) => {
+        this.policy = res;
         const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
         const text = 'Policy has been ' + status;
         this._toastr.success(text, 'Confirmation!');
         // Send sms to Principal Beneficiary
-        const smsData = {
-          content: 'Policy has been activated.',
-          sender: 'LASHMA',
-          receiver: '08056679920'
-        };
+        // const smsData = {
+        //   content: 'Policy has been activated.',
+        //   sender: 'LASHMA',
+        //   receiver: '08056679920'
+        // };
 
-        this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
-        }).catch(err => console.log(err));
-
+        // this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
+        // }).catch(err => console.log(err));
         setTimeout(e => {
           this.addApprovalClick();
         }, 1000);
+      }).catch(err => {
+        console.log(err);
       });
-    } else {
-      this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
-    }
   }
 
   addDays(date, days) {

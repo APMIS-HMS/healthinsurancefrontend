@@ -105,16 +105,53 @@ export class ListBeneficiaryComponent implements OnInit {
         console.log(this.user);
 
         if (!!this.user.userType && this.user.userType.name === 'Provider') {
-          this._getBeneficiariesFromPolicyByProvider(this.user.facilityId._id);
+          // this._getBeneficiariesFromPolicyByProvider(this.user.facilityId._id);
+          this._getAllPolicies({
+            query: {
+              'providerId._id': this.user.facilityId._id,
+              $limit: 200,
+              $sort: { createdAt: -1 }
+            }
+          });
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
-          this._getBeneficiariesFromPolicyByHIA(this.user.facilityId._id);
+          // this._getBeneficiariesFromPolicyByHIA(this.user.facilityId._id);
+          this._getAllPolicies({
+            query: {
+              'hiaId._id': this.user.facilityId._id,
+              $limit: 200,
+              $sort: { createdAt: -1 }
+            }
+          });
+        } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
+          // this._getBeneficiariesFromPolicyByEmployer(this.user.facilityId._id);
+          this._getAllPolicies({
+            query: {
+              'employerId._id': this.user.facilityId._id,
+              $limit: 200,
+              $sort: { createdAt: -1 }
+            }
+          });
         } else if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
-          this._getBeneficiariesFromPolicy(this.user.facilityId._id);
+          // this._getBeneficiariesFromPolicy(this.user.facilityId._id);
+          this._getAllPolicies({
+            query: {
+              'platformOwnerId._id': this.user.facilityId._id,
+              $limit: 200,
+              $sort: { createdAt: -1 }
+            }
+          });
         } else {
-          this.loading = false;
-          this.beneficiaries = [];
+          // this.loading = false;
+          // this.beneficiaries = [];
+          this._getAllPolicies({
+            query: {
+              'platformOwnerId._id': this.currentPlatform._id,
+              $limit: 200,
+              $sort: { createdAt: -1 }
+            }
+          });
         }
-        // this._getBeneficiariesFromPolicy(this.currentPlatform._id);  
+        // this._getBeneficiariesFromPolicy(this.currentPlatform._id);
         // this._getInActiveBeneficiaries(this.currentPlatform._id);
       }
       this._systemService.off();
@@ -123,16 +160,20 @@ export class ListBeneficiaryComponent implements OnInit {
     });
   }
 
-  _getBeneficiariesFromPolicy(platformId) {
-    console.log(platformId);
+  // _getBeneficiariesFromPolicyByEmployer(employerId) {
+  //   this._systemService.on();
+  //   this._policyService.find({
+  //     query: {
+  //       'Employer._id': employerId,
+  //       $limit: 200,
+  //       $sort: { createdAt: -1 }
+  //     }
+  //   });
+  // }
+
+  private _getAllPolicies(query) {
     this._systemService.on();
-    this._policyService.find({
-      query: {
-        'platformOwnerId._id': platformId,
-        $limit: 200,
-        $sort: { createdAt: -1 }
-      }
-    }).then((res: any) => {
+    this._policyService.find(query).then((res: any) => {
       this.loading = false;
       if (res.data.length > 0) {
         res.data.forEach(policy => {
@@ -162,82 +203,121 @@ export class ListBeneficiaryComponent implements OnInit {
     });
   }
 
-  _getBeneficiariesFromPolicyByProvider(providerId) {
-    console.log(providerId);
-    this._systemService.on();
-    this._policyService.find({
-      query: {
-        'providerId._id': providerId,
-        $limit: 200,
-        $sort: { createdAt: -1 }
-      }
-    }).then((res: any) => {
-      this.loading = false;
-      if (res.data.length > 0) {
-        res.data.forEach(policy => {
-          let principal = policy.principalBeneficiary;
-          principal.isPrincipal = true;
-          principal.hia = policy.hiaId;
-          principal.isActive = policy.isActive;
-          principal.dependantCount = policy.dependantBeneficiaries.length;
-          principal.planTypeId = policy.planTypeId;
-          this.beneficiaries.push(principal);
-          policy.dependantBeneficiaries.forEach(innerPolicy => {
-            innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
-            innerPolicy.beneficiary.isPrincipal = false;
-            innerPolicy.beneficiary.principalId = principal._id;
-            innerPolicy.beneficiary.hia = policy.hiaId;
-            innerPolicy.beneficiary.isActive = policy.isActive;
-            innerPolicy.beneficiary.planTypeId = policy.planTypeId;
-            this.beneficiaries.push(innerPolicy.beneficiary);
-          });
+  // _getBeneficiariesFromPolicy(platformId) {
+  //   console.log(platformId);
+  //   this._systemService.on();
+  //   this._policyService.find({
+  //     query: {
+  //       'platformOwnerId._id': platformId,
+  //       $limit: 200,
+  //       $sort: { createdAt: -1 }
+  //     }
+  //   }).then((res: any) => {
+  //     this.loading = false;
+  //     if (res.data.length > 0) {
+  //       res.data.forEach(policy => {
+  //         let principal = policy.principalBeneficiary;
+  //         principal.isPrincipal = true;
+  //         principal.hia = policy.hiaId;
+  //         principal.isActive = policy.isActive;
+  //         principal.dependantCount = policy.dependantBeneficiaries.length;
+  //         principal.planTypeId = policy.planTypeId;
+  //         this.beneficiaries.push(principal);
+  //         policy.dependantBeneficiaries.forEach(innerPolicy => {
+  //           innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+  //           innerPolicy.beneficiary.isPrincipal = false;
+  //           innerPolicy.beneficiary.principalId = principal._id;
+  //           innerPolicy.beneficiary.hia = policy.hiaId;
+  //           innerPolicy.beneficiary.isActive = policy.isActive;
+  //           innerPolicy.beneficiary.planTypeId = policy.planTypeId;
+  //           this.beneficiaries.push(innerPolicy.beneficiary);
+  //         });
+  //         console.log(this.beneficiaries);
+  //       });
+  //     }
+  //     this.mainBeneficiaries = this.beneficiaries;
+  //     this._systemService.off();
+  //   }).catch(err => {
+  //     this._systemService.off();
+  //   });
+  // }
 
-        });
-        console.log(this.beneficiaries);
-      }
-      this.mainBeneficiaries = this.beneficiaries;
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
-  }
+  // _getBeneficiariesFromPolicyByProvider(providerId) {
+  //   console.log(providerId);
+  //   this._systemService.on();
+  //   this._policyService.find({
+  //     query: {
+  //       'providerId._id': providerId,
+  //       $limit: 200,
+  //       $sort: { createdAt: -1 }
+  //     }
+  //   }).then((res: any) => {
+  //     this.loading = false;
+  //     if (res.data.length > 0) {
+  //       res.data.forEach(policy => {
+  //         let principal = policy.principalBeneficiary;
+  //         principal.isPrincipal = true;
+  //         principal.hia = policy.hiaId;
+  //         principal.isActive = policy.isActive;
+  //         principal.dependantCount = policy.dependantBeneficiaries.length;
+  //         principal.planTypeId = policy.planTypeId;
+  //         this.beneficiaries.push(principal);
+  //         policy.dependantBeneficiaries.forEach(innerPolicy => {
+  //           innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+  //           innerPolicy.beneficiary.isPrincipal = false;
+  //           innerPolicy.beneficiary.principalId = principal._id;
+  //           innerPolicy.beneficiary.hia = policy.hiaId;
+  //           innerPolicy.beneficiary.isActive = policy.isActive;
+  //           innerPolicy.beneficiary.planTypeId = policy.planTypeId;
+  //           this.beneficiaries.push(innerPolicy.beneficiary);
+  //         });
 
-  _getBeneficiariesFromPolicyByHIA(providerId) {
-    console.log(providerId);
-    this._systemService.on();
-    this._policyService.find({
-      query: {
-        'hiaId._id': providerId,
-        $limit: 200,
-        $sort: { createdAt: -1 }
-      }
-    }).then((res: any) => {
-      this.loading = false;
-      if (res.data.length > 0) {
-        res.data.forEach(policy => {
-          let principal = policy.principalBeneficiary;
-          principal.isPrincipal = true;
-          principal.hia = policy.hiaId;
-          principal.isActive = policy.isActive;
-          principal.dependantCount = policy.dependantBeneficiaries.length;
-          this.beneficiaries.push(principal);
-          policy.dependantBeneficiaries.forEach(innerPolicy => {
-            innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
-            innerPolicy.beneficiary.isPrincipal = false;
-            innerPolicy.beneficiary.principalId = principal._id;
-            innerPolicy.beneficiary.hia = policy.hiaId;
-            innerPolicy.beneficiary.isActive = policy.isActive;
-            this.beneficiaries.push(innerPolicy.beneficiary);
-          });
-        });
-        console.log(this.beneficiaries);
-      }
-      this.mainBeneficiaries = this.beneficiaries;
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
-  }
+  //       });
+  //       console.log(this.beneficiaries);
+  //     }
+  //     this.mainBeneficiaries = this.beneficiaries;
+  //     this._systemService.off();
+  //   }).catch(err => {
+  //     this._systemService.off();
+  //   });
+  // }
+
+  // _getBeneficiariesFromPolicyByHIA(providerId) {
+  //   console.log(providerId);
+  //   this._systemService.on();
+  //   this._policyService.find({
+  //     query: {
+  //       'hiaId._id': providerId,
+  //       $limit: 200,
+  //       $sort: { createdAt: -1 }
+  //     }
+  //   }).then((res: any) => {
+  //     this.loading = false;
+  //     if (res.data.length > 0) {
+  //       res.data.forEach(policy => {
+  //         let principal = policy.principalBeneficiary;
+  //         principal.isPrincipal = true;
+  //         principal.hia = policy.hiaId;
+  //         principal.isActive = policy.isActive;
+  //         principal.dependantCount = policy.dependantBeneficiaries.length;
+  //         this.beneficiaries.push(principal);
+  //         policy.dependantBeneficiaries.forEach(innerPolicy => {
+  //           innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+  //           innerPolicy.beneficiary.isPrincipal = false;
+  //           innerPolicy.beneficiary.principalId = principal._id;
+  //           innerPolicy.beneficiary.hia = policy.hiaId;
+  //           innerPolicy.beneficiary.isActive = policy.isActive;
+  //           this.beneficiaries.push(innerPolicy.beneficiary);
+  //         });
+  //       });
+  //       console.log(this.beneficiaries);
+  //     }
+  //     this.mainBeneficiaries = this.beneficiaries;
+  //     this._systemService.off();
+  //   }).catch(err => {
+  //     this._systemService.off();
+  //   });
+  // }
 
   private _getInActiveBeneficiaries(platformId) {
     console.log(platformId)

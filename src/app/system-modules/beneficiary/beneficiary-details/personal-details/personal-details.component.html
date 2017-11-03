@@ -15,23 +15,22 @@
                         <div class="item-label">Date of Birth:</div>
                         <div class="item-val">{{ beneficiary?.personId?.dateOfBirth | date }}</div>
                     </div>
-
-                    <!-- <div class="group-item">
-                                    <div class="item-label">LASRRA ID:</div>
-                                    <div class="item-val">133.23.22</div>
-                                </div> -->
                     <div class="group-item">
-                        <div class="item-label">Email:</div>
-                        <div class="item-val">{{ beneficiary?.personId?.email }}</div>
+                        <div class="item-label">Policy ID:</div>
+                        <div class="item-val">{{ '' }}</div>
                     </div>
                     <div class="group-item">
                         <div class="item-label">LASHMA ID:</div>
                         <div class="item-val">{{ beneficiary?.platformOwnerNumber }}</div>
                     </div>
-                    <!-- <div class="group-item">
-                                    <div class="item-label">CIN:</div>
-                                    <div class="item-val">{{ 'CI3430490' }}</div>
-                                </div> -->
+                    <div class="group-item">
+                        <div class="item-label">LASRRA ID:</div>
+                        <div class="item-val">{{ '' }}</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">Email:</div>
+                        <div class="item-val">{{ beneficiary?.personId?.email }}</div>
+                    </div>
                 </div>
 
                 <div class="group-wrap">
@@ -93,12 +92,16 @@
                         <div class="item-val">{{ dependant.beneficiary?.personIdId?.dateOfBirth | date }}</div>
                     </div>
                     <div class="group-item">
-                        <div class="item-label">LASRRA ID:</div>
-                        <div class="item-val">{{ 'LS049300' }}</div>
+                        <div class="item-label">Policy ID:</div>
+                        <div class="item-val">{{ '' }}</div>
                     </div>
                     <div class="group-item">
                         <div class="item-label">LASHMA ID:</div>
                         <div class="item-val">{{ dependant.beneficiary?.platformOwnerNumber }}</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="item-label">LASRRA ID:</div>
+                        <div class="item-val">{{ '' }}</div>
                     </div>
                 </div>
 
@@ -191,7 +194,7 @@
         </div>
         <div class="list-boxes">
             <div class="box-left">
-                <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">
+                <!-- <div *ngIf="!policy?.isActive" style="padding: 10px 0px;">
                     <form [formGroup]="approvalFormGroup" novalidate>
                         <div class="form-item-wrap">
                             <label class="label">Duration</label>
@@ -219,6 +222,9 @@
                         <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
                         <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
                     </div>
+                </div> -->
+                <div *ngIf="!policy?.isActive" style="padding: 70px 0px;">
+                    <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove();">ACTIVATE POLICY</button>
                 </div>
                 <div *ngIf="policy?.isActive" style="padding: 70px 0px;">
                     <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DEACTIVATE POLICY</button>
@@ -237,24 +243,21 @@
                                 <th class="th">Duration</th>
                                 <th class="th">Start Date</th>
                                 <th class="th">Created At</th>
+                                <th class="th">Status</th>
                                 <th class="th">Valid Till</th>
                             </tr>
                         </thead>
 
                         <tbody class="tbody">
-                            <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && !loading">
-                                <td class="text-center" colspan="4">No data available in table</td>
-                            </tr>
-                            <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0 && loading">
-                                <td class="text-center" colspan="4">
-                                    <i class="fa fa-spinner fa-spin"></i>
-                                </td>
+                            <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0">
+                                <td class="text-center" colspan="6">No data available in table</td>
                             </tr>
                             <tr *ngFor="let pol of policy?.validityPeriods; let i = index;" class="tr">
                                 <td class="td hover">{{ i+1 }}</td>
                                 <td class="td hover">{{ pol.duration }} {{ pol.unit.name }}</td>
                                 <td class="td hover">{{ pol.createdAt | date }}</td>
                                 <td class="td hover">{{ pol.startDate?.jsdate | date }}</td>
+                                <td class="td hover">{{ pol.isActive }}</td>
                                 <td class="td hover">{{ pol.validTill | date }}</td>
                             </tr>
                         </tbody>
