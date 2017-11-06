@@ -2,6 +2,7 @@ import { SystemModuleService } from './../../../services/common/system-module.se
 import { ActivatedRoute } from '@angular/router';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-pre-authorization-details',
@@ -9,17 +10,16 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
   styleUrls: ['./pre-authorization-details.component.scss']
 })
 export class PreAuthorizationDetailsComponent implements OnInit {
-
   tab_details = true;
   tab_other = false;
   tab_complaints = false;
   tab_referals = false;
-
   selectedAuthorization: any;
 
   constructor(
     private _preAuthorizationService: PreAuthorizationService,
     private _systemService: SystemModuleService,
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _route: ActivatedRoute
   ) {
       this._route.params.subscribe(param => {
@@ -30,13 +30,15 @@ export class PreAuthorizationDetailsComponent implements OnInit {
     }
 
   ngOnInit() {
-
+    this._headerEventEmitter.setRouteUrl('Pre-Authorization Details');
+    this._headerEventEmitter.setMinorRouteUrl('Pre-authrization details page.');
   }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
     this._preAuthorizationService.get(id, {}).then(payload => {
       this._systemService.off();
+      console.log(payload);
       this.selectedAuthorization = payload;
       this.tab_details = true;
     }).catch(err => {

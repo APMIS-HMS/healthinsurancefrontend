@@ -1,4 +1,4 @@
-<div class="modal-title">Reject Claim -{{claimDetail.claimNo}}</div>
+<div class="modal-title">Reject Claim - {{claimDetail.claimNo}}</div>
 
 <form [formGroup]="claimsRejectFormGroup" novalidate>
     <div class="frm-item-wrap">
@@ -24,7 +24,7 @@
     <div class="frm-item-wrap">
         <label class="label">Institution</label>
         <div class="input-wrap">
-                <input type="text" formControlName="institution" class="form-control">
+            <input type="text" formControlName="institution" class="form-control">
         </div>
         <small class="alert-label" [hidden]="claimsRejectFormGroup.controls.institution.valid || claimsRejectFormGroup.controls.institution.pristine">
             Choose state from the dropdown.

@@ -1,3 +1,7 @@
+import { UserService } from './../../../../services/common/user.service';
+import { PolicyService } from './../../../../services/policy/policy.service';
+import { PersonService } from './../../../../services/person/person.service';
+import { Observable } from 'rxjs/Rx';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
@@ -48,6 +52,8 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   organizations: any[] = [];
   isHIA: boolean = false;
   user: any;
+  person: any;
+  isEventBased = false;
   constructor(
     private _fb: FormBuilder,
     private _genderService: GenderService,
@@ -68,8 +74,22 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     private _premiumTypeService: PremiumTypeService,
     private _beneficiaryService: BeneficiaryService,
     private _route: ActivatedRoute,
-    private _locker:CoolLocalStorage
-  ) { }
+    private _locker: CoolLocalStorage,
+    private _personService: PersonService,
+    private _policyService: PolicyService,
+    private _userService: UserService
+  ) {
+    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+      console.log(value)
+      this.selectedBeneficiary = value.beneficiary;
+      if (value.beneficiary !== undefined) {
+        console.log(value);
+        console.log(value.dependants);
+        this.dependants = value.dependants;
+        this.isEventBased = true;
+      }
+    });
+  }
 
   ngOnInit() {
     console.log(this.selectedBeneficiary);
@@ -88,8 +108,8 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     console.log(this.user);
     if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
       this.isHIA = true;
-    }else if(!!this.user.userType && this.user.userType.name === 'Beneficiary'){
-      this.frmProgram.controls.sponsorship.setValue('')
+    } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
+      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
     }
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
@@ -111,13 +131,112 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
     this.frmProgram.controls['sponsorship'].valueChanges.subscribe(value => {
       if (value === 'Self') {
-        
+
       }
     });
     this._getCurrentPlatform();
     this._getPlanTypes();
     this._getPremiumTypes();
     console.log(this.dependants);
+    this._route.params.subscribe(param => {
+      console.log(param)
+      if (param.id !== undefined) {
+        this._getBeneficiary(param.id);
+      }
+    })
+  }
+
+  _getUser() {
+    this._userService.get(this.user._id, {}).then((payload: any) => {
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  _getPerson() {
+    let person$ = Observable.fromPromise(this._personService.find({
+      query: {
+        email: this.user.email
+      }
+    }));
+    let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+      query: {
+        'personId.email': this.user.email
+      }
+    }));
+    Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+      console.log(results);
+      if (results[0].data.length > 0) {
+        this.person = results[0].data[0];
+      }
+      if (results[1].data.length > 0) {
+        console.log('redirect to last page');
+        console.log(results[1].data[0]._id)
+        this._policyService.find({
+          query: {
+            principalBeneficiary: results[1].data[0]._id
+          }
+        }).then((policies: any) => {
+          console.log(policies)
+          if (policies.data.length > 0) {
+
+          } else {
+            this.selectedBeneficiary = results[1].data[0];
+            console.log(this.selectedBeneficiary)
+            if (!this.isEventBased) {
+              this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
+
+              }).catch(err => {
+                console.log(err)
+              });
+            }
+
+          }
+        }).catch(errin => {
+          console.log(errin)
+        })
+      }
+    }, error => {
+      console.log(error);
+    })
+    // this._personService.find({
+    //   query: {
+    //     email: this.user.email
+    //   }
+    // }).then((payload: any) => {
+    //   if (payload.data.length > 0) {
+    //     this._beneficiaryService.find({query:{
+    //       'personId.email':this.user.email
+    //     }})
+    //     this.person = payload.data[0];
+    //     this.stepOneFormGroup.controls.mothermaidenname.setValue(this.person.mothersMaidenName);
+    //   }
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+  }
+
+  _getBeneficiary(id) {
+    this._systemService.on();
+    this._beneficiaryService.get(id, {}).then((payload: any) => {
+      console.log(payload)
+      this.selectedBeneficiary = payload;
+
+
+
+      this._getPerson();
+
+
+
+
+
+
+
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
   }
 
   _getPlanByType(id) {
@@ -230,11 +349,11 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.premiumCategoryId = value.premiumCategory;
       policy.premiumPackageId = value.premiumPackage;
       policy.sponsorshipId = value.sponsorship;
-      if(policy.sponsorshipId.id === 2){
+      if (policy.sponsorshipId.id === 2) {
         console.log('am in')
         policy.sponsor = this.user.facilityId;
       }
-     
+
 
       let body = {
         principal: this.selectedBeneficiary,
@@ -246,11 +365,16 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
       this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
         console.log(payload);
-        this._systemService.announceBeneficiaryTabNotification({
-          tab: 'Five',
-          policy: payload.body.policyObject
+        // this._systemService.announceBeneficiaryTabNotification({
+        //   tab: 'Five',
+        //   policy: payload.body.policyObject
+        // });
+        this._router.navigate(['/modules/beneficiary/new/complete', this.selectedBeneficiary._id]).then(payload => {
+
+        }).catch(err => {
+          console.log(err)
         });
-        this._toastr.success("Your Policy item has been generated!","Success");
+        this._toastr.success("Your Policy item has been generated!", "Success");
       }).catch(err => {
         console.log(err);
       });

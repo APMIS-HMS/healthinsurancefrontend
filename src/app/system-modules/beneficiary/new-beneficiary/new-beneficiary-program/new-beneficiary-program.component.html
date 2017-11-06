@@ -70,9 +70,9 @@
     <div class="frm-item-wrap">
         <label class="label">Sponsorship</label>
         <div class="inputWrap">
-            <select formControlName="sponsorship" class="form-control">
+            <select  formControlName="sponsorship" class="form-control">
                 <option  value="" disabled selected>Sponsorship</option>
-                <option *ngFor="let sponsorship of sponsorships"  [ngValue]="sponsorship">{{sponsorship.name}}</option>
+                <option disabled *ngFor="let sponsorship of sponsorships"  [ngValue]="sponsorship">{{sponsorship.name}}</option>
                 </select>
         </div>
     </div>

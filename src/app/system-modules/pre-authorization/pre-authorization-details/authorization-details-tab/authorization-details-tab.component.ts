@@ -14,46 +14,45 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   @ViewChild('child')
   private child: NewPreauthTabsComponent;
   @Input() selectedAuthorization: any;
-
   modalApprove = false;
   modalReject = false;
   modalHold = false;
   modalQuery = false;
   requestStatus = REQUEST_STATUS;
-
   disableReject = true;
   disableHold = true;
   disableQuery = true;
   disableApprove = true;
-
   selectedTransaction: PreAuthorizationDocument;
   reply = false;
   lastI: number = 0;
   lastJ: number = 0;
 
-  
-  constructor(private _preAuthorizationService: PreAuthorizationService,
-    private _systemService: SystemModuleService) { }
+  constructor(
+    private _preAuthorizationService: PreAuthorizationService,
+    private _systemService: SystemModuleService
+  ) { }
 
   ngOnInit() {
-    console.log(this.selectedAuthorization)
+    console.log(this.selectedAuthorization);
    }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
     this._preAuthorizationService.get(id, {}).then(payload => {
       this._systemService.off();
-      this.selectedAuthorization = payload;  
+      console.log(payload);
+      this.selectedAuthorization = payload;
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
   getAge() {
     return differenceInYears(
       new Date(),
       this.selectedAuthorization.personId.dateOfBirth
-    )
+    );
   }
   disableAll() {
     this.disableReject = true;
@@ -124,7 +123,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     }
     return false;
   }
-  cancel(){
+  cancel() {
     this.disableAll();
     this._getAuthorizationDetails(this.selectedAuthorization._id);
   }

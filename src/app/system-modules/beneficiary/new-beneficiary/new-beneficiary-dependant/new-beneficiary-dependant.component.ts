@@ -26,15 +26,7 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   templateUrl: './new-beneficiary-dependant.component.html',
   styleUrls: ['./new-beneficiary-dependant.component.scss']
 })
-export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
-  ngAfterViewInit(): void {
-    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
-      console.log(value)
-      if (value.beneficiary !== undefined) {
-        console.log(value);
-      }
-    });
-  }
+export class NewBeneficiaryDependantComponent implements OnInit {
   @Input() selectedBeneficiary: any;
   frmDependants: FormGroup;
   lgs: any[] = [];
@@ -72,7 +64,13 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
     private _route: ActivatedRoute,
     private _beneficiaryService: BeneficiaryService
   ) {
-
+    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+      console.log(value)
+      this.selectedBeneficiary = value.beneficiary;
+      if (value.beneficiary !== undefined) {
+        console.log(value);
+      }
+    });
   }
 
   ngOnInit() {
@@ -82,14 +80,25 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
     this._getRelationships();
     this._getTitles();
     console.log(this.selectedBeneficiary)
-    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
-      console.log(value)
-      if (value.beneficiary !== undefined) {
-        console.log(value);
-      }
-    });
-  }
 
+    this._route.params.subscribe(param => {
+      console.log(param)
+      if (param.id !== undefined) {
+        this._getBeneficiary(param.id);
+      }
+    })
+  }
+  _getBeneficiary(id) {
+    this._systemService.on();
+    this._beneficiaryService.get(id, {}).then((payload: any) => {
+      console.log(payload)
+      this.selectedBeneficiary = payload;
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
+  }
   _addNewDependant() {
     this.today = {
       year: new Date().getFullYear(),
@@ -248,11 +257,21 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
   }
 
   moveBack() {
-    this._systemService.announceBeneficiaryTabNotification({ tab: 'One', beneficiary: this.selectedBeneficiary });
+    // this._systemService.announceBeneficiaryTabNotification({ tab: 'One', beneficiary: this.selectedBeneficiary });
+    this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
+
+    }).catch(err => {
+      console.log(err)
+    });
   }
 
   skip() {
-    this._systemService.announceBeneficiaryTabNotification({ tab: 'Three', beneficiary: this.selectedBeneficiary })
+    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Three', beneficiary: this.selectedBeneficiary })
+    this._router.navigate(['/modules/beneficiary/new/next-of-kin']).then(payload => {
+
+    }).catch(err => {
+      console.log(err)
+    });
   }
 
   onClickStepTwo(dependants) {
@@ -285,7 +304,12 @@ export class NewBeneficiaryDependantComponent implements OnInit, AfterViewInit {
     });
     //console.log(this.selectedBeneficiary);
 
-    this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList })
+    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList })
+    this._router.navigate(['/modules/beneficiary/new/program', this.selectedBeneficiary._id]).then(payload => {
+      this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList });
+    }).catch(err => {
+      console.log(err)
+    });
   }
 
   compare(l1: any, l2: any) {
