@@ -55,6 +55,9 @@ export class UserService {
   patch(_id: any, data: any, param: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('users').then((socket: any) => {
+        console.log(_id)
+        console.log(data);
+        console.log(param)
         return socket.patch(_id, data, param);
       }));
     });
