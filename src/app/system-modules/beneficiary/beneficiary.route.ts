@@ -1,3 +1,7 @@
+import { NewBeneficiaryConfirmComponent } from './new-beneficiary/new-beneficiary-confirm/new-beneficiary-confirm.component';
+import { NewBeneficiaryProgramComponent } from './new-beneficiary/new-beneficiary-program/new-beneficiary-program.component';
+import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-nok/new-beneficiary-nok.component';
+import { NewBeneficiaryDependantComponent } from './new-beneficiary/new-beneficiary-dependant/new-beneficiary-dependant.component';
 import { NewBeneficiaryDataComponent } from './new-beneficiary/new-beneficiary-data/new-beneficiary-data.component';
 import { ListReferalsComponent } from './../referal/list-referals/list-referals.component';
 import { ListClaimsComponent } from './../claims/list-claims/list-claims.component';
@@ -33,10 +37,10 @@ const BENEFICIARY_ROUTES: Routes = [
                 children: [
                     { path: '', component: PersonalDetailsComponent },
                     { path: 'principal', component: NewBeneficiaryDataComponent },
-                    { path: 'dependants', component: CheckinHistoryComponent },
-                    { path: 'next-of-kin', component: PaymentDetailBeneficiaryComponent },
-                    { path: 'program', component: ListClaimsComponent },
-                    { path: 'complete', component: ListReferalsComponent }
+                    { path: 'dependants', component: NewBeneficiaryDependantComponent },
+                    { path: 'next-of-kin', component: NewBeneficiaryNokComponent },
+                    { path: 'program', component: NewBeneficiaryProgramComponent },
+                    { path: 'complete', component: NewBeneficiaryConfirmComponent }
                 ]
             },
             { path: 'new/:id', component: NewBeneficiaryComponent }

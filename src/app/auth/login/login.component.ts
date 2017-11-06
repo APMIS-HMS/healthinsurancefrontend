@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
 				} else {
 					if (payload.user !== undefined && payload.user.userType !== undefined) {
 						console.log('am here')
-						this._router.navigate(['/modules/beneficiary/new']).then(payload =>{
+						this._router.navigate(['/modules/beneficiary/new/principal']).then(payload =>{
 
 						}).catch(err =>{
 							console.log(err)

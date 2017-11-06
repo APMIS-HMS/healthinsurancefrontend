@@ -64,8 +64,9 @@
                     <i class="fa fa-times"></i> CANCEL
                 </div>
             </div>
+            <router-outlet></router-outlet>
     
-            <div *ngIf="tab_personalData">
+            <!-- <div *ngIf="tab_personalData">
                 <app-new-beneficiary-data></app-new-beneficiary-data>
             </div>
     
@@ -83,6 +84,6 @@
     
             <div *ngIf="tab_confirm">
                 <app-new-beneficiary-confirm [policy]="policy"></app-new-beneficiary-confirm>
-            </div>
+            </div> -->
         </section>
     </div>
