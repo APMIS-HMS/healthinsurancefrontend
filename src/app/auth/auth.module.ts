@@ -1,3 +1,5 @@
+import { PolicyService } from './../services/policy/policy.service';
+import { BeneficiaryService } from './../services/beneficiary/beneficiary.service';
 import { RoleService } from './../services/auth/role/role.service';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -18,7 +20,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
     ],
     exports: [],
     imports: [ReactiveFormsModule, authModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
-    providers: [AuthService, PersonService, RoleService]
+    providers: [AuthService, PersonService, RoleService, BeneficiaryService, PolicyService]
 })
 
 export class AuthModule {
