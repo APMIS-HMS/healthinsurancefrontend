@@ -1,3 +1,7 @@
+import { PolicyService } from './../../services/policy/policy.service';
+import { Observable } from 'rxjs/Rx';
+import { PersonService } from './../../services/person/person.service';
+import { BeneficiaryService } from './../../services/beneficiary/beneficiary.service';
 import { RoleService } from './../../services/auth/role/role.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { UserTypeService } from './../../services/common/user-type.service';
@@ -32,7 +36,10 @@ export class LoginComponent implements OnInit {
 		private _router: Router,
 		private _authService: AuthService,
 		private _locker: CoolLocalStorage,
-		private _roleService: RoleService
+		private _roleService: RoleService,
+		private _beneficiaryService: BeneficiaryService,
+		private _personService: PersonService,
+		private _policyService: PolicyService
 	) {
 	}
 
@@ -91,6 +98,72 @@ export class LoginComponent implements OnInit {
 		}
 	}
 
+
+	_getPerson() {
+		// let person$ = Observable.fromPromise(this._personService.find({
+		//   query: {
+		// 	email: this.user.email
+		//   }
+		// }));
+		let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+			query: {
+				'personId.email': this.user.email
+			}
+		}));
+		Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
+			console.log(results);
+			if (results[0].data.length > 0) {
+				console.log('redirect to last page');
+				console.log(results[0].data[0]._id)
+				this._policyService.find({
+					query: {
+						principalBeneficiary: results[0].data[0]._id
+					}
+				}).then((policies: any) => {
+					console.log(policies)
+					if (policies.data.length > 0) {
+						this._router.navigate(['/modules/beneficiary/beneficiaries', policies.data[0]._id]).then(payload => {
+							// this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+						}).catch(err => {
+							console.log(err)
+						});
+					} else {
+						this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
+
+						}).catch(err => {
+							console.log(err)
+						})
+					}
+				}).catch(errin => {
+					console.log(errin)
+				})
+			} else {
+				this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
+
+				}).catch(err => {
+					console.log(err)
+				})
+			}
+		}, error => {
+			console.log(error);
+		})
+		// this._personService.find({
+		//   query: {
+		//     email: this.user.email
+		//   }
+		// }).then((payload: any) => {
+		//   if (payload.data.length > 0) {
+		//     this._beneficiaryService.find({query:{
+		//       'personId.email':this.user.email
+		//     }})
+		//     this.person = payload.data[0];
+		//     this.stepOneFormGroup.controls.mothermaidenname.setValue(this.person.mothersMaidenName);
+		//   }
+		// }).catch(err => {
+		//   console.log(err)
+		// })
+	}
+
 	onClickLogin(value: any, valid: boolean) {
 		if (valid) {
 			this.loginBtnText = false;
@@ -103,23 +176,17 @@ export class LoginComponent implements OnInit {
 				console.log(payload)
 				if (payload.user !== undefined && payload.user.roles !== undefined && payload.user.roles.length > 0) {
 					this.user = payload.user;
-					// this.setLoggedInUser(this.loginFormGroup.controls['email'].value, true);
-					// this.loginBtnText = true;
-					// this.loginBtnProcessing = false;
-					// this.disableBtn = false;
-					// this._router.navigate(['/modules/welcome']).then(res => {
-					// 	this._authService.announceMission({ status: 'On' });
-					// 	this._toastr.success('You have successfully logged in!', 'Success!');
-					// });
 					this._checkRole();
 				} else {
 					if (payload.user !== undefined && payload.user.userType !== undefined) {
-						console.log('am here')
-						this._router.navigate(['/modules/beneficiary/new/principal']).then(payload =>{
+						// console.log('am here')
+						// this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
 
-						}).catch(err =>{
-							console.log(err)
-						})
+						// }).catch(err => {
+						// 	console.log(err)
+						// })
+						this.user = payload.user;
+						this._getPerson();
 					} else {
 						this.loginBtnText = true;
 						this.loginBtnProcessing = false;
@@ -130,6 +197,7 @@ export class LoginComponent implements OnInit {
 
 				}
 			}).catch(err => {
+				console.log(err)
 				this._toastr.error('Invalid email or password!', 'Error!');
 				this.loginFormGroup.controls['password'].reset();
 				this.loginBtnText = true;

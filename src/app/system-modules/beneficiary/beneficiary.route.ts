@@ -37,10 +37,10 @@ const BENEFICIARY_ROUTES: Routes = [
                 children: [
                     { path: '', component: PersonalDetailsComponent },
                     { path: 'principal', component: NewBeneficiaryDataComponent },
-                    { path: 'dependants', component: NewBeneficiaryDependantComponent },
-                    { path: 'next-of-kin', component: NewBeneficiaryNokComponent },
-                    { path: 'program', component: NewBeneficiaryProgramComponent },
-                    { path: 'complete', component: NewBeneficiaryConfirmComponent }
+                    { path: 'dependants/:id', component: NewBeneficiaryDependantComponent },
+                    { path: 'next-of-kin/:id', component: NewBeneficiaryNokComponent },
+                    { path: 'program/:id', component: NewBeneficiaryProgramComponent },
+                    { path: 'complete/:id', component: NewBeneficiaryConfirmComponent }
                 ]
             },
             { path: 'new/:id', component: NewBeneficiaryComponent }
