@@ -49,6 +49,7 @@
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
                 <tr class="tr">
+                    <th class="th">No</th>
                     <th class="th">Date of Encounter</th>
                     <th class="th">Patient</th>
                     <th class="th">LASHMA ID</th>
@@ -65,22 +66,23 @@
 
             <tbody class="tbody">
                 <tr class="tr" *ngIf="checkedIns.length === 0 && !loading">
-                    <td class="text-center" colspan="11">No data available in table</td>
+                    <td class="text-center" colspan="12">No data available in table</td>
                 </tr>
                 <tr class="tr" *ngIf="checkedIns.length === 0 && loading">
-                    <td class="text-center" colspan="11">
+                    <td class="text-center" colspan="12">
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
-                <tr *ngFor="let check of checkedIns" class="tr">
+                <tr *ngFor="let check of checkedIns; let i = index;" class="tr">
+                    <td class="td">{{ i+1 }}</td>
                     <td class="td">{{check.createdAt | date}}</td>
                     <td class="td">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
                     <td class="td">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
-                    <td class="td"><i class="fa fa-check green" aria-hidden="true"></i></td>
+                    <td class="td" class="text-center"><i class="fa fa-check green" aria-hidden="true"></i></td>
                     <td class="td">{{check.encounterType.name}}</td>
                     <td class="td"><span class="green">{{check.encounterStatus.name}}</span></td>
                     <td class="td"><span class="green">Active</span></td>
-                    <td><i class="fa fa-times red" aria-hidden="true"></i></td>
+                    <td class="text-center"><i class="fa fa-times red" aria-hidden="true"></i></td>
                     <td class="td">{{check.claimType.name}}</td>
                     <td class="td">Filed</td>
                     <td (click)="routeBeneficiaryDetails(check)"><i class="fa fa-chevron-right"></i></td>

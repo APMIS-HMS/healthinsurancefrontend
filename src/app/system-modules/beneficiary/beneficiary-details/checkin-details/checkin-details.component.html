@@ -8,8 +8,7 @@
                     <!-- <img *ngIf="beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)"> -->
                 </div>
                 <div class="group-wrap">
-                    <div class="item-val">{{beneficiary?.personId.title.name}} {{beneficiary?.personId.lastName}} {{beneficiary?.personId.firstName}}
-                        {{beneficiary?.personId.otherNames}}
+                    <div class="item-val">{{beneficiary?.personId.title.name}} {{beneficiary?.personId.lastName}} {{beneficiary?.personId.firstName}} {{beneficiary?.personId.otherNames}}
                     </div>
                     <div class="item-val">{{beneficiary?.personId.phoneNumber}}</div>
                 </div>
@@ -38,8 +37,8 @@
                         <div class="group-item">
                             <div class="item-label">OTP Generated:</div>
                             <div class="item-val">
-                                <span *ngIf="selectedCheckIn === undefined">No</span>
-                                <span *ngIf="selectedCheckIn !== undefined">Yes</span>
+                                <span *ngIf="selectedCheckIn === undefined">No <i class="fa fa-times red" aria-hidden="true"></i></span>
+                                <span *ngIf="selectedCheckIn !== undefined">Yes <i class="fa fa-check green" aria-hidden="true"></i></span>
                             </div>
                         </div>
                     </div>

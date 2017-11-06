@@ -54,7 +54,8 @@ export class CheckedinComponent implements OnInit {
         'providerFacilityId._id': this.user.facilityId._id,
         $client: {
           checkedInToday: true
-        }
+        },
+        $sort: { createdAt: -1 }
       }
     }).then((payload: any) => {
       this.loading = false;

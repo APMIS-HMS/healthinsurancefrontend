@@ -234,6 +234,7 @@ export class CheckinDetailsComponent implements OnInit {
       }
     })
       .then((payload: any) => {
+        console.log(payload);
         if (payload !== undefined) {
           this.checkinSect = false;
           this.checkedinSect = true;
@@ -270,6 +271,7 @@ export class CheckinDetailsComponent implements OnInit {
       }
     }).then((payload: any) => {
       if (payload.data.length > 0) {
+        console.log(payload);
         this.hasCheckInToday = true;
         this.selectedCheckIn = payload.data[0];
         if (this.selectedCheckIn.confirmation !== undefined) {
