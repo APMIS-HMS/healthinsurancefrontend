@@ -1,6 +1,22 @@
 <div class="in-content-wrap">
-    <div (click)="navigateBeneficiary('/modules/beneficiary/beneficiaries');" class="back-btn">
-        <i class="fa fa-chevron-left"></i> BACK TO BENEFICIARIES
+    <div class="tabsect-wrap">
+        <div (click)="navigateBeneficiary('/modules/beneficiary/beneficiaries');" class="back-btn">
+            <i class="fa fa-chevron-left"></i> BACK TO BENEFICIARIES
+        </div>
+
+        <div class="mobile-menu-wrap" style="display:none;">
+            <i class="fa fa-ellipsis-h"></i>
+
+            <ul class="mobile-menu">
+                <li (click)="tabDetails_click()" [class.mobile-menu-active]="tab_details">Personal Details</li>
+                <li (click)="tabPayment_click()" [class.mobile-menu-active]="tab_payment">Payment History</li>
+                <li (click)="tabClaims_click()" [class.mobile-menu-active]="tab_claims">Claims</li>
+                <li (click)="tabComplaints_click()" [class.mobile-menu-active]="tab_complaints">Complaints</li>
+                <li (click)="tabReferals_click()" [class.mobile-menu-active]="tab_referals">Referals</li>
+                <li (click)="tabCheckin_click()" [class.mobile-menu-active]="tab_checkin">Check In</li>
+                <li (click)="tabCheckinDetail_click()" [class.mobile-menu-active]="tab_checkinHistory">Check In History</li>
+            </ul>
+        </div>
     </div>
 
     <ul class="inpage-tabs">

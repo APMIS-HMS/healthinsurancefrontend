@@ -81,13 +81,15 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       providerName: ['', [<any>Validators.required]],
       premiumPackage: ['', [<any>Validators.required]],
       sponsorship: ['', [<any>Validators.required]],
-      organization: ['', [<any>Validators.required]],
-      sponsorshipType: ['', [<any>Validators.required]],
+      organization: ['', []],
+      sponsorshipType: ['', []],
     });
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.user);
-    if (!!this.user.userType && this.user.userType.name === 'HIA') {
+    if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
       this.isHIA = true;
+    }else if(!!this.user.userType && this.user.userType.name === 'Beneficiary'){
+      this.frmProgram.controls.sponsorship.setValue('')
     }
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
@@ -104,6 +106,12 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this.frmProgram.controls['premiumCategory'].valueChanges.subscribe(value => {
       if (this.filteredPremiumPackages.length > 0) {
         this.premiumPackages = this.filteredPremiumPackages.filter(e => e.category.name.toLowerCase() === value.name.toLowerCase());
+      }
+    });
+
+    this.frmProgram.controls['sponsorship'].valueChanges.subscribe(value => {
+      if (value === 'Self') {
+        
       }
     });
     this._getCurrentPlatform();
@@ -242,6 +250,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
           tab: 'Five',
           policy: payload.body.policyObject
         });
+        this._toastr.success("Your Policy item has been generated!","Success");
       }).catch(err => {
         console.log(err);
       });
