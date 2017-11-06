@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-authorization-top-bar',
@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./authorization-top-bar.component.scss']
 })
 export class AuthorizationTopBarComponent implements OnInit {
+  @Input() selectedAuthorization: any;
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.selectedAuthorization);
   }
 
 }

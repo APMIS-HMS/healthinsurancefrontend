@@ -1,294 +1,290 @@
 <div class="claims-inner-wrap">
-  <div class="left-sect">
-    <div class="left-fixed shadow-b">
-      <div class="group-wrap">
-        <div class="group-item">
-          <div class="item-label">Date of Birth:</div>
-          <div class="item-val">{{selectedClaim?.checkedinDetail?.personObject?.dateOfBirth|date}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Age:</div>
-          <div class="item-val">{{displayAge}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Gender:</div>
-          <div class="item-val">{{selectedClaim?.checkedinDetail?.personObject?.gender?.name}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">LASRRA ID:</div>
-          <div class="item-val">{{selectedClaim?.checkedinDetail?.policyObject?.providerId?.provider?.lasrraId}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">LAASHMA ID:</div>
-          <div class="item-val">{{selectedClaim?.checkedinDetail?.beneficiaryObject?.platformOwnerNumber}}</div>
-        </div>
-      </div>
-
-      <div class="group-wrap">
-        <div class="group-item">
-          <div class="item-label">Hospital Name:</div>
-          <div class="item-val">{{selectedClaim?.checkedinDetail?.policyObject?.providerId?.name}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Provider ID:</div>
-          <div class="item-val">122.22.122</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Health Plan:</div>
-          <div class="item-val">{{selectedClaim?.checkedinDetail?.policyObject?.planId?.name}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Claim Type:</div>
-          <div class="item-val">{{selectedClaim?.claimType}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Status:</div>
-          <div class="item-val"><span class="lemon--green">{{selectedClaim?.checkedinDetail?.claimStatus?.name}}</span></div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Date when patient was checked in:</div>
-          <div class="item-val">{{selectedClaim?.checkedinDetail?.confirmation| date:'medium'}}</div>
-        </div>
-        <div class="group-item">
-          <div class="item-label">Date when claims was filed:</div>
-          <div class="item-val">{{selectedClaim?.dateClaimCreated| date:'medium'}}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="right-sect">
-    <div *ngFor="let item of selectedClaim.documentations;let i=index">
-      <div class="request-sect card" *ngIf="item.request != undefined">
-        <div class="headArea-1">
-          <div class="count">{{i+1}}</div>
-          <div class="letering">
-            <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
-            <div class="letering-2"><span class="letering-name">{{selectedClaim.medicalPersonelName}}</span> Requested Claims</div>
-          </div>
-        </div>
-        <div class="doc-wrap">
-          <div class="doc-title">Clinical Information</div>
-
-          <ul class="doc-entries">
-            <div class="entry-wrap">
-              <li class="doc-subtitle">Presenting Complaints</li>
-            </div>
-          </ul>
-        </div>
-
-        <div class="doc-wrap">
-          <div class="doc-title">Complaint</div>
-
-          <ul class="doc-entries">
-            <div class="entry-wrap">
-              <li>
-                <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                    <thead class="thead">
-                      <tr class="tr">
-                        <th class="th">Complaints</th>
-                        <th class="th">Duration</th>
-                        <th class="th"></th>
-                      </tr>
-                    </thead>
-
-                    <tbody class="tbody">
-                      <tr class="tr" *ngFor="let symptom of item.request.symptoms">
-                        <td class="td">{{symptom.symptom}}</td>
-                        <td class="td">{{symptom.duration}} {{symptom.unit}}(s)</td>
-                      </tr>
-                    </tbody>
-                  </table>
+    <div class="left-sect">
+        <div class="left-fixed shadow-b">
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">Date of Birth:</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.personObject?.dateOfBirth|date}}</div>
                 </div>
-              </li>
-            </div>
-          </ul>
-        </div>
-
-        <div class="doc-wrap">
-          <div class="doc-title">Clinical Findings</div>
-
-          <ul class="doc-entries">
-            <div class="entry-wrap">
-              <li class="doc-subtitle">Examination Findings</li>
-              <li>{{item.request.clinicNote}}</li>
-            </div>
-
-            <div class="entry-wrap">
-              <li class="doc-subtitle">Diagnosis</li>
-              <li>
-                <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                    <thead class="thead">
-                      <tr class="tr">
-                        <th class="th">Diagnosis</th>
-                        <th class="th"></th>
-                      </tr>
-                    </thead>
-
-                    <tbody class="tbody">
-                      <tr class="tr" *ngFor="let diagnosis of item.request.diagnosis">
-                        <td class="td">{{diagnosis.diagnosis}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="group-item">
+                    <div class="item-label">Age:</div>
+                    <div class="item-val">{{displayAge}}</div>
                 </div>
-              </li>
-            </div>
-
-            <div class="entry-wrap">
-                <li class="doc-subtitle">Investigations</li>
-                <li>
-                  <div class="tbl-wrap">
-                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                        <tr class="tr">
-                          <th class="th">Investigation</th>
-                          <th class="th"></th>
-                        </tr>
-                      </thead>
-  
-                      <tbody class="tbody">
-                        <tr class="tr" *ngFor="let itm of item.request.investigations">
-                          <td class="td">{{itm.investigation}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </li>
-              </div>
-
-            
-            <div class="entry-wrap">
-              <li>
-                <div class="tbl-wrap">
-                  <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                    <thead class="thead">
-                      <tr class="tr">
-                        <th class="th">Drug</th>
-                        <th class="th">Quantity</th>
-                        <th class="th"></th>
-                      </tr>
-                    </thead>
-
-                    <tbody class="tbody">
-                      <tr class="tr" *ngFor="let drug of item.request.drugs">
-                        <td class="td">{{drug.drug}}</td>
-                        <td class="td">{{drug.quantity}} {{drug.unit}}(s)</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="group-item">
+                    <div class="item-label">Gender:</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.personObject?.gender?.name}}</div>
                 </div>
-              </li>
+                <div class="group-item">
+                    <div class="item-label">LASRRA ID:</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.provider?.lasrraId}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">LAASHMA ID:</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</div>
+                </div>
             </div>
 
-            <div class="entry-wrap">
-                <li class="doc-subtitle">Procedures</li>
-                <li>
-                  <div class="tbl-wrap">
-                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                      <thead class="thead">
-                        <tr class="tr">
-                          <th class="th">Procedures</th>
-                          <th class="th"></th>
-                        </tr>
-                      </thead>
-  
-                      <tbody class="tbody">
-                        <tr class="tr" *ngFor="let itm2 of item.request.procedures">
-                          <td class="td">{{itm2.procedure}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </li>
-              </div>
-
-            <div class="entry-wrap">
-              <li class="doc-subtitle">Investigations</li>
-              <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
-            </div>
-
-            <div class="entry-wrap">
-              <li class="doc-subtitle">Amount</li>
-              <li>N20,000</li>
-            </div>
-          </ul>
-        </div>
-
-        
-      </div>
-
-      
-      <div *ngIf="item.response !=undefined" class="response-sect card">
-          <div class="headArea-2">
-            <div class="count">{{i+2}}</div>
-            <div class="letering">
-              <div class="letering-1">Reaction Sent {{item.response.createdAt|date:'medium'}}</div>
-              <div class="letering-2">
-                <span class="letering-name">LASHMA</span>
-                <span class="red" *ngIf="item.response.isReject == true">Reject</span>
-                <span class="red" *ngIf="item.response.isQuery == true">Query</span>
-                <span class="red" *ngIf="item.response.isHold == true">Hold</span>
-                <span class="red" *ngIf="item.response.isApprove == true">Approve</span> Request</div>
-            </div>
-          </div>
-          <div class="doc-wrap">
-            <ul class="doc-entries">
-              <div class="entry-wrap">
-                <li class="doc-subtitle">Reason for Denial:</li>
-                <li>{{item.response.reason}}</li>
-              </div>
-    
-              <div class="entry-wrap">
-                <li class="doc-subtitle">Name:</li>
-                <li>{{item.response.name}}</li>
-                <li>Lashma</li>
-              </div>
-            </ul>
-          </div>
-          <app-new-claim-tabs [claimItem]="selectedClaim" (closeDialog)="onReply($event)" *ngIf="item.response.isReply == true"></app-new-claim-tabs>
-          <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1 && item.response.isReply != true">
-              <div class="btn btn-medium btn-grey-outline" (click)="onReply()">
-                  <i class="fa fa-reply"></i> REPLY {{item.response.isReply}}
-              </div>
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">Hospital Name:</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Provider ID:</div>
+                    <div class="item-val">122.22.122</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Health Plan:</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.planId?.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Claim Type:</div>
+                    <div class="item-val">{{selectedClaim?.claimType}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Status:</div>
+                    <div class="item-val"><span class="lemon--green">{{selectedClaim?.checkedinDetail?.checkedInDetails?.claimStatus?.name}}</span></div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Date when patient was checked in:</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.confirmation| date:'medium'}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Date when claims was filed:</div>
+                    <div class="item-val">{{selectedClaim?.dateClaimCreated| date:'medium'}}</div>
+                </div>
             </div>
         </div>
     </div>
-  </div>
+    <div class="right-sect">
+        <div *ngFor="let item of selectedClaim.documentations;let i=index">
+            <div class="request-sect card" *ngIf="item.request != undefined">
+                <div class="headArea-1">
+                    <div class="count">{{i+1}}</div>
+                    <div class="letering">
+                        <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
+                        <div class="letering-2"><span class="letering-name">{{selectedClaim.medicalPersonelName}}</span> Requested Claims</div>
+                    </div>
+                </div>
+                <div class="doc-wrap">
+                    <div class="doc-title">Clinical Information</div>
+
+                    <ul class="doc-entries">
+                        <div class="entry-wrap">
+                            <li class="doc-subtitle">Presenting Complaints</li>
+                        </div>
+                    </ul>
+                </div>
+
+                <div class="doc-wrap" *ngIf="item?.request?.symptoms?.length > 0">
+                    <div class="doc-title">Complaint</div>
+
+                    <ul class="doc-entries">
+                        <div class="entry-wrap">
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Complaints</th>
+                                                <th class="th">Duration</th>
+                                                <th class="th"></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr class="tr" *ngFor="let symptom of item.request.symptoms">
+                                                <td class="td">{{symptom.symptom}}</td>
+                                                <td class="td">{{symptom.duration}} {{symptom.unit}}(s)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+
+                <div class="doc-wrap">
+                    <div class="doc-title">Clinical Findings</div>
+
+                    <ul class="doc-entries">
+                        <div class="entry-wrap">
+                            <li class="doc-subtitle">Examination Findings</li>
+                            <li>{{item.request.clinicNote}}</li>
+                        </div>
+
+                        <div class="entry-wrap" *ngIf="item?.request?.diagnosis?.length > 0">
+                            <li class="doc-subtitle">Diagnosis</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Diagnosis</th>
+                                                <th class="th"></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr class="tr" *ngFor="let diagnosis of item.request.diagnosis">
+                                                <td class="td">{{diagnosis.diagnosis}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+
+                        <div class="entry-wrap" *ngIf="item?.request?.investigations?.length > 0">
+                            <li class="doc-subtitle">Investigations</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Investigation</th>
+                                                <th class="th"></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr class="tr" *ngFor="let itm of item.request.investigations">
+                                                <td class="td">{{itm.investigation}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+
+
+                        <div class="entry-wrap" *ngIf="item?.request?.drugs?.length > 0">
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Drug</th>
+                                                <th class="th">Quantity</th>
+                                                <th class="th"></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr class="tr" *ngFor="let drug of item.request.drugs">
+                                                <td class="td">{{drug.drug}}</td>
+                                                <td class="td">{{drug.quantity}} {{drug.unit}}(s)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+
+                        <div class="entry-wrap" *ngIf="item?.request?.procedures?.length > 0">
+                            <li class="doc-subtitle">Procedures</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Procedures</th>
+                                                <th class="th"></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr class="tr" *ngFor="let itm2 of item.request.procedures">
+                                                <td class="td">{{itm2.procedure}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                        <!-- <div class="entry-wrap">
+                            <li class="doc-subtitle">Investigations</li>
+                            <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
+                        </div> -->
+                        <div class="entry-wrap">
+                            <li class="doc-subtitle">Amount</li>
+                            <li>&#x20A6; 20,000</li>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div *ngIf="item.response !=undefined" class="response-sect card">
+                <div class="headArea-2">
+                    <div class="count">{{i+2}}</div>
+                    <div class="letering">
+                        <div class="letering-1">Reaction Sent {{item.response.createdAt|date:'medium'}}</div>
+                        <div class="letering-2">
+                            <span class="letering-name">LASHMA</span>
+                            <span class="red" *ngIf="item.response.isReject == true">Reject</span>
+                            <span class="red" *ngIf="item.response.isQuery == true">Query</span>
+                            <span class="red" *ngIf="item.response.isHold == true">Hold</span>
+                            <span class="red" *ngIf="item.response.isApprove == true">Approve</span> Request</div>
+                    </div>
+                </div>
+                <div class="doc-wrap">
+                    <ul class="doc-entries">
+                        <div class="entry-wrap">
+                            <li class="doc-subtitle">Reason for Denial:</li>
+                            <li>{{item.response.reason}}</li>
+                        </div>
+
+                        <div class="entry-wrap">
+                            <li class="doc-subtitle">Name:</li>
+                            <li>{{item.response.name}}</li>
+                            <li>Lashma</li>
+                        </div>
+                    </ul>
+                </div>
+                <app-new-claim-tabs [claimItem]="selectedClaim" (closeDialog)="onReply($event)" *ngIf="item.response.isReply == true"></app-new-claim-tabs>
+                <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1 && item.response.isReply != true">
+                    <div class="btn btn-medium btn-grey-outline" (click)="onReply()">
+                        <i class="fa fa-reply"></i> REPLY {{item.response.isReply}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="action-wrap">
-  <div class="btn btn-medium btn-red" (click)="rejectClaim()">REJECT</div>
-  <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
-  <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
-  <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
+    <div class="btn btn-medium btn-red" (click)="rejectClaim()">REJECT</div>
+    <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
+    <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
+    <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
 </div>
 
 <div *ngIf="modalApprove" class="modal-overlay">
-  <div class="modal-wrap shadow-RB">
-    <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-approve-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-approve-claim>
-  </div>
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-approve-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-approve-claim>
+    </div>
 </div>
 
 <div *ngIf="modalReject" class="modal-overlay">
-  <div class="modal-wrap shadow-RB">
-    <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-reject-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-reject-claim>
-  </div>
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-reject-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-reject-claim>
+    </div>
 </div>
 
 <div *ngIf="modalQuery" class="modal-overlay">
-  <div class="modal-wrap shadow-RB">
-    <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-query-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-query-claim>
-  </div>
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-query-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-query-claim>
+    </div>
 </div>
 
 <div *ngIf="modalHold" class="modal-overlay">
-  <div class="modal-wrap shadow-RB">
-    <div (click)="modal_close()" class="close-modal">X</div>
-    <app-modal-hold-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-hold-claim>
-  </div>
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-hold-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-hold-claim>
+    </div>
 </div>
