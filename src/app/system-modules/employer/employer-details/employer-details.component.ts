@@ -20,6 +20,7 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 export class EmployerDetailsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
+  searchHiaControl = new FormControl();
   listsearchControl = new FormControl();
   filterTypeControl = new FormControl('All');
   createdByControl = new FormControl();
@@ -28,6 +29,7 @@ export class EmployerDetailsComponent implements OnInit {
 
   tab_details = true;
   tab_preauthorization = false;
+  tab_hia = false;
   tab_plans = false;
   tab_beneficiaries = false;
   tab_employers = false;
@@ -364,6 +366,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabPreauthorization_click() {
     this.tab_details = false;
@@ -375,6 +378,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabPlans_click() {
     this.tab_details = false;
@@ -386,6 +390,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabBeneficiaries_click() {
     this.tab_details = false;
@@ -397,6 +402,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabEmployers_click() {
     this.tab_details = false;
@@ -408,6 +414,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabPayment_click() {
     this.tab_details = false;
@@ -419,6 +426,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabClaims_click() {
     this.tab_details = false;
@@ -430,6 +438,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = true;
     this.tab_complaints = false;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabComplaints_click() {
     this.tab_details = false;
@@ -441,6 +450,7 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = true;
     this.tab_referals = false;
+    this.tab_hia = false;
   }
   tabReferals_click() {
     this.tab_details = false;
@@ -452,6 +462,19 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = true;
+    this.tab_hia = false;
+  }
+  tabHia_click() {
+    this.tab_details = false;
+    this.tab_preauthorization = false;
+    this.tab_plans = false;
+    this.tab_beneficiaries = false;
+    this.tab_employers = false;
+    this.tab_payment = false;
+    this.tab_claims = false;
+    this.tab_complaints = false;
+    this.tab_referals = false;
+    this.tab_hia = true;
   }
 
 }

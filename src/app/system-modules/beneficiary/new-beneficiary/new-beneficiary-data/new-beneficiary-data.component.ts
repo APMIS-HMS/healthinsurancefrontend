@@ -99,7 +99,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     private _locker: CoolLocalStorage,
     private _userService: UserService,
     private _authService: AuthService,
-    private _policyService:PolicyService
+    private _policyService: PolicyService
   ) { }
 
   ngOnInit() {
@@ -119,6 +119,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     } else if (this.user.userType.name === 'Beneficiary') {
       this._getPerson();
     }
+    this.stepOneFormGroup.controls.stateOfOrigin.valueChanges.subscribe(value => {
+      this._getLgaAndCities(value);
+    });
   }
   getMax(e) {
     if ((<number>e.target.value) > this.maxNumberOfDependant) {
@@ -170,14 +173,32 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     }));
     Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
       console.log(results);
+      if (results[0].data.length > 0) {
+        this.person = results[0].data[0];
+        this.stepOneFormGroup.controls.mothermaidenname.setValue(this.person.mothersMaidenName);
+      }
       if (results[1].data.length > 0) {
         console.log('redirect to last page');
         console.log(results[1].data[0]._id)
-        this._policyService.find({query:{
-          principalBeneficiary:results[1].data[0]._id
-        }}).then(payin =>{
-          console.log(payin)
-        }).catch(errin =>{
+        this._policyService.find({
+          query: {
+            principalBeneficiary: results[1].data[0]._id
+          }
+        }).then((policies: any) => {
+          console.log(policies)
+          if (policies.data.length > 0) {
+            this.selectedBeneficiary = results[1].data[0];
+            this._router.navigate(['/modules/beneficiary/beneficiaries', this.selectedBeneficiary._id]).then(payload => {
+              // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+            }).catch(err => {
+              console.log(err)
+            });
+          } else {
+            this.selectedBeneficiary = results[1].data[0];
+            this._initialiseFormGroup();
+            console.log(this.selectedBeneficiary)
+          }
+        }).catch(errin => {
           console.log(errin)
         })
       }
@@ -210,6 +231,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         this.currentPlatform = res.data[0];
         if (this.currentPlatform.address !== undefined) {
           this._getLga(this.currentPlatform.address.state);
+          this.stepOneFormGroup.controls.stateOfOrigin.setValue(this.currentPlatform.address.state);
+          this.stepOneFormGroup.controls.gender.setValue(this.genders[0]);
         }
       }
     }).catch(err => {
@@ -308,7 +331,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       }
     } else {
       this.today = {
-        year: new Date().getFullYear(),
+        year: new Date().getFullYear() - 18,
         month: new Date().getMonth() + 1,
         day: new Date().getDate()
       }
@@ -352,7 +375,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
     this.stepOneFormGroup.controls['stateOfOrigin'].valueChanges.subscribe(value => {
       if (value !== null) {
-        this._getLgaAndCities(value, this.selectedCountry._id, );
+        this._getLgaAndCities(value);
       }
     });
   }
@@ -487,20 +510,16 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         let fileBrowser = this.fileInput.nativeElement;
         this._systemService.on();
         if (this.person.profileImageObject === undefined) {
-          console.log('1a')
           if (fileBrowser.files && fileBrowser.files[0]) {
-            console.log('1b')
             this.upload().then((result: any) => {
-              console.log('1c')
               if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-                console.log('1d')
                 this.person.profileImageObject = result.body[0].file;
 
-                this.user.completeRegistration = true;
+                // this.user.completeRegistration = true;
                 let person$ = Observable.fromPromise(this._personService.update(this.person));
-                let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
+                // let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
 
-                Observable.forkJoin([person$, user$]).subscribe(results => {
+                Observable.forkJoin([person$]).subscribe(results => {
                   console.log('1e')
                   this._getBeneficiary(this.selectedBeneficiary._id);
                   this._systemService.off();
@@ -539,29 +558,57 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
 
 
-            this.user.completeRegistration = true;
+            // this.user.completeRegistration = true;
             let person$ = Observable.fromPromise(this._personService.update(this.person));
-            let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
+            // let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
 
-            Observable.forkJoin([person$, user$]).subscribe((results: any) => {
+            Observable.forkJoin([person$]).subscribe((results: any) => {
               console.log('1e')
               console.log(results)
               if (results[0] !== undefined) {
                 console.log('mm')
-                let beneficiary: Beneficiary = <Beneficiary>{};
+                let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
                 beneficiary.numberOfUnderAge = value.noOfChildrenU18;
                 beneficiary.platformOwnerId = this.currentPlatform;
                 beneficiary.stateID = value.lasrraId;
                 beneficiary.personId = results[0];
+                console.log(value)
 
-                this._beneficiaryService.create(beneficiary).then(paym => {
-                  console.log(paym)
-                  // this._getBeneficiary(this.selectedBeneficiary._id);
-                  this._systemService.off();
-                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
-                }).catch(erm => {
-                  console.log(erm);
-                })
+                if(this.selectedBeneficiary !== undefined){
+                  this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                    console.log(paym)
+                    // this._getBeneficiary(this.selectedBeneficiary._id);
+                    this._systemService.off();
+                    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+  
+                    this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                      // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                    }).catch(err => {
+                      console.log(err)
+                    });
+  
+  
+                  }).catch(erm => {
+                    console.log(erm);
+                  })
+                }else{
+                  this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                    console.log(paym)
+                    // this._getBeneficiary(this.selectedBeneficiary._id);
+                    this._systemService.off();
+                    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+  
+                    this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                      // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                    }).catch(err => {
+                      console.log(err)
+                    });
+  
+  
+                  }).catch(erm => {
+                    console.log(erm);
+                  })
+                }
 
               } else {
                 console.log('ll')

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ClaimService } from './../../../../services/common/claim.service';
 import differenceInYears from 'date-fns/difference_in_years';
+import { HeaderEventEmitterService } from '../../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-claims-detail-tab',
@@ -21,12 +22,14 @@ export class ClaimsDetailTabComponent implements OnInit {
 
 
   constructor(private _route: ActivatedRoute,
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _locker: CoolLocalStorage,
     private _claimService: ClaimService) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Claims Details');
+    this._headerEventEmitter.setMinorRouteUrl('Claims details reply and response page.');
     this._route.params.subscribe(param => {
-      console.log(param);
       if (param.id !== undefined) {
         this._getSelectedClaimItem(param.id);
       }
@@ -66,7 +69,7 @@ export class ClaimsDetailTabComponent implements OnInit {
     this._claimService.get(id, {}).then((payload: any) => {
       this.selectedClaim = payload;
       console.log(this.selectedClaim);
-      this.displayAge = differenceInYears(new Date(),this.selectedClaim.checkedinDetail.personObject.dateOfBirth);
+      this.displayAge = differenceInYears(new Date(), this.selectedClaim.checkedinDetail.checkedInDetails.personObject.dateOfBirth);
     });
   }
 
