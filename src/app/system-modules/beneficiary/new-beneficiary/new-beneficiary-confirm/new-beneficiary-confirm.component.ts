@@ -1,7 +1,7 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { UserService } from './../../../../services/common/user.service';
 import { RoleService } from './../../../../services/auth/role/role.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { PolicyService } from './../../../../services/policy/policy.service';
 import { Observable } from 'rxjs/Rx';
 import { JsonDataService } from './../../../../services/common/json-data.service';
@@ -22,6 +22,7 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
     private _policyService: PolicyService, private _router: Router,
     private _userService: UserService,
     private _locker: CoolLocalStorage,
+    private _route: ActivatedRoute,
     private _roleService: RoleService) { }
 
   ngOnInit() {
@@ -36,10 +37,20 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
     // })
     this._getRoles();
 
-    this._policyService.get(this.policy._id, {}).then(payload => {
-      this.policyObject = payload;
-    }).catch(err => {
-      console.log(err);
+    // this._policyService.get(this.policy._id, {}).then(payload => {
+    //   this.policyObject = payload;
+    // }).catch(err => {
+    //   console.log(err);
+    // })
+
+    this._route.params.subscribe(param => {
+      if (param.id !== undefined) {
+        this._policyService.get(param.id, {}).then(payload => {
+          this.policyObject = payload;
+        }).catch(err => {
+          console.log(err);
+        })
+      }
     })
   }
   _getRoles() {
@@ -59,7 +70,7 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
         this._router.navigate(['modules/beneficiary/beneficiaries']);
       })
 
-     
+
     }
 
   }

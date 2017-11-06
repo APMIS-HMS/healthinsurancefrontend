@@ -567,6 +567,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
               console.log(results)
               if (results[0] !== undefined) {
                 console.log('mm')
+                console.log(this.selectedBeneficiary);
                 let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
                 beneficiary.numberOfUnderAge = value.noOfChildrenU18;
                 beneficiary.platformOwnerId = this.currentPlatform;
@@ -574,7 +575,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                 beneficiary.personId = results[0];
                 console.log(value)
 
-                if(this.selectedBeneficiary !== undefined){
+                if(this.selectedBeneficiary._id !== undefined){
                   this._beneficiaryService.update(beneficiary).then((paym: any) => {
                     console.log(paym)
                     // this._getBeneficiary(this.selectedBeneficiary._id);

@@ -364,12 +364,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       console.log(body);
 
       this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
-        console.log(payload);
-        // this._systemService.announceBeneficiaryTabNotification({
-        //   tab: 'Five',
-        //   policy: payload.body.policyObject
-        // });
-        this._router.navigate(['/modules/beneficiary/new/complete', this.selectedBeneficiary._id]).then(payload => {
+        this._router.navigate(['/modules/beneficiary/new/complete', payload.body.policyObject._id]).then(payload => {
 
         }).catch(err => {
           console.log(err)
