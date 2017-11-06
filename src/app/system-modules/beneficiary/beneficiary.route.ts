@@ -1,3 +1,4 @@
+import { NewBeneficiaryDataComponent } from './new-beneficiary/new-beneficiary-data/new-beneficiary-data.component';
 import { ListReferalsComponent } from './../referal/list-referals/list-referals.component';
 import { ListClaimsComponent } from './../claims/list-claims/list-claims.component';
 import { CheckinHistoryComponent } from './beneficiary-details/checkin-history/checkin-history.component';
@@ -27,7 +28,17 @@ const BENEFICIARY_ROUTES: Routes = [
                     { path: 'referrals', component: ListReferalsComponent }
                 ]
             },
-            { path: 'new', component: NewBeneficiaryComponent },
+            {
+                path: 'new', component: NewBeneficiaryComponent,
+                children: [
+                    { path: '', component: PersonalDetailsComponent },
+                    { path: 'principal', component: NewBeneficiaryDataComponent },
+                    { path: 'dependants', component: CheckinHistoryComponent },
+                    { path: 'next-of-kin', component: PaymentDetailBeneficiaryComponent },
+                    { path: 'program', component: ListClaimsComponent },
+                    { path: 'complete', component: ListReferalsComponent }
+                ]
+            },
             { path: 'new/:id', component: NewBeneficiaryComponent }
         ]
     }

@@ -82,10 +82,8 @@ export class SignupComponent implements OnInit {
 			this._systemService.off();
 			if (results[0].data.length > 0) {
 				this.signupFormGroup.controls['email'].setErrors({ 'duplicate': true });
-				console.log(this.signupFormGroup.controls['email'].errors);
 			}
 		}, error => {
-			console.log(error);
 			this._systemService.off();
 		});
 	}
@@ -99,18 +97,14 @@ export class SignupComponent implements OnInit {
 			this._systemService.off();
 			if (results[0].data.length > 0) {
 				this.signupFormGroup.controls['phoneNumber'].setErrors({ 'duplicate': true });
-				console.log(this.signupFormGroup.controls['phoneNumber'].errors);
 			}
-			console.log(results);
 		}, error => {
-			console.log(error);
 			this._systemService.off();
 		});
 	}
 
 	onClickRegister(value: any, valid: boolean) {
 		if (valid) {
-			console.log(value);
 			if (!!this.userType && !!this.currentPlatform) {
 				this.signupBtnText = false;
 				this.signupBtnProcessing = true;
@@ -149,7 +143,6 @@ export class SignupComponent implements OnInit {
 						this._toastr.success('You have successfully signed up!', 'Success!');
 					});
 				}).catch(err => {
-					console.log(err);
 					this.signupBtnText = true;
 					this.signupBtnProcessing = false;
 					this.disableBtn = false;
@@ -182,7 +175,6 @@ export class SignupComponent implements OnInit {
 		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
 			if (res.data.length > 0) {
 				this.currentPlatform = res.data[0];
-				console.log(this.currentPlatform);
 			}
 		}).catch(err => console.log(err));
 	}

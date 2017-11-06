@@ -2,12 +2,10 @@
     <div class="bar-labels">
         <div>Household ID: {{ policy?.policyId }}</div>
         <div>Registered By: {{ policy?.platformOwnerId?.shortName }}</div>
-        <!-- <div>Status: <span class="{{ policy?.isConfirmed ? 'text-green' : 'text-red' }}">{{ policy?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div> -->
-        <!-- <div *ngIf="policy?.isConfirmed && policy?.hia?.validityPeriods.length > 0">Full License: Valid till {{ policy?.hia?.validityPeriods[policy?.hia?.validityPeriods.length - 1].validTill | date }}</div> -->
         <div>Plan Name: {{ policy?.planId?.name }}</div>
         <div>Status: <span class="{{ policy?.isActive ? 'text-green' : 'text-red' }}">{{ policy?.isActive ? 'Active' : 'Inactive' }}</span></div>
-        <!-- <div *ngIf="policy?.isPaid">Premium paid until: {{ policy?.isActive}}</div> -->
-        <div *ngIf="policy?.isConfirmed && policy?.validityPeriods.length > 0">Premium paid until: Valid till {{ policy?.validityPeriods[policy?.validityPeriods.length - 1].validTill | date }}</div>
+        <div *ngIf="policy?.isPaid && policy?.validityPeriods.length > 0">Premium: Valid until {{ policy?.validityPeriods[policy?.validityPeriods.length - 1].validTill | date }}</div>
+        <div *ngIf="!policy?.isPaid">Premium: <span class="text-red">Not Paid</span></div>
     </div>
 
     <div class="bar-icos">

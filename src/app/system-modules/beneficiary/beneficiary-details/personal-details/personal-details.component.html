@@ -7,7 +7,7 @@
             <div class="detail-content">
                 <div class="hia-user">
                     <img *ngIf="beneficiary?.personId?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
-                    <img *ngIf="beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)">
+                    <img *ngIf="beneficiary !== undefined && beneficiary?.personId?.profileImageObject !== undefined" class="" [src]="_uploadService.transform(beneficiary?.personId?.profileImageObject.thumbnail)">
                     <div class="pd-tag">P</div>
                 </div>
                 <div class="group-wrap">
@@ -150,7 +150,8 @@
 
             <div class="detail-content ">
                 <div class="hia-logo ">
-                    <img src="../../../../assets/img/logos/bridgeclinicbanner.jpg ">
+                    <img *ngIf="policy?.providerId?.logo === undefined" src="../../../../assets/img/logos/logo-placeholder.png ">
+                    <img *ngIf="policy !== undefined && policy?.providerId?.logo !== undefined" class="" [src]="_uploadService.transform(policy?.providerId?.logo?.thumbnail)">
                 </div>
                 <div class="group-wrap ">
                     <div class="item-label ">Primary Healthcare Provider:</div>
@@ -240,9 +241,9 @@
                         <thead class="thead">
                             <tr class="tr">
                                 <th class="th">No</th>
+                                <th class="th">Category</th>
                                 <th class="th">Duration</th>
                                 <th class="th">Start Date</th>
-                                <th class="th">Created At</th>
                                 <th class="th">Status</th>
                                 <th class="th">Valid Till</th>
                             </tr>
@@ -252,12 +253,12 @@
                             <tr class="tr" *ngIf="policy?.validityPeriods?.length === 0">
                                 <td class="text-center" colspan="6">No data available in table</td>
                             </tr>
-                            <tr *ngFor="let pol of policy?.validityPeriods; let i = index;" class="tr">
+                            <tr *ngFor="let pol of policy?.validityPeriods.reverse(); let i = index;" class="tr">
                                 <td class="td hover">{{ i+1 }}</td>
-                                <td class="td hover">{{ pol.duration }} {{ pol.unit.name }}</td>
-                                <td class="td hover">{{ pol.createdAt | date }}</td>
-                                <td class="td hover">{{ pol.startDate?.jsdate | date }}</td>
-                                <td class="td hover">{{ pol.isActive }}</td>
+                                <td class="td hover">{{ pol.category }}</td>
+                                <td class="td hover">{{ pol.duration }} {{ pol.unit }}</td>
+                                <td class="td hover">{{ pol.startDate | date }}</td>
+                                <td class="{{pol.isActive ? 'green': 'red'}}">{{ pol.isActive ? 'Active': 'Inactive' }}</td>
                                 <td class="td hover">{{ pol.validTill | date }}</td>
                             </tr>
                         </tbody>

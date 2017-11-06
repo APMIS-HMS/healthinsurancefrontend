@@ -42,3 +42,4 @@ export const PAYMENTTYPES = [
 export const CurrentPlaformShortName = 'LASHMA';
 export const FORM_VALIDATION_ERROR_MESSAGE = 'One or more required fields are missing!';
 export const paystackClientKey = 'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85';
+export const MAXIMUM_NUMBER_OF_DEPENDANTS = 5;

@@ -1,8 +1,10 @@
+import { PolicyService } from './../../../../services/policy/policy.service';
+import { AuthService } from './../../../../auth/services/auth.service';
 import { UserService } from './../../../../services/common/user.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';
+import { FORM_VALIDATION_ERROR_MESSAGE, MAXIMUM_NUMBER_OF_DEPENDANTS } from './../../../../services/globals/config';
 import { PersonService } from './../../../../services/person/person.service';
 import { Address } from './../../../../models/organisation/address';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
@@ -54,7 +56,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   genders: any[] = [];
   titles: any[] = [];
   maritalStatuses: any[] = [];
-
+  maxNumberOfDependant: number = MAXIMUM_NUMBER_OF_DEPENDANTS
   _video: any;
   patCanvas: any;
   patData: any;
@@ -75,6 +77,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   btnCamera = 'Use Camera';
   user: any;
   person: any;
+  isCompleteRegistration = true;
 
   constructor(
     private _fb: FormBuilder,
@@ -94,7 +97,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     private _personService: PersonService,
     private _route: ActivatedRoute,
     private _locker: CoolLocalStorage,
-    private _userService: UserService
+    private _userService: UserService,
+    private _authService: AuthService,
+    private _policyService:PolicyService
   ) { }
 
   ngOnInit() {
@@ -107,9 +112,17 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._getTitles();
     this._getMaritalStatus();
     console.log(this.user)
-    if (this.user.platformOwnerId._id === undefined) {
+    if (!this.user.completeRegistration) {
+      this.isCompleteRegistration = false;
       this._getUser();
       this._getPerson();
+    } else if (this.user.userType.name === 'Beneficiary') {
+      this._getPerson();
+    }
+  }
+  getMax(e) {
+    if ((<number>e.target.value) > this.maxNumberOfDependant) {
+      return e.target.value = this.maxNumberOfDependant;
     }
   }
   ngAfterViewInit() {
@@ -134,37 +147,58 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
   }
   _getUser() {
-    console.log(this.user._id)
     this._userService.get(this.user._id, {}).then((payload: any) => {
-      console.log(payload);
       this.stepOneFormGroup.controls.firstName.setValue(payload.firstName);
       this.stepOneFormGroup.controls.lastName.setValue(payload.lastName);
       this.stepOneFormGroup.controls.phonenumber.setValue(payload.phoneNumber);
       this.stepOneFormGroup.controls.email.setValue(payload.email);
-
-      this.stepOneFormGroup.controls.firstName.disable();
-      this.stepOneFormGroup.controls.lastName.disable();
-      this.stepOneFormGroup.controls.phonenumber.disable();
-      this.stepOneFormGroup.controls.email.disable();
     }).catch(err => {
       console.log(err)
     })
   }
 
   _getPerson() {
-    console.log(this.user._id)
-    this._personService.find({
+    let person$ = Observable.fromPromise(this._personService.find({
       query: {
         email: this.user.email
       }
-    }).then((payload: any) => {
-      console.log(payload);
-      if (payload.data.length > 0) {
-        this.person = payload.data[0];
+    }));
+    let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+      query: {
+        'personId.email': this.user.email
       }
-    }).catch(err => {
-      console.log(err)
+    }));
+    Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+      console.log(results);
+      if (results[1].data.length > 0) {
+        console.log('redirect to last page');
+        console.log(results[1].data[0]._id)
+        this._policyService.find({query:{
+          principalBeneficiary:results[1].data[0]._id
+        }}).then(payin =>{
+          console.log(payin)
+        }).catch(errin =>{
+          console.log(errin)
+        })
+      }
+    }, error => {
+      console.log(error);
     })
+    // this._personService.find({
+    //   query: {
+    //     email: this.user.email
+    //   }
+    // }).then((payload: any) => {
+    //   if (payload.data.length > 0) {
+    //     this._beneficiaryService.find({query:{
+    //       'personId.email':this.user.email
+    //     }})
+    //     this.person = payload.data[0];
+    //     this.stepOneFormGroup.controls.mothermaidenname.setValue(this.person.mothersMaidenName);
+    //   }
+    // }).catch(err => {
+    //   console.log(err)
+    // })
   }
 
   _getCurrentPlatform() {
@@ -262,7 +296,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
 
   _initialiseFormGroup() {
-    let date = this.selectedBeneficiary.personId === undefined ? new Date() : new Date(this.selectedBeneficiary.personId.dateOfBirth);
+    let date = (this.selectedBeneficiary.personId === undefined || this.selectedBeneficiary.personId === null) ? new Date() : new Date(this.selectedBeneficiary.personId.dateOfBirth);
     if (this.selectedBeneficiary.personId !== undefined) {
       let year = date.getFullYear();
       let month = date.getMonth() + 1;
@@ -290,7 +324,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       phonenumber: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       secondaryPhone: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.secondaryPhoneNumber : '', [<any>Validators.pattern(PHONE_REGEX)]],
       email: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
-      dob: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.dateOfBirth : this.today, [<any>Validators.required], this.validateEmailNotTaken.bind(this)],
+      dob: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.dateOfBirth : this.today, [<any>Validators.required], this.validateAgaintUnderAge.bind(this)],
       lashmaId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.platformOwnerNumber : '', []],
       lasrraId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.stateID : '', []],
       stateOfOrigin: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.stateOfOrigin : '', [<any>Validators.required]],
@@ -304,7 +338,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     });
 
     if (this.selectedBeneficiary._id !== undefined) {
-      if (this.selectedBeneficiary.personId !== undefined) {
+      if (this.selectedBeneficiary.personId !== null && this.selectedBeneficiary.personId !== undefined) {
         this._getLgaAndCities(this.selectedBeneficiary.personId.stateOfOrigin);
         this.stepOneFormGroup.controls['gender'].setValue(this.selectedBeneficiary.personId.gender);
         if (this.selectedBeneficiary.personId.profileImageObject !== undefined) {
@@ -323,7 +357,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     });
   }
 
-  validateEmailNotTaken(control: AbstractControl) {
+  validateAgaintUnderAge(control: AbstractControl) {
     if (control.value !== undefined && control.value.jsdate !== undefined) {
       return this._beneficiaryService.validateAge(control.value).then(res => {
         return res.body.response >= 18 ? null : { underage: true };
@@ -367,7 +401,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       if (payload.data.length > 0) {
         const states = payload.data[0].states;
         if (states.length > 0) {
-          console.log(states[0].lgs);
           this.residenceLgs = states[0].lgs;
           this.selectedState = states[0];
         }
@@ -421,11 +454,135 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
   onClickStepOne(value, valid) {
     if (valid) {
-      if (this.user.platformOwnerId._id === undefined) {
+      if (!this.user.completeRegistration) {
         //save image if available
         //update user with complete platformownerid
         //updaate person
         // save beneficiary directly
+        let address: Address = <Address>{};
+        address.lga = value.lga;
+        address.neighbourhood = value.neighbourhood;
+        address.state = this.selectedState;
+        delete address.state.cities;
+        delete address.state.lgs;
+        address.street = value.streetName;
+
+        this.person.dateOfBirth = value.dob.jsdate;
+        this.person.email = value.email;
+        this.person.firstName = value.firstName;
+        this.person.gender = value.gender;
+        this.person.homeAddress = address;
+        this.person.lastName = value.lastName;
+        this.person.lgaOfOrigin = value.lgaOfOrigin;
+        this.person.maritalStatus = value.maritalStatus;
+        this.person.mothersMaidenName = value.mothermaidenname;
+        this.person.otherNames = value.otherNames;
+        this.person.phoneNumber = value.phonenumber;
+        this.person.platformOnwerId = this.currentPlatform._id;
+        this.person.stateOfOrigin = value.stateOfOrigin;
+        this.person.title = value.title;
+
+
+
+        let fileBrowser = this.fileInput.nativeElement;
+        this._systemService.on();
+        if (this.person.profileImageObject === undefined) {
+          console.log('1a')
+          if (fileBrowser.files && fileBrowser.files[0]) {
+            console.log('1b')
+            this.upload().then((result: any) => {
+              console.log('1c')
+              if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+                console.log('1d')
+                this.person.profileImageObject = result.body[0].file;
+
+                this.user.completeRegistration = true;
+                let person$ = Observable.fromPromise(this._personService.update(this.person));
+                let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
+
+                Observable.forkJoin([person$, user$]).subscribe(results => {
+                  console.log('1e')
+                  this._getBeneficiary(this.selectedBeneficiary._id);
+                  this._systemService.off();
+                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                }, error => {
+                  console.log(error);
+                  this._systemService.off();
+                })
+
+
+
+                // this._personService.update(this.person).then(payload => {
+                //   console.log('1e')
+                //   this._getBeneficiary(this.selectedBeneficiary._id);
+                //   this._systemService.off();
+                //   this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                // }).catch(err => {
+                //   console.log(err);
+                //   this._systemService.off();
+                // })
+              }
+            }).catch(err => {
+              this._systemService.off();
+            })
+          } else {
+            // this._personService.update(this.person).then(payload => {
+            //   this._getBeneficiary(this.selectedBeneficiary._id);
+            //   this._systemService.off();
+            //   this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+            // }).catch(err => {
+            //   console.log(err);
+            //   this._systemService.off();
+            // })
+
+
+
+
+
+            this.user.completeRegistration = true;
+            let person$ = Observable.fromPromise(this._personService.update(this.person));
+            let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
+
+            Observable.forkJoin([person$, user$]).subscribe((results: any) => {
+              console.log('1e')
+              console.log(results)
+              if (results[0] !== undefined) {
+                console.log('mm')
+                let beneficiary: Beneficiary = <Beneficiary>{};
+                beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                beneficiary.platformOwnerId = this.currentPlatform;
+                beneficiary.stateID = value.lasrraId;
+                beneficiary.personId = results[0];
+
+                this._beneficiaryService.create(beneficiary).then(paym => {
+                  console.log(paym)
+                  // this._getBeneficiary(this.selectedBeneficiary._id);
+                  this._systemService.off();
+                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                }).catch(erm => {
+                  console.log(erm);
+                })
+
+              } else {
+                console.log('ll')
+              }
+
+            }, error => {
+              console.log(error);
+              this._systemService.off();
+            })
+          }
+        } else {
+          this._personService.update(this.person).then(payload => {
+            this._getBeneficiary(this.selectedBeneficiary._id);
+            this._systemService.off();
+            this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+          }).catch(err => {
+            console.log(err);
+            this._systemService.off();
+          })
+        }
+
       } else {
         if (this.selectedBeneficiary !== undefined && this.selectedBeneficiary._id !== undefined) {
           console.log(1)

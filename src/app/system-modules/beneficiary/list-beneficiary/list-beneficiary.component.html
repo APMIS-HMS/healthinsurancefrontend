@@ -1,11 +1,11 @@
 <div class="list-search-wrap">
     <div class="search-wrap">
         <label class="label-xx">Search:</label>
-        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Beneficiary">
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
 
-    <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">
+    <div class="btn btn-medium btn-blue" *ngIf="hasCreateBeneficiary" (click)="navigateNewPlatform()">
         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD BENEFICIARY
     </div>
 </div>
@@ -25,6 +25,13 @@
         <div class="input-wrap">
             <label>Registered By</label>
             <select [formControl]="createdByControl">
+                <option>All</option>
+            </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>LGA By</label>
+            <select [formControl]="utilizedByControl">
                 <option>All</option>
             </select>
         </div>
@@ -77,6 +84,7 @@
                     <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
                     <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
                 </td>
+                
                 <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">{{beneficiary.platformOwnerNumber}}</td>
                 <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">{{beneficiary.personId?.dateOfBirth | date}}</td>
                 <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">{{beneficiary.personId?.homeAddress?.lga?.name}}</td>

@@ -7,5 +7,6 @@ export interface Provider {
     hefeemaStatus: any;
     providerId: String;
     lasrraId: any;
+    validityPeriods: any;
     comment?: any;
 }
