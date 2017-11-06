@@ -292,8 +292,21 @@ button {
     -moz-box-shadow: 2px 16px 31px 0px rgba(0, 0, 0, 0.54);
     box-shadow: 2px 16px 31px 0px rgba(0, 0, 0, 0.54);
 }
-
+.mobile-menu-wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $brand-primary;
+    cursor: pointer;
+    width: 35px;
+    display: none;
+    position: relative;
+}
+.mobile-menu{
+    position: absolute;
+}
 .inpage-tabs {
+    position: relative;
     display: flex;
     justify-content: flex-start;
     margin: 0;
@@ -860,6 +873,11 @@ input[type="checkbox"].switch_1:checked:after {
 	background: #333;
 	box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
 }
+.tabsect-wrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 /**
  * Create the radio event for the label
@@ -868,15 +886,18 @@ input[type="checkbox"].switch_1:checked:after {
 	background: #7060ff;
 }
 
-
-@media only screen and (max-width: 1850px) {
-    .shadow-RB{
-        overflow-y: auto;
-    }
-}
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {
         width: 90%;
+    }
+}
+@media only screen and (max-width: 960px){
+    .mobile-menu-wrap{
+        display: block;
+    }
+    
+    .inpage-tabs li{
+        display: none;
     }
 }
 @media only screen and (max-width: 780px){
@@ -894,6 +915,13 @@ input[type="checkbox"].switch_1:checked:after {
             margin-bottom: -10px;
         }
     }
+    .shadow-RB{
+        overflow-y: auto;
+    }.list-filter-wrap{
+        background: transparent;
+        padding: 0;
+    }
+    
     .nut-tab-topSect-wrap{
         display: flex;
         flex-wrap: wrap;
