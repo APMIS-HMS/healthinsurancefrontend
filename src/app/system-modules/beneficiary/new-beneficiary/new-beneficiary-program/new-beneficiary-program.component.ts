@@ -111,6 +111,8 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1])
     } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
+    }else if (!!this.user.userType && this.user.userType.name === 'Employer') {
+      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
     }
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
@@ -380,7 +382,12 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.sponsorshipId = value.sponsorship;
       if (policy.sponsorshipId.id === 2) {
         console.log('am in')
-        policy.sponsor = this.user.facilityId;
+        if(this.user.userType.name === "Employer"){
+          policy.sponsor = this.user.facilityId;
+        }else if(this.user.userType.name === "Health Insurance Agent"){
+          // policy.sponsor = 
+        }
+       
       }
 
 

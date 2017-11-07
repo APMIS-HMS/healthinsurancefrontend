@@ -4,6 +4,7 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 
+let request = require('superagent');
 
 @Injectable()
 export class PolicyService {
@@ -61,6 +62,24 @@ export class PolicyService {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('policies').then((socket: any) => {
         return this._socket.remove(id, query);
+      }));
+    });
+  }
+
+  searchPolicy(search: any) {
+    let host = this._restService.getHost();
+    let path = host + '/api/search-policy';
+    // return request
+    //   .get(path)
+    //   .query({ search: search });
+
+
+
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('policies').then((socket: any) => {
+        return request
+          .get(path)
+          .query({ search: search });
       }));
     });
   }
