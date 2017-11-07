@@ -93,7 +93,7 @@
                 <div class="frm-item-wrap">
                     <label class="label">Nature of Relationship</label>
                     <div class="inputWrap">
-                        <select formControlName="relationship" class="form-control">
+                        <select formControlName="relationship" class="form-control" [compareWith]='compare'>
                             <option  value="" disabled selected>Relationship</option>
                             <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
                         </select>

@@ -64,6 +64,7 @@ export class LoginComponent implements OnInit {
 	private _checkRole() {
 		try {
 			const roles = this.user.roles;
+			console.log(roles)
 			const roleIds: any[] = [];
 			roles.forEach(x => {
 				roleIds.push(x._id);
@@ -100,11 +101,6 @@ export class LoginComponent implements OnInit {
 
 
 	_getPerson() {
-		// let person$ = Observable.fromPromise(this._personService.find({
-		//   query: {
-		// 	email: this.user.email
-		//   }
-		// }));
 		let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
 			query: {
 				'personId.email': this.user.email
@@ -122,11 +118,22 @@ export class LoginComponent implements OnInit {
 				}).then((policies: any) => {
 					console.log(policies)
 					if (policies.data.length > 0) {
-						this._router.navigate(['/modules/beneficiary/beneficiaries', policies.data[0]._id]).then(payload => {
-							// this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
-						}).catch(err => {
-							console.log(err)
-						});
+						if (this.user.userType.name = "Beneficiary") {
+							if (this.user.roles.length === 0) {
+								this._router.navigate(['/modules/beneficiary/new/complete', policies.data[0]._id]).then(payload => {
+
+								}).catch(err => {
+									console.log(err)
+								});
+							} else {
+								this._router.navigate(['/modules/beneficiary/beneficiaries', policies.data[0]._id]).then(payload => {
+
+								}).catch(err => {
+									console.log(err)
+								});
+							}
+						}
+
 					} else {
 						this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
 
@@ -179,12 +186,6 @@ export class LoginComponent implements OnInit {
 					this._checkRole();
 				} else {
 					if (payload.user !== undefined && payload.user.userType !== undefined) {
-						// console.log('am here')
-						// this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
-
-						// }).catch(err => {
-						// 	console.log(err)
-						// })
 						this.user = payload.user;
 						this._getPerson();
 					} else {

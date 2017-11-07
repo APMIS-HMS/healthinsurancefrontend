@@ -53,15 +53,21 @@ export class ListBeneficiaryComponent implements OnInit {
       .filter(event => event instanceof NavigationEnd)
       .subscribe(e => {
       });
+    this.user = (<any>this._locker.getObject('auth')).user;
+  
+    if (this.user.userType.name === "Beneficiary") {
+      console.log(this.user)
+      this._getPerson();
+    }
   }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
-    this.user = (<any>this._locker.getObject('auth')).user;
+
     console.log(this.user);
     // Check if user has the role to create beneficiary
-    if (this.user.userType === undefined)  {
+    if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
       this.hasCreateBeneficiary = true;
@@ -89,6 +95,39 @@ export class ListBeneficiaryComponent implements OnInit {
       }
     });
   }
+  _getPerson() {
+    if (this.user.userType.name === "Beneficiary") {
+      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+        query: {
+          'personId.email': this.user.email
+        }
+      }));
+      Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
+        console.log(results)
+        if (results[0].data.length > 0) {
+          this._policyService.find({
+            query: {
+              principalBeneficiary: results[0].data[0]._id,
+            }
+          }).then((policies: any) => {
+            console.log(policies)
+            if (policies.data.length > 0) {
+              this._router.navigate(['/modules/beneficiary/beneficiaries', policies.data[0]._id]).then(payload => {
+
+              }).catch(err => {
+                console.log(err)
+              });
+            }
+          }).catch(errin => {
+            console.log(errin)
+          })
+        }
+      }, error => {
+        console.log(error);
+      })
+    }
+
+  }
   reset() {
     this.ngOnInit();
   }
@@ -111,7 +150,7 @@ export class ListBeneficiaryComponent implements OnInit {
               'providerId._id': this.user.facilityId._id,
               $limit: 200,
               $sort: { createdAt: -1 },
-              $select: { 'providerId.$': 1, 'hiaId.name':1, 'principalBeneficiary':1, 'dependantBeneficiaries':1, 'isActive':1 }
+              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
@@ -120,7 +159,7 @@ export class ListBeneficiaryComponent implements OnInit {
               'hiaId._id': this.user.facilityId._id,
               $limit: 200,
               $sort: { createdAt: -1 },
-              $select: { 'hiaId.$': 1, 'hiaId.name':1, 'principalBeneficiary':1, 'dependantBeneficiaries':1, 'isActive':1 }
+              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
@@ -129,7 +168,7 @@ export class ListBeneficiaryComponent implements OnInit {
               'employerId._id': this.user.facilityId._id,
               $limit: 200,
               $sort: { createdAt: -1 },
-              $select: { 'employerId.$': 1, 'hiaId.name':1, 'principalBeneficiary':1, 'dependantBeneficiaries':1, 'isActive':1 }
+              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
@@ -138,7 +177,7 @@ export class ListBeneficiaryComponent implements OnInit {
               'platformOwnerId._id': this.user.facilityId._id,
               $limit: 200,
               $sort: { createdAt: -1 },
-              $select: { 'platformOwnerId.$': 1, 'hiaId.name':1, 'principalBeneficiary':1, 'dependantBeneficiaries':1, 'isActive':1 }
+              $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
           });
         } else {
@@ -147,7 +186,7 @@ export class ListBeneficiaryComponent implements OnInit {
               'platformOwnerId._id': this.currentPlatform._id,
               $limit: 200,
               $sort: { createdAt: -1 },
-              $select: { 'platformOwnerId.$': 1, 'hiaId.name':1, 'principalBeneficiary':1, 'dependantBeneficiaries':1, 'isActive':1 }
+              $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
           });
         }
@@ -189,11 +228,13 @@ export class ListBeneficiaryComponent implements OnInit {
         this._systemService.off();
         this.loading = false;
       }).catch(err => {
+        console.log(err)
         this.loading = false;
         this._systemService.off();
         this._toastr.error('Error has occured please contact your administrator!', 'Error!');
       });
     } catch (error) {
+      console.log(error)
       this.loading = false;
       this._toastr.error('Error has occured please contact your administrator!', 'Error!');
     }
@@ -226,9 +267,9 @@ export class ListBeneficiaryComponent implements OnInit {
     })
   }
 
-  navigateNewPlatform() {
+  navigateNewBeneficiary() {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/new']).then(res => {
+    this._router.navigate(['/modules/beneficiary/new/principal']).then(res => {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
@@ -237,7 +278,7 @@ export class ListBeneficiaryComponent implements OnInit {
 
   navigateEditBeneficiary(beneficiary) {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/new', beneficiary._id]).then(res => {
+    this._router.navigate(['/modules/beneficiary/new/principal', beneficiary._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
