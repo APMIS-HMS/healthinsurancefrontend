@@ -20,6 +20,7 @@ import { appRouter } from './app.route';
 import { AppComponent } from './app.component';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 //import { SimpleNotificationsModule } from 'angular2-notifications';
+import {NotificationsModule, NotificationsService} from 'angular4-notify'
 import { FacilityService } from './services/common/facility.service';
 import { PersonService } from './services/person/person.service';
 import { PolicyService } from './services/policy/policy.service';
@@ -41,10 +42,11 @@ import { SharedModule } from './shared-modules/shared.module';
 		CoolStorageModule,
 		MyDatePickerModule,
 		LoadingBarModule.forRoot(),
-		SharedModule
+		SharedModule,
+		NotificationsModule
 	],
 	providers: [SocketService, RestService, SystemModuleService, HeaderEventEmitterService, PremiumTypeService,
-		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService, PolicyService],
+		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService, PolicyService, NotificationsService],
 	bootstrap: [AppComponent]
 })
 
