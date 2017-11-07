@@ -7,6 +7,7 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService } from '../../../services/index';
+import { Policy } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -126,19 +127,20 @@ export class PendingPaymentsComponent implements OnInit {
   }
 
   onCheckSelectedToPay(index: number, policy: any) {
-    if (!policy.isChecked) {
-      policy.isChecked = true;
-      policy.isQueuedForPayment = true;
-      // this.selectedFFSClaims.push(claim);
-    } else {
-      // Remove from the selected Claim
-      console.log(index);
-      policy.isChecked = false;
-      policy.isQueuedForPayment = false;
-      // if (this.selectedFFSClaims.length > 0) {
-      //   this.selectedFFSClaims.splice(index, 1);
-      // }
-    }
+    console.log(policy);
+    // if (!policy.isChecked) {
+    //   policy.isChecked = true;
+    //   policy.isQueuedForPayment = true;
+    //   // this.selectedFFSClaims.push(claim);
+    // } else {
+    //   // Remove from the selected Claim
+    //   console.log(index);
+    //   policy.isChecked = false;
+    //   policy.isQueuedForPayment = false;
+    //   // if (this.selectedFFSClaims.length > 0) {
+    //   //   this.selectedFFSClaims.splice(index, 1);
+    //   // }
+    // }
   }
 
   onClickTab(tabName: string) {

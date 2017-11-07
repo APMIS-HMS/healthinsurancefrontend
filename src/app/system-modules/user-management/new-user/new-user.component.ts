@@ -227,7 +227,7 @@ export class NewUserComponent implements OnInit {
         });
       }).catch(err => {
         console.log(err);
-        this._toastr.error('Invalid email or password!', 'Error!');
+        this._toastr.error('Email has already been taken. Please use another email address!', 'Duplicate Email!');
         this._systemService.off();
       });
     }

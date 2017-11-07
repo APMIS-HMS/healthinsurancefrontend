@@ -127,7 +127,7 @@
                 </tr>
                 <tr class="tr" *ngFor="let policy of organisationPolicies; let i = index;">
                     <td class="td">
-                        <input (change)="onCheckSelectedToPay(i, claim);" type="checkbox">
+                        <input (change)="onCheckSelectedToPay(i, policy);" type="checkbox">
                     </td>
                     <td class="td">{{ i+1 }}</td>
                     <td class="td">{{ policy?.dueDate }}</td>

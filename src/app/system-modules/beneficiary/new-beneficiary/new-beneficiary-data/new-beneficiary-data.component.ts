@@ -130,7 +130,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
   ngAfterViewInit() {
     if (this.video !== undefined) {
-      this.context = this.snapshot.nativeElement.getContext("2d");
+      this.context = this.snapshot.nativeElement.getContext('2d');
     }
 
     this._route.params.subscribe(param => {
@@ -477,7 +477,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
   onClickStepOne(value, valid) {
     if (valid) {
-      if (!this.user.completeRegistration && this.user.userType.name === "Beneficiary") {
+      if (!this.user.completeRegistration && !!this.user.userType && this.user.userType.name === 'Beneficiary') {
         let address: Address = <Address>{};
         address.lga = value.lga;
         address.neighbourhood = value.neighbourhood;
