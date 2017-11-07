@@ -38,7 +38,7 @@ export class NewCheckinComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('New Check In');
     this._headerEventEmitter.setMinorRouteUrl('Create new check in beneficiary');
     this.listsearchControl.valueChanges
-      .debounceTime(250)
+      .debounceTime(350)
       .distinctUntilChanged()
       .subscribe(value => {
         this._getBeneficiariesFromPolicy(this.currentPlatform._id, value);
@@ -82,27 +82,14 @@ export class NewCheckinComponent implements OnInit {
   }
 
   _getBeneficiariesFromPolicy(platformId, search) {
+
     if (search.length > 2) {
-      this._systemService.on();
-      this._policyService.find({
-        query: {
-          $and: [
-            { 'platformOwnerId._id': platformId },
-            {
-              $or: [
-                { 'principalBeneficiary.person.lastName': { $regex: search, '$options': 'i' } },
-                { 'principalBeneficiary.person.firstName': { $regex: search, '$options': 'i' } },
-                { 'dependantBeneficiaries.beneficiary.personId.firstName': { $regex: search, '$options': 'i' } },
-                { 'dependantBeneficiaries.beneficiary.personId.lastName': { $regex: search, '$options': 'i' } }
-              ]
-            }
-          ]
-        }
-      }).then((res: any) => {
+      this._policyService.searchPolicy(search).then((payload: any) => {
         this.beneficiaries = [];
-        if (res.data.length > 0) {
-          res.data.forEach(policy => {
+        if (payload.body.data.length > 0) {
+          payload.body.data.forEach(policy => {
             console.log(policy._id);
+            console.log('1')
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
@@ -126,13 +113,65 @@ export class NewCheckinComponent implements OnInit {
         }
         this._systemService.off();
       }).catch(err => {
-        this._systemService.off();
-        console.log(err);
-      });
+
+      })
     } else {
       this.beneficiaries = [];
       this._systemService.off();
     }
+
+
+    // if (search.length > 2) {
+    //   this._systemService.on();
+    //   this._policyService.find({
+    //     query: {
+    //       $and: [
+    //         { 'platformOwnerId._id': platformId },
+    //         {
+    //           $or: [
+    //             { 'principalBeneficiary.personId.lastName': { $regex: search, '$options': 'i' } },
+    //             { 'principalBeneficiary.personId.firstName': { $regex: search, '$options': 'i' } },
+    //             { 'dependantBeneficiaries.beneficiary.personId.firstName': { $regex: search, '$options': 'i' } },
+    //             { 'dependantBeneficiaries.beneficiary.personId.lastName': { $regex: search, '$options': 'i' } }
+    //           ]
+    //         }
+    //       ]
+    //     }
+    //   }).then((res: any) => {
+    //     this.beneficiaries = [];
+    //     if (res.data.length > 0) {
+    //       res.data.forEach(policy => {
+    //         console.log(policy._id);
+    //         let principal = policy.principalBeneficiary;
+    //         principal.isPrincipal = true;
+    //         principal.hia = policy.hiaId;
+    //         principal.policyId = policy._id;
+    //         principal.isActive = policy.isActive;
+    //         principal.dependantCount = policy.dependantBeneficiaries.length;
+    //         this.beneficiaries.push(principal);
+    //         policy.dependantBeneficiaries.forEach(innerPolicy => {
+    //           innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+    //           innerPolicy.beneficiary.policyId = policy._id;
+    //           innerPolicy.beneficiary.isPrincipal = false;
+    //           innerPolicy.beneficiary.hia = policy.hiaId;
+    //           innerPolicy.beneficiary.isActive = policy.isActive;
+    //           this.beneficiaries.push(innerPolicy.beneficiary);
+    //         })
+    //       })
+    //       console.log(this.beneficiaries);
+    //       this._systemService.off();
+    //     } else {
+    //       this._systemService.off();
+    //     }
+    //     this._systemService.off();
+    //   }).catch(err => {
+    //     this._systemService.off();
+    //     console.log(err);
+    //   });
+    // } else {
+    //   this.beneficiaries = [];
+    //   this._systemService.off();
+    // }
 
   }
 
@@ -141,7 +180,7 @@ export class NewCheckinComponent implements OnInit {
     console.log(beneficiary.policyId);
     this._locker.setObject('policyID', beneficiary.policyId);
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/beneficiaries/'+beneficiary._id+'/checkin'])
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + beneficiary._id + '/checkin'])
       .then(payload => {
         console.log(payload);
         this._systemService.off();
@@ -152,14 +191,14 @@ export class NewCheckinComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
     } else {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url]).then(res => {
         this._systemService.off();
       }).catch(err => {

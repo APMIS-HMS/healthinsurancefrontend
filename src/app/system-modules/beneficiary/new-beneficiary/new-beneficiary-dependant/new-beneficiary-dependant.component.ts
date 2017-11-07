@@ -182,17 +182,17 @@ export class NewBeneficiaryDependantComponent implements OnInit {
             if (policies.data.length > 0) {
               console.log('policy')
               console.log(policies);
-              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
-                this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
-              })
+              // policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+              //   this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              // })
             } else {
-              if (!this.isEventBased) {
-                this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
+              // if (!this.isEventBased) {
+              //   this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
 
-                }).catch(err => {
-                  console.log(err)
-                });
-              }
+              //   }).catch(err => {
+              //     console.log(err)
+              //   });
+              // }
 
             }
           }).catch(errin => {
