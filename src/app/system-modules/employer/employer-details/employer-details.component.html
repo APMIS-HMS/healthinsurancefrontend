@@ -279,42 +279,10 @@
                         <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span>
                     </div>
                 </div>
-
-                <!-- <div class="bar-icos">
-                    <div (click)="addApprovalClick()" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
-                </div> -->
             </div>
 
-            <div>
-                <div class="frm-item-wrap">
-                    <div class="input-wrap">
-                        <div class="searchable-input">
-                            <input placeholder="Select HIA" style="width:100%;" type="text" [formControl]="searchHiaControl" class="form-control">
-
-                            <ul *ngIf="drugSearchResult" class="search-results">
-                                <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-                    <thead class="thead">
-                        <tr class="tr">
-                            <th class="th">HIA</th>
-                            <th class="th"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="tbody">
-                        <tr class="tr">
-                            <td class="td">Hygia</td>
-                            <td class="td td-icos">
-                                <i class="fa fa-times"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="padding-10">
+                <app-employer-beneficiaries></app-employer-beneficiaries>
             </div>
         </div>
     </div>
