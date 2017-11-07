@@ -108,7 +108,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     console.log(this.user);
     if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
       this.isHIA = true;
+      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1])
     } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
+      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
+    }else if (!!this.user.userType && this.user.userType.name === 'Employer') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
     }
 
@@ -154,66 +157,94 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   }
 
   _getPerson() {
-    let person$ = Observable.fromPromise(this._personService.find({
-      query: {
-        email: this.user.email
-      }
-    }));
-    let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
-      query: {
-        'personId.email': this.user.email
-      }
-    }));
-    Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
-      console.log(results);
-      if (results[0].data.length > 0) {
-        this.person = results[0].data[0];
-      }
-      if (results[1].data.length > 0) {
-        console.log('redirect to last page');
-        console.log(results[1].data[0]._id)
-        this._policyService.find({
-          query: {
-            principalBeneficiary: results[1].data[0]._id
-          }
-        }).then((policies: any) => {
-          console.log(policies)
-          if (policies.data.length > 0) {
-
-          } else {
-            this.selectedBeneficiary = results[1].data[0];
-            console.log(this.selectedBeneficiary)
-            if (!this.isEventBased) {
-              this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
-
-              }).catch(err => {
-                console.log(err)
-              });
+    if(this.user.userType.name === "Beneficiary"){
+      let person$ = Observable.fromPromise(this._personService.find({
+        query: {
+          email: this.user.email
+        }
+      }));
+      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+        query: {
+          'personId.email': this.user.email
+        }
+      }));
+      Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+        console.log(results);
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (results[1].data.length > 0) {
+          console.log('redirect to last page');
+          console.log(results[1].data[0]._id)
+          this._policyService.find({
+            query: {
+              principalBeneficiary: results[1].data[0]._id
             }
+          }).then((policies: any) => {
+            console.log(policies)
+            if (policies.data.length > 0) {
+              console.log('policy')
+            } else {
+              this.selectedBeneficiary = results[1].data[0];
+              console.log(this.selectedBeneficiary)
+              if (!this.isEventBased) {
+                this._router.navigate(['/modules/beneficiary/new/principal',this.selectedBeneficiary._id]).then(payload => {
+  
+                }).catch(err => {
+                  console.log(err)
+                });
+              }
+  
+            }
+          }).catch(errin => {
+            console.log(errin)
+          })
+        }
+      }, error => {
+        console.log(error);
+      })
+    }else{
+      let person$ = Observable.fromPromise(this._personService.find({
+        query: {
+          _id: this.selectedBeneficiary.personId._id
+        }
+      }));
 
-          }
-        }).catch(errin => {
-          console.log(errin)
-        })
-      }
-    }, error => {
-      console.log(error);
-    })
-    // this._personService.find({
-    //   query: {
-    //     email: this.user.email
-    //   }
-    // }).then((payload: any) => {
-    //   if (payload.data.length > 0) {
-    //     this._beneficiaryService.find({query:{
-    //       'personId.email':this.user.email
-    //     }})
-    //     this.person = payload.data[0];
-    //     this.stepOneFormGroup.controls.mothermaidenname.setValue(this.person.mothersMaidenName);
-    //   }
-    // }).catch(err => {
-    //   console.log(err)
-    // })
+      Observable.forkJoin([person$]).subscribe((results: any) => {
+        console.log(results);
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (this.selectedBeneficiary !== undefined) {
+          console.log('redirect to last page');
+         
+          this._policyService.find({
+            query: {
+              principalBeneficiary: this.selectedBeneficiary._id
+            }
+          }).then((policies: any) => {
+            console.log(policies)
+            if (policies.data.length > 0) {
+              console.log('policy')
+            } else {
+              if (!this.isEventBased) {
+                this._router.navigate(['/modules/beneficiary/new/principal',this.selectedBeneficiary._id]).then(payload => {
+  
+                }).catch(err => {
+                  console.log(err)
+                });
+              }
+  
+            }
+          }).catch(errin => {
+            console.log(errin)
+          })
+        }
+      }, error => {
+        console.log(error);
+      })
+    }
+
   }
 
   _getBeneficiary(id) {
@@ -351,7 +382,12 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.sponsorshipId = value.sponsorship;
       if (policy.sponsorshipId.id === 2) {
         console.log('am in')
-        policy.sponsor = this.user.facilityId;
+        if(this.user.userType.name === "Employer"){
+          policy.sponsor = this.user.facilityId;
+        }else if(this.user.userType.name === "Health Insurance Agent"){
+          // policy.sponsor = 
+        }
+       
       }
 
 
@@ -364,12 +400,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       console.log(body);
 
       this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
-        console.log(payload);
-        // this._systemService.announceBeneficiaryTabNotification({
-        //   tab: 'Five',
-        //   policy: payload.body.policyObject
-        // });
-        this._router.navigate(['/modules/beneficiary/new/complete', this.selectedBeneficiary._id]).then(payload => {
+        this._router.navigate(['/modules/beneficiary/new/complete', payload.body.policyObject._id]).then(payload => {
 
         }).catch(err => {
           console.log(err)

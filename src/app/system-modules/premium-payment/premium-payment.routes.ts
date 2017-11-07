@@ -8,9 +8,9 @@ import { NewOrganizationPaymentComponent } from './new-organization-payment/new-
 const CLAIMS_ROUTES: Routes = [
     {
         path: '', component: PremiumPaymentComponent, children: [
-            { path: '', redirectTo: 'individuals', pathMatch: 'full' },
-            { path: 'individuals', component: ListIndividualComponent },
-            { path: 'organizations', component: ListOrganizationComponent },
+            { path: '', redirectTo: 'outstanding', pathMatch: 'full' },
+            { path: 'outstanding', component: ListIndividualComponent },
+            { path: 'previous', component: ListOrganizationComponent },
             { path: 'new-organization', component: NewOrganizationPaymentComponent },
         ]
     }

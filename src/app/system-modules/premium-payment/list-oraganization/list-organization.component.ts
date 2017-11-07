@@ -1,16 +1,13 @@
 
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-
-
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
-import { SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService } from '../../../services/index';
+import { SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService, PolicyService } from '../../../services/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 
@@ -25,10 +22,12 @@ export class ListOrganizationComponent implements OnInit {
   pastDueDate = new FormControl();
   organization = new FormControl();
   dateRange = new FormControl();
-  ffsTabActive: boolean = true;
-  cTabActive: boolean = false;
+  individualActiveTab: boolean = true;
+  organisationActiveTab: boolean = false;
   user: any;
   currentPlatform: any;
+  individualLoading: boolean = true;
+  individualPolicies: any = <any>[];
 
 
   public myDatePickerOptions: IMyDpOptions = {
@@ -45,24 +44,70 @@ export class ListOrganizationComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
-    private _locker: CoolLocalStorage
+    private _locker: CoolLocalStorage,
+    private _policyService: PolicyService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('PREMIUM PAYMENT ');
-    this._headerEventEmitter.setMinorRouteUrl('- Current Organization Payments');
+    this._headerEventEmitter.setMinorRouteUrl('Previous Payments');
     this.user = (<any>this._locker.getObject('auth')).user;
+
+    this._getCurrentPlatform();
+  }
+
+  private _getPolicies() {
+    console.log(this.currentPlatform);
+    this._systemService.on();
+    this._policyService.find({
+      query: {
+        'platformOwnerId._id': this.currentPlatform._id,
+        isPaid: true,
+        $sort: { createdAt: -1 }
+      }
+    }).then((res: any) => {
+      console.log(res);
+      this.individualLoading = false;
+      res.data.forEach(policy => {
+        policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
+        this.individualPolicies.push(policy);
+      });
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
+  }
+
+  addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result.toDateString(); // .toISOString();
+  }
+
+
+  private _getCurrentPlatform() {
+    this._systemService.on();
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._getPolicies();
+      }
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
 
 
   onClickTab(tabName: string) {
-    if (tabName === 'individualPaymentHistory') {
-      this.ffsTabActive = true;
-      this.cTabActive = false;
+    if (tabName === 'individualPayment') {
+      this.individualActiveTab = true;
+      this.organisationActiveTab = false;
     } else {
-      this.ffsTabActive = false;
-      this.cTabActive = true;
+      this.individualActiveTab = false;
+      this.organisationActiveTab = true;
     }
   }
 

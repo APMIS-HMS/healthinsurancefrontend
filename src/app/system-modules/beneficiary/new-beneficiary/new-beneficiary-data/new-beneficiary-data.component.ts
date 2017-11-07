@@ -112,11 +112,11 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._getTitles();
     this._getMaritalStatus();
     console.log(this.user)
-    if (!this.user.completeRegistration) {
+    if (!this.user.completeRegistration && !!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.isCompleteRegistration = false;
       this._getUser();
       this._getPerson();
-    } else if (this.user.userType.name === 'Beneficiary') {
+    } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this._getPerson();
     }
     this.stepOneFormGroup.controls.stateOfOrigin.valueChanges.subscribe(value => {
@@ -477,11 +477,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
   onClickStepOne(value, valid) {
     if (valid) {
-      if (!this.user.completeRegistration) {
-        //save image if available
-        //update user with complete platformownerid
-        //updaate person
-        // save beneficiary directly
+      if (!this.user.completeRegistration && this.user.userType.name === "Beneficiary") {
         let address: Address = <Address>{};
         address.lga = value.lga;
         address.neighbourhood = value.neighbourhood;
@@ -514,104 +510,98 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
             this.upload().then((result: any) => {
               if (result !== undefined && result.body !== undefined && result.body.length > 0) {
                 this.person.profileImageObject = result.body[0].file;
-
-                // this.user.completeRegistration = true;
                 let person$ = Observable.fromPromise(this._personService.update(this.person));
-                // let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
 
-                Observable.forkJoin([person$]).subscribe(results => {
-                  console.log('1e')
-                  this._getBeneficiary(this.selectedBeneficiary._id);
-                  this._systemService.off();
-                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                Observable.forkJoin([person$]).subscribe((results: any) => {
+                  // this._getBeneficiary(this.selectedBeneficiary._id);
+                  // this._systemService.off();
+                  // this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+                  // }).catch(err => {
+                  //   console.log(err)
+                  // });
+
+
+                  if (results[0] !== undefined) {
+                    let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                    beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                    beneficiary.platformOwnerId = this.currentPlatform;
+                    beneficiary.stateID = value.lasrraId;
+                    beneficiary.personId = results[0];
+
+                    if (this.selectedBeneficiary._id !== undefined) {
+                      this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                        this._systemService.off();
+                        this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                        }).catch(err => {
+                          console.log(err)
+                        });
+
+
+                      }).catch(erm => {
+                        console.log(erm);
+                      })
+                    } else {
+                      this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                        this._systemService.off();
+                        this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                        }).catch(err => {
+                          console.log(err)
+                        });
+                      }).catch(erm => {
+                        console.log(erm);
+                      })
+                    }
+
+                  } else {
+                  }
+
+
+
+
                 }, error => {
                   console.log(error);
                   this._systemService.off();
                 })
-
-
-
-                // this._personService.update(this.person).then(payload => {
-                //   console.log('1e')
-                //   this._getBeneficiary(this.selectedBeneficiary._id);
-                //   this._systemService.off();
-                //   this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-                // }).catch(err => {
-                //   console.log(err);
-                //   this._systemService.off();
-                // })
               }
             }).catch(err => {
               this._systemService.off();
             })
           } else {
-            // this._personService.update(this.person).then(payload => {
-            //   this._getBeneficiary(this.selectedBeneficiary._id);
-            //   this._systemService.off();
-            //   this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
-            // }).catch(err => {
-            //   console.log(err);
-            //   this._systemService.off();
-            // })
 
-
-
-
-
-            // this.user.completeRegistration = true;
             let person$ = Observable.fromPromise(this._personService.update(this.person));
-            // let user$ = Observable.fromPromise(this._userService.patch(this.user._id, { completeRegistration: true }, {}));
-
             Observable.forkJoin([person$]).subscribe((results: any) => {
-              console.log('1e')
-              console.log(results)
               if (results[0] !== undefined) {
-                console.log('mm')
                 let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
                 beneficiary.numberOfUnderAge = value.noOfChildrenU18;
                 beneficiary.platformOwnerId = this.currentPlatform;
                 beneficiary.stateID = value.lasrraId;
                 beneficiary.personId = results[0];
-                console.log(value)
 
-                if(this.selectedBeneficiary !== undefined){
+                if (this.selectedBeneficiary._id !== undefined) {
                   this._beneficiaryService.update(beneficiary).then((paym: any) => {
-                    console.log(paym)
-                    // this._getBeneficiary(this.selectedBeneficiary._id);
                     this._systemService.off();
-                    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
-  
                     this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
-                      // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
                     }).catch(err => {
                       console.log(err)
                     });
-  
-  
+
+
                   }).catch(erm => {
                     console.log(erm);
                   })
-                }else{
+                } else {
                   this._beneficiaryService.create(beneficiary).then((paym: any) => {
-                    console.log(paym)
-                    // this._getBeneficiary(this.selectedBeneficiary._id);
                     this._systemService.off();
-                    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
-  
                     this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
-                      // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
                     }).catch(err => {
                       console.log(err)
                     });
-  
-  
                   }).catch(erm => {
                     console.log(erm);
                   })
                 }
 
               } else {
-                console.log('ll')
               }
 
             }, error => {
@@ -620,10 +610,50 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
             })
           }
         } else {
-          this._personService.update(this.person).then(payload => {
-            this._getBeneficiary(this.selectedBeneficiary._id);
-            this._systemService.off();
-            this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+          this._personService.update(this.person).then((payload: any) => {
+            // this._getBeneficiary(this.selectedBeneficiary._id);
+            // this._systemService.off();
+            // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+
+
+
+            if (payload !== undefined) {
+              let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+              beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+              beneficiary.platformOwnerId = this.currentPlatform;
+              beneficiary.stateID = value.lasrraId;
+              beneficiary.personId = payload;
+
+              if (this.selectedBeneficiary._id !== undefined) {
+                this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                  this._systemService.off();
+                  this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                  }).catch(err => {
+                    console.log(err)
+                  });
+
+
+                }).catch(erm => {
+                  console.log(erm);
+                })
+              } else {
+                this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                  this._systemService.off();
+                  this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                  }).catch(err => {
+                    console.log(err)
+                  });
+                }).catch(erm => {
+                  console.log(erm);
+                })
+              }
+
+            } else {
+            }
+
+
+
+
           }).catch(err => {
             console.log(err);
             this._systemService.off();
@@ -676,11 +706,54 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                   console.log('1d')
                   personId.profileImageObject = result.body[0].file;
 
-                  this._personService.update(personId).then(payload => {
-                    console.log('1e')
-                    this._getBeneficiary(this.selectedBeneficiary._id);
-                    this._systemService.off();
-                    this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                  this._personService.update(personId).then((payload:any) => {
+
+
+                    if (payload !== undefined) {
+                      let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                      beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                      beneficiary.platformOwnerId = this.currentPlatform;
+                      beneficiary.stateID = value.lasrraId;
+                      beneficiary.personId = payload;
+      
+                      if(this.selectedBeneficiary._id !== undefined){
+                        this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                          this._systemService.off();
+                          this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                          }).catch(err => {
+                            console.log(err)
+                          });
+        
+        
+                        }).catch(erm => {
+                          console.log(erm);
+                        })
+                      }else{
+                        this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                          this._systemService.off();
+                          this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                          }).catch(err => {
+                            console.log(err)
+                          });
+                        }).catch(erm => {
+                          console.log(erm);
+                        })
+                      }
+      
+                    } else {
+                    }
+
+
+
+                    // console.log('1e')
+                    // this._getBeneficiary(this.selectedBeneficiary._id);
+                    // this._systemService.off();
+                    // this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+                    //   // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                    // }).catch(err => {
+                    //   console.log(err)
+                    // });
+                    // // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
                   }).catch(err => {
                     console.log(err);
                     this._systemService.off();
@@ -690,20 +763,106 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                 this._systemService.off();
               })
             } else {
-              this._personService.update(personId).then(payload => {
-                this._getBeneficiary(this.selectedBeneficiary._id);
-                this._systemService.off();
-                this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+              this._personService.update(personId).then((payload:any) => {
+
+
+                if (payload !== undefined) {
+                  let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                  beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                  beneficiary.platformOwnerId = this.currentPlatform;
+                  beneficiary.stateID = value.lasrraId;
+                  beneficiary.personId = payload
+  
+                  if(this.selectedBeneficiary._id !== undefined){
+                    this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                      this._systemService.off();
+                      this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                      }).catch(err => {
+                        console.log(err)
+                      });
+    
+    
+                    }).catch(erm => {
+                      console.log(erm);
+                    })
+                  }else{
+                    this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                      this._systemService.off();
+                      this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                      }).catch(err => {
+                        console.log(err)
+                      });
+                    }).catch(erm => {
+                      console.log(erm);
+                    })
+                  }
+  
+                } else {
+                }
+
+
+
+                // this._getBeneficiary(this.selectedBeneficiary._id);
+                // this._systemService.off();
+                // this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+                //   // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                // }).catch(err => {
+                //   console.log(err)
+                // });
+                // // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
               }).catch(err => {
                 console.log(err);
                 this._systemService.off();
               })
             }
           } else {
-            this._personService.update(personId).then(payload => {
-              this._getBeneficiary(this.selectedBeneficiary._id);
-              this._systemService.off();
-              this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+            this._personService.update(personId).then((payload:any) => {
+
+
+              if (payload !== undefined) {
+                let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                beneficiary.platformOwnerId = this.currentPlatform;
+                beneficiary.stateID = value.lasrraId;
+                beneficiary.personId = payload;
+
+                if(this.selectedBeneficiary._id !== undefined){
+                  this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                    this._systemService.off();
+                    this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                    }).catch(err => {
+                      console.log(err)
+                    });
+  
+  
+                  }).catch(erm => {
+                    console.log(erm);
+                  })
+                }else{
+                  this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                    this._systemService.off();
+                    this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
+                    }).catch(err => {
+                      console.log(err)
+                    });
+                  }).catch(erm => {
+                    console.log(erm);
+                  })
+                }
+
+              } else {
+              }
+
+
+
+              // this._getBeneficiary(this.selectedBeneficiary._id);
+              // this._systemService.off();
+              // this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+              //   // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+              // }).catch(err => {
+              //   console.log(err)
+              // });
+              // // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
             }).catch(err => {
               console.log(err);
               this._systemService.off();
@@ -772,7 +931,12 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                       this.selectedBeneficiary = payload.body.beneficiary;
                       // this._systemService.announceBeneficiaryTabNotification('Two');
                       this._systemService.off();
-                      this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                      this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+                        // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                      }).catch(err => {
+                        console.log(err)
+                      });
+                      // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
                     }
                   }).catch(err => {
                     this._systemService.off();
@@ -784,13 +948,18 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                 this._systemService.off();
               })
             } else {
-              this._beneficiaryService.createWithMiddleWare({ personId: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+              this._beneficiaryService.createWithMiddleWare({ person: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
                 console.log(payload)
                 if (payload.statusCode === 200 && payload.error === false) {
                   payload.body.beneficiary.personId = payload.body.personId;
                   this.selectedBeneficiary = payload.body.beneficiary;
                   this.selectedBeneficiary.personId = payload.body.personId;
-                  this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                  this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+                    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                  }).catch(err => {
+                    console.log(err)
+                  });
+                  // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
                 }
                 this._systemService.off();
               }).catch(err => {
@@ -799,13 +968,18 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
               })
             }
           } else {
-            this._beneficiaryService.createWithMiddleWare({ personId: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
+            this._beneficiaryService.createWithMiddleWare({ person: personId, beneficiary: beneficiary, policy: policy, platform: this.currentPlatform }).then(payload => {
 
               if (payload.statusCode === 200 && payload.error === false) {
                 payload.body.beneficiary.personId = payload.body.personId;
                 this.selectedBeneficiary = payload.body.beneficiary;
                 console.log(payload)
-                this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+                this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+                  // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: paym });
+                }).catch(err => {
+                  console.log(err)
+                });
+                // this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
               }
               this._systemService.off();
             }).catch(err => {

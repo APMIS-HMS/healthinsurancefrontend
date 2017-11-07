@@ -1,3 +1,7 @@
+import { PolicyService } from './../../../../services/policy/policy.service';
+import { PersonService } from './../../../../services/person/person.service';
+import { Observable } from 'rxjs/Rx';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
 import { FORM_VALIDATION_ERROR_MESSAGE, MAXIMUM_NUMBER_OF_DEPENDANTS } from './../../../../services/globals/config';
 import { Beneficiary } from './../../../../models/setup/beneficiary';
@@ -39,6 +43,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
   currentPlatform: any;
   hasDependantAbove18 = false;
+  isEventBased = false;
+  user: any;
+  person: any;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -62,6 +69,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _maritalService: MaritalStatusService,
     private _relationshipService: RelationshipService,
     private _route: ActivatedRoute,
+    private _locker: CoolLocalStorage,
+    private _personService: PersonService,
+    private _policyService: PolicyService,
     private _beneficiaryService: BeneficiaryService
   ) {
     this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
@@ -69,17 +79,18 @@ export class NewBeneficiaryDependantComponent implements OnInit {
       this.selectedBeneficiary = value.beneficiary;
       if (value.beneficiary !== undefined) {
         console.log(value);
+        this.isEventBased = true;
       }
     });
   }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._addNewDependant();
     this._getCurrentPlatform();
     this._getGenders();
     this._getRelationships();
     this._getTitles();
-    console.log(this.selectedBeneficiary)
 
     this._route.params.subscribe(param => {
       console.log(param)
@@ -93,11 +104,106 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     this._beneficiaryService.get(id, {}).then((payload: any) => {
       console.log(payload)
       this.selectedBeneficiary = payload;
+      this._getPerson();
       this._systemService.off();
     }).catch(err => {
       console.log(err);
       this._systemService.off();
     })
+  }
+  _getPerson() {
+    if (this.user.userType.name === "Beneficiary") {
+      let person$ = Observable.fromPromise(this._personService.find({
+        query: {
+          email: this.user.email
+        }
+      }));
+      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+        query: {
+          'personId.email': this.user.email
+        }
+      }));
+      Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+        console.log(results);
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (results[1].data.length > 0) {
+          console.log('redirect to last page');
+          console.log(results[1].data[0]._id)
+          this._policyService.find({
+            query: {
+              principalBeneficiary: results[1].data[0]._id
+            }
+          }).then((policies: any) => {
+            console.log(policies)
+            if (policies.data.length > 0) {
+              console.log('policy')
+            } else {
+              this.selectedBeneficiary = results[1].data[0];
+              console.log(this.selectedBeneficiary)
+              if (!this.isEventBased) {
+                this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
+
+                }).catch(err => {
+                  console.log(err)
+                });
+              }
+
+            }
+          }).catch(errin => {
+            console.log(errin)
+          })
+        }
+      }, error => {
+        console.log(error);
+      })
+    } else {
+      let person$ = Observable.fromPromise(this._personService.find({
+        query: {
+          _id: this.selectedBeneficiary.personId._id
+        }
+      }));
+
+      Observable.forkJoin([person$]).subscribe((results: any) => {
+        console.log(results);
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (this.selectedBeneficiary !== undefined) {
+          console.log('redirect to last page');
+
+          this._policyService.find({
+            query: {
+              principalBeneficiary: this.selectedBeneficiary._id
+            }
+          }).then((policies: any) => {
+            console.log(policies)
+            if (policies.data.length > 0) {
+              console.log('policy')
+              console.log(policies);
+              // policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+              //   this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              // })
+            } else {
+              // if (!this.isEventBased) {
+              //   this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
+
+              //   }).catch(err => {
+              //     console.log(err)
+              //   });
+              // }
+
+            }
+          }).catch(errin => {
+            console.log(errin)
+          })
+        }
+      }, error => {
+        console.log(error);
+      })
+    }
+
   }
   _addNewDependant() {
     this.today = {
@@ -180,12 +286,8 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
 
   pushNewDependant(dependant?, index?) {
-    // console.log((<FormArray>this.frmDependants.controls['dependantArray']).controls.length)
-    // console.log(dependant)
-    console.log(this.selectedBeneficiary.numberOfUnderAge)
     if (dependant !== undefined && dependant.valid && (<FormArray>this.frmDependants.controls['dependantArray']).controls.length < (this.selectedBeneficiary.numberOfUnderAge)) {
       dependant.value.readOnly = true;
-
       (<FormArray>this.frmDependants.controls['dependantArray'])
         .push(
         this._fb.group({
@@ -206,6 +308,30 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     } else {
       this._toastr.warning("A Household cannot have more than 5 (Five) dependants!!!", "Warning")
     }
+  }
+  populateNewDependant(dependant, person, relationshipId) {
+
+    (<FormArray>this.frmDependants.controls['dependantArray']) = new FormArray([]);
+
+
+    (<FormArray>this.frmDependants.controls['dependantArray'])
+      .push(
+      this._fb.group({
+        firstName: [person !== undefined ? person.firstName : '', [<any>Validators.required]],
+        title: [person !== undefined ? person.title : '', [<any>Validators.required]],
+        middleName: [person !== undefined ? person.otherNames : ''],
+        lastName: [person !== undefined ? person.lastName : '', [<any>Validators.required]],
+        phonenumber: [person !== undefined ? person.phoneNumber : 0, [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+        secondaryPhone: [''],
+        email: [person !== undefined ? person.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+        dob: [person !== undefined ? person.dateOfBirth : this.today, [<any>Validators.required]],
+        gender: [person !== undefined ? person.gender : '', [<any>Validators.required]],
+        relationship: [relationshipId !== undefined ? relationshipId : '', [<any>Validators.required]],
+        lasrraId: [dependant !== undefined ? dependant.stateID : '', []],
+        readOnly: [false],
+        id: []
+      })
+      );
   }
   push(dependant, valid) {
     this._beneficiaryService.validateAge(dependant.value.dob).then(res => {
@@ -258,7 +384,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
   moveBack() {
     // this._systemService.announceBeneficiaryTabNotification({ tab: 'One', beneficiary: this.selectedBeneficiary });
-    this._router.navigate(['/modules/beneficiary/new/principal']).then(payload => {
+    this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
 
     }).catch(err => {
       console.log(err)
@@ -267,7 +393,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
   skip() {
     // this._systemService.announceBeneficiaryTabNotification({ tab: 'Three', beneficiary: this.selectedBeneficiary })
-    this._router.navigate(['/modules/beneficiary/new/next-of-kin']).then(payload => {
+    this._router.navigate(['/modules/beneficiary/new/next-of-kin', this.selectedBeneficiary._id]).then(payload => {
 
     }).catch(err => {
       console.log(err)

@@ -213,6 +213,7 @@ export class NewUserComponent implements OnInit {
         delete value.profession;
         delete value.cader;
       }
+      value.completeRegistration = true;
 
       this._userService.create(value).then(payload => {
         console.log(payload);
