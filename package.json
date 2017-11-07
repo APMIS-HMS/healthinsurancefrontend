@@ -24,7 +24,7 @@
     "@ngx-loading-bar/http": "^1.0.0-alpha.8",
     "@types/date-fns": "^2.6.0",
     "angular2-cool-storage": "^3.0.2",
-    "angular2-notifications": "^0.9.5",
+    "angular4-notify": "^1.2.0",
     "angular4-paystack": "^1.2.1",
     "breakpoint-sass": "^2.7.1",
     "date-fns": "^1.29.0",
