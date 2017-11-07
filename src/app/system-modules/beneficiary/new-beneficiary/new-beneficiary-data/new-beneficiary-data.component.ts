@@ -112,11 +112,11 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this._getTitles();
     this._getMaritalStatus();
     console.log(this.user)
-    if (!this.user.completeRegistration && this.user.userType.name === 'Beneficiary') {
+    if (!this.user.completeRegistration && !!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.isCompleteRegistration = false;
       this._getUser();
       this._getPerson();
-    } else if (this.user.userType.name === 'Beneficiary') {
+    } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this._getPerson();
     }
     this.stepOneFormGroup.controls.stateOfOrigin.valueChanges.subscribe(value => {

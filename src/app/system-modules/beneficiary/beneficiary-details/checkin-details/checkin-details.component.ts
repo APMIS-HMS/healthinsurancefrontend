@@ -8,6 +8,7 @@ import { CheckInService } from './../../../../services/common/check-in.service';
 import { EncounterStatusService } from './../../../../services/common/encounter-status.service';
 import { EncounterTypeService } from './../../../../services/common/encounter-type.service';
 import { ClaimStatusService } from './../../../../services/common/claim-status.service';
+import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
 import { ClaimTypeService } from './../../../../services/common/claim-type.service';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
@@ -69,6 +70,7 @@ export class CheckinDetailsComponent implements OnInit {
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
     private _router: Router,
+    private _preAuthorizationService:PreAuthorizationService
   ) { }
 
   ngOnInit() {
@@ -96,6 +98,14 @@ export class CheckinDetailsComponent implements OnInit {
     // this._hasCheckInToday();
 
   }
+
+  // _checkPreAuth(){
+  //   this._preAuthorizationService.find({
+  //     query:{
+  //       ''
+  //     }
+  //   })
+  // }
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
 
