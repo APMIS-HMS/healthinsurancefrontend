@@ -60,12 +60,12 @@ export class NewBeneficiaryNokComponent implements OnInit {
     private _relationshipService: RelationshipService,
     private _route: ActivatedRoute
   ) {
-    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
-      console.log(value)
-      if (value.beneficiary !== undefined) {
-        console.log(value);
-      }
-    });
+    // this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+    //   console.log(value)
+    //   if (value.beneficiary !== undefined) {
+    //     console.log(value);
+    //   }
+    // });
   }
 
   ngOnInit() {
@@ -149,7 +149,9 @@ export class NewBeneficiaryNokComponent implements OnInit {
   }
 
   closeDependant(dependant, i) {
-    console.log(dependant)
+    if ((<FormArray>this.frmNok.controls['dependantArray']).controls.length > 1) {
+      (<FormArray>this.frmNok.controls['dependantArray']).controls.splice(i);
+    }
   }
 
   pushNewDependant(dependant?, index?) {
