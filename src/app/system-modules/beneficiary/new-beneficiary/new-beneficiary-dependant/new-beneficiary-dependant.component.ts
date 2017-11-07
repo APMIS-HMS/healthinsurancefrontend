@@ -74,14 +74,14 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _policyService: PolicyService,
     private _beneficiaryService: BeneficiaryService
   ) {
-    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
-      console.log(value)
-      this.selectedBeneficiary = value.beneficiary;
-      if (value.beneficiary !== undefined) {
-        console.log(value);
-        this.isEventBased = true;
-      }
-    });
+    // this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
+    //   console.log(value)
+    //   this.selectedBeneficiary = value.beneficiary;
+    //   if (value.beneficiary !== undefined) {
+    //     console.log(value);
+    //     this.isEventBased = true;
+    //   }
+    // });
   }
 
   ngOnInit() {
@@ -139,6 +139,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
             console.log(policies)
             if (policies.data.length > 0) {
               console.log('policy')
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              })
             } else {
               this.selectedBeneficiary = results[1].data[0];
               console.log(this.selectedBeneficiary)
@@ -182,9 +185,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
             if (policies.data.length > 0) {
               console.log('policy')
               console.log(policies);
-              // policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
-              //   this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
-              // })
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              })
             } else {
               // if (!this.isEventBased) {
               //   this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {

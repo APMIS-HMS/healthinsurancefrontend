@@ -7,7 +7,7 @@
     
         <div formArrayName="dependantArray" class="frmArrayWrap">
             <div class="frmArray" *ngFor="let dependant of frmNok['controls'].dependantArray['controls']; let i = index;">
-                <div (click)="closeDependant(dependant, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
+                <div  (click)="closeDependant(dependant, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
                 <div formGroupName="{{i}}">
                     <div class="frm-item-wrap">
                         <label class="label">Gender</label>

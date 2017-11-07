@@ -4,7 +4,7 @@
             <div class="nut-tab-topSect-wrap"> 
                 <div class="nutTabs-wrap">
         
-                    <div  [class.active-nut]="tab_personalData" class="nutTab-wrap">
+                    <div (click)="tabPersonalData_click()" [class.active-nut]="tab_personalData" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
                             <!-- <div class="nut-stroke">
@@ -15,7 +15,7 @@
                         <div class="nut-label">Principal</div>
                     </div>
         
-                    <div  [class.active-nut]="tab_dependants" class="nutTab-wrap">
+                    <div (click)="tabDependants_click()"  [class.active-nut]="tab_dependants" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
                             <!-- <div class="nut-stroke">
@@ -26,7 +26,7 @@
                         <div class="nut-label">Dependants</div>
                     </div>
     
-                    <div  [class.active-nut]="tab_nok" class="nutTab-wrap">
+                    <div (click)="tabNOK_click()"  [class.active-nut]="tab_nok" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
                             <!-- <div class="nut-stroke">

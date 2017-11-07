@@ -14,7 +14,7 @@
                     <div class="input-wrap">
                         <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
                             <label for="bene-male">
-                                <input style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender, dependant)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
+                                <input [checked]="dependant.controls.gender.value" style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender, dependant)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
                             </label>
                     </span>
                     </div>
