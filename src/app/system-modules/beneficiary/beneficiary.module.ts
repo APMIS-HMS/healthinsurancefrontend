@@ -16,7 +16,7 @@ import { Angular4PaystackModule } from 'angular4-paystack';
 import { SharedModule } from '../../shared-modules/shared.module';
 import {
     CountryService, UserTypeService, GenderService, TitleService, MaritalStatusService,
-    PlanTypeService, BeneficiaryService, UploadService, SystemModuleService, FacilityService, PremiumPaymentService
+    PlanTypeService, BeneficiaryService, UploadService, SystemModuleService, FacilityService, PremiumPaymentService, PreAuthorizationService
 } from '../../services/index';
 import { beneficiaryRoutes } from './beneficiary.route';
 import { BeneficiaryComponent } from '../beneficiary/beneficiary.component';
@@ -56,6 +56,7 @@ import { PersonalDetailsComponent } from './beneficiary-details/personal-details
         PremiumPaymentService,
         ClaimService,
         ReferralService,
-        CheckInService]
+        CheckInService,
+        PreAuthorizationService]
 })
 export class BeneficiaryModule { }

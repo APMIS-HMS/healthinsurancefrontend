@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -31,6 +32,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
   dependants: any[] = [];
   isCheckIn = false;
   paramId: any;
+  user:any;
+  isBeneficiary = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -42,7 +45,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
-    private _uploadService: UploadService
+    private _uploadService: UploadService,
+    private _locker:CoolLocalStorage
   ) {
     this._route.data.subscribe(data => {
       if (!!data.goCheckIn && data.goCheckIn) {
@@ -72,6 +76,10 @@ export class BeneficiaryDetailsComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
+    this.user = (<any>this._locker.getObject('auth')).user; 
+    if(this.user.userType.name === "Beneficiary"){
+      this.isBeneficiary = true;
+    }
 
     this._route.params.subscribe(param => {
       if (!!param.id) {
@@ -80,17 +88,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
       }
     });
 
-    // this.approvalFormGroup = this._fb.group({
-    //   duration: [1, [<any>Validators.required]],
-    //   unit: ['', [<any>Validators.required]],
-    //   startDate: [new Date(), [<any>Validators.required]]
-    // });
-    console.log(this._router)
-    console.log(this._route)
     if (this._router.url.endsWith('checkin')) {
       this.tab_checkin = true;
       this.isCheckIn = true;
-      console.log('showchecking')
     } else if (this._router.url.endsWith('payment')) {
       this.tab_payment = true;
       this.isCheckIn = false;
