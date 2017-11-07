@@ -1,6 +1,9 @@
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
+
 
 @Injectable()
 export class PolicyService {
@@ -9,6 +12,9 @@ export class PolicyService {
   private _rest;
   private _restLogin;
 
+  public _listenerCreate;
+  public _listenerUpdate;
+
   constructor(
     private _socketService: SocketService,
     private _restService: RestService,
@@ -16,6 +22,10 @@ export class PolicyService {
   ) {
     this._rest = _restService.getService('policies');
     this._socket = _socketService.getService('policies');
+
+    //Listener
+    this._listenerCreate = Observable.fromEvent(this._socket, 'created');
+    this._listenerUpdate = Observable.fromEvent(this._socket, 'updated');
   }
 
   find(query: any) {
