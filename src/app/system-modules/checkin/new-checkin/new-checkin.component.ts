@@ -82,57 +82,62 @@ export class NewCheckinComponent implements OnInit {
   }
 
   _getBeneficiariesFromPolicy(platformId, search) {
-    if (search.length > 2) {
-      this._systemService.on();
-      this._policyService.find({
-        query: {
-          $and: [
-            { 'platformOwnerId._id': platformId },
-            {
-              $or: [
-                { 'principalBeneficiary.person.lastName': { $regex: search, '$options': 'i' } },
-                { 'principalBeneficiary.person.firstName': { $regex: search, '$options': 'i' } },
-                { 'dependantBeneficiaries.beneficiary.personId.firstName': { $regex: search, '$options': 'i' } },
-                { 'dependantBeneficiaries.beneficiary.personId.lastName': { $regex: search, '$options': 'i' } }
-              ]
-            }
-          ]
-        }
-      }).then((res: any) => {
-        this.beneficiaries = [];
-        if (res.data.length > 0) {
-          res.data.forEach(policy => {
-            console.log(policy._id);
-            let principal = policy.principalBeneficiary;
-            principal.isPrincipal = true;
-            principal.hia = policy.hiaId;
-            principal.policyId = policy._id;
-            principal.isActive = policy.isActive;
-            principal.dependantCount = policy.dependantBeneficiaries.length;
-            this.beneficiaries.push(principal);
-            policy.dependantBeneficiaries.forEach(innerPolicy => {
-              innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
-              innerPolicy.beneficiary.policyId = policy._id;
-              innerPolicy.beneficiary.isPrincipal = false;
-              innerPolicy.beneficiary.hia = policy.hiaId;
-              innerPolicy.beneficiary.isActive = policy.isActive;
-              this.beneficiaries.push(innerPolicy.beneficiary);
-            })
-          })
-          console.log(this.beneficiaries);
-          this._systemService.off();
-        } else {
-          this._systemService.off();
-        }
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-        console.log(err);
-      });
-    } else {
-      this.beneficiaries = [];
-      this._systemService.off();
-    }
+    this._policyService.searchPolicy(search).then(payload =>{
+      console.log(payload);
+    }).catch(err =>{
+
+    })
+    // if (search.length > 2) {
+    //   this._systemService.on();
+    //   this._policyService.find({
+    //     query: {
+    //       $and: [
+    //         { 'platformOwnerId._id': platformId },
+    //         {
+    //           $or: [
+    //             { 'principalBeneficiary.personId.lastName': { $regex: search, '$options': 'i' } },
+    //             { 'principalBeneficiary.personId.firstName': { $regex: search, '$options': 'i' } },
+    //             { 'dependantBeneficiaries.beneficiary.personId.firstName': { $regex: search, '$options': 'i' } },
+    //             { 'dependantBeneficiaries.beneficiary.personId.lastName': { $regex: search, '$options': 'i' } }
+    //           ]
+    //         }
+    //       ]
+    //     }
+    //   }).then((res: any) => {
+    //     this.beneficiaries = [];
+    //     if (res.data.length > 0) {
+    //       res.data.forEach(policy => {
+    //         console.log(policy._id);
+    //         let principal = policy.principalBeneficiary;
+    //         principal.isPrincipal = true;
+    //         principal.hia = policy.hiaId;
+    //         principal.policyId = policy._id;
+    //         principal.isActive = policy.isActive;
+    //         principal.dependantCount = policy.dependantBeneficiaries.length;
+    //         this.beneficiaries.push(principal);
+    //         policy.dependantBeneficiaries.forEach(innerPolicy => {
+    //           innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
+    //           innerPolicy.beneficiary.policyId = policy._id;
+    //           innerPolicy.beneficiary.isPrincipal = false;
+    //           innerPolicy.beneficiary.hia = policy.hiaId;
+    //           innerPolicy.beneficiary.isActive = policy.isActive;
+    //           this.beneficiaries.push(innerPolicy.beneficiary);
+    //         })
+    //       })
+    //       console.log(this.beneficiaries);
+    //       this._systemService.off();
+    //     } else {
+    //       this._systemService.off();
+    //     }
+    //     this._systemService.off();
+    //   }).catch(err => {
+    //     this._systemService.off();
+    //     console.log(err);
+    //   });
+    // } else {
+    //   this.beneficiaries = [];
+    //   this._systemService.off();
+    // }
 
   }
 
