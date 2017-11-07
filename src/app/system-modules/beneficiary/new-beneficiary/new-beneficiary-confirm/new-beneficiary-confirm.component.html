@@ -54,7 +54,8 @@
 
 
     <div class="group-item">
-        <div class="item-val">{{policyObject?.principalBeneficiary.personId.title.name}} {{policyObject?.principalBeneficiary.personId.lastName}} {{policyObject?.principalBeneficiary.personId.firstName}} {{policyObject?.principalBeneficiary.personId.otherNames}}</div>
+        <div class="item-val">{{policyObject?.principalBeneficiary.personId.title.name}} {{policyObject?.principalBeneficiary.personId.lastName}}
+            {{policyObject?.principalBeneficiary.personId.firstName}} {{policyObject?.principalBeneficiary.personId.otherNames}}</div>
     </div>
     <div class="group-item">
         <div class="item-val">{{policyObject?.principalBeneficiary.personId.phoneNumber}} </div>
@@ -82,8 +83,14 @@
     </div>
 </div>
 
-<div style="margin:40px auto;display:flex;justify-content:center;">
-    <button (click)="confirm()" class="btn btn-medium btn-blue">
-          CONFIRM
-      </button>
+<div style="margin:40px auto;display:flex;justify-content:space-around;">
+    <button (click)="confirmDetails()" class="btn btn-medium btn-blue">
+        PROCEED TO POLICY DETAILS
+    </button>
+    <button (click)="confirmPayments()" class="btn btn-medium btn-blue">
+        PROCEED TO POLICY PAYMENT PORTAL
+    </button>
+    <button *ngIf="!isBeneficiary" (click)="confirmList()" class="btn btn-medium btn-blue">
+        PROCEED TO POLICY LIST
+    </button>
 </div>
