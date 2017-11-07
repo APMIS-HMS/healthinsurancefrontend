@@ -54,8 +54,8 @@ export class ListBeneficiaryComponent implements OnInit {
       .subscribe(e => {
       });
     this.user = (<any>this._locker.getObject('auth')).user;
-  
-    if (this.user.userType.name === "Beneficiary") {
+
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       console.log(this.user)
       this._getPerson();
     }
@@ -96,7 +96,7 @@ export class ListBeneficiaryComponent implements OnInit {
     });
   }
   _getPerson() {
-    if (this.user.userType.name === "Beneficiary") {
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
         query: {
           'personId.email': this.user.email

@@ -1,12 +1,14 @@
 <div class="in-content-wrap">
     <div (click)="navigateEmployers('/modules/employer/employers')" class="back-btn">
-        <i class="fa fa-chevron-left"></i> BACK TO EMPLOYERS
+        <i class="fa fa-chevron-left"></i> BACK TO ORGANISATIONS
     </div>
 
     <ul class="inpage-tabs">
-        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Employer Details</li>
+        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Organisation Details</li>
         <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
         <li (click)="tabHia_click()" [class.tab-active]="tab_hia">HIA</li>
+        <li (click)="tabPaymentClick()" [class.tab-active]="tabPayment">Payment</li>
+        <li (click)="tabPaymentHistoryClick()" [class.tab-active]="tabPaymentHistory">Payment History</li>
         <!-- <li (click)="tabPlans_click()" [class.tab-active]="tab_plans">List of Plans</li>
         <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
         <li (click)="tabEmployers_click()" [class.tab-active]="tab_employers">Employers</li>
@@ -129,7 +131,7 @@
                 </div>
 
                 <div class="bar-icos">
-                    <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2">  UPLOAD BENEFICIARIES</div>
+                    <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2"> UPLOAD BENEFICIARIES</div>
                     <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
                 </div>
             </div>
@@ -192,7 +194,7 @@
                         <td class="th">Action</td>
                     </tr>
                 </thead>
-        
+
                 <tbody class="tbody">
                     <tr class="tr">
                         <td class="td">1</td>
@@ -217,7 +219,7 @@
                         </td>
                     </tr>
                 </tbody>
-            </table> 
+            </table>
         </div>
 
         <div *ngIf="tab_hia" class="tab-pane fade show active">
@@ -239,7 +241,7 @@
                 <div class="frm-item-wrap">
                     <div class="input-wrap">
                         <div class="searchable-input">
-                            <input placeholder="Select HIA" style="width:100%;" type="text" [formControl] ="searchHiaControl" class="form-control">
+                            <input placeholder="Select HIA" style="width:100%;" type="text" [formControl]="searchHiaControl" class="form-control">
 
                             <ul *ngIf="drugSearchResult" class="search-results">
                                 <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
@@ -260,7 +262,55 @@
                         <tr class="tr">
                             <td class="td">Hygia</td>
                             <td class="td td-icos">
-                                <i class="fa fa-times" ></i>
+                                <i class="fa fa-times"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="tabPayment" class="tab-pane fade show active">
+            <!-- <app-employer-top-bar></app-employer-top-bar> -->
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>{{ facility?.name }}</div>
+                    <div>Status:
+                        <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span>
+                    </div>
+                </div>
+
+                <!-- <div class="bar-icos">
+                    <div (click)="addApprovalClick()" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
+                </div> -->
+            </div>
+
+            <div>
+                <div class="frm-item-wrap">
+                    <div class="input-wrap">
+                        <div class="searchable-input">
+                            <input placeholder="Select HIA" style="width:100%;" type="text" [formControl]="searchHiaControl" class="form-control">
+
+                            <ul *ngIf="drugSearchResult" class="search-results">
+                                <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                    <thead class="thead">
+                        <tr class="tr">
+                            <th class="th">HIA</th>
+                            <th class="th"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="tbody">
+                        <tr class="tr">
+                            <td class="td">Hygia</td>
+                            <td class="td td-icos">
+                                <i class="fa fa-times"></i>
                             </td>
                         </tr>
                     </tbody>
