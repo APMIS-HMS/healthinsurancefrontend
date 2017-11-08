@@ -20,6 +20,23 @@ export class EmployerBeneficiariesComponent implements OnInit {
   currentPlatform: any;
   beneficiaries: any = <any>[];
   loading: boolean = true;
+  hiaResult = false;
+  isEdit = false;
+
+  nameControl = new FormControl();
+  genderControl = new FormControl('Male');
+  typeControl = new FormControl('P');
+  idControl = new FormControl();
+  dobControl = new FormControl();
+  lgaControl = new FormControl();
+  hiaControl = new FormControl();
+  statusControl = new FormControl('Active');
+
+  public myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd-mmm-yyyy',
+  };
+
+  public today: IMyDate;
 
   constructor(
     private _router: Router,
@@ -79,6 +96,10 @@ export class EmployerBeneficiariesComponent implements OnInit {
     }).catch(err => {
       this._systemService.off();
     });
+  }
+
+  editRow(){
+    this.isEdit = !this.isEdit;
   }
 
 }

@@ -8,7 +8,7 @@ import {
     FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
     UserTypeService, SystemModuleService, BeneficiaryService,
 } from './../../services/index';
-
+import { MyDatePickerModule } from 'mydatepicker';
 import { employerRoutes } from './employer.route';
 import { EmployerComponent } from './employer.component';
 import { EmployerDetailsComponent } from './employer-details/employer-details.component';
@@ -18,7 +18,8 @@ import { EmployerBeneficiariesComponent } from './employer-details/employer-bene
 @NgModule({
     imports: [
         SharedModule,
-        employerRoutes
+        employerRoutes,
+        MyDatePickerModule
     ],
     declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent, EmployerBeneficiariesComponent],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
