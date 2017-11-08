@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Component, OnInit } from '@angular/core';
@@ -19,27 +20,36 @@ export class PreAuthorizationListComponent implements OnInit {
   planControl = new FormControl();
 
   authorizations: any[] = [];
+  user:any;
 
   constructor(
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
-    private _preAuthorizationService: PreAuthorizationService
+    private _preAuthorizationService: PreAuthorizationService,
+    private _locker:CoolLocalStorage
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._headerEventEmitter.setRouteUrl('Pre-Authorization List');
     this._headerEventEmitter.setMinorRouteUrl('All pre-authorizations');
     this._getPreAuthorizations();
   }
 
   _getPreAuthorizations() {
+    if(this.user.userType.name === "Provider"){
+      
+    }
     this._systemService.on();
-    this._preAuthorizationService.find({}).then((payload: any) => {
+    this._preAuthorizationService.find({query:{
+      $sort: { createdAt: -1 },
+    }}).then((payload: any) => {
       console.log(payload.data)
       this.authorizations = payload.data;
       this._systemService.off();
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     })
   }
