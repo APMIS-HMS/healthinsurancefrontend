@@ -9,6 +9,7 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 import { ModuleService, RoleService} from '../services/index';
 import { AccessManagementComponent } from './access-management/access-management.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { ChangePassComponent } from './top-bar/change-pass/change-pass.component';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
         TopBarComponent,
         MainMenuComponent,
         AccessManagementComponent,
-        WelcomeComponent
+        WelcomeComponent,
+        ChangePassComponent
     ],
     exports: [],
     imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule],

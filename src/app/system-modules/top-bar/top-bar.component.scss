@@ -67,6 +67,8 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      position: relative;
+      cursor: pointer;
   }
   .user-img-wrap{
       width: 35px;
@@ -122,6 +124,37 @@
       padding-bottom: 10px;
       line-height: 1.5;
       font-style: italic;
+  }
+  .user-options{
+    position: absolute;
+    top: 114%;
+    width: 100%;
+    background: #074189;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+  }
+  .opt-menu-close{
+      width: 100%;
+      text-align: right;
+      cursor: pointer;
+  }
+  .opt-menu-close i{
+    margin-right: 10px;
+  }
+  .option-item{
+      padding: 5px 10px;
+  }
+  .option-item:hover{
+      background: lighten($brand-primary, 10%);
+      border-bottom: 1px solid #fff;
+  }
+  .modal-wrap{
+        min-height: auto;
+    }
+  .option-item i{
+      padding-right: 10px;
   }
 
 @media only screen and (max-width: 965px) {

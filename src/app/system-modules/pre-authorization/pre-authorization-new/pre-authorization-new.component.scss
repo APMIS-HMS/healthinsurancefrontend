@@ -40,28 +40,6 @@
 .searchable-input{
     position: relative;
 }
-.search-results{
-    padding: 10px;
-    font-size: $font-x3;
-    z-index: 2;
-    box-sizing: border-box;
-    width: 300px;
-    position: absolute;
-    top: 120%;
-    background: #fff;
-    -webkit-box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
-    -moz-box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
-    box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
-    border: 1px solid $grey-2;
-}
-.search-results li{
-    cursor: pointer;
-    padding: 5px;
-    border-bottom: 1px solid $grey-2;
-}
-.search-results li:hover{
-    background: $grey-1;
-}
 .form-control-textArea{
     min-width: 89%;
     min-height: 100px;
