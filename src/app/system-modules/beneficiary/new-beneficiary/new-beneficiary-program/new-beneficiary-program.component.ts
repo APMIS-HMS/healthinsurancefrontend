@@ -37,7 +37,7 @@ const NUMERIC_REGEX = /^[0-9]+$/;
 export class NewBeneficiaryProgramComponent implements OnInit {
 
   @Input() selectedBeneficiary: any;
-  @Input() dependants: any[];
+  @Input() dependants: any[] = [];
   frmProgram: FormGroup;
   currentPlatform: any;
   hias: any[] = [];
@@ -226,15 +226,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
             console.log(policies)
             if (policies.data.length > 0) {
               console.log('policy')
-            } else {
-              if (!this.isEventBased) {
-                this._router.navigate(['/modules/beneficiary/new/principal',this.selectedBeneficiary._id]).then(payload => {
-  
-                }).catch(err => {
-                  console.log(err)
-                });
-              }
-  
             }
           }).catch(errin => {
             console.log(errin)
@@ -328,7 +319,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this._facilityService.find({
       query: {
         'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId,
-        $select: ['name', 'provider.providerId']
+        $select: ['name', 'provider']
       }
     }).then((res: any) => {
       this._systemService.off();
@@ -385,7 +376,11 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         if(this.user.userType.name === "Employer"){
           policy.sponsor = this.user.facilityId;
         }else if(this.user.userType.name === "Health Insurance Agent"){
-          // policy.sponsor = 
+          policy.sponsor = value.organization;
+          policy.sponsorshipType = value.sponsorshipType;
+          // sponsorship: ['', [<any>Validators.required]],
+          // organization: ['', []],
+          // sponsorshipType: ['', []],
         }
        
       }

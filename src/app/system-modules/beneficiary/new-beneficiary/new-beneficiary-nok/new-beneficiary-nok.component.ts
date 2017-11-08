@@ -1,3 +1,8 @@
+import { PolicyService } from './../../../../services/policy/policy.service';
+import { CoolLocalStorage } from 'angular2-cool-storage';
+import { PersonService } from './../../../../services/person/person.service';
+import { Observable } from 'rxjs/Rx';
+import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
 import { Beneficiary } from './../../../../models/setup/beneficiary';
 import { Address } from './../../../../models/organisation/address';
 import { Person } from './../../../../models/person/person';
@@ -36,6 +41,8 @@ export class NewBeneficiaryNokComponent implements OnInit {
   relationships: any[] = [];
 
   currentPlatform: any;
+  user:any;
+  person:any;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -58,22 +65,117 @@ export class NewBeneficiaryNokComponent implements OnInit {
     private _router: Router,
     private _maritalService: MaritalStatusService,
     private _relationshipService: RelationshipService,
+    private _beneficiaryService:BeneficiaryService,
+    private _personService:PersonService,
+    private _locker:CoolLocalStorage,
+    private _policyService:PolicyService,
     private _route: ActivatedRoute
-  ) {
-    // this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
-    //   console.log(value)
-    //   if (value.beneficiary !== undefined) {
-    //     console.log(value);
-    //   }
-    // });
-  }
+  ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._addNewDependant();
     this._getCurrentPlatform();
     this._getGenders();
     this._getRelationships();
     this._getTitles();
+
+    this._route.params.subscribe(param => {
+      console.log(param)
+      if (param.id !== undefined) {
+        this._getBeneficiary(param.id);
+      }
+    });
+  }
+  _getBeneficiary(id) {
+    this._systemService.on();
+    this._beneficiaryService.get(id, {}).then((payload: any) => {
+      console.log(payload)
+      this.selectedBeneficiary = payload;
+      this._getPerson();
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    })
+  }
+
+  _getPerson() {
+    if (this.user.userType.name === "Beneficiary") {
+      let person$ = Observable.fromPromise(this._personService.find({
+        query: {
+          email: this.user.email
+        }
+      }));
+      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+        query: {
+          'personId.email': this.user.email
+        }
+      }));
+      Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+        console.log(results);
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (results[1].data.length > 0) {
+          console.log('redirect to last page');
+          console.log(results[1].data[0]._id)
+          this._policyService.find({
+            query: {
+              principalBeneficiary: results[1].data[0]._id
+            }
+          }).then((policies: any) => {
+            console.log(policies)
+            if (policies.data.length > 0) {
+              console.log('policy')
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                // this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              })
+            } 
+          }).catch(errin => {
+            console.log(errin)
+          })
+        }
+      }, error => {
+        console.log(error);
+      })
+    } else {
+      let person$ = Observable.fromPromise(this._personService.find({
+        query: {
+          _id: this.selectedBeneficiary.personId._id
+        }
+      }));
+
+      Observable.forkJoin([person$]).subscribe((results: any) => {
+        console.log(results);
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (this.selectedBeneficiary !== undefined) {
+          console.log('redirect to last page');
+
+          this._policyService.find({
+            query: {
+              principalBeneficiary: this.selectedBeneficiary._id
+            }
+          }).then((policies: any) => {
+            console.log(policies)
+            if (policies.data.length > 0) {
+              console.log('policy')
+              console.log(policies);
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                // this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              })
+            }
+          }).catch(errin => {
+            console.log(errin)
+          })
+        }
+      }, error => {
+        console.log(error);
+      })
+    }
+
   }
 
   _addNewDependant() {
@@ -89,8 +191,8 @@ export class NewBeneficiaryNokComponent implements OnInit {
           title: ['', [<any>Validators.required]],
           middleName: [''],
           lastName: ['', [<any>Validators.required]],
-          phonenumber: ['', [<any>Validators.required]],
-          secondaryPhone: [''],
+          phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+          secondaryPhone: ['',[<any>Validators.pattern(PHONE_REGEX)]],
           email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
           dob: [this.today, [<any>Validators.required]],
           gender: ['', [<any>Validators.required]],
@@ -166,7 +268,7 @@ export class NewBeneficiaryNokComponent implements OnInit {
         middleName: [''],
         lastName: ['', [<any>Validators.required]],
         phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-        secondaryPhone: [''],
+        secondaryPhone: ['', <any>Validators.pattern(PHONE_REGEX)],
         email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
         dob: ['', [<any>Validators.required]],
         gender: ['', [<any>Validators.required]],
@@ -185,40 +287,50 @@ export class NewBeneficiaryNokComponent implements OnInit {
   }
 
   moveBack() {
-    this._systemService.announceBeneficiaryTabNotification({ tab: 'Two', beneficiary: this.selectedBeneficiary });
+    this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+      
+    }).catch(err => {
+      console.log(err)
+    });
   }
-
+  canProceed(){
+    return this.frmNok['controls'].dependantArray['controls'].filter(x => x.value.readOnly === true && x.valid).length > 0;
+  }
   onClickStepTwo(dependants) {
     console.log(dependants)
     let savedFiltered = dependants.controls.dependantArray.controls.filter(x => x.value.readOnly === true && x.valid);
     let dependantList: any[] = [];
     savedFiltered.forEach(group => {
-      let person: Person = <Person>{};
+      let person: any = <any>{};
 
-      person.dateOfBirth = group.controls.dob.value.jsdate;
       person.email = group.controls.email.value;
       person.firstName = group.controls.firstName.value;
       person.gender = group.controls.gender.value;
-      person.homeAddress = this.selectedBeneficiary.personId.homeAddress;
       person.lastName = group.controls.lastName.value;
       person.otherNames = group.controls.middleName.value;
       person.phoneNumber = group.controls.phonenumber.value;
-      person.platformOnwerId = this.currentPlatform._id;
+      person.sphoneNumber = group.controls.secondaryPhone.value;
+      person.relationship = group.controls.relationship.value;
       person.title = group.controls.title.value;
 
 
-      let beneficiary: Beneficiary = <Beneficiary>{};
-      beneficiary.stateID = group.lasrraId;
-      beneficiary.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
 
 
-      dependantList.push({ person: person, beneficiary: beneficiary, relationship: group.controls.relationship.value });
-
-      // console.log(group)
+      this.person.nextOfKin.push(person);
     });
-    // console.log(dependantList);
+    console.log(this.person)
+    this._personService.update(this.person).then(payload =>{
+      console.log(payload)
+      this._router.navigate(['/modules/beneficiary/new/program', this.selectedBeneficiary._id]).then(payload => {
+        
+      }).catch(err => {
+        console.log(err)
+      });
+    }).catch(err =>{
+      console.log(err)
+    })
 
-    this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList })
+    // this._systemService.announceBeneficiaryTabNotification({ tab: 'Four', beneficiary: this.selectedBeneficiary, dependants: dependantList })
   }
 
   compare(l1: any, l2: any) {

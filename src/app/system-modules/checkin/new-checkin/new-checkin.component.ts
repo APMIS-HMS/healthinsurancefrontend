@@ -1,3 +1,4 @@
+import { ToastsManager } from 'ng2-toastr';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { FormControl } from '@angular/forms';
 import { UploadService } from './../../../services/common/upload.service';
@@ -31,7 +32,8 @@ export class NewCheckinComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
-    private _uploadService: UploadService
+    private _uploadService: UploadService,
+    private _toast: ToastsManager
   ) { }
 
   ngOnInit() {
@@ -94,12 +96,14 @@ export class NewCheckinComponent implements OnInit {
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
             principal.policyId = policy._id;
+            principal.policy = policy;
             principal.isActive = policy.isActive;
             principal.dependantCount = policy.dependantBeneficiaries.length;
             this.beneficiaries.push(principal);
             policy.dependantBeneficiaries.forEach(innerPolicy => {
               innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
               innerPolicy.beneficiary.policyId = policy._id;
+              innerPolicy.beneficiary.policy = policy;
               innerPolicy.beneficiary.isPrincipal = false;
               innerPolicy.beneficiary.hia = policy.hiaId;
               innerPolicy.beneficiary.isActive = policy.isActive;
@@ -176,17 +180,21 @@ export class NewCheckinComponent implements OnInit {
   }
 
   routeBeneficiaryDetails(beneficiary) {
-    console.log(beneficiary._id);
-    console.log(beneficiary.policyId);
-    this._locker.setObject('policyID', beneficiary.policyId);
-    this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + beneficiary._id + '/checkin'])
-      .then(payload => {
-        console.log(payload);
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      })
+    if (!beneficiary.policy.isPaid || !beneficiary.policy.isActive) {
+      this._toast.info("Premium payment not yet paid or policy not actived, contact your Health Insurance Agent", "Info")
+    } else {
+      this._locker.setObject('policyID', beneficiary.policyId);
+      this._systemService.on();
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + beneficiary._id + '/checkin'])
+        .then(payload => {
+          console.log(payload);
+          this._systemService.off();
+        }).catch(err => {
+          this._systemService.off();
+        })
+    }
+
+
   }
 
   navigate(url: string, id?: string) {

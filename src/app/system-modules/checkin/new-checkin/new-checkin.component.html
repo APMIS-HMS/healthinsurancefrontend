@@ -22,6 +22,7 @@
                     <th class="th">Type</th>
                     <th class="th">Date of Birth</th>
                     <th class="th">Status</th>
+                    <th class="th">Premium Paid</th>
                 </tr>
             </thead>
 
@@ -42,7 +43,14 @@
                         <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
                     </td>
                     <td class="td">{{beneficiary?.personId?.dateOfBirth | date}}</td>
-                    <td class="td"><span class="green">Active</span></td>
+                    <td class="td">
+                        <span *ngIf="beneficiary?.policy.isActive" class="green">Active</span>
+                        <span *ngIf="!beneficiary?.policy.isActive" class="red">InActive</span>
+                    </td>
+                    <td class="td">
+                        <span *ngIf="beneficiary?.policy.isPaid" class="green">Premium Paid</span>
+                        <span *ngIf="!beneficiary?.policy.isPaid" class="red">Premium Not Paid</span>
+                    </td>
                 </tr>
             </tbody>
         </table>
