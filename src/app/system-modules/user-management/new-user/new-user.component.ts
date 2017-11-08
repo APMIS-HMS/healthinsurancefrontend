@@ -196,7 +196,6 @@ export class NewUserComponent implements OnInit {
 
   onClickSaveUser(valid, value: any) {
     if (valid) {
-      console.log(value);
       this._systemService.on();
       if (this.user.userType === undefined) {
         value.platformOwnerId = value.facilityId;
@@ -227,7 +226,7 @@ export class NewUserComponent implements OnInit {
         });
       }).catch(err => {
         console.log(err);
-        this._toastr.error('Invalid email or password!', 'Error!');
+        this._toastr.error('Email has already been taken. Please use another email address!', 'Duplicate Email!');
         this._systemService.off();
       });
     }

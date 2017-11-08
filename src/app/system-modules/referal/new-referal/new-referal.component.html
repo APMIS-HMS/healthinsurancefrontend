@@ -13,7 +13,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Patient Name</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="patientName" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="patientName" class="form-control">
                     <small class="alert-label" [hidden]="referalFormGroup.controls.patientName.valid || referalFormGroup.controls.patientName.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
                     </small>
@@ -22,7 +22,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Gender</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="gender" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="gender" class="form-control">
                     <small class="alert-label" [hidden]="referalFormGroup.controls.gender.valid || referalFormGroup.controls.gender.pristine">
                         Choose state from the dropdown.
                     </small>
@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Age</label>
                 <div class="inputWrap">
-                    <input type="number" min="0" formControlName="age" class="form-control">
+                    <input [readonly]="true" type="number" min="0" formControlName="age" class="form-control">
                     <small class="alert-label" [hidden]="referalFormGroup.controls.age.valid || referalFormGroup.controls.age.pristine">
                         This is a required field.
                     </small>
@@ -41,7 +41,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Refering Hospital</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="referingHospital" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="referingHospital" class="form-control">
                     <small class="alert-label" [hidden]="referalFormGroup.controls.referingHospital.valid || referalFormGroup.controls.referingHospital.pristine">
                         This is a required field.
                     </small>
@@ -50,8 +50,17 @@
             <div class="frm-item-wrap">
                 <label class="label">Provider ID</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="referingLashmaId" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="referingLashmaId" class="form-control">
                     <small class="alert-label" [hidden]="referalFormGroup.controls.referingLashmaId.valid || referalFormGroup.controls.referingLashmaId.pristine">
+                        This is a required field.
+                    </small>
+                </div>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">HIA Responsible</label>
+                <div class="inputWrap">
+                    <input [readonly]="true" type="text" formControlName="hiaResponsible" class="form-control">
+                    <small class="alert-label" [hidden]="referalFormGroup.controls.hiaResponsible.valid || referalFormGroup.controls.hiaResponsible.pristine">
                         This is a required field.
                     </small>
                 </div>
@@ -68,15 +77,6 @@
                     </small>
                     <small class="alert-label" *ngIf="referalFormGroup.controls.destinationHospital.hasError('invalid')">
                         Destination Facility cannot be the same as Source Facility!
-                    </small>
-                </div>
-            </div>
-            <div class="frm-item-wrap">
-                <label class="label">HIA Responsible</label>
-                <div class="inputWrap">
-                    <input type="text" formControlName="hiaResponsible" class="form-control">
-                    <small class="alert-label" [hidden]="referalFormGroup.controls.hiaResponsible.valid || referalFormGroup.controls.hiaResponsible.pristine">
-                        This is a required field.
                     </small>
                 </div>
             </div>

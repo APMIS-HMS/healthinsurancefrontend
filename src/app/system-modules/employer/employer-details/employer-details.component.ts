@@ -33,7 +33,8 @@ export class EmployerDetailsComponent implements OnInit {
   tab_plans = false;
   tab_beneficiaries = false;
   tab_employers = false;
-  tab_payment = false;
+  tabPayment = false;
+  tabPaymentHistory = false;
   tab_claims = false;
   tab_complaints = false;
   tab_referals = false;
@@ -65,7 +66,7 @@ export class EmployerDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Employer Details');
+    this._headerEventEmitter.setRouteUrl('Organisation Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
 
     this._route.params.subscribe(param => {
@@ -88,7 +89,7 @@ export class EmployerDetailsComponent implements OnInit {
     this._countryService.find({
       query: {
         $limit: 200,
-        $select: { "states": 0 }
+        $select: { 'states': 0 }
       }
     }).then((payload: any) => {
       this._systemService.off();
@@ -103,7 +104,7 @@ export class EmployerDetailsComponent implements OnInit {
       }
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
   _getStates(_id) {
@@ -112,7 +113,7 @@ export class EmployerDetailsComponent implements OnInit {
       query: {
         _id: _id,
         $limit: 200,
-        $select: { "states.cities": 0, "states.lgs": 0 }
+        $select: { 'states.cities': 0, 'states.lgs': 0 }
       }
     }).then((payload: any) => {
       this._systemService.off();
@@ -122,7 +123,7 @@ export class EmployerDetailsComponent implements OnInit {
 
     }).catch(error => {
       this._systemService.off();
-    })
+    });
   }
 
   _getLgaAndCities(_id, state) {
@@ -130,7 +131,7 @@ export class EmployerDetailsComponent implements OnInit {
     this._countryService.find({
       query: {
         _id: _id,
-        "states.name": state.name,
+        'states.name': state.name,
         $select: { 'states.$': 1 }
       }
     }).then((payload: any) => {
@@ -142,10 +143,9 @@ export class EmployerDetailsComponent implements OnInit {
           this.lgs = states[0].lgs;
         }
       }
-
     }).catch(error => {
       this._systemService.off();
-    })
+    });
   }
 
   onClickApprove() {
@@ -177,7 +177,7 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   showImageBrowseDlg() {
-    this.fileInput.nativeElement.click()
+    this.fileInput.nativeElement.click();
     this.isUploading = true;
   }
 
@@ -189,10 +189,10 @@ export class EmployerDetailsComponent implements OnInit {
     let fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
       const formData = new FormData();
-      formData.append("excelfile", fileBrowser.files[0]);
-      formData.append("facilityId", this.facility._id);
+      formData.append('excelfile', fileBrowser.files[0]);
+      formData.append('facilityId', this.facility._id);
       this._uploadService.uploadExcelFile(formData).then(result => {
-        //console.log(result);
+        // console.log(result);
         let enrolleeList: any[] = [];
         var bodyObj = [];
         var principal = {};
@@ -224,37 +224,37 @@ export class EmployerDetailsComponent implements OnInit {
                 && item.R != undefined && item.S != undefined && item.AL != undefined && item.AM != undefined
                 && item.AL != undefined && item.AM != undefined && item.AN != undefined && item.AO != undefined
                 && item.AP != undefined && item.AQ != undefined) {
-                console.log("A");
+                console.log('A');
                 beneficiaries = [];
                 principal = {
-                  "dateOfBirth": item.A,
-                  "email": item.B,
-                  "numberOfUnderAge": item.C,
-                  "gender": item.D,
-                  "homeAddress": {
-                    "neighbourhood": item.E,
-                    "state": item.F,
-                    "lga": item.G,
-                    "street": item.H
+                  'dateOfBirth': item.A,
+                  'email': item.B,
+                  'numberOfUnderAge': item.C,
+                  'gender': item.D,
+                  'homeAddress': {
+                    'neighbourhood': item.E,
+                    'state': item.F,
+                    'lga': item.G,
+                    'street': item.H
                   },
-                  "lastName": item.I,
-                  "firstName": item.J,
-                  "lgaOfOrigin": item.K,
-                  "maritalStatus": item.L,
-                  "mothersMaidenName": item.M,
-                  "otherNames": item.N,
-                  "phoneNumber": item.O,
-                  "platformOwnerId": item.P,
-                  "stateOfOrigin": item.Q,
-                  "title": item.S
+                  'lastName': item.I,
+                  'firstName': item.J,
+                  'lgaOfOrigin': item.K,
+                  'maritalStatus': item.L,
+                  'mothersMaidenName': item.M,
+                  'otherNames': item.N,
+                  'phoneNumber': item.O,
+                  'platformOwnerId': item.P,
+                  'stateOfOrigin': item.Q,
+                  'title': item.S
                 };
                 policy = {
-                  "platformOwnerId": item.AL,
-                  "hiaId": item.AM,
-                  "providerId": item.AN,
-                  "planTypeId": item.AO,
-                  "planId": item.AP,
-                  "premiumCategoryId": item.AQ
+                  'platformOwnerId': item.AL,
+                  'hiaId': item.AM,
+                  'providerId': item.AN,
+                  'planTypeId': item.AO,
+                  'planId': item.AP,
+                  'premiumCategoryId': item.AQ
                 };
               }
               console.log(policy);
@@ -262,36 +262,36 @@ export class EmployerDetailsComponent implements OnInit {
                 && item.X != undefined && item.Y != undefined && item.Z != undefined && item.AA != undefined && item.AB != undefined
                 && item.AC != undefined && item.AD != undefined && item.AE != undefined && item.AF != undefined && item.AG != undefined) {
                 beneficiaries.push({
-                  "dateOfBirth": item.S,
-                  "email": item.T,
-                  "gender": item.U,
-                  "lastName": item.V,
-                  "firstName": item.W,
-                  "lgaOfOrigin": item.X,
-                  "numberOfUnderAge": item.Y,
-                  "maritalStatus": item.Z,
-                  "mothersMaidenName": item.AA,
-                  "otherNames": item.AB,
-                  "phoneNumber": item.AC,
-                  "platformOwnerId": item.AD,
-                  "stateOfOrigin": item.AE,
-                  "relationship": item.AF,
-                  "title": item.AG,
-                  "homeAddress": {
-                    "neighbourhood": item.AH,
-                    "state": item.AI,
-                    "lga": item.AJ,
-                    "street": item.AK
+                  'dateOfBirth': item.S,
+                  'email': item.T,
+                  'gender': item.U,
+                  'lastName': item.V,
+                  'firstName': item.W,
+                  'lgaOfOrigin': item.X,
+                  'numberOfUnderAge': item.Y,
+                  'maritalStatus': item.Z,
+                  'mothersMaidenName': item.AA,
+                  'otherNames': item.AB,
+                  'phoneNumber': item.AC,
+                  'platformOwnerId': item.AD,
+                  'stateOfOrigin': item.AE,
+                  'relationship': item.AF,
+                  'title': item.AG,
+                  'homeAddress': {
+                    'neighbourhood': item.AH,
+                    'state': item.AI,
+                    'lga': item.AJ,
+                    'street': item.AK
                   }
-                }); console.log("B");
+                }); console.log('B');
               }
               let counter = index + 1;
               if (result.body.Sheet1.length == counter) {
-                console.log("c");
+                console.log('c');
                 bodyObj.push({
-                  "principal": principal,
-                  "dependent": beneficiaries,
-                  "policy": policy
+                  'principal': principal,
+                  'dependent': beneficiaries,
+                  'policy': policy
                 });
                 console.log(bodyObj);
               } else {
@@ -303,9 +303,9 @@ export class EmployerDetailsComponent implements OnInit {
                     && result.body.Sheet1[counter].I != undefined
                     && result.body.Sheet1[counter].J != undefined) {
                     bodyObj.push({
-                      "principal": principal,
-                      "dependent": beneficiaries,
-                      "policy": policy
+                      'principal': principal,
+                      'dependent': beneficiaries,
+                      'policy': policy
                     });
                   }
                 }
@@ -317,7 +317,7 @@ export class EmployerDetailsComponent implements OnInit {
           });
         }
       }).catch(err => {
-        // this._notification('Error', "There was an error uploading the file");
+        // this._notification('Error', 'There was an error uploading the file');
       });
     }
   }
@@ -362,7 +362,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
@@ -374,7 +375,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
@@ -386,7 +388,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = true;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
@@ -398,7 +401,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = true;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
@@ -410,19 +414,34 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = true;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
     this.tab_hia = false;
   }
-  tabPayment_click() {
+  tabPaymentClick() {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = true;
+    this.tabPayment = true;
+    this.tabPaymentHistory = false;
+    this.tab_claims = false;
+    this.tab_complaints = false;
+    this.tab_referals = false;
+    this.tab_hia = false;
+  }
+  tabPaymentHistoryClick() {
+    this.tab_details = false;
+    this.tab_preauthorization = false;
+    this.tab_plans = false;
+    this.tab_beneficiaries = false;
+    this.tab_employers = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = true;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
@@ -434,7 +453,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = true;
     this.tab_complaints = false;
     this.tab_referals = false;
@@ -446,7 +466,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = true;
     this.tab_referals = false;
@@ -458,7 +479,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = true;
@@ -470,7 +492,8 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_plans = false;
     this.tab_beneficiaries = false;
     this.tab_employers = false;
-    this.tab_payment = false;
+    this.tabPayment = false;
+    this.tabPaymentHistory = false;
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;

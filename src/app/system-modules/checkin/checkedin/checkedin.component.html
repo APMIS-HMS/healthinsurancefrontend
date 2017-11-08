@@ -78,7 +78,10 @@
                     <td class="td">{{check.createdAt | date}}</td>
                     <td class="td">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
                     <td class="td">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
-                    <td class="td" class="text-center"><i class="fa fa-check green" aria-hidden="true"></i></td>
+                    <td class="td" class="text-center">
+                        <i *ngIf="check.policyObject?.isPaid" class="fa fa-check green" aria-hidden="true"></i>
+                        <i *ngIf="!check.policyObject?.isPaid" class="fa fa-check red" aria-hidden="true"></i>
+                    </td>
                     <td class="td">{{check.encounterType.name}}</td>
                     <td class="td"><span class="green">{{check.encounterStatus.name}}</span></td>
                     <td class="td"><span class="green">Active</span></td>

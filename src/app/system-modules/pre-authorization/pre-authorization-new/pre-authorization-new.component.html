@@ -13,7 +13,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Patient Name</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="patientName" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="patientName" class="form-control">
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.patientName.valid || preAuthFormGroup.controls.patientName.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
                     </small>
@@ -22,7 +22,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Gender</label>
                 <div class="inputWrap">
-                    <input type="" formControlName="gender" class="form-control">
+                    <input [readonly]="true" type="" formControlName="gender" class="form-control">
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.gender.valid || preAuthFormGroup.controls.gender.pristine">
                         Choose state from the dropdown.
                     </small>
@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Age</label>
                 <div class="inputWrap">
-                    <input type="" formControlName="age" class="form-control">
+                    <input [readonly]="true" type="" formControlName="age" class="form-control">
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.age.valid || preAuthFormGroup.controls.age.pristine">
                         This is a required field
                     </small>
@@ -41,7 +41,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Address</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="address" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="address" class="form-control">
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.address.valid || preAuthFormGroup.controls.address.pristine">
                         This is a required field.
                     </small>
@@ -50,7 +50,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Health Care Provider</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="healthCareProvider" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="healthCareProvider" class="form-control">
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.healthCareProvider.valid || preAuthFormGroup.controls.healthCareProvider.pristine">
                         This is a required field.
                     </small>
@@ -60,7 +60,7 @@
             <div class="frm-item-wrap">
                 <label class="label">HIA</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="hia" class="form-control">
+                    <input [readonly]="true" type="text" formControlName="hia" class="form-control">
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.hia.valid || preAuthFormGroup.controls.hia.pristine">
                         This is a required field.
                     </small>

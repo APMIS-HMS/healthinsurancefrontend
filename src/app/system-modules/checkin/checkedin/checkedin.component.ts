@@ -63,6 +63,7 @@ export class CheckedinComponent implements OnInit {
       console.log(this.checkedIns)
       this._systemService.off();
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     });
   }

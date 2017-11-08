@@ -185,9 +185,18 @@ export class LoginComponent implements OnInit {
 					this.user = payload.user;
 					this._checkRole();
 				} else {
+					console.log(payload)
 					if (payload.user !== undefined && payload.user.userType !== undefined) {
 						this.user = payload.user;
-						this._getPerson();
+						if(this.user.userType.name === "Beneficiary"){
+							this._getPerson();
+						}else{
+							this._router.navigate(['/modules/welcome']).then(res => {
+								this._authService.announceMission({ status: 'On' });
+								this._toastr.success('You have successfully logged in!', 'Success!');
+							});
+						}
+						
 					} else {
 						this.loginBtnText = true;
 						this.loginBtnProcessing = false;

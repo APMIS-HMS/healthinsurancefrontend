@@ -33,3 +33,4 @@ export * from './person/person';
 export * from './person/image';
 export * from './person/next-of-kin';
 export * from './claim/claim';
+export * from './policy/policy';

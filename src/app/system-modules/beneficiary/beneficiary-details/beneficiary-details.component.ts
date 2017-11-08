@@ -77,8 +77,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
-    this.user = (<any>this._locker.getObject('auth')).user; 
-    if(this.user.userType.name === "Beneficiary"){
+    this.user = (<any>this._locker.getObject('auth')).user;
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary'){
       this.isBeneficiary = true;
     }
 

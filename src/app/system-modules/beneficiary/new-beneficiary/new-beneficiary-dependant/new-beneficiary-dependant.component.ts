@@ -74,14 +74,6 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _policyService: PolicyService,
     private _beneficiaryService: BeneficiaryService
   ) {
-    this._systemService.beneficiaryTabAnnounced$.subscribe((value: any) => {
-      console.log(value)
-      this.selectedBeneficiary = value.beneficiary;
-      if (value.beneficiary !== undefined) {
-        console.log(value);
-        this.isEventBased = true;
-      }
-    });
   }
 
   ngOnInit() {
@@ -139,6 +131,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
             console.log(policies)
             if (policies.data.length > 0) {
               console.log('policy')
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              })
             } else {
               this.selectedBeneficiary = results[1].data[0];
               console.log(this.selectedBeneficiary)
@@ -182,9 +177,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
             if (policies.data.length > 0) {
               console.log('policy')
               console.log(policies);
-              // policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
-              //   this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
-              // })
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
+              })
             } else {
               // if (!this.isEventBased) {
               //   this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
@@ -218,8 +213,8 @@ export class NewBeneficiaryDependantComponent implements OnInit {
           title: ['', [<any>Validators.required]],
           middleName: [''],
           lastName: ['', [<any>Validators.required]],
-          phonenumber: ['', [<any>Validators.required]],
-          secondaryPhone: [''],
+          phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+          secondaryPhone: ['', <any>Validators.pattern(PHONE_REGEX)],
           email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
           dob: [this.today, [<any>Validators.required]],
           gender: ['', [<any>Validators.required]],
@@ -322,7 +317,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         middleName: [person !== undefined ? person.otherNames : ''],
         lastName: [person !== undefined ? person.lastName : '', [<any>Validators.required]],
         phonenumber: [person !== undefined ? person.phoneNumber : 0, [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-        secondaryPhone: [''],
+        secondaryPhone: ['',<any>Validators.pattern(PHONE_REGEX)],
         email: [person !== undefined ? person.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
         dob: [person !== undefined ? person.dateOfBirth : this.today, [<any>Validators.required]],
         gender: [person !== undefined ? person.gender : '', [<any>Validators.required]],
@@ -437,7 +432,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
       console.log(err)
     });
   }
-
+  canProceed(){
+    return this.frmDependants['controls'].dependantArray['controls'].filter(x => x.value.readOnly === true && x.valid).length > 0;
+  }
   compare(l1: any, l2: any) {
     if (l1 !== null && l2 !== null) {
       return l1._id === l2._id;
