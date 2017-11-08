@@ -45,19 +45,19 @@
                 <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span> -->
             </td>
             
-            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
                 <span *ngIf="!isEdit" class="td-value">122.212.22.2</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <input [formControl]="idControl" type="text">
                 </div>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
                 <span *ngIf="!isEdit" class="td-value">11 Oct 2020</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <my-date-picker name="dobControl" [options]="myDatePickerOptions" [selDate]="today" [formControl]="dobControl"></my-date-picker>
                 </div>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
                 <span *ngIf="!isEdit" class="td-value">Ikorodu</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <select [formControl]="lgaControl">
@@ -66,7 +66,7 @@
                     </select>
                 </div>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
                 <span *ngIf="!isEdit" class="td-value">Hygia</span>
                 <div *ngIf="isEdit" class="searchable-input">
                     <input type="text" [formControl]="hiaControl" class="form-control">
@@ -75,7 +75,7 @@
                     </ul>
                 </div>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
                 <span *ngIf="!isEdit" class="tbl-status-active td-value">Active</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <select [formControl]="statusControl">

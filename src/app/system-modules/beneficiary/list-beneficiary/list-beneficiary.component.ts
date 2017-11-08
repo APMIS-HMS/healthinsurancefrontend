@@ -177,7 +177,7 @@ export class ListBeneficiaryComponent implements OnInit {
               'platformOwnerId._id': this.user.facilityId._id,
               $limit: 200,
               $sort: { createdAt: -1 },
-              $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
+              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
           });
         } else {
