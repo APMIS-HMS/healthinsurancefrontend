@@ -19,6 +19,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   approvalFormGroup: FormGroup;
   beneficiary: any;
   policy: any;
+  mobilemenu = false;
   tab_details = false;
   tab_payment = false;
   tab_claims = false;
@@ -291,6 +292,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkedin-history'])
     this.tab_checkinHistory = true;
 
+  }
+  mobilemenu_toggle(){
+    this.mobilemenu = !this.mobilemenu;
   }
 
 }

@@ -100,13 +100,6 @@
     </section>
 </div>
 
-<div *ngIf="addOrganizationPay" class="modal-overlay">
-    <div class="modal-wrap shadow-RB" style="min-height:400px">
-        <div (click)="modal_close()" class="close-modal">X</div>
-        <app-modal-add-organization-payment (closeModal)="modal_close()"></app-modal-add-organization-payment>
-    </div>
-</div>
-
 <div *ngIf="addPaymentMode" class="modal-overlay">
     <div class="modal-wrap shadow-RB" style="max-width:150px">
         <div (click)="modal_close()" class="close-modal">X</div>
