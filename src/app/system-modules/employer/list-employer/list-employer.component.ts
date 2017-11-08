@@ -1,3 +1,4 @@
+import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -16,6 +17,7 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
   styleUrls: ['./list-employer.component.scss']
 })
 export class ListEmployerComponent implements OnInit {
+  currentPlatform: any;
   listsearchControl = new FormControl();
   filterTypeControl = new FormControl('All');
   createdByControl = new FormControl();
@@ -121,7 +123,7 @@ export class ListEmployerComponent implements OnInit {
   }
 
   private _getEmployers() {
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((res: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, 'platformOwnerId._id':this.currentPlatform._id, $limit: 200 } }).then((res: any) => {
       this.loading = false;
       console.log(res);
       if (res.data.length > 0) {
@@ -130,22 +132,39 @@ export class ListEmployerComponent implements OnInit {
       }
     }).catch(err => console.log(err));
   }
+  private _getCurrentPlatform() {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+      }
+    }).catch(err => console.log(err));
+  }
 
   private _getUserTypes() {
     this._systemService.on();
-    this._userTypeService.find({}).then((payload: any) => {
+
+    let userType$ = Observable.fromPromise(this._userTypeService.find({}));
+    let platform$ = Observable.fromPromise( this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }));
+
+    Observable.forkJoin([userType$, platform$]).subscribe((results:any) =>{
       this._systemService.off();
-      console.log(payload);
-      if (payload.data.length > 0) {
-        const index = payload.data.findIndex(x => x.name === 'Employer');
+      this.currentPlatform = results[1].data[0];
+      if (results[0].data.length > 0) {
+        const index = results[0].data.findIndex(x => x.name === 'Employer');
         if (index > -1) {
-          this.selectedUserType = payload.data[index];
+          this.selectedUserType = results[0].data[index];
           console.log(this.selectedUserType);
           this._getEmployers();
         } else {
           this.selectedUserType = undefined;
         }
       }
+    })
+
+    this._userTypeService.find({}).then((payload: any) => {
+      this._systemService.off();
+      console.log(payload);
+
     }, error => {
       this._systemService.off();
     });
