@@ -211,6 +211,7 @@ export class PendingPaymentsComponent implements OnInit {
 
   onClickPaystack() {
     console.log('awesome.');
+     // this._angular4PaystackModule
   }
 
   onClickTab(tabName: string) {
