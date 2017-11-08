@@ -32,6 +32,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   durations: any = DURATIONS;
   dependants: any[] = [];
   isCheckIn = false;
+  isHistory = false;
   paramId: any;
   user: any;
   isBeneficiary = false;
@@ -101,6 +102,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     } else if (this._router.url.endsWith('checkedin-history')) {
       this.tab_checkinHistory = true;
       this.isCheckIn = true;
+      this.isHistory = true;
     } else if (this._router.url.endsWith('referrals')) {
       this.tab_referals = true;
       this.isCheckIn = false;
@@ -120,7 +122,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
-      if (this.isCheckIn) {
+      if (this.isCheckIn && !this.isHistory) {
         this.tabCheckin_click();
       }
 
