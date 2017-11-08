@@ -11,7 +11,7 @@
 
     <div class="tab-content shadow-RB">
         <div *ngIf="tab_details" class="tab-pane fade show active">
-            <app-referal-top-bar></app-referal-top-bar>
+            <app-referal-top-bar [selectedAuthorization]="selectedAuthorization"></app-referal-top-bar>
 
             <div class="details-wrap">
                 <app-referal-detail-tab [selectedAuthorization]="selectedAuthorization" style="width:100%;"></app-referal-detail-tab>

@@ -68,7 +68,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Destination Hospital</label>
                 <div class="inputWrap">
-                    <select formControlName="destinationHospital" class="form-control">
+                    <select formControlName="destinationHospital" class="form-control"  [compareWith]='compare'>
                         <option value="" selected>Select...</option>
                         <option *ngFor="let des of destinationFacilities" [ngValue]="des">{{des.name}}</option>
                     </select>
@@ -108,7 +108,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Visit Class</label>
                 <div class="inputWrap">
-                    <select formControlName="visitClass" class="form-control">
+                    <select formControlName="visitClass" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select...</option>
                         <option *ngFor="let visit of visitTypes" [ngValue]="visit">{{visit.name}}</option>
                     </select>
