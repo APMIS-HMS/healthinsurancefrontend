@@ -33,7 +33,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   dependants: any[] = [];
   isCheckIn = false;
   paramId: any;
-  user:any;
+  user: any;
   isBeneficiary = false;
 
   constructor(
@@ -47,7 +47,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
     private _uploadService: UploadService,
-    private _locker:CoolLocalStorage
+    private _locker: CoolLocalStorage
   ) {
     this._route.data.subscribe(data => {
       if (!!data.goCheckIn && data.goCheckIn) {
@@ -78,7 +78,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
     this.user = (<any>this._locker.getObject('auth')).user;
-    if (!!this.user.userType && this.user.userType.name === 'Beneficiary'){
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.isBeneficiary = true;
     }
 
@@ -223,26 +223,33 @@ export class BeneficiaryDetailsComponent implements OnInit {
 
 
   tabDetails_click() {
-    this.tab_details = true;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId])
+    if (!this.isCheckIn) {
+      this.tab_details = true;
+      this.tab_payment = false;
+      this.tab_claims = false;
+      this.tab_complaints = false;
+      this.tab_referals = false;
+      this.tab_checkin = false;
+      this.tab_checkinHistory = false;
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId])
+    }
+
   }
   tabPayment_click() {
-    this.tab_details = false;
-    this.tab_payment = true;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/payment'])
+    if (!this.isCheckIn) {
+      this.tab_details = false;
+      this.tab_payment = true;
+      this.tab_claims = false;
+      this.tab_complaints = false;
+      this.tab_referals = false;
+      this.tab_checkin = false;
+      this.tab_checkinHistory = false;
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/payment'])
+    }
+   
   }
   tabClaims_click() {
+    if (!this.isCheckIn) {
     this.tab_details = false;
     this.tab_payment = false;
     this.tab_claims = true;
@@ -251,25 +258,31 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_checkin = false;
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/claims'])
     this.tab_checkinHistory = false;
+    }
   }
   tabComplaints_click() {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = true;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this.tab_checkinHistory = false;
+    if (!this.isCheckIn) {
+      this.tab_details = false;
+      this.tab_payment = false;
+      this.tab_claims = false;
+      this.tab_complaints = true;
+      this.tab_referals = false;
+      this.tab_checkin = false;
+      this.tab_checkinHistory = false;
+    }
   }
   tabReferals_click() {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = true;
-    this.tab_checkin = false;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/referrals'])
-    this.tab_checkinHistory = false;
+    if (!this.isCheckIn) {
+      this.tab_details = false;
+      this.tab_payment = false;
+      this.tab_claims = false;
+      this.tab_complaints = false;
+      this.tab_referals = true;
+      this.tab_checkin = false;
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/referrals'])
+      this.tab_checkinHistory = false;
+
+    }
   }
   tabCheckin_click() {
     this.tab_details = false;
@@ -280,7 +293,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_checkin = true;
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkin'])
     this.tab_checkinHistory = false;
-   
+
   }
   tabCheckinDetail_click() {
     this.tab_details = false;
@@ -293,7 +306,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_checkinHistory = true;
 
   }
-  mobilemenu_toggle(){
+  mobilemenu_toggle() {
     this.mobilemenu = !this.mobilemenu;
   }
 
