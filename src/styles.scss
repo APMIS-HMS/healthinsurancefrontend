@@ -898,6 +898,29 @@ input[type="checkbox"].switch_1:checked:after {
 .radioButton input[type=radio]:checked + label {
 	background: #7060ff;
 }
+.search-results{
+    padding: 10px;
+    font-size: $font-x3;
+    z-index: 2;
+    box-sizing: border-box;
+    width: 100%;
+    position: absolute;
+    top: 120%;
+    background: #fff;
+    -webkit-box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
+    -moz-box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
+    box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
+    border: 1px solid $grey-2;
+}
+.search-results li{
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid $grey-2;
+}
+.search-results li:hover{
+    background: $grey-1;
+}
+
 
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {

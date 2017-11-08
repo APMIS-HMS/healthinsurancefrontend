@@ -31,14 +31,28 @@
                 <span class="post-title">- {{ minorPageInView }}</span>
             </div>
             <div class="bar-right">
-                <div (click)="notifier_hide()" class="user-wrap">
-                    <div class="user-img-wrap">
+                <div class="user-wrap">
+                    <div (click)="userMenu_show()" class="user-img-wrap">
                         <img src="../../../assets/img/users/default.png">
                     </div>
-                    <div class="user-text-wrap">
+                    <div (click)="userMenu_show()" class="user-text-wrap">
                         <div *ngIf="user?.facilityId !== undefined" class="user-name">{{user?.lastName}} {{user?.firstName}}</div>
                         <div *ngIf="user?.facilityId === undefined" class="user-name">{{user?.email}}</div>
                         <div class="user-others">{{user?.facilityId?.name}}</div>
+                    </div>
+
+                    <div *ngIf="user_menu" class="user-options">
+                        <div class="opt-menu-close"><i (click)="userMenu_hide()" class="fa fa-times" aria-hidden="true"></i></div>
+                        <ul class="option-items">
+                            <li (click)="showPass_show()" class="option-item">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                <span>Change Password</span>
+                            </li>
+                            <li class="option-item">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                <span>Log Out</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -66,3 +80,10 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="changePass" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-change-pass (closeModal)="modal_close()"></app-change-pass>
+    </div>
+</div> 
