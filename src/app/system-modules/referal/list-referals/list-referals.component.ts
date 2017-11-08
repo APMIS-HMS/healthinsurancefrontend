@@ -47,7 +47,8 @@ export class ListReferalsComponent implements OnInit {
             { 'referingProvider._id': this.user.facilityId._id },
             { 'destinationProvider._id': this.user.facilityId._id },
             { 'documentation.destinationProvider._id': this.user.facilityId._id }
-          ]
+          ],
+          $sort: { createdAt: -1 },
         }
       }).then((payload: any) => {
         this.loading = false;

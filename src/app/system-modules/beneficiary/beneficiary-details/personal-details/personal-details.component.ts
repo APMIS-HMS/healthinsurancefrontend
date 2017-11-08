@@ -53,6 +53,7 @@ export class PersonalDetailsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._route.params.subscribe(param => {
       if (!!param.id) {
+        console.log(param.id)
         this._getBeneficiaryDetails(param.id);
       }
     });

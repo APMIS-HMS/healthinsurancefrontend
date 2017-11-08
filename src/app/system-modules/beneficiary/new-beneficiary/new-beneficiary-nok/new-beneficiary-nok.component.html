@@ -1,6 +1,6 @@
 <div class="pg-title">
-        {{selectedBeneficiary?.person.lastName}} {{selectedBeneficiary?.person.firstName}}</div>
-    <div class="pg-subtitle">{{selectedBeneficiary?.person.email}}</div>
+    {{selectedBeneficiary?.personId?.lastName}} {{selectedBeneficiary?.personId?.firstName}}</div>
+<div class="pg-subtitle">{{selectedBeneficiary?.personId.email}}</div>
     
     
     <form [formGroup]="frmNok" novalidate>
@@ -77,6 +77,9 @@
                         <label class="label">Secondary phone <small>(Optional)</small></label>
                         <div class="inputWrap">
                             <input type="text" formControlName="secondaryPhone" class="form-control">
+                            <small class="alert-label" [hidden]="dependant.controls.secondaryPhone.valid || dependant.controls.secondaryPhone.pristine">
+                                Enter a valid  secondary phone number.
+                            </small>
                         </div>
                     </div>
 
@@ -108,9 +111,9 @@
         </div>
         <div style="margin:10px auto;display:flex;justify-content:space-between;">
             <button class="btn btn-medium btn-blue" (click)="moveBack()">
-                PREVIOUS &nbsp; <i class="fa fa-chevron-right"></i>
+                <i class="fa fa-chevron-left"></i> &nbsp; PREVIOUS  
             </button>
-            <button class="btn btn-medium btn-blue" (click)="onClickStepTwo(frmNok);">
+            <button [disabled]="!canProceed()" class="btn btn-medium btn-blue" (click)="onClickStepTwo(frmNok);">
                 NEXT &nbsp; <i class="fa fa-chevron-right"></i>
             </button>
         </div>
