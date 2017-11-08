@@ -5,9 +5,9 @@
         </div>
 
         <div class="mobile-menu-wrap">
-            <i class="fa fa-ellipsis-h"></i>
+            <i (click)="mobilemenu_toggle()" class="fa fa-ellipsis-h"></i>
 
-            <ul class="mobile-menu">
+            <ul *ngIf="mobilemenu" class="mobile-menu">
                 <li (click)="tabDetails_click()" [class.mobile-menu-active]="tab_details">Personal Details</li>
                 <li (click)="tabPayment_click()" [class.mobile-menu-active]="tab_payment">Payment History</li>
                 <li (click)="tabClaims_click()" [class.mobile-menu-active]="tab_claims">Claims</li>

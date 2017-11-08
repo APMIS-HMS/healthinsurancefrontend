@@ -502,6 +502,7 @@ export class PreAuthorizationNewComponent implements OnInit {
           // its approved
           let copyInvestigation = resource;
           delete copyInvestigation.Amount;
+          console.log(copyInvestigation)
           return {
             'investigation': copyInvestigation,
             'approvedStatus': this.requestStatus[1],

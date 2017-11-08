@@ -1,34 +1,33 @@
 
+import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
-import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService } from '../../../services/index';
+import { SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService, PolicyService } from '../../../services/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
-
-
 @Component({
-  selector: 'app-list-individual',
-  templateUrl: './list-individual.component.html',
-  styleUrls: ['./list-individual.component.scss']
+  selector: 'app-previous-payments',
+  templateUrl: './previous-payments.component.html',
+  styleUrls: ['./previous-payments.component.scss']
 })
-export class ListIndividualComponent implements OnInit {
+export class PreviousPaymentsComponent implements OnInit {
   listsearchControl = new FormControl();
   filterHiaControl = new FormControl('All');
   pastDueDate = new FormControl();
-  employer = new FormControl();
+  organization = new FormControl();
   dateRange = new FormControl();
   individualActiveTab: boolean = true;
   organisationActiveTab: boolean = false;
   user: any;
   currentPlatform: any;
   individualLoading: boolean = true;
-  individualPolicies: any = [];
+  individualPolicies: any = <any>[];
+
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -36,20 +35,23 @@ export class ListIndividualComponent implements OnInit {
 
   public today: IMyDate;
 
+
   constructor(
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
+    private _userTypeService: UserTypeService,
     private _locker: CoolLocalStorage,
     private _policyService: PolicyService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('PREMIUM PAYMENT ');
-    this._headerEventEmitter.setMinorRouteUrl('Pending payments for both individuals and organizations');
+    this._headerEventEmitter.setMinorRouteUrl('Previous Payments');
     this.user = (<any>this._locker.getObject('auth')).user;
+
     this._getCurrentPlatform();
   }
 
@@ -59,7 +61,7 @@ export class ListIndividualComponent implements OnInit {
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
-        isPaid: false,
+        isPaid: true,
         $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
@@ -97,6 +99,7 @@ export class ListIndividualComponent implements OnInit {
   }
 
 
+
   onClickTab(tabName: string) {
     if (tabName === 'individualPayment') {
       this.individualActiveTab = true;
@@ -117,7 +120,7 @@ export class ListIndividualComponent implements OnInit {
         this._systemService.off();
       });
     } else {
-      this._systemService.off();
+      this._systemService.on();
       this._router.navigate([url]).then(res => {
         this._systemService.off();
       }).catch(err => {

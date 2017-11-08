@@ -5,10 +5,9 @@
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
 
-    <div class="btn btn-medium btn-blue" (click)="navigate('/modules/premium-payment/previous', '');">
-        <i class="fa fa-plus-circle" aria-hidden="true"></i> Previous Payment List
+    <div class="btn btn-medium btn-blue" (click)="navigate('/modules/premium-payment/pending', '');">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Pending Payment List
     </div>
-
 </div>
 
 <div class="shadow-RB">
@@ -28,8 +27,8 @@
               </select>
             </div>
             <div class="input-wrap">
-                <label>LASHMA ID</label>
-                <select [formControl]="employer" class="form-control">
+                <label>Organization</label>
+                <select [formControl]="organization" class="form-control">
                 <option>All</option>
               </select>
             </div>
@@ -43,12 +42,9 @@
         </div>
         <div class="payment-box">
             <div class="tab">
-                <div class="tab-ffs" (click)="onClickTab('individualPayment');" [class.claim-tab-active]="individualActiveTab">Individual Payment</div>
-                <!-- <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div> -->
+                <div class="tab-ffs" (click)="onClickTab('individualPayment');" [class.claim-tab-active]="individualActiveTab">Individual Payment History</div>
+                <!-- <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment History</div> -->
             </div>
-            <!-- <div class="addInd-btn-box">
-        <button class="btn btn-medium btn-yellow" (click)="navigate('/modules/premium/newindividualpayment');" >New Payment</button>
-      </div> -->
         </div>
     </div>
 
@@ -59,7 +55,7 @@
                     <th class="th">No</th>
                     <th class="th">Due Date</th>
                     <th class="th">LASHMA ID</th>
-                    <th class="th">Amount Due</th>
+                    <th class="th">Amount Paid</th>
                     <th class="th">Duration Policy</th>
                     <th class="th">Policy ID</th>
                     <th class="th">Health Plan</th>
@@ -67,6 +63,21 @@
                     <th class="th"></th>
                 </tr>
             </thead>
+
+            <!-- <tbody class="tbody">
+                <tr class="tr">
+                    <td class="td">11th Oct 2017</td>
+                    <td class="td">Agric International Technology & Trade</td>
+                    <td class="td">500</td>
+                    <td class="td" style="color: green;">750,000.00 NGN</td>
+                    <td class="td">293.19.21.44</td>
+                    <td class="td">Multi Shield Nigeria Limited</td>
+                    <td class="td td-icos">
+                        <i class="fa fa-chevron-right"></i>
+                    </td>
+                </tr>
+            </tbody> -->
+
             <tbody class="tbody">
                 <tr class="tr" *ngIf="individualPolicies.length === 0 && !individualLoading">
                     <td class="text-center" colspan="9">No data available in table</td>
@@ -80,21 +91,23 @@
                     <td class="td">{{i+1}}</td>
                     <td class="td">{{ policy?.dueDate }}</td>
                     <td class="td">{{ policy?.principalBeneficiary?.platformOwnerNumber }}</td>
-                    <td class="td" style="color: red;">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
+                    <td class="td" style="color: green">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
                     <td class="td">{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}</td>
                     <td class="td">{{ policy?.policyId }}</td>
                     <td class="td">{{ policy?.planId?.name }}</td>
                     <td class="td">{{ policy?.hiaId?.name }}</td>
-                    <td class="td td-icos" routerLink="/modules/beneficiary/beneficiaries/{{policy?.principalBeneficiary?._id}}/payment">
-                        <i class="fa fa-chevron-right"></i>
+                    <td class="td td-icos">
+                        <button class="btn btn-blue">Details</button>
                     </td>
                 </tr>
             </tbody>
         </table>
 
         <div class="list-buttom">
-            <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-            <div class="btn btn-medium btn-yellow">Load More</div>
+            <div *ngIf="individualPolicies.length > 0">
+                <div class="list-summary">Showing 1 to {{ individualPolicies.length }} of {{ individualPolicies.length }} entries (filtered from {{ individualPolicies.length }} total entries)</div>
+                <div class="btn btn-medium btn-yellow">Load More</div>
+            </div>
         </div>
     </div>
     <div *ngIf="organisationActiveTab">
@@ -102,10 +115,11 @@
             <thead class="thead">
                 <tr class="tr">
                     <th class="th">Due Date</th>
-                    <th class="th">Employer Name</th>
-                    <th class="th">Number of Employee</th>
-                    <th class="th">Amount Due</th>
+                    <th class="th">LASHMA ID</th>
+                    <th class="th">Amount Paid</th>
+                    <th class="th">Duration Policy</th>
                     <th class="th">Policy ID</th>
+                    <th class="th">Health Plan</th>
                     <th class="th">Responsible HIA</th>
                     <th class="th"></th>
                 </tr>
@@ -113,48 +127,26 @@
 
             <tbody class="tbody">
                 <tr class="tr">
-                    <td class="td" style="color: red;">11th Oct 2017</td>
-                    <td class="td">Agric International Technology & Trade</td>
-                    <td class="td">500</td>
-                    <td class="td" style="color: red;">750,000.00 NGN</td>
-                    <td class="td">293.19.21.44</td>
-                    <td class="td">Multi Shield Nigeria Limited</td>
-                    <td class="td td-icos" routerLink="/modules/employer/employers/23">
-                        <i class="fa fa-chevron-right"></i>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody class="tbody">
-                <tr class="tr">
-                    <td class="td" style="color: red;">11th Oct 2017</td>
-                    <td class="td">Agric International Technology & Trade</td>
-                    <td class="td">500</td>
-                    <td class="td" style="color: red;">750,000.00 NGN</td>
-                    <td class="td">293.19.21.44</td>
-                    <td class="td">Multi Shield Nigeria Limited</td>
-                    <td class="td td-icos" routerLink="/modules/employer/employers/23">
-                        <i class="fa fa-chevron-right"></i>
-                    </td>
-                </tr>
-            </tbody>
-
-            <tbody class="tbody">
-                <tr class="tr">
-                    <td class="td" style="color: red;">11th Oct 2017</td>
-                    <td class="td">Agric International Technology & Trade</td>
-                    <td class="td">500</td>
-                    <td class="td" style="color: red;">750,000.00 NGN</td>
-                    <td class="td">293.19.21.44</td>
-                    <td class="td">Multi Shield Nigeria Limited</td>
-                    <td class="td td-icos" routerLink="/modules/employer/employers/23">
+                    <td class="td">11th Oct 2017</td>
+                    <td class="td">203.276.1000</td>
+                    <td class="td" style="color: green;">750 NGN</td>
+                    <td class="td">10 Months</td>
+                    <td class="td">223.45.67.11</td>
+                    <td class="td">Formal Sector Plan</td>
+                    <td class="td">Healthcare Security Limited</td>
+                    <td class="td td-icos">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+
         <div class="list-buttom">
-            <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-            <div class="btn btn-medium btn-yellow">Load More</div>
+            <div>
+                <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+                <div class="btn btn-medium btn-yellow">Load More</div>
+            </div>
         </div>
     </div>
 </div>

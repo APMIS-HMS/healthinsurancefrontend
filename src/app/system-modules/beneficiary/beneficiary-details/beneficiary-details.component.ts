@@ -19,6 +19,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   approvalFormGroup: FormGroup;
   beneficiary: any;
   policy: any;
+  mobilemenu = false;
   tab_details = false;
   tab_payment = false;
   tab_claims = false;
@@ -76,8 +77,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
-    this.user = (<any>this._locker.getObject('auth')).user; 
-    if(this.user.userType.name === "Beneficiary"){
+    this.user = (<any>this._locker.getObject('auth')).user;
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary'){
       this.isBeneficiary = true;
     }
 
@@ -291,6 +292,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkedin-history'])
     this.tab_checkinHistory = true;
 
+  }
+  mobilemenu_toggle(){
+    this.mobilemenu = !this.mobilemenu;
   }
 
 }

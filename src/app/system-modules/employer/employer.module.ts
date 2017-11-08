@@ -13,13 +13,14 @@ import { employerRoutes } from './employer.route';
 import { EmployerComponent } from './employer.component';
 import { EmployerDetailsComponent } from './employer-details/employer-details.component';
 import { NewEmployerComponent } from './new-employer/new-employer.component';
+import { EmployerBeneficiariesComponent } from './employer-details/employer-beneficiaries/employer-beneficiaries.component';
 
 @NgModule({
     imports: [
         SharedModule,
         employerRoutes
     ],
-    declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent],
+    declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent, EmployerBeneficiariesComponent],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
         UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService]
 })

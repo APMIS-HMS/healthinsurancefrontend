@@ -38,6 +38,7 @@
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
             <tr class="tr">
+                <th class="th">S/No</th>
                 <th class="th">LASHMA ID</th>
                 <th class="th">Patient Name</th>
                 <th class="th">Date</th>
@@ -61,7 +62,8 @@
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let referral of authorizations" class="tr">
+            <tr *ngFor="let referral of authorizations; let i =index" class="tr">
+                <td class="td">{{i+1}}</td>
                 <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
                 <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.personId?.lastName}} {{referral.checkedInDetails?.beneficiaryObject?.personId?.firstName}}</td>
                 <td class="td">{{referral.timeOfRequest|date:'short'}}</td>
@@ -93,7 +95,8 @@
 
     <div class="list-buttom">
         <div *ngIf="authorizations.length > 0">
-            <div class="list-summary">Showing 1 to {{ authorizations.length }} of {{ authorizations.length }} entries (filtered from {{ authorizations.length }} total entries)</div>
+            <div class="list-summary">Showing 1 to {{ authorizations.length }} of {{ authorizations.length }} entries (filtered from {{ authorizations.length
+                }} total entries)</div>
             <div class="btn btn-medium btn-yellow">Load More</div>
         </div>
     </div>

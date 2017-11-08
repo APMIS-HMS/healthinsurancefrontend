@@ -54,8 +54,8 @@ export class ListBeneficiaryComponent implements OnInit {
       .subscribe(e => {
       });
     this.user = (<any>this._locker.getObject('auth')).user;
-  
-    if (this.user.userType.name === "Beneficiary") {
+
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       console.log(this.user)
       this._getPerson();
     }
@@ -96,7 +96,7 @@ export class ListBeneficiaryComponent implements OnInit {
     });
   }
   _getPerson() {
-    if (this.user.userType.name === "Beneficiary") {
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
         query: {
           'personId.email': this.user.email
@@ -143,14 +143,14 @@ export class ListBeneficiaryComponent implements OnInit {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-
+        // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
         if (!!this.user.userType && this.user.userType.name === 'Provider') {
           this._getAllPolicies({
             query: {
               'providerId._id': this.user.facilityId._id,
               $limit: 200,
               $sort: { createdAt: -1 },
-              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
+              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1, 'providerId':1 }
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
@@ -202,6 +202,7 @@ export class ListBeneficiaryComponent implements OnInit {
       this._systemService.on();
       this._policyService.find(query).then((res: any) => {
         this.loading = false;
+        console.log(res)
         if (res.data.length > 0) {
           res.data.forEach(policy => {
             let principal = policy.principalBeneficiary;
