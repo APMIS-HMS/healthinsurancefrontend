@@ -206,7 +206,39 @@ export class PendingPaymentsComponent implements OnInit {
 
   onClickCreateAndPaybatch() {
     this.paystackProcessing = true;
-    this.onClickPaystack();
+
+    let policies = [];
+    // All policies that is being paid for.
+    this.selectedOrganizationPolicies.forEach(policy => {
+      if (policy.isChecked) {
+        policies.push({
+          policyId: policy.policyId,
+          policyCollectionId: policy._id
+        });
+      }
+    });
+
+    let user = {
+      userType: this.user.userType,
+      firstName: this.user.firstName,
+      lastname: this.user.lastname,
+      facilityId: this.user.facilityId,
+      email: this.user.email,
+      isActive: this.user.isActive,
+      platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
+      phoneNumber: this.user.phoneNumber
+    };
+
+    let ref = {
+      platformOwnerId: this.currentPlatform,
+      policies: policies,
+      paidBy: user,
+      requestedAmount: this.totalCost,
+      amountPaid: 0,
+      paymentType: this.paymentType
+    };
+
+    console.log(ref);
   }
 
   onClickPaystack() {
