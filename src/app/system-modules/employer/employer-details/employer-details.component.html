@@ -136,7 +136,7 @@
                 </div>
             </div>
             <div *ngIf="!isUploading">
-                <app-list-beneficiary></app-list-beneficiary>
+                <app-employer-beneficiaries></app-employer-beneficiaries>
             </div>
 
             <!-- <table *ngIf="isUploading" class="table" cellpadding="0" cellspacing="0" border="0.5">
@@ -244,7 +244,7 @@
                             <input placeholder="Select HIA" style="width:100%;" type="text" [formControl]="searchHiaControl" class="form-control">
 
                             <ul *ngIf="drugSearchResult" class="search-results">
-                                <li (click)="onSelectDrug(result)" *ngFor="let result of drugItems">{{result.name}}</li>
+                                <li (click)="onSelectDrug(result)" *ngFor="let result of hias">{{result.name}}</li>
                             </ul>
                         </div>
                     </div>
@@ -259,8 +259,8 @@
                     </thead>
 
                     <tbody class="tbody">
-                        <tr class="tr">
-                            <td class="td">Hygia</td>
+                        <tr *ngFor="let hia of facility?.employer?.hias" class="tr">
+                            <td class="td">{{hia.name}}</td>
                             <td class="td td-icos">
                                 <i class="fa fa-times"></i>
                             </td>

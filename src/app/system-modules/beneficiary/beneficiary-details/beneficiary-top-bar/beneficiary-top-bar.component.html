@@ -8,7 +8,7 @@
         <div *ngIf="!policy?.isPaid">Premium: <span class="text-red">Not Paid</span></div>
     </div>
 
-    <div class="bar-icos">
+    <div *ngIf="!isCheckIn" class="bar-icos">
         <div (click)="addApprovalClick($event);" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
     </div>
 </div>

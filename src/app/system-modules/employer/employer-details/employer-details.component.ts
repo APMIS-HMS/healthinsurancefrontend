@@ -50,6 +50,8 @@ export class EmployerDetailsComponent implements OnInit {
   currentPlatform: any;
   selectedCountry: any;
   selectedState: any;
+  hias:any[] = [];
+  drugSearchResult = false;
 
   constructor(
     private _router: Router,
@@ -74,10 +76,28 @@ export class EmployerDetailsComponent implements OnInit {
         this._getEmployerDetails(param.id);
       }
     });
+    this.searchHiaControl.valueChanges
+      .debounceTime(350)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        this.drugSearchResult = false;
+        this._facilityService.find({
+          query: {
+            'platformOwnerId._id': this.currentPlatform._id,
+            name: { $regex: value, '$options': 'i' },
+            'facilityType.name':'Health Insurance Agent'
+          }
+        }).then((payload:any) => {
+          this.hias = payload.data;
+          this.drugSearchResult = true;
+        })
+      });
+    this._getCurrentPlatform();
   }
 
+
   private _getCurrentPlatform() {
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }
@@ -146,6 +166,18 @@ export class EmployerDetailsComponent implements OnInit {
     }).catch(error => {
       this._systemService.off();
     });
+  }
+
+  onSelectDrug(hia){
+    if(this.facility.employer.hias === undefined){
+      this.facility.employer.hias = [];
+    }
+    this.facility.employer.hias.push(hia)
+    this._facilityService.update(this.facility).then(payload =>{
+      this.facility = payload;
+    }).catch(err =>{
+
+    })
   }
 
   onClickApprove() {

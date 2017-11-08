@@ -153,8 +153,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         if (!!verifyRes) {
           this.showPayment = false;
           this.isForRenewal = true;
-          this._getPolicyDetails(verifyRes.body.principalBeneficiary);
-          this._getPreviousPolicies(verifyRes.body.principalBeneficiary);
+          this._getPolicyDetails(verifyRes.body._id);
+          this._getPreviousPolicies(verifyRes.body._id);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
