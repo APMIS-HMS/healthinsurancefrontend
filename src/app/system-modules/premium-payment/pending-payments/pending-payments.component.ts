@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { Angular4PaystackModule } from 'angular4-paystack';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../services/globals/config';
 import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService } from '../../../services/index';
 import { Policy } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -16,6 +17,7 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
   styleUrls: ['./pending-payments.component.scss']
 })
 export class PendingPaymentsComponent implements OnInit {
+  paymentGroup: FormGroup;
   listsearchControl = new FormControl();
   filterHiaControl = new FormControl('All');
   pastDueDate = new FormControl();
@@ -30,6 +32,16 @@ export class PendingPaymentsComponent implements OnInit {
   organisationLoading: boolean = true;
   individualPolicies: any = [];
   organisationPolicies: any = [];
+  selectedOrganizationPolicies: any = [];
+  paystackClientKey: string = paystackClientKey;
+  withPaystack: boolean = true;
+  cashPayment: boolean = false;
+  chequePayment: boolean = false;
+  paystackProcessing: boolean = false;
+  refKey: number;
+  paymentType: string = 'e-Payment';
+  totalCost: number = 0;
+  totalItem: number = 0;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -38,20 +50,45 @@ export class PendingPaymentsComponent implements OnInit {
   public today: IMyDate;
 
   constructor(
+    private _fb: FormBuilder,
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _locker: CoolLocalStorage,
-    private _policyService: PolicyService
+    private _policyService: PolicyService,
+    private _angular4PaystackModule: Angular4PaystackModule
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('PREMIUM PAYMENT ');
     this._headerEventEmitter.setMinorRouteUrl('Pending payments for both individuals and organizations');
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
     this._getCurrentPlatform();
+
+    this.paymentGroup = this._fb.group({
+      batchName: ['', [<any>Validators.required]],
+      paymentOption: ['e-Payment', [<any>Validators.required]]
+    });
+
+    this.paymentGroup.controls['paymentOption'].valueChanges.subscribe(value => {
+      console.log(value);
+      this.paymentType = value;
+      if (value === 'Cash' || value === 'Cheque') {
+        this.cashPayment = true;
+        this.chequePayment = true;
+        this.withPaystack = false;
+      } else {
+        this.withPaystack = true;
+        this.cashPayment = false;
+        this.chequePayment = false;
+      }
+    });
+
+    this.refKey = (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
+    console.log(this.refKey)
   }
 
   private _getIndividualPolicies() {
@@ -90,6 +127,7 @@ export class PendingPaymentsComponent implements OnInit {
       console.log(res);
       this.organisationLoading = false;
       res.data.forEach(policy => {
+        policy.isChecked = false;
         policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
         this.organisationPolicies.push(policy);
       });
@@ -122,25 +160,57 @@ export class PendingPaymentsComponent implements OnInit {
   }
 
 
-  onCheckAllToPay() {
-    console.log('Selecteed pay');
-  }
+  onCheckAllToPay(isChecked) {
+    console.log(isChecked);
+    // if (!isChecked) {
+      let counter = 0;
+      this.organisationPolicies.forEach(policy => {
+        console.log(policy);
+        counter++;
+        policy.isChecked = isChecked;
+        console.log(policy.isChecked);
+        if (policy.isChecked) {
+          this.totalItem++;
+          this.totalCost += policy.premiumPackageId.amount;
+          this.selectedOrganizationPolicies.push(policy);
+        } else {
+          this.totalItem--;
+          this.totalCost -= policy.premiumPackageId.amount;
+        }
+      });
 
-  onCheckSelectedToPay(index: number, policy: any) {
-    console.log(policy);
-    // if (!policy.isChecked) {
-    //   policy.isChecked = true;
-    //   policy.isQueuedForPayment = true;
-    //   // this.selectedFFSClaims.push(claim);
+      if ((counter === this.organisationPolicies.length) && !isChecked) {
+          this.selectedOrganizationPolicies = [];
+      }
+      console.log(this.organisationPolicies);
+      console.log(this.selectedOrganizationPolicies);
     // } else {
     //   // Remove from the selected Claim
     //   console.log(index);
     //   policy.isChecked = false;
-    //   policy.isQueuedForPayment = false;
-    //   // if (this.selectedFFSClaims.length > 0) {
-    //   //   this.selectedFFSClaims.splice(index, 1);
-    //   // }
+    //   this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
     // }
+  }
+
+  onCheckSelectedToPay(index: number, policy: Policy) {
+    console.log(policy);
+    if (!policy.isChecked) {
+      policy.isChecked = true;
+      this.selectedOrganizationPolicies.push(policy);
+    } else {
+      policy.isChecked = false;
+      this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
+      console.log(this.selectedOrganizationPolicies);
+    }
+  }
+
+  onClickCreateAndPaybatch() {
+    this.paystackProcessing = true;
+    this.onClickPaystack();
+  }
+
+  onClickPaystack() {
+    console.log('awesome.');
   }
 
   onClickTab(tabName: string) {
@@ -153,12 +223,20 @@ export class PendingPaymentsComponent implements OnInit {
     }
   }
 
+  paymentDone(event) {
+    console.log(event);
+  }
+
   onClickOpenBatchModal() {
     this.openBatchModal = true;
   }
 
   modal_close() {
     this.openBatchModal = false;
+  }
+
+  paymentCancel() {
+    console.log('Payment Closed');
   }
 
   navigate(url: string, id: string) {

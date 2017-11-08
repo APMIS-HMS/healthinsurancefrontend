@@ -83,13 +83,13 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   private _getPolicyDetails(routeId) {
-    this._policyService.find({ query: { 'principalBeneficiary': routeId } }).then((res: any) => {
-      if (res.data.length > 0) {
-        res.data[0].premiumPackageId.amountInKobo = res.data[0].premiumPackageId.amount * 100;
-        res.data[0].dueDate = this.addDays(new Date(), res.data[0].premiumPackageId.durationInDay);
-        this.isForRenewal = res.data[0].isPaid;
-        this.policy = res.data[0];
-        console.log(this.policy);
+    this._policyService.get(routeId, {}).then((res: any) => {
+      console.log(res);
+      if (res._id) {
+        res.premiumPackageId.amountInKobo = res.premiumPackageId.amount * 100;
+        res.dueDate = this.addDays(new Date(), res.premiumPackageId.durationInDay);
+        this.isForRenewal = res.isPaid;
+        this.policy = res;
       }
     }).catch(err => console.log(err));
   }

@@ -196,7 +196,6 @@ export class NewUserComponent implements OnInit {
 
   onClickSaveUser(valid, value: any) {
     if (valid) {
-      console.log(value);
       this._systemService.on();
       if (this.user.userType === undefined) {
         value.platformOwnerId = value.facilityId;

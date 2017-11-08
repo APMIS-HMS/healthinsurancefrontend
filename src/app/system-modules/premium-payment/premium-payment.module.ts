@@ -6,6 +6,7 @@ import { premiumPaymantRoutes } from './premium-payment.routes';
 import { PremiumPaymentComponent } from './premium-payment.component';
 // import { ListOrganizationComponent } from './list-oraganization/list-organization.component';
 // import { ListIndividualComponent } from './list-individual/list-individual.component';
+import { Angular4PaystackModule } from 'angular4-paystack';
 import { NewOrganizationPaymentComponent } from './new-organization-payment/new-organization-payment.component';
 import {
     ModalAddOrganizationPaymentComponent
@@ -21,6 +22,7 @@ import { PreviousPaymentsComponent } from './previous-payments/previous-payments
         SharedModule,
         MyDatePickerModule,
         premiumPaymantRoutes,
+        Angular4PaystackModule
     ],
     declarations: [PremiumPaymentComponent,
         // ListOrganizationComponent,

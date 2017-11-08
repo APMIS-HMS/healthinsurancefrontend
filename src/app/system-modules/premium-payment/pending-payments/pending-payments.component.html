@@ -46,7 +46,7 @@
                 <div class="tab-ffs" (click)="onClickTab('individualPayment');" [class.claim-tab-active]="individualActiveTab">Individual Payment</div>
                 <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div>
             </div>
-            <div class="addInd-btn-box" *ngIf="organisationActiveTab && organisationPolicies.length > 0">
+            <div class="addInd-btn-box" *ngIf="organisationActiveTab && selectedOrganizationPolicies.length > 0">
                 <button class="btn btn-medium btn-yellow" (click)="onClickOpenBatchModal();">Create Batch</button>
             </div>
         </div>
@@ -85,7 +85,7 @@
                     <td class="td">{{ policy?.policyId }}</td>
                     <td class="td">{{ policy?.planId?.name }}</td>
                     <td class="td">{{ policy?.hiaId?.name }}</td>
-                    <td class="td td-icos" routerLink="/modules/beneficiary/beneficiaries/{{policy?.principalBeneficiary?._id}}/payment">
+                    <td class="td td-icos" routerLink="/modules/beneficiary/beneficiaries/{{policy?._id}}/payment">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>
@@ -103,7 +103,7 @@
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
                 <tr class="tr">
-                    <th class="th" *ngIf="organisationPolicies.length > 0" (change)="onCheckAllToPay($event);"><input type="checkbox"></th>
+                    <th class="th" *ngIf="organisationPolicies.length > 0" (change)="onCheckAllToPay($event.target.checked);"><input type="checkbox"></th>
                     <th class="th">No</th>
                     <th class="th">Due Date</th>
                     <th class="th">Employer Name</th>
@@ -127,7 +127,7 @@
                 </tr>
                 <tr class="tr" *ngFor="let policy of organisationPolicies; let i = index;">
                     <td class="td">
-                        <input (change)="onCheckSelectedToPay(i, policy);" type="checkbox">
+                        <input [attr.checked]="policy.isChecked ? true : null" (change)="onCheckSelectedToPay(i, policy);" type="checkbox">
                     </td>
                     <td class="td">{{ i+1 }}</td>
                     <td class="td">{{ policy?.dueDate }}</td>
@@ -143,6 +143,11 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="total-cost-box">
+            <b>Total Item Selected: {{ totalItem }}</b><br>
+            <b>Total Cost: &#x20A6; {{ totalCost }}</b>
+        </div>
         <div class="list-buttom">
             <div *ngIf="organisationPolicies.length > 0">
                 <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
@@ -158,11 +163,24 @@
         <div>
             <div class="modal-title" style="font-weight: bold">Create Batch</div>
             <div>
+                <form [formGroup]="paymentGroup"></form>
                 <div class="frm-item-wrap">
-                    <input type="text" placeholder="Batch Name">
+                    <input type="text" formcontrolName="batchName" placeholder="Batch Name">
+                </div>
+                <div class="frm-item-wrap">
+                    <select formcontrolName="paymentOption">
+                        <option value="e-Payment" selected>e-Payment</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
                 </div>
             </div>
-            <button class="btn btn-medium btn-blue cta">PAY</button>
+            <button *ngIf="withPaystack" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch();" style="width:150px;padding:10px;margin-left:10px;">
+                <span *ngIf="!paystackProcessing">e-Payment</span>
+                <span *ngIf="paystackProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+            <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
+            <angular4-paystack [hidden]="true" [key]="paystackClientKey" [email]="user.email" [amount]="totalCost" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (click)="onClickPaystack();" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
         </div>
     </div>
 </div>

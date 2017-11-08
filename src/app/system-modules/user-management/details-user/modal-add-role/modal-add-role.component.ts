@@ -12,7 +12,6 @@ import { ModuleService, SystemModuleService, RoleService } from '../../../../ser
 export class ModalAddRoleComponent implements OnInit {
 
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
-
   @Input() selectedUser;
   modules: any[] = [];
   roles: any[] = [];
@@ -75,6 +74,7 @@ export class ModalAddRoleComponent implements OnInit {
     }
   }
   confirmAndPush() {
+    console.log(this.selectedUser);
     const existingRoles = this.selectedUser.roles;
     this.checkedRoles.forEach(item => {
       const index = existingRoles.findIndex(x => x._id === item._id);

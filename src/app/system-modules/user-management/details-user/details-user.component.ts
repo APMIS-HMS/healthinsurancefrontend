@@ -40,7 +40,6 @@ export class DetailsUserComponent implements OnInit {
 
   _updateUser(value) {
     this._systemService.on();
-    console.log(this.selectedUser);
     this.selectedUser.isActive = value.target.checked;
     this._userService.patch(this.selectedUser._id, this.selectedUser, {}).then((payload: any) => {
       this.selectedUser = payload;
@@ -52,11 +51,12 @@ export class DetailsUserComponent implements OnInit {
 
   _getUser(id) {
     this._systemService.on();
-    this._userService.get(id, {}).then((payload: any) => {
-      console.log(payload);
-      this.selectedUser = payload;
+    this._userService.get(id, {}).then((res: any) => {
+      console.log(res);
+      this.selectedUser = res;
       this._systemService.off();
     }).catch(err => {
+      console.log(err);
       this._systemService.off();
     });
   }
