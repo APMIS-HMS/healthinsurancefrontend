@@ -50,6 +50,8 @@ export class NewClaimComponent implements OnInit {
   isItemselected = true;
   isAuthorize = false;
 
+  authorizeType = "";
+
   tab_symptoms = true;
   tab_diagnosis = false;
   tab_investigation = false;
@@ -228,6 +230,7 @@ export class NewClaimComponent implements OnInit {
       console.log(preauth_callback);
       if (preauth_callback.data.length > 0) {
         this.isAuthorize = true;
+        this.authorizeType = "Free for Service"
         this.SelectedCheckinItem = preauth_callback.data[0];
         this.SelectedCheckinItem.checkedInDetails.beneficiaryObject={};
         this.SelectedCheckinItem.checkedInDetails.beneficiaryObject =  this.SelectedCheckinItem.beneficiaryObject;
@@ -278,6 +281,7 @@ export class NewClaimComponent implements OnInit {
         });
       } else {
         this.isAuthorize = false;
+        this.authorizeType = "Capitation";
         this.SelectedCheckinItem.checkedInDetails = {};
         console.log(checkinId);
         this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
