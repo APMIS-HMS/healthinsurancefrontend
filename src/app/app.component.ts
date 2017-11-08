@@ -11,8 +11,9 @@ import { PolicyService } from './services/policy/policy.service';
 export class AppComponent implements OnInit {
 	title = 'app works!';
 	constructor(
-		public toastr: ToastsManager,
+		public toastr: ToastsManager,vcr: ViewContainerRef,
 		private _policyService: PolicyService) {
+			this.toastr.setRootViewContainerRef(vcr);
 	}
 
 	ngOnInit() {
