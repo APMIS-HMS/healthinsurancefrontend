@@ -1,45 +1,93 @@
-<div>
-    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-        <thead class="thead">
-            <tr class="tr">
-                <th class="th">No</th>
-                <th class="th">Due Date</th>
-                <th class="th">LASHMA ID</th>
-                <th class="th">Amount Due</th>
-                <th class="th">Duration Policy</th>
-                <th class="th">Policy ID</th>
-                <th class="th">Health Plan</th>
-                <th class="th">Responsible HIA</th>
-                <th class="th"></th>
-            </tr>
-        </thead>
-        <tbody class="tbody">
-            <tr class="tr" *ngIf="beneficiaries.length === 0 && !loading">
-                <td class="text-center" colspan="9">No data available in table</td>
-            </tr>
-            <tr class="tr" *ngIf="beneficiaries.length === 0 && loading">
-                <td class="text-center" colspan="9">
-                    <i class="fa fa-spinner fa-spin"></i>
-                </td>
-            </tr>
-            <tr *ngFor="let beneficiary of beneficiaries; let i = index;" class="tr">
-                <td class="td">{{i+1}}</td>
-                <td class="td">{{ beneficiary?.dueDate }}</td>
-                <td class="td">{{ beneficiary?.principalBeneficiary?.platformOwnerNumber }}</td>
-                <td class="td" style="color: red;">&#x20A6; {{ beneficiary?.premiumPackageId?.amount }}</td>
-                <td class="td">{{ beneficiary?.premiumPackageId?.duration }} {{ beneficiary?.premiumPackageId?.unit?.name }}</td>
-                <td class="td">{{ beneficiary?.beneficiaryId }}</td>
-                <td class="td">{{ beneficiary?.planId?.name }}</td>
-                <td class="td">{{ beneficiary?.hiaId?.name }}</td>
-                <td class="td td-icos" routerLink="/modules/beneficiary/beneficiaries/{{policy?.principalBeneficiary?._id}}/payment">
-                    <i class="fa fa-chevron-right"></i>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<table class="table" cellpadding="0" cellspacing="0" border="0.5">
+    <thead class="thead">
+        <tr class="tr">
+            <th class="th">No</th>
+            <th class="th">Name</th>
+            <th class="th">Gender</th>
+            <th class="th">Type</th>
+            <th class="th">LASHMA ID</th>
+            <th class="th">DOB</th>
+            <th class="th">L.G.A</th>
+            <th class="th">HIA</th>
+            <th class="th">Status</th>
+            <td class="th">Action</td>
+        </tr>
+    </thead>
 
-    <div class="list-buttom">
-        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-        <div class="btn btn-medium btn-yellow">Load More</div>
-    </div>
-</div>
+    <tbody class="tbody">
+        <tr class="tr">
+            <td class="td hover">1</td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Joel Oniel</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <input [formControl]="nameControl" type="text">
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="baller td-value">P</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="typeControl">
+                        <option>P</option>
+                        <option>D</option>
+                    </select>
+                </div>
+                <!-- <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary.dependantCount}}</span>
+                <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
+                <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span> -->
+            </td>
+            
+            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+                <span *ngIf="!isEdit" class="td-value">122.212.22.2</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <input [formControl]="idControl" type="text">
+                </div>
+            </td>
+            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+                <span *ngIf="!isEdit" class="td-value">11 Oct 2020</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <my-date-picker name="dobControl" [options]="myDatePickerOptions" [selDate]="today" [formControl]="dobControl"></my-date-picker>
+                </div>
+            </td>
+            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+                <span *ngIf="!isEdit" class="td-value">Ikorodu</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="lgaControl">
+                        <option>P</option>
+                        <option>D</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+                <span *ngIf="!isEdit" class="td-value">Hygia</span>
+                <div *ngIf="isEdit" class="searchable-input">
+                    <input type="text" [formControl]="hiaControl" class="form-control">
+                    <ul *ngIf="hiaResult" class="search-results">
+                        <li>Hygia</li>
+                    </ul>
+                </div>
+            </td>
+            <td class="td hover" (click)="navigateDetailBeneficiary(beneficiary)">
+                <span *ngIf="!isEdit" class="tbl-status-active td-value">Active</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="statusControl">
+                        <option>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td td-icos">
+                <i *ngIf="!isEdit" class="fa fa-edit" (click)="editRow()"></i>
+                <i *ngIf="isEdit" class="fa fa-check" (click)="editRow()"></i>
+            </td>
+        </tr>
+    </tbody>
+</table>
