@@ -9,29 +9,14 @@
     </thead>
 
     <tbody class="tbody">
-        <tr class="tr">
-            <td class="td">Jonathan Nelson</td>
-            <td class="td">122.22.22.3</td>
-            <td class="td"><span class="baller">P</span></td>
-            <td class="td">11th October 2017</td>
-        </tr>
-        <tr class="tr">
-            <td class="td">Jonathan Nelson</td>
-            <td class="td">122.22.22.3</td>
-            <td class="td"><span class="baller">P</span></td>
-            <td class="td">11th October 2017</td>
-        </tr>
-        <tr class="tr">
-            <td class="td">Jonathan Nelson</td>
-            <td class="td">122.22.22.3</td>
-            <td class="td"><span class="baller">P</span></td>
-            <td class="td">11th October 2017</td>
-        </tr>
-        <tr class="tr">
-            <td class="td">Jonathan Nelson</td>
-            <td class="td">122.22.22.3</td>
-            <td class="td"><span class="baller">P</span></td>
-            <td class="td">11th October 2017</td>
+        <tr *ngFor="let check of checkins" class="tr">
+            <td class="td">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
+            <td class="td">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
+            <td class="td">
+                <span *ngIf="check.beneficiaryId === check.principalBeneficiaryId" class="baller">P</span>
+                <span *ngIf="check.beneficiaryId !== check.principalBeneficiaryId" class="baller">D</span>
+            </td>
+            <td class="td">{{check.createdAt | date:'short'}}</td>
         </tr>
     </tbody>
 </table>

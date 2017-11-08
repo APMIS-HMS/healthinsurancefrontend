@@ -53,6 +53,7 @@ export class CheckinDetailsComponent implements OnInit {
   selectedEncounterStatus: any;
   selectedCheckIn: CheckIn;
   user: any;
+  policy:any;
   hasCheckInToday = false;
 
   constructor(private _fb: FormBuilder,
@@ -139,7 +140,7 @@ export class CheckinDetailsComponent implements OnInit {
 
       if (results[1].data.length > 0) {
         // this.dependants = results[1].data[0].dependantBeneficiaries;
-        // this.policy = results[1].data[0];
+        this.policy = results[1].data[0];
         // console.log(this.dependants)
         // console.log(this.policy)
       }

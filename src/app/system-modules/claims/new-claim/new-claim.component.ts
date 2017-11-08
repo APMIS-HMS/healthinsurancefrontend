@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { DURATIONS } from './../../../services/globals/config';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { PolicyService } from './../../../services/policy/policy.service';
@@ -34,6 +35,8 @@ export class NewClaimComponent implements OnInit {
   newClaimConfirm = false;
 
   showCodes = false;
+
+  durations = [];
 
   claimsFormGroup: FormGroup;
   searchResults = false;
@@ -101,7 +104,7 @@ export class NewClaimComponent implements OnInit {
     private _drugPackSizeService: DrugPackSizeService,
     private _procedureService: ProcedureService,
     private _diagnosisService: DiagnosisService,
-    private _policyService:PolicyService,
+    private _policyService: PolicyService,
     private _preAuthorizationService: PreAuthorizationService,
     private _diagnosisTypeService: DiagnosisTypeService,
     private _route: ActivatedRoute,
@@ -117,7 +120,7 @@ export class NewClaimComponent implements OnInit {
         this._getSelectedCheckinItem(param.id);
       }
     });
-
+    this.durations = DURATIONS;
 
     this.claimsFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
@@ -220,11 +223,14 @@ export class NewClaimComponent implements OnInit {
 
   _getSelectedCheckinItem(checkinId) {
     var clinicNote = "";
-    this._preAuthorizationService.find({ query: { "checkedInDetails._id": checkinId } }).then((preauth_callback: any) => {
+    console.log(checkinId);
+    this._preAuthorizationService.find({ query: { "checkedInDetails": checkinId } }).then((preauth_callback: any) => {
       console.log(preauth_callback);
       if (preauth_callback.data.length > 0) {
         this.isAuthorize = true;
         this.SelectedCheckinItem = preauth_callback.data[0];
+        this.SelectedCheckinItem.checkedInDetails.beneficiaryObject={};
+        this.SelectedCheckinItem.checkedInDetails.beneficiaryObject =  this.SelectedCheckinItem.beneficiaryObject;
         this.SelectedCheckinItem.providerFacility = this.SelectedCheckinItem.policyId.providerId.name;
         this.SelectedCheckinItem.plan = this.SelectedCheckinItem.policyId.planTypeId.name;
         console.log(this.SelectedCheckinItem);
@@ -281,9 +287,9 @@ export class NewClaimComponent implements OnInit {
           this.SelectedCheckinItem.plan = this.SelectedCheckinItem.checkedInDetails.policyObject.planTypeId.name;
           // let policyId = this._locker.getObject('policyID');
           // console.log(policyId);
-          this.SelectedCheckinItem.policyId={};
-          this.SelectedCheckinItem.policyId.planId={};
-         
+          this.SelectedCheckinItem.policyId = {};
+          this.SelectedCheckinItem.policyId.planId = {};
+
           // this._policyService.find({ query: { _id: policyId, $limit: 1 } }).then((payload2:any)=>{
           //   this.SelectedCheckinItem.policyId.planId.name = payload2.data[0].planId.planType.name;
           // })
@@ -499,17 +505,21 @@ export class NewClaimComponent implements OnInit {
   }
 
   onAddDrug() {
+    console.log("Inside drug list");
     let name = this.claimsFormGroup.controls.drug;
     let qty = this.claimsFormGroup.controls.drugQty;
     let unit = this.claimsFormGroup.controls.drugUnit;
-    if (name.valid && qty.value.length > 0) {
+    console.log(qty.value.toString().length);
+    console.log(name.valid)
+    if (name.valid && qty.value.toString().length > 0) {
       this.drugList.push({
         "drug": typeof (this.selectedDrug.name) === 'object' ? this.selectedDrug : name.value,
         "quantity": qty.value,
         "unit": unit.value,
       });
       this.claimsFormGroup.controls.drug.reset();
-      this.claimsFormGroup.controls.drugQty.reset();
+      unit.reset();
+      qty.reset(1);
     } else {
       name.markAsDirty({ onlySelf: true });
     }
