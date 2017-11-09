@@ -16,6 +16,7 @@ import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService
 })
 export class PaymentDetailBeneficiaryComponent implements OnInit {
   paymentOptionGroup: FormGroup;
+  cashPaymentGroup: FormGroup;
   policy: any;
   previousPolicies: any = [];
   currentPlatform: any;
@@ -30,6 +31,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   showPayment: boolean = false;
   isForRenewal: boolean = false;
   openCashPaymentModal: boolean = false;
+  cashPaymentProcessing: boolean = false;
   paymentTypes: any = PAYMENTTYPES;
 
   constructor(
@@ -63,6 +65,11 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
     this.paymentOptionGroup = this._fb.group({
       paymentOption: ['e-Payment', [<any>Validators.required]]
+    });
+
+    this.cashPaymentGroup = this._fb.group({
+      amount: [{ value: 0, disabled: true}, [<any>Validators.required]],
+      comment: ['', [<any>Validators.required]]
     });
 
     this.paymentOptionGroup.controls['paymentOption'].valueChanges.subscribe(value => {
@@ -166,8 +173,66 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     });
   }
 
+  onClickCreateAndPaybatch(valid: boolean, value: any) {
+    if (valid) {
+      console.log(value);
+      this.cashPaymentProcessing = true;
+      let policies = [];
+      // All policies that is being paid for.
+      policies.push({
+        policyId: this.policy.policyId,
+        policyCollectionId: this.policy._id
+      });
+
+      let user = {
+        userType: this.user.userType,
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        facilityId: this.user.facilityId,
+        email: this.user.email,
+        isActive: this.user.isActive,
+        platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
+        phoneNumber: this.user.phoneNumber
+      };
+
+      let ref = {
+        platformOwnerId: this.currentPlatform,
+        policies: policies,
+        paidBy: user,
+        requestedAmount: this.policy.premiumPackageId.amount,
+        amountPaid: this.policy.premiumPackageId.amount,
+        paymentType: this.paymentType,
+        comment: value.comment,
+        isActive: true,
+      };
+
+      console.log(ref);
+      this._premiumPaymentService.payWidthCashWithMiddleWare(ref).then((res: any) => {
+        console.log(res);
+        if (!!res) {
+          this.showPayment = false;
+          this.isForRenewal = true;
+          this.openCashPaymentModal = false;
+          this._getPolicyDetails(res.body._id);
+          this._getPreviousPolicies(res.body._id);
+          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+    } else {
+      this._toastr.error('Please fill in all required fields', 'Form ValidationError!');
+    }
+  }
+
   onClickPayCash() {
+    this.cashPaymentGroup.controls['amount'].setValue(this.policy.premiumPackageId.amount);
+    this.openCashPaymentModal = true;
     console.log('Pay Cash');
+  }
+
+  modal_close() {
+    this.openCashPaymentModal = false;
   }
 
   addDays(date, days) {

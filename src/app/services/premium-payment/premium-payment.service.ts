@@ -69,4 +69,11 @@ export class PremiumPaymentService {
       .post(path)
       .send(body);
   }
+  
+  payWidthCashWithMiddleWare(body: any) {
+    const path = this._restService.getHost() + '/premium-cash-payment';
+    return request
+      .post(path)
+      .send(body);
+  }
 }
