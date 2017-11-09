@@ -89,17 +89,17 @@
                     </div>
                     <div class="input-wrap">
                         <div class="input-wrap-x2">
-                            <div style="width:150px;margin-right:10px;">
+                            <div *ngIf="selectedCheckIn?.encounterType.name==='In-Patient'" style="width:150px;margin-right:10px;">
                                 <span class="inner-label">Date of Admission:</span>
-                                <my-date-picker name="admissionDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="admissionDate"></my-date-picker>
+                                <label>{{selectedCheckIn?.createdAt|date:'short'}}</label>
                             </div>
-                            <div style="width:150px;">
+                            <div *ngIf="selectedCheckIn?.encounterType.name==='In-Patient'" style="width:150px;margin-right:10px;">
                                 <span class="inner-label">Date of Discharge:</span>
-                                <my-date-picker name="dischargeDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="dischargeDate"></my-date-picker>
+                    
                             </div>
                             <div style="width:150px;">
                                 <span class="inner-label">Date of Visit:</span>
-                                <my-date-picker name="visitDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="visitDate"></my-date-picker>
+                                <label>{{selectedCheckIn?.createdAt|date:'short'}}</label>
                             </div>
                         </div>
                     </div>

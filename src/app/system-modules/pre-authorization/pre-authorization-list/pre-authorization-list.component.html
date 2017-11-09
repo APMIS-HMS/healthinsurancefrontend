@@ -61,10 +61,17 @@
                     <span class="green">{{auth.approvedStatus.name}}</span>
                 </td>
                 <td class="td">
-                        <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
                     {{(auth.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
                 </td>
-                <td class="td">Emergency</td>
+                <td class="td">
+                    <span *ngIf="!selectedCheckIn?.isEmergency">No
+                        <i class="fa fa-times red" aria-hidden="true"></i>
+                    </span>
+                    <span *ngIf="selectedCheckIn?.isEmergency">Yes
+                        <i class="fa fa-check green" aria-hidden="true"></i>
+                    </span>
+                </td>
                 <td class="td tip-td">
                     <i class="fa fa-info fa-circle"></i>
                     <div class="tooltip">
@@ -72,7 +79,7 @@
                         <div class="tip-content">{{auth.documentation[0].document[1].clinicalDocumentation}}</div>
                     </div>
                 </td>
-                <td class="td td-icos" (click)="navigateDetail(auth)" >
+                <td class="td td-icos" (click)="navigateDetail(auth)">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>
