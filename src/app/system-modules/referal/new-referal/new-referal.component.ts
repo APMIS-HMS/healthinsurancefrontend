@@ -19,7 +19,7 @@ import { PolicyService } from '../../../services/policy/policy.service';
 import { ToastsManager } from 'ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationService } from '../../../services/pre-authorization/pre-authorization.service';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-new-referal',
@@ -567,11 +567,22 @@ export class NewReferalComponent implements OnInit {
   }
 
 
+  getDateDiff(date1, date2) {
+    var b = moment(date1),
+      a = moment(date2),
+      intervals: any = ['years', 'months', 'weeks', 'days'],
+      out = [];
+
+    for (var i = 0; i < intervals.length; i++) {
+      var diff = a.diff(b, intervals[i]);
+      b.add(diff, intervals[i]);
+      out.push(diff + ' ' + intervals[i]);
+    }
+    return out.join(', ');
+  };
+
   _getAge() {
-    return differenceInYears(
-      new Date(),
-      this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth
-    );
+    return this.getDateDiff(this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth, new Date());
   }
   _getAddress() {
     return this.selectedCheckIn.beneficiaryObject.personId.homeAddress.street + ', ' +

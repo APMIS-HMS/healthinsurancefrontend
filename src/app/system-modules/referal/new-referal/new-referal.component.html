@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Age</label>
                 <div class="inputWrap">
-                    <input [readonly]="true" type="number" min="0" formControlName="age" class="form-control">
+                    <input [readonly]="true" type="text" min="0" formControlName="age" class="form-control">
                     <small class="alert-label" [hidden]="referalFormGroup.controls.age.valid || referalFormGroup.controls.age.pristine">
                         This is a required field.
                     </small>
