@@ -8,6 +8,9 @@ import { CurrentPlaformShortName } from '../../services/globals/config';
 import { NotificationService } from './../../services/common/notification.service';
 import { PolicyService } from './../../services/policy/policy.service';
 
+import { SystemModuleService } from './../../services/index';
+import { PushNotificationComponent } from 'ng2-notifications/ng2-notifications';
+
 
 @Component({
   selector: 'app-top-bar',
@@ -34,6 +37,7 @@ export class TopBarComponent implements OnInit {
     private _facilityService: FacilityService,
     private _locker: CoolLocalStorage,
     private _router: Router,
+    private _systemService: SystemModuleService,
     private _notificationService: NotificationService,
     private _policyService: PolicyService
   ) { }
@@ -59,7 +63,19 @@ export class TopBarComponent implements OnInit {
       // let title = "New Policy - " + payload.policyId;
       // let content = payload.principalBeneficiary.personId.firstName + " " + payload.principalBeneficiary.personId.firstName + " " + "added " + payload.dependantBeneficiaries.length + " dependant(s)";
       console.log("-----broadcast create object-------");
+      this._notificationService.find({
+        query: {
+          'userType._id': userUserType.userType._id
+        }
+      }).then((noOfUnReads: any) => {
+        let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
+        this.noUnReadAlert = unReadItems.length;
+        this.alerts = noOfUnReads.data;
+        console.log(this.alerts);
+      });
+    });
 
+    this._policyService._listenerUpdate.subscribe(payload => {
       this._notificationService.find({
         query: {
           'userType._id': userUserType.userType._id
@@ -71,20 +87,9 @@ export class TopBarComponent implements OnInit {
         console.log(this.alerts);
       });
 
-      this._notificationService.find({
-        query: {
-          'userType._id': userUserType.userType._id
-        }
-      }).then((noOfUnReads: any) => {
-        this.alerts = noOfUnReads.data;
-        console.log(this.alerts);
-      });
     });
 
-    this._policyService._listenerUpdate.subscribe(payload => {
-      let title = "Policy updated - " + payload.policyId;
-      let content = payload.principalBeneficiary.personId.firstName + " " + payload.principalBeneficiary.personId.firstName + " " + "added " + payload.dependantBeneficiaries.length + " dependant(s)";
-    });
+
     this._notificationService.find({
       query: {
         'userType._id': userUserType.userType._id
@@ -94,6 +99,7 @@ export class TopBarComponent implements OnInit {
       this.noUnReadAlert = unReadItems.length;
       this.alerts = noOfUnReads.data;
       console.log(this.alerts);
+
     })
   }
 
@@ -108,6 +114,20 @@ export class TopBarComponent implements OnInit {
     }).catch(err => {
       console.log(err);
     });
+  }
+
+  navigateDetailBeneficiary(item) {
+    this._systemService.on();
+    item.isRead = true;
+    this._notificationService.update(item).then(payload => {
+      this._router.navigate(['/modules/beneficiary/beneficiaries', item.policyId]).then(res => {
+        this.modal_close();
+        this._systemService.off();
+      }).catch(err => {
+        this.modal_close();
+        this._systemService.off();
+      });
+    })
   }
 
   menu_show() {
