@@ -18,6 +18,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Router, ActivatedRoute } from '@angular/router';
 import differenceInYears from 'date-fns/difference_in_years';
+import { FacilityService } from '../../../../services/index';
 
 @Component({
   selector: 'app-checkin-details',
@@ -53,7 +54,7 @@ export class CheckinDetailsComponent implements OnInit {
   selectedEncounterStatus: any;
   selectedCheckIn: CheckIn;
   user: any;
-  policy:any;
+  policy: any;
   hasCheckInToday = false;
 
   constructor(private _fb: FormBuilder,
@@ -71,7 +72,8 @@ export class CheckinDetailsComponent implements OnInit {
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
     private _router: Router,
-    private _preAuthorizationService:PreAuthorizationService
+    private _preAuthorizationService: PreAuthorizationService,
+    private _facilityService: FacilityService
   ) { }
 
   ngOnInit() {
@@ -95,6 +97,7 @@ export class CheckinDetailsComponent implements OnInit {
     this._getClaimTypes();
     this._getEncounterStatuses();
     this._getEncounterTypes();
+    this._getUserFacility();
 
     // this._hasCheckInToday();
 
@@ -107,6 +110,13 @@ export class CheckinDetailsComponent implements OnInit {
   //     }
   //   })
   // }
+  private _getUserFacility() {
+    this._facilityService.get(this.user.facilityId._id, {}).then(payload => {
+      this.user.facilityId = payload;
+    }).catch(err => {
+
+    })
+  }
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
 
@@ -276,6 +286,7 @@ export class CheckinDetailsComponent implements OnInit {
     this._checkInService.find({
       query: {
         beneficiaryId: this.beneficiary._id,
+        'providerFacilityId._id': this.user.facilityId._id,
         $client: {
           hasCheckInToday: false
         }

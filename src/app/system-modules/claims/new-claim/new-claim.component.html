@@ -13,7 +13,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Patient Name</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="patientName" class="form-control" value="{{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.personId?.firstName}} {{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.personId?.lastName}} ">
+                    <input type="text" formControlName="patientName" class="form-control" disabled value="{{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.personId?.firstName}} {{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.personId?.lastName}} ">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.patientName.valid || claimsFormGroup.controls.patientName.pristine">
                     This is a required field (minimum 3 and max of 50 characters).
@@ -22,7 +22,7 @@
             <div class="frm-item-wrap">
                 <label class="label">LASHMA ID</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="lashmaid" class="form-control" value="{{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}">
+                    <input type="text" formControlName="lashmaid" class="form-control" disabled value="{{SelectedCheckinItem?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.lashmaid.valid || claimsFormGroup.controls.lashmaid.pristine">
                     This is a required field.
@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Hospital Name</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="hospital" class="form-control" value="{{SelectedCheckinItem?.providerFacility}}">
+                    <input type="text" formControlName="hospital" disabled class="form-control" value="{{SelectedCheckinItem?.providerFacility}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.hospital.valid || claimsFormGroup.controls.hospital.pristine">
                     This is a required field.
@@ -40,7 +40,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Health Plan</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="plan" class="form-control" value="{{SelectedCheckinItem?.plan}}">
+                    <input type="text" formControlName="plan" disabled class="form-control" value="{{SelectedCheckinItem?.plan}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.plan.valid || claimsFormGroup.controls.plan.pristine">
                     This is a required field.
@@ -104,11 +104,12 @@
             <div class="frm-item-wrap">
                 <label class="label">Claim Type</label>
                 <div class="input-wrap">
-                    <select formControlName="claimType" class="form-control">
-                        <option value="Free for Service" selected *ngIf="isAuthorize==true">Free for Service</option>
-                        <option value="Capitation" selected *ngIf="isAuthorize ==false">Capitation</option>
+                        <input type="text" formControlName="claimType" class="form-control" disabled value="{{authorizeType}}">
+                    <!-- <select formControlName="claimType" disabled class="form-control">
+                        <option value="Free for Service" *ngIf="isAuthorize==true">Free for Service</option>
+                        <option value="Capitation" *ngIf="isAuthorize ==false">Capitation</option> -->
                         <!-- <option *ngFor="let item of claimTypesItems" [ngValue]="item.name">{{ item.name }}</option> -->
-                    </select>
+                    <!-- </select> -->
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.claimType.valid || claimsFormGroup.controls.claimType.pristine">
                     Choose state from the dropdown.
@@ -178,12 +179,8 @@
                                         <div class="input-wrap-x2">
                                             <input type="number" placeholder="Duration" min="1" formControlName="symptomDuration" class="form-control">
                                             <select formControlName="symptomUnit" class="form-control">
-                                                <option value="Minute" selected>Minute</option>
-                                                <option value="Hour">Hour</option>
-                                                <option value="Day">Day</option>
-                                                <option value="Week">Week</option>
-                                                <option value="Month">Month</option>
-                                                <option value="Year">Year</option>
+                                                <option disabled value="" selected>Select...</option>
+                                                <option *ngFor="let duration of durations" [ngValue]="duration.name">{{duration.name}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -358,7 +355,7 @@
                                         <div class="input-wrap-x2">
                                             <input placeholder="Qty" style="width:50px;" min="1" type="number" formControlName="drugQty" class="form-control">
                                             <select formControlName="drugUnit" class="form-control">
-                                                <option disabled value="" selected>Pack Size</option>
+                                                <option disabled value="" selected>Select...</option>
                                                 <option *ngFor="let pack of packSizes" [ngValue]="pack.name">{{pack.name}}</option>
                                             </select>
                                         </div>

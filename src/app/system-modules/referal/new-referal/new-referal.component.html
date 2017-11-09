@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Age</label>
                 <div class="inputWrap">
-                    <input [readonly]="true" type="number" min="0" formControlName="age" class="form-control">
+                    <input [readonly]="true" type="text" min="0" formControlName="age" class="form-control">
                     <small class="alert-label" [hidden]="referalFormGroup.controls.age.valid || referalFormGroup.controls.age.pristine">
                         This is a required field.
                     </small>
@@ -68,7 +68,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Destination Hospital</label>
                 <div class="inputWrap">
-                    <select formControlName="destinationHospital" class="form-control">
+                    <select formControlName="destinationHospital" class="form-control"  [compareWith]='compare'>
                         <option value="" selected>Select...</option>
                         <option *ngFor="let des of destinationFacilities" [ngValue]="des">{{des.name}}</option>
                     </select>
@@ -89,17 +89,17 @@
                     </div>
                     <div class="input-wrap">
                         <div class="input-wrap-x2">
-                            <div style="width:150px;margin-right:10px;">
+                            <div *ngIf="selectedCheckIn?.encounterType.name==='In-Patient'" style="width:150px;margin-right:10px;">
                                 <span class="inner-label">Date of Admission:</span>
-                                <my-date-picker name="admissionDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="admissionDate"></my-date-picker>
+                                <label>{{selectedCheckIn?.createdAt|date:'short'}}</label>
                             </div>
-                            <div style="width:150px;">
+                            <div *ngIf="selectedCheckIn?.encounterType.name==='In-Patient'" style="width:150px;margin-right:10px;">
                                 <span class="inner-label">Date of Discharge:</span>
-                                <my-date-picker name="dischargeDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="dischargeDate"></my-date-picker>
+                    
                             </div>
                             <div style="width:150px;">
                                 <span class="inner-label">Date of Visit:</span>
-                                <my-date-picker name="visitDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="visitDate"></my-date-picker>
+                                <label>{{selectedCheckIn?.createdAt|date:'short'}}</label>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Visit Class</label>
                 <div class="inputWrap">
-                    <select formControlName="visitClass" class="form-control">
+                    <select formControlName="visitClass" class="form-control" [compareWith]='compare'>
                         <option value="" selected>Select...</option>
                         <option *ngFor="let visit of visitTypes" [ngValue]="visit">{{visit.name}}</option>
                     </select>

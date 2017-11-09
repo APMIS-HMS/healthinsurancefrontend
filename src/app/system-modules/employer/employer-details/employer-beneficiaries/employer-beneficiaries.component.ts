@@ -101,5 +101,7 @@ export class EmployerBeneficiariesComponent implements OnInit {
   editRow(){
     this.isEdit = !this.isEdit;
   }
+  navigateDetailBeneficiary(){
 
+  }
 }

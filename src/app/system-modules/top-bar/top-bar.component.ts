@@ -20,6 +20,8 @@ export class TopBarComponent implements OnInit {
   minorPageInView: String = '';
   currentPlatform: any;
   user: any;
+  user_menu = false;
+  changePass = false;
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -66,6 +68,19 @@ export class TopBarComponent implements OnInit {
   notifier_hide(){
     this.notifier = false;
   }
-
+  userMenu_show(){
+    this.notifier_hide();
+    this.user_menu = !this.user_menu;
+  }
+  userMenu_hide(){
+    this.notifier_hide();
+    this.user_menu = false;
+  }
+  modal_close() {
+    this.changePass = false;
+  }
+  showPass_show(){
+    this.changePass = true;
+  }
 
 }

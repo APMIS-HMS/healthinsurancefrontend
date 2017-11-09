@@ -12,7 +12,8 @@ const REFERAL_ROUTES: Routes = [
             { path: 'referals', component: ListReferalsComponent },
             { path: 'referals/:id', component: ReferalDetailsComponent },
             { path: 'new', component: NewReferalComponent },
-            { path: 'new/:id', component: NewReferalComponent }
+            { path: 'new/:id', component: NewReferalComponent },
+            { path: 'view/:refid', component: NewReferalComponent }
         ]
     }
 ];
