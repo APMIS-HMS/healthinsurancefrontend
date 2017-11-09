@@ -106,8 +106,9 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
-        'principalBeneficiary': routeId,
-        isPaid: true, $sort: { createdAt: -1 }
+        // 'principalBeneficiary': routeId,
+        //isPaid: true,
+        $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
       console.log(res);
