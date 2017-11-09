@@ -64,7 +64,7 @@
             </div>
 
             <ul *ngIf="notifier" class="notify-wrap shadow-b">
-                <li class="notify-item" *ngFor="let item of alerts">
+                <li class="notify-item" [class.unread]="item.isRead==false" *ngFor="let item of alerts" (click)="navigateDetailBeneficiary(item)">
                     <div class="notify-title">{{item.title}}</div>
                     <div class="notify-content">{{item.body}}</div>
                 </li>
