@@ -157,6 +157,9 @@
   .option-item i{
       padding-right: 10px;
   }
+  .unread{
+      background: $unread-bg;
+  }
 
 @media only screen and (max-width: 965px) {
     .sect-b{
