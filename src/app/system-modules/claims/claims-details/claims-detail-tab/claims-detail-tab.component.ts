@@ -11,15 +11,15 @@ import { HeaderEventEmitterService } from '../../../../services/event-emitters/h
   styleUrls: ['./claims-detail-tab.component.scss']
 })
 export class ClaimsDetailTabComponent implements OnInit {
-  
+
   modalApprove = false;
   modalReject = false;
   modalHold = false;
   modalQuery = false;
   selectedClaim: any = <any>{};
-  displayAge:number;
+  displayAge: number;
   isReply = false;
-
+  status = "";
 
   constructor(private _route: ActivatedRoute,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -55,21 +55,35 @@ export class ClaimsDetailTabComponent implements OnInit {
     this.modalHold = false;
   }
 
-  onReply(){
-    if(this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response != undefined){
-      this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response.isReply = true;
-      console.log(this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response);
-    }else{
-      this.selectedClaim.documentations[this.selectedClaim.documentations.length -1].response.isReply = true;
+  onReply() {
+    if (this.selectedClaim.documentations[this.selectedClaim.documentations.length - 1].response != undefined) {
+      this.selectedClaim.documentations[this.selectedClaim.documentations.length - 1].response.isReply = true;
+      console.log(this.selectedClaim.documentations[this.selectedClaim.documentations.length - 1].response);
+    } else {
+      this.selectedClaim.documentations[this.selectedClaim.documentations.length - 1].response.isReply = true;
     }
   }
 
-  
+
   _getSelectedClaimItem(id) {
     this._claimService.get(id, {}).then((payload: any) => {
       this.selectedClaim = payload;
       console.log(this.selectedClaim);
-      this.displayAge = differenceInYears(new Date(), this.selectedClaim.checkedinDetail.checkedInDetails.personObject.dateOfBirth);
+
+      this.selectedClaim.documentations.forEach(element => {
+        if (element.response != Response) {
+          if (element.response.isReject == true) {
+            this.status = 'Reject';
+          } else if (element.response.isQuery == true) {
+            this.status = 'Query';
+          } else if (element.response.isHold == true) {
+            this.status = 'Hold';
+          } else if (element.response.isApprove == true) {
+            this.status = 'Approved';
+          }
+        }
+      });
+      this.displayAge = differenceInYears(new Date(), this.selectedClaim.checkedinDetail.checkedInDetails.beneficiaryObject.personId.dateOfBirth);
     });
   }
 
