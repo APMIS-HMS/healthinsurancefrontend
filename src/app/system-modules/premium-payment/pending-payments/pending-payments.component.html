@@ -44,7 +44,7 @@
         <div class="payment-box">
             <div class="tab">
                 <div class="tab-ffs" (click)="onClickTab('individualPayment');" [class.claim-tab-active]="individualActiveTab">Individual Payment</div>
-                <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div>
+                <!-- <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div> -->
             </div>
             <div class="addInd-btn-box" *ngIf="organisationActiveTab && selectedOrganizationPolicies.length > 0">
                 <button class="btn btn-medium btn-yellow" (click)="onClickOpenBatchModal();">Create Batch</button>
