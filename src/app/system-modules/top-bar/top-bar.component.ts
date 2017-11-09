@@ -9,6 +9,7 @@ import { NotificationService } from './../../services/common/notification.servic
 import { PolicyService } from './../../services/policy/policy.service';
 
 import { SystemModuleService } from './../../services/index';
+import { PushNotificationComponent } from 'ng2-notifications/ng2-notifications';
 
 
 @Component({
@@ -72,15 +73,6 @@ export class TopBarComponent implements OnInit {
         this.alerts = noOfUnReads.data;
         console.log(this.alerts);
       });
-
-      this._notificationService.find({
-        query: {
-          'userType._id': userUserType.userType._id
-        }
-      }).then((noOfUnReads: any) => {
-        this.alerts = noOfUnReads.data;
-        console.log(this.alerts);
-      });
     });
 
     this._policyService._listenerUpdate.subscribe(payload => {
@@ -95,15 +87,6 @@ export class TopBarComponent implements OnInit {
         console.log(this.alerts);
       });
 
-      this._notificationService.find({
-        query: {
-          'userType._id': userUserType.userType._id
-        }
-      }).then((noOfUnReads: any) => {
-        this.alerts = noOfUnReads.data;
-        console.log(this.alerts);
-      });
-      
     });
 
 
@@ -116,7 +99,7 @@ export class TopBarComponent implements OnInit {
       this.noUnReadAlert = unReadItems.length;
       this.alerts = noOfUnReads.data;
       console.log(this.alerts);
-      
+
     })
   }
 
