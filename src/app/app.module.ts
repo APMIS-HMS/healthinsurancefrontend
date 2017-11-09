@@ -24,6 +24,10 @@ import { PersonService } from './services/person/person.service';
 import { PolicyService } from './services/policy/policy.service';
 import { MyDatePickerModule } from 'mydatepicker';
 import { SharedModule } from './shared-modules/shared.module';
+import { NotificationsModule } from 'angular-notice'
+import { NotificationService } from './services/common/notification.service';
+
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -40,11 +44,12 @@ import { SharedModule } from './shared-modules/shared.module';
 		CoolStorageModule,
 		MyDatePickerModule,
 		LoadingBarModule.forRoot(),
-		SharedModule
-		// NotificationsModule
+		SharedModule,
+		NotificationsModule
 	],
 	providers: [SocketService, RestService, SystemModuleService, HeaderEventEmitterService, PremiumTypeService,
-		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService, PolicyService],
+		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService, 
+		PolicyService, NotificationsModule, NotificationService],
 	bootstrap: [AppComponent]
 })
 

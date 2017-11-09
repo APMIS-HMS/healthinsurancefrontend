@@ -10,6 +10,7 @@ import { ModuleService, RoleService} from '../services/index';
 import { AccessManagementComponent } from './access-management/access-management.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ChangePassComponent } from './top-bar/change-pass/change-pass.component';
+import { NotificationService } from './../services/common/notification.service';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,7 @@ import { ChangePassComponent } from './top-bar/change-pass/change-pass.component
     ],
     exports: [],
     imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule],
-    providers: [ModuleService, RoleService]
+    providers: [ModuleService, RoleService, NotificationService]
 })
 
 export class SystemModules {

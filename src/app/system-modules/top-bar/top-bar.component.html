@@ -42,7 +42,9 @@
                     </div>
 
                     <div *ngIf="user_menu" class="user-options">
-                        <div class="opt-menu-close"><i (click)="userMenu_hide()" class="fa fa-times" aria-hidden="true"></i></div>
+                        <div class="opt-menu-close">
+                            <i (click)="userMenu_hide()" class="fa fa-times" aria-hidden="true"></i>
+                        </div>
                         <ul class="option-items">
                             <li (click)="showPass_show()" class="option-item">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
@@ -58,24 +60,17 @@
 
                 <div class="icons-wrap">
                     <i (click)="notifier_toggle()" class="fa fa-bell-o" aria-hidden="true">
-                        <span class="notify-count">3</span>
+                        <span class="notify-count" *ngIf="noUnReadAlert>0">{{noUnReadAlert}}</span>
                     </i>
                 </div>
             </div>
 
             <ul *ngIf="notifier" class="notify-wrap shadow-b">
-                <li class="notify-item">
-                    <div class="notify-title">Notification Title Here</div>
-                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
+                <li class="notify-item" [class.unread]="item.isRead==false" *ngFor="let item of alerts" (click)="navigateDetailBeneficiary(item)">
+                    <div class="notify-title">{{item.title}}</div>
+                    <div class="notify-content">{{item.body}}</div>
                 </li>
-                <li class="notify-item">
-                    <div class="notify-title">Notification Title Here</div>
-                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
-                </li>
-                <li class="notify-item">
-                    <div class="notify-title">Notification Title Here</div>
-                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
-                </li>
+
             </ul>
         </div>
     </div>
@@ -86,4 +81,4 @@
         <div (click)="modal_close()" class="close-modal">X</div>
         <app-change-pass (closeModal)="modal_close()"></app-change-pass>
     </div>
-</div> 
+</div>

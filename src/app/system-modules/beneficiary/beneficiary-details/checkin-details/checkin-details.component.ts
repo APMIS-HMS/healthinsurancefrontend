@@ -203,7 +203,8 @@ export class CheckinDetailsComponent implements OnInit {
         this.otp_show = false;
         this.checkin_show = true;
         this._initializedForm();
-        console.log('in')
+        // this.checkedinFormGroup.controls.encounterStatus.setValue(this.encounterStatuses[0]);
+
       } else {
         this._toastr.warning('Invalid or expired OTP supplied, check and try again', 'OTP');
       }

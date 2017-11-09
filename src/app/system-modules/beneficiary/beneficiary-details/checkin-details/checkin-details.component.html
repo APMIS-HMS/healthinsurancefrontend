@@ -116,6 +116,7 @@
             <div (click)="navigateToNewClaim()" class="btn btn-medium btn-yellow">GENERATE CLAIM</div>
             <div (click)="navigateToNewReferal()" class="btn btn-medium btn-yellow">NEW REFERAL</div>
             <div (click)="navigateToNewAuthorization()" class="btn btn-medium btn-yellow">NEW AUTHORIZATION</div>
+            <div  class="btn btn-medium btn-yellow">CHECK OUT</div>
         </div>
 
         <div class="right-content">
@@ -135,7 +136,7 @@
                     <div class="input-wrap">
                         <select formControlName="encounterStatus" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Status</option>
-                            <option *ngFor="let encounter of encounterStatuses" [ngValue]="encounter">{{encounter.name}}</option>
+                            <option disabled *ngFor="let encounter of encounterStatuses" [ngValue]="encounter">{{encounter.name}}</option>
                         </select>
                         <small class="alert-label" [hidden]="checkedinFormGroup.controls.encounterStatus.valid || checkedinFormGroup.controls.encounterStatus.pristine">
                             This is a required field.
@@ -147,7 +148,7 @@
                     <div class="input-wrap">
                         <select formControlName="encounterType" class="form-control" [compareWith]='compare'>
                             <option value="" disabled selected>Select Encounter Type</option>
-                            <option *ngFor="let encounter of encounterTypes" [ngValue]="encounter">{{encounter.name}}</option>
+                            <option disabled *ngFor="let encounter of encounterTypes" [ngValue]="encounter">{{encounter.name}}</option>
                         </select>
                         <small class="alert-label" [hidden]="checkedinFormGroup.controls.encounterType.valid || checkedinFormGroup.controls.encounterType.pristine">
                             This is a required field.

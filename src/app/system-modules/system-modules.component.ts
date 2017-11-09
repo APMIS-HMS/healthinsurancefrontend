@@ -7,6 +7,7 @@ import { SystemModuleService } from './../services/common/system-module.service'
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { PolicyService } from './../services/policy/policy.service';
 
 import { LoadingBarService } from '@ngx-loading-bar/core';
 @Component({
@@ -34,6 +35,7 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 		private _systemService: SystemModuleService,
 		private _roleService: RoleService,
 		private _uploadService: UploadService,
+		private _policyService:PolicyService
 	) {
 		this.online = this._uploadService.checkOnlineStatus();
 	}
@@ -69,6 +71,13 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 			// this._router.navigate(['auth/login']);
 		}
 		// this._checkRole();
+		this._policyService._listenerCreate.subscribe(payload => {
+			console.log(" broadcasting------from ----system module---");
+		});
+
+		this._policyService._listenerUpdate.subscribe(payload => {
+		
+		});
 	}
 	private _checkRole() {
 		try {
