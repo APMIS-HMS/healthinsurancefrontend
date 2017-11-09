@@ -24,7 +24,7 @@ export class TopBarComponent implements OnInit {
   minorPageInView: String = '';
   currentPlatform: any;
   user: any;
-  alerts:any[] = [];
+  alerts: any[] = [];
   user_menu = false;
   changePass = false;
   noUnReadAlert = 0;
@@ -52,34 +52,49 @@ export class TopBarComponent implements OnInit {
       this._router.navigate(['auth/login']);
     }
 
-    let userUserType = (<any>this._locker.getObject('auth')).user;
+    var userUserType = (<any>this._locker.getObject('auth')).user;
+    console.log(userUserType.userType._id);
 
     this._policyService._listenerCreate.subscribe(payload => {
-      let title = "New Policy - " + payload.policyId;
-      let content = payload.principalBeneficiary.personId.firstName + " " + payload.principalBeneficiary.personId.firstName + " " + "added " + payload.dependantBeneficiaries.length + " dependant(s)";
-      console.log(content + " broadcasting");
-      this._notificationService.find({
-        query: {
-          'isRead': false
-        }
-      }).then((noOfUnReadNotice:any) => {
-        this.noUnReadAlert = noOfUnReadNotice.data.length;
-        console.log("number of " + this.noUnReadAlert);
-      })
+      // let title = "New Policy - " + payload.policyId;
+      // let content = payload.principalBeneficiary.personId.firstName + " " + payload.principalBeneficiary.personId.firstName + " " + "added " + payload.dependantBeneficiaries.length + " dependant(s)";
+      console.log("-----broadcast create object-------");
+
       this._notificationService.find({
         query: {
           'userType._id': userUserType.userType._id
         }
-      }).then((noOfUnReads:any) => {
+      }).then((noOfUnReads: any) => {
+        let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
+        this.noUnReadAlert = unReadItems.length;
         this.alerts = noOfUnReads.data;
-      })
+        console.log(this.alerts);
+      });
+
+      this._notificationService.find({
+        query: {
+          'userType._id': userUserType.userType._id
+        }
+      }).then((noOfUnReads: any) => {
+        this.alerts = noOfUnReads.data;
+        console.log(this.alerts);
+      });
     });
 
     this._policyService._listenerUpdate.subscribe(payload => {
       let title = "Policy updated - " + payload.policyId;
       let content = payload.principalBeneficiary.personId.firstName + " " + payload.principalBeneficiary.personId.firstName + " " + "added " + payload.dependantBeneficiaries.length + " dependant(s)";
     });
-
+    this._notificationService.find({
+      query: {
+        'userType._id': userUserType.userType._id
+      }
+    }).then((noOfUnReads: any) => {
+      let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
+      this.noUnReadAlert = unReadItems.length;
+      this.alerts = noOfUnReads.data;
+      console.log(this.alerts);
+    })
   }
 
   _getCurrentPlatform() {
@@ -98,24 +113,24 @@ export class TopBarComponent implements OnInit {
   menu_show() {
     this.showMenu.emit(true);
   }
-  notifier_toggle(){
+  notifier_toggle() {
     this.notifier = !this.notifier;
   }
-  notifier_hide(){
+  notifier_hide() {
     this.notifier = false;
   }
-  userMenu_show(){
+  userMenu_show() {
     this.notifier_hide();
     this.user_menu = !this.user_menu;
   }
-  userMenu_hide(){
+  userMenu_hide() {
     this.notifier_hide();
     this.user_menu = false;
   }
   modal_close() {
     this.changePass = false;
   }
-  showPass_show(){
+  showPass_show() {
     this.changePass = true;
   }
 

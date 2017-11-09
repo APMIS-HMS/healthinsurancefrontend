@@ -58,13 +58,13 @@
 
                 <div class="icons-wrap">
                     <i (click)="notifier_toggle()" class="fa fa-bell-o" aria-hidden="true">
-                        <span class="notify-count">{{noUnReadAlert}}</span>
+                        <span class="notify-count" *ngIf="noUnReadAlert>0">{{noUnReadAlert}}</span>
                     </i>
                 </div>
             </div>
 
             <ul *ngIf="notifier" class="notify-wrap shadow-b">
-                <li class="notify-item" *ngFor="let item of alert">
+                <li class="notify-item" *ngFor="let item of alerts">
                     <div class="notify-title">{{item.title}}</div>
                     <div class="notify-content">{{item.body}}</div>
                 </li>
