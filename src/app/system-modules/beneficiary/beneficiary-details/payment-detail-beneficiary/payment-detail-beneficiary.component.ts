@@ -18,6 +18,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   paymentOptionGroup: FormGroup;
   cashPaymentGroup: FormGroup;
   policy: any;
+  routeId: string;
   previousPolicies: any = [];
   currentPlatform: any;
   user: any;
@@ -57,8 +58,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
     this._route.parent.params.subscribe(param => {
       if (!!param.id) {
+        this.routeId = param.id;
         this._getPolicyDetails(param.id);
-        this._getPreviousPolicies(param.id);
         this._getCurrentPlatform();
       }
     });
@@ -87,7 +88,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     });
 
     this.refKey = (this.user ? this.user._id.substr(20) : '')  + new Date().getTime();
-    console.log(this.refKey)
   }
 
   private _getPolicyDetails(routeId) {
@@ -102,10 +102,15 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     }).catch(err => console.log(err));
   }
 
-  private _getPreviousPolicies(routeId) {
+  private _getPreviousPolicies(routeId, ownerId: any) {
     this._policyService.find({
-      query: { 'principalBeneficiary._id': routeId, isPaid: true, $sort: { createdAt: -1 } }
+      query: {
+        'platformOwnerId._id': this.currentPlatform._id,
+        'principalBeneficiary': routeId,
+        isPaid: true, $sort: { createdAt: -1 }
+      }
     }).then((res: any) => {
+      console.log(res);
       this.previousPolicyLoading = false;
       if (res.data.length > 0) {
         console.log(res.data);
@@ -122,6 +127,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
+        this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
       }
     }).catch(err => {
       console.log(err);
@@ -132,6 +138,11 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   paymentDone(data) {
     console.log(data);
     let policies = [];
+    // Delete unnecessary data
+    delete this.currentPlatform.itContact;
+    delete this.currentPlatform.businessContact;
+    delete this.currentPlatform.bankDetails;
+    delete this.currentPlatform.address;
     // All policies that is being paid for.
     policies.push({
       policyId: this.policy.policyId,
@@ -162,7 +173,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
           this.showPayment = false;
           this.isForRenewal = true;
           this._getPolicyDetails(verifyRes.body._id);
-          this._getPreviousPolicies(verifyRes.body._id);
+          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
@@ -178,6 +189,12 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       console.log(value);
       this.cashPaymentProcessing = true;
       let policies = [];
+
+      // Delete unnecessary data
+      delete this.currentPlatform.itContact;
+      delete this.currentPlatform.businessContact;
+      delete this.currentPlatform.bankDetails;
+      delete this.currentPlatform.address;
       // All policies that is being paid for.
       policies.push({
         policyId: this.policy.policyId,
@@ -214,7 +231,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
           this.isForRenewal = true;
           this.openCashPaymentModal = false;
           this._getPolicyDetails(res.body._id);
-          this._getPreviousPolicies(res.body._id);
+          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
