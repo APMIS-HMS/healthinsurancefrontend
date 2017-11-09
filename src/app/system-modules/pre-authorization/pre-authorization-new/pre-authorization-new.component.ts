@@ -24,7 +24,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import differenceInYears from 'date-fns/difference_in_years';
 import { DURATIONS } from '../../../services/globals/config';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-pre-authorization-new',
   templateUrl: './pre-authorization-new.component.html',
@@ -128,6 +128,7 @@ export class PreAuthorizationNewComponent implements OnInit {
         this._getCheckedIn(param.id);
       }
     })
+    this.testDateDiff();
   }
 
   _getDiagnosisTypes() {
@@ -390,12 +391,40 @@ export class PreAuthorizationNewComponent implements OnInit {
   //   })
   // }
 
+  getDateDiff(date1, date2) {
+    var b = moment(date1),
+      a = moment(date2),
+      intervals: any = ['years', 'months', 'weeks', 'days'],
+      out = [];
+
+    for (var i = 0; i < intervals.length; i++) {
+      var diff = a.diff(b, intervals[i]);
+      b.add(diff, intervals[i]);
+      out.push(diff + ' ' + intervals[i]);
+    }
+    return out.join(', ');
+  };
+
+  testDateDiff(){
+  var today   = new Date(),
+      newYear = new Date(today.getFullYear(), 0, 1),
+      y2k     = new Date(2000, 0, 1);
+
+    //(AS OF NOV 29, 2016)
+    //Time since New Year: 0 years, 10 months, 4 weeks, 0 days
+    console.log( 'Time since New Year: ' + this.getDateDiff(newYear, today) );
+
+    //Time since Y2K: 16 years, 10 months, 4 weeks, 0 days
+    console.log( 'Time since Y2K: ' + this.getDateDiff(y2k, today) );
+  }
+
 
   _getAge() {
-    return differenceInYears(
-      new Date(),
-      this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth
-    )
+    // return differenceInYears(
+    //   new Date(),
+    //   this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth
+    // )
+    return this.getDateDiff(this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth, new Date());
   }
   _getAddress() {
     return this.selectedCheckIn.beneficiaryObject.personId.homeAddress.street + ', ' +

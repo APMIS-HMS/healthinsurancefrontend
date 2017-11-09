@@ -5,6 +5,7 @@ import { NewPreauthTabsComponent } from './../../pre-authorization-new/new-preau
 import { REQUEST_STATUS } from './../../../../services/globals/config';
 import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
 import differenceInYears from 'date-fns/difference_in_years';
+import * as moment from 'moment';
 @Component({
   selector: 'app-authorization-details-tab',
   templateUrl: './authorization-details-tab.component.html',
@@ -35,7 +36,8 @@ export class AuthorizationDetailsTabComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.selectedAuthorization);
-   }
+    this.testDateDiff();
+  }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
@@ -54,6 +56,35 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       this.selectedAuthorization.personId.dateOfBirth
     );
   }
+  getDateDiff(date1, date2) {
+    var b = moment(date1),
+      a = moment(date2),
+      intervals: any = ['years', 'months', 'weeks', 'days'],
+      out = [];
+
+    for (var i = 0; i < intervals.length; i++) {
+      var diff = a.diff(b, intervals[i]);
+      b.add(diff, intervals[i]);
+      out.push(diff + ' ' + intervals[i]);
+    }
+    return out.join(', ');
+  };
+
+  testDateDiff(){
+  var today   = new Date(),
+      newYear = new Date(today.getFullYear(), 0, 1),
+      y2k     = new Date(2000, 0, 1);
+
+    //(AS OF NOV 29, 2016)
+    //Time since New Year: 0 years, 10 months, 4 weeks, 0 days
+    console.log( 'Time since New Year: ' + this.getDateDiff(newYear, today) );
+
+    //Time since Y2K: 16 years, 10 months, 4 weeks, 0 days
+    console.log( 'Time since Y2K: ' + this.getDateDiff(y2k, today) );
+  }
+
+
+
   disableAll() {
     this.disableReject = true;
     this.disableHold = true;
