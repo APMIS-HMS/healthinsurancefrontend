@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -17,6 +17,7 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
   styleUrls: ['./pending-payments.component.scss']
 })
 export class PendingPaymentsComponent implements OnInit {
+  @ViewChild('paystackButton') paystackButton: ElementRef;
   paymentGroup: FormGroup;
   listsearchControl = new FormControl();
   filterHiaControl = new FormControl('All');
@@ -69,11 +70,11 @@ export class PendingPaymentsComponent implements OnInit {
     this._getCurrentPlatform();
 
     this.paymentGroup = this._fb.group({
-      batchName: ['', [<any>Validators.required]],
-      paymentOption: ['e-Payment', [<any>Validators.required]]
+      batchNo: ['', [<any>Validators.required]],
+      paymentType: ['e-Payment', [<any>Validators.required]]
     });
 
-    this.paymentGroup.controls['paymentOption'].valueChanges.subscribe(value => {
+    this.paymentGroup.controls['paymentType'].valueChanges.subscribe(value => {
       console.log(value);
       this.paymentType = value;
       if (value === 'Cash' || value === 'Cheque') {
@@ -204,9 +205,13 @@ export class PendingPaymentsComponent implements OnInit {
     }
   }
 
-  onClickCreateAndPaybatch() {
-    this.paystackProcessing = true;
+  onClickCreateAndPaybatch(valid: boolean, value: any) {
+    // this.paystackButton.nativeElement.valueChanges.subscribe(value => {
+    //   console.log(value);
+    // });
 
+    this.paystackProcessing = true;
+    console.log(value);
     let policies = [];
     // All policies that is being paid for.
     this.selectedOrganizationPolicies.forEach(policy => {
@@ -221,7 +226,7 @@ export class PendingPaymentsComponent implements OnInit {
     let user = {
       userType: this.user.userType,
       firstName: this.user.firstName,
-      lastname: this.user.lastname,
+      lastName: this.user.lastName,
       facilityId: this.user.facilityId,
       email: this.user.email,
       isActive: this.user.isActive,
@@ -235,10 +240,15 @@ export class PendingPaymentsComponent implements OnInit {
       paidBy: user,
       requestedAmount: this.totalCost,
       amountPaid: 0,
-      paymentType: this.paymentType
+      paymentType: value.paymentType,
+      batchNo: value.batchNo
     };
 
     console.log(ref);
+  }
+
+  onChangePaystack() {
+    console.log("changed");
   }
 
   onClickPaystack() {

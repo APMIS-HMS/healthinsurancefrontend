@@ -29,6 +29,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   previousPolicyLoading: boolean = true;
   showPayment: boolean = false;
   isForRenewal: boolean = false;
+  openCashPaymentModal: boolean = false;
   paymentTypes: any = PAYMENTTYPES;
 
   constructor(
@@ -163,6 +164,10 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     }).catch(err => {
       console.log(err);
     });
+  }
+
+  onClickPayCash() {
+    console.log('Pay Cash');
   }
 
   addDays(date, days) {

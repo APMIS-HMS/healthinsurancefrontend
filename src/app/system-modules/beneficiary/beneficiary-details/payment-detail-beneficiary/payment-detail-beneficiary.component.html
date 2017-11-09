@@ -122,7 +122,7 @@
                 <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.personId?.email" [amount]="policy?.premiumPackageId?.amountInKobo" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()"
                     (callback)="paymentDone($event)">e-Payment</angular4-paystack>
                 <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
-                <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
+                <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickPayCash();" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
             </div>
         </div>
         <div *ngIf="isForRenewal" style="text-align:center;width:100%">
@@ -174,6 +174,34 @@
         <div class="list-summary">Showing 1 to {{ previousPolicies.length }} of {{ previousPolicies.length }} entries (filtered from {{ previousPolicies.length }} total entries)</div>
         <div class="btn btn-medium btn-yellow">Load More</div>
     </div>
+</div>
 
-    <!-- (click)=" addPaymentMode_click()" -->
+<div *ngIf="openCashPaymentModal" class="modal-overlay">
+    <div class="modal-wrap shadow-RB" style="max-width:150px">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <div>
+            <div class="modal-title" style="font-weight: bold">Cash Payment</div>
+            <div>
+                <form [formGroup]="cashPaymentGroup">
+                    <div class="frm-item-wrap">
+                        <input type="text" formControlName="batchNo" placeholder="Batch Name">
+                    </div>
+                    <div class="frm-item-wrap">
+                        <select formControlName="paymentType">
+                            <option value="e-Payment" selected>e-Payment</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <button *ngIf="withPaystack" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch(paymentGroup.valid, paymentGroup.value);" style="width:150px;padding:10px;margin-left:10px;">
+                <span *ngIf="!paystackProcessing">e-Payment</span>
+                <span *ngIf="paystackProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+            <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatchCash();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
+            <angular4-paystack type="button" #paystackButton [hidden]="true" [key]="paystackClientKey" [email]="user.email" [amount]="totalCost" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (click)="onChangePaystack();"
+                (click)="onClickPaystack();" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+        </div>
+    </div>
 </div>
