@@ -15,16 +15,16 @@
     </thead>
 
     <tbody class="tbody">
-        <tr class="tr">
-            <td class="td hover">1</td>
+        <tr *ngFor="let policy of mainBeneficiaries; let i=index" class="tr">
+            <td class="td hover">{{i+1}}</td>
             <td class="td hover">
-                <span *ngIf="!isEdit" class="td-value">Joel Oniel</span>
+                <span *ngIf="!isEdit" class="td-value">{{policy.personId?.lastName}} {{policy.personId?.lastName}}</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <input [formControl]="nameControl" type="text">
                 </div>
             </td>
             <td class="td hover">
-                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <span *ngIf="!isEdit" class="td-value">{{policy.personId?.gender.name}}</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <select [formControl]="genderControl">
                         <option>Male</option>
@@ -33,7 +33,8 @@
                 </div>
             </td>
             <td class="td hover">
-                <span *ngIf="!isEdit" class="baller td-value">P</span>
+                <span *ngIf="!isEdit && policy.isPrincipal" class="baller td-value">P</span>
+                <span *ngIf="!isEdit && !policy.isPrincipal" class="baller td-value">D</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <select [formControl]="typeControl">
                         <option>P</option>
@@ -44,15 +45,15 @@
                 <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
                 <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span> -->
             </td>
-            
+
             <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span *ngIf="!isEdit" class="td-value">122.212.22.2</span>
+                <span *ngIf="!isEdit" class="td-value">{{policy?.platformOwnerNumber}}</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <input [formControl]="idControl" type="text">
                 </div>
             </td>
             <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span *ngIf="!isEdit" class="td-value">11 Oct 2020</span>
+                <span *ngIf="!isEdit" class="td-value">{{policy?.personId?.dateOfBirth|date}}</span>
                 <div *ngIf="isEdit" class="input-wrap">
                     <my-date-picker name="dobControl" [options]="myDatePickerOptions" [selDate]="today" [formControl]="dobControl"></my-date-picker>
                 </div>
