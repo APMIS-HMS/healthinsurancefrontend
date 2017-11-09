@@ -57,7 +57,7 @@ export class TopBarComponent implements OnInit {
     }
 
     var userUserType = (<any>this._locker.getObject('auth')).user;
-    console.log(userUserType.userType._id);
+    // console.log(userUserType.userType._id);
 
     this._policyService._listenerCreate.subscribe(payload => {
       // let title = "New Policy - " + payload.policyId;
