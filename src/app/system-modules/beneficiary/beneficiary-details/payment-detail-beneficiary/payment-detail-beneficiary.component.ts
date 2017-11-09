@@ -103,10 +103,11 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   private _getPreviousPolicies(routeId, ownerId: any) {
+    console.log(routeId)
     this._policyService.find({
       query: {
-        'platformOwnerId._id': this.currentPlatform._id,
-        'principalBeneficiary': routeId,
+        'platformOwnerId._id': ownerId,
+        '_id': routeId,
         isPaid: true, $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
