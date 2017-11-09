@@ -90,8 +90,7 @@ export class TopBarComponent implements OnInit {
       });
 
     });
-
-
+    
     this._notificationService.find({
       query: {
         'userType._id': userUserType.userType._id
