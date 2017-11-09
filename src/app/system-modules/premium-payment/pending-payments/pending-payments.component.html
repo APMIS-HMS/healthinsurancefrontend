@@ -44,7 +44,7 @@
         <div class="payment-box">
             <div class="tab">
                 <div class="tab-ffs" (click)="onClickTab('individualPayment');" [class.claim-tab-active]="individualActiveTab">Individual Payment</div>
-                <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div>
+                <!-- <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div> -->
             </div>
             <div class="addInd-btn-box" *ngIf="organisationActiveTab && selectedOrganizationPolicies.length > 0">
                 <button class="btn btn-medium btn-yellow" (click)="onClickOpenBatchModal();">Create Batch</button>
@@ -163,24 +163,26 @@
         <div>
             <div class="modal-title" style="font-weight: bold">Create Batch</div>
             <div>
-                <form [formGroup]="paymentGroup"></form>
-                <div class="frm-item-wrap">
-                    <input type="text" formcontrolName="batchName" placeholder="Batch Name">
-                </div>
-                <div class="frm-item-wrap">
-                    <select formcontrolName="paymentOption">
-                        <option value="e-Payment" selected>e-Payment</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Cheque">Cheque</option>
-                    </select>
-                </div>
+                <form [formGroup]="paymentGroup">
+                    <div class="frm-item-wrap">
+                        <input type="text" formControlName="batchNo" placeholder="Batch Name">
+                    </div>
+                    <div class="frm-item-wrap">
+                        <select formControlName="paymentType">
+                            <option value="e-Payment" selected>e-Payment</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                </form>
             </div>
-            <button *ngIf="withPaystack" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch();" style="width:150px;padding:10px;margin-left:10px;">
+            <button *ngIf="withPaystack" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch(paymentGroup.valid, paymentGroup.value);" style="width:150px;padding:10px;margin-left:10px;">
                 <span *ngIf="!paystackProcessing">e-Payment</span>
                 <span *ngIf="paystackProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
             </button>
-            <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
-            <angular4-paystack [hidden]="true" [key]="paystackClientKey" [email]="user.email" [amount]="totalCost" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (click)="onClickPaystack();" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+            <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatchCash();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
+            <angular4-paystack type="button" #paystackButton [hidden]="true" [key]="paystackClientKey" [email]="user.email" [amount]="totalCost" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (click)="onChangePaystack();"
+                (click)="onClickPaystack();" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
         </div>
     </div>
 </div>
