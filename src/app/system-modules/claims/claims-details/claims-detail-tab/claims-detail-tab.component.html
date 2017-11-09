@@ -4,7 +4,7 @@
             <div class="group-wrap">
                 <div class="group-item">
                     <div class="item-label">Date of Birth:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.personObject?.dateOfBirth|date}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.beneficiaryObject.personId.dateOfBirth|date}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Age:</div>
@@ -12,30 +12,30 @@
                 </div>
                 <div class="group-item">
                     <div class="item-label">Gender:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.personObject?.gender?.name}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.beneficiaryObject.personId.gender.name}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">LASRRA ID:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.provider?.lasrraId}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject.providerId.provider.lasrraId}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">LAASHMA ID:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.beneficiaryObject.platformOwnerNumber}}</div>
                 </div>
             </div>
 
             <div class="group-wrap">
                 <div class="group-item">
                     <div class="item-label">Hospital Name:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.name}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject.providerId.name}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Provider ID:</div>
-                    <div class="item-val">122.22.122</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject.providerId.provider.comment}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Health Plan:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.planId?.name}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.plan}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Claim Type:</div>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="group-item">
                     <div class="item-label">Status:</div>
-                    <div class="item-val"><span class="lemon--green">{{selectedClaim?.checkedinDetail?.checkedInDetails?.claimStatus?.name}}</span></div>
+                    <div class="item-val"><span class="lemon--green">{{status}}</span></div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Date when patient was checked in:</div>

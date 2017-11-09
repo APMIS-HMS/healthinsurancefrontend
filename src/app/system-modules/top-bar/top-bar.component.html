@@ -42,7 +42,9 @@
                     </div>
 
                     <div *ngIf="user_menu" class="user-options">
-                        <div class="opt-menu-close"><i (click)="userMenu_hide()" class="fa fa-times" aria-hidden="true"></i></div>
+                        <div class="opt-menu-close">
+                            <i (click)="userMenu_hide()" class="fa fa-times" aria-hidden="true"></i>
+                        </div>
                         <ul class="option-items">
                             <li (click)="showPass_show()" class="option-item">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
@@ -68,7 +70,7 @@
                     <div class="notify-title">{{item.title}}</div>
                     <div class="notify-content">{{item.body}}</div>
                 </li>
-                
+
             </ul>
         </div>
     </div>
@@ -79,4 +81,4 @@
         <div (click)="modal_close()" class="close-modal">X</div>
         <app-change-pass (closeModal)="modal_close()"></app-change-pass>
     </div>
-</div> 
+</div>
