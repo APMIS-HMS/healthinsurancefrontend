@@ -58,24 +58,17 @@
 
                 <div class="icons-wrap">
                     <i (click)="notifier_toggle()" class="fa fa-bell-o" aria-hidden="true">
-                        <span class="notify-count">3</span>
+                        <span class="notify-count">{{noUnReadAlert}}</span>
                     </i>
                 </div>
             </div>
 
             <ul *ngIf="notifier" class="notify-wrap shadow-b">
-                <li class="notify-item">
-                    <div class="notify-title">Notification Title Here</div>
-                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
+                <li class="notify-item" *ngFor="let item of alert">
+                    <div class="notify-title">{{item.title}}/div>
+                    <div class="notify-content">{{item.body}}</div>
                 </li>
-                <li class="notify-item">
-                    <div class="notify-title">Notification Title Here</div>
-                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
-                </li>
-                <li class="notify-item">
-                    <div class="notify-title">Notification Title Here</div>
-                    <div class="notify-content">Herein goes the content of the said notification. This should be a clickable item which should route to the relevant page.</div>
-                </li>
+                
             </ul>
         </div>
     </div>
