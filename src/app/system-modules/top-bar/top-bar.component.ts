@@ -25,12 +25,13 @@ export class TopBarComponent implements OnInit {
   pageInView: String = '';
   minorPageInView: String = '';
   currentPlatform: any;
-  user: any;
+  user:any=<any>{};
   alerts: any[] = [];
   user_menu = false;
   changePass = false;
   noUnReadAlert = 0;
   notificationMessage="";
+  
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -55,53 +56,35 @@ export class TopBarComponent implements OnInit {
     } catch (error) {
       this._router.navigate(['auth/login']);
     }
-
-    var userUserType = (<any>this._locker.getObject('auth')).user;
+    
     // console.log(userUserType.userType._id);
 
     this._policyService._listenerCreate.subscribe(payload => {
       // let title = "New Policy - " + payload.policyId;
       // let content = payload.principalBeneficiary.personId.firstName + " " + payload.principalBeneficiary.personId.firstName + " " + "added " + payload.dependantBeneficiaries.length + " dependant(s)";
       console.log("-----broadcast create object-------");
-      this._notificationService.find({
-        query: {
-          'userType._id': userUserType.userType._id
-        }
-      }).then((noOfUnReads: any) => {
-        let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
-        this.noUnReadAlert = unReadItems.length;
-        this.alerts = noOfUnReads.data;
-        this.notificationMessage = this.alerts[this.alerts.length-1];
-        console.log(this.alerts);
-      });
+      this.setNotifier();
     });
 
     this._policyService._listenerUpdate.subscribe(payload => {
-      this._notificationService.find({
-        query: {
-          'userType._id': userUserType.userType._id
-        }
-      }).then((noOfUnReads: any) => {
-        let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
-        this.noUnReadAlert = unReadItems.length;
-        this.alerts = noOfUnReads.data;
-        this.notificationMessage = this.alerts[this.alerts.length-1];
-        console.log(this.alerts);
-      });
-
+      this.setNotifier();
     });
     
+    this.setNotifier();
+  }
+
+  setNotifier(){
     this._notificationService.find({
       query: {
-        'userType._id': userUserType.userType._id
+        'userType._id': this.user.userType._id
       }
     }).then((noOfUnReads: any) => {
       let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
       this.noUnReadAlert = unReadItems.length;
       this.alerts = noOfUnReads.data;
+      //this.notificationMessage = this.alerts[this.alerts.length-1];
       console.log(this.alerts);
-
-    })
+    });
   }
 
   _getCurrentPlatform() {
@@ -121,6 +104,7 @@ export class TopBarComponent implements OnInit {
     this._systemService.on();
     item.isRead = true;
     this._notificationService.update(item).then(payload => {
+      this.setNotifier();
       this._router.navigate(['/modules/beneficiary/beneficiaries', item.policyId]).then(res => {
         this.modal_close();
         this._systemService.off();
