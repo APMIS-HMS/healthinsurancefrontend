@@ -9,7 +9,6 @@ import { NotificationService } from './../../services/common/notification.servic
 import { PolicyService } from './../../services/policy/policy.service';
 
 import { SystemModuleService } from './../../services/index';
-import { PushNotificationComponent } from 'ng2-notifications/ng2-notifications';
 
 
 @Component({
@@ -31,6 +30,7 @@ export class TopBarComponent implements OnInit {
   user_menu = false;
   changePass = false;
   noUnReadAlert = 0;
+  notificationMessage="";
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -71,6 +71,7 @@ export class TopBarComponent implements OnInit {
         let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
         this.noUnReadAlert = unReadItems.length;
         this.alerts = noOfUnReads.data;
+        this.notificationMessage = this.alerts[this.alerts.length-1];
         console.log(this.alerts);
       });
     });
@@ -84,12 +85,12 @@ export class TopBarComponent implements OnInit {
         let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
         this.noUnReadAlert = unReadItems.length;
         this.alerts = noOfUnReads.data;
+        this.notificationMessage = this.alerts[this.alerts.length-1];
         console.log(this.alerts);
       });
 
     });
-
-
+    
     this._notificationService.find({
       query: {
         'userType._id': userUserType.userType._id
