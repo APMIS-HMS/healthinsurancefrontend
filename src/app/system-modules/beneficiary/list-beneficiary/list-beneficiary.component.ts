@@ -241,7 +241,6 @@ export class ListBeneficiaryComponent implements OnInit {
     }
   }
 
-
   private _getInActiveBeneficiaries(platformId) {
     this._systemService.on();
     let policy$ = Observable.fromPromise(this._policyService.find({ 'platformOwnerId._id': platformId, isActive: true }));

@@ -19,7 +19,7 @@ import { PolicyService } from '../../../services/policy/policy.service';
 import { ToastsManager } from 'ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationService } from '../../../services/pre-authorization/pre-authorization.service';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-new-referal',
@@ -121,6 +121,7 @@ export class NewReferalComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
 
     this.durations = DURATIONS;
+    this._getUserFacility();
     this._getCurrentPlatform();
     this._getVisitTypes();
     this._getDiagnosisTypes();
@@ -130,10 +131,18 @@ export class NewReferalComponent implements OnInit {
     this._initializeFormGroup();
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
+        console.log(param.id)
         this._getCheckedIn(param.id);
       } else if (param.refid !== undefined) {
         this._getReferral(param.refid);
       }
+    })
+  }
+  private _getUserFacility() {
+    this._facilityService.get(this.user.facilityId._id, {}).then(payload => {
+      this.user.facilityId = payload;
+    }).catch(err => {
+
     })
   }
   private _getReferral(id) {
@@ -152,62 +161,62 @@ export class NewReferalComponent implements OnInit {
 
 
 
-      let symptomObj = this.referral.documentation[0].document[0];
-      let clinicalNoteObj = this.referral.documentation[0].document[1];
-      let diagnosisObj = this.referral.documentation[0].document[2];
-      let investigationObj = this.referral.documentation[0].document[3];
-      let drugObj = this.referral.documentation[0].document[4];
-      let procedureObj = this.referral.documentation[0].document[5];
-      let reasonObj = this.referral.documentation[0].document[6];
-      let preAuthObj = this.referral.documentation[0].document[7];
+      // let symptomObj = this.referral.documentation[0].document[0];
+      // let clinicalNoteObj = this.referral.documentation[0].document[1];
+      // let diagnosisObj = this.referral.documentation[0].document[2];
+      // let investigationObj = this.referral.documentation[0].document[3];
+      // let drugObj = this.referral.documentation[0].document[4];
+      // let procedureObj = this.referral.documentation[0].document[5];
+      // let reasonObj = this.referral.documentation[0].document[6];
+      // let preAuthObj = this.referral.documentation[0].document[7];
   
-      this.referalFormGroup = this._fb.group({
-        destinationHospital: ['', [<any>Validators.required]],
-        reason: ['', [<any>Validators.required]],
-        doctor: [this.referral !== undefined ? this.referral.medicalPersonelName : ''],
-        unit: [this.referral !== undefined ? this.referral.medicalPersonelUnit : ''],
-        clinicalNote: ['', [<any>Validators.required]]
-      });
+      // this.referalFormGroup = this._fb.group({
+      //   destinationHospital: ['', [<any>Validators.required]],
+      //   reason: ['', [<any>Validators.required]],
+      //   doctor: [this.referral !== undefined ? this.referral.medicalPersonelName : ''],
+      //   unit: [this.referral !== undefined ? this.referral.medicalPersonelUnit : ''],
+      //   clinicalNote: ['', [<any>Validators.required]]
+      // });
   
-      this.referalFormGroup.controls.doctor.disable();
-      this.referalFormGroup.controls.unit.disable();
+      // this.referalFormGroup.controls.doctor.disable();
+      // this.referalFormGroup.controls.unit.disable();
   
-      this.referalFormGroup.controls.destinationHospital.valueChanges.subscribe(value => {
-        if (value !== null && value._id === this.user.facilityId._id) {
-          this.referalFormGroup.controls.destinationHospital.reset();
-          this.referalFormGroup.controls.destinationHospital.setErrors({ 'invalid': true });
-        }
-      })
+      // this.referalFormGroup.controls.destinationHospital.valueChanges.subscribe(value => {
+      //   if (value !== null && value._id === this.user.facilityId._id) {
+      //     this.referalFormGroup.controls.destinationHospital.reset();
+      //     this.referalFormGroup.controls.destinationHospital.setErrors({ 'invalid': true });
+      //   }
+      // })
   
-      this.symptomFormGroup = this._fb.group({
-        complaint: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-        complaintDuration: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-        complaintUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      });
-      this.complaintLists = symptomObj.clinicalDocumentation;
+      // this.symptomFormGroup = this._fb.group({
+      //   complaint: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   complaintDuration: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
+      //   complaintUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      // });
+      // this.complaintLists = symptomObj.clinicalDocumentation;
   
-      this.diagnosisFormGroup = this._fb.group({
-        diagnosis: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-        diagnosisType: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      });
-      this.diagnosisLists = diagnosisObj.clinicalDocumentation;
+      // this.diagnosisFormGroup = this._fb.group({
+      //   diagnosis: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   diagnosisType: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      // });
+      // this.diagnosisLists = diagnosisObj.clinicalDocumentation;
   
-      this.procedureFormGroup = this._fb.group({
-        procedure: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      });
-      this.procedureList = procedureObj.clinicalDocumentation;
+      // this.procedureFormGroup = this._fb.group({
+      //   procedure: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      // });
+      // this.procedureList = procedureObj.clinicalDocumentation;
   
-      this.investigationFormGroup = this._fb.group({
-        services: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      });
-      this.investigationList = investigationObj.clinicalDocumentation;
+      // this.investigationFormGroup = this._fb.group({
+      //   services: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      // });
+      // this.investigationList = investigationObj.clinicalDocumentation;
   
-      this.drugFormGroup = this._fb.group({
-        drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-        drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-        drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      });
-      this.drugList = drugObj.clinicalDocumentation;
+      // this.drugFormGroup = this._fb.group({
+      //   drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
+      //   drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      // });
+      // this.drugList = drugObj.clinicalDocumentation;
 
 
 
@@ -277,8 +286,10 @@ export class NewReferalComponent implements OnInit {
         day: new Date().getDate()
       }
     }
+    console.log(this.user)
+    // console.log(this.selectedCheckIn.beneficiaryObject.personId.lastName)
     this.referalFormGroup = this._fb.group({
-      patientName: [this.selectedCheckIn != null ? this.selectedCheckIn.beneficiaryObject.personId.lastName : '', [<any>Validators.required]],
+      patientName: [this.selectedCheckIn != undefined ? this.selectedCheckIn.beneficiaryObject.personId.lastName : '', [<any>Validators.required]],
       gender: [this.selectedCheckIn != null ? this.selectedCheckIn.beneficiaryObject.personId.gender.name : '', [<any>Validators.required]],
       age: [this.selectedCheckIn != undefined ? this._getAge() : 0, [<any>Validators.required]],
       referingHospital: [this.selectedCheckIn != null ? this.user.facilityId.name : '', [<any>Validators.required]],
@@ -476,17 +487,22 @@ export class NewReferalComponent implements OnInit {
   }
   _getCheckedIn(id) {
     this._systemService.on();
+    console.log(id)
     this._checkInService.get(id, {}).then((payload: any) => {
+      console.log(payload);
       this.selectedCheckIn = payload;
+      console.log(this.selectedCheckIn)
       this._initializeFormGroup();
       this._getPolicy2();
       this._systemService.off();
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     })
   }
 
   _getPolicy2() {
+    console.log('policy 2')
     this._systemService.on();
     this._policyService.find(
       {
@@ -503,7 +519,7 @@ export class NewReferalComponent implements OnInit {
         }
       }
     ).then((results: any) => {
-      // console.log(results);
+      console.log(results);
       // let policyResult = results[0];
       // console.log(policyResult);
       if (results.data.length > 0) {
@@ -551,11 +567,22 @@ export class NewReferalComponent implements OnInit {
   }
 
 
+  getDateDiff(date1, date2) {
+    var b = moment(date1),
+      a = moment(date2),
+      intervals: any = ['years', 'months', 'weeks', 'days'],
+      out = [];
+
+    for (var i = 0; i < intervals.length; i++) {
+      var diff = a.diff(b, intervals[i]);
+      b.add(diff, intervals[i]);
+      out.push(diff + ' ' + intervals[i]);
+    }
+    return out.join(', ');
+  };
+
   _getAge() {
-    return differenceInYears(
-      new Date(),
-      this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth
-    );
+    return this.getDateDiff(this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth, new Date());
   }
   _getAddress() {
     return this.selectedCheckIn.beneficiaryObject.personId.homeAddress.street + ', ' +
