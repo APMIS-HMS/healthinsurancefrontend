@@ -86,33 +86,49 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
     }
   }
   confirmList() {
-    let roles: any[] = [];
-    if (this.roles.length > 0) {
-      roles.push(this.roles[0]);
-      this._userService.patch(this.user._id, { roles: roles, completeRegistration: true }, {}).then(payload => {
-        this._router.navigate(['modules/beneficiary/beneficiaries']);
+    if (this.user.userType.name !== "Beneficiary") {
+      this._router.navigate(['modules/beneficiary/beneficiaries']).then(payload => {
+
       }).catch(err => {
 
-      })
+      });
+    } else {
+      let roles: any[] = [];
+      if (this.roles.length > 0) {
+        roles.push(this.roles[0]);
+        this._userService.patch(this.user._id, { roles: roles, completeRegistration: true }, {}).then(payload => {
+          this._router.navigate(['modules/beneficiary/beneficiaries']);
+        }).catch(err => {
+
+        })
+      }
     }
   }
 
   confirmDetails() {
-    let roles: any[] = [];
-    if (this.roles.length > 0) {
-      roles.push(this.roles[0]);
-      this._userService.patch(this.user._id, { roles: roles, completeRegistration: true }, {}).then(payload => {
-        this.user = payload;
-        console.log(payload)
-        this._checkRole();
-        this._router.navigate(['/modules/beneficiary/beneficiaries', this.policyObject._id]).then(payload => {
-          
-        }).catch(err2 => {
-          console.log(err2)
-        });
+    if (this.user.userType.name !== "Beneficiary") {
+      this._router.navigate(['modules/beneficiary/beneficiaries']).then(payload => {
+
       }).catch(err => {
 
-      })
+      });
+    } else {
+      let roles: any[] = [];
+      if (this.roles.length > 0) {
+        roles.push(this.roles[0]);
+        this._userService.patch(this.user._id, { roles: roles, completeRegistration: true }, {}).then(payload => {
+          this.user = payload;
+          console.log(payload)
+          this._checkRole();
+          this._router.navigate(['/modules/beneficiary/beneficiaries', this.policyObject._id]).then(payload => {
+
+          }).catch(err2 => {
+            console.log(err2)
+          });
+        }).catch(err => {
+
+        })
+      }
     }
   }
 

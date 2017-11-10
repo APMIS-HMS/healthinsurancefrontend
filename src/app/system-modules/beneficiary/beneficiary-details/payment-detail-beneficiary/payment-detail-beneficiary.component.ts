@@ -70,7 +70,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
     this.cashPaymentGroup = this._fb.group({
       amount: [{ value: 0, disabled: true}, [<any>Validators.required]],
-      comment: ['', [<any>Validators.required]]
+      comment: ['']
     });
 
     this.paymentOptionGroup.controls['paymentOption'].valueChanges.subscribe(value => {
@@ -103,10 +103,11 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   private _getPreviousPolicies(routeId, ownerId: any) {
+    console.log(routeId)
     this._policyService.find({
       query: {
-        'platformOwnerId._id': this.currentPlatform._id,
-        'principalBeneficiary': routeId,
+        'platformOwnerId._id': ownerId,
+        '_id': routeId,
         isPaid: true, $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
