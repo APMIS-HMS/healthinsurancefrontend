@@ -149,7 +149,7 @@
         <div class="detail-item ">
 
             <div class="detail-content ">
-                <div class="hia-logo ">
+                <div class="hia-user">
                     <img *ngIf="policy?.providerId?.logo === undefined" src="../../../../assets/img/logos/logo-placeholder.png ">
                     <img *ngIf="policy !== undefined && policy?.providerId?.logo !== undefined" class="" [src]="_uploadService.transform(policy?.providerId?.logo?.thumbnail)">
                 </div>
