@@ -32,10 +32,10 @@
             </div>
             <div class="bar-right">
                 <div class="user-wrap">
-                    <div (click)="userMenu_show()" class="user-img-wrap">
+                    <div (click)="userMenu_toggle()" class="user-img-wrap">
                         <img src="../../../assets/img/users/default.png">
                     </div>
-                    <div (click)="userMenu_show()" class="user-text-wrap">
+                    <div (click)="userMenu_toggle()" class="user-text-wrap">
                         <div *ngIf="user?.facilityId !== undefined" class="user-name">{{user?.lastName}} {{user?.firstName}}</div>
                         <div *ngIf="user?.facilityId === undefined" class="user-name">{{user?.email}}</div>
                         <div class="user-others">{{user?.facilityId?.name}}</div>
@@ -45,7 +45,7 @@
                         <div class="opt-menu-close">
                             <i (click)="userMenu_hide()" class="fa fa-times" aria-hidden="true"></i>
                         </div>
-                        <ul class="option-items">
+                        <ul (click)="userMenu_hide()" class="option-items">
                             <li (click)="showPass_show()" class="option-item">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
                                 <span>Change Password</span>

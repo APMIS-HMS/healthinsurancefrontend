@@ -1,0 +1,83 @@
+<div class="details-wrap">
+    <div class="detail-item">
+        <div class="item-label item-head">Health Insurance Agent Detail</div>
+        <div class="detail-content">
+            <!-- <img class="hia-logo" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)"> -->
+            <img *ngIf="selectedFacility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)">
+            <img *ngIf="selectedFacility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
+            <div class="group-wrap">
+                <div class="item-label">{{selectedFacility?.name}}</div>
+                <div class="item-val">{{selectedFacility?.hia?.type.name}}</div>
+                <div class="item-val">{{selectedFacility?.address?.street}}</div>
+                <div class="item-val">{{selectedFacility?.address?.neighbourhood}} - {{selectedFacility?.address?.state.name}}</div>
+                <div class="item-val">{{selectedFacility?.phoneNumber}}</div>
+            </div>
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">NHIS Number:</div>
+                    <div class="item-val">{{selectedFacility?.hia?.nhisNumber}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Type:</div>
+                    <div class="item-val">{{selectedFacility?.hia?.type?.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">CIN Number:</div>
+                    <div class="item-val">{{selectedFacility?.hia?.cin}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Registration Date:</div>
+                    <div class="item-val">{{selectedFacility?.hia?.registrationDate | date}}.</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Banker:</div>
+                    <div class="item-val">{{selectedFacility?.bankDetails?.bank?.name}}.</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Bank Account:</div>
+                    <div class="item-val">{{selectedFacility?.bankDetails?.accountNumber}}</div>
+                </div>
+            </div>
+            <div class="group-wrap">
+                <input type="checkbox" class="item-label-x2">Accept Terms and Conditions
+            </div>
+            <i (click)="navigateEditHIA(selectedFacility)" class="ico-cirle fa fa-pencil"></i>
+        </div>
+    </div>
+
+    <div class="detail-item">
+        <div class="item-label item-head">Business Contact</div>
+
+        <div class="detail-content">
+            <div class="hia-user">
+                <img *ngIf="selectedFacility?.businessContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility?.businessContact?.image?.thumbnail)">
+                <img *ngIf="selectedFacility?.businessContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+            </div>
+            <div class="group-wrap">
+                <div class="item-val">{{selectedFacility?.businessContact?.lastName}} {{selectedFacility?.businessContact?.firstName}}</div>
+                <div class="item-val">{{selectedFacility?.businessContact?.phoneNumber}}</div>
+                <div class="item-val">{{selectedFacility?.businessContact?.email}}</div>
+                <div class="item-val">{{selectedFacility?.businessContact?.position.name}}</div>
+            </div>
+            <i (click)="navigateEditHIA(selectedFacility)" class="ico-cirle fa fa-pencil"></i>
+        </div>
+    </div>
+
+    <div class="detail-item">
+        <div class="item-label item-head">IT Contact</div>
+
+        <div class="detail-content">
+            <div class="hia-user">
+                <img *ngIf="selectedFacility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility?.itContact?.image?.thumbnail)">
+                <img *ngIf="selectedFacility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+            </div>
+            <div class="group-wrap">
+                <div class="item-val">{{selectedFacility?.itContact?.lastName}} {{selectedFacility?.itContact?.firstName}}</div>
+                <div class="item-val">{{selectedFacility?.itContact?.phoneNumber}}</div>
+                <div class="item-val">{{selectedFacility?.itContact?.email}}</div>
+                <div class="item-val">{{selectedFacility?.itContact?.position.name}}</div>
+            </div>
+            <i (click)="navigateEditHIA(selectedFacility)" class="ico-cirle fa fa-pencil"></i>
+        </div>
+    </div>
+</div>

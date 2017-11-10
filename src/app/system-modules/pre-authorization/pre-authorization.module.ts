@@ -18,7 +18,7 @@ import { PreAuthorizationRoutes } from './pre-authorization.routes';
 import { PreAuthorizationComponent } from './pre-authorization.component';
 import { PreAuthorizationDetailsComponent } from './pre-authorization-details/pre-authorization-details.component';
 import { PreAuthorizationNewComponent } from './pre-authorization-new/pre-authorization-new.component';
-import { PreAuthorizationListComponent } from './pre-authorization-list/pre-authorization-list.component';
+// import { PreAuthorizationListComponent } from './pre-authorization-list/pre-authorization-list.component';
 import { AuthorizationTopBarComponent } from './pre-authorization-details/authorization-top-bar/authorization-top-bar.component';
 import { AuthorizationDetailsTabComponent } from './pre-authorization-details/authorization-details-tab/authorization-details-tab.component';
 import { AuthorizationOthersTabComponent } from './pre-authorization-details/authorization-others-tab/authorization-others-tab.component';
@@ -38,7 +38,7 @@ import { NewAuthConfirmComponent } from './pre-authorization-new/new-auth-confir
     declarations: [PreAuthorizationComponent,
         PreAuthorizationDetailsComponent,
         PreAuthorizationNewComponent,
-        PreAuthorizationListComponent,
+        // PreAuthorizationListComponent,
         AuthorizationTopBarComponent,
         AuthorizationDetailsTabComponent,
         AuthorizationOthersTabComponent,

@@ -21,7 +21,8 @@
     justify-content: flex-start;
     width: 80%;
 }
-.right-wrap{
+
+.right-wrap {
     width: 20%;
 }
 
@@ -149,5 +150,25 @@
     width: 100%;
     button {
         float: left;
+    }
+}
+
+
+@media only screen and (max-width: 960px){
+    .left-wrap {
+        display: block;
+    }
+    .detail-item{
+        margin-bottom: 20px;
+        border: 1px solid $grey-2;
+        padding: 20px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    .details-wrap{
+        display: block;
+    }
+    .right-wrap, .left-wrap{
+        width: 100%;
     }
 }

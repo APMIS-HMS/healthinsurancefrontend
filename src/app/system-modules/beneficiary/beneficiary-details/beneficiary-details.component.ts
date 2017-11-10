@@ -36,6 +36,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   paramId: any;
   user: any;
   isBeneficiary = false;
+  tabTitle = "Personal Details";
 
   constructor(
     private _fb: FormBuilder,
@@ -234,9 +235,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_referals = false;
       this.tab_checkin = false;
       this.tab_checkinHistory = false;
-      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId])
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId]);
     }
-
+    this.tabTitle = "Personal Details";
   }
   tabPayment_click() {
     if (!this.isCheckIn) {
@@ -247,9 +248,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_referals = false;
       this.tab_checkin = false;
       this.tab_checkinHistory = false;
-      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/payment'])
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/payment']);
     }
-   
+    this.tabTitle = "Payment History";
   }
   tabClaims_click() {
     if (!this.isCheckIn) {
@@ -262,6 +263,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/claims'])
     this.tab_checkinHistory = false;
     }
+    this.tabTitle = "Claims";
   }
   tabComplaints_click() {
     if (!this.isCheckIn) {
@@ -273,6 +275,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_checkin = false;
       this.tab_checkinHistory = false;
     }
+    this.tabTitle = "Complaints";
   }
   tabReferals_click() {
     if (!this.isCheckIn) {
@@ -282,10 +285,10 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_complaints = false;
       this.tab_referals = true;
       this.tab_checkin = false;
-      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/referrals'])
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/referrals']);
       this.tab_checkinHistory = false;
-
     }
+    this.tabTitle = "Referals";
   }
   tabCheckin_click() {
     this.tab_details = false;
@@ -296,7 +299,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_checkin = true;
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkin'])
     this.tab_checkinHistory = false;
-
+    this.tabTitle = "Check In";
   }
   tabCheckinDetail_click() {
     this.tab_details = false;
@@ -307,7 +310,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_checkin = false;
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkedin-history'])
     this.tab_checkinHistory = true;
-
+    this.tabTitle = "Check In history";
   }
   mobilemenu_toggle() {
     this.mobilemenu = !this.mobilemenu;
