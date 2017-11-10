@@ -143,7 +143,7 @@ export class TopBarComponent implements OnInit {
   }
   userMenu_show() {
     this.notifier_hide();
-    this.user_menu = !this.user_menu;
+    this.user_menu = true;
   }
   userMenu_hide() {
     this.notifier_hide();
