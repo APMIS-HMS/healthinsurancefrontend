@@ -70,7 +70,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
     this.cashPaymentGroup = this._fb.group({
       amount: [{ value: 0, disabled: true}, [<any>Validators.required]],
-      comment: ['', [<any>Validators.required]]
+      comment: ['']
     });
 
     this.paymentOptionGroup.controls['paymentOption'].valueChanges.subscribe(value => {

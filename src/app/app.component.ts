@@ -38,14 +38,16 @@ export class AppComponent implements OnInit {
 				}
 			}).then((noOfUnReads: any) => {
 				let alert = noOfUnReads.data[noOfUnReads.data.length - 1];
+				console.log(alert);
 				const options = {
 					title: alert.title,
 					body: alert.body,
 					dir: 'ltr',
 					icon: './../assets/img/logos/lagos-state-logo.jpg',
 					tag: 'notice',
-					closeDelay: 5000
+					closeDelay: 7500
 				};
+				console.log(options);
 				this._nativeNotificationService.notify(options);
 			});
 		});
