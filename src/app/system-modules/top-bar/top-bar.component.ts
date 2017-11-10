@@ -132,6 +132,9 @@ export class TopBarComponent implements OnInit {
     this.notifier_hide();
     this.user_menu = false;
   }
+  userMenu_toggle(){
+    this.user_menu = !this.user_menu;
+  }
   modal_close() {
     this.changePass = false;
   }
