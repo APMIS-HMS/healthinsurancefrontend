@@ -48,35 +48,13 @@ export class HiaDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    let url = this._router.url;
     this._route.params.subscribe(param => {
       if (!!param.id) {
         console.log(param);
-        this._getHIADetails(param.id);
+        this._getHIADetails(param.id, url);
       }
     });
-
-    let url = this._router.url;
-    if (url.includes('plans')) {
-        this.tabMenuClick('plans');
-    } else if (url.includes('beneficiaries')) {
-      this.tabMenuClick('beneficiaries');
-    } else if (url.includes('pre-authorizations')) {
-      this.tabMenuClick('pre-authorizations');
-    }else if (url.includes('claims')) {
-      this.tabMenuClick('claims');
-    } else if (url.includes('complaints')) {
-      this.tabMenuClick('complaints');
-    } else if (url.includes('referrals')) {
-      this.tabMenuClick('referrals');
-    } else if (url.includes('payments')) {
-      this.tabMenuClick('payments');
-    } else if (url.includes('organizations')) {
-      this.tabMenuClick('organizations');
-    } else {
-      this.tabMenuClick('details');
-    }
-
-    console.log(this._router.url);
 
     this.approvalFormGroup = this._fb.group({
       duration: [1, [<any>Validators.required]],
@@ -136,11 +114,12 @@ export class HiaDetailsComponent implements OnInit {
     });
   }
 
-  _getHIADetails(id) {
+  _getHIADetails(id, url) {
     this._systemService.on();
     this._facilityService.get(id, {}).then((res: any) => {
       console.log(res);
       this.selectedFacility = res;
+      this.routeCondition(url);
       this._headerEventEmitter.setMinorRouteUrl(this.selectedFacility.name);
       this._systemService.off();
     }).catch(err => {
@@ -154,6 +133,28 @@ export class HiaDetailsComponent implements OnInit {
 
   openModal(e) {
     this.addApproval = true;
+  }
+
+  routeCondition(url) {
+    if (url.includes('plans')) {
+      this.tabMenuClick('plans');
+    } else if (url.includes('beneficiaries')) {
+      this.tabMenuClick('beneficiaries');
+    } else if (url.includes('pre-authorizations')) {
+      this.tabMenuClick('pre-authorizations');
+    } else if (url.includes('claims')) {
+      this.tabMenuClick('claims');
+    } else if (url.includes('complaints')) {
+      this.tabMenuClick('complaints');
+    } else if (url.includes('referrals')) {
+      this.tabMenuClick('referrals');
+    } else if (url.includes('payments')) {
+      this.tabMenuClick('payments');
+    } else if (url.includes('organizations')) {
+      this.tabMenuClick('organizations');
+    } else {
+      this.tabMenuClick('details');
+    }
   }
 
   tabMenuClick(menu) {
