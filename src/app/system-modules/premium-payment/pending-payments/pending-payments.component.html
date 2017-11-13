@@ -44,7 +44,7 @@
         <div class="payment-box">
             <div class="tab">
                 <div class="tab-ffs" (click)="onClickTab('individualPayment');" [class.claim-tab-active]="individualActiveTab">Individual Payment</div>
-                <!-- <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div> -->
+                <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="organisationActiveTab">Organization Payment</div>
             </div>
             <div class="addInd-btn-box" *ngIf="organisationActiveTab && selectedOrganizationPolicies.length > 0">
                 <button class="btn btn-medium btn-yellow" (click)="onClickOpenBatchModal();">Create Batch</button>
@@ -160,7 +160,7 @@
 <div *ngIf="openBatchModal" class="modal-overlay">
     <div class="modal-wrap shadow-RB" style="max-width:150px">
         <div (click)="modal_close()" class="close-modal">X</div>
-        <div>
+        <div *ngIf="!showPaystack">
             <div class="modal-title" style="font-weight: bold">Create Batch</div>
             <div>
                 <form [formGroup]="paymentGroup">
@@ -181,8 +181,12 @@
                 <span *ngIf="paystackProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
             </button>
             <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatchCash();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
-            <angular4-paystack type="button" #paystackButton [hidden]="true" [key]="paystackClientKey" [email]="user.email" [amount]="totalCost" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()" (click)="onChangePaystack();"
-                (click)="onClickPaystack();" (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+        </div>
+        <div class="paystack-box" *ngIf="showPaystack">
+            <div class="modal-title" style="font-weight: bold">Head to payment gateway</div>
+            <div class="modal-title" style="font-weight: bold">Amount: &#x20A6; {{ totalCost }}</div>
+            <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (click)="onChangePaystack();" (click)="onClickPaystack();"
+                (callback)="paymentDone($event)">e-Payment</angular4-paystack>
         </div>
     </div>
 </div>

@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { Angular4PaystackModule } from 'angular4-paystack';
+// import { Angular4PaystackModule } from 'angular4-paystack';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../services/globals/config';
-import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService } from '../../../services/index';
+import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService, PremiumPaymentService } from '../../../services/index';
 import { Policy } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
@@ -17,7 +17,6 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
   styleUrls: ['./pending-payments.component.scss']
 })
 export class PendingPaymentsComponent implements OnInit {
-  @ViewChild('paystackButton') paystackButton: ElementRef;
   paymentGroup: FormGroup;
   listsearchControl = new FormControl();
   filterHiaControl = new FormControl('All');
@@ -43,6 +42,8 @@ export class PendingPaymentsComponent implements OnInit {
   paymentType: string = 'e-Payment';
   totalCost: number = 0;
   totalItem: number = 0;
+  showPaystack: boolean = false;
+  premiumPaymentData: any;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -59,7 +60,7 @@ export class PendingPaymentsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _locker: CoolLocalStorage,
     private _policyService: PolicyService,
-    private _angular4PaystackModule: Angular4PaystackModule
+    private _premiumPaymentService: PremiumPaymentService
   ) { }
 
   ngOnInit() {
@@ -89,7 +90,6 @@ export class PendingPaymentsComponent implements OnInit {
     });
 
     this.refKey = (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
-    console.log(this.refKey)
   }
 
   private _getIndividualPolicies() {
@@ -206,10 +206,6 @@ export class PendingPaymentsComponent implements OnInit {
   }
 
   onClickCreateAndPaybatch(valid: boolean, value: any) {
-    // this.paystackButton.nativeElement.valueChanges.subscribe(value => {
-    //   console.log(value);
-    // });
-
     this.paystackProcessing = true;
     console.log(value);
     let policies = [];
@@ -245,15 +241,37 @@ export class PendingPaymentsComponent implements OnInit {
     };
 
     console.log(ref);
+    // Create batch, if successful, enable the paystack button.
+    this._premiumPaymentService.create(ref).then((res: any) => {
+      if (res._id) {
+        this.showPaystack = true;
+        this.premiumPaymentData = res;
+        console.log(res);
+      }
+    }).catch(err => console.log(err));
   }
 
-  onChangePaystack() {
-    console.log("changed");
-  }
-
-  onClickPaystack() {
-    console.log('awesome.');
-     // this._angular4PaystackModule
+  paymentDone(data) {
+    console.log(data);
+    if (!!this.premiumPaymentData) {
+      console.log('Payment Done');
+      console.log(this.premiumPaymentData);
+      // GEt the premium payment for the transaction
+      this._premiumPaymentService.get(this.premiumPaymentData._id, {}).then((res: any) => {
+        if (res._id) {
+          console.log(res);
+          res.isActive = true;
+          // Update premium payment
+          this._premiumPaymentService.update(res).then((resResponse: any) => {
+            if (resResponse._id) {
+              this.showPaystack = true;
+              this.premiumPaymentData = res;
+              console.log(res);
+            }
+          }).catch(err => console.log(err));
+        }
+      }).catch(err => console.log(err));
+    }
   }
 
   onClickTab(tabName: string) {
@@ -264,10 +282,6 @@ export class PendingPaymentsComponent implements OnInit {
       this.individualActiveTab = false;
       this.organisationActiveTab = true;
     }
-  }
-
-  paymentDone(event) {
-    console.log(event);
   }
 
   onClickOpenBatchModal() {

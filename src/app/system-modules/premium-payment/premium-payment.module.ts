@@ -7,7 +7,7 @@ import { PremiumPaymentComponent } from './premium-payment.component';;
 import { Angular4PaystackModule } from 'angular4-paystack';
 import { NewOrganizationPaymentComponent } from './new-organization-payment/new-organization-payment.component';
 import { ModalPaymentModeComponent } from './new-organization-payment/modal-payment-mode/modal-payment-mode.component';
-import { PolicyService } from '../../services/index';
+import { PolicyService, PremiumPaymentService } from '../../services/index';
 import { PendingPaymentsComponent } from './pending-payments/pending-payments.component';
 import { PreviousPaymentsComponent } from './previous-payments/previous-payments.component';
 
@@ -24,6 +24,6 @@ import { PreviousPaymentsComponent } from './previous-payments/previous-payments
         ModalPaymentModeComponent,
         PendingPaymentsComponent,
         PreviousPaymentsComponent],
-    providers: [PolicyService]
+    providers: [PolicyService, PremiumPaymentService]
 })
 export class PremiumPaymentModule { }
