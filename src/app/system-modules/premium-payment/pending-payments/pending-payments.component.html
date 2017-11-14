@@ -137,7 +137,7 @@
                     <td class="td">{{ policy?.policyId }}</td>
                     <td class="td">{{ policy?.planId?.name }}</td>
                     <td class="td">{{ policy?.hiaId?.name }}</td>
-                    <td class="td td-icos" routerLink="/modules/employer/employers/23">
+                    <td class="td td-icos" routerLink="/modules/employer/employers/{{ policy?.providerId?._id }}/payment">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>

@@ -3,7 +3,7 @@ import { SharedModule } from '../../shared-modules/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
 
 import { premiumPaymantRoutes } from './premium-payment.routes';
-import { PremiumPaymentComponent } from './premium-payment.component';;
+import { PremiumPaymentComponent } from './premium-payment.component';
 import { Angular4PaystackModule } from 'angular4-paystack';
 import { NewOrganizationPaymentComponent } from './new-organization-payment/new-organization-payment.component';
 import { ModalPaymentModeComponent } from './new-organization-payment/modal-payment-mode/modal-payment-mode.component';

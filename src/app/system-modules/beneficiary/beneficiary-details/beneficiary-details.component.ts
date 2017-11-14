@@ -119,8 +119,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     else if (this._router.url.endsWith('referrals')) {
       this.tab_referals = true;
       this.isCheckIn = false;
-    }
-    else {
+    } else {
       this.tab_details = true;
       this.isCheckIn = false;
     }
