@@ -28,12 +28,14 @@ import { ModalHoldAuthorizationComponent } from './pre-authorization-details/mod
 import { ModalQueryAuthorizationComponent } from './pre-authorization-details/modal-query-authorization/modal-query-authorization.component';
 import { NewPreauthTabsComponent } from './pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
 import { NewAuthConfirmComponent } from './pre-authorization-new/new-auth-confirm/new-auth-confirm.component';
+import { DateTimePickerModule } from 'ng-pick-datetime';
 
 @NgModule({
     imports: [
         SharedModule,
         MyDatePickerModule,
         PreAuthorizationRoutes,
+        DateTimePickerModule
     ],
     declarations: [PreAuthorizationComponent,
         PreAuthorizationDetailsComponent,

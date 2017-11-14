@@ -1,3 +1,4 @@
+import { UserService } from './../../../services/common/user.service';
 import { authModulesRoutes } from './../../../auth/auth.route';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -90,6 +91,7 @@ export class PreAuthorizationNewComponent implements OnInit {
 
   diagnosisTypes: any[] = [];
   packSizes: any[] = [];
+  employees:any[] = [];
   requestStatus = REQUEST_STATUS;
 
   constructor(
@@ -110,6 +112,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     private _policyService: PolicyService,
     private _toastr: ToastsManager,
     private _locker: CoolLocalStorage,
+    private _userService:UserService,
     private _preAuthorizationService: PreAuthorizationService
   ) { }
 
@@ -122,13 +125,33 @@ export class PreAuthorizationNewComponent implements OnInit {
     this._getDiagnosisTypes();
     this._getDrugPackSizes();
     this._initializeFormGroup();
+    this._getEmployees();
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
         this._getCheckedIn(param.id);
       }
     })
-    this.testDateDiff();
+    // this.testDateDiff();
+  }
+
+  _getEmployees(){
+    if(this.user.userType.name==='Provider'){
+      this._systemService.on();
+      this._userService.find({
+        query:{
+          'facilityId._id':this.user.facilityId._id,
+          $select:['firstName', 'lastName', 'profession','cader', 'unit', 'otherNames']
+        }
+      }).then((payload: any) => {
+        this.employees = payload.data;
+        console.log(this.employees)
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      })
+    }
   }
 
   _getDiagnosisTypes() {
@@ -165,7 +188,7 @@ export class PreAuthorizationNewComponent implements OnInit {
       hia: [this.selectedCheckIn != null ? this.selectedCheckIn.policyObject.hiaId.name : '', [<any>Validators.required]],
       visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : new Date(), [<any>Validators.required]],
       clinicalNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       emergency: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : false, [<any>Validators.required]],
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -196,7 +219,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.drugFormGroup = this._fb.group({
       drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : ''],
+      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
     });
 
     this.drugFormGroup.controls.drug.valueChanges
@@ -260,6 +283,14 @@ export class PreAuthorizationNewComponent implements OnInit {
           this.selectedInvestigation = undefined;
           this._getInvestigations(value);
         }
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
+      this.preAuthFormGroup.controls.docName.valueChanges
+      .subscribe(value => {
+        this.preAuthFormGroup.controls.docUnit.setValue(value.unit);
       }, error => {
         this._systemService.off();
         console.log(error)
@@ -500,10 +531,12 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
   onAddDrug() {
     let name = this.drugFormGroup.controls.drug;
+    console.log(name.valid)
     let unit = this.drugFormGroup.controls.drugUnit;
     let quantity = this.drugFormGroup.controls.drugQty;
-    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
+   
     if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
+      let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
       this.drugList.push({
         "drug": retObj.investigation,
         "unit": unit.value,
@@ -538,8 +571,8 @@ export class PreAuthorizationNewComponent implements OnInit {
             'checked': false
           }
         } else {
-          if (resource.Prefered != undefined) {
-            if (resource.Prefered.toLowerCase().trim() == 'c') {
+          if (resource.Preferred != undefined) {
+            if (resource.Preferred.toLowerCase().trim() == 'c') {
               console.log(3)
               // cover by capitation, dont put amount
               //requires authorization

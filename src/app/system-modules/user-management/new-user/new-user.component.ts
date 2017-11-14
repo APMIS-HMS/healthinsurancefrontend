@@ -238,15 +238,12 @@ export class NewUserComponent implements OnInit {
   }
 
   compare(l1: any, l2: any) {
-    console.log(l1)
-    console.log(l2);
     if (l1 !== null && l2 !== null) {
       return l1._id === l2._id;
     }
     return false;
   }
   setDate(): void {
-    // Set today date using the patchValue function
     let date = new Date();
     this.userFormGroup.patchValue({
       dob: {

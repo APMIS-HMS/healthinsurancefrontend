@@ -129,6 +129,7 @@ export class NewClaimComponent implements OnInit {
       lashmaid: ['', [<any>Validators.required]],
       hospital: ['', [<any>Validators.required]],
       medicalPersonelName: ['', [<any>Validators.required]],
+      docunit: [''],
       plan: [''],
       auth: [''],
       entryDate: [''],

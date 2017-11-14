@@ -26,6 +26,7 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { SharedModule } from './shared-modules/shared.module';
 import { NotificationsModule } from 'angular-notice'
 import { NotificationService } from './services/common/notification.service';
+import { DateTimePickerModule } from 'ng-pick-datetime';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { NotificationService } from './services/common/notification.service';
 		MyDatePickerModule,
 		LoadingBarModule.forRoot(),
 		SharedModule,
-		NotificationsModule
+		NotificationsModule,
+		DateTimePickerModule
 	],
 	providers: [SocketService, RestService, SystemModuleService, HeaderEventEmitterService, PremiumTypeService,
 		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService, 
