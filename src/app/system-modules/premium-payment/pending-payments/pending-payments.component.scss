@@ -50,7 +50,7 @@
 .modal-wrap {
     width: 250px;
     height: 200px;
-    min-width: 200px;
+    min-width: 250px;
     min-height: 200px;
 }
 
@@ -58,4 +58,18 @@
     width: 94%;
     padding: 20px;
     text-align: right;
+}
+
+.paystack-box {
+    .paystack-btn {
+        width: 150px;
+        padding: 10px;
+        margin-left: 65px;
+    }
+}
+
+.paystack-btn {
+    width: 150px;
+    padding: 10px;
+    margin-left: 65px;
 }
