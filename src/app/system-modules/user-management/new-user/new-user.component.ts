@@ -107,6 +107,7 @@ export class NewUserComponent implements OnInit {
       phoneNumber: [this.selectedUser != null ? this.selectedUser.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       profession: [this.selectedUser != null ? this._getProfession(this.selectedUser.profession) : ''],
       cader: [this.selectedUser != null ? this.selectedUser.cader : ''],
+      unit: [this.selectedUser != null ? this.selectedUser.unit : ''],
       readonly: [this.selectedUser != null ? true : false]
     });
     // this._resolveShowType();
@@ -140,7 +141,7 @@ export class NewUserComponent implements OnInit {
   _getUser(id) {
     this._userService.get(id, {}).then((payload: any) => {
       this.selectedUser = payload;
-
+      console.log(this.selectedUser)
       this._facilityService.find({
         query: {
           'facilityType._id': payload.userType._id, $limit: 200,
@@ -150,13 +151,14 @@ export class NewUserComponent implements OnInit {
         this.facilities = payload.data;
         console.log(this.facilities)
         this._resolveShowType();
+        this._initializedUser();
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
 
 
-      this._initializedUser();
+      // this._initializedUser();
     }).catch(err => {
       console.log(err)
     })
@@ -236,6 +238,8 @@ export class NewUserComponent implements OnInit {
   }
 
   compare(l1: any, l2: any) {
+    console.log(l1)
+    console.log(l2);
     if (l1 !== null && l2 !== null) {
       return l1._id === l2._id;
     }
@@ -284,9 +288,11 @@ export class NewUserComponent implements OnInit {
           this.selectedUser.phoneNumber = value.phoneNumber;
           this.selectedUser.profession = value.profession;
           this.selectedUser.cader = value.cader;
+          this.selectedUser.unit = value.unit;
           if (this.selectedUser.userType.name !== 'Provider') {
             delete this.selectedUser.profession;
             delete this.selectedUser.cader;
+            delete this.selectedUser.unit;
           }
           this._userService.patch(this.selectedUser._id, this.selectedUser, {}).then(pay => {
             this._toastr.success('You have successfully updated a user!', "Update")

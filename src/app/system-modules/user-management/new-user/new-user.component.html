@@ -121,6 +121,12 @@
                     </select>
                 </div>
             </div>
+            <div *ngIf="showProvider" class="frm-item-wrap">
+                <label class="label">Unit</label>
+                <div class="inputWrap">
+                    <input type="text" formControlName="unit" class="form-control">
+                </div>
+            </div>
 
             <button (click)="onClickSaveUser(userFormGroup.valid, userFormGroup.value)" class="btn btn-medium btn-blue">{{btnText}}</button>
         </form>
