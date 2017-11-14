@@ -144,7 +144,7 @@
             </tbody>
         </table>
 
-        <div class="total-cost-box">
+        <div class="total-cost-box" *ngIf="organisationPolicies.length > 0 && selectedOrganizationPolicies.length > 0">
             <b>Total Item Selected: {{ totalItem }}</b><br>
             <b>Total Cost: &#x20A6; {{ totalCost }}</b>
         </div>
@@ -183,10 +183,9 @@
             <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatchCash();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
         </div>
         <div class="paystack-box" *ngIf="showPaystack">
-            <div class="modal-title" style="font-weight: bold">Head to payment gateway</div>
+            <div class="modal-title" style="font-weight: bold">Verify that you want to continue with payment</div>
             <div class="modal-title" style="font-weight: bold">Amount: &#x20A6; {{ totalCost }}</div>
-            <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (click)="onChangePaystack();" (click)="onClickPaystack();"
-                (callback)="paymentDone($event)">e-Payment</angular4-paystack>
+            <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (callback)="paymentDone($event)">Verify</angular4-paystack>
         </div>
     </div>
 </div>

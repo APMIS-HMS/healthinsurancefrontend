@@ -243,7 +243,7 @@ export class PendingPaymentsComponent implements OnInit {
     console.log(ref);
     // Create batch, if successful, enable the paystack button.
     this._premiumPaymentService.create(ref).then((res: any) => {
-      if (res._id) {
+      if (!!res._id) {
         this.showPaystack = true;
         this.premiumPaymentData = res;
         console.log(res);
@@ -253,24 +253,30 @@ export class PendingPaymentsComponent implements OnInit {
 
   paymentDone(data) {
     console.log(data);
-    if (!!this.premiumPaymentData) {
+    if (!!this.premiumPaymentData && this.premiumPaymentData._id) {
       console.log('Payment Done');
       console.log(this.premiumPaymentData);
-      // GEt the premium payment for the transaction
-      this._premiumPaymentService.get(this.premiumPaymentData._id, {}).then((res: any) => {
-        if (res._id) {
-          console.log(res);
-          res.isActive = true;
-          // Update premium payment
-          this._premiumPaymentService.update(res).then((resResponse: any) => {
-            if (resResponse._id) {
-              this.showPaystack = true;
-              this.premiumPaymentData = res;
-              console.log(res);
-            }
-          }).catch(err => console.log(err));
+      let payload = {
+        premiumPaymentId: this.premiumPaymentData._id,
+        action: 'update',
+        ref: data
+      };
+      console.log('Call API');
+      // Call paystack verification API
+      this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes: any) => {
+        console.log(verifyRes);
+        if (!!verifyRes.body._id) {
+          this._getOrganisationPolicies();
+          this.showPaystack = false;
+          this.openBatchModal = false;
+          this.premiumPaymentData = {};
+          this.ngOnInit();
+          // this._router.navigate(['/modules/premium-payment/previous']);
+          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
-      }).catch(err => console.log(err));
+      }).catch(err => {
+        console.log(err);
+      });
     }
   }
 
