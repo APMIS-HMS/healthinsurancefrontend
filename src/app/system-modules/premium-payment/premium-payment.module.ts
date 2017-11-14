@@ -10,6 +10,7 @@ import { ModalPaymentModeComponent } from './new-organization-payment/modal-paym
 import { PolicyService, PremiumPaymentService } from '../../services/index';
 import { PendingPaymentsComponent } from './pending-payments/pending-payments.component';
 import { PreviousPaymentsComponent } from './previous-payments/previous-payments.component';
+import { ListOrganizationComponent } from './list-organization/list-organization.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { PreviousPaymentsComponent } from './previous-payments/previous-payments
         NewOrganizationPaymentComponent,
         ModalPaymentModeComponent,
         PendingPaymentsComponent,
-        PreviousPaymentsComponent],
+        PreviousPaymentsComponent,
+        ListOrganizationComponent],
     providers: [PolicyService, PremiumPaymentService]
 })
 export class PremiumPaymentModule { }

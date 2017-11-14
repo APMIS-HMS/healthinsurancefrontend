@@ -14,6 +14,7 @@ import { EmployerComponent } from './employer.component';
 import { EmployerDetailsComponent } from './employer-details/employer-details.component';
 import { NewEmployerComponent } from './new-employer/new-employer.component';
 import { EmployerBeneficiariesComponent } from './employer-details/employer-beneficiaries/employer-beneficiaries.component';
+import { PremiumPaymentTabComponent } from './employer-details/premium-payment-tab/premium-payment-tab.component';
 
 @NgModule({
     imports: [
@@ -21,7 +22,7 @@ import { EmployerBeneficiariesComponent } from './employer-details/employer-bene
         employerRoutes,
         MyDatePickerModule
     ],
-    declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent, EmployerBeneficiariesComponent],
+    declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent, EmployerBeneficiariesComponent, PremiumPaymentTabComponent],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
         UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService]
 })

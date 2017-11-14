@@ -1,0 +1,186 @@
+<div class="list-search-wrap">
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
+</div>
+
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="filter-box">
+            <div class="label-xx">Filters:</div>
+            <div class="input-wrap">
+                <label>HIA</label>
+                <select [formControl]="filterHiaControl" class="form-control">
+                <option value="All" selected>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>Past Due Date</label>
+                <select [formControl]="pastDueDate" class="form-control">
+                <option>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>LASHMA ID</label>
+                <select [formControl]="employer" class="form-control">
+                <option>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>Date Range</label>
+                <div style="width:150px;margin-right:10px;">
+                    <my-date-picker name="dateRange" [options]="myDatePickerOptions" [selDate]="today"></my-date-picker>
+                </div>
+            </div>
+            <div class="btn btn-medium btn-blue-outline">RESET</div>
+        </div>
+        <div class="payment-box">
+            <div class="tab">
+                <div class="tab-ffs" (click)="onClickTab('individualPayment');" [class.claim-tab-active]="unbatchedActiveTab">Individual Payment</div>
+                <div class="tab-c" (click)="onClickTab('organizationPayment');" [class.claim-tab-active]="batchedActiveTab">Organization Payment</div>
+            </div>
+            <div class="addInd-btn-box" *ngIf="organisationActiveTab && selectedOrganizationPolicies.length > 0">
+                <button class="btn btn-medium btn-yellow" (click)="onClickOpenBatchModal();">Create Batch</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="unbatchedActiveTab">
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">No</th>
+                    <th class="th">Due Date</th>
+                    <th class="th">LASHMA ID</th>
+                    <th class="th">Amount Due</th>
+                    <th class="th">Duration Policy</th>
+                    <th class="th">Policy ID</th>
+                    <th class="th">Health Plan</th>
+                    <th class="th">Responsible HIA</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="unbatchedPolicies.length === 0 && !unbatchedLoading">
+                    <td class="text-center" colspan="9">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="unbatchedPolicies.length === 0 && unbatchedLoading">
+                    <td class="text-center" colspan="9">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr *ngFor="let policy of unbatchedPolicies; let i = index;" class="tr">
+                    <td class="td">{{i+1}}</td>
+                    <td class="td">{{ policy?.dueDate }}</td>
+                    <td class="td">{{ policy?.principalBeneficiary?.platformOwnerNumber }}</td>
+                    <td class="td" style="color: red;">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
+                    <td class="td">{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}</td>
+                    <td class="td">{{ policy?.policyId }}</td>
+                    <td class="td">{{ policy?.planId?.name }}</td>
+                    <td class="td">{{ policy?.hiaId?.name }}</td>
+                    <td class="td td-icos" routerLink="/modules/beneficiary/beneficiaries/{{policy?._id}}/payment">
+                        <i class="fa fa-chevron-right"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="list-buttom">
+            <div *ngIf="unbatchedPolicies.length > 0">
+                <div class="list-summary">Showing 1 to {{ unbatchedPolicies.length }} of {{ unbatchedPolicies.length }} entries (filtered from {{ unbatchedPolicies.length }} total entries)</div>
+                <div class="btn btn-medium btn-yellow">Load More</div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="batchedActiveTab">
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th" *ngIf="batchedPolicies.length > 0" (change)="onCheckAllToPay($event.target.checked);"><input type="checkbox"></th>
+                    <th class="th">No</th>
+                    <th class="th">Due Date</th>
+                    <th class="th">Employer Name</th>
+                    <th class="th">Number of Employee</th>
+                    <th class="th">Amount Due</th>
+                    <th class="th">Policy ID</th>
+                    <th class="th">Health Plan</th>
+                    <th class="th">Responsible HIA</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="batchedPolicies.length === 0 && !bactchedLoading">
+                    <td class="text-center" colspan="9">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="batchedPolicies.length === 0 && bactchedLoading">
+                    <td class="text-center" colspan="9">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr class="tr" *ngFor="let policy of batchedPolicies; let i = index;">
+                    <td class="td">
+                        <input [attr.checked]="policy.isChecked ? true : null" (change)="onCheckSelectedToPay(i, policy);" type="checkbox">
+                    </td>
+                    <td class="td">{{ i+1 }}</td>
+                    <td class="td">{{ policy?.dueDate }}</td>
+                    <td class="td">{{ policy?.principalBeneficiary?.platformOwnerNumber }}</td>
+                    <td class="td" style="color: red;">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
+                    <td class="td">{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}</td>
+                    <td class="td">{{ policy?.policyId }}</td>
+                    <td class="td">{{ policy?.planId?.name }}</td>
+                    <td class="td">{{ policy?.hiaId?.name }}</td>
+                    <td class="td td-icos" routerLink="/modules/employer/employers/23">
+                        <i class="fa fa-chevron-right"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total-cost-box" *ngIf="batchedPolicies.length > 0 && selectedOrganizationPolicies.length > 0">
+            <b>Total Item Selected: {{ totalItem }}</b><br>
+            <b>Total Cost: &#x20A6; {{ totalCost }}</b>
+        </div>
+        <div class="list-buttom">
+            <div *ngIf="batchedPolicies.length > 0">
+                <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+                <div class="btn btn-medium btn-yellow">Load More</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="openBatchModal" class="modal-overlay">
+    <div class="modal-wrap shadow-RB" style="max-width:150px">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <div *ngIf="!showPaystack">
+            <div class="modal-title" style="font-weight: bold">Create Batch</div>
+            <div>
+                <form [formGroup]="paymentGroup">
+                    <div class="frm-item-wrap">
+                        <input type="text" formControlName="batchNo" placeholder="Batch Name">
+                    </div>
+                    <div class="frm-item-wrap">
+                        <select formControlName="paymentType">
+                            <option value="e-Payment" selected>e-Payment</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <button *ngIf="withPaystack" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch(paymentGroup.valid, paymentGroup.value);" style="width:150px;padding:10px;margin-left:10px;">
+                <span *ngIf="!paystackProcessing">e-Payment</span>
+                <span *ngIf="paystackProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+            <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatchCash();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
+        </div>
+        <div class="paystack-box" *ngIf="showPaystack">
+            <div class="modal-title" style="font-weight: bold">Verify that you want to continue with payment</div>
+            <div class="modal-title" style="font-weight: bold">Amount: &#x20A6; {{ totalCost }}</div>
+            <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (callback)="paymentDone($event)">Verify</angular4-paystack>
+        </div>
+    </div>
+</div>
