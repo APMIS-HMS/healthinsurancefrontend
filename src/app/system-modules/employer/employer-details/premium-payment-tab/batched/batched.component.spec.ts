@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListOrganizationComponent } from './list-organization.component';
+import { BatchedComponent } from './batched.component';
 
-describe('ListOrganizationComponent', () => {
-  let component: ListOrganizationComponent;
-  let fixture: ComponentFixture<ListOrganizationComponent>;
+describe('BatchedComponent', () => {
+  let component: BatchedComponent;
+  let fixture: ComponentFixture<BatchedComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListOrganizationComponent ]
+      declarations: [ BatchedComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListOrganizationComponent);
+    fixture = TestBed.createComponent(BatchedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

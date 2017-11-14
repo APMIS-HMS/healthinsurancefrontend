@@ -4,11 +4,11 @@
     </div>
 
     <ul class="inpage-tabs">
-        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Organisation Details</li>
-        <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
-        <li (click)="tabHia_click()" [class.tab-active]="tab_hia">HIA</li>
-        <li (click)="tabPaymentClick()" [class.tab-active]="tabPayment">Payment</li>
-        <li (click)="tabPaymentHistoryClick()" [class.tab-active]="tabPaymentHistory">Payment History</li>
+        <li (click)="navigate('details');" [class.tab-active]="tab_details">Organisation Details</li>
+        <li (click)="navigate('beneficiary');" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
+        <li (click)="navigate('hia');" [class.tab-active]="tab_hia">HIA</li>
+        <li (click)="navigate('payment');" [class.tab-active]="tabPayment">Payment</li>
+        <li (click)="navigate('payment-history');" [class.tab-active]="tabPaymentHistory">Payment History</li>
         <!-- <li (click)="tabPlans_click()" [class.tab-active]="tab_plans">List of Plans</li>
         <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
         <li (click)="tabEmployers_click()" [class.tab-active]="tab_employers">Employers</li>
@@ -132,8 +132,7 @@
 
                 <div class="bar-icos">
                     <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2"> UPLOAD BENEFICIARIES</div>
-                    <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;"
-                        #fileInput type="file" id="uploadResult" (change)="upload($event)">
+                    <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
                 </div>
             </div>
             <div *ngIf="!isUploading">
@@ -297,8 +296,8 @@
                 </div>
             </div>
 
-            <div class="padding-10">
-                <app-employer-beneficiaries></app-employer-beneficiaries>
+            <div>
+                <app-premium-payment-tab></app-premium-payment-tab>
             </div>
         </div>
     </div>

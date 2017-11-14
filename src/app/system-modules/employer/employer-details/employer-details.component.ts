@@ -50,8 +50,9 @@ export class EmployerDetailsComponent implements OnInit {
   currentPlatform: any;
   selectedCountry: any;
   selectedState: any;
-  hias:any[] = [];
+  hias: any[] = [];
   drugSearchResult = false;
+  routeId: string;
 
   constructor(
     private _router: Router,
@@ -63,9 +64,9 @@ export class EmployerDetailsComponent implements OnInit {
     private _uploadService: UploadService,
     private _titleService: TitleService,
     private _genderService: GenderService,
-    private _countryService: CountryService,
-
-  ) { }
+    private _countryService: CountryService
+  ) {
+  }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Organisation Details');
@@ -73,6 +74,7 @@ export class EmployerDetailsComponent implements OnInit {
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
+        this.routeId = param.id;
         this._getEmployerDetails(param.id);
       }
     });
@@ -85,14 +87,26 @@ export class EmployerDetailsComponent implements OnInit {
           query: {
             'platformOwnerId._id': this.currentPlatform._id,
             name: { $regex: value, '$options': 'i' },
-            'facilityType.name':'Health Insurance Agent'
+            'facilityType.name': 'Health Insurance Agent'
           }
         }).then((payload:any) => {
           this.hias = payload.data;
           this.drugSearchResult = true;
-        })
+        });
       });
     this._getCurrentPlatform();
+
+    if (this._router.url.endsWith('payment')) {
+      this.navigate('payment');
+    } else if (this._router.url.endsWith('beneficiary')) {
+      this.navigate('beneficiary');
+    } else if (this._router.url.endsWith('hia')) {
+      this.navigate('hia');
+    } else if (this._router.url.endsWith('payment-history')) {
+      this.navigate('payment-history');
+    } else {
+      this.navigate('details');
+    }
   }
 
 
@@ -168,16 +182,16 @@ export class EmployerDetailsComponent implements OnInit {
     });
   }
 
-  onSelectDrug(hia){
-    if(this.facility.employer.hias === undefined){
+  onSelectDrug(hia) {
+    if (this.facility.employer.hias === undefined){
       this.facility.employer.hias = [];
     }
-    this.facility.employer.hias.push(hia)
-    this._facilityService.update(this.facility).then(payload =>{
+    this.facility.employer.hias.push(hia);
+    this._facilityService.update(this.facility).then(payload => {
       this.facility = payload;
-    }).catch(err =>{
+    }).catch(err => {
 
-    })
+    });
   }
 
   onClickApprove() {
@@ -372,7 +386,7 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   navigateEmployers(url, id?) {
-    this._systemService.on()
+    this._systemService.on();
     if (!!id) {
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
@@ -388,137 +402,15 @@ export class EmployerDetailsComponent implements OnInit {
     }
   }
 
-  tabDetails_click() {
-    this.tab_details = true;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
+  navigateTo(route) {
+    this._router.navigate([route]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
-  tabPreauthorization_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = true;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabPlans_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = true;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabBeneficiaries_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = true;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabEmployers_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = true;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabPaymentClick() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = true;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabPaymentHistoryClick() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = true;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabClaims_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = true;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabComplaints_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = true;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabReferals_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = true;
-    this.tab_hia = false;
-  }
-  tabHia_click() {
+
+  navigate(tabName) {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -529,7 +421,30 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
-    this.tab_hia = true;
+    this.tab_hia = false;
+
+    switch (tabName) {
+      case 'details':
+        this.tab_details = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId);
+        break;
+      case 'beneficiary':
+        this.tab_beneficiaries = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/beneficiary');
+        break;
+      case 'hia':
+        this.tab_hia = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/hia');
+        break;
+      case 'payment':
+        this.tabPayment = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/payment');
+        break;
+      case 'payment-history':
+        this.tabPaymentHistory = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/payment-history');
+        break;
+    }
   }
 
 }
