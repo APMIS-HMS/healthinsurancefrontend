@@ -167,8 +167,8 @@ export class PremiumPaymentTabComponent implements OnInit {
           this.showPaystack = false;
           this.openBatchModal = false;
           this.premiumPaymentData = {};
+          this.onClickTab('batchedPayment');
           this._premiumPaymentService.setWhenDone(true);
-          // this._router.navigate(['/modules/premium-payment/previous']);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
