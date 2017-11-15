@@ -18,7 +18,7 @@ import { HeaderEventEmitterService } from '../../../../services/event-emitters/h
   styleUrls: ['./premium-payment-tab.component.scss']
 })
 export class PremiumPaymentTabComponent implements OnInit {
-  @Output() isDoneSavingPolicy: any;
+  // @Output() isDoneSavingPolicy: any;
   openBatchModal: boolean = false;
   paymentGroup: FormGroup;
   listsearchControl = new FormControl();
@@ -95,58 +95,57 @@ export class PremiumPaymentTabComponent implements OnInit {
   }
 
   onClickCreateAndPaybatch(valid: boolean, value: any) {
-    this.isDoneSavingPolicy = true;
-    // this.paystackProcessing = true;
-    // console.log(value);
-    // let policies = [];
-    // if (this.selectedPolicies.length > 0 && !!this.currentPlatform && !!this.currentPlatform._id) {
-    //   // Get the total price
-    //   this.selectedPolicies.forEach(policy => {
-    //     this.totalCost += policy.premiumPackageId.amount;
-    //   });
-    //   // All policies that is being paid for.
-    //   this.selectedPolicies.forEach(policy => {
-    //     if (policy.isChecked) {
-    //       policies.push({
-    //         policyId: policy.policyId,
-    //         policyCollectionId: policy._id
-    //       });
-    //     }
-    //   });
+    this.paystackProcessing = true;
+    console.log(value);
+    let policies = [];
+    if (this.selectedPolicies.length > 0 && !!this.currentPlatform && !!this.currentPlatform._id) {
+      // Get the total price
+      this.selectedPolicies.forEach(policy => {
+        this.totalCost += policy.premiumPackageId.amount;
+      });
+      // All policies that is being paid for.
+      this.selectedPolicies.forEach(policy => {
+        if (policy.isChecked) {
+          policies.push({
+            policyId: policy.policyId,
+            policyCollectionId: policy._id
+          });
+        }
+      });
 
-    //   let user = {
-    //     userType: this.user.userType,
-    //     firstName: this.user.firstName,
-    //     lastName: this.user.lastName,
-    //     facilityId: this.user.facilityId,
-    //     email: this.user.email,
-    //     isActive: this.user.isActive,
-    //     platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
-    //     phoneNumber: this.user.phoneNumber
-    //   };
+      let user = {
+        userType: this.user.userType,
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        facilityId: this.user.facilityId,
+        email: this.user.email,
+        isActive: this.user.isActive,
+        platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
+        phoneNumber: this.user.phoneNumber
+      };
 
-    //   let ref = {
-    //     platformOwnerId: this.currentPlatform,
-    //     policies: policies,
-    //     paidBy: user,
-    //     requestedAmount: this.totalCost,
-    //     amountPaid: 0,
-    //     paymentType: value.paymentType,
-    //     batchNo: value.batchNo
-    //   };
+      let ref = {
+        platformOwnerId: this.currentPlatform,
+        policies: policies,
+        paidBy: user,
+        requestedAmount: this.totalCost,
+        amountPaid: 0,
+        paymentType: value.paymentType,
+        batchNo: value.batchNo
+      };
 
-    //   console.log(ref);
-    //   // Create batch, if successful, enable the paystack button.
-    //   this._premiumPaymentService.create(ref).then((res: any) => {
-    //     if (!!res._id) {
-    //       this.showPaystack = true;
-    //       this.premiumPaymentData = res;
-    //       console.log(res);
-    //     }
-    //   }).catch(err => console.log(err));
-    // } else {
-    //   console.log('Current platform owner or selected policies is empty');
-    // }
+      console.log(ref);
+      // Create batch, if successful, enable the paystack button.
+      this._premiumPaymentService.create(ref).then((res: any) => {
+        if (!!res._id) {
+          this.showPaystack = true;
+          this.premiumPaymentData = res;
+          console.log(res);
+        }
+      }).catch(err => console.log(err));
+    } else {
+      console.log('Current platform owner or selected policies is empty');
+    }
   }
 
 
@@ -168,7 +167,8 @@ export class PremiumPaymentTabComponent implements OnInit {
           this.showPaystack = false;
           this.openBatchModal = false;
           this.premiumPaymentData = {};
-          // this._router.navigate(['/modules/premium-payment/previous']);
+          this.onClickTab('batchedPayment');
+          this._premiumPaymentService.setWhenDone(true);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }
       }).catch(err => {
@@ -192,7 +192,9 @@ export class PremiumPaymentTabComponent implements OnInit {
 
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+    this._facilityService.find(
+      { query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }}
+    ).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
       }

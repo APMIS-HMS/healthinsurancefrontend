@@ -7,7 +7,7 @@ import { Angular4PaystackModule } from 'angular4-paystack';
 import { SharedModule } from '../../shared-modules/shared.module';
 import {
     FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
-    UserTypeService, SystemModuleService, BeneficiaryService,MaritalStatusService,PlanTypeService,PremiumPaymentService
+    UserTypeService, SystemModuleService, BeneficiaryService, MaritalStatusService, PlanTypeService, PremiumPaymentService
 } from './../../services/index';
 import { MyDatePickerModule } from 'mydatepicker';
 import { employerRoutes } from './employer.route';
@@ -38,6 +38,6 @@ import { BatchedComponent } from './employer-details/premium-payment-tab/batched
     ],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
         UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService,
-        MaritalStatusService, PlanTypeService, PremiumPaymentService]
+        MaritalStatusService, PlanTypeService, PremiumPaymentService,BatchedComponent]
 })
 export class EmployerModule { }
