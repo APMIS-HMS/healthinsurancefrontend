@@ -94,6 +94,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   employees:any[] = [];
   requestStatus = REQUEST_STATUS;
 
+
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
@@ -187,8 +188,8 @@ export class PreAuthorizationNewComponent implements OnInit {
       healthCareProvider: [this.selectedCheckIn != null ? this.selectedCheckIn.providerFacilityId.name : '', [<any>Validators.required]],
       hia: [this.selectedCheckIn != null ? this.selectedCheckIn.policyObject.hiaId.name : '', [<any>Validators.required]],
       visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : new Date(), [<any>Validators.required]],
+      requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', []],
+      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : new Date(), []],
       clinicalNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       emergency: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : false, [<any>Validators.required]],
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -830,6 +831,7 @@ export class PreAuthorizationNewComponent implements OnInit {
             counter = counter + 1;
           }
         });
+        console.log(this.preAuthFormGroup)
       }
     } catch (error) {
       this._systemService.off();

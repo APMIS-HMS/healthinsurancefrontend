@@ -1,3 +1,4 @@
+import { UserService } from './../../../services/common/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { DURATIONS } from './../../../services/globals/config';
@@ -92,7 +93,7 @@ export class NewClaimComponent implements OnInit {
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
   };
-
+  employees:any[] = [];
   public today: IMyDate;
 
   constructor(
@@ -113,6 +114,7 @@ export class NewClaimComponent implements OnInit {
     private _drugService: DrugService,
     private _checkInService: CheckInService,
     private _claimService: ClaimService,
+    private _userService:UserService,
     private _investigationService: InvestigationService) { }
 
   ngOnInit() {
@@ -123,6 +125,7 @@ export class NewClaimComponent implements OnInit {
       }
     });
     this.durations = DURATIONS;
+    this._getEmployees();
 
     this.claimsFormGroup = this._fb.group({
       patientName: ['', [<any>Validators.required]],
@@ -221,6 +224,14 @@ export class NewClaimComponent implements OnInit {
         console.log(error)
       });
 
+      this.claimsFormGroup.controls.medicalPersonelName.valueChanges
+      .subscribe(value => {
+        this.claimsFormGroup.controls.docunit.setValue(value.unit);
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
   }
 
 
@@ -312,6 +323,24 @@ export class NewClaimComponent implements OnInit {
       }
     })
 
+  }
+  _getEmployees(){
+    if(this.user.userType.name==='Provider'){
+      this._systemService.on();
+      this._userService.find({
+        query:{
+          'facilityId._id':this.user.facilityId._id,
+          $select:['firstName', 'lastName', 'profession','cader', 'unit', 'otherNames']
+        }
+      }).then((payload: any) => {
+        this.employees = payload.data;
+        console.log(this.employees)
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      })
+    }
   }
 
   _getClaimTypes() {
