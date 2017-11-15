@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -33,9 +33,11 @@ export class BatchedComponent implements OnInit {
   premiumPaymentData: any;
   currentPlatform: any;
   showPaystack: boolean = false;
+  routeId: string;
 
   constructor(
     private _fb: FormBuilder,
+    private _route: ActivatedRoute,
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -49,6 +51,13 @@ export class BatchedComponent implements OnInit {
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
+
+    this._route.params.subscribe(param => {
+      console.log(param);
+      if (param.id !== undefined) {
+        this.routeId = param.id;
+      }
+    });
   }
 
   onCheckAllToPay(isChecked) {
@@ -171,20 +180,17 @@ export class BatchedComponent implements OnInit {
   private _getBatchedPolicies() {
     console.log(this.currentPlatform);
     this._systemService.on();
-    this._policyService.find({
+    this._premiumPaymentService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
-        isPaid: false,
+        // isActive: false,
+        'sponsor._id': this.routeId,
         $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
       console.log(res);
       this.loading = false;
-      res.data.forEach(policy => {
-        policy.isChecked = false;
-        policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
-        this.policies.push(policy);
-      });
+      this.policies = res.data;
       this._systemService.off();
     }).catch(error => {
       console.log(error);
