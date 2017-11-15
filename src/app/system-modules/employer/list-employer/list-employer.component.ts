@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName } from './../../../services/globals/config';
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -29,6 +30,7 @@ export class ListEmployerComponent implements OnInit {
   loading: Boolean = true;
   planTypes: any[] = [];
   selectedUserType: any = <any>{};
+  user: any;
 
   constructor(
     private _router: Router,
@@ -36,13 +38,14 @@ export class ListEmployerComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
-    private _industryService: IndustryService
+    private _industryService: IndustryService,
+    private _locker: CoolLocalStorage
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._headerEventEmitter.setRouteUrl('Organisation List');
     this._headerEventEmitter.setMinorRouteUrl('All Organisations');
-
     this._getUserTypes();
     this._getIndustries();
 
@@ -62,14 +65,14 @@ export class ListEmployerComponent implements OnInit {
     //   }
     // })
     this.filterTypeControl.valueChanges
-    .distinctUntilChanged()
-    .debounceTime(200)
-    .switchMap((term) => Observable.fromPromise(
-      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }))).subscribe((payload1: any) => {
-        this.employers = payload1.data.filter(function (item) {
-          return (item.employer.industry.name.toLowerCase().includes(payload1.toLowerCase()))
+      .distinctUntilChanged()
+      .debounceTime(200)
+      .switchMap((term) => Observable.fromPromise(
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }))).subscribe((payload1: any) => {
+          this.employers = payload1.data.filter(function (item) {
+            return (item.employer.industry.name.toLowerCase().includes(payload1.toLowerCase()))
+          });
         });
-      });
 
 
 
@@ -122,8 +125,9 @@ export class ListEmployerComponent implements OnInit {
     }
   }
 
-  private _getEmployers() {
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, 'platformOwnerId._id':this.currentPlatform._id, $limit: 200 } }).then((res: any) => {
+
+  private _getAllPolicies(query) {
+    this._facilityService.find(query).then((res: any) => {
       this.loading = false;
       console.log(res);
       if (res.data.length > 0) {
@@ -131,6 +135,24 @@ export class ListEmployerComponent implements OnInit {
         this.local_employers = this.employers;
       }
     }).catch(err => console.log(err));
+  }
+
+  private _getEmployers() {
+    if (this.user !== undefined && this.user.userType.name === 'Platform Owner') {
+      let query = { query: { 'platformOwnerId._id': this.currentPlatform._id, $limit: 200 } };
+      this._getAllPolicies(query)
+    } else if (this.user !== undefined && this.user.userType.name === 'Health Insurance Agent') {
+      console.log('agent');
+      let query = 
+        {
+          query:
+          {
+            'facilityType._id': this.selectedUserType._id, 'platformOwnerId._id': this.currentPlatform._id,
+            'employer.hias._id': this.user.facilityId._id, $limit: 200
+          }
+        };
+        this._getAllPolicies(query);
+    }
   }
   private _getCurrentPlatform() {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
@@ -144,9 +166,9 @@ export class ListEmployerComponent implements OnInit {
     this._systemService.on();
 
     let userType$ = Observable.fromPromise(this._userTypeService.find({}));
-    let platform$ = Observable.fromPromise( this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }));
+    let platform$ = Observable.fromPromise(this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }));
 
-    Observable.forkJoin([userType$, platform$]).subscribe((results:any) =>{
+    Observable.forkJoin([userType$, platform$]).subscribe((results: any) => {
       this._systemService.off();
       this.currentPlatform = results[1].data[0];
       if (results[0].data.length > 0) {
@@ -171,7 +193,7 @@ export class ListEmployerComponent implements OnInit {
   }
 
   navigateToDetails(id: string) {
-   this._systemService.on()
+    this._systemService.on()
     console.log(id)
     this._router.navigate(['/modules/employer/employers/' + id]).then(res => {
       this._systemService.off();
@@ -182,7 +204,7 @@ export class ListEmployerComponent implements OnInit {
   }
 
   navigateNewEmployer() {
-   this._systemService.on()
+    this._systemService.on()
     this._router.navigate(['/modules/employer/new']).then(res => {
       this._systemService.off();
     }).catch(err => {

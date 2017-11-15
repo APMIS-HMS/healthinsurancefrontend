@@ -56,7 +56,15 @@ export class ListPlansComponent implements OnInit {
 
   _getPlans() {
     this._systemService.on();
-    this._planService.find({ query: { 'platformOwnerId._id': this.currentPlatform._id, 'facilityId._id': this.user.facilityId._id } }).then((payload: any) => {
+    this._planService.find({
+      query: {
+        'platformOwnerId._id': this.currentPlatform._id,
+        $or: [
+          { 'facilityId._id': this.user.facilityId._id },
+          { 'facilityId._id': this.currentPlatform._id }
+        ]
+      }
+    }).then((payload: any) => {
       this.loading = false;
       this.plans = payload.data;
       console.log(this.plans)
@@ -106,7 +114,7 @@ export class ListPlansComponent implements OnInit {
     let index = plan.premiums.findIndex(x => x.unit.name === duration);
     if (index === -1) {
       return ret;
-    }else{
+    } else {
       return plan.premiums[index].amount;
     }
   }
@@ -129,7 +137,7 @@ export class ListPlansComponent implements OnInit {
       this._systemService.off();
     });
   }
-  navigatePlanDetail(plan){
+  navigatePlanDetail(plan) {
     this._systemService.on();
     this._router.navigate(['/modules/plan/plans', plan._id]).then(res => {
       this._systemService.off();

@@ -31,11 +31,11 @@ export class CheckinDetailsComponent implements OnInit {
   checkinFormGroup: FormGroup;
   checkedinFormGroup: FormGroup;
 
-  otp_show = true;
+  otp_show = false;
   checkin_show = false;
   otp_generated = false;
-  checkinSect = true;
-  checkedinSect = false;
+  checkinSect = false;
+  checkedinSect = true;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -99,17 +99,8 @@ export class CheckinDetailsComponent implements OnInit {
     this._getEncounterTypes();
     this._getUserFacility();
 
-    // this._hasCheckInToday();
-
   }
 
-  // _checkPreAuth(){
-  //   this._preAuthorizationService.find({
-  //     query:{
-  //       ''
-  //     }
-  //   })
-  // }
   private _getUserFacility() {
     this._facilityService.get(this.user.facilityId._id, {}).then(payload => {
       this.user.facilityId = payload;
@@ -131,21 +122,10 @@ export class CheckinDetailsComponent implements OnInit {
       }
     }));
 
-    // query: {
-    //   $or: [
-    //     { platformOwnerNumber: { $regex: value, '$options': 'i' } },
-    //     { 'personId.lastName': { $regex: value, '$options': 'i' } },
-    //     { 'personId.firstName': { $regex: value, '$options': 'i' } },
-    //   ]
-    // }
-
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
-      console.log(results)
-      // if (this.isCheckIn) {
-      //   this.tabCheckin_click();
-      // }
+      console.log('has today')
       this._hasCheckInToday();
 
       if (results[1].data.length > 0) {
@@ -302,11 +282,25 @@ export class CheckinDetailsComponent implements OnInit {
           this.checkinSect = false;
           this.checkedinSect = true;
         } else if (this.selectedCheckIn.otp.isVerified) {
-          this._initializedForm();
-          this.otp_show = false;
-          this.checkin_show = true;
+          // this._initializedForm();
+          // this.otp_show = false;
+          // this.checkin_show = true;
+          //route to generate
+          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
+            this._systemService.off();
+          }).catch(err => {
+            console.log(err)
+            this._systemService.off();
+          });
         }
 
+      }else{
+        this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
+          this._systemService.off();
+        }).catch(err => {
+          console.log(err)
+          this._systemService.off();
+        });
       }
       this._systemService.off();
     }).catch(err => {
@@ -366,7 +360,25 @@ export class CheckinDetailsComponent implements OnInit {
   otp_regenerate() {
     this.selectedCheckIn = undefined;
   }
-
+  checkOut() {
+    let checkOut = {
+      checkOutBy: this.user._id,
+    };
+    this.selectedCheckIn.checkOut = checkOut;
+    this.selectedCheckIn.isCheckedOut = true;
+    this._checkInService.update(this.selectedCheckIn).then(payload => {
+      console.log(payload);
+      this._toastr.success('You have successfully checked out this patient', "Checked Out");
+      this._router.navigate(['/modules/checkin/checkedin']).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err)
+        this._systemService.off();
+      });
+    }).catch(err => {
+      console.log(err);
+    })
+  }
   navigateToNewClaim() {
     this._systemService.on();
     this._router.navigate(['/modules/claim/new', this.selectedCheckIn._id]).then(res => {

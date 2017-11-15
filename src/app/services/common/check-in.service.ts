@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Rx';
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -5,7 +6,8 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 
 @Injectable()
 export class CheckInService {
-  public listner;
+  public listner:Observable<any>;
+  public patchedListener:Observable<any>;
   public _socket;
   private _rest;
   private _restLogin;
@@ -17,6 +19,8 @@ export class CheckInService {
   ) {
     this._rest = _restService.getService('check-ins');
     this._socket = _socketService.getService('check-ins');
+    this.listner = Observable.fromEvent(this._socket, 'created');
+    this.patchedListener = Observable.fromEvent(this._socket, 'patched');
   }
 
   find(query: any) {

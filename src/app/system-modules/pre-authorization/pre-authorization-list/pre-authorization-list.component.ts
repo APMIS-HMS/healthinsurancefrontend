@@ -45,7 +45,6 @@ export class PreAuthorizationListComponent implements OnInit {
     this._preAuthorizationService.find({query:{
       $sort: { createdAt: -1 },
     }}).then((payload: any) => {
-      console.log(payload.data)
       this.authorizations = payload.data;
       this._systemService.off();
     }).catch(err => {

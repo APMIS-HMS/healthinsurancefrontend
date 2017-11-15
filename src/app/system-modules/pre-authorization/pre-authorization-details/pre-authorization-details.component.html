@@ -20,10 +20,10 @@
         </div>
 
         <div *ngIf="tab_other" class="tab-pane fade show active">
-            <app-authorization-top-bar></app-authorization-top-bar>
+            <app-authorization-top-bar [selectedAuthorization]="selectedAuthorization"></app-authorization-top-bar>
 
             <div class="details-wrap">
-                <app-authorization-others-tab style="width:100%;"></app-authorization-others-tab>
+                <app-authorization-others-tab [selectedAuthorization]="selectedAuthorization" style="width:100%;"></app-authorization-others-tab>
             </div>
         </div>
     </div>

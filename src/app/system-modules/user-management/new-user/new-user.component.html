@@ -13,7 +13,7 @@
             <div class="frm-item-wrap">
                 <label class="label">User Type</label>
                 <div class="inputWrap">
-                    <select formControlName="userType" class="form-control">
+                    <select formControlName="userType" class="form-control" [compareWith]='compare'>
                         <option value=" " disabled selected>Select User Type</option>
                         <option *ngFor="let user of userTypes" [ngValue]="user">{{user.name}}</option>
                     </select>
@@ -23,7 +23,7 @@
             <div *ngIf="showHIA || showProvider" class="frm-item-wrap">
                 <label class="label">Facilities</label>
                 <div class="inputWrap">
-                    <select formControlName="facilityId" class="form-control">
+                    <select formControlName="facilityId" class="form-control" [compareWith]='compare'>
                         <option value=" " disabled selected>Select Facility</option>
                         <option *ngFor="let user of facilities" [ngValue]="user">{{user.name}}</option>
                     </select>
@@ -33,7 +33,7 @@
             <div *ngIf="showPlatformOwner" class="frm-item-wrap">
                 <label class="label">Facilities</label>
                 <div class="inputWrap">
-                    <select formControlName="facilityId" class="form-control">
+                    <select formControlName="facilityId" class="form-control" [compareWith]='compare'>
                         <option value=" " disabled selected>Select Facility</option>
                         <option *ngFor="let user of facilities" [ngValue]="user">{{user.name}}</option>
                     </select>
@@ -62,8 +62,8 @@
             <div class="frm-item-wrap">
                 <label class="label">Other Name</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="otherName" class="form-control">
-                    <small class="alert-label" [hidden]="userFormGroup.controls.otherName.valid || userFormGroup.controls.otherName.pristine">
+                    <input type="text" formControlName="otherNames" class="form-control">
+                    <small class="alert-label" [hidden]="userFormGroup.controls.otherNames.valid || userFormGroup.controls.otherNames.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
                     </small>
                 </div>
@@ -97,7 +97,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Email Address</label>
                 <div class="inputWrap">
-                    <input type="text" formControlName="email" class="form-control">
+                    <input [readonly]="userFormGroup.controls.readonly.value" type="text" formControlName="email" class="form-control">
                     <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
                         This is a required field (minimum 3 and max of 50 characters).
                     </small>
@@ -106,23 +106,29 @@
             <div *ngIf="showProvider" class="frm-item-wrap">
                 <label class="label">Profession</label>
                 <div class="inputWrap">
-                    <select formControlName="profession" class="form-control">
+                    <select formControlName="profession" class="form-control" [compareWith]='compare'>
                         <option value=" " disabled selected>Select Profession</option>
                         <option *ngFor="let profession of professions" [ngValue]="profession">{{profession.name}}</option>
                     </select>
                 </div>
             </div>
             <div *ngIf="showProvider" class="frm-item-wrap">
-                <label class="label">Cader</label>
+                <label class="label">Cadre</label>
                 <div class="inputWrap">
-                    <select formControlName="cader" class="form-control">
+                    <select formControlName="cader" class="form-control" [compareWith]='compare'>
                         <option value=" " disabled selected>Select Cader</option>
                         <option *ngFor="let cader of caders" [ngValue]="cader">{{cader.name}}</option>
                     </select>
                 </div>
             </div>
+            <div *ngIf="showProvider" class="frm-item-wrap">
+                <label class="label">Unit</label>
+                <div class="inputWrap">
+                    <input type="text" formControlName="unit" class="form-control">
+                </div>
+            </div>
 
-            <button (click)="onClickSaveUser(userFormGroup.valid, userFormGroup.value)" class="btn btn-medium btn-blue"> SAVE</button>
+            <button (click)="onClickSaveUser(userFormGroup.valid, userFormGroup.value)" class="btn btn-medium btn-blue">{{btnText}}</button>
         </form>
     </section>
 </div>

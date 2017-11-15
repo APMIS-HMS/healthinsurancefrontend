@@ -945,8 +945,11 @@ export class NewReferalComponent implements OnInit {
         console.log(authorizationObject);
         this._referralService.create(authorizationObject).then(payload => {
           console.log(payload);
-          this._router.navigate(['/modules/referal/referals']);
-          this._systemService.off();
+          this.selectedCheckIn.otp.isVerified = false;
+          this._checkInService.update(this.selectedCheckIn).then(payload2=>{
+            this._router.navigate(['/modules/referal/referals']);
+            this._systemService.off();
+          })
         }).catch(err => {
           this._systemService.off();
           console.log(err);

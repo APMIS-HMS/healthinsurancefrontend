@@ -91,6 +91,16 @@ export class ListUserComponent implements OnInit {
 
   }
 
+  navigateEditUser(user) {
+    this._systemService.on();
+    this._router.navigate(['/modules/user/new', user._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
+    });
+  }
+
   showDetails(user) {
     this._systemService.on();
     this._router.navigate(['/modules/user/users', user._id]).then(res => {
