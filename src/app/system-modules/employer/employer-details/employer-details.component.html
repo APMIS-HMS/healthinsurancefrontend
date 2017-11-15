@@ -183,7 +183,7 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true">
-                                <select [formControl]="titleControl" (change)="onTitle($event,i)"  [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
+                                <select [formControl]="titleControl" (change)="onTitle($event,i)" [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
                                     <option *ngFor="let title of titles" [selected]="item.title==title.name">{{title.name}}</option>
                                 </select>
                             </div>
@@ -264,8 +264,8 @@
                                 <span *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == true">
                                         {{item.stateOfOrigin}}
                                     </span>
-                                </div>
-                                <select *ngIf="item.isEdit==true" (change)="onOstate($event,i)" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
+                            </div>
+                            <select *ngIf="item.isEdit==true" (change)="onOstate($event,i)" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
                                     <option *ngFor="let state of oStates" [selected]="item.stateOfOrigin==state.name">{{state.name}}</option>
                                 </select>
                         </td>
@@ -471,6 +471,21 @@
 
             <div>
                 <app-premium-payment-tab></app-premium-payment-tab>
+            </div>
+        </div>
+        <div *ngIf="tabPaymentHistory" class="tab-pane fade show active">
+            <!-- <app-employer-top-bar></app-employer-top-bar> -->
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>{{ facility?.name }}</div>
+                    <div>Status:
+                        <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <app-payment-history></app-payment-history>
             </div>
         </div>
     </div>

@@ -112,7 +112,6 @@ export class UnbatchedComponent implements OnInit {
         this.totalItem++;
         this.totalCost += policy.premiumPackageId.amount;
         this.selectedPolicies.push(policy);
-        this._premiumPaymentService.setPolicy(this.selectedPolicies);
         // this.outputSelectedPolicies = this.selectedPolicies;
       } else {
         this.totalItem--;
@@ -125,8 +124,7 @@ export class UnbatchedComponent implements OnInit {
       this.selectedPolicies = [];
       // this.outputSelectedPolicies = [];
     }
-    console.log(this.policies);
-    console.log(this.selectedPolicies);
+    this._premiumPaymentService.setPolicy(this.selectedPolicies);
     // } else {
     //   // Remove from the selected Claim
     //   console.log(index);
@@ -138,13 +136,25 @@ export class UnbatchedComponent implements OnInit {
   onCheckSelectedToPay(index: number, policy: Policy) {
     console.log(policy);
     if (!policy.isChecked) {
+      let found: boolean = false;
       policy.isChecked = true;
-      this.selectedPolicies.push(policy);
+      this.selectedPolicies.forEach(item => {
+        if (e => e._id === policy._id) {
+          found = true;
+        } else {
+          found = false;
+        }
+      });
+
+      if (!found) {
+        this.selectedPolicies.push(policy);
+      }
     } else {
       policy.isChecked = false;
       this.selectedPolicies = this.selectedPolicies.filter(x => x._id !== policy._id);
       console.log(this.selectedPolicies);
     }
+    this._premiumPaymentService.setPolicy(this.selectedPolicies);
 
     // Send policy to the parent component
     // this.selectedPolicy(this.selectedPolicies);
