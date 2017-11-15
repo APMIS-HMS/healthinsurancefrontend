@@ -361,7 +361,7 @@
                                     Invalid
                                 </span>
                                 <span *ngIf="checkValue(item.policy.premiumPackage,packages,'category.name') == true">
-                                    {{item?.policy?.premiumPackage}}
+                                    {{item?.policy?.premiumPackage}} {{packages[0].category.name}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
