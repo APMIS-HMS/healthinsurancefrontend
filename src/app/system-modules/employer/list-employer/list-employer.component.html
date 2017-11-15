@@ -60,7 +60,7 @@
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let employer of employers; let i = index;" class="tr">
+            <tr *ngFor="let employer of employers; let i = index;" class="tr"> 
                 <td class="td hover" (click)="navigateToDetails(employer._id);">{{ i+1 }}</td>
                 <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.name }}</td>
                 <td class="td hover text-right" (click)="navigateToDetails(employer._id);">{{ employer.email }}</td>

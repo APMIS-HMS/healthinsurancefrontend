@@ -85,6 +85,7 @@ export class ListEmployerComponent implements OnInit {
       .subscribe((payload: any) => {
         var strVal = this.listsearchControl.value;
         this.employers = payload.data.filter(function (item) {
+          console.log(item);
           return (item.name.toLowerCase().includes(strVal.toLowerCase())
             || item.email.toLowerCase().includes(strVal.toLowerCase())
             || item.employer.industry.name.toLowerCase().includes(strVal.toLowerCase())
@@ -92,7 +93,7 @@ export class ListEmployerComponent implements OnInit {
             || item.employer.cin.toLowerCase().includes(strVal.toLowerCase())
             || item.businessContact.lastName.toLowerCase().includes(strVal.toLowerCase())
             || item.businessContact.firstName.toLowerCase().includes(strVal.toLowerCase())
-            || item.businessContact.phoneNumber.includes(strVal.toLowerCase()))
+            || item.businessContact.phoneNumber.includes(strVal.toLowerCase())) 
         })
       });
   }
