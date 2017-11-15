@@ -28,7 +28,7 @@ export * from './organisation/employer';
 export * from './organisation/facility';
 export * from './organisation/hia';
 export * from './organisation/provider';
-export * from './plan/Plan';
+export * from './plan/plan';
 export * from './person/person';
 export * from './person/image';
 export * from './person/next-of-kin';
