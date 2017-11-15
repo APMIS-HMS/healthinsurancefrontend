@@ -257,11 +257,11 @@
     </div>
 </div>
 
-<div class="action-wrap" *ngIf="statusCheck==true">
-    <div class="btn btn-medium btn-red" *ngIf="isAuthCreateClaim==true" (click)="rejectClaim()">REJECT</div>
-    <div class="btn btn-medium btn-red" disabled="status=='Query'" *ngIf="isAuthCreateClaim==true" (click)="queryClaim()">QUERY</div>
-    <div class="btn btn-medium btn-yellow" disabled="status=='Hold'" *ngIf="isAuthCreateClaim==true" (click)="holdClaim()">HOLD</div>
-    <div class="btn btn-medium btn-blue" *ngIf="isAuthCreateClaim==true" (click)="approveClaim()">APPROVE</div>
+<div class="action-wrap" *ngIf="isAuthCreateClaim==true">
+    <div class="btn btn-medium btn-red" disabled="status=='Reject'" (click)="rejectClaim()">REJECT</div>
+    <div class="btn btn-medium btn-red" disabled="status=='Query'" (click)="queryClaim()">QUERY</div>
+    <div class="btn btn-medium btn-yellow" disabled="status=='Hold'"  (click)="holdClaim()">HOLD</div>
+    <div class="btn btn-medium btn-blue" disabled="status=='Approve'" (click)="approveClaim()">APPROVE</div>
 </div>
 
 <div *ngIf="modalApprove" class="modal-overlay">
