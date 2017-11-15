@@ -26,6 +26,8 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 export class EmployerDetailsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
+
+  globalItemIndex = 0;
   orderExcelPolicies = [];
   totalExcelPrincipalItems = 0;
   titles = [];
@@ -52,14 +54,14 @@ export class EmployerDetailsComponent implements OnInit {
   statusControl = new FormControl('All');
 
 
-  allitemsControl= new FormControl();
+  allitemsControl = new FormControl();
   nameControl = new FormControl();
   genderControl = new FormControl();
   titleControl = new FormControl();
   maritalStatusControl = new FormControl();
   stateControl = new FormControl();
   oStateControl = new FormControl();
-  oLgaControl= new FormControl();
+  oLgaControl = new FormControl();
   lgaControl = new FormControl();
   hiaControl = new FormControl();
   platformControl = new FormControl();
@@ -67,6 +69,7 @@ export class EmployerDetailsComponent implements OnInit {
   planTypeControl = new FormControl();
   planControl = new FormControl();
   packageControl = new FormControl();
+  categoryControl = new FormControl();
   sponsorshipControl = new FormControl();
 
   public myDatePickerOptions: IMyDpOptions = {
@@ -162,6 +165,37 @@ export class EmployerDetailsComponent implements OnInit {
     this._getPremiumCategory();
     this._getFacilityTypes();
     this._getPlans();
+
+    this.stateControl.valueChanges.subscribe(value => {
+      if (this.stateControl.valid) {
+        var filteredState = this.mStates.filter(x => x.name == this.stateControl.value);
+        this.mLga = filteredState[0].lgs;
+      }
+    });
+
+    this.oStateControl.valueChanges.subscribe(value => {
+      if (this.oStateControl.valid) {
+        var filteredState = this.oStates.filter(x => x.name == this.oStateControl.value);
+        this.oLga = filteredState[0].lgs;
+      }
+    });
+
+    this.platformControl.valueChanges
+      .debounceTime(350)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        this.drugSearchResult = false;
+        this._facilityService.find({
+          query: {
+            'platformOwnerId.name': value,
+            $limit: 1
+          }
+        }).then((payload: any) => {
+          if (payload.data.length > 0) {
+
+          }
+        });
+      });
   }
 
   _getTitles() {
@@ -251,7 +285,11 @@ export class EmployerDetailsComponent implements OnInit {
       this.categories = payload.data;
     })
   }
-  
+
+  propertyValueChange(param, i, prop) {
+    this.orderExcelPolicies
+  }
+
 
   checkValue(param, data, obj) {
     try {
@@ -313,10 +351,7 @@ export class EmployerDetailsComponent implements OnInit {
 
   checkHiaValue(facilityType, hia, data) {
     if (facilityType != undefined && hia != undefined) {
-      console.log(facilityType);
-      console.log(hia);
       let val = data.filter(x => x.facilityType.name.toString().toLowerCase() == facilityType.toString().toLowerCase() && x.name.toLowerCase() == hia.toString().toLowerCase());
-      console.log(val);
       if (val.length > 0) {
         return true;
       } else {
@@ -329,15 +364,91 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   checkPremiumValue(param, pPackage, data) {
+    console.log(data);
+    console.log(param);
     let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
+    console.log(val);
     if (val.length > 0) {
       this.packages = val[0].premiums;
+      console.log(this.packages);
       return true;
     } else {
       this.packages = [];
       return false;
     }
   }
+
+  onTitle(event, index) {
+    this.orderExcelPolicies[index].title = this.titleControl.value;
+  }
+
+  onName(event, index) {
+    this.orderExcelPolicies[index].name = this.nameControl.value;
+  }
+
+  onGender(event,index){
+    this.orderExcelPolicies[index].gender = this.genderControl.value;
+  }
+
+onStatus(event,index){
+  this.orderExcelPolicies[index].maritalStatus = this.maritalStatusControl.value;
+}
+
+
+onRstate(event,index){
+  var filteredState = this.mStates.filter(x => x.name == this.stateControl.value);
+  this.mLga = filteredState[0].lgs;
+  this.orderExcelPolicies[index].homeAddress.state = this.stateControl.value;
+  this.orderExcelPolicies[index].homeAddress.lga = this.mLga[0].name;
+}
+
+onRlga(event,index){
+  this.orderExcelPolicies[index].homeAddress.lga = this.lgaControl.value;
+}
+
+
+onOstate(event,index){
+  var filteredState = this.oStates.filter(x => x.name == this.oStateControl.value);
+  this.oLga = filteredState[0].lgs;
+  this.orderExcelPolicies[index].stateOfOrigin = this.oStateControl.value;
+  this.orderExcelPolicies[index].lgaOfOrigin = this.oLga[0].name;
+}
+
+onOlga(event,index){
+  this.orderExcelPolicies[index].lgaOfOrigin = this.oLgaControl.value;
+}
+
+onPlatform(event,index){
+  this.orderExcelPolicies[index].platformOwner = this.platformControl.value;
+}
+
+onfacilityType(event,index){
+  this.orderExcelPolicies[index].policy.facilityType = this.facilityTypeControl.value;
+}
+
+onHia(event,index){
+  this.orderExcelPolicies[index].policy.hia = this.hiaControl.value;
+}
+
+onPlanTypes(event,index){
+  this.orderExcelPolicies[index].policy.planTypes = this.planTypeControl.value;
+}
+
+onPlan(event,index){
+  this.orderExcelPolicies[index].policy.plan = this.planControl.value;
+}
+
+onPackage(event,index){
+  this.orderExcelPolicies[index].policy.premiumPackage = this.packageControl.value;
+}
+
+onCategory(event,index){
+  this.orderExcelPolicies[index].policy.premiumCategory = this.categoryControl.value;
+}
+
+onSponsor(event,index){
+  this.orderExcelPolicies[index].policy.sponsorship = this.sponsorshipControl.value;
+}
 
   private _getCurrentPlatform() {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
@@ -412,7 +523,7 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   onSelectDrug(hia) {
-    if (this.facility.employer.hias === undefined){
+    if (this.facility.employer.hias === undefined) {
       this.facility.employer.hias = [];
     }
     this.facility.employer.hias.push(hia);
@@ -480,7 +591,6 @@ export class EmployerDetailsComponent implements OnInit {
           });
         });
         this.totalExcelPrincipalItems = this.orderExcelPolicies.filter(x => x.isPrincipal == true).length;
-        console.log(this.orderExcelPolicies);
       }).catch(err => {
         // this._notification('Error', 'There was an error uploading the file');
       });
@@ -492,14 +602,14 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   editRow(param) {
-    if(this.orderExcelPolicies[param].isEdit == true){
+    if (this.orderExcelPolicies[param].isEdit == true) {
       this.orderExcelPolicies[param].isEdit = false
-    }else{
+    } else {
       this.orderExcelPolicies[param].isEdit = true
     }
     this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
   }
-  
+
 
   private _getEmployerDetails(routeId) {
     this._systemService.on();
