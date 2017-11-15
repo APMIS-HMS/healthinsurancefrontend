@@ -24,7 +24,7 @@ import { PersonService } from './services/person/person.service';
 import { PolicyService } from './services/policy/policy.service';
 import { MyDatePickerModule } from 'mydatepicker';
 import { SharedModule } from './shared-modules/shared.module';
-import { NotificationsModule } from 'angular-notice'
+import { NotificationsModule } from 'angular-notice';
 import { NotificationService } from './services/common/notification.service';
 import { DateTimePickerModule } from 'ng-pick-datetime';
 

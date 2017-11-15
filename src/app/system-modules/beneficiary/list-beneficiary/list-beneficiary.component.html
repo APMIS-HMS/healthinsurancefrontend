@@ -153,7 +153,7 @@
     <div class="list-buttom">
         <div *ngIf="beneficiaries.length > 0">
             <div class="list-summary">Showing 1 to {{ beneficiaries.length }} of {{ beneficiaries.length }} entries (filtered from {{ beneficiaries.length }} total entries)</div>
-            <div class="btn btn-medium btn-yellow">Load More</div>
+            <div class="btn btn-medium btn-yellow" (click)="loadMoreBeneficiaries(beneficiaries.length)">Load More</div>
         </div>
     </div>
 </div>
