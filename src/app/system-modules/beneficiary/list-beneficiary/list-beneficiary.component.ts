@@ -47,7 +47,7 @@ export class ListBeneficiaryComponent implements OnInit {
     private _policyService: PolicyService,
     private _planService: PlanService,
     private _locker: CoolLocalStorage,
-    private _toastr: ToastsManager,
+    private _toastr: ToastsManager
   ) {
     this._router.events
       .filter(event => event instanceof NavigationEnd)
@@ -65,8 +65,6 @@ export class ListBeneficiaryComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
 
-    console.log(this.user);
-    // Check if user has the role to create beneficiary
     if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
@@ -154,6 +152,7 @@ export class ListBeneficiaryComponent implements OnInit {
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          console.log('multi')
           this._getAllPolicies({
             query: {
               'hiaId._id': this.user.facilityId._id,

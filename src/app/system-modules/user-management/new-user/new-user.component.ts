@@ -102,7 +102,7 @@ export class NewUserComponent implements OnInit {
       facilityId: [this.selectedUser != null ? this.selectedUser.facilityId : ''],
       lastName: [this.selectedUser != null ? this.selectedUser.lastName : '', [<any>Validators.required]],
       firstName: [this.selectedUser != null ? this.selectedUser.firstName : '', [<any>Validators.required]],
-      otherName: [this.selectedUser != null ? this.selectedUser.otherNames : ''],
+      otherNames: [this.selectedUser != null ? this.selectedUser.otherNames : ''],
       email: [this.selectedUser != null ? this.selectedUser.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       phoneNumber: [this.selectedUser != null ? this.selectedUser.phoneNumber : '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       profession: [this.selectedUser != null ? this._getProfession(this.selectedUser.profession) : ''],
@@ -281,7 +281,7 @@ export class NewUserComponent implements OnInit {
           this.selectedUser.email = value.email;
           this.selectedUser.firstName = value.firstName;
           this.selectedUser.lastName = value.lastName;
-          this.selectedUser.otherNames = value.otherName;
+          this.selectedUser.otherNames = value.otherNames;
           this.selectedUser.phoneNumber = value.phoneNumber;
           this.selectedUser.profession = value.profession;
           this.selectedUser.cader = value.cader;
