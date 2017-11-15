@@ -27,20 +27,17 @@ import { BatchedComponent } from './employer-details/premium-payment-tab/batched
         MyDatePickerModule,
         Angular4PaystackModule
     ],
-<<<<<<< HEAD
-    declarations: [EmployerComponent, EmployerDetailsComponent, NewEmployerComponent, EmployerBeneficiariesComponent,ExcelUploadItemsComponent],
-    providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
-        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService,MaritalStatusService,PlanTypeService]
-=======
     declarations: [
         EmployerComponent,
         EmployerDetailsComponent,
         NewEmployerComponent, EmployerBeneficiariesComponent,
         PremiumPaymentTabComponent,
         UnbatchedComponent,
-        BatchedComponent],
+        ExcelUploadItemsComponent,
+        BatchedComponent
+    ],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
-        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService, PremiumPaymentService]
->>>>>>> e6918bfd09bfb73a3a798dee7345835950a1ece0
+        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService,
+        MaritalStatusService, PlanTypeService, PremiumPaymentService]
 })
 export class EmployerModule { }
