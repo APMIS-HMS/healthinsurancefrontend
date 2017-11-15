@@ -40,14 +40,14 @@
                     <div class="item-val">{{ beneficiary?.personId?.phoneNumber }}</div>
                 </div>
 
-                <div class="group-wrap">
+                <!-- <div class="group-wrap">
                     <div class="group-item">
                         <div class="item-label">Card Status:
                             <span class="green">
                                 Issued</span>
                         </div>
 
-                        <!-- <div style="color: green" class="item-val"> Issued</div> -->
+                        <div style="color: green" class="item-val"> Issued</div>
                     </div>
                     <div class="group-item">
                         <div class="item-label">Card Issued By:</div>
@@ -69,7 +69,7 @@
                         <div class="item-label">Card Expiration Date:</div>
                         <div class="item-val">3rd Dec. 2017</div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="radioButton">
                                 <input type="radio" value="" id="radioButtonInput"/>
@@ -110,14 +110,14 @@
                     <div class="item-val">{{ dependant.beneficiary?.personIdId?.phoneNumber }}</div>
                     <div class="item-val">Relationship: {{ dependant?.relationshipId?.name }}</div>
                 </div>
-                <div class="group-wrap">
+                <!-- <div class="group-wrap">
                     <div class="group-item">
                         <div class="item-label">Card Status:
                             <span class="green">
                                 Issued</span>
                         </div>
 
-                        <!-- <div style="color: green" class="item-val"> Issued</div> -->
+                        <div style="color: green" class="item-val"> Issued</div>
                     </div>
                     <div class="group-item">
                         <div class="item-label">Card Issued By:</div>
@@ -139,8 +139,8 @@
                         <div class="item-label">Card Expiration Date:</div>
                         <div class="item-val">3rd Dec. 2017</div>
                     </div>
-                </div>
-                <i (click)="navigateEditBeneficiary(beneficiary)" class=" ico-cirle fa fa-pencil "></i>
+                </div> -->
+                <i (click)="navigateEditBeneficiary(beneficiary)" class="ico-cirle fa fa-pencil "></i>
             </div>
         </div>
     </div>
@@ -159,7 +159,7 @@
                     <div class="item-val ">{{policy?.providerId?.name}}</div>
                     <div class="item-val ">{{policy?.providerId?.address?.street}}</div>
                     <div class="item-val ">{{policy?.providerId?.address?.neigbhourhood}}</div>
-                    <div class="item-val ">{{policy?.providerId?.address?.city.name}}-{{policy?.providerId?.address?.state?.name}}.</div>
+                    <div class="item-val ">{{policy?.providerId?.address?.city?.name}}-{{policy?.providerId?.address?.state?.name}}.</div>
                     <div class="item-val ">{{policy?.providerId?.phoneNumber}}</div>
 
                     <div (click)="navigateFacility(policy?.providerId)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>

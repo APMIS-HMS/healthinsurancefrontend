@@ -6,9 +6,9 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 // import { Angular4PaystackModule } from 'angular4-paystack';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../services/globals/config';
+import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES, SPONSORSHIP } from '../../../services/globals/config';
 import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService, PremiumPaymentService } from '../../../services/index';
-import { Policy } from '../../../models/index';
+import { Policy, OrganizationPolicy } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class PendingPaymentsComponent implements OnInit {
   individualLoading: boolean = true;
   organisationLoading: boolean = true;
   individualPolicies: any = [];
-  organisationPolicies: any = [];
+  organisationPolicies: OrganizationPolicy[] = [];
   selectedOrganizationPolicies: any = [];
   paystackClientKey: string = paystackClientKey;
   withPaystack: boolean = true;
@@ -44,6 +44,7 @@ export class PendingPaymentsComponent implements OnInit {
   totalItem: number = 0;
   showPaystack: boolean = false;
   premiumPaymentData: any;
+  sponsorship: any = SPONSORSHIP;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -67,7 +68,6 @@ export class PendingPaymentsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('PREMIUM PAYMENT ');
     this._headerEventEmitter.setMinorRouteUrl('Pending payments for both individuals and organizations');
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
     this._getCurrentPlatform();
 
     this.paymentGroup = this._fb.group({
@@ -76,7 +76,6 @@ export class PendingPaymentsComponent implements OnInit {
     });
 
     this.paymentGroup.controls['paymentType'].valueChanges.subscribe(value => {
-      console.log(value);
       this.paymentType = value;
       if (value === 'Cash' || value === 'Cheque') {
         this.cashPayment = true;
@@ -93,11 +92,13 @@ export class PendingPaymentsComponent implements OnInit {
   }
 
   private _getIndividualPolicies() {
-    console.log(this.currentPlatform);
+    const sponsorship = this.sponsorship.filter(e => e.name.toLowerCase() === 'self')[0].name;
+    let policies = [];
     this._systemService.on();
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
+        'sponsorshipId.name': sponsorship,
         isPaid: false,
         $sort: { createdAt: -1 }
       }
@@ -106,8 +107,9 @@ export class PendingPaymentsComponent implements OnInit {
       this.individualLoading = false;
       res.data.forEach(policy => {
         policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
-        this.individualPolicies.push(policy);
+        policies.push(policy);
       });
+      this.individualPolicies = policies;
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -116,21 +118,38 @@ export class PendingPaymentsComponent implements OnInit {
   }
 
   private _getOrganisationPolicies() {
-    console.log(this.currentPlatform);
     this._systemService.on();
+    const sponsorship = this.sponsorship.filter(e => e.name.toLowerCase() === 'organization')[0].name;
+
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
+        'sponsorshipId.name': sponsorship,
         isPaid: false,
         $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
-      console.log(res);
+      // console.log(res);
       this.organisationLoading = false;
       res.data.forEach(policy => {
-        policy.isChecked = false;
-        policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
-        this.organisationPolicies.push(policy);
+        console.log(policy);
+        let hasItem = this.organisationPolicies.filter(e => !!e.sponsor && (e.sponsor._id === policy.sponsor._id));
+
+        let modelPolicy: OrganizationPolicy = <OrganizationPolicy>{};
+        modelPolicy._id = policy._id;
+        modelPolicy.provider = policy.providerId;
+        modelPolicy.platformOwner = policy.platformOwnerId;
+        modelPolicy.sponsor = policy.sponsor;
+        modelPolicy.hia = policy.hiaId;
+
+        if (hasItem.length === 0) {
+          modelPolicy.noOfEmployees = 1;
+          modelPolicy.totalCost = policy.premiumPackageId.amount;
+          this.organisationPolicies.push(modelPolicy);
+        } else {
+          hasItem[0].totalCost += policy.premiumPackageId.amount;
+          hasItem[0].noOfEmployees++;
+        }
       });
       this._systemService.off();
     }).catch(error => {
@@ -161,124 +180,93 @@ export class PendingPaymentsComponent implements OnInit {
   }
 
 
-  onCheckAllToPay(isChecked) {
-    console.log(isChecked);
-    // if (!isChecked) {
-      let counter = 0;
-      this.organisationPolicies.forEach(policy => {
-        console.log(policy);
-        counter++;
-        policy.isChecked = isChecked;
-        console.log(policy.isChecked);
-        if (policy.isChecked) {
-          this.totalItem++;
-          this.totalCost += policy.premiumPackageId.amount;
-          this.selectedOrganizationPolicies.push(policy);
-        } else {
-          this.totalItem--;
-          this.totalCost -= policy.premiumPackageId.amount;
-        }
-      });
 
-      if ((counter === this.organisationPolicies.length) && !isChecked) {
-          this.selectedOrganizationPolicies = [];
-      }
-      console.log(this.organisationPolicies);
-      console.log(this.selectedOrganizationPolicies);
-    // } else {
-    //   // Remove from the selected Claim
-    //   console.log(index);
-    //   policy.isChecked = false;
-    //   this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
-    // }
-  }
+  // onCheckSelectedToPay(index: number, policy: Policy) {
+  //   console.log(policy);
+  //   if (!policy.isChecked) {
+  //     policy.isChecked = true;
+  //     this.selectedOrganizationPolicies.push(policy);
+  //   } else {
+  //     policy.isChecked = false;
+  //     this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
+  //     console.log(this.selectedOrganizationPolicies);
+  //   }
+  // }
 
-  onCheckSelectedToPay(index: number, policy: Policy) {
-    console.log(policy);
-    if (!policy.isChecked) {
-      policy.isChecked = true;
-      this.selectedOrganizationPolicies.push(policy);
-    } else {
-      policy.isChecked = false;
-      this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
-      console.log(this.selectedOrganizationPolicies);
-    }
-  }
+  // onClickCreateAndPaybatch(valid: boolean, value: any) {
+  //   this.paystackProcessing = true;
+  //   console.log(value);
+  //   let policies = [];
+  //   // All policies that is being paid for.
+  //   this.selectedOrganizationPolicies.forEach(policy => {
+  //     if (policy.isChecked) {
+  //       policies.push({
+  //         policyId: policy.policyId,
+  //         policyCollectionId: policy._id
+  //       });
+  //     }
+  //   });
 
-  onClickCreateAndPaybatch(valid: boolean, value: any) {
-    this.paystackProcessing = true;
-    console.log(value);
-    let policies = [];
-    // All policies that is being paid for.
-    this.selectedOrganizationPolicies.forEach(policy => {
-      if (policy.isChecked) {
-        policies.push({
-          policyId: policy.policyId,
-          policyCollectionId: policy._id
-        });
-      }
-    });
+  //   let user = {
+  //     userType: this.user.userType,
+  //     firstName: this.user.firstName,
+  //     lastName: this.user.lastName,
+  //     facilityId: this.user.facilityId,
+  //     email: this.user.email,
+  //     isActive: this.user.isActive,
+  //     platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
+  //     phoneNumber: this.user.phoneNumber
+  //   };
 
-    let user = {
-      userType: this.user.userType,
-      firstName: this.user.firstName,
-      lastName: this.user.lastName,
-      facilityId: this.user.facilityId,
-      email: this.user.email,
-      isActive: this.user.isActive,
-      platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
-      phoneNumber: this.user.phoneNumber
-    };
+  //   let ref = {
+  //     platformOwnerId: this.currentPlatform,
+  //     policies: policies,
+  //     paidBy: user,
+  //     requestedAmount: this.totalCost,
+  //     amountPaid: 0,
+  //     paymentType: value.paymentType,
+  //     batchNo: value.batchNo
+  //   };
 
-    let ref = {
-      platformOwnerId: this.currentPlatform,
-      policies: policies,
-      paidBy: user,
-      requestedAmount: this.totalCost,
-      amountPaid: 0,
-      paymentType: value.paymentType,
-      batchNo: value.batchNo
-    };
+  //   console.log(ref);
+  //   // Create batch, if successful, enable the paystack button.
+  //   this._premiumPaymentService.create(ref).then((res: any) => {
+  //     if (!!res._id) {
+  //       this.showPaystack = true;
+  //       this.premiumPaymentData = res;
+  //       console.log(res);
+  //     }
+  //   }).catch(err => console.log(err));
+  // }
 
-    console.log(ref);
-    // Create batch, if successful, enable the paystack button.
-    this._premiumPaymentService.create(ref).then((res: any) => {
-      if (!!res._id) {
-        this.showPaystack = true;
-        this.premiumPaymentData = res;
-        console.log(res);
-      }
-    }).catch(err => console.log(err));
-  }
-
-  paymentDone(data) {
-    console.log(data);
-    if (!!this.premiumPaymentData && this.premiumPaymentData._id) {
-      console.log('Payment Done');
-      console.log(this.premiumPaymentData);
-      let payload = {
-        premiumPaymentId: this.premiumPaymentData._id,
-        action: 'update',
-        ref: data
-      };
-      console.log('Call API');
-      // Call paystack verification API
-      this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes: any) => {
-        console.log(verifyRes);
-        if (!!verifyRes.body._id) {
-          this._getOrganisationPolicies();
-          this.showPaystack = false;
-          this.openBatchModal = false;
-          this.premiumPaymentData = {};
-          this.ngOnInit();
-          // this._router.navigate(['/modules/premium-payment/previous']);
-          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
-        }
-      }).catch(err => {
-        console.log(err);
-      });
-    }
-  }
+  // paymentDone(data) {
+  //   console.log(data);
+  //   if (!!this.premiumPaymentData && this.premiumPaymentData._id) {
+  //     console.log('Payment Done');
+  //     console.log(this.premiumPaymentData);
+  //     let payload = {
+  //       premiumPaymentId: this.premiumPaymentData._id,
+  //       action: 'update',
+  //       ref: data
+  //     };
+  //     console.log('Call API');
+  //     // Call paystack verification API
+  //     this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes: any) => {
+  //       console.log(verifyRes);
+  //       if (!!verifyRes.body._id) {
+  //         this._getOrganisationPolicies();
+  //         this.showPaystack = false;
+  //         this.openBatchModal = false;
+  //         this.premiumPaymentData = {};
+  //         this.ngOnInit();
+  //         // this._router.navigate(['/modules/premium-payment/previous']);
+  //         this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+  //       }
+  //     }).catch(err => {
+  //       console.log(err);
+  //     });
+  //   }
+  // }
 
   onClickTab(tabName: string) {
     if (tabName === 'individualPayment') {
@@ -290,17 +278,17 @@ export class PendingPaymentsComponent implements OnInit {
     }
   }
 
-  onClickOpenBatchModal() {
-    this.openBatchModal = true;
-  }
+  // onClickOpenBatchModal() {
+  //   this.openBatchModal = true;
+  // }
 
-  modal_close() {
-    this.openBatchModal = false;
-  }
+  // modal_close() {
+  //   this.openBatchModal = false;
+  // }
 
-  paymentCancel() {
-    console.log('Payment Closed');
-  }
+  // paymentCancel() {
+  //   console.log('Payment Closed');
+  // }
 
   navigate(url: string, id: string) {
     if (!!id) {
