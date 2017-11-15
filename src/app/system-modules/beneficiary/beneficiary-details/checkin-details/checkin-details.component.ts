@@ -371,12 +371,19 @@ export class CheckinDetailsComponent implements OnInit {
       checkOutBy:this.user._id, 
     };
     this.selectedCheckIn.checkOut = checkOut;
+    this.selectedCheckIn.isCheckedOut = true;
     this._checkInService.update(this.selectedCheckIn).then(payload =>{
       console.log(payload);
+      this._toastr.success('You have successfully checked out this patient',"Checked Out");
+      this._router.navigate(['/modules/checkin/checkedin']).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err)
+        this._systemService.off();
+      });
     }).catch(err =>{
       console.log(err);
     })
-    // console.log(this.selectedCheckIn)
   }
   navigateToNewClaim() {
     this._systemService.on();

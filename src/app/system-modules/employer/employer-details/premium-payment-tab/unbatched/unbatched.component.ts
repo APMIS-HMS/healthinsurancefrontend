@@ -28,6 +28,7 @@ export class UnbatchedComponent implements OnInit {
   totalItem: number = 0;
   premiumPaymentData: any;
   currentPlatform: any;
+  
 
   constructor(
     private _fb: FormBuilder,

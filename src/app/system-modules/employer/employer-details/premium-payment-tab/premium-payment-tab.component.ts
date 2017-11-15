@@ -41,6 +41,11 @@ export class PremiumPaymentTabComponent implements OnInit {
   selectedPolicies: any = <any>[];
   totalCost = 0;
   premiumPaymentData: any;
+  public myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd-mmm-yyyy',
+  };
+
+  public today: IMyDate;
 
   constructor(
     private _fb: FormBuilder,

@@ -223,29 +223,36 @@ export class CheckinDetailsGenerateComponent implements OnInit {
     });
   }
   checkin_click() {
-    // this._systemService.on();
-    // this.selectedCheckIn.encounterType = this.checkinFormGroup.controls['encounterType'].value;
-    // this.selectedCheckIn.encounterDateTime = this.checkinFormGroup.controls['encounterDate'].value.jsdate;
-    // let policyId = this._locker.getObject('policyID');
-    // this.selectedCheckIn.policyId = policyId;
-    // this._checkInService.patch(this.selectedCheckIn._id, this.selectedCheckIn, {
-    //   $client: {
-    //     confirmation: true
-    //   }
-    // })
-    //   .then((payload: any) => {
-    //     console.log(payload);
-    //     if (payload !== undefined) {
-    //       this.checkinSect = false;
-    //       this.checkedinSect = true;
-    //       this.selectedCheckIn = payload;
-    //       this._initializedForm();
-    //     }
-    //     this._systemService.off();
-    //   }).catch(err => {
-    //     console.log(err);
-    //     this._systemService.off();
-    //   })
+    this._systemService.on();
+    this.selectedCheckIn.encounterType = this.checkinFormGroup.controls['encounterType'].value;
+    this.selectedCheckIn.encounterDateTime = this.checkinFormGroup.controls['encounterDate'].value.jsdate;
+    let policyId = this._locker.getObject('policyID');
+    this.selectedCheckIn.policyId = policyId;
+    this._checkInService.patch(this.selectedCheckIn._id, this.selectedCheckIn, {
+      $client: {
+        confirmation: true
+      }
+    })
+      .then((payload: any) => {
+        console.log(payload);
+        if (payload !== undefined) {
+          // this.checkinSect = false;
+          // this.checkedinSect = true;
+          // this.selectedCheckIn = payload;
+          // this._initializedForm();
+          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.selectedCheckIn.beneficiaryId + '/checkin'])
+          .then(payload => {
+            this._systemService.off();
+          }).catch(err => {
+            console.log(err)
+            this._systemService.off();
+          });
+        }
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      })
   }
   getAge() {
     return differenceInYears(
