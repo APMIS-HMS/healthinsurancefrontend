@@ -27,12 +27,14 @@ export class BeneficiaryDetailsComponent implements OnInit {
   tab_referals = false;
   tab_checkin = false;
   tab_checkinHistory = false;
+  tab_checkinGenerate = false;
   addApproval: boolean = false;
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
   durations: any = DURATIONS;
   dependants: any[] = [];
   isCheckIn = false;
   isHistory = false;
+  isGenerate = false;
   paramId: any;
   user: any;
   isBeneficiary = false;
@@ -60,6 +62,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
         this.tab_complaints = false;
         this.tab_referals = false;
         this.tab_checkinHistory = false;
+        this.tab_checkinGenerate = false;
       }
     });
 
@@ -72,6 +75,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
         this.tab_complaints = false;
         this.tab_referals = false;
         this.tab_checkinHistory = false;
+        this.tab_checkinGenerate = false;
       }
     });
   }
@@ -80,7 +84,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
     this.user = (<any>this._locker.getObject('auth')).user;
-    
+
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.isBeneficiary = true;
     }
@@ -105,11 +109,17 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_checkinHistory = true;
       this.isCheckIn = true;
       this.isHistory = true;
-    } else if (this._router.url.endsWith('referrals')) {
+      this.isGenerate = false;
+    } else if (this._router.url.endsWith('checkin-generate')){
+      this.tab_checkinGenerate = true;
+      this.isCheckIn = true;
+      this.isHistory = false;
+      this.isGenerate = true;
+    }
+    else if (this._router.url.endsWith('referrals')) {
       this.tab_referals = true;
       this.isCheckIn = false;
-    }
-    else {
+    } else {
       this.tab_details = true;
       this.isCheckIn = false;
     }
@@ -124,7 +134,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
-      if (this.isCheckIn && !this.isHistory) {
+      if (this.isCheckIn && !this.isHistory && !this.isGenerate) {
         this.tabCheckin_click();
       }
 
@@ -140,42 +150,47 @@ export class BeneficiaryDetailsComponent implements OnInit {
   }
 
   onClickApprove(valid: boolean, value: any) {
+    console.log(this.policy);
     if (valid) {
-      const validity = {
-        duration: value.duration,
-        unit: value.unit,
-        startDate: value.startDate,
-        createdAt: new Date(),
-        validTill: this.addDays(new Date(), value.unit.days)
-      };
+      // if (this.policy.isPaid) {
+      //   const validity = {
+      //     duration: value.duration,
+      //     unit: value.unit,
+      //     startDate: value.startDate,
+      //     createdAt: new Date(),
+      //     validTill: this.addDays(new Date(), value.unit.days)
+      //   };
 
-      if (!!this.policy.validityPeriods) {
-        this.policy.validityPeriods.push(validity);
-      } else {
-        this.policy.validityPeriods = [];
-        this.policy.validityPeriods.push(validity);
-      }
+      //   if (!!this.policy.validityPeriods) {
+      //     this.policy.validityPeriods.push(validity);
+      //   } else {
+      //     this.policy.validityPeriods = [];
+      //     this.policy.validityPeriods.push(validity);
+      //   }
 
-      this.policy.isActive = true;
-      this._policyService.update(this.policy).then((res: any) => {
-        this.policy = res;
-        const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
-        const text = 'Policy has been ' + status;
-        this._toastr.success(text, 'Confirmation!');
-        // Send sms to Principal Beneficiary
-        const smsData = {
-          content: 'Testing beneficiary',
-          sender: 'Me',
-          receiver: '08056679920'
-        };
-
-        this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
-        }).catch(err => console.log(err));
-
-        setTimeout(e => {
-          this.addApprovalClick();
-        }, 1000);
-      });
+      //   this.policy.isActive = true;
+      //   this._policyService.update(this.policy).then((res: any) => {
+      //     this.policy = res;
+      //     const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
+      //     const text = 'Policy has been ' + status;
+      //     this._toastr.success(text, 'Confirmation!');
+      //     // Send sms to Principal Beneficiary
+      //     const smsData = {
+      //       content: 'Testing beneficiary',
+      //       sender: 'Me',
+      //       receiver: '08056679920'
+      //     };
+  
+      //     this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
+      //     }).catch(err => console.log(err));
+  
+      //     setTimeout(e => {
+      //       this.addApprovalClick();
+      //     }, 1000);
+      //   });
+      // } else {
+      //   this._toastr.error('Policy has not been paid for. Please pay for policy before you can active!', 'Payment Error!');
+      // }
     } else {
       this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
     }
@@ -235,6 +250,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_referals = false;
       this.tab_checkin = false;
       this.tab_checkinHistory = false;
+      this.tab_checkinGenerate = false;
       this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId]);
     }
     this.tabTitle = "Personal Details";
@@ -248,20 +264,22 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_referals = false;
       this.tab_checkin = false;
       this.tab_checkinHistory = false;
+      this.tab_checkinGenerate = false;
       this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/payment']);
     }
     this.tabTitle = "Payment History";
   }
   tabClaims_click() {
     if (!this.isCheckIn) {
-    this.tab_details = false;
-    this.tab_payment = false;
-    this.tab_claims = true;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_checkin = false;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/claims'])
-    this.tab_checkinHistory = false;
+      this.tab_details = false;
+      this.tab_payment = false;
+      this.tab_claims = true;
+      this.tab_complaints = false;
+      this.tab_referals = false;
+      this.tab_checkin = false;
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/claims'])
+      this.tab_checkinHistory = false;
+      this.tab_checkinGenerate = false;
     }
     this.tabTitle = "Claims";
   }
@@ -274,6 +292,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_referals = false;
       this.tab_checkin = false;
       this.tab_checkinHistory = false;
+      this.tab_checkinGenerate = false;
     }
     this.tabTitle = "Complaints";
   }
@@ -287,6 +306,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
       this.tab_checkin = false;
       this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/referrals']);
       this.tab_checkinHistory = false;
+      this.tab_checkinGenerate = false;
     }
     this.tabTitle = "Referals";
   }
@@ -299,7 +319,20 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_checkin = true;
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkin'])
     this.tab_checkinHistory = false;
+    this.tab_checkinGenerate = false;
     this.tabTitle = "Check In";
+  }
+  tabCheckinGenerate_click() {
+    this.tab_details = false;
+    this.tab_payment = false;
+    this.tab_claims = false;
+    this.tab_complaints = false;
+    this.tab_referals = false;
+    this.tab_checkin = false;
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkin-generate'])
+    this.tab_checkinHistory = false;
+    this.tab_checkinGenerate = true;
+    this.tabTitle = "Check In - Generate";
   }
   tabCheckinDetail_click() {
     this.tab_details = false;
@@ -310,6 +343,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_checkin = false;
     this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkedin-history'])
     this.tab_checkinHistory = true;
+    this.tab_checkinGenerate = false;
     this.tabTitle = "Check In history";
   }
   mobilemenu_toggle() {

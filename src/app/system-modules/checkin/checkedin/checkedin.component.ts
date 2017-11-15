@@ -48,13 +48,13 @@ export class CheckedinComponent implements OnInit {
 
   _getCheckedIn() {
     this._systemService.on();
-    console.log(this.user.facilityId._id)
     this._checkInService.find({
       query: {
         'providerFacilityId._id': this.user.facilityId._id,
-        $client: {
-          checkedInToday: true
-        },
+        'isCheckedOut': false,
+        // $client: {
+        //   checkedInToday: true
+        // },
         $sort: { createdAt: -1 }
       }
     }).then((payload: any) => {
@@ -77,10 +77,10 @@ export class CheckedinComponent implements OnInit {
   //   })
   // }
 
-  
+
   routeBeneficiaryDetails(check) {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/beneficiaries/'+check.beneficiaryId+'/checkin'])
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin'])
       .then(payload => {
         this._systemService.off();
       }).catch(err => {
@@ -91,14 +91,14 @@ export class CheckedinComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
     } else {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url]).then(res => {
         this._systemService.off();
       }).catch(err => {

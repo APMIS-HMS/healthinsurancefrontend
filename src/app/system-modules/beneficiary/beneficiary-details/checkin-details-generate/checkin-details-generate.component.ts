@@ -1,3 +1,4 @@
+import { Component, OnInit, Input } from '@angular/core';
 import { PolicyService } from './../../../../services/policy/policy.service';
 import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
 import { Observable } from 'rxjs/Observable';
@@ -13,7 +14,6 @@ import { ClaimTypeService } from './../../../../services/common/claim-type.servi
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,11 +21,12 @@ import differenceInYears from 'date-fns/difference_in_years';
 import { FacilityService } from '../../../../services/index';
 
 @Component({
-  selector: 'app-checkin-details',
-  templateUrl: './checkin-details.component.html',
-  styleUrls: ['./checkin-details.component.scss']
+  selector: 'app-checkin-details-generate',
+  templateUrl: './checkin-details-generate.component.html',
+  styleUrls: ['./checkin-details-generate.component.scss']
 })
-export class CheckinDetailsComponent implements OnInit {
+export class CheckinDetailsGenerateComponent implements OnInit {
+
   @Input() beneficiary;
   otpFormGroup: FormGroup;
   checkinFormGroup: FormGroup;
@@ -98,18 +99,11 @@ export class CheckinDetailsComponent implements OnInit {
     this._getEncounterStatuses();
     this._getEncounterTypes();
     this._getUserFacility();
-
-    // this._hasCheckInToday();
+    
+    console.log(this.selectedCheckIn)
 
   }
 
-  // _checkPreAuth(){
-  //   this._preAuthorizationService.find({
-  //     query:{
-  //       ''
-  //     }
-  //   })
-  // }
   private _getUserFacility() {
     this._facilityService.get(this.user.facilityId._id, {}).then(payload => {
       this.user.facilityId = payload;
@@ -131,28 +125,12 @@ export class CheckinDetailsComponent implements OnInit {
       }
     }));
 
-    // query: {
-    //   $or: [
-    //     { platformOwnerNumber: { $regex: value, '$options': 'i' } },
-    //     { 'personId.lastName': { $regex: value, '$options': 'i' } },
-    //     { 'personId.firstName': { $regex: value, '$options': 'i' } },
-    //   ]
-    // }
-
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
       console.log(results)
-      // if (this.isCheckIn) {
-      //   this.tabCheckin_click();
-      // }
-      this._hasCheckInToday();
 
       if (results[1].data.length > 0) {
-        // this.dependants = results[1].data[0].dependantBeneficiaries;
-        this.policy = results[1].data[0];
-        // console.log(this.dependants)
-        // console.log(this.policy)
       }
 
       this._systemService.off();
@@ -258,10 +236,17 @@ export class CheckinDetailsComponent implements OnInit {
       .then((payload: any) => {
         console.log(payload);
         if (payload !== undefined) {
-          this.checkinSect = false;
-          this.checkedinSect = true;
-          this.selectedCheckIn = payload;
-          this._initializedForm();
+          // this.checkinSect = false;
+          // this.checkedinSect = true;
+          // this.selectedCheckIn = payload;
+          // this._initializedForm();
+          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.selectedCheckIn.beneficiaryId + '/checkin'])
+          .then(payload => {
+            this._systemService.off();
+          }).catch(err => {
+            console.log(err)
+            this._systemService.off();
+          });
         }
         this._systemService.off();
       }).catch(err => {
@@ -282,37 +267,6 @@ export class CheckinDetailsComponent implements OnInit {
     return false;
   }
 
-  _hasCheckInToday() {
-    this._systemService.on();
-    this._checkInService.find({
-      query: {
-        beneficiaryId: this.beneficiary._id,
-        'providerFacilityId._id': this.user.facilityId._id,
-        $client: {
-          hasCheckInToday: false
-        }
-      }
-    }).then((payload: any) => {
-      if (payload.data.length > 0) {
-        console.log(payload);
-        this.hasCheckInToday = true;
-        this.selectedCheckIn = payload.data[0];
-        if (this.selectedCheckIn.confirmation !== undefined) {
-          this._initializedForm();
-          this.checkinSect = false;
-          this.checkedinSect = true;
-        } else if (this.selectedCheckIn.otp.isVerified) {
-          this._initializedForm();
-          this.otp_show = false;
-          this.checkin_show = true;
-        }
-
-      }
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    })
-  }
 
 
   _getClaimTypes() {
@@ -367,23 +321,7 @@ export class CheckinDetailsComponent implements OnInit {
     this.selectedCheckIn = undefined;
   }
   checkOut(){
-    let checkOut = {
-      checkOutBy:this.user._id, 
-    };
-    this.selectedCheckIn.checkOut = checkOut;
-    this.selectedCheckIn.isCheckedOut = true;
-    this._checkInService.update(this.selectedCheckIn).then(payload =>{
-      console.log(payload);
-      this._toastr.success('You have successfully checked out this patient',"Checked Out");
-      this._router.navigate(['/modules/checkin/checkedin']).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err)
-        this._systemService.off();
-      });
-    }).catch(err =>{
-      console.log(err);
-    })
+    console.log(this.selectedCheckIn)
   }
   navigateToNewClaim() {
     this._systemService.on();

@@ -104,41 +104,22 @@ export class PersonalDetailsComponent implements OnInit {
   }
 
   onClickApprove() {
-    // const validity = {
-    // duration: value.duration,
-    // unit: value.unit,
-    // startDate: value.startDate,
-    // createdAt: new Date(),
-    // validTill: this.addDays(new Date(), value.unit.days)
-    // };
-    // if (!!this.policy.validityPeriods) {
-    //   this.policy.validityPeriods.push(validity);
-    // } else {
-    //   this.policy.validityPeriods = [];
-    //   this.policy.validityPeriods.push(validity);
-    // }
-
-    this.policy.isActive = !this.policy.isActive;
-    this._policyService.update(this.policy).then((res: any) => {
-      this.policy = res;
-      const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
-      const text = 'Policy has been ' + status;
-      this._toastr.success(text, 'Confirmation!');
-      // Send sms to Principal Beneficiary
-      // const smsData = {
-      //   content: 'Policy has been activated.',
-      //   sender: 'LASHMA',
-      //   receiver: '08056679920'
-      // };
-
-      // this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
-      // }).catch(err => console.log(err));
-      setTimeout(e => {
-        this.addApprovalClick();
-      }, 1000);
-    }).catch(err => {
-      console.log(err);
-    });
+    if (this.policy.isPaid) {  
+      this.policy.isActive = !this.policy.isActive;
+      this._policyService.update(this.policy).then((res: any) => {
+        this.policy = res;
+        const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
+        const text = 'Policy has been ' + status;
+        this._toastr.success(text, 'Confirmation!');
+        setTimeout(e => {
+          this.addApprovalClick();
+        }, 1000);
+      }).catch(err => {
+        console.log(err);
+      });
+    } else {
+      this._toastr.error('Policy has not been paid for. Please pay for policy before you can active!', 'Payment Error!');
+    }
   }
 
   addDays(date, days) {
