@@ -368,13 +368,6 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-<<<<<<< HEAD
-                                <select [formControl]="packageControl" [class.invalidvalue]="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == false">
-                                    <option *ngFor="let sponsor of SPONSORSHIP">{{sponsor.name}}</option>
-                                </select>
-                            </div>
-                        </td>
-=======
                                 <select [formControl]="packageControl" [class.invalidvalue]="checkValue(item.policy.premiumPackage,packages,'category.name') == false">
                                     <option *ngFor="let package of packages" [selected]="item.policy.premiumPackage==package.category.name">{{package?.category?.name}}</option>
                                 </select>
@@ -410,7 +403,6 @@
                                 </select>
                             </div>
                         </td>
->>>>>>> 30a0fcb3d5c04168df2ffce354b28f4ae67bdea6
 
                         <td class="td td-icos">
                             <i *ngIf="!item.isEdit==true" class="fa fa-edit" (click)="editRow(i)"></i>
