@@ -20,6 +20,8 @@ export class ClaimsDetailTabComponent implements OnInit {
   displayAge: number;
   isReply = false;
   status = "";
+  statusCheck = false;
+  isAuthCreateClaim = false;
 
   constructor(private _route: ActivatedRoute,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -34,6 +36,14 @@ export class ClaimsDetailTabComponent implements OnInit {
         this._getSelectedClaimItem(param.id);
       }
     });
+    this.getAuthforClaimCreate();
+  }
+
+  getAuthforClaimCreate(){
+    var userUserType = (<any>this._locker.getObject('auth')).user;
+    if(userUserType.userType.name == "Health Insurance Agent"){
+      this.isAuthCreateClaim = true;
+    }
   }
 
   approveClaim() {
@@ -71,7 +81,7 @@ export class ClaimsDetailTabComponent implements OnInit {
       console.log(this.selectedClaim);
 
       this.selectedClaim.documentations.forEach(element => {
-        if (element.response != Response) {
+        if (element.response != undefined) {
           if (element.response.isReject == true) {
             this.status = 'Reject';
           } else if (element.response.isQuery == true) {
@@ -83,7 +93,9 @@ export class ClaimsDetailTabComponent implements OnInit {
           }
         }
       });
+      console.log(new Date);
       this.displayAge = differenceInYears(new Date(), this.selectedClaim.checkedinDetail.checkedInDetails.beneficiaryObject.personId.dateOfBirth);
+      console.log(this.displayAge);
     });
   }
 
