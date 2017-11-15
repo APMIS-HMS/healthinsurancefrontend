@@ -91,7 +91,7 @@
                             <div class="item-val">{{ facility?.businessContact?.firstName }} {{ facility?.businessContact?.lastName }}</div>
                             <div class="item-val">{{ facility?.businessContact?.phoneNumber }}</div>
                             <div class="item-val">{{ facility?.businessContact?.email }}</div>
-                            <div class="item-val">{{ facility?.businessContact?.position.name }}</div>
+                            <div class="item-val">{{ facility?.businessContact?.position?.name }}</div>
                         </div>
                         <i (click)="navigateEmployers('/modules/employer/new/', facility?._id)" class="ico-cirle fa fa-pencil"></i>
                     </div>
@@ -109,7 +109,7 @@
                             <div class="item-val">{{ facility?.itContact?.firstName }} {{ facility?.itContact?.lastName }}</div>
                             <div class="item-val">{{ facility?.itContact?.phoneNumber }}</div>
                             <div class="item-val">{{ facility?.itContact?.email }}</div>
-                            <div class="item-val">{{ facility?.itContact?.position.name }}</div>
+                            <div class="item-val">{{ facility?.itContact?.position?.name }}</div>
                         </div>
                         <i (click)="navigateEmployers('/modules/employer/new/', facility?._id)" class="ico-cirle fa fa-pencil"></i>
                     </div>
@@ -183,7 +183,7 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true">
-                                <select [formControl]="titleControl"  [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
+                                <select [formControl]="titleControl" [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
                                     <option *ngFor="let title of titles" [selected]="item.title==title.name">{{title.name}}</option>
                                 </select>
                             </div>
@@ -257,18 +257,18 @@
                             </div>
                         </td>
                         <td class="td hover">
-                                <div *ngIf="!item.isEdit==true" class="td-value">
-                                    <span style="color:Red" *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == false">
+                            <div *ngIf="!item.isEdit==true" class="td-value">
+                                <span style="color:Red" *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == false">
                                         Invalid
                                     </span>
-                                    <span *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == true">
+                                <span *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == true">
                                         {{item.stateOfOrigin}}
                                     </span>
-                                </div>
-                                <select *ngIf="item.isEdit==true" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
+                            </div>
+                            <select *ngIf="item.isEdit==true" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
                                     <option *ngFor="let state of oStates" [selected]="item.stateOfOrigin==state.name">{{state.name}}</option>
                                 </select>
-                            </td>
+                        </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkValue(item.lgaOfOrigin,oLga,'name') == false">

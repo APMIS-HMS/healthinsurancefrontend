@@ -18,7 +18,6 @@ import { HeaderEventEmitterService } from '../../../../../services/event-emitter
   styleUrls: ['./unbatched.component.scss']
 })
 export class UnbatchedComponent implements OnInit {
-  @Input() isDoneSavingPolicies: any;
   user: any;
   loading: boolean = true;
   policies: any = <any>[];
@@ -46,7 +45,11 @@ export class UnbatchedComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
 
-    console.log(this.isDoneSavingPolicies);
+    this._premiumPaymentService.announcedWhenDone.subscribe(value => {
+      if (value) {
+        this._getUnbatchedPolicies();
+      }
+    });
   }
 
   private _getUnbatchedPolicies() {
@@ -74,7 +77,9 @@ export class UnbatchedComponent implements OnInit {
 
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+    this._facilityService.find(
+      { query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }}
+    ).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getUnbatchedPolicies();
@@ -139,10 +144,6 @@ export class UnbatchedComponent implements OnInit {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result.toDateString(); // .toISOString();
-  }
-
-  onClickResetComponent(event) {
-    console.log(event);
   }
 
   // public selectedPolicy(policy: any): void {
