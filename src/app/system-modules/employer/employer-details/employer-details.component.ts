@@ -3,6 +3,11 @@ import { CountryService } from './../../../services/common/country.service';
 import { GenderService } from './../../../services/common/gender.service';
 import { TitleService } from './../../../services/common/titles.service';
 import { UploadService } from './../../../services/common/upload.service';
+import { PlanTypeService } from './../../../services/common/plan-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
+import { PremiumTypeService } from './../../../services/common/premium-type.service';
+import { PlanService } from './../../../services/plan/plan.service';
+import { MaritalStatusService } from './../../../services/common/marital-status.service';
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,6 +15,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService, SystemModuleService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
+import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
@@ -20,12 +26,54 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 export class EmployerDetailsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
+  orderExcelPolicies = [];
+  totalExcelPrincipalItems = 0;
+  titles = [];
+  genders = [];
+  maritalStatus = [];
+  mStates = [];
+  mLga = [];
+  oStates = [];
+  oLga = [];
+  platforms = [];
+  planTypes = [];
+  userTypes = [];
+  plans = [];
+  packages = [];
+  categories = [];
+  SPONSORSHIP = [];
+
+
   searchHiaControl = new FormControl();
   listsearchControl = new FormControl();
   filterTypeControl = new FormControl('All');
   createdByControl = new FormControl();
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
+
+
+  allitemsControl= new FormControl();
+  nameControl = new FormControl();
+  genderControl = new FormControl();
+  titleControl = new FormControl();
+  maritalStatusControl = new FormControl();
+  stateControl = new FormControl();
+  oStateControl = new FormControl();
+  oLgaControl= new FormControl();
+  lgaControl = new FormControl();
+  hiaControl = new FormControl();
+  platformControl = new FormControl();
+  facilityTypeControl = new FormControl();
+  planTypeControl = new FormControl();
+  planControl = new FormControl();
+  packageControl = new FormControl();
+  sponsorshipControl = new FormControl();
+
+  public myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd-mmm-yyyy',
+  };
+
+  public today: IMyDate;
 
   tab_details = true;
   tab_preauthorization = false;
@@ -50,7 +98,7 @@ export class EmployerDetailsComponent implements OnInit {
   currentPlatform: any;
   selectedCountry: any;
   selectedState: any;
-  hias:any[] = [];
+  hias: any[] = [];
   drugSearchResult = false;
 
   constructor(
@@ -64,12 +112,21 @@ export class EmployerDetailsComponent implements OnInit {
     private _titleService: TitleService,
     private _genderService: GenderService,
     private _countryService: CountryService,
-
+    private _maritalStatusService: MaritalStatusService,
+    private _planTypeService: PlanTypeService,
+    private _userTypeService: UserTypeService,
+    private _planService: PlanService,
+    private _premiumTypeService: PremiumTypeService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Organisation Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
+
+    this.SPONSORSHIP = [
+      { 'id': 1, 'name': 'Self' },
+      { 'id': 2, 'name': 'Organization' }
+    ];
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
@@ -85,16 +142,188 @@ export class EmployerDetailsComponent implements OnInit {
           query: {
             'platformOwnerId._id': this.currentPlatform._id,
             name: { $regex: value, '$options': 'i' },
-            'facilityType.name':'Health Insurance Agent'
+            'facilityType.name': 'Health Insurance Agent'
           }
-        }).then((payload:any) => {
+        }).then((payload: any) => {
           this.hias = payload.data;
           this.drugSearchResult = true;
         })
       });
     this._getCurrentPlatform();
+    this._getTitles();
+    this._getGender();
+    this._getMaritalStatus();
+    this._getState();
+    this._getOriginState();
+    this._getPlatforms();
+    this._getPlanTypes();
+    this._getPremiumCategory();
+    this._getFacilityTypes();
+    this._getPlans();
   }
 
+  _getTitles() {
+    this._titleService.find({}).then((payload: any) => {
+      this.titles = payload.data;
+    });
+  }
+
+  _getGender() {
+    this._genderService.find({}).then((payload: any) => {
+      this.genders = payload.data;
+    })
+  }
+
+  _getMaritalStatus() {
+    this._maritalStatusService.find({}).then((payload: any) => {
+      this.maritalStatus = payload.data;
+    })
+  }
+
+  _getState() {
+    this._countryService.find({
+      query:
+      {
+        'name': 'Nigeria'
+      }
+    }).then((payload: any) => {
+      if (payload.data[0] != undefined) {
+        this.mStates = payload.data[0].states;
+      }
+    })
+  }
+
+  _getOriginState() {
+    this._countryService.find({
+      query:
+      {
+        'name': 'Nigeria'
+      }
+    }).then((payload: any) => {
+      if (payload.data[0] != undefined) {
+        this.oStates = payload.data[0].states;
+      }
+    })
+  }
+
+  _getPlatforms() {
+    this._facilityService.find({}).then((payload: any) => {
+      if (payload.data.length > 0) {
+        this.platforms = payload.data;
+      }
+    })
+  }
+
+  _getPlanTypes() {
+    this._planTypeService.find({}).then((payload: any) => {
+      this.planTypes = payload.data;
+    })
+  }
+
+  _getFacilityTypes() {
+    this._userTypeService.find({}).then((payload: any) => {
+      this.userTypes = payload.data;
+    })
+  }
+
+  _getPlans() {
+    this._planService.find({}).then((payload: any) => {
+      this.plans = payload.data;
+    })
+  }
+
+  _getPremiumCategory() {
+    this._premiumTypeService.find({}).then((payload: any) => {
+      this.categories = payload.data;
+    })
+  }
+  
+
+  checkValue(param, data, obj) {
+    try {
+      if (obj.toString().includes('.')) {
+        let arObj = obj.toString().split('.');//Not expecting obj of an array more than two indexes
+        let val1 = arObj[0];
+        let val2 = arObj[1];
+        let val = data.filter(function (x) {
+          if (x[val1] != undefined) {
+            if (x[val1][val2].toString().toLowerCase() == param.toString().toLowerCase()) {
+              return true;
+            }
+            else {
+              return false;
+            }
+          }
+        });
+        if (val.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (data.length > 0) {
+          let val = data.filter(x => x[obj].toLowerCase() == param.toString().toLowerCase());
+          if (val.length > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    } catch (Exception) {
+      return false;
+    }
+  }
+
+  checkLocationValue(param, data) {
+    let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
+    if (val.length > 0) {
+      this.mLga = val[0].lgs;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checklocationValue2(param, data) {
+    let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
+    if (val.length > 0) {
+      this.oLga = val[0].lgs;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkHiaValue(facilityType, hia, data) {
+    if (facilityType != undefined && hia != undefined) {
+      console.log(facilityType);
+      console.log(hia);
+      let val = data.filter(x => x.facilityType.name.toString().toLowerCase() == facilityType.toString().toLowerCase() && x.name.toLowerCase() == hia.toString().toLowerCase());
+      console.log(val);
+      if (val.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+
+  }
+
+  checkPremiumValue(param, pPackage, data) {
+    let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
+    if (val.length > 0) {
+      this.packages = val[0].premiums;
+      return true;
+    } else {
+      this.packages = [];
+      return false;
+    }
+  }
 
   private _getCurrentPlatform() {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
@@ -168,14 +397,14 @@ export class EmployerDetailsComponent implements OnInit {
     });
   }
 
-  onSelectDrug(hia){
-    if(this.facility.employer.hias === undefined){
+  onSelectDrug(hia) {
+    if (this.facility.employer.hias === undefined) {
       this.facility.employer.hias = [];
     }
     this.facility.employer.hias.push(hia)
-    this._facilityService.update(this.facility).then(payload =>{
+    this._facilityService.update(this.facility).then(payload => {
       this.facility = payload;
-    }).catch(err =>{
+    }).catch(err => {
 
     })
   }
@@ -224,130 +453,20 @@ export class EmployerDetailsComponent implements OnInit {
       formData.append('excelfile', fileBrowser.files[0]);
       formData.append('facilityId', this.facility._id);
       this._uploadService.uploadExcelFile(formData).then(result => {
-        // console.log(result);
-        let enrolleeList: any[] = [];
-        var bodyObj = [];
-        var principal = {};
-        var beneficiaries = [];
-        var policy = {};
-        if (result.body !== undefined && result.error == false) {
-          // res.body.data.Sheet1.forEach(row => {
-          //   let rowObj: any = <any>{};
-          //   rowObj.serial = row.A;
-          //   rowObj.surname = row.B;
-          //   rowObj.firstName = row.C;
-          //   rowObj.gender = row.D;
-          //   rowObj.filNo = row.E;
-          //   rowObj.category = row.F;
-          //   rowObj.sponsor = row.G;
-          //   rowObj.plan = row.H;
-          //   rowObj.type = row.I;
-          //   // rowObj.date = this.excelDateToJSDate(row.J);
-          //   enrolleeList.push(rowObj);
-          // });
-          console.log(result);
-          result.body.Sheet1.forEach(function (item, index) {
-            if (index > 0) {
-              if (item.A != undefined && item.B != undefined && item.C != undefined
-                && item.D != undefined && item.E != undefined && item.F != undefined && item.G != undefined
-                && item.H != undefined && item.I != undefined
-                && item.J != undefined && item.K != undefined && item.L != undefined && item.M != undefined
-                && item.N != undefined && item.O != undefined && item.P != undefined && item.Q != undefined
-                && item.R != undefined && item.S != undefined && item.AL != undefined && item.AM != undefined
-                && item.AL != undefined && item.AM != undefined && item.AN != undefined && item.AO != undefined
-                && item.AP != undefined && item.AQ != undefined) {
-                console.log('A');
-                beneficiaries = [];
-                principal = {
-                  'dateOfBirth': item.A,
-                  'email': item.B,
-                  'numberOfUnderAge': item.C,
-                  'gender': item.D,
-                  'homeAddress': {
-                    'neighbourhood': item.E,
-                    'state': item.F,
-                    'lga': item.G,
-                    'street': item.H
-                  },
-                  'lastName': item.I,
-                  'firstName': item.J,
-                  'lgaOfOrigin': item.K,
-                  'maritalStatus': item.L,
-                  'mothersMaidenName': item.M,
-                  'otherNames': item.N,
-                  'phoneNumber': item.O,
-                  'platformOwnerId': item.P,
-                  'stateOfOrigin': item.Q,
-                  'title': item.S
-                };
-                policy = {
-                  'platformOwnerId': item.AL,
-                  'hiaId': item.AM,
-                  'providerId': item.AN,
-                  'planTypeId': item.AO,
-                  'planId': item.AP,
-                  'premiumCategoryId': item.AQ
-                };
-              }
-              console.log(policy);
-              if (item.S != undefined && item.T != undefined && item.U != undefined && item.V != undefined && item.W != undefined
-                && item.X != undefined && item.Y != undefined && item.Z != undefined && item.AA != undefined && item.AB != undefined
-                && item.AC != undefined && item.AD != undefined && item.AE != undefined && item.AF != undefined && item.AG != undefined) {
-                beneficiaries.push({
-                  'dateOfBirth': item.S,
-                  'email': item.T,
-                  'gender': item.U,
-                  'lastName': item.V,
-                  'firstName': item.W,
-                  'lgaOfOrigin': item.X,
-                  'numberOfUnderAge': item.Y,
-                  'maritalStatus': item.Z,
-                  'mothersMaidenName': item.AA,
-                  'otherNames': item.AB,
-                  'phoneNumber': item.AC,
-                  'platformOwnerId': item.AD,
-                  'stateOfOrigin': item.AE,
-                  'relationship': item.AF,
-                  'title': item.AG,
-                  'homeAddress': {
-                    'neighbourhood': item.AH,
-                    'state': item.AI,
-                    'lga': item.AJ,
-                    'street': item.AK
-                  }
-                }); console.log('B');
-              }
-              let counter = index + 1;
-              if (result.body.Sheet1.length == counter) {
-                console.log('c');
-                bodyObj.push({
-                  'principal': principal,
-                  'dependent': beneficiaries,
-                  'policy': policy
-                });
-                console.log(bodyObj);
-              } else {
-                try {
-                  if (result.body.Sheet1[counter].A != undefined
-                    && result.body.Sheet1[counter].B != undefined
-                    && result.body.Sheet1[counter].C != undefined
-                    && result.body.Sheet1[counter].D != undefined
-                    && result.body.Sheet1[counter].I != undefined
-                    && result.body.Sheet1[counter].J != undefined) {
-                    bodyObj.push({
-                      'principal': principal,
-                      'dependent': beneficiaries,
-                      'policy': policy
-                    });
-                  }
-                }
-                catch (Exception) {
-
-                }
-              }
-            }
+        result.body.forEach(element => {
+          let principal = element.principal;
+          principal.policy = element.policy;
+          principal.isPrincipal = true;
+          principal.isEdit = false;
+          this.orderExcelPolicies.push(principal);
+          element.dependent.forEach(item => {
+            item.isPrincipal = false;
+            item.isEdit = false;
+            this.orderExcelPolicies.push(item);
           });
-        }
+        });
+        this.totalExcelPrincipalItems = this.orderExcelPolicies.filter(x => x.isPrincipal == true).length;
+        console.log(this.orderExcelPolicies);
       }).catch(err => {
         // this._notification('Error', 'There was an error uploading the file');
       });
@@ -357,6 +476,16 @@ export class EmployerDetailsComponent implements OnInit {
   addApprovalClick() {
     this.addApproval = !this.addApproval;
   }
+
+  editRow(param) {
+    if(this.orderExcelPolicies[param].isEdit == true){
+      this.orderExcelPolicies[param].isEdit = false
+    }else{
+      this.orderExcelPolicies[param].isEdit = true
+    }
+    this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+  }
+  
 
   private _getEmployerDetails(routeId) {
     this._systemService.on();
