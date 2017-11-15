@@ -59,6 +59,7 @@
                     <th class="th">Added on</th>
                     <th class="th">Status</th>
                     <th class="th"></th>
+                    <th class="th"></th>
                 </tr>
             </thead>
 
@@ -83,6 +84,9 @@
                     <td>
                         <span *ngIf="user.isActive" class="td tbl-status-active">Active</span>
                         <span *ngIf="!user.isActive" class="td tbl-status-inactive">InActive</span>
+                    </td>
+                    <td class="td td-icos">
+                        <i class="fa fa-edit" (click)="navigateEditUser(user)"></i>
                     </td>
                     <td (click)="showDetails(user)"><i class="fa fa-chevron-right"></i></td>
                 </tr>

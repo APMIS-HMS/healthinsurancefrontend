@@ -47,7 +47,7 @@ export class ListBeneficiaryComponent implements OnInit {
     private _policyService: PolicyService,
     private _planService: PlanService,
     private _locker: CoolLocalStorage,
-    private _toastr: ToastsManager,
+    private _toastr: ToastsManager
   ) {
     this._router.events
       .filter(event => event instanceof NavigationEnd)
@@ -65,8 +65,6 @@ export class ListBeneficiaryComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
 
-    console.log(this.user);
-    // Check if user has the role to create beneficiary
     if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
@@ -154,6 +152,7 @@ export class ListBeneficiaryComponent implements OnInit {
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          console.log('multi')
           this._getAllPolicies({
             query: {
               'hiaId._id': this.user.facilityId._id,
@@ -198,13 +197,14 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   private _getAllPolicies(query) {
+    this.beneficiaries = [];
     try {
       this._systemService.on();
       this._policyService.find(query).then((res: any) => {
         this.loading = false;
         console.log(res)
         if (res.data.length > 0) {
-          res.data.forEach(policy => {
+          res.data.forEach((policy, i) => {
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
@@ -213,7 +213,7 @@ export class ListBeneficiaryComponent implements OnInit {
             principal.dependantCount = policy.dependantBeneficiaries.length;
             principal.planTypeId = policy.planTypeId;
             this.beneficiaries.push(principal);
-            policy.dependantBeneficiaries.forEach(innerPolicy => {
+            policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
               innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
               innerPolicy.beneficiary.isPrincipal = false;
               innerPolicy.beneficiary.principalId = principal._id;

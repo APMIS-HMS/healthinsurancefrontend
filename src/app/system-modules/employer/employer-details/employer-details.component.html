@@ -4,11 +4,11 @@
     </div>
 
     <ul class="inpage-tabs">
-        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Organisation Details</li>
-        <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
-        <li (click)="tabHia_click()" [class.tab-active]="tab_hia">HIA</li>
-        <li (click)="tabPaymentClick()" [class.tab-active]="tabPayment">Payment</li>
-        <li (click)="tabPaymentHistoryClick()" [class.tab-active]="tabPaymentHistory">Payment History</li>
+        <li (click)="navigate('details');" [class.tab-active]="tab_details">Organisation Details</li>
+        <li (click)="navigate('beneficiary');" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
+        <li (click)="navigate('hia');" [class.tab-active]="tab_hia">HIA</li>
+        <li (click)="navigate('payment');" [class.tab-active]="tabPayment">Payment</li>
+        <li (click)="navigate('payment-history');" [class.tab-active]="tabPaymentHistory">Payment History</li>
         <!-- <li (click)="tabPlans_click()" [class.tab-active]="tab_plans">List of Plans</li>
         <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
         <li (click)="tabEmployers_click()" [class.tab-active]="tab_employers">Employers</li>
@@ -132,8 +132,10 @@
 
                 <div class="bar-icos">
                     <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2"> UPLOAD BENEFICIARIES</div>
-                    <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;"
-                        #fileInput type="file" id="uploadResult" (change)="upload($event)">
+                    <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
+                </div>
+                <div>
+                    <span>Upload items: {{totalExcelPrincipalItems}}</span>
                 </div>
                 <div>
                     <span>Upload items: {{totalExcelPrincipalItems}}</span>
@@ -184,15 +186,15 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true">
-                                <select [formControl]="genderControl" [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
-                                    <option *ngFor="let title of titles" selected>{{title.name}}</option>
+                                <select [formControl]="titleControl"  [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
+                                    <option *ngFor="let title of titles" [selected]="item.title==title.name">{{title.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
                             <span *ngIf="!item.isEdit==true" class="td-value">{{item.firstName}} {{item.lastName}}</span>
                             <div *ngIf="item.isEdit==true" class="input-wrap">
-                                <input [formControl]="nameControl" placeholder="Firstname Lastname" type="text">
+                                <input [formControl]="nameControl" value="{{item.firstName}} {{item.lastName}}" placeholder="Firstname Lastname" type="text">
                             </div>
                         </td>
                         <td class="td hover">
@@ -206,7 +208,7 @@
                             </div>
                             <div *ngIf="item.isEdit==true" class="input-wrap">
                                 <select [formControl]="genderControl" [class.invalidvalue]="checkValue(item.gender,genders,'name') == false">
-                                    <option *ngFor="let gender of genders">{{gender.name}}</option>
+                                    <option *ngFor="let gender of genders" [selected]="item.gender==gender.name">{{gender.name}}</option>
                                 </select>
                             </div>
                         </td>
@@ -214,8 +216,8 @@
                             <span *ngIf="item.isPrincipal==true" class="baller td-value">P</span>
                             <span *ngIf="item.isPrincipal!=true" class="baller td-value">D</span>
                         </td>
-                        <td class="td hover" (click)="navigateDetailBeneficiary()">
-                            <div *ngIf="!item.isEdit==true" class="td-value">
+                        <td class="td hover">
+                            <div *ngIf="item.isEdit==false" class="td-value">
                                 <span style="color:Red" *ngIf="checkValue(item.maritalStatus,maritalStatus,'name') == false">
                                     Invalid
                                 </span>
@@ -225,7 +227,7 @@
                             </div>
                             <div *ngIf="item.isEdit==true" class="input-wrap">
                                 <select [formControl]="maritalStatusControl" [class.invalidvalue]="checkValue(item.maritalStatus,maritalStatus,'name') == false">
-                                    <option *ngFor="let status of maritalStatus">{{status.name}}</option>
+                                    <option *ngFor="let status of maritalStatus" [selected]="item.maritalStatus==status.name">{{status.name}}</option>
                                 </select>
                             </div>
                         </td>
@@ -238,11 +240,10 @@
                                     {{item?.homeAddress?.state}}
                                 </span>
                             </div>
-                            <select *ngIf="item.isEdit==true" [formControl]="lgaControl" [class.invalidvalue]="checkLocationValue(item.homeAddress.state,mStates) == false">
-                                <option *ngFor="let state of mStates">{{state.name}}</option>
+                            <select *ngIf="item.isEdit==true" [formControl]="stateControl" [class.invalidvalue]="checkLocationValue(item.homeAddress.state,mStates) == false">
+                                <option *ngFor="let state of mStates" [selected]="item.homeAddress.state==state.name">{{state.name}}</option>
                             </select>
                         </td>
-
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkValue(item.homeAddress.lga,mLga,'name') == false">
@@ -254,23 +255,23 @@
                             </div>
                             <div *ngIf="item.isEdit==true" class="input-wrap">
                                 <select *ngIf="item.isEdit==true" [formControl]="lgaControl" [class.invalidvalue]="checkValue(item.homeAddress.lga,mLga,'name') == false">
-                                    <option *ngFor="let lg of mLga">{{lg.name}}</option>
+                                    <option *ngFor="let lg of mLga" [selected]="item.homeAddress.lga==lg.name">{{lg.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
-                            <div *ngIf="!item.isEdit==true" class="td-value">
-                                <span style="color:Red" *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == false">
-                                    Invalid
-                                </span>
-                                <span *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == true">
-                                    {{item?.homeAddress?.state}}
-                                </span>
-                            </div>
-                            <select *ngIf="item.isEdit==true" [formControl]="genderControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
-                                <option *ngFor="let state of oStates">{{state.name}}</option>
-                            </select>
-                        </td>
+                                <div *ngIf="!item.isEdit==true" class="td-value">
+                                    <span style="color:Red" *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == false">
+                                        Invalid
+                                    </span>
+                                    <span *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == true">
+                                        {{item.stateOfOrigin}}
+                                    </span>
+                                </div>
+                                <select *ngIf="item.isEdit==true" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
+                                    <option *ngFor="let state of oStates" [selected]="item.stateOfOrigin==state.name">{{state.name}}</option>
+                                </select>
+                            </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkValue(item.lgaOfOrigin,oLga,'name') == false">
@@ -281,12 +282,11 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true" class="input-wrap">
-                                <select *ngIf="item.isEdit==true" [formControl]="lgaControl" [class.invalidvalue]="checkValue(item.homeAddress.lga,oLga,'name') == false">
-                                    <option *ngFor="let lg of oLga">{{lg.name}}</option>
+                                <select *ngIf="item.isEdit==true" [formControl]="oLgaControl" [class.invalidvalue]="checkValue(item.homeAddress.lga,oLga,'name') == false">
+                                    <option *ngFor="let lg of oLga" [selected]="item.lgaOfOrigin==lg.name">{{lg.name}}</option>
                                 </select>
                             </div>
                         </td>
-
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkValue(item.platformOwner,platforms,'platformOwnerId.name') == false">
@@ -297,7 +297,7 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <input [formControl]="platformControl" [class.invalidvalue]="checkValue(item.platformOwner,platforms,'platformOwnerId.name') == false">
+                                <input [formControl]="platformControl" value="{{item.platformOwner}}" [class.invalidvalue]="checkValue(item.platformOwner,platforms,'platformOwnerId.name') == false">
                             </div>
                         </td>
                         <td class="td hover">
@@ -310,11 +310,8 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <input [formControl]="facilityTypeControl" [class.invalidvalue]="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
-                            </div>
-                            <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="genderControl" [class.invalidvalue]="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
-                                    <option *ngFor="let userType of userTypes">{{userType.name}}</option>
+                                <select [formControl]="facilityTypeControl" [class.invalidvalue]="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
+                                    <option *ngFor="let userType of userTypes" [selected]="item.policy.facilityType==userType.name">{{userType.name}}</option>
                                 </select>
                             </div>
                         </td>
@@ -328,7 +325,7 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <input [formControl]="hiaControl" [class.invalidvalue]="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
+                                <input [formControl]="hiaControl" value="{{item.policy.hia}}" [class.invalidvalue]="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
                             </div>
                         </td>
                         <td class="td hover">
@@ -342,7 +339,7 @@
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
                                 <select [formControl]="planTypeControl" [class.invalidvalue]="checkValue(item.policy.planType,planTypes,'name') == false">
-                                    <option *ngFor="let planTypes of planTypes">{{planTypes.name}}</option>
+                                    <option *ngFor="let planTypes of planTypes" [selected]="item.policy.planType==planTypes.name">{{planTypes.name}}</option>
                                 </select>
                             </div>
                         </td>
@@ -357,7 +354,7 @@
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
                                 <select [formControl]="planControl" [class.invalidvalue]="checkPremiumValue(item.policy.plan,item.policy.premiumPackage,plans) == false">
-                                    <option *ngFor="let plan of plans">{{plan.name}}</option>
+                                    <option *ngFor="let plan of plans" [selected]="item.policy.plan==plan.name">{{plan.name}}</option>
                                 </select>
                             </div>
                         </td>
@@ -371,42 +368,49 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
+<<<<<<< HEAD
+                                <select [formControl]="packageControl" [class.invalidvalue]="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == false">
+                                    <option *ngFor="let sponsor of SPONSORSHIP">{{sponsor.name}}</option>
+                                </select>
+                            </div>
+                        </td>
+=======
                                 <select [formControl]="packageControl" [class.invalidvalue]="checkValue(item.policy.premiumPackage,packages,'category.name') == false">
-                                    <option *ngFor="let package of packages">{{package.category.name}}</option>
+                                    <option *ngFor="let package of packages" [selected]="item.policy.premiumPackage==package.category.name">{{package?.category?.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkValue(item.policy.premiumPackage,categories,'name') == false">
+                                <span style="color:Red" *ngIf="checkValue(item.policy.premiumCategory,categories,'name') == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkValue(item.policy.premiumPackage,categories,'name') == true">
-                                    {{item?.policy?.premiumPackage}}
+                                <span *ngIf="checkValue(item.policy.premiumCategory,categories,'name') == true">
+                                    {{item?.policy?.premiumCategory}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="packageControl" [class.invalidvalue]="checkValue(item.policy.premiumPackage,categories,'name') == false">
-                                    <option *ngFor="let category of categories">{{category.name}}</option>
+                                <select [formControl]="categoryControl" [class.invalidvalue]="checkValue(item.policy.premiumCategory,categories,'name') == false">
+                                    <option *ngFor="let category of categories" [selected]="item.policy.premiumCategory==category.name">{{category.name}}</option>
                                 </select>
                             </div>
                         </td>
-
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == false">
                                     Invalid
                                 </span>
                                 <span *ngIf="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == true">
-                                    {{item?.policy?.premiumPackage}}
+                                    {{item?.policy?.sponsorship}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="packageControl" [class.invalidvalue]="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == false">
-                                    <option *ngFor="let sponsor of SPONSORSHIP">{{sponsor.name}}</option>
+                                <select [formControl]="sponsorshipControl" [class.invalidvalue]="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == false">
+                                    <option *ngFor="let sponsor of SPONSORSHIP" [selected]="item.policy.sponsorship==sponsor.name">{{sponsor.name}}</option>
                                 </select>
                             </div>
                         </td>
+>>>>>>> 30a0fcb3d5c04168df2ffce354b28f4ae67bdea6
 
                         <td class="td td-icos">
                             <i *ngIf="!item.isEdit==true" class="fa fa-edit" (click)="editRow(i)"></i>
@@ -476,8 +480,8 @@
                 </div>
             </div>
 
-            <div class="padding-10">
-                <app-employer-beneficiaries></app-employer-beneficiaries>
+            <div>
+                <app-premium-payment-tab></app-premium-payment-tab>
             </div>
         </div>
     </div>

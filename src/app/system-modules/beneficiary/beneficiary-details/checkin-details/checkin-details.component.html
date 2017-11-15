@@ -54,61 +54,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="checkinSect" class="right-wrap">
-        <div class="top-cta-wrap" *ngIf="selectedCheckIn === undefined">
-            <div (click)="generate_otp()" class="btn btn-medium btn-yellow">GENERATE OTP</div>
-        </div>
-
-        <div *ngIf="checkinSect" class="right-content">
-            <div class="sect-title">Check In</div>
-            <form *ngIf="otp_show" [formGroup]="otpFormGroup" novalidate>
-                <div class="frm-item-wrap">
-                    <label class="label">Verify OTP Code</label>
-                    <div class="input-wrap">
-                        <input type="text" formControlName="otp" class="form-control">
-                        <small class="alert-label" [hidden]="otpFormGroup.controls.otp.valid || otpFormGroup.controls.otp.pristine">
-                            This is a required field.
-                        </small>
-                    </div>
-                </div>
-                <div class="frm-item-wrap btn-space">
-                    <button (click)="otp_verify()" class="btn btn-medium btn-blue label"> VERIFY OTP</button>
-                    <div class="input-wrap" *ngIf="selectedCheckIn !== undefined">
-                        <button (click)="otp_regenerate()" class="btn btn-medium btn-blue form-control"> RE-GENERATE OTP</button>
-                    </div>
-                </div>
-
-
-            </form>
-
-            <form *ngIf="checkin_show" [formGroup]="checkinFormGroup" class="animated fadeIn" novalidate>
-                <div class="frm-title">Clinical Information</div>
-                <div class="frm-item-wrap">
-                    <label class="label">Health Encounter Type </label>
-                    <div class="input-wrap">
-                        <select formControlName="encounterType" class="form-control" [compareWith]='compare'>
-                            <option value="" disabled selected>Select Encounter Type</option>
-                            <option *ngFor="let encounter of encounterTypes" [ngValue]="encounter">{{encounter.name}}</option>
-                        </select>
-                        <small class="alert-label" [hidden]="checkinFormGroup.controls.encounterType.valid || checkinFormGroup.controls.encounterType.pristine">
-                            This is a required field.
-                        </small>
-                    </div>
-                </div>
-                <div class="frm-item-wrap">
-                    <label class="label">Health Encounter Date </label>
-                    <div class="input-wrap">
-                        <my-date-picker style="width:300px;" name="encounterDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="encounterDate"></my-date-picker>
-                        <small class="alert-label" [hidden]="checkinFormGroup.controls.encounterDate.valid || checkinFormGroup.controls.encounterDate.pristine">
-                            This is a required field.
-                        </small>
-                    </div>
-                </div>
-
-                <button (click)="checkin_click()" class="btn btn-medium btn-blue"> CHECKIN</button>
-            </form>
-        </div>
-    </div>
+   
 
     <div *ngIf="checkedinSect" class="right-wrap">
 
@@ -116,7 +62,7 @@
             <div (click)="navigateToNewClaim()" class="btn btn-medium btn-yellow">GENERATE CLAIM</div>
             <div (click)="navigateToNewReferal()" class="btn btn-medium btn-yellow">NEW REFERAL</div>
             <div (click)="navigateToNewAuthorization()" class="btn btn-medium btn-yellow">NEW AUTHORIZATION</div>
-            <div  class="btn btn-medium btn-yellow">CHECK OUT</div>
+            <div (click)="checkOut()"  class="btn btn-medium btn-yellow">CHECK OUT</div>
         </div>
 
         <div class="right-content">

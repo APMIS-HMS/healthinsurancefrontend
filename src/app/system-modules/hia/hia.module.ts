@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared-modules/shared.module';
 import {
     SystemModuleService, CountryService, BankService, ContactPositionService, UserTypeService, FacilityService,
-    BeneficiaryService, PlanService, PlanTypeService, ClaimService, IndustryService, ReferralService
+    BeneficiaryService, PlanService, PlanTypeService, ClaimService, IndustryService, ReferralService, PreAuthorizationService
 } from '../../services/index';
 import { hiaRoutes } from './hia.route';
 import { HiaComponent } from './hia.component';
@@ -21,6 +21,7 @@ import { ListPreauthorizationsComponent } from './hia-details/list-preauthorizat
 import { ListBeneficiariesComponent } from './hia-details/list-beneficiaries/list-beneficiaries.component';
 import { ListPaymentsComponent } from './hia-details/list-payments/list-payments.component';
 import { ListReferralsComponent } from './hia-details/list-referrals/list-referrals.component';
+import { PreAuthorizationListComponent } from '../pre-authorization/pre-authorization-list/pre-authorization-list.component';
 
 @NgModule({
     imports: [
@@ -42,6 +43,6 @@ import { ListReferralsComponent } from './hia-details/list-referrals/list-referr
         ListPaymentsComponent, ListReferralsComponent],
     providers: [CountryService,
         BankService, ContactPositionService, UserTypeService, FacilityService, PlanTypeService, ClaimService, IndustryService,
-        HiaGradeService, HiaTypeService, BeneficiaryService, PlanService, ReferralService]
+        HiaGradeService, HiaTypeService, BeneficiaryService, PlanService, ReferralService, PreAuthorizationService]
 })
 export class HiaModule { }

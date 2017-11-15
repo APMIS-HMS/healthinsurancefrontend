@@ -72,7 +72,6 @@ export class EmployerBeneficiariesComponent implements OnInit {
     })
   }
   private _getAllPolicies(query) {
-    console.log(query)
     try {
       this._systemService.on();
       this._policyService.find(query).then((res: any) => {

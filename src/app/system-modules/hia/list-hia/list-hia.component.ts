@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { AuthService } from './../../../auth/services/auth.service';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -24,6 +25,7 @@ export class ListHiaComponent implements OnInit {
   hias: any[] = [];
   hiaTypes: any[] = [];
   loading: boolean = true;
+  user:any;
 
   constructor(
     private _router: Router,
@@ -32,14 +34,17 @@ export class ListHiaComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
-    private  _hiaTypeService: HiaTypeService
+    private _hiaTypeService: HiaTypeService,
+    private _locker:CoolLocalStorage
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('HIA List');
     this._headerEventEmitter.setMinorRouteUrl('All HIAs');
+    this.user = (<any>this._locker.getObject("auth")).user;
 
-    this._getUserTypes();
+    this._checkUser();
+    // this._getUserTypes();
     this._getHiaTypes();
 
     this.filterTypeControl.valueChanges.subscribe(payload => {
@@ -77,20 +82,40 @@ export class ListHiaComponent implements OnInit {
             || item.hia.grade.name.toLowerCase().includes(strVal.toLowerCase()))
         })
       });
+
+  }
   
+  private _checkUser(){
+    if(this.user !== undefined && this.user.userType.name !== "Platform Owner"){
+      if(this.user.userType.name === 'Health Insurance Agent'){
+        this._router.navigate(['/modules/hia/hias', this.user.facilityId._id]).then(res => {
+          this._systemService.off();
+        }).catch(err => {
+          this._systemService.off();
+        });
+      }
+    }else{
+      this._getUserTypes();
+    }
   }
 
   _getHIAs() {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
-      this.loading = false;
-      this.hias = payload.data;
-      console.log(this.hias);
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    })
+    this._facilityService.find(
+      {
+        query:
+        {
+          'facilityType._id': this.selectedUserType._id, $limit: 200
+        }
+      }).then((payload: any) => {
+        this.loading = false;
+        this.hias = payload.data;
+        console.log(this.hias);
+        this._systemService.off();
+      }).catch(error => {
+        console.log(error);
+        this._systemService.off();
+      })
   }
 
   private _getUserTypes() {
