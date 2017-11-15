@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -18,7 +18,7 @@ import { HeaderEventEmitterService } from '../../../../services/event-emitters/h
   styleUrls: ['./premium-payment-tab.component.scss']
 })
 export class PremiumPaymentTabComponent implements OnInit {
-  //@Input() selectedPolicies: any;
+  @Output() isDoneSavingPolicy: any;
   openBatchModal: boolean = false;
   paymentGroup: FormGroup;
   listsearchControl = new FormControl();
@@ -90,57 +90,58 @@ export class PremiumPaymentTabComponent implements OnInit {
   }
 
   onClickCreateAndPaybatch(valid: boolean, value: any) {
-    this.paystackProcessing = true;
-    console.log(value);
-    let policies = [];
-    if (this.selectedPolicies.length > 0 && !!this.currentPlatform && !!this.currentPlatform._id) {
-      // Get the total price
-      this.selectedPolicies.forEach(policy => {
-        this.totalCost += policy.premiumPackageId.amount;
-      });
-      // All policies that is being paid for.
-      this.selectedPolicies.forEach(policy => {
-        if (policy.isChecked) {
-          policies.push({
-            policyId: policy.policyId,
-            policyCollectionId: policy._id
-          });
-        }
-      });
+    this.isDoneSavingPolicy = true;
+    // this.paystackProcessing = true;
+    // console.log(value);
+    // let policies = [];
+    // if (this.selectedPolicies.length > 0 && !!this.currentPlatform && !!this.currentPlatform._id) {
+    //   // Get the total price
+    //   this.selectedPolicies.forEach(policy => {
+    //     this.totalCost += policy.premiumPackageId.amount;
+    //   });
+    //   // All policies that is being paid for.
+    //   this.selectedPolicies.forEach(policy => {
+    //     if (policy.isChecked) {
+    //       policies.push({
+    //         policyId: policy.policyId,
+    //         policyCollectionId: policy._id
+    //       });
+    //     }
+    //   });
 
-      let user = {
-        userType: this.user.userType,
-        firstName: this.user.firstName,
-        lastName: this.user.lastName,
-        facilityId: this.user.facilityId,
-        email: this.user.email,
-        isActive: this.user.isActive,
-        platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
-        phoneNumber: this.user.phoneNumber
-      };
+    //   let user = {
+    //     userType: this.user.userType,
+    //     firstName: this.user.firstName,
+    //     lastName: this.user.lastName,
+    //     facilityId: this.user.facilityId,
+    //     email: this.user.email,
+    //     isActive: this.user.isActive,
+    //     platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
+    //     phoneNumber: this.user.phoneNumber
+    //   };
 
-      let ref = {
-        platformOwnerId: this.currentPlatform,
-        policies: policies,
-        paidBy: user,
-        requestedAmount: this.totalCost,
-        amountPaid: 0,
-        paymentType: value.paymentType,
-        batchNo: value.batchNo
-      };
+    //   let ref = {
+    //     platformOwnerId: this.currentPlatform,
+    //     policies: policies,
+    //     paidBy: user,
+    //     requestedAmount: this.totalCost,
+    //     amountPaid: 0,
+    //     paymentType: value.paymentType,
+    //     batchNo: value.batchNo
+    //   };
 
-      console.log(ref);
-      // Create batch, if successful, enable the paystack button.
-      this._premiumPaymentService.create(ref).then((res: any) => {
-        if (!!res._id) {
-          this.showPaystack = true;
-          this.premiumPaymentData = res;
-          console.log(res);
-        }
-      }).catch(err => console.log(err));
-    } else {
-      console.log('Current platform owner or selected policies is empty');
-    }
+    //   console.log(ref);
+    //   // Create batch, if successful, enable the paystack button.
+    //   this._premiumPaymentService.create(ref).then((res: any) => {
+    //     if (!!res._id) {
+    //       this.showPaystack = true;
+    //       this.premiumPaymentData = res;
+    //       console.log(res);
+    //     }
+    //   }).catch(err => console.log(err));
+    // } else {
+    //   console.log('Current platform owner or selected policies is empty');
+    // }
   }
 
 
@@ -154,7 +155,7 @@ export class PremiumPaymentTabComponent implements OnInit {
         action: 'update',
         ref: data
       };
-      console.log('Call API');
+
       // Call paystack verification API
       this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes: any) => {
         console.log(verifyRes);
@@ -162,7 +163,6 @@ export class PremiumPaymentTabComponent implements OnInit {
           this.showPaystack = false;
           this.openBatchModal = false;
           this.premiumPaymentData = {};
-          this.ngOnInit();
           // this._router.navigate(['/modules/premium-payment/previous']);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
         }

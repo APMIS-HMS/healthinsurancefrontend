@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -18,7 +18,7 @@ import { HeaderEventEmitterService } from '../../../../../services/event-emitter
   styleUrls: ['./unbatched.component.scss']
 })
 export class UnbatchedComponent implements OnInit {
-  // @Output() outputSelectedPolicies: any;
+  @Input() isDoneSavingPolicies: any;
   user: any;
   loading: boolean = true;
   policies: any = <any>[];
@@ -44,6 +44,8 @@ export class UnbatchedComponent implements OnInit {
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
+
+    console.log(this.isDoneSavingPolicies);
   }
 
   private _getUnbatchedPolicies() {
@@ -83,14 +85,13 @@ export class UnbatchedComponent implements OnInit {
   }
 
   onCheckAllToPay(isChecked) {
-    console.log(isChecked);
     // if (!isChecked) {
     let counter = 0;
     this.policies.forEach(policy => {
       console.log(policy);
       counter++;
       policy.isChecked = isChecked;
-      console.log(policy.isChecked);
+
       if (policy.isChecked) {
         this.totalItem++;
         this.totalCost += policy.premiumPackageId.amount;
@@ -137,6 +138,10 @@ export class UnbatchedComponent implements OnInit {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result.toDateString(); // .toISOString();
+  }
+
+  onClickResetComponent(event) {
+    console.log(event);
   }
 
   // public selectedPolicy(policy: any): void {
