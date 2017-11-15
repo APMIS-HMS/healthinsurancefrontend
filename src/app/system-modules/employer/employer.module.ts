@@ -34,9 +34,10 @@ import { BatchedComponent } from './employer-details/premium-payment-tab/batched
         PremiumPaymentTabComponent,
         UnbatchedComponent,
         ExcelUploadItemsComponent,
-        BatchedComponent],
+        BatchedComponent
+    ],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
-        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService, MaritalStatusService, PlanTypeService, PremiumPaymentService]
-
+        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService,
+        MaritalStatusService, PlanTypeService, PremiumPaymentService,BatchedComponent]
 })
 export class EmployerModule { }

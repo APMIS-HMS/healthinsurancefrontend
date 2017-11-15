@@ -1,7 +1,7 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Event, NavigationEnd } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Observable } from 'rxjs/Observable';
@@ -53,31 +53,9 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _uploadService: UploadService,
     private _locker: CoolLocalStorage
   ) {
-    this._route.data.subscribe(data => {
-      if (!!data.goCheckIn && data.goCheckIn) {
-        this.isCheckIn = true;
-        this.tab_payment = false;
-        this.tab_details = false;
-        this.tab_claims = false;
-        this.tab_complaints = false;
-        this.tab_referals = false;
-        this.tab_checkinHistory = false;
-        this.tab_checkinGenerate = false;
-      }
-    });
-
-    this._route.data.subscribe(data => {
-      if (!!data.goPayment && data.goPayment) {
-        this.tab_payment = true;
-        this.isCheckIn = false;
-        this.tab_details = false;
-        this.tab_claims = false;
-        this.tab_complaints = false;
-        this.tab_referals = false;
-        this.tab_checkinHistory = false;
-        this.tab_checkinGenerate = false;
-      }
-    });
+    this._router.events.subscribe((routerEvent:Event) =>{
+      this._checkRouterEvent(routerEvent);
+    })
   }
 
   ngOnInit() {
@@ -95,33 +73,43 @@ export class BeneficiaryDetailsComponent implements OnInit {
         this._getBeneficiaryDetails(param.id);
       }
     });
-
-    if (this._router.url.endsWith('checkin')) {
-      this.tab_checkin = true;
-      this.isCheckIn = true;
-    } else if (this._router.url.endsWith('payment')) {
-      this.tab_payment = true;
-      this.isCheckIn = false;
-    } else if (this._router.url.endsWith('claims')) {
-      this.tab_claims = true;
-      this.isCheckIn = false;
-    } else if (this._router.url.endsWith('checkedin-history')) {
-      this.tab_checkinHistory = true;
-      this.isCheckIn = true;
-      this.isHistory = true;
-      this.isGenerate = false;
-    } else if (this._router.url.endsWith('checkin-generate')){
-      this.tab_checkinGenerate = true;
-      this.isCheckIn = true;
-      this.isHistory = false;
-      this.isGenerate = true;
-    }
-    else if (this._router.url.endsWith('referrals')) {
-      this.tab_referals = true;
-      this.isCheckIn = false;
-    } else {
-      this.tab_details = true;
-      this.isCheckIn = false;
+  }
+  private _checkRouterEvent(event:Event){
+    if(event instanceof NavigationEnd){
+      console.log('fire')
+      if (this._router.url.endsWith('checkin')) {
+        this.tab_checkinGenerate = false;
+        this.tab_checkinHistory = false;
+        this.tab_checkin = true;
+        this.isCheckIn = true;
+      } else if (this._router.url.endsWith('payment')) {
+        this.tab_payment = true;
+        this.isCheckIn = false;
+      } else if (this._router.url.endsWith('claims')) {
+        this.tab_claims = true;
+        this.isCheckIn = false;
+      } else if (this._router.url.endsWith('checkedin-history')) {
+        this.tab_checkinHistory = true;
+        this.tab_checkinGenerate = false;
+        this.tab_checkin = false;
+        this.isCheckIn = true;
+        this.isHistory = true;
+        this.isGenerate = false;
+      } else if (this._router.url.endsWith('checkin-generate')){
+        this.tab_checkinGenerate = true;
+        this.tab_checkin = false;
+        this.tab_checkinHistory = false;
+        this.isCheckIn = true;
+        this.isHistory = false;
+        this.isGenerate = true;
+      }
+      else if (this._router.url.endsWith('referrals')) {
+        this.tab_referals = true;
+        this.isCheckIn = false;
+      } else {
+        this.tab_details = true;
+        this.isCheckIn = false;
+      }
     }
   }
 

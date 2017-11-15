@@ -99,7 +99,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
     this._getEncounterStatuses();
     this._getEncounterTypes();
     this._getUserFacility();
-    
+
     console.log(this.selectedCheckIn)
 
   }
@@ -131,6 +131,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
       console.log(results)
 
       if (results[1].data.length > 0) {
+        this.policy = results[1].data[0];
       }
 
       this._systemService.off();
@@ -177,18 +178,40 @@ export class CheckinDetailsGenerateComponent implements OnInit {
       }
     }).then((payload: any) => {
       console.log(payload)
-      if (payload.data !== undefined) {
+      if (payload.data !== undefined && payload.data.length > 0) {
+        this.selectedCheckIn = payload.data[0];
         this.otp_show = false;
         this.checkin_show = true;
         this._initializedForm();
         // this.checkedinFormGroup.controls.encounterStatus.setValue(this.encounterStatuses[0]);
 
       } else {
-        this._toastr.warning('Invalid or expired OTP supplied, check and try again', 'OTP');
+        //check token verified
+        this._checkToVerified();
       }
       this._systemService.off();
     }).catch(err => {
       console.log(err)
+      this._systemService.off();
+    })
+  }
+  private _checkToVerified() {
+    this._checkInService.find({
+      query: {
+        beneficiaryId: this.beneficiary._id,
+        'otp.number': this.otpFormGroup.controls['otp'].value,
+        'otp.isVerified': true
+      }
+    }).then((payload: any) => {
+      if (payload.data.length > 0) {
+        this.selectedCheckIn = payload.data[0];
+        this.otp_show = false;
+        this.checkin_show = true;
+        this._initializedForm();
+      }else{
+        this._toastr.warning('Invalid or expired OTP supplied, check and try again', 'OTP');
+      }
+    }).catch(err =>{
       this._systemService.off();
     })
   }
@@ -227,7 +250,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
     this.selectedCheckIn.encounterType = this.checkinFormGroup.controls['encounterType'].value;
     this.selectedCheckIn.encounterDateTime = this.checkinFormGroup.controls['encounterDate'].value.jsdate;
     let policyId = this._locker.getObject('policyID');
-    this.selectedCheckIn.policyId = policyId;
+    this.selectedCheckIn.policyId = this.policy._id;
     this._checkInService.patch(this.selectedCheckIn._id, this.selectedCheckIn, {
       $client: {
         confirmation: true
@@ -241,12 +264,12 @@ export class CheckinDetailsGenerateComponent implements OnInit {
           // this.selectedCheckIn = payload;
           // this._initializedForm();
           this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.selectedCheckIn.beneficiaryId + '/checkin'])
-          .then(payload => {
-            this._systemService.off();
-          }).catch(err => {
-            console.log(err)
-            this._systemService.off();
-          });
+            .then(payload => {
+              this._systemService.off();
+            }).catch(err => {
+              console.log(err)
+              this._systemService.off();
+            });
         }
         this._systemService.off();
       }).catch(err => {
@@ -320,7 +343,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
   otp_regenerate() {
     this.selectedCheckIn = undefined;
   }
-  checkOut(){
+  checkOut() {
     console.log(this.selectedCheckIn)
   }
   navigateToNewClaim() {

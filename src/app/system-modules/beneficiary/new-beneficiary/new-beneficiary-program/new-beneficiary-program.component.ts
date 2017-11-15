@@ -284,7 +284,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
   _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] } }).then((res: any) => {
+    this._facilityService.find({
+      query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
+    }).then((res: any) => {
       this._systemService.off();
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];

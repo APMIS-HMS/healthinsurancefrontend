@@ -52,7 +52,6 @@ export class BatchedComponent implements OnInit {
   }
 
   onCheckAllToPay(isChecked) {
-    console.log(isChecked);
     // if (!isChecked) {
     let counter = 0;
     this.policies.forEach(policy => {
@@ -195,7 +194,9 @@ export class BatchedComponent implements OnInit {
 
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+    this._facilityService.find(
+      { query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] } }
+    ).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getBatchedPolicies();

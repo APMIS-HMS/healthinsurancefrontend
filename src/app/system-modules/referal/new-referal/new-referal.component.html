@@ -607,8 +607,8 @@
                         <label class="label">Name of Doctor</label>
                         <div class="input-wrap">
                             <select formControlName="doctor" class="form-control">
-                                <option value=" " disabled selected>Select User Type</option>
-                                <option *ngFor="let user of userTypes" [ngValue]="user">{{user.name}}</option>
+                                <option value=" " disabled selected>Select A Doctor</option>
+                                <option *ngFor="let emp of employees" [ngValue]="emp">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
                             </select>
                         </div>
                     </div>
