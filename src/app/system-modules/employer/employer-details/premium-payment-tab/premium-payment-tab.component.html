@@ -1,7 +1,7 @@
 <div class="shadow-RB">
     <div class="list-filter-wrap">
         <div class="filter-box">
-            <div class="label-xx">Filters:</div>
+            <!-- <div class="label-xx">Filters:</div>
             <div class="input-wrap">
                 <label>HIA</label>
                 <select [formControl]="filterHiaControl" class="form-control">
@@ -26,7 +26,7 @@
                     <my-date-picker name="dateRange" [options]="myDatePickerOptions" [selDate]="today"></my-date-picker>
                 </div>
             </div>
-            <div class="btn btn-medium btn-blue-outline">RESET</div>
+            <div class="btn btn-medium btn-blue-outline">RESET</div> -->
         </div>
         <div class="payment-box">
             <div class="tab">
@@ -75,7 +75,7 @@
         <div class="paystack-box" *ngIf="showPaystack">
             <div class="modal-title" style="font-weight: bold">Verify that you want to continue with payment</div>
             <div class="modal-title" style="font-weight: bold">Amount: &#x20A6; {{ totalCost }}</div>
-            <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (callback)="paymentDone($event)">Verify</angular4-paystack>
+            <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (callback)="paymentDone($event)">Verify Payment</angular4-paystack>
         </div>
     </div>
 </div>

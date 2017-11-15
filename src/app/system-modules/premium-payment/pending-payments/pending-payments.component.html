@@ -122,7 +122,7 @@
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
-                <tr class="tr hover" *ngFor="let policy of organisationPolicies; let i = index;" routerLink="/modules/employer/employers/{{ policy?.provider?._id }}/payment">
+                <tr class="tr hover" *ngFor="let policy of organisationPolicies; let i = index;" routerLink="/modules/employer/employers/{{ policy?.sponsor?._id }}/payment">
                     <td class="td">{{ i+1 }}</td>
                     <td class="td">{{ policy?.sponsor?.name }}</td>
                     <td class="td text-center">{{ policy?.noOfEmployees }}</td>

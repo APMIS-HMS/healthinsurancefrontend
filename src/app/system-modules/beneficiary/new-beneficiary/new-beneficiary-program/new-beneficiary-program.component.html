@@ -10,7 +10,7 @@
         <div class="inputWrap">
             <select formControlName="hiaName" class="form-control">
                 <option  value="" disabled selected>HIA</option>
-                <option *ngFor="let hia of hias"  [ngValue]="hia">{{hia.name}}</option>
+                <option disabled="isHia" *ngFor="let hia of hias"  [ngValue]="hia">{{hia.name}}</option>
             </select>
         </div>
     </div>

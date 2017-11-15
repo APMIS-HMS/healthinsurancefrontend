@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -41,6 +41,7 @@ export class PremiumPaymentTabComponent implements OnInit {
   selectedPolicies: any = <any>[];
   totalCost = 0;
   premiumPaymentData: any;
+  facility: any;
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
   };
@@ -49,6 +50,7 @@ export class PremiumPaymentTabComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
+    private _route: ActivatedRoute,
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -64,6 +66,12 @@ export class PremiumPaymentTabComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('Premium Payment');
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.user);
+
+    this._route.params.subscribe(param => {
+      if (param.id !== undefined) {
+        this._getFacility(param.id);
+      }
+    });
 
     this._getCurrentPlatform();
 
@@ -105,6 +113,7 @@ export class PremiumPaymentTabComponent implements OnInit {
       });
       // All policies that is being paid for.
       this.selectedPolicies.forEach(policy => {
+        console.log(policy);
         if (policy.isChecked) {
           policies.push({
             policyId: policy.policyId,
@@ -128,6 +137,8 @@ export class PremiumPaymentTabComponent implements OnInit {
         platformOwnerId: this.currentPlatform,
         policies: policies,
         paidBy: user,
+        sponsor: this.facility,
+        // sponsorshipId: ,
         requestedAmount: this.totalCost,
         amountPaid: 0,
         paymentType: value.paymentType,
@@ -151,7 +162,7 @@ export class PremiumPaymentTabComponent implements OnInit {
 
   paymentDone(data) {
     console.log(data);
-    if (!!this.premiumPaymentData && this.premiumPaymentData._id) {
+    if (!!this.premiumPaymentData && !!this.facility && this.premiumPaymentData._id && !!this.facility._id) {
       console.log('Payment Done');
       console.log(this.premiumPaymentData);
       let payload = {
@@ -188,6 +199,23 @@ export class PremiumPaymentTabComponent implements OnInit {
       this.unbatchedActiveTab = false;
       this.batchedActiveTab = true;
     }
+  }
+
+  private _getFacility(id) {
+    this._facilityService.get(id, {}).then((res: any) => {
+      if (!!res && res._id) {
+        this.facility = {
+          name: res.name,
+          _id: res._id,
+          email: res.email,
+          logo: res.logo,
+          phoneNumber: res.phoneNumber
+        };
+        console.log(this.facility);
+      }
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   private _getCurrentPlatform() {
