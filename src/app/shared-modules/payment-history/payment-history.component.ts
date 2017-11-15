@@ -39,10 +39,12 @@ export class PaymentHistoryComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _locker: CoolLocalStorage,
-    private _policyService: PolicyService,
+    private _policyService: PolicyService
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Payment History');
+    this._headerEventEmitter.setMinorRouteUrl('Payment history for beneficiary');
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
 
