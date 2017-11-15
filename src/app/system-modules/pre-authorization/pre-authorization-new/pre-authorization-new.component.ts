@@ -572,8 +572,8 @@ export class PreAuthorizationNewComponent implements OnInit {
             'checked': false
           }
         } else {
-          if (resource.Preferred != undefined) {
-            if (resource.Preferred.toLowerCase().trim() == 'c') {
+          if (resource.Prefered != undefined) {
+            if (resource.Prefered.toLowerCase().trim() == 'c') {
               console.log(3)
               // cover by capitation, dont put amount
               //requires authorization
