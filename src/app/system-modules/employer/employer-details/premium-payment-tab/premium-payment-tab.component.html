@@ -40,7 +40,7 @@
     </div>
 
     <div *ngIf="unbatchedActiveTab">
-        <app-unbatched></app-unbatched>
+        <app-unbatched [isDoneSavingPolicies]="isDoneSavingPolicy"></app-unbatched>
     </div>
     <div *ngIf="batchedActiveTab">
         <app-batched></app-batched>

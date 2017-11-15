@@ -150,42 +150,47 @@ export class BeneficiaryDetailsComponent implements OnInit {
   }
 
   onClickApprove(valid: boolean, value: any) {
+    console.log(this.policy);
     if (valid) {
-      const validity = {
-        duration: value.duration,
-        unit: value.unit,
-        startDate: value.startDate,
-        createdAt: new Date(),
-        validTill: this.addDays(new Date(), value.unit.days)
-      };
+      // if (this.policy.isPaid) {
+      //   const validity = {
+      //     duration: value.duration,
+      //     unit: value.unit,
+      //     startDate: value.startDate,
+      //     createdAt: new Date(),
+      //     validTill: this.addDays(new Date(), value.unit.days)
+      //   };
 
-      if (!!this.policy.validityPeriods) {
-        this.policy.validityPeriods.push(validity);
-      } else {
-        this.policy.validityPeriods = [];
-        this.policy.validityPeriods.push(validity);
-      }
+      //   if (!!this.policy.validityPeriods) {
+      //     this.policy.validityPeriods.push(validity);
+      //   } else {
+      //     this.policy.validityPeriods = [];
+      //     this.policy.validityPeriods.push(validity);
+      //   }
 
-      this.policy.isActive = true;
-      this._policyService.update(this.policy).then((res: any) => {
-        this.policy = res;
-        const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
-        const text = 'Policy has been ' + status;
-        this._toastr.success(text, 'Confirmation!');
-        // Send sms to Principal Beneficiary
-        const smsData = {
-          content: 'Testing beneficiary',
-          sender: 'Me',
-          receiver: '08056679920'
-        };
-
-        this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
-        }).catch(err => console.log(err));
-
-        setTimeout(e => {
-          this.addApprovalClick();
-        }, 1000);
-      });
+      //   this.policy.isActive = true;
+      //   this._policyService.update(this.policy).then((res: any) => {
+      //     this.policy = res;
+      //     const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
+      //     const text = 'Policy has been ' + status;
+      //     this._toastr.success(text, 'Confirmation!');
+      //     // Send sms to Principal Beneficiary
+      //     const smsData = {
+      //       content: 'Testing beneficiary',
+      //       sender: 'Me',
+      //       receiver: '08056679920'
+      //     };
+  
+      //     this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
+      //     }).catch(err => console.log(err));
+  
+      //     setTimeout(e => {
+      //       this.addApprovalClick();
+      //     }, 1000);
+      //   });
+      // } else {
+      //   this._toastr.error('Policy has not been paid for. Please pay for policy before you can active!', 'Payment Error!');
+      // }
     } else {
       this._toastr.error('Some fields are empty. Please fill in all required fields!', 'Form Validation Error!');
     }
