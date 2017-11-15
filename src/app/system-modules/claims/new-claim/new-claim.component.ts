@@ -618,7 +618,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
     this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
-    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
+    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value.firstName +" "+this.claimsFormGroup.controls.medicalPersonelName.value.lastName;
     //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
     this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;

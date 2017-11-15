@@ -54,7 +54,7 @@ export class EmployerDetailsComponent implements OnInit {
   statusControl = new FormControl('All');
 
 
-  allitemsControl = new FormControl();
+  itemCheckBox = new FormControl();
   nameControl = new FormControl();
   genderControl = new FormControl();
   titleControl = new FormControl();
@@ -362,18 +362,12 @@ export class EmployerDetailsComponent implements OnInit {
     }
 
   }
-
   checkPremiumValue(param, pPackage, data) {
-    console.log(data);
-    console.log(param);
     let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
-    console.log(val);
     if (val.length > 0) {
       this.packages = val[0].premiums;
-      console.log(this.packages);
       return true;
     } else {
-      this.packages = [];
       return false;
     }
   }
@@ -571,6 +565,21 @@ onSponsor(event,index){
     return new Date(Math.round((date - 25569) * 86400 * 1000));
   }
 
+  handleChange(e) {
+    console.log(e);
+    var isChecked = e.target.checked;
+    if(isChecked){
+      this.orderExcelPolicies.forEach(function(item){
+        item.isCheck =true;
+      })
+    }else{
+      this.orderExcelPolicies.forEach(function(item){
+        item.isCheck =false;
+      })
+    }
+    this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+  }
+
   public upload(e) {
     let fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
@@ -578,15 +587,18 @@ onSponsor(event,index){
       formData.append('excelfile', fileBrowser.files[0]);
       formData.append('facilityId', this.facility._id);
       this._uploadService.uploadExcelFile(formData).then(result => {
-        result.body.forEach(element => {
+        result.body.forEach((element,index) => {
           let principal = element.principal;
           principal.policy = element.policy;
           principal.isPrincipal = true;
           principal.isEdit = false;
+          principal.isCheck = false;
           this.orderExcelPolicies.push(principal);
           element.dependent.forEach(item => {
             item.isPrincipal = false;
             item.isEdit = false;
+            item.isCheck = false;
+            item.principalIndex = index;
             this.orderExcelPolicies.push(item);
           });
         });
