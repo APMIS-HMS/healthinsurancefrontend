@@ -29,8 +29,6 @@ export class ClaimsDetailTabComponent implements OnInit {
     private _claimService: ClaimService) { }
 
   ngOnInit() {
-    
-    
     this._headerEventEmitter.setRouteUrl('Claims Details');
     this._headerEventEmitter.setMinorRouteUrl('Claims details reply and response page.');
     this._route.params.subscribe(param => {
@@ -38,6 +36,7 @@ export class ClaimsDetailTabComponent implements OnInit {
         this._getSelectedClaimItem(param.id);
       }
     });
+    this.getAuthforClaimCreate();
   }
 
   getAuthforClaimCreate(){
@@ -85,14 +84,12 @@ export class ClaimsDetailTabComponent implements OnInit {
         if (element.response != undefined) {
           if (element.response.isReject == true) {
             this.status = 'Reject';
-            this.statusCheck = true;
           } else if (element.response.isQuery == true) {
             this.status = 'Query';
           } else if (element.response.isHold == true) {
             this.status = 'Hold';
           } else if (element.response.isApprove == true) {
             this.status = 'Approved';
-            this.statusCheck = true;
           }
         }
       });

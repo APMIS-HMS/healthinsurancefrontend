@@ -166,12 +166,13 @@
                         <th class="th">sponsorship</th>
                         <td class="th">Action</td>
                     </tr>
+                    <!-- orderExcelPolicies[item.principalIndex]==true ||  -->
                 </thead>
 
                 <tbody class="tbody">
                     <tr class="tr" *ngFor="let item of orderExcelPolicies; let i=index">
                         <td class="td hover">
-                            <input *ngIf="orderExcelPolicies[item.principalIndex]==true || item.isPrincipal==true" checked="false" [formControl]="itemCheckBox" type="checkbox">
+                            <input  (change)="onSelectPrincipal($event,item)" [(ngModel)]="item.isCheck" [formControl]="itemCheckBox" type="checkbox">
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
