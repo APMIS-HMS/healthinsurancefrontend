@@ -145,7 +145,7 @@
                 <thead class="thead">
                     <tr class="tr">
                         <th class="th">
-                            <input type="checkbox">
+                            <input type="checkbox" (change)="handleChange($event)">
                         </th>
                         <th class="th">Title</th>
                         <th class="th">Name</th>
@@ -171,7 +171,7 @@
                 <tbody class="tbody">
                     <tr class="tr" *ngFor="let item of orderExcelPolicies; let i=index">
                         <td class="td hover">
-                            <input *ngIf="item.isPrincipal==true" [formControl]="allitemsControl" type="checkbox">
+                            <input *ngIf="orderExcelPolicies[item.principalIndex]==true || item.isPrincipal==true" checked="false" [formControl]="itemCheckBox" type="checkbox">
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
@@ -361,7 +361,7 @@
                                     Invalid
                                 </span>
                                 <span *ngIf="checkValue(item.policy.premiumPackage,packages,'category.name') == true">
-                                    {{item?.policy?.premiumPackage}} {{packages[0].category.name}}
+                                    {{item?.policy?.premiumPackage}} 
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
