@@ -1,5 +1,5 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -35,7 +35,8 @@ export class ListEmployerComponent implements OnInit {
   index:any = 0;
   totalData:any;
   showLoadMore:any = true;
-  limit:number = 10;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
 
   constructor(
     private _router: Router,
@@ -145,10 +146,10 @@ export class ListEmployerComponent implements OnInit {
       this.totalData = res.total;
       if (res.data.length > 0) {
         //this.employers = res.data;
-        this.employers.push(...res.data);
+        (this.resetData !== true) ? this.employers.push(...res.data) : this.employers = res.data;
         this.local_employers = this.employers;
       }
-      if(this.employers.length == this.totalData){
+      if(this.employers.length >= this.totalData){
         this.showLoadMore = false;
       }
       console.log(this.showLoadMore, this.totalData, this.employers.length);
@@ -217,12 +218,13 @@ export class ListEmployerComponent implements OnInit {
 
   loadMore(){
     this._getEmployers();   
-    
-    if(this.employers.length == this.totalData){
-      this.showLoadMore = false;
-      return;
-    }
 
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getEmployers();
   }
 
   navigateToDetails(id: string) {

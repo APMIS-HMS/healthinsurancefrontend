@@ -1,4 +1,4 @@
-import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { Router } from '@angular/router';
@@ -34,7 +34,8 @@ export class ListUserComponent implements OnInit {
   index:any = 0 ;
   totalEntries:number;
   showLoadMore:Boolean = true;
-  limit:number = 10;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
 
   constructor(
     private _fb: FormBuilder,
@@ -73,10 +74,9 @@ export class ListUserComponent implements OnInit {
         this.loading = false;
         this.totalEntries = payload.total;
         //Array.prototype.push.apply(this.users,payload.data); 
-        this.users.push(...payload.data);
-        if(this.totalEntries == this.users.length){
+        (this.resetData !== true) ? this.users.push(...payload.data) : this.users = payload.data;
+        if(this.totalEntries <= this.users.length){
           this.showLoadMore = false;
-          return;
         }
         this._systemService.off();
       }).catch(err => {
@@ -96,10 +96,9 @@ export class ListUserComponent implements OnInit {
         this.loading = false;
         this.totalEntries = payload.total;
         //Array.prototype.push.apply(this.users,payload.data);
-        this.users.push(...payload.data);
-        if(this.totalEntries == this.users.length){
+        (this.resetData !== true) ? this.users.push(...payload.data) : this.users = payload.data;
+        if(this.totalEntries <= this.users.length){
           this.showLoadMore = false;
-          return;
         }
         this._systemService.off();
       }).catch(err => {
@@ -150,9 +149,13 @@ export class ListUserComponent implements OnInit {
   }
 
   loadMore(){
-
     this._getUsers();
+  }
 
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getUsers();
   }
 
 }
