@@ -31,6 +31,10 @@ export class ListEmployerComponent implements OnInit {
   planTypes: any[] = [];
   selectedUserType: any = <any>{};
   user: any;
+  index:any = 0;
+  totalData:any;
+  showLoadMore:any = true;
+  limit:number = 10;
 
   constructor(
     private _router: Router,
@@ -51,14 +55,14 @@ export class ListEmployerComponent implements OnInit {
 
     // this.filterTypeControl.valueChanges.subscribe(payload => {
     //   if (payload != undefined) {
-    //     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
+    //     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit } }).then((payload1: any) => {
     //       this.employers = payload1.data.filter(function (item) {
     //         return (item.employer.industry.name.toLowerCase().includes(payload.toLowerCase()))
     //       });
     //     });
 
     //     if (payload == "All") {
-    //       this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+    //       this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit } }).then((payload2: any) => {
     //         this.employers = payload2.data;
     //       });
     //     }
@@ -68,7 +72,7 @@ export class ListEmployerComponent implements OnInit {
       .distinctUntilChanged()
       .debounceTime(200)
       .switchMap((term) => Observable.fromPromise(
-        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }))).subscribe((payload1: any) => {
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit } }))).subscribe((payload1: any) => {
           this.employers = payload1.data.filter(function (item) {
             return (item.employer.industry.name.toLowerCase().includes(payload1.toLowerCase()))
           });
@@ -81,7 +85,7 @@ export class ListEmployerComponent implements OnInit {
       .distinctUntilChanged()
       .debounceTime(200)
       .switchMap((term) => Observable.fromPromise(
-        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } })))
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit } })))
       .subscribe((payload: any) => {
         var strVal = this.listsearchControl.value;
         this.employers = payload.data.filter(function (item) {
@@ -96,6 +100,11 @@ export class ListEmployerComponent implements OnInit {
             || item.businessContact.phoneNumber.includes(strVal.toLowerCase())) 
         })
       });
+  
+  }
+
+  ngAfterViewInit(){
+    
   }
 
   onClickEdit(employer) {
@@ -116,11 +125,11 @@ export class ListEmployerComponent implements OnInit {
 
   onSelectedStatus(item: any) {
     this.employers = this.local_employers;
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, isTokenVerified: item, $limit: 200 } }).then((payload: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, isTokenVerified: item, $limit: this.limit } }).then((payload: any) => {
       this.employers = payload.data;
     });
     if (item == "All") {
-      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit } }).then((payload2: any) => {
         this.employers = payload2.data;
       });
     }
@@ -128,19 +137,27 @@ export class ListEmployerComponent implements OnInit {
 
 
   private _getAllPolicies(query) {
+    
     this._facilityService.find(query).then((res: any) => {
       this.loading = false;
-      console.log(res);
+      console.log(res.total);
+      this.totalData = res.total;
       if (res.data.length > 0) {
-        this.employers = res.data;
+        //this.employers = res.data;
+        this.employers.push(...res.data);
         this.local_employers = this.employers;
       }
+      if(this.employers.length == this.totalData){
+        this.showLoadMore = false;
+      }
+      console.log(this.showLoadMore, this.totalData, this.employers.length);
     }).catch(err => console.log(err));
+
   }
 
   private _getEmployers() {
     if (this.user !== undefined && this.user.userType.name === 'Platform Owner') {
-      let query = { query: { 'platformOwnerId._id': this.currentPlatform._id, $limit: 200,'facilityType._id': this.selectedUserType._id, } };
+      let query = { query: { 'platformOwnerId._id': this.currentPlatform._id, $limit: this.limit, $skip: this.index*this.limit ,'facilityType._id': this.selectedUserType._id, } };
       this._getAllPolicies(query)
     } else if (this.user !== undefined && this.user.userType.name === 'Health Insurance Agent') {
       console.log('agent');
@@ -149,12 +166,15 @@ export class ListEmployerComponent implements OnInit {
           query:
           {
             'facilityType._id': this.selectedUserType._id, 'platformOwnerId._id': this.currentPlatform._id,
-            'employer.hias._id': this.user.facilityId._id, $limit: 200
+            'employer.hias._id': this.user.facilityId._id, $limit: this.limit, $skip: this.index*this.limit 
           }
         };
         this._getAllPolicies(query);
+
+        this.index++;
     }
   }
+
   private _getCurrentPlatform() {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
@@ -191,6 +211,16 @@ export class ListEmployerComponent implements OnInit {
     // }, error => {
     //   this._systemService.off();
     // });
+  }
+
+  loadMore(){
+    this._getEmployers();   
+    
+    if(this.employers.length == this.totalData){
+      this.showLoadMore = false;
+      return;
+    }
+
   }
 
   navigateToDetails(id: string) {
