@@ -30,6 +30,7 @@ export class PaymentHistoryComponent implements OnInit {
   routeId: string;
   currentPlatform: any;
   loading: boolean = true;
+  planTypes:any[] = [];
 
   constructor(
     private _route: ActivatedRoute,
@@ -39,10 +40,12 @@ export class PaymentHistoryComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _locker: CoolLocalStorage,
-    private _policyService: PolicyService,
+    private _policyService: PolicyService
   ) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Payment History');
+    this._headerEventEmitter.setMinorRouteUrl('Payment history for beneficiary');
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
 
@@ -97,6 +100,10 @@ export class PaymentHistoryComponent implements OnInit {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result.toDateString(); // .toISOString();
+  }
+
+  reset(){
+
   }
 
 }
