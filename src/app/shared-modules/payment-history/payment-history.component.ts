@@ -30,6 +30,7 @@ export class PaymentHistoryComponent implements OnInit {
   routeId: string;
   currentPlatform: any;
   loading: boolean = true;
+  planTypes:any[] = [];
 
   constructor(
     private _route: ActivatedRoute,
@@ -99,6 +100,10 @@ export class PaymentHistoryComponent implements OnInit {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result.toDateString(); // .toISOString();
+  }
+
+  reset(){
+
   }
 
 }

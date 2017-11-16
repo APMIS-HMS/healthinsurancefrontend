@@ -39,7 +39,11 @@ export class PreAuthorizationDetailsComponent implements OnInit {
     this._preAuthorizationService.get(id, {}).then(payload => {
       this._systemService.off();
       console.log(payload);
-      this.selectedAuthorization = payload;
+      if(payload === undefined){
+        console.log('ahe')
+      }else{
+        this.selectedAuthorization = payload;
+      }
       this.tab_details = true;
     }).catch(err => {
       this._systemService.off();

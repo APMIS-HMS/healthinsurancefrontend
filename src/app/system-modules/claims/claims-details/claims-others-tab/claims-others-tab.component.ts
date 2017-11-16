@@ -27,13 +27,12 @@ export class ClaimsOthersTabComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user._id);
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
+        console.log(param._id);
         if (this.user !== undefined && this.user.userType.name === 'Provider') {
           this._claimService.find({
             query: {
-              _id: { $not: param.id },
               providerFacilityId: this.user.facilityId._id
             },
             $sort: { createdAt: -1 }
@@ -58,7 +57,8 @@ export class ClaimsOthersTabComponent implements OnInit {
 
             });
             this.loading = false;
-            this.listOfClaims = payload.data;
+            console.log(param._id);
+            this.listOfClaims = payload.data.filter(x=>x._id != param._id);
             console.log(this.listOfClaims);
           });
         } if (this.user !== undefined && this.user.userType.name === 'Health Insurance Agent') {
@@ -72,11 +72,11 @@ export class ClaimsOthersTabComponent implements OnInit {
     this._systemService.on();
     this._claimService.find({
       query: {
-        _id: { $not: param.id },
         'checkedinDetail.checkedInDetails.policyObject.hiaId._id': this.user.facilityId._id
       }
     }).then((payload: any) => {
-      this.listOfClaims = payload.data;
+      console.log(param._id);
+      this.listOfClaims = payload.data.filter(x=>x._id != param._id);
       console.log(this.listOfClaims);
       this.loading = false;
       this._systemService.off();

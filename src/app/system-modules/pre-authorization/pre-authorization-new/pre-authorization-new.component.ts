@@ -572,8 +572,9 @@ export class PreAuthorizationNewComponent implements OnInit {
             'checked': false
           }
         } else {
-          if (resource.Preferred != undefined) {
-            if (resource.Preferred.toLowerCase().trim() == 'c') {
+          //Requires authorization
+          if (resource.Prefered != undefined) {
+            if (resource.Prefered.toLowerCase().trim() == 'c') {
               console.log(3)
               // cover by capitation, dont put amount
               //requires authorization
@@ -690,11 +691,24 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   needAuthorization(procedure) {
-    if (procedure.procedure.PA === ' Y ') {
-      return true;
-    } else {
-      return false;
+    console.log(procedure)
+    if(procedure.drug !== undefined){
+      console.log(1)
+      if (procedure.drug.PA.trim() === 'Y') {
+        console.log(2)
+        return true;
+      } else {
+        console.log(3)
+        return false;
+      }
+    }else{
+      if (procedure.procedure.PA.trim() === 'Y') {
+        return true;
+      } else {
+        return false;
+      }
     }
+   
   }
 
   send() {
