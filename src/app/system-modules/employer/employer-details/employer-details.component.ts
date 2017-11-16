@@ -54,7 +54,7 @@ export class EmployerDetailsComponent implements OnInit {
   statusControl = new FormControl('All');
 
 
-  allitemsControl = new FormControl();
+  itemCheckBox = new FormControl();
   nameControl = new FormControl();
   genderControl = new FormControl();
   titleControl = new FormControl();
@@ -362,18 +362,12 @@ export class EmployerDetailsComponent implements OnInit {
     }
 
   }
-
   checkPremiumValue(param, pPackage, data) {
-    console.log(data);
-    console.log(param);
     let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
-    console.log(val);
     if (val.length > 0) {
       this.packages = val[0].premiums;
-      console.log(this.packages);
       return true;
     } else {
-      this.packages = [];
       return false;
     }
   }
@@ -386,69 +380,69 @@ export class EmployerDetailsComponent implements OnInit {
     this.orderExcelPolicies[index].name = this.nameControl.value;
   }
 
-  onGender(event,index){
+  onGender(event, index) {
     this.orderExcelPolicies[index].gender = this.genderControl.value;
   }
 
-onStatus(event,index){
-  this.orderExcelPolicies[index].maritalStatus = this.maritalStatusControl.value;
-}
+  onStatus(event, index) {
+    this.orderExcelPolicies[index].maritalStatus = this.maritalStatusControl.value;
+  }
 
 
-onRstate(event,index){
-  var filteredState = this.mStates.filter(x => x.name == this.stateControl.value);
-  this.mLga = filteredState[0].lgs;
-  this.orderExcelPolicies[index].homeAddress.state = this.stateControl.value;
-  this.orderExcelPolicies[index].homeAddress.lga = this.mLga[0].name;
-}
+  onRstate(event, index) {
+    var filteredState = this.mStates.filter(x => x.name == this.stateControl.value);
+    this.mLga = filteredState[0].lgs;
+    this.orderExcelPolicies[index].homeAddress.state = this.stateControl.value;
+    this.orderExcelPolicies[index].homeAddress.lga = this.mLga[0].name;
+  }
 
-onRlga(event,index){
-  this.orderExcelPolicies[index].homeAddress.lga = this.lgaControl.value;
-}
+  onRlga(event, index) {
+    this.orderExcelPolicies[index].homeAddress.lga = this.lgaControl.value;
+  }
 
 
-onOstate(event,index){
-  var filteredState = this.oStates.filter(x => x.name == this.oStateControl.value);
-  this.oLga = filteredState[0].lgs;
-  this.orderExcelPolicies[index].stateOfOrigin = this.oStateControl.value;
-  this.orderExcelPolicies[index].lgaOfOrigin = this.oLga[0].name;
-}
+  onOstate(event, index) {
+    var filteredState = this.oStates.filter(x => x.name == this.oStateControl.value);
+    this.oLga = filteredState[0].lgs;
+    this.orderExcelPolicies[index].stateOfOrigin = this.oStateControl.value;
+    this.orderExcelPolicies[index].lgaOfOrigin = this.oLga[0].name;
+  }
 
-onOlga(event,index){
-  this.orderExcelPolicies[index].lgaOfOrigin = this.oLgaControl.value;
-}
+  onOlga(event, index) {
+    this.orderExcelPolicies[index].lgaOfOrigin = this.oLgaControl.value;
+  }
 
-onPlatform(event,index){
-  this.orderExcelPolicies[index].platformOwner = this.platformControl.value;
-}
+  onPlatform(event, index) {
+    this.orderExcelPolicies[index].platformOwner = this.platformControl.value;
+  }
 
-onfacilityType(event,index){
-  this.orderExcelPolicies[index].policy.facilityType = this.facilityTypeControl.value;
-}
+  onfacilityType(event, index) {
+    this.orderExcelPolicies[index].policy.facilityType = this.facilityTypeControl.value;
+  }
 
-onHia(event,index){
-  this.orderExcelPolicies[index].policy.hia = this.hiaControl.value;
-}
+  onHia(event, index) {
+    this.orderExcelPolicies[index].policy.hia = this.hiaControl.value;
+  }
 
-onPlanTypes(event,index){
-  this.orderExcelPolicies[index].policy.planTypes = this.planTypeControl.value;
-}
+  onPlanTypes(event, index) {
+    this.orderExcelPolicies[index].policy.planTypes = this.planTypeControl.value;
+  }
 
-onPlan(event,index){
-  this.orderExcelPolicies[index].policy.plan = this.planControl.value;
-}
+  onPlan(event, index) {
+    this.orderExcelPolicies[index].policy.plan = this.planControl.value;
+  }
 
-onPackage(event,index){
-  this.orderExcelPolicies[index].policy.premiumPackage = this.packageControl.value;
-}
+  onPackage(event, index) {
+    this.orderExcelPolicies[index].policy.premiumPackage = this.packageControl.value;
+  }
 
-onCategory(event,index){
-  this.orderExcelPolicies[index].policy.premiumCategory = this.categoryControl.value;
-}
+  onCategory(event, index) {
+    this.orderExcelPolicies[index].policy.premiumCategory = this.categoryControl.value;
+  }
 
-onSponsor(event,index){
-  this.orderExcelPolicies[index].policy.sponsorship = this.sponsorshipControl.value;
-}
+  onSponsor(event, index) {
+    this.orderExcelPolicies[index].policy.sponsorship = this.sponsorshipControl.value;
+  }
 
   private _getCurrentPlatform() {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
@@ -571,6 +565,29 @@ onSponsor(event,index){
     return new Date(Math.round((date - 25569) * 86400 * 1000));
   }
 
+  handleChange(e) {
+    var isChecked = e.target.checked;
+    if (isChecked) {
+      this.orderExcelPolicies.forEach(function (item) {
+        item.isCheck = true;
+      })
+    } else {
+      this.orderExcelPolicies.forEach(function (item) {
+        item.isCheck = false;
+      })
+    }
+    this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+  }
+
+  onSelectPrincipal(e, index) {
+    var isChecked = e.target.checked;
+    if (isChecked == true) {
+      this.orderExcelPolicies[index].isCheck = true;
+    } else {
+      this.orderExcelPolicies[index].isCheck = false;
+    }
+  }
+
   public upload(e) {
     let fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
@@ -578,15 +595,19 @@ onSponsor(event,index){
       formData.append('excelfile', fileBrowser.files[0]);
       formData.append('facilityId', this.facility._id);
       this._uploadService.uploadExcelFile(formData).then(result => {
-        result.body.forEach(element => {
+        result.body.forEach((element, index) => {
           let principal = element.principal;
           principal.policy = element.policy;
           principal.isPrincipal = true;
           principal.isEdit = false;
+          principal.isCheck = false;
+          principal.principalIndex = index;
           this.orderExcelPolicies.push(principal);
           element.dependent.forEach(item => {
             item.isPrincipal = false;
             item.isEdit = false;
+            item.isCheck = false;
+            item.principalIndex = index;
             this.orderExcelPolicies.push(item);
           });
         });
@@ -595,6 +616,70 @@ onSponsor(event,index){
         // this._notification('Error', 'There was an error uploading the file');
       });
     }
+  }
+
+  validateControls() {
+    if (this.nameControl.valid && this.genderControl.valid
+      && this.titleControl.valid && this.maritalStatusControl.valid
+      && this.stateControl.valid && this.oStateControl.valid
+      && this.oLgaControl.valid && this.lgaControl.valid
+      && this.hiaControl.valid && this.platformControl.valid
+      && this.facilityTypeControl.valid && this.planTypeControl.valid
+      && this.planControl.valid && this.packageControl.valid
+      && this.categoryControl.valid && this.sponsorshipControl.valid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  save() {
+    // if (this.validateControls() == true) {
+    //   var mPrincipal = {};
+    //   var mDependants = [];
+    //   var beneficiaries = [];
+    //   this.orderExcelPolicies.forEach(function (item) {
+    //     if (item.principalIndex == true) {
+
+    //     } else {
+
+    //     }
+    //   })
+    // } else {
+
+    // }
+
+    // 'principal': principal,
+    // 'dependent': beneficiaries,
+    // 'policy': policy
+
+    var groups = {};
+    var bObj = {};
+    for (var i = 0; i < this.orderExcelPolicies.length; i++) {
+      var groupName = this.orderExcelPolicies[i].principalIndex;
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(this.orderExcelPolicies[i]);
+    };
+    console.log(groups);
+    // var beneficiaries = [];
+    // for (groupName in groups) {
+    //   if (groups[groupName].isPrincipal == true) {
+    //     let prin = groups[groupName]
+    //     prin = delete prin.policy;
+    //     bObj = {
+    //       'principal': prin,
+    //       'policy': groups[groupName].policy
+    //     }
+    //   }else{
+    //     bObj = {
+    //       'dependent': groups[groupName]
+    //     }
+    //   }
+    //   myArray.push({ group: groupName, color: groups[groupName] });
+    //}
+
   }
 
   addApprovalClick() {

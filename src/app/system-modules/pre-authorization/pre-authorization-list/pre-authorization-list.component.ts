@@ -38,19 +38,19 @@ export class PreAuthorizationListComponent implements OnInit {
   }
 
   _getPreAuthorizations() {
-    if(this.user.userType.name === "Provider"){
-      
+    if (this.user.userType.name === 'Provider') {
+
     }
     this._systemService.on();
-    this._preAuthorizationService.find({query:{
+    this._preAuthorizationService.find({query: {
       $sort: { createdAt: -1 },
     }}).then((payload: any) => {
       this.authorizations = payload.data;
       this._systemService.off();
     }).catch(err => {
-      console.log(err)
+      console.log(err);
       this._systemService.off();
-    })
+    });
   }
 
   navigate(url: string, id: string) {
@@ -74,9 +74,9 @@ export class PreAuthorizationListComponent implements OnInit {
   navigateDetail(auth) {
     this._router.navigate(['/modules/pre-auth/pre-authorizations', auth._id]).then(payload =>{
 
-    }).catch(err =>{
+    }).catch(err => {
 
-    })
+    });
   }
 
 }

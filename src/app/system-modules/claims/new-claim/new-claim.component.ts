@@ -93,7 +93,7 @@ export class NewClaimComponent implements OnInit {
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
   };
-  employees:any[] = [];
+  employees: any[] = [];
   public today: IMyDate;
 
   constructor(
@@ -114,7 +114,7 @@ export class NewClaimComponent implements OnInit {
     private _drugService: DrugService,
     private _checkInService: CheckInService,
     private _claimService: ClaimService,
-    private _userService:UserService,
+    private _userService: UserService,
     private _investigationService: InvestigationService) { }
 
   ngOnInit() {
@@ -224,8 +224,9 @@ export class NewClaimComponent implements OnInit {
         console.log(error)
       });
 
-      this.claimsFormGroup.controls.medicalPersonelName.valueChanges
+    this.claimsFormGroup.controls.medicalPersonelName.valueChanges
       .subscribe(value => {
+        console.log(value);
         this.claimsFormGroup.controls.docunit.setValue(value.unit);
       }, error => {
         this._systemService.off();
@@ -244,8 +245,8 @@ export class NewClaimComponent implements OnInit {
         this.isAuthorize = true;
         this.authorizeType = "Free for Service"
         this.SelectedCheckinItem = preauth_callback.data[0];
-        this.SelectedCheckinItem.checkedInDetails.beneficiaryObject={};
-        this.SelectedCheckinItem.checkedInDetails.beneficiaryObject =  this.SelectedCheckinItem.beneficiaryObject;
+        this.SelectedCheckinItem.checkedInDetails.beneficiaryObject = {};
+        this.SelectedCheckinItem.checkedInDetails.beneficiaryObject = this.SelectedCheckinItem.beneficiaryObject;
         this.SelectedCheckinItem.providerFacility = this.SelectedCheckinItem.policyId.providerId.name;
         this.SelectedCheckinItem.plan = this.SelectedCheckinItem.policyId.planTypeId.name;
         console.log(this.SelectedCheckinItem);
@@ -253,39 +254,46 @@ export class NewClaimComponent implements OnInit {
           console.log("2" + element);
           element.documentation.forEach(element2 => {
             console.log(element2);
-            element2.document[3].clinicalDocumentation.forEach(item => {
-              this.symptomLists.push({
-                "symptom": item.symptom.name,
-                "duration": item.duration,
-                "unit": item.unit.name
+            if (element2.document[3] != undefined) {
+              element2.document[3].clinicalDocumentation.forEach(item => {
+                this.symptomLists.push({
+                  "symptom": item.symptom.name,
+                  "duration": item.duration,
+                  "unit": item.unit.name
+                });
               });
-            });
-            element2.document[4].clinicalDocumentation.forEach(item => {
-              this.procedureList.push({
-                "procedure": item.procedure.name
+            }
+            if (element2.document[4] != undefined) {
+              element2.document[4].clinicalDocumentation.forEach(item => {
+                this.procedureList.push({
+                  "procedure": item.procedure.name
+                });
               });
-            });
-
-            element2.document[5].clinicalDocumentation.forEach(item => {
-              this.investigationList.push({
-                "investigation": item.investigation.name
+            }
+            if (element2.document[5] != undefined) {
+              element2.document[5].clinicalDocumentation.forEach(item => {
+                this.investigationList.push({
+                  "investigation": item.investigation.name
+                });
               });
-            });
-
-            element2.document[6].clinicalDocumentation.forEach(item => {
-              this.diagnosisLists.push({
-                "diagnosis": item.diagnosis.name,
-                "type": item.diagnosisType.name
+            }
+            if (element2.document[6] != undefined) {
+              element2.document[6].clinicalDocumentation.forEach(item => {
+                this.diagnosisLists.push({
+                  "diagnosis": item.diagnosis.name,
+                  "type": item.diagnosisType.name
+                });
               });
-            });
-
-            element2.document[7].clinicalDocumentation.forEach(item => {
-              this.drugList.push({
-                "drug": item.drug.name,
-                "quantity": item.quantity,
-                "unit": item.unit.name
+            }
+            if (element2.document[7] != undefined) {
+              element2.document[7].clinicalDocumentation.forEach(item => {
+                this.drugList.push({
+                  "drug": item.drug.name,
+                  "quantity": item.quantity,
+                  "unit": item.unit.name
+                });
               });
-            });
+            }
 
             clinicNote += element2.document[0].clinicalDocumentation + " ";
             this.claimsFormGroup.controls.clinicalNote.setValue(clinicNote);
@@ -324,13 +332,13 @@ export class NewClaimComponent implements OnInit {
     })
 
   }
-  _getEmployees(){
-    if(this.user.userType.name==='Provider'){
+  _getEmployees() {
+    if (this.user.userType.name === 'Provider') {
       this._systemService.on();
       this._userService.find({
-        query:{
-          'facilityId._id':this.user.facilityId._id,
-          $select:['firstName', 'lastName', 'profession','cader', 'unit', 'otherNames']
+        query: {
+          'facilityId._id': this.user.facilityId._id,
+          $select: ['firstName', 'lastName', 'profession', 'cader', 'unit', 'otherNames']
         }
       }).then((payload: any) => {
         this.employees = payload.data;
@@ -610,7 +618,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
     this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
-    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
+    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value.firstName +" "+this.claimsFormGroup.controls.medicalPersonelName.value.lastName;
     //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
     this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
@@ -619,7 +627,6 @@ export class NewClaimComponent implements OnInit {
     this._claimService.create(this.claimItem).then((payload: any) => {
       console.log(payload);
       this.SelectedCheckinItem
-      this.claimsFormGroup.reset();
       this.isProcessing = false;
       this.navigateListClaim();
     }, error => {

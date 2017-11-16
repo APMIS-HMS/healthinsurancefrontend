@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -27,10 +27,12 @@ export class UnbatchedComponent implements OnInit {
   totalItem: number = 0;
   premiumPaymentData: any;
   currentPlatform: any;
+  routeId: String;
   
 
   constructor(
     private _fb: FormBuilder,
+    private _route: ActivatedRoute,
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -45,6 +47,13 @@ export class UnbatchedComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
 
+    this._route.params.subscribe(param => {
+      console.log(param);
+      if (param.id !== undefined) {
+        this.routeId = param.id;
+      }
+    });
+
     this._premiumPaymentService.announcedWhenDone.subscribe(value => {
       if (value) {
         this._getUnbatchedPolicies();
@@ -58,6 +67,7 @@ export class UnbatchedComponent implements OnInit {
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
+        'sponsor._id': this.routeId,
         isPaid: false,
         $sort: { createdAt: -1 }
       }
@@ -102,7 +112,6 @@ export class UnbatchedComponent implements OnInit {
         this.totalItem++;
         this.totalCost += policy.premiumPackageId.amount;
         this.selectedPolicies.push(policy);
-        this._premiumPaymentService.setPolicy(this.selectedPolicies);
         // this.outputSelectedPolicies = this.selectedPolicies;
       } else {
         this.totalItem--;
@@ -115,8 +124,7 @@ export class UnbatchedComponent implements OnInit {
       this.selectedPolicies = [];
       // this.outputSelectedPolicies = [];
     }
-    console.log(this.policies);
-    console.log(this.selectedPolicies);
+    this._premiumPaymentService.setPolicy(this.selectedPolicies);
     // } else {
     //   // Remove from the selected Claim
     //   console.log(index);
@@ -128,13 +136,25 @@ export class UnbatchedComponent implements OnInit {
   onCheckSelectedToPay(index: number, policy: Policy) {
     console.log(policy);
     if (!policy.isChecked) {
+      let found: boolean = false;
       policy.isChecked = true;
-      this.selectedPolicies.push(policy);
+      this.selectedPolicies.forEach(item => {
+        if (e => e._id === policy._id) {
+          found = true;
+        } else {
+          found = false;
+        }
+      });
+
+      if (!found) {
+        this.selectedPolicies.push(policy);
+      }
     } else {
       policy.isChecked = false;
       this.selectedPolicies = this.selectedPolicies.filter(x => x._id !== policy._id);
       console.log(this.selectedPolicies);
     }
+    this._premiumPaymentService.setPolicy(this.selectedPolicies);
 
     // Send policy to the parent component
     // this.selectedPolicy(this.selectedPolicies);

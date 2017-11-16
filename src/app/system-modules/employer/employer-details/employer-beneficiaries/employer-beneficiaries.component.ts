@@ -61,7 +61,7 @@ export class EmployerBeneficiariesComponent implements OnInit {
       if (param.id !== undefined) {
         this._getFacility(param.id);
       }
-    })
+    });
   }
   private _getFacility(id) {
     this._facilityService.get(id, {}).then(payload => {

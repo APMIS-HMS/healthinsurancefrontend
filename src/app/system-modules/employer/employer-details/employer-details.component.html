@@ -134,6 +134,9 @@
                     <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2"> UPLOAD BENEFICIARIES</div>
                     <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
                 </div>
+                <div class="bar-icos">
+                    <div (click)="save()" class="btn btn-medium btn-white-outline btn-radius-x2">SAVE</div>
+                </div>
                 <div>
                     <span>Upload items: {{totalExcelPrincipalItems}}</span>
                 </div>
@@ -148,7 +151,7 @@
                 <thead class="thead">
                     <tr class="tr">
                         <th class="th">
-                            <input type="checkbox">
+                            <input type="checkbox" (change)="handleChange($event)">
                         </th>
                         <th class="th">Title</th>
                         <th class="th">Name</th>
@@ -169,12 +172,13 @@
                         <th class="th">sponsorship</th>
                         <td class="th">Action</td>
                     </tr>
+                    <!-- orderExcelPolicies[item.principalIndex]==true ||  -->
                 </thead>
 
                 <tbody class="tbody">
                     <tr class="tr" *ngFor="let item of orderExcelPolicies; let i=index">
                         <td class="td hover">
-                            <input *ngIf="item.isPrincipal==true" [formControl]="allitemsControl" type="checkbox">
+                            <input  (change)="onSelectPrincipal($event,i)" [(ngModel)]="item.isCheck" [formControl]="itemCheckBox" type="checkbox">
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
@@ -186,7 +190,7 @@
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true">
-                                <select [formControl]="titleControl" (change)="onTitle($event,i)"  [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
+                                <select [formControl]="titleControl" (change)="onTitle($event,i)" [class.invalidvalue]="checkValue(item.title,titles,'name') == false">
                                     <option *ngFor="let title of titles" [selected]="item.title==title.name">{{title.name}}</option>
                                 </select>
                             </div>
@@ -267,8 +271,8 @@
                                 <span *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == true">
                                         {{item.stateOfOrigin}}
                                     </span>
-                                </div>
-                                <select *ngIf="item.isEdit==true" (change)="onOstate($event,i)" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
+                            </div>
+                            <select *ngIf="item.isEdit==true" (change)="onOstate($event,i)" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
                                     <option *ngFor="let state of oStates" [selected]="item.stateOfOrigin==state.name">{{state.name}}</option>
                                 </select>
                         </td>
@@ -364,7 +368,7 @@
                                     Invalid
                                 </span>
                                 <span *ngIf="checkValue(item.policy.premiumPackage,packages,'category.name') == true">
-                                    {{item?.policy?.premiumPackage}}
+                                    {{item?.policy?.premiumPackage}} 
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
@@ -474,6 +478,21 @@
 
             <div>
                 <app-premium-payment-tab></app-premium-payment-tab>
+            </div>
+        </div>
+        <div *ngIf="tabPaymentHistory" class="tab-pane fade show active">
+            <!-- <app-employer-top-bar></app-employer-top-bar> -->
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>{{ facility?.name }}</div>
+                    <div>Status:
+                        <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <app-payment-history></app-payment-history>
             </div>
         </div>
     </div>
