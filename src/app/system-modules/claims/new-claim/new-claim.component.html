@@ -526,14 +526,14 @@
                         <div class="input-wrap">
                             <select formControlName="medicalPersonelName" class="form-control">
                                 <option value=" " disabled selected>Select A Doctor</option>
-                                <option *ngFor="let emp of employees" [ngValue]="emp">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
+                                <option *ngFor="let emp of employees" [ngValue]="emp" [selected]="emp._id==SelectedCheckinItem.medicalPersonelName._id">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Unit of Doctor</label>
                         <div class="input-wrap">
-                            <input type="text" formControlName="docunit" class="form-control">
+                            <input type="text" formControlName="docunit" value="{{SelectedCheckinItem.medicalPersonelUnit}}" class="form-control">
                             <small class="alert-label" [hidden]="claimsFormGroup.controls.docunit.valid || claimsFormGroup.controls.docunit.pristine">
                                 This is a required field.
                             </small>

@@ -19,6 +19,7 @@ export class CheckInService {
   ) {
     this._rest = _restService.getService('check-ins');
     this._socket = _socketService.getService('check-ins');
+    this._socket.timeout = 10000;
     this.listner = Observable.fromEvent(this._socket, 'created');
     this.patchedListener = Observable.fromEvent(this._socket, 'patched');
   }
