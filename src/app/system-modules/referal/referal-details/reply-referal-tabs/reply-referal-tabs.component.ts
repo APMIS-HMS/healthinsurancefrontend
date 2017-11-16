@@ -1,4 +1,4 @@
-import differenceInYears from 'date-fns/difference_in_years';
+import * as differenceInYears from 'date-fns/difference_in_years';
 import { Observable } from 'rxjs/Rx';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { REQUEST_STATUS, CurrentPlaformShortName, DURATIONS, FORM_VALIDATION_ERROR_MESSAGE } from './../../../../services/globals/config';

@@ -526,7 +526,7 @@
                         <div class="input-wrap">
                             <select formControlName="medicalPersonelName" class="form-control">
                                 <option value=" " disabled selected>Select A Doctor</option>
-                                <option *ngFor="let emp of employees" [ngValue]="emp">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
+                                <option *ngFor="let emp of employees" [selected]="emp._id==SelectedCheckinItem.medicalPersonelName._id">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
                             </select>
                         </div>
                     </div>

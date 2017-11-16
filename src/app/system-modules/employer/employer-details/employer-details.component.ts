@@ -579,24 +579,22 @@ export class EmployerDetailsComponent implements OnInit {
     this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
   }
 
-  onSelectPrincipal(e, item) {
+  onSelectPrincipal(e, index) {
     var isChecked = e.target.checked;
     if (isChecked == true) {
-      this.orderExcelPolicies.forEach(function (itm) {
-        if (itm.principalIndex == item.principalIndex) {
-          itm.isCheck = true;
-          console.log("same");
-        }
-      })
+      this.orderExcelPolicies[index].isCheck = true;
     } else {
-      this.orderExcelPolicies.forEach(function (itm) {
-        if (itm.principalIndex == item.principalIndex) {
-          itm.isCheck = false;
-          console.log("not same");
-        }
-      })
+      this.orderExcelPolicies[index].isCheck = false;
     }
-    this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+  }
+
+  checkItemChecked() {
+    var filterItem = this.orderExcelPolicies.filter(x => x.isCheck == true);
+    if (filterItem.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public upload(e) {
@@ -612,6 +610,7 @@ export class EmployerDetailsComponent implements OnInit {
           principal.isPrincipal = true;
           principal.isEdit = false;
           principal.isCheck = false;
+          principal.principalIndex = index;
           this.orderExcelPolicies.push(principal);
           element.dependent.forEach(item => {
             item.isPrincipal = false;
@@ -626,6 +625,70 @@ export class EmployerDetailsComponent implements OnInit {
         // this._notification('Error', 'There was an error uploading the file');
       });
     }
+  }
+
+  validateControls() {
+    if (this.nameControl.valid && this.genderControl.valid
+      && this.titleControl.valid && this.maritalStatusControl.valid
+      && this.stateControl.valid && this.oStateControl.valid
+      && this.oLgaControl.valid && this.lgaControl.valid
+      && this.hiaControl.valid && this.platformControl.valid
+      && this.facilityTypeControl.valid && this.planTypeControl.valid
+      && this.planControl.valid && this.packageControl.valid
+      && this.categoryControl.valid && this.sponsorshipControl.valid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  save() {
+    // if (this.validateControls() == true) {
+    //   var mPrincipal = {};
+    //   var mDependants = [];
+    //   var beneficiaries = [];
+    //   this.orderExcelPolicies.forEach(function (item) {
+    //     if (item.principalIndex == true) {
+
+    //     } else {
+
+    //     }
+    //   })
+    // } else {
+
+    // }
+
+    // 'principal': principal,
+    // 'dependent': beneficiaries,
+    // 'policy': policy
+
+    var groups = {};
+    var bObj = {};
+    for (var i = 0; i < this.orderExcelPolicies.length; i++) {
+      var groupName = this.orderExcelPolicies[i].principalIndex;
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(this.orderExcelPolicies[i]);
+    };
+    console.log(groups);
+    // var beneficiaries = [];
+    // for (groupName in groups) {
+    //   if (groups[groupName].isPrincipal == true) {
+    //     let prin = groups[groupName]
+    //     prin = delete prin.policy;
+    //     bObj = {
+    //       'principal': prin,
+    //       'policy': groups[groupName].policy
+    //     }
+    //   }else{
+    //     bObj = {
+    //       'dependent': groups[groupName]
+    //     }
+    //   }
+    //   myArray.push({ group: groupName, color: groups[groupName] });
+    //}
+
   }
 
   addApprovalClick() {

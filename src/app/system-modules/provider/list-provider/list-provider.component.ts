@@ -1,7 +1,7 @@
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
+import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import 'rxjs/add/operator/filter';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -27,6 +27,11 @@ export class ListProviderComponent implements OnInit {
   categories: any = <any>[];
   loading: boolean = true;
   selectedUserType: any = <any>{};
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  index:number = 0;
+  totalEntries:number;
+  showLoadMore:Boolean = true;
+  resetData:Boolean;
 
   constructor(
     private _router: Router,
@@ -46,7 +51,7 @@ export class ListProviderComponent implements OnInit {
       this._systemService.on();
       if (payload != undefined) {
        
-        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.index*this.limit } }).then((payload1: any) => {
           this.providers = payload1.data.filter(function (item) {
             return (item.provider.facilityType.name.toLowerCase().includes(payload.toLowerCase()))
           })
@@ -54,7 +59,7 @@ export class ListProviderComponent implements OnInit {
         
         if (payload === "All") {
           this._systemService.on();
-          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.index*this.limit } }).then((payload2: any) => {
             this.providers = payload2.data;
           });
         }
@@ -66,7 +71,7 @@ export class ListProviderComponent implements OnInit {
       .distinctUntilChanged()
       .debounceTime(200)
       .switchMap((term) => Observable.fromPromise(
-        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } })))
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.index*this.limit } })))
       .subscribe((payload: any) => {
         console.log(this.listsearchControl.value);
         var strVal = this.listsearchControl.value;
@@ -95,22 +100,29 @@ export class ListProviderComponent implements OnInit {
   }
 
   private _getProviders() {
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((res: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.index*this.limit } }).then((res: any) => {
       this.loading = false;
       console.log(res);
       if (res.data.length > 0) {
-        this.providers = res.data;
+        (this.resetData !== true) ? this.providers.push(...res.data) : this.providers = res.data;
+        this.totalEntries = res.total;
+        if(this.providers.length >= this.totalEntries){
+          this.showLoadMore = false;
+        }
+
       }
     }).catch(err => console.log(err));
+
+    this.index++;
   }
 
   onSelectedStatus(item) {
     console.log(item);
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id,isTokenVerified:item, $limit: 200 } }).then((payload: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id,isTokenVerified:item, $limit: this.limit, $skip: this.index*this.limit } }).then((payload: any) => {
       this.providers = payload.data;
     });
     if(item=="All"){
-      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.index*this.limit } }).then((payload: any) => {
         this.providers = payload.data;
       });
     }
@@ -134,6 +146,7 @@ export class ListProviderComponent implements OnInit {
     }, error => {
       this._systemService.off();
     });
+  
   }
 
   navigateNewProvider() {
@@ -152,6 +165,17 @@ export class ListProviderComponent implements OnInit {
     }).catch(err => {
       this._systemService.off();
     });
+  }
+
+  loadMore(){
+    this._getUserTypes();
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getUserTypes();
+    this.showLoadMore = true;
   }
 
 }
