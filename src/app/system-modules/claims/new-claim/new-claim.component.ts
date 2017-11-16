@@ -241,6 +241,7 @@ export class NewClaimComponent implements OnInit {
     console.log(checkinId);
     this._preAuthorizationService.find({ query: { "checkedInDetails": checkinId } }).then((preauth_callback: any) => {
       console.log(preauth_callback);
+      
       if (preauth_callback.data.length > 0) {
         this.isAuthorize = true;
         this.authorizeType = "Free for Service"
@@ -304,6 +305,9 @@ export class NewClaimComponent implements OnInit {
         this.authorizeType = "Capitation";
         this.SelectedCheckinItem.checkedInDetails = {};
         console.log(checkinId);
+        this.SelectedCheckinItem.medicalPersonelName = {};
+        this.SelectedCheckinItem.medicalPersonelName._id = 0;
+        this.SelectedCheckinItem.medicalPersonelUnit = "";
         this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
           console.log(payload.data[0]);
           this.SelectedCheckinItem.checkedInDetails = payload.data[0];
@@ -618,7 +622,7 @@ export class NewClaimComponent implements OnInit {
     this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
     this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
-    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value.firstName +" "+this.claimsFormGroup.controls.medicalPersonelName.value.lastName;
+    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
     //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
     this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
