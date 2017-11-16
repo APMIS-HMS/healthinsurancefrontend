@@ -18,7 +18,7 @@ export class PreAuthorizationListComponent implements OnInit {
   filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
-
+  loading: boolean = true;
   authorizations: any[] = [];
   user:any;
 
@@ -45,6 +45,7 @@ export class PreAuthorizationListComponent implements OnInit {
     this._preAuthorizationService.find({query: {
       $sort: { createdAt: -1 },
     }}).then((payload: any) => {
+      this.loading = false;
       this.authorizations = payload.data;
       this._systemService.off();
     }).catch(err => {

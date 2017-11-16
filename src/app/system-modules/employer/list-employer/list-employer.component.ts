@@ -181,7 +181,7 @@ export class ListEmployerComponent implements OnInit {
           this.selectedUserType = undefined;
         }
       }
-    })
+    });
 
     // this._userTypeService.find({}).then((payload: any) => {
     //   this._systemService.off();
@@ -193,8 +193,8 @@ export class ListEmployerComponent implements OnInit {
   }
 
   navigateToDetails(id: string) {
-    this._systemService.on()
-    console.log(id)
+    this._systemService.on();
+    console.log(id);
     this._router.navigate(['/modules/employer/employers/' + id]).then(res => {
       this._systemService.off();
     }).catch(err => {

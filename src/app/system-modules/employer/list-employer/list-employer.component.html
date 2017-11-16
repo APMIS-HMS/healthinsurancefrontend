@@ -62,13 +62,13 @@
             </tr>
             <tr *ngFor="let employer of employers; let i = index;" class="tr">
                 <td class="td hover" (click)="navigateToDetails(employer._id);">{{ i+1 }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.name }}</td>
-                <td class="td hover text-right" (click)="navigateToDetails(employer._id);">{{ employer.email }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.businessContact.lastName }} {{ employer.businessContact.firstName }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.businessContact.phoneNumber }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.industry.name }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.cacNumber }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.cin }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.name }}</td>
+                <td class="td hover text-right" (click)="navigateToDetails(employer._id);">{{ employer?.email }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.businessContact?.lastName }} {{ employer?.businessContact?.firstName }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.businessContact?.phoneNumber }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.employer?.industry?.name }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.employer?.cacNumber }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.employer?.cin }}</td>
                 <td (click)="navigateToDetails(employer._id);" class="td hover {{ employer.isConfirmed ? ' tbl-status-active': ' tbl-status-inactive' }}">
                     {{ employer.isConfirmed ? 'Active': 'Inactive' }}
                 </td>
