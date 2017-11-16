@@ -77,6 +77,11 @@ export class ListUserComponent implements OnInit {
         (this.resetData !== true) ? this.users.push(...payload.data) : this.users = payload.data;
         if(this.totalEntries <= this.users.length){
           this.showLoadMore = false;
+<<<<<<< HEAD
+          this._systemService.off();
+          return;
+=======
+>>>>>>> d58e4a737013cdb46ecd20107454285da658ded2
         }
         this._systemService.off();
       }).catch(err => {
@@ -99,6 +104,8 @@ export class ListUserComponent implements OnInit {
         (this.resetData !== true) ? this.users.push(...payload.data) : this.users = payload.data;
         if(this.totalEntries <= this.users.length){
           this.showLoadMore = false;
+          this._systemService.off();
+          return;
         }
         this._systemService.off();
       }).catch(err => {
