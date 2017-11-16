@@ -2,7 +2,7 @@ import { authModulesRoutes } from './../../../auth/auth.route';
 import { ReferralAuthorization } from './../../../models/referral/referral';
 import { ReferralService } from './../../../services/referral/referral.service';
 import { PreAuthorizationDocument, Document } from './../../../models/authorization/authorization';
-import differenceInYears from 'date-fns/difference_in_years';
+import * as differenceInYears from 'date-fns/difference_in_years';
 import { Observable } from 'rxjs/Observable';
 import { REQUEST_STATUS, DURATIONS, CurrentPlaformShortName, FORM_VALIDATION_ERROR_MESSAGE } from './../../../services/globals/config';
 import { InvestigationService } from './../../../services/common/investigation.service';

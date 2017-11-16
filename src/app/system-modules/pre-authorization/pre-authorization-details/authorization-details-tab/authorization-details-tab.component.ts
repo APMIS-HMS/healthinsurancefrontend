@@ -5,7 +5,7 @@ import { PreAuthorizationDocument } from './../../../../models/authorization/aut
 import { NewPreauthTabsComponent } from './../../pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
 import { REQUEST_STATUS } from './../../../../services/globals/config';
 import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
-import differenceInYears from 'date-fns/difference_in_years';
+import * as differenceInYears from 'date-fns/difference_in_years';
 import * as moment from 'moment';
 @Component({
   selector: 'app-authorization-details-tab',
