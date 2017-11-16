@@ -177,6 +177,7 @@ export class LoginComponent implements OnInit {
 			this.loginBtnProcessing = true;
 			this.disableBtn = true;
 
+			console.log(value);
 
 			this._authService.login(value).then(payload => {
 				this._locker.setObject('auth', payload);
@@ -190,7 +191,7 @@ export class LoginComponent implements OnInit {
 						this.user = payload.user;
 						if(this.user.userType.name === "Beneficiary"){
 							this._getPerson();
-						}else{
+						}else {
 							this._router.navigate(['/modules/welcome']).then(res => {
 								this._authService.announceMission({ status: 'On' });
 								this._toastr.success('You have successfully logged in!', 'Success!');
@@ -217,6 +218,7 @@ export class LoginComponent implements OnInit {
 		} else {
 			this._toastr.error('Please fill in the required fields!', 'Form Validation Error!');
 		}
+		value = {email: '', password: ''};
 	}
 
 	onClickTab(tab) {
