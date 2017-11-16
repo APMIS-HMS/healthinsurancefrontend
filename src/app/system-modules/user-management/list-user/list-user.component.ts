@@ -74,9 +74,8 @@ export class ListUserComponent implements OnInit {
         this.totalEntries = payload.total;
         //Array.prototype.push.apply(this.users,payload.data); 
         this.users.push(...payload.data);
-        if(this.totalEntries == this.users.length){
+        if(this.totalEntries <= this.users.length){
           this.showLoadMore = false;
-          return;
         }
         this._systemService.off();
       }).catch(err => {
@@ -97,9 +96,8 @@ export class ListUserComponent implements OnInit {
         this.totalEntries = payload.total;
         //Array.prototype.push.apply(this.users,payload.data);
         this.users.push(...payload.data);
-        if(this.totalEntries == this.users.length){
+        if(this.totalEntries <= this.users.length){
           this.showLoadMore = false;
-          return;
         }
         this._systemService.off();
       }).catch(err => {
@@ -150,9 +148,13 @@ export class ListUserComponent implements OnInit {
   }
 
   loadMore(){
-
     this._getUsers();
+  }
 
+  reset(){
+    this.index = 0;
+    this.users = [];
+    this._getUsers();
   }
 
 }

@@ -148,7 +148,7 @@ export class ListEmployerComponent implements OnInit {
         this.employers.push(...res.data);
         this.local_employers = this.employers;
       }
-      if(this.employers.length == this.totalData){
+      if(this.employers.length >= this.totalData){
         this.showLoadMore = false;
       }
       console.log(this.showLoadMore, this.totalData, this.employers.length);
@@ -217,12 +217,13 @@ export class ListEmployerComponent implements OnInit {
 
   loadMore(){
     this._getEmployers();   
-    
-    if(this.employers.length == this.totalData){
-      this.showLoadMore = false;
-      return;
-    }
 
+  }
+
+  reset(){
+    this.index = 0;
+    this.employers = [];
+    this._getEmployers();
   }
 
   navigateToDetails(id: string) {
