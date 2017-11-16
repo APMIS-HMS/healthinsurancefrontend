@@ -39,7 +39,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.selectedAuthorization);
-    this.testDateDiff();
+    // this.testDateDiff();
   }
 
   _getAuthorizationDetails(id) {
@@ -95,6 +95,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     this.disableApprove = true;
   }
   validateResponse(doc, cliDoc, transaction: PreAuthorizationDocument) {
+    console.log('yyyyy')
     this.disableAll();
     let validDocs = transaction.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
     let pendingDocs: any[] = [];
@@ -121,8 +122,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       });
     });
     let hasDecided = false;
+    console.log('wwwwww')
     if (approvedDocs.length === counter) {
-      this.disableApprove = false;
+      this.disableApprove = true;
       hasDecided = true;
     } else if (rejectedDocs.length === counter) {
       this.disableReject = false;

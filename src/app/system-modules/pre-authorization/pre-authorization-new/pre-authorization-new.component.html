@@ -513,6 +513,7 @@
                                     <tr class="tr">
                                         <th class="th">Drug</th>
                                         <th class="th">Quantity</th>
+                                        <th class="th">Need Authorization</th>
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
@@ -521,6 +522,9 @@
                                     <tr class="tr" *ngFor="let item of drugList;let i=index">
                                         <th class="td">{{item.drug.name}}</th>
                                         <th class="td">{{item.quantity}} {{item.unit.name}}</th>
+                                        <td class="td">
+                                            <input [checked]="needAuthorization(item)" type="checkbox" disabled="disabled">
+                                        </td>
                                         <td>
                                             <i class="fa fa-times" (click)="removeDrug(i)"></i>
                                         </td>
