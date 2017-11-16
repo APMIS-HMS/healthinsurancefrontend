@@ -150,6 +150,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       platformOwnerId: this.currentPlatform,
       reference: data,
       policies: policies,
+      sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
       paidBy: this.user,
       requestedAmount: this.policy.premiumPackageId.amount,
       amountPaid: this.policy.premiumPackageId.amount,

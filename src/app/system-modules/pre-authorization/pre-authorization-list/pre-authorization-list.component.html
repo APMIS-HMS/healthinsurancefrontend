@@ -52,6 +52,14 @@
         </thead>
 
         <tbody class="tbody">
+            <tr class="tr" *ngIf="authorizations.length === 0 && !loading">
+                <td class="text-center" colspan="11">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="authorizations.length === 0 && loading">
+                <td class="text-center" colspan="11">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
             <tr *ngFor="let auth of authorizations; let i = index;" class="tr">
                 <td class="td">{{ i+1 }}</td>
                 <td class="td">{{auth.createdAt | date}}</td>

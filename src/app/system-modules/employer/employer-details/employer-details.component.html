@@ -134,6 +134,9 @@
                     <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2"> UPLOAD BENEFICIARIES</div>
                     <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
                 </div>
+                <div class="bar-icos">
+                    <div (click)="save()" class="btn btn-medium btn-white-outline btn-radius-x2">SAVE</div>
+                </div>
                 <div>
                     <span>Upload items: {{totalExcelPrincipalItems}}</span>
                 </div>
@@ -172,7 +175,7 @@
                 <tbody class="tbody">
                     <tr class="tr" *ngFor="let item of orderExcelPolicies; let i=index">
                         <td class="td hover">
-                            <input  (change)="onSelectPrincipal($event,item)" [(ngModel)]="item.isCheck" [formControl]="itemCheckBox" type="checkbox">
+                            <input  (change)="onSelectPrincipal($event,i)" [(ngModel)]="item.isCheck" [formControl]="itemCheckBox" type="checkbox">
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
