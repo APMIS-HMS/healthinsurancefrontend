@@ -111,8 +111,8 @@
 
     <div class="list-buttom">
         <div *ngIf="providers.length > 0">
-            <div class="list-summary">Showing 1 to {{ providers.length }} of {{ providers.length }} entries (filtered from {{ providers.length }} total entries)</div>
-            <div class="btn btn-medium btn-yellow">Load More</div>
+            <div class="list-summary">Showing 1 to {{ providers.length }} of {{ totalEntries }} entries (filtered from {{ totalEntries }} total entries)</div>
+            <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="showLoadMore">Load More</div>
         </div>
     </div>
 </div>
