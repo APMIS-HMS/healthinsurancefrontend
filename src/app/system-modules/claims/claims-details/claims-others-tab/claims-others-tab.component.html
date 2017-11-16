@@ -1,8 +1,8 @@
-<div class="title">Claims Julie Jani</div>
 
 <table class="table" cellpadding="0" cellspacing="0" border="0.5">
     <thead class="thead">
         <tr class="tr">
+            <th class="th">No</th>
             <th class="th">LASHMA ID</th>
             <th class="th">Patient Name</th>
             <th class="th">Date</th>
@@ -16,43 +16,33 @@
     </thead>
 
     <tbody class="tbody">
-        <tr class="tr">
-            <td class="td">122.122.12.1</td>
-            <td class="td">Jonathan Nelson</td>
-            <td class="td">11th Oct 2017</td>
-            <td class="td">Healthy Health LTD</td>
-            <td class="td">Gold Plan</td>
-            <td class="td">Foremost Hospital</td>
-            <td class="td"><span class="green">Active</span></td>
-            <td class="td">
-              <div class="tooltip">
-                <div class="tip-title"></div>
-                <div class="tip-content"></div>
-              </div>
+        <tr class="tr" *ngIf="listOfClaims.length === 0 && !loading">
+            <td class="text-center" colspan="14">No data available in table</td>
+        </tr>
+        <tr class="tr" *ngIf="listOfClaims.length === 0 && loading">
+            <td class="text-center" colspan="14">
+                <i class="fa fa-spinner fa-spin"></i>
             </td>
-            <td class="td td-icos" routerLink="/modules/claim/claims/11">
+        </tr>
+        <tr class="tr" *ngFor="let item of listOfClaims; let i=index;">
+            <td class="td">{{ i+1 }}</td>
+            <td class="td">{{item.checkedinDetail?.checkedInDetails.beneficiaryObject?.platformOwnerNumber}}</td>
+            <td class="td">{{item.checkedinDetail?.checkedInDetails.beneficiaryObject?.personId.firstName}} {{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.lastName}}</td>
+            <td class="td">{{item.dateClaimCreated|date}}</td>
+            <td class="td">{{item?.checkedinDetail?.checkedInDetails.policyObject?.hiaId.name}}</td>
+            <td class="td">{{item?.checkedinDetail.plan}}</td>
+            <td class="td">{{item?.checkedinDetail.providerFacility}}</td>
+            <td class="td"><span class="green">{{item?.status}}</span></td>
+            <td class="td">
+                <div class="tooltip">
+                    <div class="tip-title"></div>
+                    <div class="tip-content"></div>
+                </div>
+            </td>
+            <td class="td td-icos" routerLink="/modules/claim/claims/{{item._id}}">
                 <i class="fa fa-info fa-circle"></i>
                 <i class="fa fa-chevron-right"></i>
             </td>
         </tr>
-        <tr class="tr">
-          <td class="td">122.122.12.1</td>
-          <td class="td">Jonathan Nelson</td>
-          <td class="td">11th Oct 2017</td>
-          <td class="td">Healthy Health LTD</td>
-          <td class="td">Gold Plan</td>
-          <td class="td">Foremost Hospital</td>
-          <td class="td"><span class="blue">Planned In</span></td>
-          <td class="td">
-            <div class="tooltip">
-              <div class="tip-title">Reason: Refferal Required</div>
-              <div class="tip-content">there is a reason for everthing that happens under the sun. so therefoe, the onq who must succeed in life must be he who chooses to take charge of his own destiny, the one who takes ownership of all that concerns him.</div>
-            </div>
-          </td>
-          <td class="td td-icos" routerLink="/modules/claim/claims/11">
-              <i class="fa fa-info fa-circle"></i>
-              <i class="fa fa-chevron-right"></i>
-          </td>
-      </tr>
     </tbody>
 </table>

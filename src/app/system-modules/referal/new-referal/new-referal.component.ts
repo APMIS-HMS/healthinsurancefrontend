@@ -13,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { SystemModuleService, CheckInService, SymptomService, ProcedureService, DiagnosisService, DrugService, DiagnosisTypeService, FacilityService } from '../../../services/index';
+import { SystemModuleService, CheckInService, SymptomService, ProcedureService, DiagnosisService, DrugService, DiagnosisTypeService, FacilityService, UserService } from '../../../services/index';
 import { DrugPackSizeService } from '../../../services/common/drug-pack-size.service';
 import { PolicyService } from '../../../services/policy/policy.service';
 import { ToastsManager } from 'ng2-toastr';
@@ -87,6 +87,7 @@ export class NewReferalComponent implements OnInit {
   packSizes: any[] = [];
   requestStatus = REQUEST_STATUS;
   referral: any;
+  employees:any[] = [];
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -111,7 +112,8 @@ export class NewReferalComponent implements OnInit {
     private _toastr: ToastsManager,
     private _locker: CoolLocalStorage,
     private _facilityService: FacilityService,
-    private _referralService: ReferralService
+    private _referralService: ReferralService,
+    private _userService:UserService
   ) { }
 
   ngOnInit() {
@@ -126,6 +128,7 @@ export class NewReferalComponent implements OnInit {
     this._getVisitTypes();
     this._getDiagnosisTypes();
     this._getDrugPackSizes();
+    this._getEmployees();
 
 
     this._initializeFormGroup();
@@ -144,6 +147,24 @@ export class NewReferalComponent implements OnInit {
     }).catch(err => {
 
     })
+  }
+  _getEmployees(){
+    if(this.user.userType.name==='Provider'){
+      this._systemService.on();
+      this._userService.find({
+        query:{
+          'facilityId._id':this.user.facilityId._id,
+          $select:['firstName', 'lastName', 'profession','cader', 'unit', 'otherNames']
+        }
+      }).then((payload: any) => {
+        this.employees = payload.data;
+        console.log(this.employees)
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      })
+    }
   }
   private _getReferral(id) {
     this._referralService.get(id, {}).then(payload => {
@@ -297,9 +318,9 @@ export class NewReferalComponent implements OnInit {
       visitClass: ['', [<any>Validators.required]],
       hiaResponsible: ['', [<any>Validators.required]],
       referingLashmaId: [this.selectedCheckIn != null ? this.user.facilityId.provider.providerId : '', [<any>Validators.required]],
-      admissionDate: ['', [<any>Validators.required]],
-      dischargeDate: ['', [<any>Validators.required]],
-      visitDate: ['', [<any>Validators.required]],
+      admissionDate: ['', []],
+      dischargeDate: ['', []],
+      visitDate: ['', []],
       reason: ['', [<any>Validators.required]],
       doctor: ['', [<any>Validators.required]],
       unit: ['', [<any>Validators.required]],
@@ -336,6 +357,14 @@ export class NewReferalComponent implements OnInit {
       drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
       drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+    });
+
+    this.referalFormGroup.controls.doctor.valueChanges
+    .subscribe(value => {
+      this.referalFormGroup.controls.unit.setValue(value.unit);
+    }, error => {
+      this._systemService.off();
+      console.log(error)
     });
 
     this.drugFormGroup.controls.drug.valueChanges
