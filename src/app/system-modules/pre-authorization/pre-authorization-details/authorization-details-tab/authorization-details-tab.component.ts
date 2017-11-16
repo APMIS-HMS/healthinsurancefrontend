@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
 import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
@@ -28,15 +29,17 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   reply = false;
   lastI: number = 0;
   lastJ: number = 0;
-
+  user:any;
   constructor(
     private _preAuthorizationService: PreAuthorizationService,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private _locker:CoolLocalStorage
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.selectedAuthorization);
-    this.testDateDiff();
+    // this.testDateDiff();
   }
 
   _getAuthorizationDetails(id) {
@@ -92,6 +95,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     this.disableApprove = true;
   }
   validateResponse(doc, cliDoc, transaction: PreAuthorizationDocument) {
+    console.log('yyyyy')
     this.disableAll();
     let validDocs = transaction.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
     let pendingDocs: any[] = [];
@@ -118,8 +122,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       });
     });
     let hasDecided = false;
+    console.log('wwwwww')
     if (approvedDocs.length === counter) {
-      this.disableApprove = false;
+      this.disableApprove = true;
       hasDecided = true;
     } else if (rejectedDocs.length === counter) {
       this.disableReject = false;

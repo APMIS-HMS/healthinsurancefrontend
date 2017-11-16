@@ -94,6 +94,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   employees:any[] = [];
   requestStatus = REQUEST_STATUS;
 
+
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
@@ -187,8 +188,8 @@ export class PreAuthorizationNewComponent implements OnInit {
       healthCareProvider: [this.selectedCheckIn != null ? this.selectedCheckIn.providerFacilityId.name : '', [<any>Validators.required]],
       hia: [this.selectedCheckIn != null ? this.selectedCheckIn.policyObject.hiaId.name : '', [<any>Validators.required]],
       visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : new Date(), [<any>Validators.required]],
+      requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', []],
+      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : new Date(), []],
       clinicalNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       emergency: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : false, [<any>Validators.required]],
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -571,8 +572,9 @@ export class PreAuthorizationNewComponent implements OnInit {
             'checked': false
           }
         } else {
-          if (resource.Preferred != undefined) {
-            if (resource.Preferred.toLowerCase().trim() == 'c') {
+          //Requires authorization
+          if (resource.Prefered != undefined) {
+            if (resource.Prefered.toLowerCase().trim() == 'c') {
               console.log(3)
               // cover by capitation, dont put amount
               //requires authorization
@@ -689,11 +691,24 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   needAuthorization(procedure) {
-    if (procedure.procedure.PA === ' Y ') {
-      return true;
-    } else {
-      return false;
+    console.log(procedure)
+    if(procedure.drug !== undefined){
+      console.log(1)
+      if (procedure.drug.PA.trim() === 'Y') {
+        console.log(2)
+        return true;
+      } else {
+        console.log(3)
+        return false;
+      }
+    }else{
+      if (procedure.procedure.PA.trim() === 'Y') {
+        return true;
+      } else {
+        return false;
+      }
     }
+   
   }
 
   send() {
@@ -830,6 +845,7 @@ export class PreAuthorizationNewComponent implements OnInit {
             counter = counter + 1;
           }
         });
+        console.log(this.preAuthFormGroup)
       }
     } catch (error) {
       this._systemService.off();

@@ -133,7 +133,9 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
   }
 
   confirmPayments() {
-
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.policyObject._id + '/payment']).then(payload => {
+    }).catch(err2 => {
+    });
   }
 
 }

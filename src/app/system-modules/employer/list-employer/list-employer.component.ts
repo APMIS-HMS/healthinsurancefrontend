@@ -18,6 +18,7 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
   styleUrls: ['./list-employer.component.scss']
 })
 export class ListEmployerComponent implements OnInit {
+  isPlatformOwner: boolean;
   currentPlatform: any;
   listsearchControl = new FormControl();
   filterTypeControl = new FormControl('All');
@@ -139,7 +140,8 @@ export class ListEmployerComponent implements OnInit {
 
   private _getEmployers() {
     if (this.user !== undefined && this.user.userType.name === 'Platform Owner') {
-      let query = { query: { 'platformOwnerId._id': this.currentPlatform._id, $limit: 200 } };
+      this.isPlatformOwner = true;
+      let query = { query: { 'platformOwnerId._id': this.currentPlatform._id, $limit: 200,'facilityType._id': this.selectedUserType._id, } };
       this._getAllPolicies(query)
     } else if (this.user !== undefined && this.user.userType.name === 'Health Insurance Agent') {
       console.log('agent');
@@ -183,13 +185,13 @@ export class ListEmployerComponent implements OnInit {
       }
     })
 
-    this._userTypeService.find({}).then((payload: any) => {
-      this._systemService.off();
-      console.log(payload);
+    // this._userTypeService.find({}).then((payload: any) => {
+    //   this._systemService.off();
+    //   console.log(payload);
 
-    }, error => {
-      this._systemService.off();
-    });
+    // }, error => {
+    //   this._systemService.off();
+    // });
   }
 
   navigateToDetails(id: string) {
