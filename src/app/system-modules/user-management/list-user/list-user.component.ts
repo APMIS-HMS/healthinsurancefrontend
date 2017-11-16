@@ -77,6 +77,8 @@ export class ListUserComponent implements OnInit {
         (this.resetData !== true) ? this.users.push(...payload.data) : this.users = payload.data;
         if(this.totalEntries <= this.users.length){
           this.showLoadMore = false;
+          this._systemService.off();
+          return;
         }
         this._systemService.off();
       }).catch(err => {
