@@ -33,6 +33,8 @@ export class ListBeneficiaryComponent implements OnInit {
   mainBeneficiaries: any[] = [];
   loading: boolean = true;
   planTypes: any[] = [];
+  limitValue = 4;
+  skipValue = 0;
   currentPlatform: any;
   getQueryValue;
   initialValue = 2;
@@ -151,9 +153,10 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'providerId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
-              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1, 'providerId':1 }
+              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1, 'providerId': 1 }
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
@@ -161,7 +164,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'hiaId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -170,7 +174,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'employerId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -179,7 +184,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'platformOwnerId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -188,7 +194,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'platformOwnerId._id': this.currentPlatform._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -209,8 +216,8 @@ export class ListBeneficiaryComponent implements OnInit {
       this._policyService.find(query).then((res: any) => {
         this.loading = false;
         if (res.data.length > 0 ) {
-          const loadMore = this.initialValue === 2 ? this.initialValue : this.increaseValue;
-          res.data.slice(0, loadMore).forEach((policy, i) => {
+          // const loadMore = this.initialValue === 2 ? this.initialValue : this.increaseValue;
+          res.data.forEach((policy, i) => {
             const principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
@@ -235,7 +242,7 @@ export class ListBeneficiaryComponent implements OnInit {
         this._systemService.off();
         this.loading = false;
       }).catch(err => {
-        console.log(err)
+        console.log(err);
         this.loading = false;
         this._systemService.off();
         this._toastr.error('Error has occured please contact your administrator!', 'Error!');
@@ -249,11 +256,13 @@ export class ListBeneficiaryComponent implements OnInit {
 
   loadMoreBeneficiaries(loadValue) {
     const v = this.getQueryValue;
-      this._policyService.find(v).then((res: any) => {
-        this.initialValue = res.data.length;
-        this.increaseValue = this.initialValue;
-      });
-      console.log(v);
+    this.skipValue ++;
+    console.log(this.skipValue , this.initialValue);
+      // this._policyService.find(v).then((res: any) => {
+      //   this.initialValue = res.data.length;
+      //   this.increaseValue = this.initialValue;
+      // });
+      // console.log(v);
       this._getAllPolicies(v);
   }
 
