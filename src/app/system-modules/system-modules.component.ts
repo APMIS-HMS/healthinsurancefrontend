@@ -82,7 +82,7 @@ export class SystemModulesComponent implements OnInit, OnDestroy {
 	private _checkRole() {
 		try {
 			const roles = this.user.roles;
-			console.log
+			console.log();
 			const roleIds: any[] = [];
 			roles.forEach(x => {
 				roleIds.push(x._id);
