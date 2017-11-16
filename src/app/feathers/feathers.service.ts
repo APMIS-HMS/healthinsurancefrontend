@@ -64,6 +64,7 @@ export class SocketService {
         return this._app.logout();
     }
     loginIntoApp(query: any) {
+        console.log(query);
         return this._app.authenticate({
             strategy: 'local',
             'email': query.email,

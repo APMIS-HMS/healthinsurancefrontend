@@ -5,8 +5,8 @@
 
             <div class="form-field-wrap">
                 <div class="inputWrap">
-                  <input type="password" class="form-control" formControlName="old_pass" name="old_pass" placeholder="Old Password" size="50" maxlength="255" />
-                  <small class="alert-label" [hidden]="changePassFormGroup.controls.old_pass.valid || changePassFormGroup.controls.old_pass.pristine">
+                  <input type="email" class="form-control" formControlName="email" name="email" placeholder="Old Password" size="50" maxlength="255" />
+                  <small class="alert-label" [hidden]="changePassFormGroup.controls.email.valid || changePassFormGroup.controls.email.pristine">
                       Old password is required.
                   </small>
                 </div>
@@ -19,7 +19,7 @@
                 </small>
               </div>
             </div>
-            <div class="form-field-wrap">
+            <!-- <div class="form-field-wrap">
               <div class="inputWrap">
                 <input type="password" class="form-control" formControlName="cpassword" name="cpassword" placeholder="Confirm Password" size="50" maxlength="255" />
                 <small class="alert-label" [hidden]="changePassFormGroup.controls.cpassword.valid || changePassFormGroup.controls.cpassword.pristine">
@@ -27,7 +27,7 @@
                 </small>
               </div>
             </div>
-            
+             -->
 
             <button (click)="changePassword(changePassFormGroup.value, changePassFormGroup.valid) " class="btn btn-medium btn-blue">
                 <span>CHANGE PASSWORD</span>

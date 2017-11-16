@@ -41,7 +41,6 @@ export class AuthService {
   find(query: any) {
     return this._socket.find(query);
   }
-
   findAll() {
     return this._socket.find();
   }

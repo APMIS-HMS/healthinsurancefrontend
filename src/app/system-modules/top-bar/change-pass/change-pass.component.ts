@@ -21,23 +21,29 @@ export class ChangePassComponent implements OnInit {
 
   ngOnInit() {
 
+    this.user = <any>this._locker.getItem('auth');
+    console.log(this.user);
     this.changePassFormGroup = this._fb.group({
-      old_pass: ['', [<any>Validators.required]],
+      email: ['', [<any>Validators.required]],
       password: ['', [<any>Validators.required]],
-      cpassword: ['', [<any>Validators.required]]
-		}, {
-      validator: PasswordValidation.MatchPassword
-    });
+    })
+    //   cpassword: ['', [<any>Validators.required]]
+		// }, {
+    //   validator: PasswordValidation.MatchPassword
+    // });
   }
 
   changePassword(value: any, valid: boolean) {
-    this.user = <any>this._locker.getItem('auth');
-         const getUserPassword = value.old_pass;
+    // console.log(value);
+    // this.user = <any>this._locker.getItem('auth');
+    //  const getUserPassword = value.old_pass;
+    
+    // console.log(value);
 
-    console.log({email: this.user.email, password: getUserPassword});
+    // console.log({email: this.user.email, password: getUserPassword});
 
-    const toCheck = {email: this.user.email, password: getUserPassword};
-    this._authService.login(toCheck)
+    // const toCheck = {email: this.user.email, password: getUserPassword};
+    this._authService.login(value)
       .then((result) => {
         console.log(result);
       })
@@ -49,7 +55,7 @@ export class ChangePassComponent implements OnInit {
     //   .then((resetPwd) => {
     //     console.log(resetPwd);
     //   });
-    console.log(value , valid);
-  }
+  // }
 
+}
 }
