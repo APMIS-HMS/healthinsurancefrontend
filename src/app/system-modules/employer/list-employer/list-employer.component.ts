@@ -173,7 +173,7 @@ export class ListEmployerComponent implements OnInit {
         };
         this._getAllPolicies(query);
 
-        this.index++;
+        this.index++; 
     }
   }
 
