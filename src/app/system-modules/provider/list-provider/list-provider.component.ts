@@ -1,7 +1,7 @@
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
+import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import 'rxjs/add/operator/filter';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -27,7 +27,7 @@ export class ListProviderComponent implements OnInit {
   categories: any = <any>[];
   loading: boolean = true;
   selectedUserType: any = <any>{};
-  limit:number = 10;
+  limit:number = TABLE_LIMIT_PER_VIEW;
   index:number = 0;
   totalEntries:number;
   showLoadMore:Boolean = true;
