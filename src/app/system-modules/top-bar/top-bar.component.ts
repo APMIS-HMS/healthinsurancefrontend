@@ -7,6 +7,7 @@ import { FacilityService } from '../../services/index';
 import { CurrentPlaformShortName } from '../../services/globals/config';
 import { NotificationService } from './../../services/common/notification.service';
 import { PolicyService } from './../../services/policy/policy.service';
+import { AuthService } from './../../auth/services/auth.service';
 
 import { SystemModuleService } from './../../services/index';
 
@@ -40,7 +41,8 @@ export class TopBarComponent implements OnInit {
     private _router: Router,
     private _systemService: SystemModuleService,
     private _notificationService: NotificationService,
-    private _policyService: PolicyService
+    private _policyService: PolicyService,
+    private _authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -71,6 +73,12 @@ export class TopBarComponent implements OnInit {
     });
     
     this.setNotifier();
+  }
+
+  signOut() {
+    this._authService.logOut().then(res => {
+      this._router.navigate(['/auth/login']);
+    });
   }
 
   setNotifier(){
