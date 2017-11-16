@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
@@ -29,26 +30,43 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   reply = false;
   lastI: number = 0;
   lastJ: number = 0;
-  user:any;
+  user: any;
   constructor(
     private _preAuthorizationService: PreAuthorizationService,
     private _systemService: SystemModuleService,
-    private _locker:CoolLocalStorage
+    private _locker: CoolLocalStorage,
+    private _route:ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.selectedAuthorization);
+    if(this.selectedAuthorization !== undefined){
+      let validDocs = this.selectedAuthorization.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+      if (validDocs.length === 0) {
+        this.disableApprove = false;
+      }
+    }
     // this.testDateDiff();
+    this._route.params.subscribe(param =>{
+      this._getAuthorizationDetails(param.id);
+    })
   }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
-    this._preAuthorizationService.get(id, {}).then(payload => {
+    this._preAuthorizationService.get(id, {}).then((payload:any) => {
       this._systemService.off();
-      console.log(payload);
-      this.selectedAuthorization = payload;
+      payload.documentation.forEach(doc =>{
+        let validDocs = doc.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+        if (validDocs.length === 0) {
+          this.disableApprove = false;
+        }
+      })
+     
+      // this.selectedAuthorization = payload;
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     });
   }
@@ -73,17 +91,17 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     return out.join(', ');
   };
 
-  testDateDiff(){
-  var today   = new Date(),
+  testDateDiff() {
+    var today = new Date(),
       newYear = new Date(today.getFullYear(), 0, 1),
-      y2k     = new Date(2000, 0, 1);
+      y2k = new Date(2000, 0, 1);
 
     //(AS OF NOV 29, 2016)
     //Time since New Year: 0 years, 10 months, 4 weeks, 0 days
-    console.log( 'Time since New Year: ' + this.getDateDiff(newYear, today) );
+    console.log('Time since New Year: ' + this.getDateDiff(newYear, today));
 
     //Time since Y2K: 16 years, 10 months, 4 weeks, 0 days
-    console.log( 'Time since Y2K: ' + this.getDateDiff(y2k, today) );
+    console.log('Time since Y2K: ' + this.getDateDiff(y2k, today));
   }
 
 
@@ -106,9 +124,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
 
     let counter = 0;
     console.log(validDocs)
-    if(validDocs.length === 0){
+    if (validDocs.length === 0) {
       this.disableApprove = false;
-    }else{
+    } else {
       validDocs.forEach(doc => {
         doc.clinicalDocumentation.forEach(cliDoc => {
           counter = counter + 1;
@@ -126,7 +144,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
         });
       });
       let hasDecided = false;
-  
+
       if (approvedDocs.length === counter) {
         console.log('wwwwww')
         this.disableApprove = false;
@@ -142,7 +160,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
         hasDecided = true;
       }
       if (hasDecided === false) {
-  
+
         if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
           this.disableQuery = false;
         }
