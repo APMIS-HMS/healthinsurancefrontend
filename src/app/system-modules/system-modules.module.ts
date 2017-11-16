@@ -12,6 +12,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { ChangePassComponent } from './top-bar/change-pass/change-pass.component';
 import { NotificationService } from './../services/common/notification.service';
 
+
 @NgModule({
     declarations: [
         SystemModulesComponent,
