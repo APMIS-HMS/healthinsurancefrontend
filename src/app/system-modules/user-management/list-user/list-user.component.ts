@@ -31,6 +31,10 @@ export class ListUserComponent implements OnInit {
   selectedUser: any = <any>{};
   auth: any = <any>{};
   currentPlatform:any;
+  index:any = 0 ;
+  totalEntries:number;
+  showLoadMore:Boolean = true;
+  limit:number = 10;
 
   constructor(
     private _fb: FormBuilder,
@@ -56,8 +60,10 @@ export class ListUserComponent implements OnInit {
         this._getUsers();
 			}
 		}).catch(err => console.log(err));
-	}
+  }
+  
   _getUsers() {
+
     this._systemService.on();
     if (this.auth.userType === undefined) {
       this._userService.find({
@@ -65,7 +71,13 @@ export class ListUserComponent implements OnInit {
       }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
-        this.users = payload.data;
+        this.totalEntries = payload.total;
+        //Array.prototype.push.apply(this.users,payload.data); 
+        this.users.push(...payload.data);
+        if(this.totalEntries == this.users.length){
+          this.showLoadMore = false;
+          return;
+        }
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
@@ -75,19 +87,27 @@ export class ListUserComponent implements OnInit {
       this._userService.find({
         query: {
           'platformOwnerId._id': this.currentPlatform._id,
-          $limit:200,
+          $limit:this.limit,
+          $skip: this.index*this.limit,
           $sort: { createdAt: -1 }
         }
       }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
-        this.users = payload.data;
+        this.totalEntries = payload.total;
+        //Array.prototype.push.apply(this.users,payload.data);
+        this.users.push(...payload.data);
+        if(this.totalEntries == this.users.length){
+          this.showLoadMore = false;
+          return;
+        }
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
     }
 
+    this.index++;
 
   }
 
@@ -127,6 +147,12 @@ export class ListUserComponent implements OnInit {
         this._systemService.off();
       });
     }
+  }
+
+  loadMore(){
+
+    this._getUsers();
+
   }
 
 }
