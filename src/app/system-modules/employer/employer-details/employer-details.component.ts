@@ -588,6 +588,15 @@ export class EmployerDetailsComponent implements OnInit {
     }
   }
 
+  checkItemChecked() {
+    var filterItem = this.orderExcelPolicies.filter(x => x.isCheck == true);
+    if (filterItem.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public upload(e) {
     let fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
