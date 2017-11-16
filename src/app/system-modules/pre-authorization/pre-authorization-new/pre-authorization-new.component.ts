@@ -712,15 +712,19 @@ export class PreAuthorizationNewComponent implements OnInit {
   needAuthorization(procedure) {
     console.log(procedure)
     if(procedure.drug !== undefined){
-      console.log(1)
       if (procedure.drug.PA.trim() === 'Y') {
-        console.log(2)
         return true;
       } else {
-        console.log(3)
         return false;
       }
-    }else{
+    }else if(procedure.investigation !== undefined){
+      if (procedure.investigation.PA.trim() === 'Y') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    else{
       if (procedure.procedure.PA.trim() === 'Y') {
         return true;
       } else {

@@ -442,7 +442,7 @@
                                     <tr *ngFor="let investigation of investigationList; let i=index" class="tr">
                                         <td class="td">{{investigation.investigation.name}}</td>
                                         <td class="td">
-                                            <input type="checkbox" disabled="disabled">
+                                            <input [checked]="needAuthorization(investigation)" type="checkbox" disabled="disabled">
                                         </td>
                                         <td>
                                             <i (click)="removeInvestigation(i)" class="fa fa-times"></i>

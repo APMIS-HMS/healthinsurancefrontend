@@ -105,41 +105,47 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     let heldDocs: any[] = [];
 
     let counter = 0;
-    validDocs.forEach(doc => {
-      doc.clinicalDocumentation.forEach(cliDoc => {
-        counter = counter + 1;
-        if (cliDoc.approvedStatus.id === 1) {
-          pendingDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 2) {
-          approvedDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 3) {
-          rejectedDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 4) {
-          queriedDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 5) {
-          heldDocs.push(cliDoc);
-        }
+    console.log(validDocs)
+    if(validDocs.length === 0){
+      this.disableApprove = false;
+    }else{
+      validDocs.forEach(doc => {
+        doc.clinicalDocumentation.forEach(cliDoc => {
+          counter = counter + 1;
+          if (cliDoc.approvedStatus.id === 1) {
+            pendingDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 2) {
+            approvedDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 3) {
+            rejectedDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 4) {
+            queriedDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 5) {
+            heldDocs.push(cliDoc);
+          }
+        });
       });
-    });
-    let hasDecided = false;
-    console.log('wwwwww')
-    if (approvedDocs.length === counter) {
-      this.disableApprove = true;
-      hasDecided = true;
-    } else if (rejectedDocs.length === counter) {
-      this.disableReject = false;
-      hasDecided = true;
-    } else if (queriedDocs.length === counter) {
-      this.disableQuery = false;
-      hasDecided = true;
-    } else if (heldDocs.length === counter) {
-      this.disableHold = false;
-      hasDecided = true;
-    }
-    if (hasDecided === false) {
-
-      if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
+      let hasDecided = false;
+  
+      if (approvedDocs.length === counter) {
+        console.log('wwwwww')
+        this.disableApprove = false;
+        hasDecided = true;
+      } else if (rejectedDocs.length === counter) {
+        this.disableReject = false;
+        hasDecided = true;
+      } else if (queriedDocs.length === counter) {
         this.disableQuery = false;
+        hasDecided = true;
+      } else if (heldDocs.length === counter) {
+        this.disableHold = false;
+        hasDecided = true;
+      }
+      if (hasDecided === false) {
+  
+        if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
+          this.disableQuery = false;
+        }
       }
     }
   }
@@ -174,6 +180,10 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   }
   approveClaim(transaction) {
     this.selectedTransaction = transaction;
+    this.selectedTransaction.approvedStatus = this.requestStatus[1];
+    this.selectedAuthorization.approvedStatus = this.requestStatus[1];
+    // console.log(this.selectedTransaction)
+    // console.log(this.selectedAuthorization)
     this.modalApprove = true;
   }
   rejectClaim(transaction) {
