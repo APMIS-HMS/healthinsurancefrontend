@@ -97,7 +97,7 @@
                     <div class="letering">
                         <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name">{{selectedAuthorization?.medicalPersonelName}}</span> Requested Pre-Authorization</div>
+                            <span class="letering-name">{{selectedAuthorization?.medicalPersonelName.lastName}} {{selectedAuthorization?.medicalPersonelName.firstName}}</span> Requested Pre-Authorization</div>
                     </div>
                 </div>
                 <div class="doc-wrap">

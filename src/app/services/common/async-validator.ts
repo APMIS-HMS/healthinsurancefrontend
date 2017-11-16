@@ -2,7 +2,7 @@ import { BeneficiaryService } from './../beneficiary/beneficiary.service';
 import { PersonService } from './../person/person.service';
 import { Observable } from 'rxjs/Rx';
 import { Validator, AbstractControl } from "@angular/forms";
-import addYears from 'date-fns/add_years';
+import * as addYears from 'date-fns/add_years';
 
 export default class AsyncValidator implements Validator {
     constructor(private _beneficiaryService: BeneficiaryService) {

@@ -73,10 +73,10 @@ export class TopBarComponent implements OnInit {
     this.setNotifier();
   }
 
-  setNotifier(){
+  setNotifier() {
     this._notificationService.find({
       query: {
-        'userType._id': this.user.userType._id
+        'userType._id': (!!this.user.userType && this.user.userType._id) ? this.user.userType._id : ''
       }
     }).then((noOfUnReads: any) => {
       let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
