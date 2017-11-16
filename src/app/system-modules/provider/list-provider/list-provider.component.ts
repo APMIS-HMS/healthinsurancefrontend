@@ -175,6 +175,7 @@ export class ListProviderComponent implements OnInit {
     this.index = 0;
     this.resetData = true;
     this._getUserTypes();
+    this.showLoadMore = true;
   }
 
 }

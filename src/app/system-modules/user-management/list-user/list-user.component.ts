@@ -156,6 +156,7 @@ export class ListUserComponent implements OnInit {
     this.index = 0;
     this.resetData = true;
     this._getUsers();
+    this.showLoadMore = true;
   }
 
 }
