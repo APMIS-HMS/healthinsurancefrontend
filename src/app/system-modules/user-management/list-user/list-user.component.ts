@@ -76,6 +76,7 @@ export class ListUserComponent implements OnInit {
         this.users.push(...payload.data);
         if(this.totalEntries == this.users.length){
           this.showLoadMore = false;
+          this._systemService.off();
           return;
         }
         this._systemService.off();
@@ -99,6 +100,7 @@ export class ListUserComponent implements OnInit {
         this.users.push(...payload.data);
         if(this.totalEntries == this.users.length){
           this.showLoadMore = false;
+          this._systemService.off();
           return;
         }
         this._systemService.off();

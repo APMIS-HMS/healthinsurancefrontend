@@ -538,13 +538,18 @@ export class PreAuthorizationNewComponent implements OnInit {
    
     if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
       let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
-      this.drugList.push({
-        "drug": retObj.investigation,
-        "unit": unit.value,
-        "quantity": quantity.value,
-        "checked": retObj.checked,
-        "approvedStatus": retObj.approvedStatus
-      });
+      if(retObj.checked === false){
+        this._toastr.info("Selected Drug does not require authorization!", "Info");
+      }else{
+        this.drugList.push({
+          "drug": retObj.investigation,
+          "unit": unit.value,
+          "quantity": quantity.value,
+          "checked": retObj.checked,
+          "approvedStatus": retObj.approvedStatus
+        });
+      }
+
       this.drugFormGroup.controls.drug.reset();
       unit.reset();
       quantity.reset(1);
@@ -624,11 +629,15 @@ export class PreAuthorizationNewComponent implements OnInit {
     let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedInvestigation);
     console.log(retObj)
     if (name.valid) {
-      this.investigationList.push({
-        "investigation": retObj.investigation,
-        "checked": retObj.checked,
-        "approvedStatus": retObj.approvedStatus
-      });
+      if(retObj.checked === false){
+        this._toastr.info("Selected Investigation does not require authorization!", "Info");
+      }else{
+        this.investigationList.push({
+          "investigation": retObj.investigation,
+          "checked": retObj.checked,
+          "approvedStatus": retObj.approvedStatus
+        });
+      }
       this.investigationFormGroup.controls.services.reset();
     } else {
       name.markAsDirty({ onlySelf: true });
@@ -638,11 +647,20 @@ export class PreAuthorizationNewComponent implements OnInit {
     let name = this.procedureFormGroup.controls.procedures;
     let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedProcedure);
     if (name.valid) {
-      this.procedureList.push({
-        "procedure": retObj.investigation,
-        "checked": retObj.checked,
-        "approvedStatus": this.requestStatus[0]
-      });
+
+      if(retObj.checked === false){
+        this._toastr.info("Selected Procedure does not require authorization!", "Info");
+      }else{
+        this.procedureList.push({
+          "procedure": retObj.investigation,
+          "checked": retObj.checked,
+          "approvedStatus": this.requestStatus[0]
+        });
+      }
+
+
+
+   
       this.procedureFormGroup.controls.procedures.reset();
     } else {
       name.markAsDirty({ onlySelf: true });
@@ -653,6 +671,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     let name = this.diagnosisFormGroup.controls.diagnosis;
     let diagnosisType = this.diagnosisFormGroup.controls.diagnosisType;
     if (name.valid && diagnosisType.valid) {
+      
       this.diagnosisLists.push({
         "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
         "diagnosisType": diagnosisType.value,
