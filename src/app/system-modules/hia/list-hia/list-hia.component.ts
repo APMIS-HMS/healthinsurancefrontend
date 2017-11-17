@@ -151,7 +151,7 @@ export class ListHiaComponent implements OnInit {
       }
     }).then((payload: any) => {
       this._systemService.off();
-      this.hiaTypes = payload.data;
+      //this.hiaTypes = payload.data;
       this.totalEntries = payload.total;
       (this.resetData !== true) ? this.hiaTypes.push(...payload.data) : this.hiaTypes = payload.data;
       if(this.hiaTypes.length >= this.totalEntries){
