@@ -11,7 +11,6 @@ import { NewPlanComponent } from './new-plan/new-plan.component';
 import { planRoutes } from './plan.route';
 import { PlanComponent } from './plan.component';
 import { UserTypeService } from '../../services/common/user-type.service';
-import { LashmaCodesListComponent } from './details-plan/lashma-codes-list/lashma-codes-list.component';
 
 @NgModule({
   imports: [
@@ -21,7 +20,7 @@ import { LashmaCodesListComponent } from './details-plan/lashma-codes-list/lashm
     ReactiveFormsModule,
     planRoutes
 ],
-  declarations: [PlanComponent, DetailsPlanComponent, NewPlanComponent, LashmaCodesListComponent],
+  declarations: [PlanComponent, DetailsPlanComponent, NewPlanComponent],
   providers: [PlanService, PlanTypeService, DrugService, InvestigationService, VisitTypeService, ProcedureService]
 })
 export class PlanModule { } 

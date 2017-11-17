@@ -1,6 +1,7 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
+import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -21,6 +22,11 @@ export class PreAuthorizationListComponent implements OnInit {
   loading: boolean = true;
   authorizations: any[] = [];
   user:any;
+  totalEntries:number;
+  showLoadMore:any = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
+  index:number = 0;
 
   constructor(
     private _router: Router,
@@ -44,9 +50,16 @@ export class PreAuthorizationListComponent implements OnInit {
     this._systemService.on();
     this._preAuthorizationService.find({query: {
       $sort: { createdAt: -1 },
+      $limit: this.limit, 
+      $skip: this.limit*this.index
     }}).then((payload: any) => {
       this.loading = false;
-      this.authorizations = payload.data;
+      //this.authorizations = payload.data;
+      this.totalEntries = payload.total;
+      (this.resetData !== true) ? this.authorizations.push(...payload.data) : this.authorizations = payload.data;
+      if(this.authorizations.length >= this.totalEntries){
+        this.showLoadMore = false;
+      }
       this._systemService.off();
     }).catch(err => {
       console.log(err);
@@ -78,6 +91,17 @@ export class PreAuthorizationListComponent implements OnInit {
     }).catch(err => {
 
     });
+  }
+
+  loadMore(){
+    this._getPreAuthorizations();
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getPreAuthorizations();
+    this.showLoadMore = true;
   }
 
 }

@@ -104,11 +104,11 @@
             <div class="frm-item-wrap">
                 <label class="label">Claim Type</label>
                 <div class="input-wrap">
-                        <input type="text" formControlName="claimType" class="form-control" disabled value="{{authorizeType}}">
+                    <input type="text" formControlName="claimType" class="form-control" disabled value="{{authorizeType}}">
                     <!-- <select formControlName="claimType" disabled class="form-control">
                         <option value="Free for Service" *ngIf="isAuthorize==true">Free for Service</option>
                         <option value="Capitation" *ngIf="isAuthorize ==false">Capitation</option> -->
-                        <!-- <option *ngFor="let item of claimTypesItems" [ngValue]="item.name">{{ item.name }}</option> -->
+                    <!-- <option *ngFor="let item of claimTypesItems" [ngValue]="item.name">{{ item.name }}</option> -->
                     <!-- </select> -->
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.claimType.valid || claimsFormGroup.controls.claimType.pristine">

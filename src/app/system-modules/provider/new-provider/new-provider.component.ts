@@ -143,7 +143,28 @@ export class NewProviderComponent implements OnInit {
       classification: [this.facility != null ? this.facility.facilityClass : '', [<any>Validators.required]],
       grade: [this.facility != null ? this.facility.provider.facilityGrade : '', [<any>Validators.required]],
       ownership: [this.facility != null ? this.facility.provider.facilityOwnership : '', [<any>Validators.required]],
-      comment: [this.facility != null ? this.facility.provider.comment : '', [<any>Validators.required]]
+      comment: [this.facility != null ? this.facility.provider.comment : '', [<any>Validators.required]],
+
+      // lcda:[<any>Validators.required],
+      // ownerName:[<any>Validators.required],
+      // ownerAddress:[<any>Validators.required],
+      // ownerPhone:[<any>Validators.required],
+      // noConsultant:[<any>Validators.required],
+      // noDoc:[<any>Validators.required],
+      // noNurse:[<any>Validators.required],
+      // noLabSci:[<any>Validators.required],
+      // noOtherStaff:[<any>Validators.required],
+      // noTotalStaff:[<any>Validators.required],
+      // noCot:[<any>Validators.required],
+      // noRoom:[<any>Validators.required],
+      // noBed:[<any>Validators.required],
+      // operatingOfficer:[<any>Validators.required],
+      // status:[<any>Validators.required],
+      // regDate:[<any>Validators.required],
+      // renDate:[<any>Validators.required],
+      // year:[<any>Validators.required],
+      // logoStatus:[<any>Validators.required],
+      // servicesRendered:[<any>Validators.required]
     });
     console.log(this.facility);
 
