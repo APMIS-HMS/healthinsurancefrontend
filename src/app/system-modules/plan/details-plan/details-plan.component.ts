@@ -16,7 +16,6 @@ import { FacilityService } from '../../../services/index';
 	styleUrls: ['./details-plan.component.scss']
 })
 export class DetailsPlanComponent implements OnInit {
-
 	listsearchControl = new FormControl();
 	premiumsearchControl = new FormControl();
 
@@ -62,6 +61,7 @@ export class DetailsPlanComponent implements OnInit {
 			this._systemService.off();
 		});
 	}
+
 	navigateEditPlan(plan) {
 		this._systemService.on();
 		this._router.navigate(['/modules/plan/new', plan._id]).then(res => {
