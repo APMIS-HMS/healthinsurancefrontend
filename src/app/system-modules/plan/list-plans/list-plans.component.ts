@@ -1,6 +1,6 @@
 import { PlanService } from './../../../services/plan/plan.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { PlanTypeService } from './../../../services/common/plan-type.service';
 
 import { UploadService } from './../../../services/common/upload.service';
@@ -33,6 +33,11 @@ export class ListPlansComponent implements OnInit {
   user: any;
   plans: any = [];
   loading: boolean = true;
+  totalEntries:number;
+  showLoadMore:any = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
+  index:number = 0;
 
   constructor(
     private _router: Router,
@@ -62,16 +67,24 @@ export class ListPlansComponent implements OnInit {
         $or: [
           { 'facilityId._id': this.user.facilityId._id },
           { 'facilityId._id': this.currentPlatform._id }
-        ]
+        ], 
+        $limit: this.limit, 
+        $skip: this.limit*this.index
       }
     }).then((payload: any) => {
       this.loading = false;
-      this.plans = payload.data;
-      console.log(this.plans)
+      //this.plans = payload.data;
+      this.totalEntries = payload.total;
+      (this.resetData !== true) ? this.plans.push(...payload.data) : this.plans = payload.data;
+      if(this.plans.length >= this.totalEntries){
+        this.showLoadMore = false;
+      }
+      console.log(this.plans);
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
     });
+    this.index++;
   }
 
   _getCurrentPlatform() {
@@ -145,5 +158,16 @@ export class ListPlansComponent implements OnInit {
       console.log(err)
       this._systemService.off();
     });
+  }
+
+  loadMore(){
+    this._getCurrentPlatform();
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getCurrentPlatform();
+    this.showLoadMore = true;
   }
 }

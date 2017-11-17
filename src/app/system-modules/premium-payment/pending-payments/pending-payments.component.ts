@@ -6,7 +6,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 // import { Angular4PaystackModule } from 'angular4-paystack';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES, SPONSORSHIP } from '../../../services/globals/config';
+import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES, SPONSORSHIP, TABLE_LIMIT_PER_VIEW } from '../../../services/globals/config';
 import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService, PremiumPaymentService } from '../../../services/index';
 import { Policy, OrganizationPolicy } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -45,6 +45,14 @@ export class PendingPaymentsComponent implements OnInit {
   showPaystack: boolean = false;
   premiumPaymentData: any;
   sponsorship: any = SPONSORSHIP;
+
+  totalEntries:number;
+  OrganisationTotalEntries:number;
+  individualShowLoadMore:any = true;
+  organisationShowLoadMore:any = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
+  index:number = 0;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -100,6 +108,8 @@ export class PendingPaymentsComponent implements OnInit {
         'platformOwnerId._id': this.currentPlatform._id,
         'sponsorshipId.name': sponsorship,
         isPaid: false,
+        $limit: this.limit,
+        $skip: this.index*this.limit,
         $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
@@ -109,7 +119,12 @@ export class PendingPaymentsComponent implements OnInit {
         policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
         policies.push(policy);
       });
-      this.individualPolicies = policies;
+      //this.individualPolicies = policies;
+      this.totalEntries = res.total;
+      (this.resetData !== true) ? this.individualPolicies.push(...policies) : this.individualPolicies = policies;
+      if(this.individualPolicies.length >= this.totalEntries){
+        this.individualShowLoadMore = false;
+      }
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -126,6 +141,8 @@ export class PendingPaymentsComponent implements OnInit {
         'platformOwnerId._id': this.currentPlatform._id,
         'sponsorshipId.name': sponsorship,
         isPaid: false,
+        $limit: this.limit,
+        $skip: this.index*this.limit,
         $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
@@ -151,6 +168,11 @@ export class PendingPaymentsComponent implements OnInit {
           hasItem[0].noOfEmployees++;
         }
       });
+      this.totalEntries = res.total;
+      //(this.resetData !== true) ? this.organisationPolicies.push(...res.data) : this.organisationPolicies = res.data;
+      if(this.organisationPolicies.length >= this.OrganisationTotalEntries){
+        this.organisationShowLoadMore = false;
+      }
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -306,6 +328,18 @@ export class PendingPaymentsComponent implements OnInit {
         this._systemService.off();
       });
     }
+  }
+
+  loadMore(){
+    this._getCurrentPlatform();
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getCurrentPlatform();
+    if(this.individualActiveTab) { this.individualShowLoadMore = true; this.organisationShowLoadMore = false; }
+    else{ this.organisationShowLoadMore = true; this.individualShowLoadMore = false; }
   }
 
 }

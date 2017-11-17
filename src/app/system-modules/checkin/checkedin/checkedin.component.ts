@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs/Rx';
 import { Router } from '@angular/router';
 import { CheckIn } from './../../../models/check-in/check-in';
+import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { UploadService } from './../../../services/common/upload.service';
 import { CheckInService } from './../../../services/common/check-in.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
@@ -33,6 +34,11 @@ export class CheckedinComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   user: any;
   checkInSubscription:Subscription;
+  totalEntries:number;
+  showLoadMore:any = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
+  index:number = 0;
 
   constructor(
     private _toastr: ToastsManager,
@@ -48,7 +54,7 @@ export class CheckedinComponent implements OnInit, OnDestroy {
     this._headerEventEmitter.setRouteUrl('Check In');
     this._headerEventEmitter.setMinorRouteUrl('Check In Beneficiaries');
     this.user = (<any>this._locker.getObject('auth')).user;
-    this._getCheckedIn();
+    this._getCheckedIn(); 
 
     this.checkInSubscription = this._checkInService.listner.subscribe(payload =>{
       console.log(payload);
@@ -61,6 +67,8 @@ export class CheckedinComponent implements OnInit, OnDestroy {
       query: {
         'providerFacilityId._id': this.user.facilityId._id,
         'isCheckedOut': false,
+        $limit: this.limit,
+        $skip: this.index*this.limit,
         // $client: {
         //   checkedInToday: true
         // },
@@ -68,7 +76,12 @@ export class CheckedinComponent implements OnInit, OnDestroy {
       }
     }).then((payload: any) => {
       this.loading = false;
-      this.checkedIns = payload.data;
+      //this.checkedIns = payload.data;
+      this.totalEntries = payload.total;
+      (this.resetData !== true) ? this.checkedIns.push(...payload.data) : this.checkedIns = payload.data;
+      if(this.checkedIns.length >= this.totalEntries){
+        this.showLoadMore = false;
+      }
       console.log(this.checkedIns)
       this._systemService.off();
     }).catch(err => {
@@ -114,6 +127,18 @@ export class CheckedinComponent implements OnInit, OnDestroy {
         this._systemService.off();
       });
     }
+  }
+
+
+  loadMore(){
+    this._getCheckedIn();
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getCheckedIn();
+    this.showLoadMore = true;
   }
 
 }
