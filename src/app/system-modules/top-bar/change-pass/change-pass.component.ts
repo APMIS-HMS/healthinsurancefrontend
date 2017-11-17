@@ -11,8 +11,9 @@ import { CoolLocalStorage } from "angular2-cool-storage";
 import { User } from "../../../models/setup/user";
 import { Injectable } from "@angular/core";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
+import { Router } from "@angular/router";
 
-const host = require('../../../feathers/feathers.service'); // "http://localhost:3031"; 
+const host = require("../../../feathers/feathers.service"); // "http://localhost:3031";
 const feathers = require("feathers/client");
 const socketio = require("feathers-socketio/client");
 const io = require("socket.io-client");
@@ -49,8 +50,7 @@ export class ChangePasswordSocketService {
 @Injectable()
 export class ChangePasswordAuthService {
   _chSocket;
-  constructor(private _chSocketService: ChangePasswordSocketService) {
-  }
+  constructor(private _chSocketService: ChangePasswordSocketService) {}
 
   chLogin(query: any) {
     return this._chSocketService.chLoginIntoApp(query);
@@ -71,11 +71,12 @@ export class ChangePassComponent implements OnInit {
     private _chAuthService: ChangePasswordAuthService,
     private _locker: CoolLocalStorage,
     private _authService: AuthService,
-    private _toastr: ToastsManager,
+    private _router: Router,
+    private _toastr: ToastsManager
   ) {}
 
   ngOnInit() {
-    this.user = <any>this._locker.getItem('auth');
+    this.user = <any>this._locker.getItem("auth");
     this.changePassFormGroup = this._fb.group(
       {
         old_pass: ["", [<any>Validators.required]],
@@ -99,29 +100,28 @@ export class ChangePassComponent implements OnInit {
       .then(logindetails => {
         return logindetails;
       })
-      .then(result => {  // RvnYUv4i
-        const newpwd = {password: value.cpassword};
+      .then(result => {
+        // RvnYUv4i
+        const newpwd = { password: value.cpassword };
         this._authService
           .patch(userId, newpwd, {})
           .then(updatedPwd => {
             this._toastr.success(
-              'Password was successfully changed',
-              'Success!'
+              "Password was successfully changed",
+              "Success!"
             );
-        return this._authService.logOut();
+            setTimeout(() => {
+              this._authService.logOut().then(res => {
+                this._router.navigate(["/auth/login"]);
+              });
+            }, 3000);
           })
           .catch(err => {
-            this._toastr.error(
-              'Unable to change password',
-              'Error!'
-            );
+            this._toastr.error("Unable to change password", "Error!");
           });
       })
       .catch(err => {
-        this._toastr.error(
-          'Wrong Password',
-          'Error!'
-        );
+        this._toastr.error("Wrong Password", "Error!");
       });
   }
 }
