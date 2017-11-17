@@ -1,4 +1,5 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
 	selector: 'app-root',
@@ -8,8 +9,9 @@ import { Component, ViewContainerRef, OnInit } from '@angular/core';
 
 export class AppComponent implements OnInit {
 	title = 'app works!';
-	constructor() {
-		
+	constructor(private vcr: ViewContainerRef, 
+		private toastr: ToastsManager) {
+		this.toastr.setRootViewContainerRef(vcr);
 	}
 
 	ngOnInit() {

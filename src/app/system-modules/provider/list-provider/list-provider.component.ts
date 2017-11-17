@@ -1,7 +1,7 @@
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
+import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import 'rxjs/add/operator/filter';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -27,10 +27,11 @@ export class ListProviderComponent implements OnInit {
   categories: any = <any>[];
   loading: boolean = true;
   selectedUserType: any = <any>{};
-  limit:number = 2;
+  limit:number = TABLE_LIMIT_PER_VIEW;
   index:number = 0;
   totalEntries:number;
   showLoadMore:Boolean = true;
+  resetData:Boolean;
 
   constructor(
     private _router: Router,
@@ -103,7 +104,7 @@ export class ListProviderComponent implements OnInit {
       this.loading = false;
       console.log(res);
       if (res.data.length > 0) {
-        this.providers.push(...res.data);
+        (this.resetData !== true) ? this.providers.push(...res.data) : this.providers = res.data;
         this.totalEntries = res.total;
         if(this.providers.length >= this.totalEntries){
           this.showLoadMore = false;
@@ -168,8 +169,13 @@ export class ListProviderComponent implements OnInit {
 
   loadMore(){
     this._getUserTypes();
+  }
 
-    console.log(this.providers);
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getUserTypes();
+    this.showLoadMore = true;
   }
 
 }

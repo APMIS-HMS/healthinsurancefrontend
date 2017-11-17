@@ -135,10 +135,15 @@
                     <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
                 </div>
                 <div class="bar-icos">
-                    <div (click)="save()" class="btn btn-medium btn-white-outline btn-radius-x2">SAVE</div>
-                </div>
-                <div>
-                    <span>Upload items: {{totalExcelPrincipalItems}}</span>
+                        <span>
+                                <div (click)="save()" [hidden]="isProcessing" *ngIf="checkItemChecked()==true" class="btn btn-medium btn-white-outline btn-radius-x2">SAVE</div>
+                                
+                                <div [hidden]="!isProcessing">
+                                    Uploading...
+                                    <i class='fa fa-spinner fa-spin'></i>
+                                </div>
+                            </span>
+                    
                 </div>
                 <div>
                     <span>Upload items: {{totalExcelPrincipalItems}}</span>
@@ -147,7 +152,7 @@
             <div *ngIf="!isUploading">
                 <app-employer-beneficiaries></app-employer-beneficiaries>
             </div>
-            <table class="table" *ngIf="isUploading" cellpadding="0" cellspacing="0" border="0.5">
+            <table class="table" *ngIf="isUploading" disabled="isProcessing==true" cellpadding="0" cellspacing="0" border="0.5">
                 <thead class="thead">
                     <tr class="tr">
                         <th class="th">
@@ -158,6 +163,7 @@
                         <th class="th">Gender</th>
                         <th class="th">Type</th>
                         <th class="th">Marital Satus</th>
+                        <th class="th">Relationship</th>
                         <th class="th">Residential State</th>
                         <th class="th">Residential LGA</th>
                         <th class="th">Sate of Origin</th>
@@ -236,6 +242,21 @@
                             </div>
                         </td>
                         <td class="td hover">
+                                <div *ngIf="item.isEdit==false && item.isPrincipal == false" class="td-value">
+                                    <span style="color:Red" *ngIf="checkValue(item?.relationship,relationhips,'name') == false">
+                                        Invalid
+                                    </span>
+                                    <span *ngIf="checkValue(item?.relationship,relationhips,'name') == true">
+                                        {{item?.relationship}}
+                                    </span>
+                                </div>
+                                <div *ngIf="item.isEdit==true" class="input-wrap">
+                                    <select [formControl]="relationshipControl" (change)="onRelationship($event,i)" [class.invalidvalue]="checkValue(item?.relationship,relationhips,'name') == false">
+                                        <option *ngFor="let relation of relationhips" [selected]="relation.name==item.relationship">{{relation.name}}</option>
+                                    </select>
+                                </div>
+                            </td>
+                        <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkLocationValue(item.homeAddress.state,mStates) == false">
                                     Invalid
@@ -306,103 +327,104 @@
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
+                                <span style="color:Red" *ngIf="checkHiaValue(item?.policy?.facilityType,item?.policy?.hia,platforms) == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == true">
+                                <span *ngIf="checkHiaValue(item?.policy?.facilityType,item?.policy?.hia,platforms) == true">
                                     {{item?.policy?.facilityType}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="facilityTypeControl" (change)="onfacilityType($event,i)" [class.invalidvalue]="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
+                                <select [formControl]="facilityTypeControl" (change)="onfacilityType($event,i)" [class.invalidvalue]="checkHiaValue(item?.policy?.facilityType,item?.policy?.hia,platforms) == false">
                                     <option *ngFor="let userType of userTypes" [selected]="item.policy.facilityType==userType.name">{{userType.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
+                                <span style="color:Red" *ngIf="checkHiaValue(item?.policy?.facilityType,item?.policy?.hia,platforms) == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == true">
+                                <span *ngIf="checkHiaValue(item?.policy?.facilityType,item?.policy?.hia,platforms) == true">
                                     {{item?.policy?.hia}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <input [formControl]="hiaControl" (change)="onHia($event,i)" value="{{item.policy.hia}}" [class.invalidvalue]="checkHiaValue(item.policy.facilityType,item.policy.hia,platforms) == false">
+                                <input [formControl]="hiaControl" (change)="onHia($event,i)" value="{{item?.policy?.hia}}" [class.invalidvalue]="checkHiaValue(item?.policy?.facilityType,item?.policy?.hia,platforms) == false">
                             </div>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkValue(item.policy.planType,planTypes,'name') == false">
+                                <span style="color:Red" *ngIf="checkValue(item?.policy?.planType,planTypes,'name') == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkValue(item.policy.planType,planTypes,'name') == true">
+                                <span *ngIf="checkValue(item?.policy?.planType,planTypes,'name') == true">
                                     {{item?.policy?.planType}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="planTypeControl" (change)="onPlanTypes($event,i)" [class.invalidvalue]="checkValue(item.policy.planType,planTypes,'name') == false">
+                                <select [formControl]="planTypeControl" (change)="onPlanTypes($event,i)" [class.invalidvalue]="checkValue(item?.policy?.planType,planTypes,'name') == false">
                                     <option *ngFor="let planType of planTypes" [selected]="item.policy.planType==planTypes.name">{{planType.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkPremiumValue(item.policy.plan,item.policy.premiumPackage,plans) == false">
+                                <span style="color:Red" *ngIf="checkPremiumValue(item?.policy?.plan,plans) == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkPremiumValue(item.policy.plan,item.policy.premiumPackage,plans) == true">
+                                <span *ngIf="checkPremiumValue(item?.policy?.plan,plans) == true">
                                     {{item?.policy?.plan}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="planControl" (change)="onPlan($event,i)" [class.invalidvalue]="checkPremiumValue(item.policy.plan,item.policy.premiumPackage,plans) == false">
+                                <select [formControl]="planControl" (change)="onPlan($event,i)" [class.invalidvalue]="checkPremiumValue(item?.policy?.plan,plans) == false">
+                                    <option>---Select Plan---</option>
                                     <option *ngFor="let plan of plans" [selected]="item.policy.plan==plan.name">{{plan.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkValue(item.policy.premiumPackage,packages,'category.name') == false">
+                                <span style="color:Red" *ngIf="checkValue(item?.policy?.premiumPackage,packages,'category.name') == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkValue(item.policy.premiumPackage,packages,'category.name') == true">
+                                <span *ngIf="checkValue(item?.policy?.premiumPackage,packages,'category.name') == true">
                                     {{item?.policy?.premiumPackage}} 
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="packageControl" (change)="onPackage($event,i)" [class.invalidvalue]="checkValue(item.policy.premiumPackage,packages,'category.name') == false">
-                                    <option *ngFor="let package of packages" [selected]="item.policy.premiumPackage==package.category.name">{{package.category.name}}</option>
+                                <select [formControl]="packageControl" (change)="onPackage($event,i)" [class.invalidvalue]="checkValue(item?.policy?.premiumPackage,packages,'category.name') == false">
+                                    <option *ngFor="let package of packages" [selected]="item.policy.premiumPackage==package.category.name">{{package?.category?.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkValue(item.policy.premiumCategory,categories,'name') == false">
+                                <span style="color:Red" *ngIf="checkValue(item?.policy?.premiumCategory,categories,'name') == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkValue(item.policy.premiumCategory,categories,'name') == true">
+                                <span *ngIf="checkValue(item?.policy?.premiumCategory,categories,'name') == true">
                                     {{item?.policy?.premiumCategory}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="categoryControl" (change)="onCategory($event,i)" [class.invalidvalue]="checkValue(item.policy.premiumCategory,categories,'name') == false">
+                                <select [formControl]="categoryControl" (change)="onCategory($event,i)" [class.invalidvalue]="checkValue(item?.policy?.premiumCategory,categories,'name') == false">
                                     <option *ngFor="let category of categories" [selected]="item.policy.premiumCategory==category.name">{{category.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                <span style="color:Red" *ngIf="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == false">
+                                <span style="color:Red" *ngIf="checkValue(item?.policy?.sponsorship,SPONSORSHIP,'name') == false">
                                     Invalid
                                 </span>
-                                <span *ngIf="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == true">
+                                <span *ngIf="checkValue(item?.policy?.sponsorship,SPONSORSHIP,'name') == true">
                                     {{item?.policy?.sponsorship}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                <select [formControl]="sponsorshipControl" (change)="onSponsor($event,i)" [class.invalidvalue]="checkValue(item.policy.sponsorship,SPONSORSHIP,'name') == false">
+                                <select [formControl]="sponsorshipControl" (change)="onSponsor($event,i)" [class.invalidvalue]="checkValue(item?.policy?.sponsorship,SPONSORSHIP,'name') == false">
                                     <option *ngFor="let sponsor of SPONSORSHIP" [selected]="item.policy.sponsorship==sponsor.name">{{sponsor.name}}</option>
                                 </select>
                             </div>

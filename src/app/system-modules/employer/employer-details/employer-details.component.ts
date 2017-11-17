@@ -5,7 +5,9 @@ import { TitleService } from './../../../services/common/titles.service';
 import { UploadService } from './../../../services/common/upload.service';
 import { PlanTypeService } from './../../../services/common/plan-type.service';
 import { UserTypeService } from './../../../services/common/user-type.service';
+import { RelationshipService } from './../../../services/common/relationship.service';
 import { PremiumTypeService } from './../../../services/common/premium-type.service';
+import { BulkBeneficiaryUploadService } from './../../../services/common/bulk-beneficiary-upload.service';
 import { PlanService } from './../../../services/plan/plan.service';
 import { MaritalStatusService } from './../../../services/common/marital-status.service';
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
@@ -17,6 +19,7 @@ import { FacilityService, SystemModuleService } from './../../../services/index'
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+
 
 @Component({
   selector: 'app-employer-details',
@@ -44,6 +47,11 @@ export class EmployerDetailsComponent implements OnInit {
   packages = [];
   categories = [];
   SPONSORSHIP = [];
+  beneficiaries = [];
+  relationhips = [];
+  nSuccess = 0;
+  nFailed = 0;
+  isProcessing = false;
 
 
   searchHiaControl = new FormControl();
@@ -71,6 +79,7 @@ export class EmployerDetailsComponent implements OnInit {
   packageControl = new FormControl();
   categoryControl = new FormControl();
   sponsorshipControl = new FormControl();
+  relationshipControl = new FormControl();
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -120,7 +129,9 @@ export class EmployerDetailsComponent implements OnInit {
     private _planTypeService: PlanTypeService,
     private _userTypeService: UserTypeService,
     private _planService: PlanService,
-    private _premiumTypeService: PremiumTypeService
+    private _premiumTypeService: PremiumTypeService,
+    private _relationshipService:RelationshipService,
+    public _bulkBeneficiaryUploadService: BulkBeneficiaryUploadService
   ) { }
 
   ngOnInit() {
@@ -165,6 +176,7 @@ export class EmployerDetailsComponent implements OnInit {
     this._getPremiumCategory();
     this._getFacilityTypes();
     this._getPlans();
+    this._getRelationship();
 
     this.stateControl.valueChanges.subscribe(value => {
       if (this.stateControl.valid) {
@@ -274,6 +286,12 @@ export class EmployerDetailsComponent implements OnInit {
     })
   }
 
+  _getRelationship() {
+    this._relationshipService.find({}).then((payload: any) => {
+      this.relationhips = payload.data;
+    })
+  }
+
   _getPlans() {
     this._planService.find({}).then((payload: any) => {
       this.plans = payload.data;
@@ -329,6 +347,19 @@ export class EmployerDetailsComponent implements OnInit {
     }
   }
 
+  checkPlanType(data, obj, param) {
+    if (data.length > 0) {
+      let val = data.filter(x => x[obj].toLowerCase() == param.toString().toLowerCase());
+      if (val.length > 0) {
+        console.log(true)
+        return true;
+      } else {
+        console.log(false)
+        return false;
+      }
+    }
+  }
+
   checkLocationValue(param, data) {
     let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
     if (val.length > 0) {
@@ -362,8 +393,8 @@ export class EmployerDetailsComponent implements OnInit {
     }
 
   }
-  checkPremiumValue(param, pPackage, data) {
-    let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
+  checkPremiumValue(param, data) {
+    let val = data.filter(x => x.name == param);
     if (val.length > 0) {
       this.packages = val[0].premiums;
       return true;
@@ -420,12 +451,16 @@ export class EmployerDetailsComponent implements OnInit {
     this.orderExcelPolicies[index].policy.facilityType = this.facilityTypeControl.value;
   }
 
+  onRelationship(event, index) {
+    this.orderExcelPolicies[index].relationship = this.relationshipControl.value;
+  }
+
   onHia(event, index) {
     this.orderExcelPolicies[index].policy.hia = this.hiaControl.value;
   }
 
   onPlanTypes(event, index) {
-    this.orderExcelPolicies[index].policy.planTypes = this.planTypeControl.value;
+    this.orderExcelPolicies[index].policy.planType = this.planTypeControl.value;
   }
 
   onPlan(event, index) {
@@ -588,6 +623,15 @@ export class EmployerDetailsComponent implements OnInit {
     }
   }
 
+  checkItemChecked() {
+    var filterItem = this.orderExcelPolicies.filter(x => x.isCheck == true);
+    if (filterItem.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public upload(e) {
     let fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
@@ -611,6 +655,7 @@ export class EmployerDetailsComponent implements OnInit {
             this.orderExcelPolicies.push(item);
           });
         });
+        console.log(this.orderExcelPolicies);
         this.totalExcelPrincipalItems = this.orderExcelPolicies.filter(x => x.isPrincipal == true).length;
       }).catch(err => {
         // this._notification('Error', 'There was an error uploading the file');
@@ -634,25 +679,7 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   save() {
-    // if (this.validateControls() == true) {
-    //   var mPrincipal = {};
-    //   var mDependants = [];
-    //   var beneficiaries = [];
-    //   this.orderExcelPolicies.forEach(function (item) {
-    //     if (item.principalIndex == true) {
-
-    //     } else {
-
-    //     }
-    //   })
-    // } else {
-
-    // }
-
-    // 'principal': principal,
-    // 'dependent': beneficiaries,
-    // 'policy': policy
-
+    var retainedOrderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
     var groups = {};
     var bObj = {};
     for (var i = 0; i < this.orderExcelPolicies.length; i++) {
@@ -662,24 +689,40 @@ export class EmployerDetailsComponent implements OnInit {
       }
       groups[groupName].push(this.orderExcelPolicies[i]);
     };
-    console.log(groups);
-    // var beneficiaries = [];
-    // for (groupName in groups) {
-    //   if (groups[groupName].isPrincipal == true) {
-    //     let prin = groups[groupName]
-    //     prin = delete prin.policy;
-    //     bObj = {
-    //       'principal': prin,
-    //       'policy': groups[groupName].policy
-    //     }
-    //   }else{
-    //     bObj = {
-    //       'dependent': groups[groupName]
-    //     }
-    //   }
-    //   myArray.push({ group: groupName, color: groups[groupName] });
-    //}
 
+
+    for (groupName in groups) {
+      var val: any = <any>{};
+      val.dependent = [];
+      groups[groupName].forEach(element => {
+        if (element.isPrincipal == true) {
+          val.policy = element.policy;
+          let p = element;
+          p = delete element.policy;
+          val.principal = element;
+        } else {
+          val.dependent.push(element);
+        }
+      });
+      this.beneficiaries.push(val);
+    }
+    console.log(this.beneficiaries);
+    this.isProcessing = true
+    this.beneficiaries.forEach((uploadItem, index) => {
+      this._bulkBeneficiaryUploadService.create(uploadItem).then(payload => {
+        this.nSuccess += 1;
+        console.log(payload);
+      }, error => {
+        console.log(error);
+        this.isProcessing = false;
+      })
+      if (index == this.beneficiaries.length - 1) {
+        this.isProcessing = false;
+        this.nSuccess = 0;
+        this.nFailed = 0;
+        this.orderExcelPolicies = retainedOrderExcelPolicies;
+      }
+    })
   }
 
   addApprovalClick() {

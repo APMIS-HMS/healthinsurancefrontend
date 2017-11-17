@@ -241,7 +241,7 @@ export class NewClaimComponent implements OnInit {
     console.log(checkinId);
     this._preAuthorizationService.find({ query: { "checkedInDetails": checkinId } }).then((preauth_callback: any) => {
       console.log(preauth_callback);
-      
+
       if (preauth_callback.data.length > 0) {
         this.isAuthorize = true;
         this.authorizeType = "Free for Service"
@@ -300,6 +300,8 @@ export class NewClaimComponent implements OnInit {
             this.claimsFormGroup.controls.clinicalNote.setValue(clinicNote);
           })
         });
+        this.claimsFormGroup.controls.medicalPersonelName.setValue(this.SelectedCheckinItem.medicalPersonelName);
+        this.claimsFormGroup.controls.docunit.setValue(this.SelectedCheckinItem.medicalPersonelUnit);
       } else {
         this.isAuthorize = false;
         this.authorizeType = "Capitation";
@@ -627,7 +629,8 @@ export class NewClaimComponent implements OnInit {
     //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
     this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
     this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
-    console.log(this.claimItem);
+    console.log(this.claimsFormGroup.controls.docunit.value);
+    console.log(this.claimsFormGroup.controls.medicalPersonelName.value);
     this.isProcessing = true;
     this._claimService.create(this.claimItem).then((payload: any) => {
       console.log(payload);
@@ -638,7 +641,6 @@ export class NewClaimComponent implements OnInit {
       console.log(error);
       this.isProcessing = false;
     })
-
   }
 
   navigateListClaim() {

@@ -11,6 +11,7 @@ import { AccessManagementComponent } from './access-management/access-management
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ChangePassComponent } from './top-bar/change-pass/change-pass.component';
 import { NotificationService } from './../services/common/notification.service';
+import { NotificationsModule } from 'angular-notice'
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { NotificationService } from './../services/common/notification.service';
         ChangePassComponent
     ],
     exports: [],
-    imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule],
+    imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule,NotificationsModule ],
     providers: [ModuleService, RoleService, NotificationService]
 })
 
