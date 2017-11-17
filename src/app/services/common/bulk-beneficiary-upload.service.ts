@@ -25,4 +25,10 @@ export class BulkBeneficiaryUploadService {
       .send(body);
   }
 
+  download(){
+    let host = this._restService.getHost();
+    let path = host + '/uploads/template/bulk-upload.xlsx';
+    window.open(path);
+  }
+
 }

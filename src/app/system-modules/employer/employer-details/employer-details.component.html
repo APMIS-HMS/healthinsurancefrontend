@@ -129,21 +129,26 @@
                         <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span>
                     </div>
                 </div>
+                <button (click)="downloadExcelTemplate()">
+                    <i class="fa fa-download" aria-hidden="true">--Excel Template</i>
+                </button>
+
 
                 <div class="bar-icos">
                     <div (click)="showImageBrowseDlg()" class="btn btn-medium btn-white-outline btn-radius-x2"> UPLOAD BENEFICIARIES</div>
-                    <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;" #fileInput type="file" id="uploadResult" (change)="upload($event)">
+                    <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display:none;"
+                        #fileInput type="file" id="uploadResult" (change)="upload($event)">
                 </div>
                 <div class="bar-icos">
-                        <span>
-                                <div (click)="save()" [hidden]="isProcessing" *ngIf="checkItemChecked()==true" class="btn btn-medium btn-white-outline btn-radius-x2">SAVE</div>
-                                
-                                <div [hidden]="!isProcessing">
-                                    Uploading...
-                                    <i class='fa fa-spinner fa-spin'></i>
-                                </div>
-                            </span>
-                    
+                    <span>
+                        <div (click)="save()" [hidden]="isProcessing" *ngIf="checkItemChecked()==true" class="btn btn-medium btn-white-outline btn-radius-x2">SAVE</div>
+
+                        <div [hidden]="!isProcessing">
+                            Uploading...
+                            <i class='fa fa-spinner fa-spin'></i>
+                        </div>
+                    </span>
+
                 </div>
                 <div>
                     <span>Upload items: {{totalExcelPrincipalItems}}</span>
@@ -184,7 +189,7 @@
                 <tbody class="tbody">
                     <tr class="tr" *ngFor="let item of orderExcelPolicies; let i=index">
                         <td class="td hover">
-                            <input  (change)="onSelectPrincipal($event,i)" [(ngModel)]="item.isCheck" [formControl]="itemCheckBox" type="checkbox">
+                            <input (change)="onSelectPrincipal($event,i)" [(ngModel)]="item.isCheck" [formControl]="itemCheckBox" type="checkbox">
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
@@ -204,7 +209,8 @@
                         <td class="td hover">
                             <span *ngIf="!item.isEdit==true" class="td-value">{{item.firstName}} {{item.lastName}}</span>
                             <div *ngIf="item.isEdit==true" class="input-wrap">
-                                <input [formControl]="nameControl" (change)="onName($event,i)" value="{{item.firstName}} {{item.lastName}}" placeholder="Firstname Lastname" type="text">
+                                <input [formControl]="nameControl" (change)="onName($event,i)" value="{{item.firstName}} {{item.lastName}}" placeholder="Firstname Lastname"
+                                    type="text">
                             </div>
                         </td>
                         <td class="td hover">
@@ -242,20 +248,20 @@
                             </div>
                         </td>
                         <td class="td hover">
-                                <div *ngIf="item.isEdit==false && item.isPrincipal == false" class="td-value">
-                                    <span style="color:Red" *ngIf="checkValue(item?.relationship,relationhips,'name') == false">
-                                        Invalid
-                                    </span>
-                                    <span *ngIf="checkValue(item?.relationship,relationhips,'name') == true">
-                                        {{item?.relationship}}
-                                    </span>
-                                </div>
-                                <div *ngIf="item.isEdit==true" class="input-wrap">
-                                    <select [formControl]="relationshipControl" (change)="onRelationship($event,i)" [class.invalidvalue]="checkValue(item?.relationship,relationhips,'name') == false">
-                                        <option *ngFor="let relation of relationhips" [selected]="relation.name==item.relationship">{{relation.name}}</option>
-                                    </select>
-                                </div>
-                            </td>
+                            <div *ngIf="item.isEdit==false && item.isPrincipal == false" class="td-value">
+                                <span style="color:Red" *ngIf="checkValue(item?.relationship,relationhips,'name') == false">
+                                    Invalid
+                                </span>
+                                <span *ngIf="checkValue(item?.relationship,relationhips,'name') == true">
+                                    {{item?.relationship}}
+                                </span>
+                            </div>
+                            <div *ngIf="item.isEdit==true" class="input-wrap">
+                                <select [formControl]="relationshipControl" (change)="onRelationship($event,i)" [class.invalidvalue]="checkValue(item?.relationship,relationhips,'name') == false">
+                                    <option *ngFor="let relation of relationhips" [selected]="relation.name==item.relationship">{{relation.name}}</option>
+                                </select>
+                            </div>
+                        </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkLocationValue(item.homeAddress.state,mStates) == false">
@@ -287,15 +293,15 @@
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
                                 <span style="color:Red" *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == false">
-                                        Invalid
-                                    </span>
+                                    Invalid
+                                </span>
                                 <span *ngIf="checklocationValue2(item.stateOfOrigin,oStates) == true">
-                                        {{item.stateOfOrigin}}
-                                    </span>
+                                    {{item.stateOfOrigin}}
+                                </span>
                             </div>
                             <select *ngIf="item.isEdit==true" (change)="onOstate($event,i)" [formControl]="oStateControl" [class.invalidvalue]="checklocationValue2(item.stateOfOrigin,oStates) == false">
-                                    <option *ngFor="let state of oStates" [selected]="item.stateOfOrigin==state.name">{{state.name}}</option>
-                                </select>
+                                <option *ngFor="let state of oStates" [selected]="item.stateOfOrigin==state.name">{{state.name}}</option>
+                            </select>
                         </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true" class="td-value">
@@ -390,7 +396,7 @@
                                     Invalid
                                 </span>
                                 <span *ngIf="checkValue(item?.policy?.premiumPackage,packages,'category.name') == true">
-                                    {{item?.policy?.premiumPackage}} 
+                                    {{item?.policy?.premiumPackage}}
                                 </span>
                             </div>
                             <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">

@@ -30,7 +30,7 @@ export class ListClaimsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Claim List');
     this._headerEventEmitter.setMinorRouteUrl('List of all claims');
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user._id);
+    console.log(this.user.userType.name);
     if (this.user !== undefined && this.user.userType.name === 'Provider') {
       this._claimService.find({
         query: { providerFacilityId: this.user.facilityId._id },
@@ -72,6 +72,25 @@ export class ListClaimsComponent implements OnInit {
         'checkedinDetail.checkedInDetails.policyObject.hiaId._id': this.user.facilityId._id
       }
     }).then((payload: any) => {
+      payload.data.forEach(element => {
+        for (let i = element.documentations.length - 1; i >= 0; i--) {
+          if (element.documentations[i].response != undefined) {
+            if (element.documentations[i].response.isReject == true) {
+              element.status = 'Reject';
+            } else if (element.documentations[i].response.isQuery == true) {
+              element.status = 'Query';
+            } else if (element.documentations[i].response.isHold == true) {
+              element.status = 'Hold';
+            } else if (element.documentations[i].response.isApprove == true) {
+              element.status = 'Approved';
+            }
+            break;
+          } else {
+            element.status = 'Pending';
+          }
+        }
+
+      });
       this.listOfClaims = payload.data;
       console.log(this.listOfClaims);
       this.loading = false;

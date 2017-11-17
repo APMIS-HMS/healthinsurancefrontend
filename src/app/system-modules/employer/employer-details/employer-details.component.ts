@@ -130,7 +130,7 @@ export class EmployerDetailsComponent implements OnInit {
     private _userTypeService: UserTypeService,
     private _planService: PlanService,
     private _premiumTypeService: PremiumTypeService,
-    private _relationshipService:RelationshipService,
+    private _relationshipService: RelationshipService,
     public _bulkBeneficiaryUploadService: BulkBeneficiaryUploadService
   ) { }
 
@@ -663,26 +663,16 @@ export class EmployerDetailsComponent implements OnInit {
     }
   }
 
-  validateControls() {
-    if (this.nameControl.valid && this.genderControl.valid
-      && this.titleControl.valid && this.maritalStatusControl.valid
-      && this.stateControl.valid && this.oStateControl.valid
-      && this.oLgaControl.valid && this.lgaControl.valid
-      && this.hiaControl.valid && this.platformControl.valid
-      && this.facilityTypeControl.valid && this.planTypeControl.valid
-      && this.planControl.valid && this.packageControl.valid
-      && this.categoryControl.valid && this.sponsorshipControl.valid) {
-      return true;
-    } else {
-      return false;
-    }
+  downloadExcelTemplate(){
+    this._bulkBeneficiaryUploadService.download();
   }
 
   save() {
     var retainedOrderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+    var checkOrderExcelPolicies = this.orderExcelPolicies.filter(x=>x.isCheck==true);
     var groups = {};
     var bObj = {};
-    for (var i = 0; i < this.orderExcelPolicies.length; i++) {
+    for (var i = 0; i < checkOrderExcelPolicies.length; i++) {
       var groupName = this.orderExcelPolicies[i].principalIndex;
       if (!groups[groupName]) {
         groups[groupName] = [];
@@ -710,6 +700,15 @@ export class EmployerDetailsComponent implements OnInit {
     this.isProcessing = true
     this.beneficiaries.forEach((uploadItem, index) => {
       this._bulkBeneficiaryUploadService.create(uploadItem).then(payload => {
+        this.orderExcelPolicies.splice(uploadItem,1);
+        if (payload.body.policyObject == undefined) {
+          const text = payload.body;
+          this._toastr.error(text, 'Failed!');
+        } else {
+          const text = payload.body.policyObject.user.firstName + " " + payload.body.policyObject.user.lastName + " and dependant(s) created";
+          this._toastr.success(text, 'Success!');
+        }
+        
         this.nSuccess += 1;
         console.log(payload);
       }, error => {
@@ -720,9 +719,10 @@ export class EmployerDetailsComponent implements OnInit {
         this.isProcessing = false;
         this.nSuccess = 0;
         this.nFailed = 0;
-        this.orderExcelPolicies = retainedOrderExcelPolicies;
+        // this.orderExcelPolicies = retainedOrderExcelPolicies;
+        // this.orderExcelPolicies = [];
       }
-    })
+    });
   }
 
   addApprovalClick() {
