@@ -36,6 +36,10 @@ export * from './common/capitation-fee.service';
 export * from './common/drug-pack-size.service';
 export * from './common/profession.service';
 export * from './common/notification.service';
+export * from './common/bulk-beneficiary-upload.service';
+
+
+
 export * from './referral/referral.service';
 
 
