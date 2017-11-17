@@ -225,6 +225,7 @@ export class ListEmployerComponent implements OnInit {
     this.index = 0;
     this.resetData = true;
     this._getEmployers();
+    this.showLoadMore = true;
   }
 
   navigateToDetails(id: string) {
