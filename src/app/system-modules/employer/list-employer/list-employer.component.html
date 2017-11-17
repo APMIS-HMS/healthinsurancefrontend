@@ -5,7 +5,7 @@
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
 
-    <div class="btn btn-medium btn-blue" (click)="navigateNewEmployer()">
+    <div *ngIf="isPlatformOwner" class="btn btn-medium btn-blue" (click)="navigateNewEmployer()">
         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ORGANISATION
     </div>
 </div>
@@ -31,7 +31,7 @@
       </select>
         </div>
 
-        <div class="btn btn-medium btn-blue-outline">RESET</div>
+        <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
     </div>
 
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
@@ -60,15 +60,15 @@
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let employer of employers; let i = index;" class="tr">
+            <tr *ngFor="let employer of employers; let i = index;" class="tr"> 
                 <td class="td hover" (click)="navigateToDetails(employer._id);">{{ i+1 }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.name }}</td>
-                <td class="td hover text-right" (click)="navigateToDetails(employer._id);">{{ employer.email }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.businessContact.lastName }} {{ employer.businessContact.firstName }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.businessContact.phoneNumber }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.industry.name }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.cacNumber }}</td>
-                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer.employer.cin }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.name }}</td>
+                <td class="td hover text-right" (click)="navigateToDetails(employer._id);">{{ employer?.email }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.businessContact?.lastName }} {{ employer?.businessContact?.firstName }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.businessContact?.phoneNumber }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.employer?.industry?.name }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.employer?.cacNumber }}</td>
+                <td class="td hover" (click)="navigateToDetails(employer._id);">{{ employer?.employer?.cin }}</td>
                 <td (click)="navigateToDetails(employer._id);" class="td hover {{ employer.isConfirmed ? ' tbl-status-active': ' tbl-status-inactive' }}">
                     {{ employer.isConfirmed ? 'Active': 'Inactive' }}
                 </td>
@@ -84,8 +84,8 @@
 
     <div class="list-buttom">
         <div *ngIf="employers.length > 0">
-            <div class="list-summary">Showing 1 to {{ employers.length }} of {{ employers.length }} entries (filtered from {{ employers.length }} total entries)</div>
-            <div class="btn btn-medium btn-yellow">Load More</div>
+            <div class="list-summary">Showing 1 to {{ employers.length }} of {{ totalData }} entries (filtered from {{ totalData }} total entries)</div>
+            <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="showLoadMore">Load More</div>
         </div>
     </div>
 </div>

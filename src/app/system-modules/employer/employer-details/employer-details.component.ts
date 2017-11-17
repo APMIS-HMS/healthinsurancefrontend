@@ -3,6 +3,13 @@ import { CountryService } from './../../../services/common/country.service';
 import { GenderService } from './../../../services/common/gender.service';
 import { TitleService } from './../../../services/common/titles.service';
 import { UploadService } from './../../../services/common/upload.service';
+import { PlanTypeService } from './../../../services/common/plan-type.service';
+import { UserTypeService } from './../../../services/common/user-type.service';
+import { RelationshipService } from './../../../services/common/relationship.service';
+import { PremiumTypeService } from './../../../services/common/premium-type.service';
+import { BulkBeneficiaryUploadService } from './../../../services/common/bulk-beneficiary-upload.service';
+import { PlanService } from './../../../services/plan/plan.service';
+import { MaritalStatusService } from './../../../services/common/marital-status.service';
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,7 +17,9 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { FacilityService, SystemModuleService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
+import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+
 
 @Component({
   selector: 'app-employer-details',
@@ -20,12 +29,63 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 export class EmployerDetailsComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
 
+
+  globalItemIndex = 0;
+  orderExcelPolicies = [];
+  totalExcelPrincipalItems = 0;
+  titles = [];
+  genders = [];
+  maritalStatus = [];
+  mStates = [];
+  mLga = [];
+  oStates = [];
+  oLga = [];
+  platforms = [];
+  planTypes = [];
+  userTypes = [];
+  plans = [];
+  packages = [];
+  categories = [];
+  SPONSORSHIP = [];
+  beneficiaries = [];
+  relationhips = [];
+  nSuccess = 0;
+  nFailed = 0;
+  isProcessing = false;
+
+
   searchHiaControl = new FormControl();
   listsearchControl = new FormControl();
   filterTypeControl = new FormControl('All');
   createdByControl = new FormControl();
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
+
+
+  itemCheckBox = new FormControl();
+  nameControl = new FormControl();
+  genderControl = new FormControl();
+  titleControl = new FormControl();
+  maritalStatusControl = new FormControl();
+  stateControl = new FormControl();
+  oStateControl = new FormControl();
+  oLgaControl = new FormControl();
+  lgaControl = new FormControl();
+  hiaControl = new FormControl();
+  platformControl = new FormControl();
+  facilityTypeControl = new FormControl();
+  planTypeControl = new FormControl();
+  planControl = new FormControl();
+  packageControl = new FormControl();
+  categoryControl = new FormControl();
+  sponsorshipControl = new FormControl();
+  relationshipControl = new FormControl();
+
+  public myDatePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd-mmm-yyyy',
+  };
+
+  public today: IMyDate;
 
   tab_details = true;
   tab_preauthorization = false;
@@ -50,8 +110,9 @@ export class EmployerDetailsComponent implements OnInit {
   currentPlatform: any;
   selectedCountry: any;
   selectedState: any;
-  hias:any[] = [];
+  hias: any[] = [];
   drugSearchResult = false;
+  routeId: string;
 
   constructor(
     private _router: Router,
@@ -64,15 +125,27 @@ export class EmployerDetailsComponent implements OnInit {
     private _titleService: TitleService,
     private _genderService: GenderService,
     private _countryService: CountryService,
-
+    private _maritalStatusService: MaritalStatusService,
+    private _planTypeService: PlanTypeService,
+    private _userTypeService: UserTypeService,
+    private _planService: PlanService,
+    private _premiumTypeService: PremiumTypeService,
+    private _relationshipService:RelationshipService,
+    public _bulkBeneficiaryUploadService: BulkBeneficiaryUploadService
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Organisation Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
 
+    this.SPONSORSHIP = [
+      { 'id': 1, 'name': 'Self' },
+      { 'id': 2, 'name': 'Organization' }
+    ];
+
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
+        this.routeId = param.id;
         this._getEmployerDetails(param.id);
       }
     });
@@ -85,16 +158,326 @@ export class EmployerDetailsComponent implements OnInit {
           query: {
             'platformOwnerId._id': this.currentPlatform._id,
             name: { $regex: value, '$options': 'i' },
-            'facilityType.name':'Health Insurance Agent'
+            'facilityType.name': 'Health Insurance Agent'
           }
-        }).then((payload:any) => {
+        }).then((payload: any) => {
           this.hias = payload.data;
           this.drugSearchResult = true;
-        })
+        });
       });
     this._getCurrentPlatform();
+    this._getTitles();
+    this._getGender();
+    this._getMaritalStatus();
+    this._getState();
+    this._getOriginState();
+    this._getPlatforms();
+    this._getPlanTypes();
+    this._getPremiumCategory();
+    this._getFacilityTypes();
+    this._getPlans();
+    this._getRelationship();
+
+    this.stateControl.valueChanges.subscribe(value => {
+      if (this.stateControl.valid) {
+        var filteredState = this.mStates.filter(x => x.name == this.stateControl.value);
+        this.mLga = filteredState[0].lgs;
+      }
+    });
+
+    this.oStateControl.valueChanges.subscribe(value => {
+      if (this.oStateControl.valid) {
+        var filteredState = this.oStates.filter(x => x.name == this.oStateControl.value);
+        this.oLga = filteredState[0].lgs;
+      }
+    });
+
+    this.platformControl.valueChanges
+      .debounceTime(350)
+      .distinctUntilChanged()
+      .subscribe(value => {
+        this.drugSearchResult = false;
+        this._facilityService.find({
+          query: {
+            'platformOwnerId.name': value,
+            $limit: 1
+          }
+        }).then((payload: any) => {
+          if (payload.data.length > 0) {
+
+          }
+        });
+      });
   }
 
+  _getTitles() {
+    this._titleService.find({}).then((payload: any) => {
+      this.titles = payload.data;
+    });
+
+    if (this._router.url.endsWith('payment')) {
+      this.navigate('payment');
+    } else if (this._router.url.endsWith('beneficiary')) {
+      this.navigate('beneficiary');
+    } else if (this._router.url.endsWith('hia')) {
+      this.navigate('hia');
+    } else if (this._router.url.endsWith('payment-history')) {
+      this.navigate('payment-history');
+    } else {
+      this.navigate('details');
+    }
+  }
+
+  _getGender() {
+    this._genderService.find({}).then((payload: any) => {
+      this.genders = payload.data;
+    })
+  }
+
+  _getMaritalStatus() {
+    this._maritalStatusService.find({}).then((payload: any) => {
+      this.maritalStatus = payload.data;
+    })
+  }
+
+  _getState() {
+    this._countryService.find({
+      query:
+      {
+        'name': 'Nigeria'
+      }
+    }).then((payload: any) => {
+      if (payload.data[0] != undefined) {
+        this.mStates = payload.data[0].states;
+      }
+    })
+  }
+
+  _getOriginState() {
+    this._countryService.find({
+      query:
+      {
+        'name': 'Nigeria'
+      }
+    }).then((payload: any) => {
+      if (payload.data[0] != undefined) {
+        this.oStates = payload.data[0].states;
+      }
+    })
+  }
+
+  _getPlatforms() {
+    this._facilityService.find({}).then((payload: any) => {
+      if (payload.data.length > 0) {
+        this.platforms = payload.data;
+      }
+    })
+  }
+
+  _getPlanTypes() {
+    this._planTypeService.find({}).then((payload: any) => {
+      this.planTypes = payload.data;
+    })
+  }
+
+  _getFacilityTypes() {
+    this._userTypeService.find({}).then((payload: any) => {
+      this.userTypes = payload.data;
+    })
+  }
+
+  _getRelationship() {
+    this._relationshipService.find({}).then((payload: any) => {
+      this.relationhips = payload.data;
+    })
+  }
+
+  _getPlans() {
+    this._planService.find({}).then((payload: any) => {
+      this.plans = payload.data;
+    })
+  }
+
+  _getPremiumCategory() {
+    this._premiumTypeService.find({}).then((payload: any) => {
+      this.categories = payload.data;
+    })
+  }
+
+  propertyValueChange(param, i, prop) {
+    this.orderExcelPolicies
+  }
+
+
+  checkValue(param, data, obj) {
+    try {
+      if (obj.toString().includes('.')) {
+        let arObj = obj.toString().split('.');//Not expecting obj of an array more than two indexes
+        let val1 = arObj[0];
+        let val2 = arObj[1];
+        let val = data.filter(function (x) {
+          if (x[val1] != undefined) {
+            if (x[val1][val2].toString().toLowerCase() == param.toString().toLowerCase()) {
+              return true;
+            }
+            else {
+              return false;
+            }
+          }
+        });
+        if (val.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (data.length > 0) {
+          let val = data.filter(x => x[obj].toLowerCase() == param.toString().toLowerCase());
+          if (val.length > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    } catch (Exception) {
+      return false;
+    }
+  }
+
+  checkPlanType(data, obj, param) {
+    if (data.length > 0) {
+      let val = data.filter(x => x[obj].toLowerCase() == param.toString().toLowerCase());
+      if (val.length > 0) {
+        console.log(true)
+        return true;
+      } else {
+        console.log(false)
+        return false;
+      }
+    }
+  }
+
+  checkLocationValue(param, data) {
+    let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
+    if (val.length > 0) {
+      this.mLga = val[0].lgs;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checklocationValue2(param, data) {
+    let val = data.filter(x => x.name.toLowerCase() == param.toLowerCase());
+    if (val.length > 0) {
+      this.oLga = val[0].lgs;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkHiaValue(facilityType, hia, data) {
+    if (facilityType != undefined && hia != undefined) {
+      let val = data.filter(x => x.facilityType.name.toString().toLowerCase() == facilityType.toString().toLowerCase() && x.name.toLowerCase() == hia.toString().toLowerCase());
+      if (val.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+
+  }
+  checkPremiumValue(param, data) {
+    let val = data.filter(x => x.name == param);
+    if (val.length > 0) {
+      this.packages = val[0].premiums;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onTitle(event, index) {
+    this.orderExcelPolicies[index].title = this.titleControl.value;
+  }
+
+  onName(event, index) {
+    this.orderExcelPolicies[index].name = this.nameControl.value;
+  }
+
+  onGender(event, index) {
+    this.orderExcelPolicies[index].gender = this.genderControl.value;
+  }
+
+  onStatus(event, index) {
+    this.orderExcelPolicies[index].maritalStatus = this.maritalStatusControl.value;
+  }
+
+
+  onRstate(event, index) {
+    var filteredState = this.mStates.filter(x => x.name == this.stateControl.value);
+    this.mLga = filteredState[0].lgs;
+    this.orderExcelPolicies[index].homeAddress.state = this.stateControl.value;
+    this.orderExcelPolicies[index].homeAddress.lga = this.mLga[0].name;
+  }
+
+  onRlga(event, index) {
+    this.orderExcelPolicies[index].homeAddress.lga = this.lgaControl.value;
+  }
+
+
+  onOstate(event, index) {
+    var filteredState = this.oStates.filter(x => x.name == this.oStateControl.value);
+    this.oLga = filteredState[0].lgs;
+    this.orderExcelPolicies[index].stateOfOrigin = this.oStateControl.value;
+    this.orderExcelPolicies[index].lgaOfOrigin = this.oLga[0].name;
+  }
+
+  onOlga(event, index) {
+    this.orderExcelPolicies[index].lgaOfOrigin = this.oLgaControl.value;
+  }
+
+  onPlatform(event, index) {
+    this.orderExcelPolicies[index].platformOwner = this.platformControl.value;
+  }
+
+  onfacilityType(event, index) {
+    this.orderExcelPolicies[index].policy.facilityType = this.facilityTypeControl.value;
+  }
+
+  onRelationship(event, index) {
+    this.orderExcelPolicies[index].relationship = this.relationshipControl.value;
+  }
+
+  onHia(event, index) {
+    this.orderExcelPolicies[index].policy.hia = this.hiaControl.value;
+  }
+
+  onPlanTypes(event, index) {
+    this.orderExcelPolicies[index].policy.planType = this.planTypeControl.value;
+  }
+
+  onPlan(event, index) {
+    this.orderExcelPolicies[index].policy.plan = this.planControl.value;
+  }
+
+  onPackage(event, index) {
+    this.orderExcelPolicies[index].policy.premiumPackage = this.packageControl.value;
+  }
+
+  onCategory(event, index) {
+    this.orderExcelPolicies[index].policy.premiumCategory = this.categoryControl.value;
+  }
+
+  onSponsor(event, index) {
+    this.orderExcelPolicies[index].policy.sponsorship = this.sponsorshipControl.value;
+  }
 
   private _getCurrentPlatform() {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
@@ -168,16 +551,16 @@ export class EmployerDetailsComponent implements OnInit {
     });
   }
 
-  onSelectDrug(hia){
-    if(this.facility.employer.hias === undefined){
+  onSelectDrug(hia) {
+    if (this.facility.employer.hias === undefined) {
       this.facility.employer.hias = [];
     }
-    this.facility.employer.hias.push(hia)
-    this._facilityService.update(this.facility).then(payload =>{
+    this.facility.employer.hias.push(hia);
+    this._facilityService.update(this.facility).then(payload => {
       this.facility = payload;
-    }).catch(err =>{
+    }).catch(err => {
 
-    })
+    });
   }
 
   onClickApprove() {
@@ -217,6 +600,38 @@ export class EmployerDetailsComponent implements OnInit {
     return new Date(Math.round((date - 25569) * 86400 * 1000));
   }
 
+  handleChange(e) {
+    var isChecked = e.target.checked;
+    if (isChecked) {
+      this.orderExcelPolicies.forEach(function (item) {
+        item.isCheck = true;
+      })
+    } else {
+      this.orderExcelPolicies.forEach(function (item) {
+        item.isCheck = false;
+      })
+    }
+    this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+  }
+
+  onSelectPrincipal(e, index) {
+    var isChecked = e.target.checked;
+    if (isChecked == true) {
+      this.orderExcelPolicies[index].isCheck = true;
+    } else {
+      this.orderExcelPolicies[index].isCheck = false;
+    }
+  }
+
+  checkItemChecked() {
+    var filterItem = this.orderExcelPolicies.filter(x => x.isCheck == true);
+    if (filterItem.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public upload(e) {
     let fileBrowser = this.fileInput.nativeElement;
     if (fileBrowser.files && fileBrowser.files[0]) {
@@ -224,139 +639,105 @@ export class EmployerDetailsComponent implements OnInit {
       formData.append('excelfile', fileBrowser.files[0]);
       formData.append('facilityId', this.facility._id);
       this._uploadService.uploadExcelFile(formData).then(result => {
-        // console.log(result);
-        let enrolleeList: any[] = [];
-        var bodyObj = [];
-        var principal = {};
-        var beneficiaries = [];
-        var policy = {};
-        if (result.body !== undefined && result.error == false) {
-          // res.body.data.Sheet1.forEach(row => {
-          //   let rowObj: any = <any>{};
-          //   rowObj.serial = row.A;
-          //   rowObj.surname = row.B;
-          //   rowObj.firstName = row.C;
-          //   rowObj.gender = row.D;
-          //   rowObj.filNo = row.E;
-          //   rowObj.category = row.F;
-          //   rowObj.sponsor = row.G;
-          //   rowObj.plan = row.H;
-          //   rowObj.type = row.I;
-          //   // rowObj.date = this.excelDateToJSDate(row.J);
-          //   enrolleeList.push(rowObj);
-          // });
-          console.log(result);
-          result.body.Sheet1.forEach(function (item, index) {
-            if (index > 0) {
-              if (item.A != undefined && item.B != undefined && item.C != undefined
-                && item.D != undefined && item.E != undefined && item.F != undefined && item.G != undefined
-                && item.H != undefined && item.I != undefined
-                && item.J != undefined && item.K != undefined && item.L != undefined && item.M != undefined
-                && item.N != undefined && item.O != undefined && item.P != undefined && item.Q != undefined
-                && item.R != undefined && item.S != undefined && item.AL != undefined && item.AM != undefined
-                && item.AL != undefined && item.AM != undefined && item.AN != undefined && item.AO != undefined
-                && item.AP != undefined && item.AQ != undefined) {
-                console.log('A');
-                beneficiaries = [];
-                principal = {
-                  'dateOfBirth': item.A,
-                  'email': item.B,
-                  'numberOfUnderAge': item.C,
-                  'gender': item.D,
-                  'homeAddress': {
-                    'neighbourhood': item.E,
-                    'state': item.F,
-                    'lga': item.G,
-                    'street': item.H
-                  },
-                  'lastName': item.I,
-                  'firstName': item.J,
-                  'lgaOfOrigin': item.K,
-                  'maritalStatus': item.L,
-                  'mothersMaidenName': item.M,
-                  'otherNames': item.N,
-                  'phoneNumber': item.O,
-                  'platformOwnerId': item.P,
-                  'stateOfOrigin': item.Q,
-                  'title': item.S
-                };
-                policy = {
-                  'platformOwnerId': item.AL,
-                  'hiaId': item.AM,
-                  'providerId': item.AN,
-                  'planTypeId': item.AO,
-                  'planId': item.AP,
-                  'premiumCategoryId': item.AQ
-                };
-              }
-              console.log(policy);
-              if (item.S != undefined && item.T != undefined && item.U != undefined && item.V != undefined && item.W != undefined
-                && item.X != undefined && item.Y != undefined && item.Z != undefined && item.AA != undefined && item.AB != undefined
-                && item.AC != undefined && item.AD != undefined && item.AE != undefined && item.AF != undefined && item.AG != undefined) {
-                beneficiaries.push({
-                  'dateOfBirth': item.S,
-                  'email': item.T,
-                  'gender': item.U,
-                  'lastName': item.V,
-                  'firstName': item.W,
-                  'lgaOfOrigin': item.X,
-                  'numberOfUnderAge': item.Y,
-                  'maritalStatus': item.Z,
-                  'mothersMaidenName': item.AA,
-                  'otherNames': item.AB,
-                  'phoneNumber': item.AC,
-                  'platformOwnerId': item.AD,
-                  'stateOfOrigin': item.AE,
-                  'relationship': item.AF,
-                  'title': item.AG,
-                  'homeAddress': {
-                    'neighbourhood': item.AH,
-                    'state': item.AI,
-                    'lga': item.AJ,
-                    'street': item.AK
-                  }
-                }); console.log('B');
-              }
-              let counter = index + 1;
-              if (result.body.Sheet1.length == counter) {
-                console.log('c');
-                bodyObj.push({
-                  'principal': principal,
-                  'dependent': beneficiaries,
-                  'policy': policy
-                });
-                console.log(bodyObj);
-              } else {
-                try {
-                  if (result.body.Sheet1[counter].A != undefined
-                    && result.body.Sheet1[counter].B != undefined
-                    && result.body.Sheet1[counter].C != undefined
-                    && result.body.Sheet1[counter].D != undefined
-                    && result.body.Sheet1[counter].I != undefined
-                    && result.body.Sheet1[counter].J != undefined) {
-                    bodyObj.push({
-                      'principal': principal,
-                      'dependent': beneficiaries,
-                      'policy': policy
-                    });
-                  }
-                }
-                catch (Exception) {
-
-                }
-              }
-            }
+        result.body.forEach((element, index) => {
+          let principal = element.principal;
+          principal.policy = element.policy;
+          principal.isPrincipal = true;
+          principal.isEdit = false;
+          principal.isCheck = false;
+          principal.principalIndex = index;
+          this.orderExcelPolicies.push(principal);
+          element.dependent.forEach(item => {
+            item.isPrincipal = false;
+            item.isEdit = false;
+            item.isCheck = false;
+            item.principalIndex = index;
+            this.orderExcelPolicies.push(item);
           });
-        }
+        });
+        console.log(this.orderExcelPolicies);
+        this.totalExcelPrincipalItems = this.orderExcelPolicies.filter(x => x.isPrincipal == true).length;
       }).catch(err => {
         // this._notification('Error', 'There was an error uploading the file');
       });
     }
   }
 
+  validateControls() {
+    if (this.nameControl.valid && this.genderControl.valid
+      && this.titleControl.valid && this.maritalStatusControl.valid
+      && this.stateControl.valid && this.oStateControl.valid
+      && this.oLgaControl.valid && this.lgaControl.valid
+      && this.hiaControl.valid && this.platformControl.valid
+      && this.facilityTypeControl.valid && this.planTypeControl.valid
+      && this.planControl.valid && this.packageControl.valid
+      && this.categoryControl.valid && this.sponsorshipControl.valid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  save() {
+    var retainedOrderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+    var groups = {};
+    var bObj = {};
+    for (var i = 0; i < this.orderExcelPolicies.length; i++) {
+      var groupName = this.orderExcelPolicies[i].principalIndex;
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(this.orderExcelPolicies[i]);
+    };
+
+
+    for (groupName in groups) {
+      var val: any = <any>{};
+      val.dependent = [];
+      groups[groupName].forEach(element => {
+        if (element.isPrincipal == true) {
+          val.policy = element.policy;
+          let p = element;
+          p = delete element.policy;
+          val.principal = element;
+        } else {
+          val.dependent.push(element);
+        }
+      });
+      this.beneficiaries.push(val);
+    }
+    console.log(this.beneficiaries);
+    this.isProcessing = true
+    this.beneficiaries.forEach((uploadItem, index) => {
+      this._bulkBeneficiaryUploadService.create(uploadItem).then(payload => {
+        this.nSuccess += 1;
+        console.log(payload);
+      }, error => {
+        console.log(error);
+        this.isProcessing = false;
+      })
+      if (index == this.beneficiaries.length - 1) {
+        this.isProcessing = false;
+        this.nSuccess = 0;
+        this.nFailed = 0;
+        this.orderExcelPolicies = retainedOrderExcelPolicies;
+      }
+    })
+  }
+
   addApprovalClick() {
     this.addApproval = !this.addApproval;
   }
+
+  editRow(param) {
+    if (this.orderExcelPolicies[param].isEdit == true) {
+      this.orderExcelPolicies[param].isEdit = false
+    } else {
+      this.orderExcelPolicies[param].isEdit = true
+    }
+    this.orderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
+  }
+
 
   private _getEmployerDetails(routeId) {
     this._systemService.on();
@@ -372,7 +753,7 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   navigateEmployers(url, id?) {
-    this._systemService.on()
+    this._systemService.on();
     if (!!id) {
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
@@ -388,137 +769,15 @@ export class EmployerDetailsComponent implements OnInit {
     }
   }
 
-  tabDetails_click() {
-    this.tab_details = true;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
+  navigateTo(route) {
+    this._router.navigate([route]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
-  tabPreauthorization_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = true;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabPlans_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = true;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabBeneficiaries_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = true;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabEmployers_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = true;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabPaymentClick() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = true;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabPaymentHistoryClick() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = true;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabClaims_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = true;
-    this.tab_complaints = false;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabComplaints_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = true;
-    this.tab_referals = false;
-    this.tab_hia = false;
-  }
-  tabReferals_click() {
-    this.tab_details = false;
-    this.tab_preauthorization = false;
-    this.tab_plans = false;
-    this.tab_beneficiaries = false;
-    this.tab_employers = false;
-    this.tabPayment = false;
-    this.tabPaymentHistory = false;
-    this.tab_claims = false;
-    this.tab_complaints = false;
-    this.tab_referals = true;
-    this.tab_hia = false;
-  }
-  tabHia_click() {
+
+  navigate(tabName) {
     this.tab_details = false;
     this.tab_preauthorization = false;
     this.tab_plans = false;
@@ -529,7 +788,30 @@ export class EmployerDetailsComponent implements OnInit {
     this.tab_claims = false;
     this.tab_complaints = false;
     this.tab_referals = false;
-    this.tab_hia = true;
+    this.tab_hia = false;
+
+    switch (tabName) {
+      case 'details':
+        this.tab_details = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId);
+        break;
+      case 'beneficiary':
+        this.tab_beneficiaries = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/beneficiary');
+        break;
+      case 'hia':
+        this.tab_hia = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/hia');
+        break;
+      case 'payment':
+        this.tabPayment = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/payment');
+        break;
+      case 'payment-history':
+        this.tabPaymentHistory = true;
+        this.navigateTo('/modules/employer/employers/' + this.routeId + '/payment-history');
+        break;
+    }
   }
 
 }

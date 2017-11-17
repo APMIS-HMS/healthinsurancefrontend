@@ -1,3 +1,5 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
+import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { AuthService } from './../../../auth/services/auth.service';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -24,6 +26,12 @@ export class ListHiaComponent implements OnInit {
   hias: any[] = [];
   hiaTypes: any[] = [];
   loading: boolean = true;
+  user:any;
+  totalEntries:number;
+  showLoadMore:any = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
+  index:number = 0;
 
   constructor(
     private _router: Router,
@@ -32,28 +40,31 @@ export class ListHiaComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _userTypeService: UserTypeService,
-    private  _hiaTypeService: HiaTypeService
+    private _hiaTypeService: HiaTypeService,
+    private _locker:CoolLocalStorage
   ) { }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('HIA List');
     this._headerEventEmitter.setMinorRouteUrl('All HIAs');
+    this.user = (<any>this._locker.getObject("auth")).user;
 
-    this._getUserTypes();
+    this._checkUser();
+    // this._getUserTypes();
     this._getHiaTypes();
 
     this.filterTypeControl.valueChanges.subscribe(payload => {
       this._systemService.on();
       if (payload !== undefined) {
         console.log(payload);
-        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload1: any) => {
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index } }).then((payload1: any) => {
           this.hias = payload1.data.filter(function (item) {
             return (item.hia.type.name.toLowerCase() == payload.toLowerCase())
           });
         });
 
         if (payload == "All") {
-          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+          this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index } }).then((payload2: any) => {
             this.hias = payload2.data;
           });
         }
@@ -65,7 +76,7 @@ export class ListHiaComponent implements OnInit {
       .distinctUntilChanged()
       .debounceTime(200)
       .switchMap((term) => Observable.fromPromise(
-        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } })))
+        this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index } })))
       .subscribe((payload: any) => {
         var strVal = this.listsearchControl.value;
         this.hias = payload.data.filter(function (item) {
@@ -77,20 +88,40 @@ export class ListHiaComponent implements OnInit {
             || item.hia.grade.name.toLowerCase().includes(strVal.toLowerCase()))
         })
       });
+
+  }
   
+  private _checkUser(){
+    if(this.user !== undefined && this.user.userType.name !== "Platform Owner"){
+      if(this.user.userType.name === 'Health Insurance Agent'){
+        this._router.navigate(['/modules/hia/hias', this.user.facilityId._id]).then(res => {
+          this._systemService.off();
+        }).catch(err => {
+          this._systemService.off();
+        });
+      }
+    }else{
+      this._getUserTypes();
+    }
   }
 
   _getHIAs() {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload: any) => {
-      this.loading = false;
-      this.hias = payload.data;
-      console.log(this.hias);
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    })
+    this._facilityService.find(
+      {
+        query:
+        {
+          'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index
+        }
+      }).then((payload: any) => {
+        this.loading = false;
+        this.hias = payload.data;
+        console.log(this.hias);
+        this._systemService.off();
+      }).catch(error => {
+        console.log(error);
+        this._systemService.off();
+      })
   }
 
   private _getUserTypes() {
@@ -116,11 +147,16 @@ export class ListHiaComponent implements OnInit {
     this._systemService.on();
     this._hiaTypeService.find({
       query: {
-        $limit: 200
+        $limit: this.limit, $skip: this.limit*this.index
       }
     }).then((payload: any) => {
       this._systemService.off();
       this.hiaTypes = payload.data;
+      this.totalEntries = payload.total;
+      (this.resetData !== true) ? this.hiaTypes.push(...payload.data) : this.hiaTypes = payload.data;
+      if(this.hiaTypes.length >= this.totalEntries){
+        this.showLoadMore = false;
+      }
     }).catch(err => {
       this._systemService.off();
     })
@@ -128,11 +164,11 @@ export class ListHiaComponent implements OnInit {
 
   onSelectedStatus(item: any) {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, isTokenVerified: item, $limit: 200 } }).then((payload: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, isTokenVerified: item, $limit: this.limit, $skip: this.limit*this.index } }).then((payload: any) => {
       this.hias = payload.data;
     });
     if (item == "All") {
-      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index } }).then((payload2: any) => {
         this.hias = payload2.data;
       });
     }
@@ -141,11 +177,11 @@ export class ListHiaComponent implements OnInit {
 
   onSelectedGrade(item: any) {
     this._systemService.on();
-    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, 'hia.grade.name': item, $limit: 200 } }).then((payload: any) => {
+    this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, 'hia.grade.name': item, $limit: this.limit, $skip: this.limit*this.index } }).then((payload: any) => {
       this.hias = payload.data;
     });
     if (item == "All") {
-      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: 200 } }).then((payload2: any) => {
+      this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index } }).then((payload2: any) => {
         this.hias = payload2.data;
       });
     }
@@ -181,4 +217,18 @@ export class ListHiaComponent implements OnInit {
       this._systemService.off();
     });
   }
+
+  loadMore(){
+    this._getHiaTypes();
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getHiaTypes();
+    this.showLoadMore = true;
+  }
+
+
+
 }

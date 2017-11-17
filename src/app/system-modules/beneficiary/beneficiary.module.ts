@@ -33,6 +33,7 @@ import { CheckinDetailsComponent } from './beneficiary-details/checkin-details/c
 import { CheckinHistoryComponent } from './beneficiary-details/checkin-history/checkin-history.component';
 import { PaymentDetailBeneficiaryComponent } from './beneficiary-details/payment-detail-beneficiary/payment-detail-beneficiary.component';
 import { PersonalDetailsComponent } from './beneficiary-details/personal-details/personal-details.component';
+import { CheckinDetailsGenerateComponent } from './beneficiary-details/checkin-details-generate/checkin-details-generate.component';
 
 @NgModule({
     imports: [
@@ -46,7 +47,8 @@ import { PersonalDetailsComponent } from './beneficiary-details/personal-details
         BeneficiaryTopBarComponent, NewBeneficiaryDependantComponent, NewBeneficiaryProgramComponent, NewBeneficiaryDataComponent,
         NewBeneficiaryConfirmComponent, NewBeneficiaryNokComponent, CheckinDetailsComponent, CheckinHistoryComponent,
         PaymentDetailBeneficiaryComponent,
-        PersonalDetailsComponent
+        PersonalDetailsComponent,
+        CheckinDetailsGenerateComponent
     ],
     providers: [CountryService, GenderService, TitleService, MaritalStatusService, PlanService, PremiumTypeService,
         PlanTypeService, BeneficiaryService, BankService, RelationshipService, JsonDataService, PolicyService,     ClaimTypeService,

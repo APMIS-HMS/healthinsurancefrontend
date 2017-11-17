@@ -496,7 +496,7 @@
 
                     <div class="frm-item-wrap">
                         <label class="label">Clinical Note</label>
-                        <div class="input-wrap" style="width:100%;">
+                        <div class="input-wrap">
                             <textarea formControlName="clinicalNote" class="form-control-textArea"></textarea>
                         </div>
                         <small class="alert-label" [hidden]="claimsFormGroup.controls.clinicalNote.valid || claimsFormGroup.controls.clinicalNote.pristine">
@@ -505,14 +505,14 @@
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Claims Note</label>
-                        <div class="input-wrap" style="width:100%;">
+                        <div class="input-wrap">
                             <textarea formControlName="claimsNote" class="form-control-textArea"></textarea>
                         </div>
                         <small class="alert-label" [hidden]="claimsFormGroup.controls.claimsNote.valid || claimsFormGroup.controls.claimsNote.pristine">
                             This is a required field.
                         </small>
                     </div>
-                    <div class="frm-item-wrap">
+                    <!-- <div class="frm-item-wrap">
                         <label class="label">Name of Doctor</label>
                         <div class="input-wrap">
                             <input type="email" formControlName="medicalPersonelName" class="form-control">
@@ -520,6 +520,24 @@
                         <small class="alert-label" [hidden]="claimsFormGroup.controls.medicalPersonelName.valid || claimsFormGroup.controls.medicalPersonelName.pristine">
                             This is a required field.
                         </small>
+                    </div> -->
+                    <div class="frm-item-wrap">
+                        <label class="label">Name of Doctor</label>
+                        <div class="input-wrap">
+                            <select formControlName="medicalPersonelName" class="form-control">
+                                <option value=" " disabled selected>Select A Doctor</option>
+                                <option *ngFor="let emp of employees" [selected]="emp._id==SelectedCheckinItem.medicalPersonelName._id">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="frm-item-wrap">
+                        <label class="label">Unit of Doctor</label>
+                        <div class="input-wrap">
+                            <input type="text" formControlName="docunit" class="form-control">
+                            <small class="alert-label" [hidden]="claimsFormGroup.controls.docunit.valid || claimsFormGroup.controls.docunit.pristine">
+                                This is a required field.
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>

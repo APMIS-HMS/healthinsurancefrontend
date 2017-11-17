@@ -147,7 +147,7 @@
                             </div>
 
                             <div class="bar-icos">
-                                <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                                <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                             </div>
                         </div>
 
@@ -218,7 +218,7 @@
                             </div>
 
                             <div class="bar-icos">
-                                <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                                <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                             </div>
                         </div>
 
@@ -246,7 +246,7 @@
                             </div>
 
                             <div class="bar-icos">
-                                <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                                <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                             </div>
                         </div>
 
@@ -318,7 +318,7 @@
                             </div>
 
                             <div class="bar-icos">
-                                <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                                <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                             </div>
                         </div>
 
@@ -375,7 +375,7 @@
                             </div>
 
                             <div class="bar-icos">
-                                <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                                <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                             </div>
                         </div>
 
@@ -451,7 +451,7 @@
                             </div>
 
                             <div class="bar-icos">
-                                <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                                <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                             </div>
                         </div>
 
@@ -510,7 +510,7 @@
                         </div>
 
                         <div class="bar-icos">
-                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                            <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                         </div>
                     </div>
 
@@ -581,31 +581,40 @@
                         </div>
 
                         <div class="bar-icos">
-                            <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
+                            <!-- <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i> -->
                         </div>
                     </div>
 
                     <div class="frm-item-wrap">
                         <label class="label">Reason for Referal</label>
-                        <div class="inputWrap" style="width:100%;">
+                        <div class="input-wrap">
                             <textarea formControlName="reason" class="form-control-textArea"></textarea>
                             <small class="alert-label" [hidden]="referalFormGroup.controls.reason.valid || referalFormGroup.controls.reason.pristine">
                                 This is a required field.
                             </small>
                         </div>
                     </div>
-                    <div class="frm-item-wrap">
+                    <!-- <div class="frm-item-wrap">
                         <label class="label">Name of Doctor</label>
-                        <div class="inputWrap">
+                        <div class="input-wrap">
                             <input type="text" formControlName="doctor" class="form-control">
                             <small class="alert-label" [hidden]="referalFormGroup.controls.doctor.valid || referalFormGroup.controls.doctor.pristine">
                                 This is a required field.
                             </small>
                         </div>
+                    </div> -->
+                    <div class="frm-item-wrap">
+                        <label class="label">Name of Doctor</label>
+                        <div class="input-wrap">
+                            <select formControlName="doctor" class="form-control">
+                                <option value=" " disabled selected>Select A Doctor</option>
+                                <option *ngFor="let emp of employees" [ngValue]="emp">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Unit of Doctor</label>
-                        <div class="inputWrap">
+                        <div class="input-wrap">
                             <input type="text" formControlName="unit" class="form-control">
                             <small class="alert-label" [hidden]="referalFormGroup.controls.unit.valid || referalFormGroup.controls.unit.pristine">
                                 This is a required field.

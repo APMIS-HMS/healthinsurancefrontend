@@ -103,7 +103,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   private _getPreviousPolicies(routeId, ownerId: any) {
-    console.log(routeId)
     this._policyService.find({
       query: {
         'platformOwnerId._id': ownerId,
@@ -125,7 +124,9 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
+    this._facilityService.find(
+      { query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] } }
+    ).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
@@ -139,11 +140,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   paymentDone(data) {
     console.log(data);
     let policies = [];
-    // Delete unnecessary data
-    delete this.currentPlatform.itContact;
-    delete this.currentPlatform.businessContact;
-    delete this.currentPlatform.bankDetails;
-    delete this.currentPlatform.address;
     // All policies that is being paid for.
     policies.push({
       policyId: this.policy.policyId,
@@ -154,6 +150,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       platformOwnerId: this.currentPlatform,
       reference: data,
       policies: policies,
+      sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
       paidBy: this.user,
       requestedAmount: this.policy.premiumPackageId.amount,
       amountPaid: this.policy.premiumPackageId.amount,
@@ -191,11 +188,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       this.cashPaymentProcessing = true;
       let policies = [];
 
-      // Delete unnecessary data
-      delete this.currentPlatform.itContact;
-      delete this.currentPlatform.businessContact;
-      delete this.currentPlatform.bankDetails;
-      delete this.currentPlatform.address;
       // All policies that is being paid for.
       policies.push({
         policyId: this.policy.policyId,
@@ -220,8 +212,10 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         requestedAmount: this.policy.premiumPackageId.amount,
         amountPaid: this.policy.premiumPackageId.amount,
         paymentType: this.paymentType,
+        sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
         comment: value.comment,
         isActive: true,
+        action: 'create'
       };
 
       console.log(ref);

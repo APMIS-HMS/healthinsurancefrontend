@@ -85,14 +85,15 @@
                     <my-date-picker name="requestDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="requestDate"></my-date-picker>
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestDate.valid || preAuthFormGroup.controls.requestDate.pristine">
                         This is a required field.
-                    </small> 
+                    </small>
                 </div>
             </div>
 
             <div class="frm-item-wrap">
                 <label class="label">Time of Request</label>
                 <div style="width:300px;" class="inputWrap">
-                    <my-date-picker name="requestTime" [options]="myDatePickerOptions" [selDate]="today" formControlName="requestTime"></my-date-picker>
+                    <!-- <my-date-picker name="requestTime" [options]="myDatePickerOptions" [selDate]="today" formControlName="requestTime"></my-date-picker> -->
+                    <owl-date-time formControlName="requestTime" [type]="'timer'" [dateFormat]="'hh:mm'" [placeHolder]="'hh:mm'"></owl-date-time>
                     <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestTime.valid || preAuthFormGroup.controls.requestTime.pristine">
                         This is a required field.
                     </small>
@@ -104,7 +105,7 @@
                 <div>
                     <div class="inputWrap" style="justify-content:flex-start; margin-bottom:20px;">
                         <span style="margin-right:10px;">
-                            <input style="width: 30px;display: block;margin: 0 auto;"  type="checkbox" formControlName="emergency" name="emergency">
+                            <input style="width: 30px;display: block;margin: 0 auto;" type="checkbox" formControlName="emergency" name="emergency">
                         </span>
                     </div>
                 </div>
@@ -127,7 +128,7 @@
         <div class="link-right">
             <div (click)="pop_codes()" class="link-item">Lashma Codes</div>
         </div>
-        
+
         <ul class="inpage-tabs">
             <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
             <li (click)="tabClinicalNotes_click()" [class.tab-active]="tab_clinicalNotes">Clinical Notes</li>
@@ -146,7 +147,7 @@
                             <div>Clinical Information - Complaints</div>
                         </div>
 
-                        <div class="bar-icos">
+                        <div *ngIf="false" class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -234,7 +235,7 @@
                             <div>Clinical Documentation</div>
                         </div>
 
-                        <div class="bar-icos">
+                        <div *ngIf="false" class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -262,7 +263,7 @@
                             <div>Clinical Information - Diagnosis</div>
                         </div>
 
-                        <div class="bar-icos">
+                        <div *ngIf="false" class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -345,7 +346,7 @@
                             <div>Clinical Information - Procedure</div>
                         </div>
 
-                        <div class="bar-icos">
+                        <div *ngIf="false" class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -401,7 +402,7 @@
                             <div>Clinical Information - Investigations</div>
                         </div>
 
-                        <div class="bar-icos">
+                        <div *ngIf="false" class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -441,7 +442,7 @@
                                     <tr *ngFor="let investigation of investigationList; let i=index" class="tr">
                                         <td class="td">{{investigation.investigation.name}}</td>
                                         <td class="td">
-                                            <input type="checkbox" disabled="disabled">
+                                            <input [checked]="needAuthorization(investigation)" type="checkbox" disabled="disabled">
                                         </td>
                                         <td>
                                             <i (click)="removeInvestigation(i)" class="fa fa-times"></i>
@@ -461,7 +462,7 @@
                             <div>Clinical Information - Drugs</div>
                         </div>
 
-                        <div class="bar-icos">
+                        <div *ngIf="false" class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -512,6 +513,7 @@
                                     <tr class="tr">
                                         <th class="th">Drug</th>
                                         <th class="th">Quantity</th>
+                                        <th class="th">Need Authorization</th>
                                         <th class="th"></th>
                                     </tr>
                                 </thead>
@@ -520,6 +522,9 @@
                                     <tr class="tr" *ngFor="let item of drugList;let i=index">
                                         <th class="td">{{item.drug.name}}</th>
                                         <th class="td">{{item.quantity}} {{item.unit.name}}</th>
+                                        <td class="td">
+                                            <input [checked]="needAuthorization(item)" type="checkbox" disabled="disabled">
+                                        </td>
                                         <td>
                                             <i class="fa fa-times" (click)="removeDrug(i)"></i>
                                         </td>
@@ -538,7 +543,7 @@
                             <div>Clinical Documentation</div>
                         </div>
 
-                        <div class="bar-icos">
+                        <div *ngIf="false" class="bar-icos">
                             <i (click)="addApprovalClick(e);" class="fa fa-pencil" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -547,7 +552,7 @@
 
                         <div class="frm-item-wrap">
                             <label class="label">Reason for Request</label>
-                            <div class="input-wrap" style="width:100%;">
+                            <div class="input-wrap">
                                 <textarea formControlName="requestReason" class="form-control-textArea"></textarea>
                             </div>
                             <small class="alert-label" [hidden]="preAuthFormGroup.controls.requestReason.valid || preAuthFormGroup.controls.requestReason.pristine">
@@ -558,7 +563,7 @@
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Pre-Authorization Note</label>
-                        <div class="input-wrap" style="width:100%;">
+                        <div class="input-wrap">
                             <textarea formControlName="preAuthorizationNote" class="form-control-textArea"></textarea>
                         </div>
                         <small class="alert-label" [hidden]="preAuthFormGroup.controls.preAuthorizationNote.valid || preAuthFormGroup.controls.preAuthorizationNote.pristine">
@@ -567,12 +572,16 @@
                     </div>
                     <div class="frm-item-wrap">
                         <label class="label">Name of Doctor</label>
-                        <div class="inputWrap">
-                            <input type="email" formControlName="docName" class="form-control">
+                        <div class="input-wrap">
+                            <select formControlName="docName" class="form-control">
+                                <option value=" " disabled selected>Select A Doctor</option>
+                                <option *ngFor="let emp of employees" [ngValue]="emp">{{emp.lastName}} {{emp.firstName}} - ({{emp.profession?.name}} - {{emp.cader?.name}}</option>
+                            </select>
                         </div>
-
+                    </div>
+                    <div class="frm-item-wrap">
                         <label class="label">Doctor's Unit</label>
-                        <div class="inputWrap">
+                        <div class="input-wrap">
                             <input type="email" formControlName="docUnit" class="form-control">
                         </div>
                         <small class="alert-label" [hidden]="preAuthFormGroup.controls.docUnit.valid || preAuthFormGroup.controls.docUnit.pristine">
@@ -597,4 +606,4 @@
         <div (click)="modal_close()" class="close-modal">X</div>
         <app-lashma-codes (closeModal)="modal_close()"></app-lashma-codes>
     </div>
-</div>  
+</div>

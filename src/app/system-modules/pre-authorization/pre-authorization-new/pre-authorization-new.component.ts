@@ -1,3 +1,4 @@
+import { UserService } from './../../../services/common/user.service';
 import { authModulesRoutes } from './../../../auth/auth.route';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
@@ -22,7 +23,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import differenceInYears from 'date-fns/difference_in_years';
+import * as differenceInYears from 'date-fns/difference_in_years';
 import { DURATIONS } from '../../../services/globals/config';
 import * as moment from 'moment';
 @Component({
@@ -90,7 +91,9 @@ export class PreAuthorizationNewComponent implements OnInit {
 
   diagnosisTypes: any[] = [];
   packSizes: any[] = [];
+  employees:any[] = [];
   requestStatus = REQUEST_STATUS;
+
 
   constructor(
     private _fb: FormBuilder,
@@ -110,6 +113,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     private _policyService: PolicyService,
     private _toastr: ToastsManager,
     private _locker: CoolLocalStorage,
+    private _userService:UserService,
     private _preAuthorizationService: PreAuthorizationService
   ) { }
 
@@ -122,13 +126,33 @@ export class PreAuthorizationNewComponent implements OnInit {
     this._getDiagnosisTypes();
     this._getDrugPackSizes();
     this._initializeFormGroup();
+    this._getEmployees();
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
         this._getCheckedIn(param.id);
       }
     })
-    this.testDateDiff();
+    // this.testDateDiff();
+  }
+
+  _getEmployees(){
+    if(this.user.userType.name==='Provider'){
+      this._systemService.on();
+      this._userService.find({
+        query:{
+          'facilityId._id':this.user.facilityId._id,
+          $select:['firstName', 'lastName', 'profession','cader', 'unit', 'otherNames']
+        }
+      }).then((payload: any) => {
+        this.employees = payload.data;
+        console.log(this.employees)
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      })
+    }
   }
 
   _getDiagnosisTypes() {
@@ -164,8 +188,8 @@ export class PreAuthorizationNewComponent implements OnInit {
       healthCareProvider: [this.selectedCheckIn != null ? this.selectedCheckIn.providerFacilityId.name : '', [<any>Validators.required]],
       hia: [this.selectedCheckIn != null ? this.selectedCheckIn.policyObject.hiaId.name : '', [<any>Validators.required]],
       visitClass: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      requestDate: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', []],
+      requestTime: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : new Date(), []],
       clinicalNote: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       emergency: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : false, [<any>Validators.required]],
       requestReason: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
@@ -196,7 +220,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     this.drugFormGroup = this._fb.group({
       drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
       drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : ''],
+      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
     });
 
     this.drugFormGroup.controls.drug.valueChanges
@@ -260,6 +284,14 @@ export class PreAuthorizationNewComponent implements OnInit {
           this.selectedInvestigation = undefined;
           this._getInvestigations(value);
         }
+      }, error => {
+        this._systemService.off();
+        console.log(error)
+      });
+
+      this.preAuthFormGroup.controls.docName.valueChanges
+      .subscribe(value => {
+        this.preAuthFormGroup.controls.docUnit.setValue(value.unit);
       }, error => {
         this._systemService.off();
         console.log(error)
@@ -500,17 +532,24 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
   onAddDrug() {
     let name = this.drugFormGroup.controls.drug;
+    console.log(name.valid)
     let unit = this.drugFormGroup.controls.drugUnit;
     let quantity = this.drugFormGroup.controls.drugQty;
-    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
+   
     if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
-      this.drugList.push({
-        "drug": retObj.investigation,
-        "unit": unit.value,
-        "quantity": quantity.value,
-        "checked": retObj.checked,
-        "approvedStatus": retObj.approvedStatus
-      });
+      let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
+      if(retObj.checked === false){
+        this._toastr.info("Selected Drug does not require authorization!", "Info");
+      }else{
+        this.drugList.push({
+          "drug": retObj.investigation,
+          "unit": unit.value,
+          "quantity": quantity.value,
+          "checked": retObj.checked,
+          "approvedStatus": retObj.approvedStatus
+        });
+      }
+
       this.drugFormGroup.controls.drug.reset();
       unit.reset();
       quantity.reset(1);
@@ -538,6 +577,7 @@ export class PreAuthorizationNewComponent implements OnInit {
             'checked': false
           }
         } else {
+          //Requires authorization
           if (resource.Prefered != undefined) {
             if (resource.Prefered.toLowerCase().trim() == 'c') {
               console.log(3)
@@ -589,11 +629,15 @@ export class PreAuthorizationNewComponent implements OnInit {
     let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedInvestigation);
     console.log(retObj)
     if (name.valid) {
-      this.investigationList.push({
-        "investigation": retObj.investigation,
-        "checked": retObj.checked,
-        "approvedStatus": retObj.approvedStatus
-      });
+      if(retObj.checked === false){
+        this._toastr.info("Selected Investigation does not require authorization!", "Info");
+      }else{
+        this.investigationList.push({
+          "investigation": retObj.investigation,
+          "checked": retObj.checked,
+          "approvedStatus": retObj.approvedStatus
+        });
+      }
       this.investigationFormGroup.controls.services.reset();
     } else {
       name.markAsDirty({ onlySelf: true });
@@ -603,11 +647,20 @@ export class PreAuthorizationNewComponent implements OnInit {
     let name = this.procedureFormGroup.controls.procedures;
     let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedProcedure);
     if (name.valid) {
-      this.procedureList.push({
-        "procedure": retObj.investigation,
-        "checked": retObj.checked,
-        "approvedStatus": this.requestStatus[0]
-      });
+
+      if(retObj.checked === false){
+        this._toastr.info("Selected Procedure does not require authorization!", "Info");
+      }else{
+        this.procedureList.push({
+          "procedure": retObj.investigation,
+          "checked": retObj.checked,
+          "approvedStatus": this.requestStatus[0]
+        });
+      }
+
+
+
+   
       this.procedureFormGroup.controls.procedures.reset();
     } else {
       name.markAsDirty({ onlySelf: true });
@@ -618,6 +671,7 @@ export class PreAuthorizationNewComponent implements OnInit {
     let name = this.diagnosisFormGroup.controls.diagnosis;
     let diagnosisType = this.diagnosisFormGroup.controls.diagnosisType;
     if (name.valid && diagnosisType.valid) {
+      
       this.diagnosisLists.push({
         "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
         "diagnosisType": diagnosisType.value,
@@ -656,11 +710,28 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
 
   needAuthorization(procedure) {
-    if (procedure.procedure.PA === ' Y ') {
-      return true;
-    } else {
-      return false;
+    console.log(procedure)
+    if(procedure.drug !== undefined){
+      if (procedure.drug.PA.trim() === 'Y') {
+        return true;
+      } else {
+        return false;
+      }
+    }else if(procedure.investigation !== undefined){
+      if (procedure.investigation.PA.trim() === 'Y') {
+        return true;
+      } else {
+        return false;
+      }
     }
+    else{
+      if (procedure.procedure.PA.trim() === 'Y') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+   
   }
 
   send() {
@@ -797,6 +868,7 @@ export class PreAuthorizationNewComponent implements OnInit {
             counter = counter + 1;
           }
         });
+        console.log(this.preAuthFormGroup)
       }
     } catch (error) {
       this._systemService.off();

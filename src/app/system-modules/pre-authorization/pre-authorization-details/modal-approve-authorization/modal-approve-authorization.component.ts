@@ -44,6 +44,7 @@ export class ModalApproveAuthorizationComponent implements OnInit {
       }
       this.selectedTransaction.response = response;
       this.selectedTransaction.approvedStatus = this.approvedStatus[1];
+      this.selectedAuthorization.approvedStatus = this.approvedStatus[1];
       const index = this.selectedAuthorization.documentation.findIndex(x => x._id === this.selectedTransaction._id);
       this.selectedAuthorization.documentation[index] = this.selectedTransaction;
 

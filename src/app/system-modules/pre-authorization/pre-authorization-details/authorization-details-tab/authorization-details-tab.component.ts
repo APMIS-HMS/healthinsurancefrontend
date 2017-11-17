@@ -1,10 +1,12 @@
+import { ActivatedRoute } from '@angular/router';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
 import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
 import { NewPreauthTabsComponent } from './../../pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
 import { REQUEST_STATUS } from './../../../../services/globals/config';
 import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
-import differenceInYears from 'date-fns/difference_in_years';
+import * as differenceInYears from 'date-fns/difference_in_years';
 import * as moment from 'moment';
 @Component({
   selector: 'app-authorization-details-tab',
@@ -28,24 +30,43 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   reply = false;
   lastI: number = 0;
   lastJ: number = 0;
-
+  user: any;
   constructor(
     private _preAuthorizationService: PreAuthorizationService,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private _locker: CoolLocalStorage,
+    private _route:ActivatedRoute
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.selectedAuthorization);
-    this.testDateDiff();
+    if(this.selectedAuthorization !== undefined){
+      let validDocs = this.selectedAuthorization.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+      if (validDocs.length === 0) {
+        this.disableApprove = false;
+      }
+    }
+    // this.testDateDiff();
+    this._route.params.subscribe(param =>{
+      this._getAuthorizationDetails(param.id);
+    })
   }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
-    this._preAuthorizationService.get(id, {}).then(payload => {
+    this._preAuthorizationService.get(id, {}).then((payload:any) => {
       this._systemService.off();
-      console.log(payload);
-      this.selectedAuthorization = payload;
+      payload.documentation.forEach(doc =>{
+        let validDocs = doc.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+        if (validDocs.length === 0) {
+          this.disableApprove = false;
+        }
+      })
+     
+      // this.selectedAuthorization = payload;
     }).catch(err => {
+      console.log(err)
       this._systemService.off();
     });
   }
@@ -70,17 +91,17 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     return out.join(', ');
   };
 
-  testDateDiff(){
-  var today   = new Date(),
+  testDateDiff() {
+    var today = new Date(),
       newYear = new Date(today.getFullYear(), 0, 1),
-      y2k     = new Date(2000, 0, 1);
+      y2k = new Date(2000, 0, 1);
 
     //(AS OF NOV 29, 2016)
     //Time since New Year: 0 years, 10 months, 4 weeks, 0 days
-    console.log( 'Time since New Year: ' + this.getDateDiff(newYear, today) );
+    console.log('Time since New Year: ' + this.getDateDiff(newYear, today));
 
     //Time since Y2K: 16 years, 10 months, 4 weeks, 0 days
-    console.log( 'Time since Y2K: ' + this.getDateDiff(y2k, today) );
+    console.log('Time since Y2K: ' + this.getDateDiff(y2k, today));
   }
 
 
@@ -92,6 +113,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     this.disableApprove = true;
   }
   validateResponse(doc, cliDoc, transaction: PreAuthorizationDocument) {
+    console.log('yyyyy')
     this.disableAll();
     let validDocs = transaction.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
     let pendingDocs: any[] = [];
@@ -101,40 +123,47 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     let heldDocs: any[] = [];
 
     let counter = 0;
-    validDocs.forEach(doc => {
-      doc.clinicalDocumentation.forEach(cliDoc => {
-        counter = counter + 1;
-        if (cliDoc.approvedStatus.id === 1) {
-          pendingDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 2) {
-          approvedDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 3) {
-          rejectedDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 4) {
-          queriedDocs.push(cliDoc);
-        } else if (cliDoc.approvedStatus.id === 5) {
-          heldDocs.push(cliDoc);
-        }
-      });
-    });
-    let hasDecided = false;
-    if (approvedDocs.length === counter) {
+    console.log(validDocs)
+    if (validDocs.length === 0) {
       this.disableApprove = false;
-      hasDecided = true;
-    } else if (rejectedDocs.length === counter) {
-      this.disableReject = false;
-      hasDecided = true;
-    } else if (queriedDocs.length === counter) {
-      this.disableQuery = false;
-      hasDecided = true;
-    } else if (heldDocs.length === counter) {
-      this.disableHold = false;
-      hasDecided = true;
-    }
-    if (hasDecided === false) {
+    } else {
+      validDocs.forEach(doc => {
+        doc.clinicalDocumentation.forEach(cliDoc => {
+          counter = counter + 1;
+          if (cliDoc.approvedStatus.id === 1) {
+            pendingDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 2) {
+            approvedDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 3) {
+            rejectedDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 4) {
+            queriedDocs.push(cliDoc);
+          } else if (cliDoc.approvedStatus.id === 5) {
+            heldDocs.push(cliDoc);
+          }
+        });
+      });
+      let hasDecided = false;
 
-      if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
+      if (approvedDocs.length === counter) {
+        console.log('wwwwww')
+        this.disableApprove = false;
+        hasDecided = true;
+      } else if (rejectedDocs.length === counter) {
+        this.disableReject = false;
+        hasDecided = true;
+      } else if (queriedDocs.length === counter) {
         this.disableQuery = false;
+        hasDecided = true;
+      } else if (heldDocs.length === counter) {
+        this.disableHold = false;
+        hasDecided = true;
+      }
+      if (hasDecided === false) {
+
+        if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
+          this.disableQuery = false;
+        }
       }
     }
   }
@@ -169,6 +198,10 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   }
   approveClaim(transaction) {
     this.selectedTransaction = transaction;
+    this.selectedTransaction.approvedStatus = this.requestStatus[1];
+    this.selectedAuthorization.approvedStatus = this.requestStatus[1];
+    // console.log(this.selectedTransaction)
+    // console.log(this.selectedAuthorization)
     this.modalApprove = true;
   }
   rejectClaim(transaction) {

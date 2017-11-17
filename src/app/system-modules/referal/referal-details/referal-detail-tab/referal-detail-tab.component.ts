@@ -2,7 +2,7 @@ import { REQUEST_STATUS } from './../../../../services/globals/config';
 import { ReferralAuthorization } from './../../../../models/referral/referral';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
-import differenceInYears from 'date-fns/difference_in_years';
+import * as differenceInYears from 'date-fns/difference_in_years';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { ReferralService } from './../../../../services/referral/referral.service';
 import { Component, OnInit, Input } from '@angular/core';

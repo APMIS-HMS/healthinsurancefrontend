@@ -13,6 +13,7 @@
                 <li (click)="tabClaims_click()" [class.mobile-menu-active]="tab_claims">Claims</li>
                 <li (click)="tabComplaints_click()" [class.mobile-menu-active]="tab_complaints">Complaints</li>
                 <li (click)="tabReferals_click()" [class.mobile-menu-active]="tab_referals">Referals</li>
+                <li (click)="tabCheckinGenerate_click()" [class.mobile-menu-active]="tab_checkinGenerate">Check In - Generate</li>
                 <li (click)="tabCheckin_click()" [class.mobile-menu-active]="tab_checkin">Check In</li>
                 <li (click)="tabCheckinDetail_click()" [class.mobile-menu-active]="tab_checkinHistory">Check In History</li>
             </ul>
@@ -23,8 +24,9 @@
         <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Personal Details</li>
         <li (click)="tabPayment_click()" [class.tab-active]="tab_payment">Payment History</li>
         <li (click)="tabClaims_click()" [class.tab-active]="tab_claims">Claims</li>
-        <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+        <!-- <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li> -->
         <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referrals</li>
+        <li *ngIf="isCheckIn" (click)="tabCheckinGenerate_click()" [class.tab-active]="tab_checkinGenerate">Check In - Generate</li>
         <li *ngIf="isCheckIn" (click)="tabCheckin_click()" [class.tab-active]="tab_checkin">Check In</li>
         <li *ngIf="isCheckIn" (click)="tabCheckinDetail_click()" [class.tab-active]="tab_checkinHistory">Check In History</li>
     </ul>

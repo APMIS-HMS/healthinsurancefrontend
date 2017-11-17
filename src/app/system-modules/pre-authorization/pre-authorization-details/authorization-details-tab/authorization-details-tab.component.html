@@ -97,7 +97,7 @@
                     <div class="letering">
                         <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name">{{selectedAuthorization?.medicalPersonelName}}</span> Requested Pre-Authorization</div>
+                            <span class="letering-name">{{selectedAuthorization?.medicalPersonelName.lastName}} {{selectedAuthorization?.medicalPersonelName.firstName}}</span> Requested Pre-Authorization</div>
                     </div>
                 </div>
                 <div class="doc-wrap">
@@ -271,7 +271,7 @@
                 </div>
 
 
-                <div class="action-wrap" *ngIf="transaction.response=== undefined">
+                <div class="action-wrap" *ngIf="transaction.response=== undefined && user?.userType.name==='Health Insurance Agent'">
                     <button class="btn btn-medium btn-red" [disabled]="disableReject" (click)="rejectClaim(transaction)">REJECT</button>
                     <button class="btn btn-medium btn-red" [disabled]="disableQuery" (click)="queryClaim(transaction)">QUERY</button>
                     <button class="btn btn-medium btn-yellow" [disabled]="disableHold" (click)="holdClaim(transaction)">HOLD</button>
@@ -311,7 +311,7 @@
                 </div>
 
                 <div class="reply-wrap">
-                    <div (click)="replyOk(transaction)" *ngIf="!reply && i === (selectedAuthorization?.documentation.length-1) && transaction.approvedStatus.id !== 2" class="btn btn-medium btn-grey-outline">
+                    <div (click)="replyOk(transaction)" *ngIf="!reply && i === (selectedAuthorization?.documentation.length-1) && transaction.approvedStatus.id !== 2  && user?.userType.name==='Provider'" class="btn btn-medium btn-grey-outline">
                         <i class="fa fa-reply"></i> REPLY
                     </div>
                     <div *ngIf="reply && i === (selectedAuthorization?.documentation.length-1)" class="btn btn-medium btn-blue" (click)="sendReply()">

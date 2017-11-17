@@ -6,8 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./list-claim.component.scss']
 })
 export class ListClaimComponent implements OnInit {
-
-  constructor() { }
+  constructor( ) { }
 
   ngOnInit() {
   }

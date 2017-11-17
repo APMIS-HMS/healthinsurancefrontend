@@ -5,6 +5,7 @@ export interface Claim {
     approval: Date;
     claimNote: any;
     medicalPersonelName: any;
+    medicalPersonelUnit:any;
     medicalPersonelShortName: any;
     authorizationCode: any;
     costingApprovalDocumentation: any;

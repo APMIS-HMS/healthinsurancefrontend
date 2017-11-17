@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Rx';
 import { Router } from '@angular/router';
 import { CheckIn } from './../../../models/check-in/check-in';
 import { UploadService } from './../../../services/common/upload.service';
@@ -6,18 +7,21 @@ import { SystemModuleService } from './../../../services/common/system-module.se
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { LoadingBarService } from '@ngx-loading-bar/core';
-import differenceInYears from 'date-fns/difference_in_years';
+import * as differenceInYears from 'date-fns/difference_in_years';
 
 @Component({
   selector: 'app-checkedin',
   templateUrl: './checkedin.component.html',
   styleUrls: ['./checkedin.component.scss']
 })
-export class CheckedinComponent implements OnInit {
+export class CheckedinComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.checkInSubscription.unsubscribe();
+  }
 
   listsearchControl = new FormControl();
   filterTypeControl = new FormControl();
@@ -28,6 +32,7 @@ export class CheckedinComponent implements OnInit {
   checkedIns: CheckIn[] = [];
   loading: boolean = false;
   user: any;
+  checkInSubscription:Subscription;
 
   constructor(
     private _toastr: ToastsManager,
@@ -44,17 +49,21 @@ export class CheckedinComponent implements OnInit {
     this._headerEventEmitter.setMinorRouteUrl('Check In Beneficiaries');
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCheckedIn();
+
+    this.checkInSubscription = this._checkInService.listner.subscribe(payload =>{
+      console.log(payload);
+    })
   }
 
   _getCheckedIn() {
     this._systemService.on();
-    console.log(this.user.facilityId._id)
     this._checkInService.find({
       query: {
         'providerFacilityId._id': this.user.facilityId._id,
-        $client: {
-          checkedInToday: true
-        },
+        'isCheckedOut': false,
+        // $client: {
+        //   checkedInToday: true
+        // },
         $sort: { createdAt: -1 }
       }
     }).then((payload: any) => {
@@ -77,10 +86,10 @@ export class CheckedinComponent implements OnInit {
   //   })
   // }
 
-  
+
   routeBeneficiaryDetails(check) {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/beneficiaries/'+check.beneficiaryId+'/checkin'])
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin'])
       .then(payload => {
         this._systemService.off();
       }).catch(err => {
@@ -91,14 +100,14 @@ export class CheckedinComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
     } else {
-     this._systemService.on()
+      this._systemService.on()
       this._router.navigate([url]).then(res => {
         this._systemService.off();
       }).catch(err => {

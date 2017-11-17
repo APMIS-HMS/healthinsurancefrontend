@@ -111,7 +111,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1])
     } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
-    }else if (!!this.user.userType && this.user.userType.name === 'Employer') {
+    } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
     }
 
@@ -157,7 +157,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   }
 
   _getPerson() {
-    if(this.user.userType.name === "Beneficiary"){
+    if (this.user.userType.name === "Beneficiary") {
       let person$ = Observable.fromPromise(this._personService.find({
         query: {
           email: this.user.email
@@ -188,13 +188,13 @@ export class NewBeneficiaryProgramComponent implements OnInit {
               this.selectedBeneficiary = results[1].data[0];
               console.log(this.selectedBeneficiary)
               if (!this.isEventBased) {
-                this._router.navigate(['/modules/beneficiary/new/principal',this.selectedBeneficiary._id]).then(payload => {
-  
+                this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
+
                 }).catch(err => {
                   console.log(err)
                 });
               }
-  
+
             }
           }).catch(errin => {
             console.log(errin)
@@ -203,7 +203,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       }, error => {
         console.log(error);
       })
-    }else{
+    } else {
       let person$ = Observable.fromPromise(this._personService.find({
         query: {
           _id: this.selectedBeneficiary.personId._id
@@ -217,7 +217,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         }
         if (this.selectedBeneficiary !== undefined) {
           console.log('redirect to last page');
-         
+
           this._policyService.find({
             query: {
               principalBeneficiary: this.selectedBeneficiary._id
@@ -284,7 +284,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
   _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] } }).then((res: any) => {
+    this._facilityService.find({
+      query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
+    }).then((res: any) => {
       this._systemService.off();
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
@@ -308,6 +310,13 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     }).then((res: any) => {
       this._systemService.off();
       this.hias = res.data;
+      if (this.user.userType.name === 'Health Insurance Agent') {
+        this.isHIA = true;
+        let index = this.hias.findIndex(x => x._id === this.user.facilityId._id);
+        if(index > -1){
+          this.frmProgram.controls.hiaName.setValue(this.hias[index]);
+        }
+      }
     }).catch(err => {
       this._systemService.off();
       console.log(err);
@@ -373,16 +382,16 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.sponsorshipId = value.sponsorship;
       if (policy.sponsorshipId.id === 2) {
         console.log('am in')
-        if(this.user.userType.name === "Employer"){
+        if (this.user.userType.name === "Employer") {
           policy.sponsor = this.user.facilityId;
-        }else if(this.user.userType.name === "Health Insurance Agent"){
+        } else if (this.user.userType.name === "Health Insurance Agent") {
           policy.sponsor = value.organization;
           policy.sponsorshipType = value.sponsorshipType;
           // sponsorship: ['', [<any>Validators.required]],
           // organization: ['', []],
           // sponsorshipType: ['', []],
         }
-       
+
       }
 
 

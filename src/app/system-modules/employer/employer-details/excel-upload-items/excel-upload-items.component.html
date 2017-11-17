@@ -1,0 +1,159 @@
+<table class="table" cellpadding="0" cellspacing="0" border="0.5">
+    <thead class="thead">
+        <tr class="tr">
+            <th class="th">
+                <input type="checkbox">
+            </th>
+            <th class="th">No</th>
+            <th class="th">Name</th>
+            <th class="th">Gender</th>
+            <th class="th">Type</th>
+            <th class="th">LASHMA ID</th>
+            <th class="th">DOB</th>
+            <th class="th">L.G.A</th>
+            <th class="th">HIA</th>
+            <th class="th">Premium Category</th>
+            <th class="th">Premium Package</th>
+            <th class="th">sponsorship</th>
+            <th class="th">FacilityType</th>
+            <th class="th">PlanType</th>
+            <th class="th">Plan</th>
+            <th class="th">Status</th>
+            <td class="th">Action</td>
+        </tr>
+    </thead>
+
+    <tbody class="tbody">
+        <tr class="tr">
+            <td class="td hover">
+                <input type="checkbox">
+            </td>
+            <td class="td hover"></td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Name Name</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <input [formControl]="nameControl" type="text">
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="baller td-value">P</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="typeControl">
+                        <option>P</option>
+                        <option>D</option>
+                    </select>
+                </div>
+                <!-- <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary.dependantCount}}</span>
+                <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
+                <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span> -->
+            </td>
+
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
+                <span *ngIf="!isEdit" class="td-value">Red Tag</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <input [formControl]="idControl" type="text">
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">21/02/1997</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <my-date-picker name="dobControl" [options]="myDatePickerOptions" [selDate]="today" [formControl]="dobControl"></my-date-picker>
+                </div>
+            </td>
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
+                <span *ngIf="!isEdit" class="td-value">Ikorodu</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="lgaControl">
+                        <option>P</option>
+                        <option>D</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover">
+                <span *ngIf="!isEdit" class="td-value">Male</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="genderControl">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
+                <span *ngIf="!isEdit" class="td-value">Hygia</span>
+                <div *ngIf="isEdit" class="searchable-input">
+                    <input type="text" [formControl]="hiaControl" class="form-control">
+                    <ul *ngIf="hiaResult" class="search-results">
+                        <li>Hygia</li>
+                    </ul>
+                </div>
+            </td>
+            <td class="td hover" (click)="navigateDetailBeneficiary()">
+                <span *ngIf="!isEdit" class="tbl-status-active td-value">Active</span>
+                <div *ngIf="isEdit" class="input-wrap">
+                    <select [formControl]="statusControl">
+                        <option>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+            </td>
+            <td class="td td-icos">
+                <i *ngIf="!isEdit" class="fa fa-edit" (click)="editRow()"></i>
+                <i *ngIf="isEdit" class="fa fa-check" (click)="editRow()"></i>
+            </td>
+        </tr>
+    </tbody>
+</table>

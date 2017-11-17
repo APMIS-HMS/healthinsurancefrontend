@@ -15,6 +15,7 @@ export interface CheckIn {
     confirmation: any;
     otp: any;
     checkOut: any;
+    isCheckedOut:boolean;
     _id:any;
     beneficiaryObject:any;
     policyObject:any;

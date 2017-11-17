@@ -1,3 +1,4 @@
+import { CheckinDetailsGenerateComponent } from './beneficiary-details/checkin-details-generate/checkin-details-generate.component';
 import { NewBeneficiaryConfirmComponent } from './new-beneficiary/new-beneficiary-confirm/new-beneficiary-confirm.component';
 import { NewBeneficiaryProgramComponent } from './new-beneficiary/new-beneficiary-program/new-beneficiary-program.component';
 import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-nok/new-beneficiary-nok.component';
@@ -26,6 +27,7 @@ const BENEFICIARY_ROUTES: Routes = [
                 children: [
                     { path: '', component: PersonalDetailsComponent },
                     { path: 'checkin', component: CheckinDetailsComponent },
+                    { path: 'checkin-generate', component: CheckinDetailsGenerateComponent },
                     { path: 'checkedin-history', component: CheckinHistoryComponent },
                     { path: 'payment', component: PaymentDetailBeneficiaryComponent },
                     { path: 'claims', component: ListClaimsComponent },

@@ -1,6 +1,7 @@
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { Subject } from 'rxjs/Subject';
 const request = require('superagent');
 
 @Injectable()
@@ -9,6 +10,10 @@ export class PremiumPaymentService {
   public _socket;
   private _rest;
   private _restLogin;
+  private _announcePolicy = new Subject<any>();
+  private _announceWhenDone = new Subject<any>();
+  announcedPolicy = this._announcePolicy.asObservable();
+  announcedWhenDone = this._announceWhenDone.asObservable();
 
   constructor(
     private _socketService: SocketService,
@@ -75,5 +80,13 @@ export class PremiumPaymentService {
     return request
       .post(path)
       .send(body);
+  }
+
+  setPolicy(value: string) {
+    this._announcePolicy.next(value);
+  }
+
+  setWhenDone(value: boolean) {
+    this._announceWhenDone.next(value);
   }
 }

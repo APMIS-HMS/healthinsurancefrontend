@@ -11,6 +11,7 @@ import { ListReferalsComponent } from '../system-modules/referal/list-referals/l
 import { ListPlansComponent } from '../system-modules/plan/list-plans/list-plans.component';
 import { PreAuthorizationListComponent } from '../system-modules/pre-authorization/pre-authorization-list/pre-authorization-list.component';
 import { LashmaCodesComponent } from './lashma-codes/lashma-codes.component';
+import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { LashmaCodesComponent } from './lashma-codes/lashma-codes.component';
         ListReferalsComponent,
         LashmaCodesComponent,
         ListPlansComponent,
-        PreAuthorizationListComponent
+        PreAuthorizationListComponent,
+        PaymentHistoryComponent
     ],
     exports: [
         CommonModule,
@@ -36,7 +38,8 @@ import { LashmaCodesComponent } from './lashma-codes/lashma-codes.component';
         ListReferalsComponent,
         ListPlansComponent,
         LashmaCodesComponent,
-        PreAuthorizationListComponent
+        PreAuthorizationListComponent,
+        PaymentHistoryComponent
     ],
     imports: [
         RouterModule,

@@ -16,7 +16,7 @@
                 </div>
                 <div class="group-item">
                     <div class="item-label">LASRRA ID:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject.providerId.provider.lasrraId}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.provider?.lasrraId}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">LAASHMA ID:</div>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="group-item">
                     <div class="item-label">Provider ID:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject.providerId.provider.comment}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.provider?.comment}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Health Plan:</div>
@@ -43,7 +43,9 @@
                 </div>
                 <div class="group-item">
                     <div class="item-label">Status:</div>
-                    <div class="item-val"><span class="lemon--green">{{status}}</span></div>
+                    <div class="item-val">
+                        <span class="lemon--green">{{status}}</span>
+                    </div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Date when patient was checked in:</div>
@@ -63,7 +65,8 @@
                     <div class="count">{{i+1}}</div>
                     <div class="letering">
                         <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
-                        <div class="letering-2"><span class="letering-name">{{selectedClaim.medicalPersonelName}}</span> Requested Claims</div>
+                        <div class="letering-2">
+                            <span class="letering-name">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span> Requested Claims</div>
                     </div>
                 </div>
                 <div class="doc-wrap">
@@ -208,8 +211,8 @@
                             <li>in the name of the king comes the big fat bully of the year because youve gat to be kidding right</li>
                         </div> -->
                         <div class="entry-wrap">
-                            <li class="doc-subtitle">Amount</li>
-                            <li>&#x20A6; 20,000</li>
+                            <!-- <li class="doc-subtitle">Amount</li>
+                            <li>&#x20A6; 20,000</li> -->
                         </div>
                     </ul>
                 </div>
@@ -254,11 +257,11 @@
     </div>
 </div>
 
-<div class="action-wrap">
-    <div class="btn btn-medium btn-red" (click)="rejectClaim()">REJECT</div>
-    <div class="btn btn-medium btn-red" (click)="queryClaim()">QUERY</div>
-    <div class="btn btn-medium btn-yellow" (click)="holdClaim()">HOLD</div>
-    <div class="btn btn-medium btn-blue" (click)="approveClaim()">APPROVE</div>
+<div class="action-wrap" *ngIf="isAuthCreateClaim==true">
+    <div class="btn btn-medium btn-red" disabled="status=='Reject'" (click)="rejectClaim()">REJECT</div>
+    <div class="btn btn-medium btn-red" disabled="status=='Query'" (click)="queryClaim()">QUERY</div>
+    <div class="btn btn-medium btn-yellow" disabled="status=='Hold'"  (click)="holdClaim()">HOLD</div>
+    <div class="btn btn-medium btn-blue" disabled="status=='Approve'" (click)="approveClaim()">APPROVE</div>
 </div>
 
 <div *ngIf="modalApprove" class="modal-overlay">

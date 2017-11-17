@@ -1,4 +1,8 @@
 @import '../../../../assets/libs/variables.scss';
+.text-right {
+    text-align: right;
+}
+
 .list-filter-wrap {
     flex-direction: column;
     padding: 10px 10px 0px 10px;
@@ -50,7 +54,7 @@
 .modal-wrap {
     width: 250px;
     height: 200px;
-    min-width: 200px;
+    min-width: 250px;
     min-height: 200px;
 }
 
@@ -58,4 +62,18 @@
     width: 94%;
     padding: 20px;
     text-align: right;
+}
+
+.paystack-box {
+    .paystack-btn {
+        width: 150px;
+        padding: 10px;
+        margin-left: 65px;
+    }
+}
+
+.paystack-btn {
+    width: 150px;
+    padding: 10px;
+    margin-left: 65px;
 }
