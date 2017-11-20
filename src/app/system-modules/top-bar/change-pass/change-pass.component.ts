@@ -13,7 +13,7 @@ import { Injectable } from "@angular/core";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
 import { Router } from "@angular/router";
 
-const host = require("../../../feathers/feathers.service"); // "http://localhost:3031";
+const host = require("../../../feathers/feathers.service");
 const feathers = require("feathers/client");
 const socketio = require("feathers-socketio/client");
 const io = require("socket.io-client");

@@ -73,7 +73,7 @@ export class ListBeneficiaryComponent implements OnInit {
     }
 
     this._getPlans();
-    this._getCurrentPlatform();
+    console.log(this._getCurrentPlatform());
 
     this.statusControl.valueChanges.subscribe((value) => {
       if (value === 'All') {
