@@ -199,7 +199,7 @@ export class ListBeneficiaryComponent implements OnInit {
   }
 
   private _getAllPolicies(query) {
-    this.beneficiaries = [];
+    //this.beneficiaries = [];
     // this.tempBeneficiaries = [];
     try {
       this._systemService.on();
