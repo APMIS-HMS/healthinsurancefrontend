@@ -81,7 +81,7 @@ export class ListBeneficiaryComponent implements OnInit {
         let temp = this.beneficiaries.filter(x => x.isActive === (value == 'true') ? true : false);
         this.beneficiaries = temp;
       }
-    });
+    }); 
 
     this.filterTypeControl.valueChanges.subscribe((value) => {
       this.beneficiaries = this.mainBeneficiaries;
