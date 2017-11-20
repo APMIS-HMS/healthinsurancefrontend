@@ -5,7 +5,7 @@
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
 
-    <div *ngIf="isPlatformOwner" class="btn btn-medium btn-blue" (click)="navigateNewEmployer()">
+    <div *ngIf="isPlatformOwner" *ngIf="isPlatformOwner == true" class="btn btn-medium btn-blue" (click)="navigateNewEmployer()">
         <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ORGANISATION
     </div>
 </div>
