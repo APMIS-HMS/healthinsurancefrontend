@@ -29,10 +29,13 @@ export class ListBeneficiaryComponent implements OnInit {
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
   beneficiaries: any[] = [];
+  sizeOfBeneficiaries: any[] = [];
   inActiveBeneficiaries: any[] = [];
   mainBeneficiaries: any[] = [];
   loading: boolean = true;
   planTypes: any[] = [];
+  limitValue = 4;
+  skipValue = 0;
   currentPlatform: any;
   user: any;
   hasCreateBeneficiary: Boolean = false;
@@ -56,7 +59,6 @@ export class ListBeneficiaryComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
 
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
-      console.log(this.user)
       this._getPerson();
     }
   }
@@ -64,7 +66,6 @@ export class ListBeneficiaryComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
-
     if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
@@ -72,13 +73,13 @@ export class ListBeneficiaryComponent implements OnInit {
     }
 
     this._getPlans();
-    this._getCurrentPlatform();
+    console.log(this._getCurrentPlatform());
 
     this.statusControl.valueChanges.subscribe((value) => {
       if (value === 'All') {
         this.beneficiaries = this.mainBeneficiaries;
       } else {
-        let temp = this.beneficiaries.filter(x => x.isActive === (value == 'true') ? true : false);
+        const temp = this.beneficiaries.filter(x => x.isActive === (value === 'true') ? true : false);
         this.beneficiaries = temp;
       }
     }); 
@@ -101,27 +102,23 @@ export class ListBeneficiaryComponent implements OnInit {
         }
       }));
       Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
-        console.log(results)
         if (results[0].data.length > 0) {
           this._policyService.find({
             query: {
               principalBeneficiary: results[0].data[0]._id,
             }
           }).then((policies: any) => {
-            console.log(policies)
             if (policies.data.length > 0) {
               this._router.navigate(['/modules/beneficiary/beneficiaries', policies.data[0]._id]).then(payload => {
 
               }).catch(err => {
-                console.log(err)
+                console.log(err);
               });
             }
           }).catch(errin => {
-            console.log(errin)
           })
         }
       }, error => {
-        console.log(error);
       })
     }
 
@@ -146,9 +143,10 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'providerId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
-              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1, 'providerId':1 }
+              $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1, 'providerId': 1 }
             }
           });
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
@@ -156,7 +154,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'hiaId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -165,7 +164,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'employerId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -174,7 +174,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'platformOwnerId._id': this.user.facilityId._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -183,7 +184,8 @@ export class ListBeneficiaryComponent implements OnInit {
           this._getAllPolicies({
             query: {
               'platformOwnerId._id': this.currentPlatform._id,
-              $limit: 200,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
               $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
@@ -198,14 +200,16 @@ export class ListBeneficiaryComponent implements OnInit {
 
   private _getAllPolicies(query) {
     this.beneficiaries = [];
+    // this.tempBeneficiaries = [];
     try {
       this._systemService.on();
+
       this._policyService.find(query).then((res: any) => {
         this.loading = false;
-        console.log(res)
-        if (res.data.length > 0) {
+        if (res.data.length > 0 ) {
+          console.log(res);
           res.data.forEach((policy, i) => {
-            let principal = policy.principalBeneficiary;
+            const principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
             principal.policyId = policy._id;
@@ -229,7 +233,7 @@ export class ListBeneficiaryComponent implements OnInit {
         this._systemService.off();
         this.loading = false;
       }).catch(err => {
-        console.log(err)
+        console.log(err);
         this.loading = false;
         this._systemService.off();
         this._toastr.error('Error has occured please contact your administrator!', 'Error!');
@@ -239,6 +243,11 @@ export class ListBeneficiaryComponent implements OnInit {
       this.loading = false;
       this._toastr.error('Error has occured please contact your administrator!', 'Error!');
     }
+    this.skipValue++;
+  }
+
+  loadMoreBeneficiaries() {
+    this._getCurrentPlatform();
   }
 
   private _getInActiveBeneficiaries(platformId) {
@@ -259,12 +268,12 @@ export class ListBeneficiaryComponent implements OnInit {
           if (index > -1) {
             beneficiaryList.splice(index);
           }
-        })
-      })
+        });
+      });
       this.inActiveBeneficiaries = beneficiaryList;
       this._systemService.off();
     }, error => {
-    })
+    });
   }
 
   navigateNewBeneficiary() {
