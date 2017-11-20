@@ -138,7 +138,6 @@ export class PremiumPaymentTabComponent implements OnInit {
         policies: policies,
         paidBy: user,
         sponsor: this.facility,
-        // sponsorshipId: ,
         requestedAmount: this.totalCost,
         amountPaid: 0,
         paymentType: value.paymentType,

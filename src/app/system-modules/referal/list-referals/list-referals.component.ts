@@ -2,6 +2,7 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { ReferralService } from './../../../services/referral/referral.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -21,6 +22,12 @@ export class ListReferalsComponent implements OnInit {
 
   authorizations:any[] = [];
   user:any;
+  
+  totalEntries:number;
+  showLoadMore:any = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
+  index:number = 0;
 
   constructor(
     private _router: Router,
@@ -49,10 +56,22 @@ export class ListReferalsComponent implements OnInit {
             { 'documentation.destinationProvider._id': this.user.facilityId._id }
           ],
           $sort: { createdAt: -1 },
+          $limit: this.limit, 
+          $skip: this.limit*this.index
         }
       }).then((payload: any) => {
         this.loading = false;
-        this.authorizations = payload.data;
+        //this.authorizations = payload.data;
+        this.totalEntries = payload.total;
+        if(this.resetData !== true) { 
+          this.authorizations.push(...payload.data) 
+        }else{ 
+          this.resetData = false;
+          this.authorizations = payload.data; 
+        }
+        if(this.authorizations.length >= this.totalEntries){
+          this.showLoadMore = false;
+        }
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
@@ -64,11 +83,24 @@ export class ListReferalsComponent implements OnInit {
         query: {
           $or: [
             { 'policyId.hiaId._id': this.user.facilityId._id }
-          ]
+          ],
+          $limit: this.limit, 
+          $skip: this.limit*this.index
         }
       }).then((payload: any) => {
         this.loading = false;
-        this.authorizations = payload.data;
+        //this.authorizations = payload.data;
+        this.totalEntries = payload.total;
+        if(this.resetData !== true) { 
+          this.authorizations.push(...payload.data) 
+        }else{ 
+          this.resetData = false;
+          this.authorizations = payload.data; 
+        }
+        
+        if(this.authorizations.length >= this.totalEntries){
+          this.showLoadMore = false;
+        }
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
@@ -77,6 +109,7 @@ export class ListReferalsComponent implements OnInit {
       console.log('You are not required to view this content...');
       this.loading = false;
     }
+    this.index++;
   }
 
   navigateDetail(auth) {
@@ -86,4 +119,17 @@ export class ListReferalsComponent implements OnInit {
       console.log(err);
     });
   }
+
+  loadMore(){
+    this._getReferrals();
+  }
+
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getReferrals();
+    this.showLoadMore = true;
+  }
+
+
 }

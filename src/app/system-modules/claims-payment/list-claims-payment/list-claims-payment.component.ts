@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs/Rx';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import {
   SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService,
   CapitationFeeService, PolicyService, BeneficiaryService
@@ -39,6 +39,14 @@ export class ListClaimsPaymentComponent implements OnInit {
   qCBtnProcessing: boolean = false;
   qCDisableBtn: boolean = false;
   capitationPrice: any;
+  claimsTotalEntries:number;
+  capitationClaimsTotalEntries:number;
+  showClaimsLoadMore:any = true;
+  showCapitationClaimsLoadMore:any = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  claimsResetData:Boolean;
+  capitationClaimsResetData:Boolean;
+  index:number = 0;
 
   constructor(
     private _router: Router,
@@ -78,11 +86,23 @@ export class ListClaimsPaymentComponent implements OnInit {
       query: {
         'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
          isQueuedForPayment: false,
-         'approvedDocumentation.response.isApprove': true
+         'approvedDocumentation.response.isApprove': true,
+         $limit: this.limit, 
+         $skip: this.limit*this.index
     }}).then((payload: any) => {
       console.log(payload);
       this.loading = false;
-      this.claims = payload.data;
+      //this.claims = payload.data;
+      this.claimsTotalEntries = payload.total;
+      if(this.claimsResetData !== true){ 
+        this.claims.push(...payload.data) 
+      }else{
+        this.claimsResetData = false;
+        this.claims = payload.data; 
+      }
+      if(this.claims.length >= this.claimsTotalEntries){
+        this.showClaimsLoadMore = false;
+      }
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -97,10 +117,23 @@ export class ListClaimsPaymentComponent implements OnInit {
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
          isActive: true,
+         $limit: this.limit, 
+         $skip: this.limit*this.index
     }}).then((res: any) => {
       console.log(res);
       this.loading = false;
-      this.capitationClaims = res.data;
+      //this.capitationClaims = res.data;
+      this.capitationClaimsTotalEntries = res.total;
+      if(this.capitationClaimsResetData !== true) 
+      { 
+        this.capitationClaims.push(...res.data) 
+      }else{ 
+        this.capitationClaimsResetData = false;
+        this.capitationClaims = res.data; 
+      }
+      if(this.capitationClaims.length >= this.capitationClaimsTotalEntries){
+        this.showClaimsLoadMore = false;
+      }
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -242,5 +275,25 @@ export class ListClaimsPaymentComponent implements OnInit {
         this._systemService.off();
       });
     }
+  }
+
+  claimsLoadMore(){
+    this._getClaimsPayments();
+  }
+  capitationClaimsLoadMore(){
+    this._getClaimsCapitationPrice();
+  }
+
+  claimsReset(){
+    this.index = 0;
+    this.claimsResetData = true;
+    this._getClaimsPayments();
+    this.showClaimsLoadMore = true;
+  }
+  capitationClaimsReset(){
+    this.index = 0;
+    this.claimsResetData = true;
+    this._getClaimsCapitationPrice();
+    this.showClaimsLoadMore = true;
   }
 }

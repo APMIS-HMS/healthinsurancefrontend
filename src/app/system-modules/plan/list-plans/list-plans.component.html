@@ -45,7 +45,7 @@
       </select>
         </div>
 
-        <div class="btn btn-medium btn-blue-outline">RESET</div>
+        <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
     </div>
 
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
@@ -75,15 +75,15 @@
                 </td>
             </tr>
             <tr *ngFor="let plan of plans; let i = index;" class="tr">
-                <td class="td">{{ i+1 }}</td>
-                <td class="td">{{plan.name}}</td>
-                <td class="td">{{plan.planType.name}}</td>
-                <td class="td">0</td>
-                <td class="td">{{ plan.userType?.name === 'Platform Owner' ? 'LASHMA' : plan.userType?.name }}</td>
+                <td class="td" (click)="navigatePlanDetail(plan)">{{ i+1 }}</td>
+                <td class="td" (click)="navigatePlanDetail(plan)">{{plan.name}}</td>
+                <td class="td" (click)="navigatePlanDetail(plan)">{{plan.planType.name}}</td>
+                <td class="td" (click)="navigatePlanDetail(plan)">0</td>
+                <td class="td" (click)="navigatePlanDetail(plan)">{{ plan.userType?.name === 'Platform Owner' ? 'LASHMA' : plan.userType?.name }}</td>
                 <!-- <td class="td number">{{getPrice('Week', plan) | number:'1.2-2'}}</td>
                 <td class="td number">{{getPrice('Month', plan) | number:'1.2-2'}}</td>
                 <td class="td number">{{getPrice('Year', plan) | number:'1.2-2'}}</td> -->
-                <td class="td">
+                <td class="td" (click)="navigatePlanDetail(plan)">
                     <span *ngIf="plan.isActive" class="tbl-status-active">Active</span>
                     <span *ngIf="!plan.isActive" class="tbl-status-inactive">InActive</span>
                 </td>
@@ -97,8 +97,8 @@
 
     <div class="list-buttom">
         <div *ngIf="plans.length > 0">
-            <div class="list-summary">Showing 1 to {{ plans.length }} of {{ plans.length }} entries (filtered from {{ plans.length }} total entries)</div>
-            <div class="btn btn-medium btn-yellow">Load More</div>
+            <div class="list-summary">Showing 1 to {{ plans.length }} of {{ totalEntries }} entries (filtered from {{ totalEntries }} total entries)</div>
+            <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="showLoadMore">Load More</div>
         </div>
     </div>
 </div>

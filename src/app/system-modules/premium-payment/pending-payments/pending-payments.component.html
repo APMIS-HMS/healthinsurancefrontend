@@ -94,8 +94,8 @@
 
         <div class="list-buttom">
             <div *ngIf="individualPolicies.length > 0">
-                <div class="list-summary">Showing 1 to {{ individualPolicies.length }} of {{ individualPolicies.length }} entries (filtered from {{ individualPolicies.length }} total entries)</div>
-                <div class="btn btn-medium btn-yellow">Load More</div>
+                <div class="list-summary">Showing 1 to {{ individualPolicies.length }} of {{ totalEntries }} entries (filtered from {{ totalEntries }} total entries)</div>
+                <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="individualShowLoadMore">Load More</div>
             </div>
         </div>
     </div>
@@ -138,8 +138,8 @@
 
         <div class="list-buttom">
             <div *ngIf="organisationPolicies.length > 0">
-                <div class="list-summary">Showing 1 to {{ organisationPolicies.length }} of {{ organisationPolicies.length }} entries (filtered from {{ organisationPolicies.length }} total entries)</div>
-                <div class="btn btn-medium btn-yellow">Load More</div>
+                <div class="list-summary">Showing 1 to {{ organisationPolicies.length }} of {{ OrganisationTotalEntries }} entries (filtered from {{ OrganisationTotalEntries }} total entries)</div>
+                <div class="btn btn-medium btn-yellow" (click)="loadMore" *ngIf="organisationShowLoadMore">Load More</div>
             </div>
         </div>
     </div>
