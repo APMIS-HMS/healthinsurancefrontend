@@ -146,7 +146,12 @@ export class ListEmployerComponent implements OnInit {
       this.totalData = res.total;
       if (res.data.length > 0) {
         //this.employers = res.data;
-        (this.resetData !== true) ? this.employers.push(...res.data) : this.employers = res.data;
+        if(this.resetData !== true) { 
+          this.employers.push(...res.data); 
+        }else{ 
+          this.resetData = false;
+          this.employers = res.data 
+        }
         this.local_employers = this.employers;
       }
       if(this.employers.length >= this.totalData){

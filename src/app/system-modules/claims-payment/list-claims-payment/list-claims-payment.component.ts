@@ -94,7 +94,12 @@ export class ListClaimsPaymentComponent implements OnInit {
       this.loading = false;
       //this.claims = payload.data;
       this.claimsTotalEntries = payload.total;
-      (this.claimsResetData !== true) ? this.claims.push(...payload.data) : this.claims = payload.data;
+      if(this.claimsResetData !== true){ 
+        this.claims.push(...payload.data) 
+      }else{
+        this.claimsResetData = false;
+        this.claims = payload.data; 
+      }
       if(this.claims.length >= this.claimsTotalEntries){
         this.showClaimsLoadMore = false;
       }
@@ -119,7 +124,13 @@ export class ListClaimsPaymentComponent implements OnInit {
       this.loading = false;
       //this.capitationClaims = res.data;
       this.capitationClaimsTotalEntries = res.total;
-      (this.capitationClaimsResetData !== true) ? this.capitationClaims.push(...res.data) : this.capitationClaims = res.data;
+      if(this.capitationClaimsResetData !== true) 
+      { 
+        this.capitationClaims.push(...res.data) 
+      }else{ 
+        this.capitationClaimsResetData = false;
+        this.capitationClaims = res.data; 
+      }
       if(this.capitationClaims.length >= this.capitationClaimsTotalEntries){
         this.showClaimsLoadMore = false;
       }

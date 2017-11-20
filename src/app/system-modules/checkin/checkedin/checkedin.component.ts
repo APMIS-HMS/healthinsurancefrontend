@@ -78,11 +78,15 @@ export class CheckedinComponent implements OnInit, OnDestroy {
       this.loading = false;
       //this.checkedIns = payload.data;
       this.totalEntries = payload.total;
-      (this.resetData !== true) ? this.checkedIns.push(...payload.data) : this.checkedIns = payload.data;
+      if(this.resetData !== true) { 
+        this.checkedIns.push(...payload.data) 
+      }else{ 
+        this.resetData = false;
+        this.checkedIns = payload.data 
+      }
       if(this.checkedIns.length >= this.totalEntries){
         this.showLoadMore = false;
       }
-      console.log(this.checkedIns)
       this._systemService.off();
     }).catch(err => {
       console.log(err)
