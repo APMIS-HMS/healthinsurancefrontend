@@ -121,7 +121,13 @@ export class PendingPaymentsComponent implements OnInit {
       });
       //this.individualPolicies = policies;
       this.totalEntries = res.total;
-      (this.resetData !== true) ? this.individualPolicies.push(...policies) : this.individualPolicies = policies;
+      if(this.resetData !== true) 
+      { 
+        this.individualPolicies.push(...policies) 
+      }else{ 
+        this.resetData = false;
+        this.individualPolicies = policies; 
+      }
       if(this.individualPolicies.length >= this.totalEntries){
         this.individualShowLoadMore = false;
       }
@@ -169,7 +175,12 @@ export class PendingPaymentsComponent implements OnInit {
         }
       });
       this.totalEntries = res.total;
-      //(this.resetData !== true) ? this.organisationPolicies.push(...res.data) : this.organisationPolicies = res.data;
+      if(this.resetData !== true) { 
+        this.organisationPolicies.push(...res.data); 
+      }else{ 
+        this.resetData = false;
+        this.organisationPolicies = res.data; 
+      }
       if(this.organisationPolicies.length >= this.OrganisationTotalEntries){
         this.organisationShowLoadMore = false;
       }

@@ -243,9 +243,8 @@ export class MainMenuComponent implements OnInit {
   }
   signOut() {
     // this.setLoggedInUser(this.user.email, false);
-    this._authService.logOut().then(payload =>{
+    this._authService.logOut().then(payload => {
       this._router.navigate(['/auth/login']);
     });
-   
   }
 }

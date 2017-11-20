@@ -75,7 +75,12 @@ export class ListPlansComponent implements OnInit {
       this.loading = false;
       //this.plans = payload.data;
       this.totalEntries = payload.total;
-      (this.resetData !== true) ? this.plans.push(...payload.data) : this.plans = payload.data;
+      if(this.resetData !== true) { 
+        this.plans.push(...payload.data); 
+      }else{ 
+        this.resetData = false;
+        this.plans = payload.data;
+      }
       if(this.plans.length >= this.totalEntries){
         this.showLoadMore = false;
       }

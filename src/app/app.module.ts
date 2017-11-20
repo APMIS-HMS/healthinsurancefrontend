@@ -4,6 +4,7 @@ import { GenderService } from './services/common/gender.service';
 
 import { UploadService } from './services/common/upload.service';
 import { AuthService } from './auth/services/auth.service';
+import { ChangePasswordAuthService, ChangePasswordSocketService } from './system-modules/top-bar/change-pass/change-pass.component'; 
 import { PremiumTypeService } from './services/common/premium-type.service';
 import { HeaderEventEmitterService } from './services/event-emitters/header-event-emitter.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -49,7 +50,7 @@ import { DateTimePickerModule } from 'ng-pick-datetime';
 	],
 	providers: [SocketService, RestService, SystemModuleService, HeaderEventEmitterService, PremiumTypeService,
 		UserTypeService, AuthService, UploadService, FacilityService, GenderService, UserService, PersonService, 
-		PolicyService, NotificationService],
+		PolicyService, NotificationService, ChangePasswordAuthService, ChangePasswordSocketService],
 	bootstrap: [AppComponent]
 })
 
