@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -7,7 +7,9 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 // import { Angular4PaystackComponent } from 'angular4-paystack';
 import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../../services/event-emitters/header-event-emitter.service';
-import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService } from '../../../../services/index';
+import {
+  FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService
+} from '../../../../services/index';
 
 @Component({
   selector: 'app-payment-detail-beneficiary',
@@ -42,6 +44,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     private _toastr: ToastsManager,
     private _route: ActivatedRoute,
     private _headerEventEmitter: HeaderEventEmitterService,
+    private _elementRef: ElementRef,
     // private _angular4Paystack: Angular4PaystackComponent,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
@@ -50,6 +53,13 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   ) {
 
   }
+
+  // ngAfterViewInit() {
+  //   let s = document.createElement('script');
+  //   s.type = 'text/javascript';
+  //   s.src = 'http://flw-pms-dev.eu-west-1.elasticbeanstalk.com/flwv3-pug/getpaidx/api/flwpbf-inline.js';
+  //   this._elementRef.nativeElement.appendChild(s);
+  // }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary Payment');
@@ -137,50 +147,51 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     });
   }
 
-  paymentDone(data) {
-    console.log(data);
-    let policies = [];
-    // All policies that is being paid for.
-    policies.push({
-      policyId: this.policy.policyId,
-      policyCollectionId: this.policy._id
-    });
 
-    let ref = {
-      platformOwnerId: this.currentPlatform,
-      reference: data,
-      policies: policies,
-      sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
-      paidBy: this.user,
-      requestedAmount: this.policy.premiumPackageId.amount,
-      amountPaid: this.policy.premiumPackageId.amount,
-      paymentType: this.paymentType
-    };
-    // Save into the Premium Payment Service
-    this._premiumPaymentService.create(ref).then((res: any) => {
-      console.log(res);
+  // paymentDone(data) {
+  //   console.log(data);
+  //   let policies = [];
+  //   // All policies that is being paid for.
+  //   policies.push({
+  //     policyId: this.policy.policyId,
+  //     policyCollectionId: this.policy._id
+  //   });
 
-      let verificationData = {
-        reference: res.reference,
-        premiumId: res._id
-      };
-      // Call paystack verification API
-      this._premiumPaymentService.verifyPaystackWithMiddleWare(verificationData).then((verifyRes: any) => {
-        console.log(verifyRes);
-        if (!!verifyRes) {
-          this.showPayment = false;
-          this.isForRenewal = true;
-          this._getPolicyDetails(verifyRes.body._id);
-          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
-          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
-        }
-      }).catch(err => {
-        console.log(err);
-      });
-    }).catch(err => {
-      console.log(err);
-    });
-  }
+  //   let ref = {
+  //     platformOwnerId: this.currentPlatform,
+  //     reference: data,
+  //     policies: policies,
+  //     sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
+  //     paidBy: this.user,
+  //     requestedAmount: this.policy.premiumPackageId.amount,
+  //     amountPaid: this.policy.premiumPackageId.amount,
+  //     paymentType: this.paymentType
+  //   };
+  //   // Save into the Premium Payment Service
+  //   this._premiumPaymentService.create(ref).then((res: any) => {
+  //     console.log(res);
+
+  //     let verificationData = {
+  //       reference: res.reference,
+  //       premiumId: res._id
+  //     };
+  //     // Call paystack verification API
+  //     this._premiumPaymentService.verifyPaystackWithMiddleWare(verificationData).then((verifyRes: any) => {
+  //       console.log(verifyRes);
+  //       if (!!verifyRes) {
+  //         this.showPayment = false;
+  //         this.isForRenewal = true;
+  //         this._getPolicyDetails(verifyRes.body._id);
+  //         this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
+  //         this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+  //       }
+  //     }).catch(err => {
+  //       console.log(err);
+  //     });
+  //   }).catch(err => {
+  //     console.log(err);
+  //   });
+  // }
 
   onClickCreateAndPaybatch(valid: boolean, value: any) {
     if (valid) {
