@@ -332,7 +332,7 @@ export class EmployerDetailsComponent implements OnInit {
         }
       } else {
         if (data.length > 0) {
-          let val = data.filter(x => x[obj].toLowerCase() == param.toString().toLowerCase());
+          let val = data.filter(x => x[obj].toLowerCase() == param.toLowerCase());
           if (val.length > 0) {
             return true;
           } else {
@@ -663,21 +663,24 @@ export class EmployerDetailsComponent implements OnInit {
     }
   }
 
-  downloadExcelTemplate(){
+  downloadExcelTemplate() {
     this._bulkBeneficiaryUploadService.download();
   }
 
   save() {
+    var counter = 0;
     var retainedOrderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
-    var checkOrderExcelPolicies = this.orderExcelPolicies.filter(x=>x.isCheck==true);
+    var checkOrderExcelPolicies = this.orderExcelPolicies.filter(x => x.isCheck == true);
+    
+    this.orderExcelPolicies = retainedOrderExcelPolicies;
     var groups = {};
     var bObj = {};
     for (var i = 0; i < checkOrderExcelPolicies.length; i++) {
-      var groupName = this.orderExcelPolicies[i].principalIndex;
+      var groupName = checkOrderExcelPolicies[i].principalIndex;
       if (!groups[groupName]) {
         groups[groupName] = [];
       }
-      groups[groupName].push(this.orderExcelPolicies[i]);
+      groups[groupName].push(checkOrderExcelPolicies[i]);
     };
 
 
@@ -698,30 +701,36 @@ export class EmployerDetailsComponent implements OnInit {
     }
     console.log(this.beneficiaries);
     this.isProcessing = true
+    this.beneficiaries = JSON.parse(JSON.stringify(this.beneficiaries));
     this.beneficiaries.forEach((uploadItem, index) => {
       this._bulkBeneficiaryUploadService.create(uploadItem).then(payload => {
-        this.orderExcelPolicies.splice(uploadItem,1);
         if (payload.body.policyObject == undefined) {
           const text = payload.body;
           this._toastr.error(text, 'Failed!');
         } else {
-          const text = payload.body.policyObject.user.firstName + " " + payload.body.policyObject.user.lastName + " and dependant(s) created";
-          this._toastr.success(text, 'Success!');
+          counter = index + 1;
+          checkOrderExcelPolicies.forEach((o, i) => {
+            if (o.principalIndex == index) {
+              checkOrderExcelPolicies.splice(i);
+              this.orderExcelPolicies = checkOrderExcelPolicies;
+            }
+          })
         }
-        
         this.nSuccess += 1;
+        if (index == this.beneficiaries.length - 1) {
+          let content = counter.toString() + "/" + this.beneficiaries.length + "was uploaded";
+          this._toastr.success(content, 'Success!');
+          this.isProcessing = false;
+          this.nSuccess = 0;
+          this.nFailed = 0;
+          // this.orderExcelPolicies = retainedOrderExcelPolicies;
+          // this.orderExcelPolicies = [];
+        }
         console.log(payload);
       }, error => {
         console.log(error);
         this.isProcessing = false;
       })
-      if (index == this.beneficiaries.length - 1) {
-        this.isProcessing = false;
-        this.nSuccess = 0;
-        this.nFailed = 0;
-        // this.orderExcelPolicies = retainedOrderExcelPolicies;
-        // this.orderExcelPolicies = [];
-      }
     });
   }
 
