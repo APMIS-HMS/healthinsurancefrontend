@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, Input, ElementRef, EventEmitter } from '@angular/core';
 import { FLUTTERWAVE_PUBLIC_KEY } from '../../services/globals/config';
 import { HeaderEventEmitterService } from '../../services/event-emitters/header-event-emitter.service';
 import { FlutterwaveService, WindowRef } from '../../services/index';
@@ -9,6 +9,8 @@ import { FlutterwaveService, WindowRef } from '../../services/index';
   styleUrls: ['./angular-4-flutterwave.component.scss']
 })
 export class Angular4FlutterwaveComponent implements OnInit {
+  @Output() close: EventEmitter<any> = new EventEmitter();
+  @Output() callback: EventEmitter<any> = new EventEmitter();
   @Input() customer_email: string;
   @Input() amount: string;
   @Input() payment_method: string;
@@ -21,18 +23,23 @@ export class Angular4FlutterwaveComponent implements OnInit {
   @Input() PBFPubKey: string;
   @Input() exclude_banks: string;
   @Input() pay_button_text: string;
-  @Input() onclose: any;
-  @Input() callback: any;
+  btnTitle: string = 'Pay with flutterwave';
+  disableBtn: boolean = false;
 
   constructor(
     private _windowRef: WindowRef
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
+    this.btnTitle = this.custom_title;
   }
 
   setup() {
-     console.log(this.customer_email);
+    const _this = this;
+
+    _this.onClickOpen();
+
     this._windowRef.nativeWindow.getpaidSetup({
       customer_email: this.customer_email,
       amount: this.amount,
@@ -44,22 +51,36 @@ export class Angular4FlutterwaveComponent implements OnInit {
       txref: this.txref,
       PBFPubKey: this.PBFPubKey,
       exclude_banks: this.exclude_banks,
-      onclose: this.close,
-      callback: this.onClickCallback
+      onclose: function () {
+        _this.onClickClose();
+        return _this.close.emit();
+      },
+      callback: function (res) {
+        console.log('This is the response returned after a charge');
+        return _this.callback.emit(res);
+      }
     });
   }
 
   onClickCallback(response) {
+    this.callback.emit(response);
     console.log('This is the response returned after a charge', response);
-    if (response.tx.chargeResponse === '00' || response.tx.chargeResponse === '0') {
-      // redirect to a success page
-    } else {
-      // redirect to a failure page.
-    }
+    // if (response.tx.chargeResponse === '00' || response.tx.chargeResponse === '0') {
+    //   // redirect to a success page
+    // } else {
+    //   // redirect to a failure page.
+    // }
   }
 
-  close() {
-    console.log('Flutterwave Close');
+  onClickOpen() {
+    console.log("Clicked");
+    this.btnTitle = 'Paying...';
+    this.disableBtn = true;
+  }
+
+  onClickClose() {
+    this.disableBtn = false;
+    this.btnTitle = this.custom_title;
   }
 
 }

@@ -36,6 +36,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   openCashPaymentModal: boolean = false;
   cashPaymentProcessing: boolean = false;
   paymentTypes: any = PAYMENTTYPES;
+  payment: string = 'flutterwave'; // This is either flutterwave or paystack
 
   constructor(
     private _fb: FormBuilder,
@@ -147,51 +148,41 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     });
   }
 
+  paymentDone(data) {
+    console.log(data);
+    let policies = [];
+    // All policies that is being paid for.
+    policies.push({
+      policyId: this.policy.policyId,
+      policyCollectionId: this.policy._id
+    });
 
-  // paymentDone(data) {
-  //   console.log(data);
-  //   let policies = [];
-  //   // All policies that is being paid for.
-  //   policies.push({
-  //     policyId: this.policy.policyId,
-  //     policyCollectionId: this.policy._id
-  //   });
+    let ref = {
+      platformOwnerId: this.currentPlatform,
+      reference: data,
+      policies: policies,
+      sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
+      paidBy: this.user,
+      requestedAmount: this.policy.premiumPackageId.amount,
+      amountPaid: this.policy.premiumPackageId.amount,
+      paymentType: this.paymentType
+    };
 
-  //   let ref = {
-  //     platformOwnerId: this.currentPlatform,
-  //     reference: data,
-  //     policies: policies,
-  //     sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
-  //     paidBy: this.user,
-  //     requestedAmount: this.policy.premiumPackageId.amount,
-  //     amountPaid: this.policy.premiumPackageId.amount,
-  //     paymentType: this.paymentType
-  //   };
-  //   // Save into the Premium Payment Service
-  //   this._premiumPaymentService.create(ref).then((res: any) => {
-  //     console.log(res);
-
-  //     let verificationData = {
-  //       reference: res.reference,
-  //       premiumId: res._id
-  //     };
-  //     // Call paystack verification API
-  //     this._premiumPaymentService.verifyPaystackWithMiddleWare(verificationData).then((verifyRes: any) => {
-  //       console.log(verifyRes);
-  //       if (!!verifyRes) {
-  //         this.showPayment = false;
-  //         this.isForRenewal = true;
-  //         this._getPolicyDetails(verifyRes.body._id);
-  //         this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
-  //         this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
-  //       }
-  //     }).catch(err => {
-  //       console.log(err);
-  //     });
-  //   }).catch(err => {
-  //     console.log(err);
-  //   });
-  // }
+    if (this.payment === 'flutterwave') {
+      if (data.tx.chargeResponse === '00' || data.tx.chargeResponse === '0') {
+        // redirect to a success page
+        console.log('Succeeded');
+      } else {
+        // Pending, Validation.
+        ref.reference = data.data.data;
+        this.createPremium(ref);
+      }
+    } else {
+      // payment is paystack
+      ref.reference = data;
+      this.createPremium(ref);
+    }
+  }
 
   onClickCreateAndPaybatch(valid: boolean, value: any) {
     if (valid) {
@@ -246,6 +237,34 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     } else {
       this._toastr.error('Please fill in all required fields', 'Form ValidationError!');
     }
+  }
+
+  createPremium(ref) {
+    // Save into the Premium Payment Service
+    this._premiumPaymentService.create(ref).then((res: any) => {
+      console.log(res);
+
+      let verificationData = {
+        reference: res.reference,
+        premiumId: res._id,
+        payment: this.payment // flutterwave or paystack
+      };
+      // Call paystack verification API
+      this._premiumPaymentService.verifyPaymentWithMiddleWare(verificationData).then((verifyRes: any) => {
+        console.log(verifyRes);
+        if (!!verifyRes) {
+          this.showPayment = false;
+          this.isForRenewal = true;
+          this._getPolicyDetails(verifyRes.body._id);
+          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
+          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   onClickPayCash() {
