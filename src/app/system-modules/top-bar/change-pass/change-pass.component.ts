@@ -109,7 +109,12 @@ export class ChangePassComponent implements OnInit {
             this._toastr.success(
               "Password was successfully changed",
               "Success!"
-            );
+            ).then(e =>{
+              console.log(e)
+            })
+            .catch(err =>{
+              console.log(err)
+            });
             setTimeout(() => {
               this._authService.logOut().then(res => {
                 this._router.navigate(["/auth/login"]);
@@ -117,10 +122,13 @@ export class ChangePassComponent implements OnInit {
             }, 3000);
           })
           .catch(err => {
+            console.log(1)
             this._toastr.error("Unable to change password", "Error!");
           });
       })
       .catch(err => {
+        console.log(2)
+        console.log(this._toastr);
         this._toastr.error("Wrong Password", "Error!");
       });
   }
