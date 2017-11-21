@@ -235,7 +235,7 @@
                 <div class="doc-wrap">
                     <ul class="doc-entries">
                         <div class="entry-wrap">
-                            <li class="doc-subtitle">Reason for Denial:</li>
+                            <li class="doc-subtitle">Reason(s):</li>
                             <li>{{item.response.reason}}</li>
                         </div>
 
@@ -248,7 +248,7 @@
                 </div>
                 <app-new-claim-tabs [claimItem]="selectedClaim" (closeDialog)="onReply($event)" *ngIf="item.response.isReply == true"></app-new-claim-tabs>
                 <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1 && item.response.isReply != true">
-                    <div class="btn btn-medium btn-grey-outline" (click)="onReply()">
+                    <div class="btn btn-medium btn-grey-outline" *ngIf="selectedClaim.approvedDocumentation.response == undefined" (click)="onReply()">
                         <i class="fa fa-reply"></i> REPLY {{item.response.isReply}}
                     </div>
                 </div>

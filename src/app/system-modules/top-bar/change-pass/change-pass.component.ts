@@ -14,49 +14,15 @@ import { Injectable } from "@angular/core";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
 import { Router } from "@angular/router";
 
-const host = require("../../../feathers/feathers.service");
-const feathers = require("feathers/client");
-const socketio = require("feathers-socketio/client");
-const io = require("socket.io-client");
-const hooks = require("feathers-hooks");
-const rest = require("feathers-rest/client");
-const rx = require("feathers-reactive");
-const RxJS = require("rxjs");
-const authentication = require("feathers-authentication-client");
-
-// @Injectable()
-// export class ChangePasswordSocketService {
-//   public socket: any;
-//   public _app: any;
-
-//   constructor() {
-//     this.socket = io(host.HOST);
-//     this._app = feathers()
-//       .configure(socketio(this.socket))
-//       .configure(rx(RxJS, { listStrategy: "always" }))
-//       .configure(hooks())
-//       .configure(authentication({ storage: window.sessionStorage }));
-//   }
-//   chLoginIntoApp(query: any) {
-//     return this._app.authenticate({
-//       strategy: "local",
-//       email: query.email,
-//       password: query.password
-//     });
-//   }
-// }
-
-// password RvnYUv4i
-
-// @Injectable()
-// export class ChangePasswordAuthService {
-//   _chSocket;
-//   constructor(private _chSocketService: ChangePasswordSocketService) {}
-
-//   chLogin(query: any) {
-//     return this._chSocketService.chLoginIntoApp(query);
-//   }
-// }
+// const host = require("../../../feathers/feathers.service");
+// const feathers = require("feathers/client");
+// const socketio = require("feathers-socketio/client");
+// const io = require("socket.io-client");
+// const hooks = require("feathers-hooks");
+// const rest = require("feathers-rest/client");
+// const rx = require("feathers-reactive");
+// const RxJS = require("rxjs");
+// const authentication = require("feathers-authentication-client");
 
 @Component({
   selector: "app-change-pass",
@@ -126,6 +92,7 @@ export class ChangePassComponent implements OnInit {
         }
       })
       .catch(err => {
+        console.log(this._toastr);
         this._toastr.error("Wrong Password", "Error!");
       });
   }

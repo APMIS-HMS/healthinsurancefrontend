@@ -12,6 +12,7 @@ import { ListPlansComponent } from '../system-modules/plan/list-plans/list-plans
 import { PreAuthorizationListComponent } from '../system-modules/pre-authorization/pre-authorization-list/pre-authorization-list.component';
 import { LashmaCodesComponent } from './lashma-codes/lashma-codes.component';
 import { PaymentHistoryComponent } from './payment-history/payment-history.component';
+import { Angular4FlutterwaveComponent } from './angular-4-flutterwave/angular-4-flutterwave.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { PaymentHistoryComponent } from './payment-history/payment-history.compo
         LashmaCodesComponent,
         ListPlansComponent,
         PreAuthorizationListComponent,
-        PaymentHistoryComponent
+        PaymentHistoryComponent,
+        Angular4FlutterwaveComponent
     ],
     exports: [
         CommonModule,
@@ -39,7 +41,8 @@ import { PaymentHistoryComponent } from './payment-history/payment-history.compo
         ListPlansComponent,
         LashmaCodesComponent,
         PreAuthorizationListComponent,
-        PaymentHistoryComponent
+        PaymentHistoryComponent,
+        Angular4FlutterwaveComponent
     ],
     imports: [
         RouterModule,
