@@ -68,13 +68,13 @@ export class PremiumPaymentService {
     });
   }
 
-  verifyPaystackWithMiddleWare(body: any) {
-    const path = this._restService.getHost() + '/paystack-verification';
+  verifyPaymentWithMiddleWare(body: any) {
+    const path = this._restService.getHost() + '/payment-verification';
     return request
       .post(path)
       .send(body);
   }
-  
+
   payWidthCashWithMiddleWare(body: any) {
     const path = this._restService.getHost() + '/premium-cash-payment';
     return request

@@ -49,3 +49,5 @@ export * from './claim/claims-payment.service';
 export * from './policy/policy.service';
 export * from './premium-payment/premium-payment.service';
 export * from './pre-authorization/pre-authorization.service';
+export * from './flutterwave/flutterwave.service';
+export * from './common/winref.service';
