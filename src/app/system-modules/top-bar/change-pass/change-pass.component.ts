@@ -6,6 +6,7 @@ import {
   Validators
 } from "@angular/forms";
 import { PasswordValidation } from "../../../services/common/password-validation";
+import { ChangePasswordService } from "../../../services/change-password/change-password.service";
 import { AuthService } from "../../../auth/services/auth.service";
 import { CoolLocalStorage } from "angular2-cool-storage";
 import { User } from "../../../models/setup/user";
@@ -23,39 +24,39 @@ const rx = require("feathers-reactive");
 const RxJS = require("rxjs");
 const authentication = require("feathers-authentication-client");
 
-@Injectable()
-export class ChangePasswordSocketService {
-  public socket: any;
-  public _app: any;
+// @Injectable()
+// export class ChangePasswordSocketService {
+//   public socket: any;
+//   public _app: any;
 
-  constructor() {
-    this.socket = io(host.HOST);
-    this._app = feathers()
-      .configure(socketio(this.socket))
-      .configure(rx(RxJS, { listStrategy: "always" }))
-      .configure(hooks())
-      .configure(authentication({ storage: window.sessionStorage }));
-  }
-  chLoginIntoApp(query: any) {
-    return this._app.authenticate({
-      strategy: "local",
-      email: query.email,
-      password: query.password
-    });
-  }
-}
+//   constructor() {
+//     this.socket = io(host.HOST);
+//     this._app = feathers()
+//       .configure(socketio(this.socket))
+//       .configure(rx(RxJS, { listStrategy: "always" }))
+//       .configure(hooks())
+//       .configure(authentication({ storage: window.sessionStorage }));
+//   }
+//   chLoginIntoApp(query: any) {
+//     return this._app.authenticate({
+//       strategy: "local",
+//       email: query.email,
+//       password: query.password
+//     });
+//   }
+// }
 
 // password RvnYUv4i
 
-@Injectable()
-export class ChangePasswordAuthService {
-  _chSocket;
-  constructor(private _chSocketService: ChangePasswordSocketService) {}
+// @Injectable()
+// export class ChangePasswordAuthService {
+//   _chSocket;
+//   constructor(private _chSocketService: ChangePasswordSocketService) {}
 
-  chLogin(query: any) {
-    return this._chSocketService.chLoginIntoApp(query);
-  }
-}
+//   chLogin(query: any) {
+//     return this._chSocketService.chLoginIntoApp(query);
+//   }
+// }
 
 @Component({
   selector: "app-change-pass",
@@ -68,7 +69,7 @@ export class ChangePassComponent implements OnInit {
   _app: any;
   constructor(
     private _fb: FormBuilder,
-    private _chAuthService: ChangePasswordAuthService,
+    private _chAuthService: ChangePasswordService,
     private _locker: CoolLocalStorage,
     private _authService: AuthService,
     private _router: Router,
@@ -94,31 +95,35 @@ export class ChangePassComponent implements OnInit {
     const getUserPassword = value.old_pass,
       userId = this.user._id;
 
-    const toCheck = { email: this.user.email, password: getUserPassword };
+    const val = { email: this.user.email, password: getUserPassword };
     return this._chAuthService
-      .chLogin(toCheck)
+      .changePassWordService(val)
       .then(logindetails => {
         return logindetails;
       })
-      .then(result => {
+      .then((data: any) => {
         // RvnYUv4i
-        const newpwd = { password: value.cpassword };
-        this._authService
-          .patch(userId, newpwd, {})
-          .then(updatedPwd => {
-            this._toastr.success(
-              "Password was successfully changed",
-              "Success!"
-            );
-            setTimeout(() => {
-              this._authService.logOut().then(res => {
-                this._router.navigate(["/auth/login"]);
-              });
-            }, 3000);
-          })
-          .catch(err => {
-            this._toastr.error("Unable to change password", "Error!");
-          });
+        if (data.body) {
+          const newpwd = { password: value.cpassword };
+          this._authService
+            .patch(userId, newpwd, {})
+            .then(updatedPwd => {
+              this._toastr.success(
+                "Password was successfully changed",
+                "Success!"
+              );
+              setTimeout(() => {
+                this._authService.logOut().then(res => {
+                  this._router.navigate(["/auth/login"]);
+                });
+              }, 3000);
+            })
+            .catch(err => {
+              this._toastr.error("Unable to change password", "Error!");
+            });
+        } else {
+          return this._toastr.error("Wrong Password", "Error!");
+        }
       })
       .catch(err => {
         this._toastr.error("Wrong Password", "Error!");
