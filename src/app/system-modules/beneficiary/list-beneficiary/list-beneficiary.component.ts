@@ -34,6 +34,8 @@ export class ListBeneficiaryComponent implements OnInit {
   mainBeneficiaries: any[] = [];
   loading: boolean = true;
   planTypes: any[] = [];
+  totalData:number;
+  showLoadMore:Boolean = true;
   limitValue = 4;
   skipValue = 0;
   currentPlatform: any;
@@ -61,6 +63,9 @@ export class ListBeneficiaryComponent implements OnInit {
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this._getPerson();
     }
+
+    
+    
   }
 
   ngOnInit() {
@@ -138,6 +143,7 @@ export class ListBeneficiaryComponent implements OnInit {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
+        
         // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
         if (!!this.user.userType && this.user.userType.name === 'Provider') {
           this._getAllPolicies({
@@ -148,7 +154,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1, 'providerId': 1 }
             }
-          });
+          }, this.currentPlatform._id);
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
           console.log('multi')
           this._getAllPolicies({
@@ -159,7 +165,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          });
+          }, this.currentPlatform._id);
         } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
           this._getAllPolicies({
             query: {
@@ -169,7 +175,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          });
+          }, this.currentPlatform._id);
         } else if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
           this._getAllPolicies({
             query: {
@@ -179,7 +185,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          });
+          }, this.currentPlatform._id);
         } else {
           this._getAllPolicies({
             query: {
@@ -189,7 +195,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          });
+          }, this.currentPlatform._id);
         }
       }
       this._systemService.off();
@@ -198,7 +204,7 @@ export class ListBeneficiaryComponent implements OnInit {
     });
   }
 
-  private _getAllPolicies(query) {
+  private _getAllPolicies(query, id) {
     //this.beneficiaries = [];
     // this.tempBeneficiaries = [];
     try {
@@ -229,6 +235,13 @@ export class ListBeneficiaryComponent implements OnInit {
             });
           });
         }
+        this._beneficiaryService.countBenefeciaries(id).then(data => {
+          console.log(data.body);
+          this.totalData = data.body.count;
+          if(this.beneficiaries.length >= this.totalData){
+            this.showLoadMore = false;
+          }
+        });
         this.mainBeneficiaries = this.beneficiaries;
         this._systemService.off();
         this.loading = false;
