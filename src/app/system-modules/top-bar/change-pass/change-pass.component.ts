@@ -14,16 +14,6 @@ import { Injectable } from "@angular/core";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
 import { Router } from "@angular/router";
 
-// const host = require("../../../feathers/feathers.service");
-// const feathers = require("feathers/client");
-// const socketio = require("feathers-socketio/client");
-// const io = require("socket.io-client");
-// const hooks = require("feathers-hooks");
-// const rest = require("feathers-rest/client");
-// const rx = require("feathers-reactive");
-// const RxJS = require("rxjs");
-// const authentication = require("feathers-authentication-client");
-
 @Component({
   selector: "app-change-pass",
   templateUrl: "./change-pass.component.html",
