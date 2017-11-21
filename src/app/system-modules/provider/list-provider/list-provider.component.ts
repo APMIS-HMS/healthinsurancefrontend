@@ -104,7 +104,12 @@ export class ListProviderComponent implements OnInit {
       this.loading = false;
       console.log(res);
       if (res.data.length > 0) {
-        (this.resetData !== true) ? this.providers.push(...res.data) : this.providers = res.data;
+        if(this.resetData !== true) { 
+          this.providers.push(...res.data) 
+        }else{ 
+          this.resetData = false;
+          this.providers = res.data;
+        }
         this.totalEntries = res.total;
         if(this.providers.length >= this.totalEntries){
           this.showLoadMore = false;

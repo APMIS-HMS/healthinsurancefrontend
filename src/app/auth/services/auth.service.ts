@@ -16,7 +16,7 @@ export class AuthService {
   constructor(
     private _socketService: SocketService,
     private _restService: RestService,
-    private _locker:CoolLocalStorage
+    private _locker: CoolLocalStorage
   ) {
     this._rest = _restService.getService('users');
     this._changePasswordRest = _restService.getService('changepassword');
@@ -41,14 +41,13 @@ export class AuthService {
   find(query: any) {
     return this._socket.find(query);
   }
-
   findAll() {
     return this._socket.find();
   }
   get(id: string, query: any) {
     return this._socket.get(id, query);
   }
-  checkAuth(){
+  checkAuth() {
     // this._restService._app.logout();
     // this.logOut();
     if (this._locker.getItem('auth') !== undefined && this._locker.getItem('auth') != null) {

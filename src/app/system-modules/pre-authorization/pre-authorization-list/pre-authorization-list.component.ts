@@ -56,7 +56,12 @@ export class PreAuthorizationListComponent implements OnInit {
       this.loading = false;
       //this.authorizations = payload.data;
       this.totalEntries = payload.total;
-      (this.resetData !== true) ? this.authorizations.push(...payload.data) : this.authorizations = payload.data;
+      if(this.resetData !== true) { 
+        this.authorizations.push(...payload.data) 
+      }else{ 
+        this.resetData = false;
+        this.authorizations = payload.data; 
+      }
       if(this.authorizations.length >= this.totalEntries){
         this.showLoadMore = false;
       }
