@@ -66,7 +66,8 @@
                     <div class="letering">
                         <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span> Requested Claims</div>
+                            <span class="letering-name">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span>
+                            Requested Claims</div>
                     </div>
                 </div>
                 <div class="doc-wrap">
@@ -236,7 +237,14 @@
                     <ul class="doc-entries">
                         <div class="entry-wrap">
                             <li class="doc-subtitle">Reason(s):</li>
-                            <li>{{item.response.reason}}</li>
+                            <li>
+                                <span *ngIf="item.response.reason !=''">
+                                        {{item.response.reason}}
+                                </span>
+                                <span *ngIf="item.response.reason ==''">
+                                    Nill
+                                </span>
+                            </li>
                         </div>
 
                         <div class="entry-wrap">
@@ -258,10 +266,10 @@
 </div>
 
 <div class="action-wrap" *ngIf="isAuthCreateClaim==true">
-    <div class="btn btn-medium btn-red" disabled="status=='Reject'" (click)="rejectClaim()">REJECT</div>
-    <div class="btn btn-medium btn-red" disabled="status=='Query'" (click)="queryClaim()">QUERY</div>
-    <div class="btn btn-medium btn-yellow" disabled="status=='Hold'"  (click)="holdClaim()">HOLD</div>
-    <div class="btn btn-medium btn-blue" disabled="status=='Approve'" (click)="approveClaim()">APPROVE</div>
+    <button class="btn btn-medium btn-red" [disabled]="isReject" (click)="rejectClaim()">REJECT</button>
+    <button class="btn btn-medium btn-red" [disabled]="isQuery" (click)="queryClaim()">QUERY</button>
+    <button class="btn btn-medium btn-yellow" [disabled]="isHold" (click)="holdClaim()">HOLD</button>
+    <button class="btn btn-medium btn-blue" [disabled]="isApproved" (click)="approveClaim()">APPROVE</button>
 </div>
 
 <div *ngIf="modalApprove" class="modal-overlay">

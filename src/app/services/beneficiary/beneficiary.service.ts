@@ -81,11 +81,11 @@ export class BeneficiaryService {
       .query({ dateOfBirth: body.date });
   }
 
-  countBenefeciaries(platformOwnerId){
+  countBenefeciaries(userType:string, _id:any){
     let host = this._restService.getHost();
     let path = host + '/api/get-beneficiary-count';
     return request
       .get(path)
-      .query({platformOwnerId: platformOwnerId});
+      .query({_id: _id, userType: userType});
   }
 }

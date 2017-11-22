@@ -3,7 +3,7 @@ import { PlanService } from './../../../services/plan/plan.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Observable } from 'rxjs/Rx';
 import { Beneficiary } from './../../../models/setup/beneficiary';
-import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { PolicyService } from './../../../services/policy/policy.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -36,7 +36,7 @@ export class ListBeneficiaryComponent implements OnInit {
   planTypes: any[] = [];
   totalData:number;
   showLoadMore:Boolean = true;
-  limitValue = 4;
+  limitValue = 3;
   skipValue = 0;
   currentPlatform: any;
   user: any;
@@ -129,7 +129,10 @@ export class ListBeneficiaryComponent implements OnInit {
 
   }
   reset() {
-    this.ngOnInit();
+    this.skipValue = 0;
+    this.beneficiaries = [];
+    this._getCurrentPlatform();
+    this.showLoadMore = true;
   }
   private _getPlans() {
     this._planService.find({}).then((payload: any) => {
@@ -154,7 +157,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1, 'providerId': 1 }
             }
-          }, this.currentPlatform._id);
+          }, this.user.facilityId._id, this.user.userType.name);
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
           console.log('multi')
           this._getAllPolicies({
@@ -165,7 +168,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          }, this.currentPlatform._id);
+          }, this.user.facilityId._id, this.user.userType.name);
         } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
           this._getAllPolicies({
             query: {
@@ -175,7 +178,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          }, this.currentPlatform._id);
+          }, this.user.facilityId._id, this.user.userType.name);
         } else if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
           this._getAllPolicies({
             query: {
@@ -185,7 +188,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          }, this.currentPlatform._id);
+          }, this.user.facilityId._id, this.user.userType.name);
         } else {
           this._getAllPolicies({
             query: {
@@ -195,7 +198,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          }, this.currentPlatform._id);
+          }, this.user.facilityId._id, this.user.userType.name);
         }
       }
       this._systemService.off();
@@ -204,7 +207,7 @@ export class ListBeneficiaryComponent implements OnInit {
     });
   }
 
-  private _getAllPolicies(query, id) {
+  private _getAllPolicies(query, id, userType) {
     //this.beneficiaries = [];
     // this.tempBeneficiaries = [];
     try {
@@ -235,8 +238,10 @@ export class ListBeneficiaryComponent implements OnInit {
             });
           });
         }
-        this._beneficiaryService.countBenefeciaries(id).then(data => {
+        console.log(this.user);
+        this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
           this.totalData = data.body.count;
+          console.log(this.totalData);
           if(this.beneficiaries.length >= this.totalData){
             this.showLoadMore = false;
           }

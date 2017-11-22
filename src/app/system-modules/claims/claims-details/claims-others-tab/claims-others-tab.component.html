@@ -1,4 +1,3 @@
-
 <table class="table" cellpadding="0" cellspacing="0" border="0.5">
     <thead class="thead">
         <tr class="tr">
@@ -26,13 +25,23 @@
         </tr>
         <tr class="tr" *ngFor="let item of listOfClaims; let i=index;">
             <td class="td">{{ i+1 }}</td>
-            <td class="td">{{item.checkedinDetail?.checkedInDetails.beneficiaryObject?.platformOwnerNumber}}</td>
-            <td class="td">{{item.checkedinDetail?.checkedInDetails.beneficiaryObject?.personId.firstName}} {{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.lastName}}</td>
+            <td class="td">{{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
+            <td class="td">{{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.firstName}} {{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.lastName}}</td>
             <td class="td">{{item.dateClaimCreated|date}}</td>
-            <td class="td">{{item?.checkedinDetail?.checkedInDetails.policyObject?.hiaId.name}}</td>
-            <td class="td">{{item?.checkedinDetail.plan}}</td>
-            <td class="td">{{item?.checkedinDetail.providerFacility}}</td>
-            <td class="td"><span class="green">{{item?.status}}</span></td>
+            <td class="td">
+                <span *ngIf="item.checkedinDetail.checkedInDetails.policyObject != undefined">
+                    {{item?.checkedinDetail?.checkedInDetails?.policyObject?.hiaId?.name}}
+                </span>
+                <span *ngIf="item.checkedinDetail.checkedInDetails.policyId != undefined">
+                    {{item?.checkedinDetail?.policyId?.hiaId?.name}}
+                </span>
+            </td>
+            <td class="td">{{item?.checkedinDetail?.plan}}</td>
+            <td class="td">{{item?.checkedinDetail?.providerFacility}}</td>
+            <td class="td">
+                <span class="green" *ngIf="item.status != 'Pending'">{{item?.status}}</span>
+                <span class="red" *ngIf="item.status == 'Pending'">{{item?.status}}</span>
+            </td>
             <td class="td">
                 <div class="tooltip">
                     <div class="tip-title"></div>
