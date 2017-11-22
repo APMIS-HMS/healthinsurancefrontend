@@ -139,7 +139,7 @@
         <div class="list-buttom">
             <div *ngIf="organisationPolicies.length > 0">
                 <div class="list-summary">Showing 1 to {{ organisationPolicies.length }} of {{ OrganisationTotalEntries }} entries (filtered from {{ OrganisationTotalEntries }} total entries)</div>
-                <div class="btn btn-medium btn-yellow" (click)="loadMore" *ngIf="organisationShowLoadMore">Load More</div>
+                <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="organisationShowLoadMore">Load More</div>
             </div>
         </div>
     </div>
