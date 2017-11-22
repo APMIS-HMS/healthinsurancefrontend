@@ -384,20 +384,20 @@ export class NewPreauthTabsComponent implements OnInit {
   }
 
   removeComplain(complain, i) {
-    this.complaintLists.splice(i);
+    this.complaintLists.splice(i,1);
   }
 
   removeDiagnosis(diagnosis, i) {
-    this.diagnosisLists.splice(i);
+    this.diagnosisLists.splice(i,1);
   }
   removeProcedure(i) {
-    this.procedureList.splice(i);
+    this.procedureList.splice(i,1);
   }
   removeInvestigation(i) {
-    this.investigationList.splice(i);
+    this.investigationList.splice(i,1);
   }
   removeDrug(i) {
-    this.drugList.splice(i);
+    this.drugList.splice(i,1);
   }
 
   onSelectComplain(complain) {
