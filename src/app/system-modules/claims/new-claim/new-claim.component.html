@@ -104,7 +104,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Claim Type</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="claimType" class="form-control" disabled value="{{authorizeType}}">
+                    <input type="text" formControlName="claimType" class="form-control" disabled>
                     <!-- <select formControlName="claimType" disabled class="form-control">
                         <option value="Free for Service" *ngIf="isAuthorize==true">Free for Service</option>
                         <option value="Capitation" *ngIf="isAuthorize ==false">Capitation</option> -->
@@ -553,23 +553,20 @@
                     </div>
                 </span>
             </button> -->
+            <button class="btn btn-medium btn-blue cta" (click)="onSendClaim(claimsFormGroup.valid)">
+                <span>
+                    <div [hidden]="isProcessing">
+                        Save
+                    </div>
+                    <div [hidden]="!isProcessing">
+                        Processing...
+                        <i class='fa fa-spinner fa-spin'></i>
+                    </div>
+                </span>
+            </button>
         </form>
     </section>
 
-    <section class="app-content-wrap content shadow-RB">
-        <!-- <app-new-claim-confirm></app-new-claim-confirm> -->
-        <button class="btn btn-medium btn-blue cta" (click)="onSendClaim(claimsFormGroup.controls.valid)">
-            <span>
-                <div [hidden]="isProcessing">
-                    Save
-                </div>
-                <div [hidden]="!isProcessing">
-                    Processing...
-                    <i class='fa fa-spinner fa-spin'></i>
-                </div>
-            </span>
-        </button>
-    </section>
 </div>
 
 <div *ngIf="showCodes" class="modal-overlay">

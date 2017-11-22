@@ -17,22 +17,22 @@
         <div class="input-wrap">
             <label>Responsible HIA</label>
             <select [formControl]="filterHiaControl" class="form-control">
-            <option value="All" selected>All</option>
-          </select>
+                <option value="All" selected>All</option>
+            </select>
         </div>
 
         <div class="input-wrap">
             <label>Hospital Name</label>
             <select [formControl]="hospitalControl">
-            <option>All</option>
-          </select>
+                <option>All</option>
+            </select>
         </div>
 
         <div class="input-wrap">
             <label>Health Care Plan</label>
             <select [formControl]="planControl">
-            <option>All</option>
-          </select>
+                <option>All</option>
+            </select>
         </div>
 
         <div class="btn btn-medium btn-blue-outline">RESET</div>
@@ -68,10 +68,20 @@
                 <td class="td">{{item.checkedinDetail?.checkedInDetails.beneficiaryObject?.platformOwnerNumber}}</td>
                 <td class="td">{{item.checkedinDetail?.checkedInDetails.beneficiaryObject?.personId.firstName}} {{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.lastName}}</td>
                 <td class="td">{{item.dateClaimCreated|date}}</td>
-                <td class="td">{{item?.checkedinDetail?.checkedInDetails.policyObject?.hiaId.name}}</td>
+                <td class="td">
+                    <span *ngIf="item.checkedinDetail.checkedInDetails.policyObject != undefined">
+                        {{item?.checkedinDetail?.checkedInDetails?.policyObject?.hiaId?.name}}
+                    </span>
+                    <span *ngIf="item.checkedinDetail.checkedInDetails.policyId != undefined">
+                        {{item?.checkedinDetail?.policyId?.hiaId?.name}}
+                    </span>
+                </td>
                 <td class="td">{{item?.checkedinDetail.plan}}</td>
                 <td class="td">{{item?.checkedinDetail.providerFacility}}</td>
-                <td class="td"><span class="green">{{item?.status}}</span></td>
+                <td class="td">
+                    <span class="green" *ngIf="item.status != 'Pending'">{{item?.status}}</span>
+                    <span class="red" *ngIf="item.status == 'Pending'">{{item?.status}}</span>
+                </td>
                 <td class="td">
                     <div class="tooltip">
                         <div class="tip-title"></div>
@@ -88,7 +98,8 @@
 
     <div class="list-buttom">
         <div *ngIf="listOfClaims.length > 0">
-            <div class="list-summary">Showing 1 to {{ listOfClaims.length }} of {{ listOfClaims.length }} entries (filtered from {{ listOfClaims.length }} total entries)</div>
+            <div class="list-summary">Showing 1 to {{ listOfClaims.length }} of {{ listOfClaims.length }} entries (filtered from {{ listOfClaims.length
+                }} total entries)</div>
             <div class="btn btn-medium btn-yellow">Load More</div>
         </div>
     </div>
