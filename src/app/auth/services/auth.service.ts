@@ -73,19 +73,19 @@ export class AuthService {
   remove(id: string, query: any) {
     return this._socket.remove(id, query);
   }
-  changePassword(body: any) {
-    let host = this._restService.getHost();
-    let path = host + '/changepassword';
-    return request
-      .post(path)
-      .send(body);
-  }
-  resetPassword(body: any) {
-    let host = this._restService.getHost();
-    let path = host + '/passwordreset';
-    return request
-      .post(path)
-      .send(body);
-  }
+  // changePassword(body: any) {
+  //   let host = this._restService.getHost();
+  //   let path = host + '/changepassword';
+  //   return request
+  //     .post(path)
+  //     .send(body);
+  // }
+  // resetPassword(body: any) {
+  //   let host = this._restService.getHost();
+  //   let path = host + '/passwordreset';
+  //   return request
+  //     .post(path)
+  //     .send(body);
+  // }
 
 }
