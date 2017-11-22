@@ -236,7 +236,6 @@ export class ListBeneficiaryComponent implements OnInit {
           });
         }
         this._beneficiaryService.countBenefeciaries(id).then(data => {
-          console.log(data.body);
           this.totalData = data.body.count;
           if(this.beneficiaries.length >= this.totalData){
             this.showLoadMore = false;
