@@ -157,9 +157,24 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       policyCollectionId: this.policy._id
     });
 
+    let flutterwaveRes = {
+      data: data.data.data,
+      tx:  {
+        charged_amount: data.tx.charged_amount,
+        customer: data.tx.customer,
+        flwRef: data.tx.flwRef,
+        txRef: data.tx.txRef,
+        orderRef: data.tx.orderRef,
+        paymentType: data.tx.paymentType,
+        raveRef: data.tx.raveRef,
+        status: data.tx.status
+      }
+    };
+
+    console.log(flutterwaveRes);
     let ref = {
       platformOwnerId: this.currentPlatform,
-      reference: data,
+      reference: (this.payment === 'flutterwave') ? flutterwaveRes : data,
       policies: policies,
       sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
       paidBy: this.user,
@@ -174,7 +189,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         console.log('Succeeded');
       } else {
         // Pending, Validation.
-        ref.reference = data.data.data;
+        ref.reference = flutterwaveRes.tx;
         this.createPremium(ref);
       }
     } else {
@@ -245,7 +260,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       console.log(res);
 
       let verificationData = {
-        // reference: res.reference,
+        reference: res.reference,
         premiumId: res._id,
         payment: this.payment // flutterwave or paystack
       };
@@ -253,11 +268,17 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       this._premiumPaymentService.verifyPaymentWithMiddleWare(verificationData).then((verifyRes: any) => {
         console.log(verifyRes);
         if (!!verifyRes) {
-          this.showPayment = false;
-          this.isForRenewal = true;
-          this._getPolicyDetails(verifyRes.body._id);
-          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
-          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+          if (verifyRes.body.status === 'success') {
+            this.showPayment = false;
+            this.isForRenewal = true;
+            this._getPolicyDetails(verifyRes.body.data._id);
+            this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
+            this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+          } else {
+            this.showPayment = false;
+            this.isForRenewal = true;
+            this._toastr.error(verifyRes.body.message, 'Payment Error!');
+          }
         }
       }).catch(err => {
         console.log(err);
