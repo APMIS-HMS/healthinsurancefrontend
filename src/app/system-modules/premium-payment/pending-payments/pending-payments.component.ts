@@ -175,16 +175,16 @@ export class PendingPaymentsComponent implements OnInit {
           hasItem[0].noOfEmployees++;
         }
       });
-      this.totalEntries = res.total;
-      if (this.resetData !== true) {
-        this.organisationPolicies.push(...res.data);
-      } else {
-        this.resetData = false;
-        this.organisationPolicies = res.data;
-      }
-      if (this.organisationPolicies.length >= this.OrganisationTotalEntries) {
-        this.organisationShowLoadMore = false;
-      }
+      // this.totalEntries = res.total;
+      // if (this.resetData !== true) {
+      //   this.organisationPolicies.push(...res.data);
+      // } else {
+      //   this.resetData = false;
+      //   this.organisationPolicies = res.data;
+      // }
+      // if (this.organisationPolicies.length >= this.OrganisationTotalEntries) {
+      //   this.organisationShowLoadMore = false;
+      // }
       this._systemService.off();
     }).catch(error => {
       console.log(error);

@@ -113,10 +113,11 @@ export class EmployerDetailsComponent implements OnInit {
   hias: any[] = [];
   drugSearchResult = false;
   routeId: string;
-  canApprove = false;
+  canApprove: boolean = false;
+  user: any;
 
   constructor(
-    private locker: CoolLocalStorage,
+    private _locker: CoolLocalStorage,
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -139,8 +140,9 @@ export class EmployerDetailsComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Organisation Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
+    this.user = (<any>this._locker.getObject('auth')).user;
 
-    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner') {
+    if (!!this.user.userType && (this.user.userType.name === 'Platform Owner')) {
       this.canApprove = true;
     }
 
