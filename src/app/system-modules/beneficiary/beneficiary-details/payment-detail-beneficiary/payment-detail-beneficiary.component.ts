@@ -245,7 +245,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       console.log(res);
 
       let verificationData = {
-        reference: res.reference,
+        // reference: res.reference,
         premiumId: res._id,
         payment: this.payment // flutterwave or paystack
       };
