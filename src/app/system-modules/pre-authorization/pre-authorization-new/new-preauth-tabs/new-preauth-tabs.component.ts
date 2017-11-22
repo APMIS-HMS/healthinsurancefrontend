@@ -109,6 +109,7 @@ export class NewPreauthTabsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._initializeFormGroup();
     this.durations = DURATIONS;
     this._getVisitTypes();
@@ -131,7 +132,7 @@ export class NewPreauthTabsComponent implements OnInit {
       }
     }
 
-  
+
     let symptomObj = this.selectedTransaction.document[0];
     let clinicalNoteObj = this.selectedTransaction.document[1];
     let diagnosisObj = this.selectedTransaction.document[2];
@@ -376,28 +377,33 @@ export class NewPreauthTabsComponent implements OnInit {
   }
 
   needAuthorization(procedure) {
-    if (procedure.procedure.PA === ' Y ') {
+    let itsSecFacility = this.user.provider.facilityClass.includes("Secondary");
+    if (itsSecFacility == true) {
       return true;
     } else {
-      return false;
+      if (procedure.procedure.PA === ' Y ') {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
   removeComplain(complain, i) {
-    this.complaintLists.splice(i,1);
+    this.complaintLists.splice(i, 1);
   }
 
   removeDiagnosis(diagnosis, i) {
-    this.diagnosisLists.splice(i,1);
+    this.diagnosisLists.splice(i, 1);
   }
   removeProcedure(i) {
-    this.procedureList.splice(i,1);
+    this.procedureList.splice(i, 1);
   }
   removeInvestigation(i) {
-    this.investigationList.splice(i,1);
+    this.investigationList.splice(i, 1);
   }
   removeDrug(i) {
-    this.drugList.splice(i,1);
+    this.drugList.splice(i, 1);
   }
 
   onSelectComplain(complain) {
@@ -434,8 +440,8 @@ export class NewPreauthTabsComponent implements OnInit {
         "drug": typeof (this.selectedDrug) === 'object' ? this.selectedDrug : name.value,
         "unit": unit.value,
         "quantity": quantity.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.drugFormGroup.controls.drug.reset();
       unit.reset();
@@ -452,8 +458,8 @@ export class NewPreauthTabsComponent implements OnInit {
     if (name.valid) {
       this.investigationList.push({
         "investigation": typeof (this.selectedInvestigation) === 'object' ? this.selectedInvestigation : name.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.investigationFormGroup.controls.services.reset();
     } else {
@@ -465,8 +471,8 @@ export class NewPreauthTabsComponent implements OnInit {
     if (name.valid) {
       this.procedureList.push({
         "procedure": typeof (this.selectedProcedure) === 'object' ? this.selectedProcedure : name.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.procedureFormGroup.controls.procedures.reset();
     } else {
@@ -481,8 +487,8 @@ export class NewPreauthTabsComponent implements OnInit {
       this.diagnosisLists.push({
         "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
         "diagnosisType": diagnosisType.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       this.diagnosisFormGroup.controls.diagnosis.reset();
       diagnosisType.reset();
@@ -501,8 +507,8 @@ export class NewPreauthTabsComponent implements OnInit {
         "symptom": typeof (this.selectedComplain) === 'object' ? this.selectedComplain : name.value,
         "duration": duration.value,
         "unit": unit.value,
-        "checked":false,
-        "approvedStatus":this.requestStatus[0]
+        "checked": false,
+        "approvedStatus": this.requestStatus[0]
       });
       name.reset();
       duration.reset(1);
