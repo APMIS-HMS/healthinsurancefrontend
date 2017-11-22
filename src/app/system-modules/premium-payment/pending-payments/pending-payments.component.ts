@@ -6,7 +6,9 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 // import { Angular4PaystackModule } from 'angular4-paystack';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES, SPONSORSHIP, TABLE_LIMIT_PER_VIEW } from '../../../services/globals/config';
+import {
+  CurrentPlaformShortName, PAYSTACK_CLIENT_KEY, PAYMENTTYPES, SPONSORSHIP, TABLE_LIMIT_PER_VIEW
+} from '../../../services/globals/config';
 import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService, PremiumPaymentService } from '../../../services/index';
 import { Policy, OrganizationPolicy } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
@@ -33,7 +35,7 @@ export class PendingPaymentsComponent implements OnInit {
   individualPolicies: any = [];
   organisationPolicies: OrganizationPolicy[] = [];
   selectedOrganizationPolicies: any = [];
-  paystackClientKey: string = paystackClientKey;
+  paystackClientKey: string = PAYSTACK_CLIENT_KEY;
   withPaystack: boolean = true;
   cashPayment: boolean = false;
   chequePayment: boolean = false;

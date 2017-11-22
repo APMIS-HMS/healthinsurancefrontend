@@ -121,8 +121,8 @@
                 </div>
                 <!-- <a (click)="getpaidSetupdd();" class="btn btn-medium btn-blue cta" data-PBFPubKey="FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X" data-txref="rave-checkout-1511132266" data-amount="50000" data-customer_email="user@example.com" data-currency="NGN" data-pay_button_text="e-Payment"
                     data-country="NG" data-custom_title="Sabaoth" data-custom_description="" data-redirect_url="" data-custom_logo="" data-payment_method="both" data-exclude_banks=""></a> -->
-                <angular-4-flutterwave [amount]="'50000'" [customer_email]="'email@me.com'" [PBFPubKey]="'FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X'" [txref]="'rave-checkout-2390390232'" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="'Pay with Flutterwave'"
-                    [custom_description]="" [exclude_banks]="" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
+                <angular-4-flutterwave *ngIf="withPaystack" [amount]="policy?.premiumPackageId?.amount" [customer_email]="policy?.principalBeneficiary?.personId?.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'"
+                    [custom_title]="'e-Payment'" [custom_description]="" [exclude_banks]="" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
                 <!-- <button *ngIf="withPaystack" (click)="getpaidSetup();" class="btn btn-medium btn-blue cta">Flutterwave Setup</button> -->
                 <!-- <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.personId?.email" [amount]="policy?.premiumPackageId?.amountInKobo" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()"
                     (callback)="paymentDone($event)">e-Payment</angular4-paystack> -->
