@@ -11,10 +11,17 @@ import { Injectable } from '@angular/core';
 const rx = require('feathers-reactive');
 const RxJS = require('rxjs');
 
+<<<<<<< HEAD
+//export const HOST = 'http://172.16.16.44:3031'; // Live
+//export const HOST = 'http://192.168.1.4:3031'; // Live
+export const HOST = 'http://localhost:3031'; // Your base server URL here
+//export const  HOST = 'http://insuranceapi.azurewebsites.net';
+=======
 //const HOST = 'http://172.16.16.44:3031'; // Live
 //const HOST = 'http://192.168.1.4:3031'; // Live
 //const HOST = 'http://localhost:3031'; // Your base server URL here
 const  HOST = 'http://insuranceapi.azurewebsites.net';
+>>>>>>> f7770a8f1b7277276ad5ca48e15fb778a9ad31ba
 
 @Injectable()
 export class SocketService {
