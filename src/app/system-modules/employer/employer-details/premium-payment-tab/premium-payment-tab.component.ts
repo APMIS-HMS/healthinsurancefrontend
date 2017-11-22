@@ -5,7 +5,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
+import { CurrentPlaformShortName, PAYSTACK_CLIENT_KEY, PAYMENTTYPES } from '../../../../services/globals/config';
 import {
   SystemModuleService, FacilityService, PolicyService, PremiumPaymentService
 } from '../../../../services/index';
@@ -32,7 +32,7 @@ export class PremiumPaymentTabComponent implements OnInit {
   cashPayment: boolean = false;
   chequePayment: boolean = false;
   paymentType: string = 'e-Payment';
-  paystackClientKey: string = paystackClientKey;
+  paystackClientKey: string = PAYSTACK_CLIENT_KEY;
   paystackProcessing: boolean = false;
   refKey: number;
   unbatchedActiveTab: boolean = true;

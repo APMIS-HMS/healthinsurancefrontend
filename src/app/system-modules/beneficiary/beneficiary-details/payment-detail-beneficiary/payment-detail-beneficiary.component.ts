@@ -5,7 +5,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 // import { Angular4PaystackComponent } from 'angular4-paystack';
-import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
+import { CurrentPlaformShortName, PAYSTACK_CLIENT_KEY, PAYMENTTYPES, FLUTTERWAVE_PUBLIC_KEY } from '../../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../../services/event-emitters/header-event-emitter.service';
 import {
   FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService
@@ -24,7 +24,8 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   previousPolicies: any = [];
   currentPlatform: any;
   user: any;
-  paystackClientKey: string = paystackClientKey;
+  paystackClientKey: string = PAYSTACK_CLIENT_KEY;
+  flutterwaveClientKey: string = FLUTTERWAVE_PUBLIC_KEY;
   withPaystack: boolean = true;
   cashPayment: boolean = false;
   chequePayment: boolean = false;
@@ -157,9 +158,24 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       policyCollectionId: this.policy._id
     });
 
+    let flutterwaveRes = {
+      data: data.data.data,
+      tx:  {
+        charged_amount: data.tx.charged_amount,
+        customer: data.tx.customer,
+        flwRef: data.tx.flwRef,
+        txRef: data.tx.txRef,
+        orderRef: data.tx.orderRef,
+        paymentType: data.tx.paymentType,
+        raveRef: data.tx.raveRef,
+        status: data.tx.status
+      }
+    };
+
+    console.log(flutterwaveRes);
     let ref = {
       platformOwnerId: this.currentPlatform,
-      reference: data,
+      reference: (this.payment === 'flutterwave') ? flutterwaveRes : data,
       policies: policies,
       sponsor: (!!this.policy.sponsor) ? this.policy.sponsor : 'self',
       paidBy: this.user,
@@ -174,7 +190,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         console.log('Succeeded');
       } else {
         // Pending, Validation.
-        ref.reference = data.data.data;
+        ref.reference = flutterwaveRes.tx;
         this.createPremium(ref);
       }
     } else {
@@ -253,11 +269,17 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       this._premiumPaymentService.verifyPaymentWithMiddleWare(verificationData).then((verifyRes: any) => {
         console.log(verifyRes);
         if (!!verifyRes) {
-          this.showPayment = false;
-          this.isForRenewal = true;
-          this._getPolicyDetails(verifyRes.body._id);
-          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
-          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+          if (verifyRes.body.status === 'success') {
+            this.showPayment = false;
+            this.isForRenewal = true;
+            this._getPolicyDetails(verifyRes.body.data._id);
+            this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
+            this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+          } else {
+            this.showPayment = false;
+            this.isForRenewal = true;
+            this._toastr.error(verifyRes.body.message, 'Payment Error!');
+          }
         }
       }).catch(err => {
         console.log(err);
