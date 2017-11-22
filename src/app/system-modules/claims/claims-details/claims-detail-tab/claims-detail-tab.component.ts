@@ -19,6 +19,10 @@ export class ClaimsDetailTabComponent implements OnInit {
   selectedClaim: any = <any>{};
   displayAge: number;
   isReply = false;
+  isReject = false;
+  isQuery = false;
+  isHold = false;
+  isApproved = false;
   status = "";
   statusCheck = false;
   isAuthCreateClaim = false;
@@ -41,6 +45,7 @@ export class ClaimsDetailTabComponent implements OnInit {
 
   getAuthforClaimCreate(){
     var userUserType = (<any>this._locker.getObject('auth')).user;
+    console.log(userUserType.userType.name)
     if(userUserType.userType.name == "Health Insurance Agent"){
       this.isAuthCreateClaim = true;
     }
@@ -83,13 +88,17 @@ export class ClaimsDetailTabComponent implements OnInit {
       this.selectedClaim.documentations.forEach(element => {
         if (element.response != undefined) {
           if (element.response.isReject == true) {
-            this.status = 'Reject';
+            this.status ="Reject"; 
+            this.isReject = true;
           } else if (element.response.isQuery == true) {
-            this.status = 'Query';
+            this.isQuery = true;
+            this.status ="Query";
           } else if (element.response.isHold == true) {
-            this.status = 'Hold';
+            this.isHold = true;
+            this.status ="Query";
           } else if (element.response.isApprove == true) {
-            this.status = 'Approved';
+            this.isApproved = true;
+            this.status ="Approved";
           }
         }
       });

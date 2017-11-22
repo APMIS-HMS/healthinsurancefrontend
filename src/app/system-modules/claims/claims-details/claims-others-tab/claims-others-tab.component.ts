@@ -29,7 +29,6 @@ export class ClaimsOthersTabComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
-        console.log(param._id);
         if (this.user !== undefined && this.user.userType.name === 'Provider') {
           this._claimService.find({
             query: {
@@ -58,7 +57,7 @@ export class ClaimsOthersTabComponent implements OnInit {
             });
             this.loading = false;
             console.log(param._id);
-            this.listOfClaims = payload.data.filter(x=>x._id != param._id);
+            this.listOfClaims = payload.data.filter(x => x._id != param.id);
             console.log(this.listOfClaims);
           });
         } if (this.user !== undefined && this.user.userType.name === 'Health Insurance Agent') {
@@ -75,10 +74,28 @@ export class ClaimsOthersTabComponent implements OnInit {
         'checkedinDetail.checkedInDetails.policyObject.hiaId._id': this.user.facilityId._id
       }
     }).then((payload: any) => {
-      console.log(param._id);
-      this.listOfClaims = payload.data.filter(x=>x._id != param._id);
-      console.log(this.listOfClaims);
+      payload.data.forEach(element => {
+        for (let i = element.documentations.length - 1; i >= 0; i--) {
+          if (element.documentations[i].response != undefined) {
+            if (element.documentations[i].response.isReject == true) {
+              element.status = 'Reject';
+            } else if (element.documentations[i].response.isQuery == true) {
+              element.status = 'Query';
+            } else if (element.documentations[i].response.isHold == true) {
+              element.status = 'Hold';
+            } else if (element.documentations[i].response.isApprove == true) {
+              element.status = 'Approved';
+            }
+            break;
+          } else {
+            element.status = 'Pending';
+          }
+        }
+
+      });
       this.loading = false;
+      console.log(param._id);
+      this.listOfClaims = payload.data.filter(x => x._id != param.id);
       this._systemService.off();
     }).catch(err => {
       console.log(err);
