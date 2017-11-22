@@ -10,6 +10,7 @@ import { Claim } from './../../../models/index';
 import { CheckIn } from './../../../models/check-in/check-in';
 import { CheckInService } from './../../../services/common/check-in.service';
 import { ClaimService } from './../../../services/common/claim.service';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ClaimTypeService } from './../../../services/common/claim-type.service';
 import { VisitTypeService } from './../../../services/common/visit-type.service';
 import { DiagnosisTypeService } from './../../../services/common/diagnosis-type.service';
@@ -102,6 +103,7 @@ export class NewClaimComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _systemService: SystemModuleService,
     private _claimTypeService: ClaimTypeService,
+    private _toastr: ToastsManager,
     private _visitTypeService: VisitTypeService,
     private _symptomService: SymptomService,
     private _drugPackSizeService: DrugPackSizeService,
@@ -128,10 +130,10 @@ export class NewClaimComponent implements OnInit {
     this._getEmployees();
 
     this.claimsFormGroup = this._fb.group({
-      patientName: ['', [<any>Validators.required]],
-      lashmaid: ['', [<any>Validators.required]],
-      hospital: ['', [<any>Validators.required]],
-      medicalPersonelName: ['', [<any>Validators.required]],
+      patientName: [''],
+      lashmaid: [''],
+      hospital: [''],
+      medicalPersonelName: [''],
       docunit: [''],
       plan: [''],
       auth: [''],
@@ -147,7 +149,6 @@ export class NewClaimComponent implements OnInit {
       drugUnit: [''],
       outPatient: [''],
       inPatient: [''],
-      //admissionDate: [''],
       dischargeDate: [''],
       clinicalNote: ['', [<any>Validators.required]],
       claimsNote: [''],
@@ -302,6 +303,7 @@ export class NewClaimComponent implements OnInit {
         });
         this.claimsFormGroup.controls.medicalPersonelName.setValue(this.SelectedCheckinItem.medicalPersonelName);
         this.claimsFormGroup.controls.docunit.setValue(this.SelectedCheckinItem.medicalPersonelUnit);
+        this.claimsFormGroup.controls.claimType.setValue(this.authorizeType);
       } else {
         this.isAuthorize = false;
         this.authorizeType = "Capitation";
@@ -334,6 +336,7 @@ export class NewClaimComponent implements OnInit {
           }
           console.log(this.SelectedCheckinItem);
         })
+        this.claimsFormGroup.controls.claimType.setValue(this.authorizeType);
       }
     })
 
@@ -605,42 +608,53 @@ export class NewClaimComponent implements OnInit {
 
 
   onSendClaim(valid) {
-    var request = {
-      "visitType": this.claimsFormGroup.controls.visitClass.value,
-      "drugs": this.drugList,
-      "investigations": this.investigationList,
-      "procedures": this.procedureList,
-      "diagnosis": this.diagnosisLists,
-      "symptoms": this.symptomLists,
-      "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
-    };
-    this.claimItem.documentations = [{
-      "request": request
-    }];
-    //this.claimItem.claimNo = 1;
-    this.claimItem.providerFacilityId = this.user.facilityId._id;
-    this.claimItem.checkedinDetail = this.SelectedCheckinItem;
-    this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
-    this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
-    this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
-    this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
-    this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
-    this.claimItem.medicalPersonelUnit = this.claimsFormGroup.controls.docunit.value;
-    //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
-    this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
-    this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
-    console.log(this.claimsFormGroup.controls.docunit.value);
-    console.log(this.claimsFormGroup.controls.medicalPersonelName.value);
-    this.isProcessing = true;
-    this._claimService.create(this.claimItem).then((payload: any) => {
-      console.log(payload);
-      this.SelectedCheckinItem
-      this.isProcessing = false;
-      this.navigateListClaim();
-    }, error => {
-      console.log(error);
-      this.isProcessing = false;
-    })
+    console.log(this.claimsFormGroup);
+    if (valid) {
+      var request = {
+        "visitType": this.claimsFormGroup.controls.visitClass.value,
+        "drugs": this.drugList,
+        "investigations": this.investigationList,
+        "procedures": this.procedureList,
+        "diagnosis": this.diagnosisLists,
+        "symptoms": this.symptomLists,
+        "clinicNote": this.claimsFormGroup.controls.clinicalNote.value
+      };
+      this.claimItem.documentations = [{
+        "request": request
+      }];
+      //this.claimItem.claimNo = 1;
+      this.claimItem.providerFacilityId = this.user.facilityId._id;
+      this.claimItem.checkedinDetail = this.SelectedCheckinItem;
+      this.claimItem.claimNote = this.claimsFormGroup.controls.claimsNote.value;
+      this.claimItem.checkedinDetail.dateDischarged = this.claimsFormGroup.controls.dischargeDate.value;
+      this.claimItem.checkedinDetail.visitDate = this.claimsFormGroup.controls.visitDate.value;
+      this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
+      this.claimItem.medicalPersonelName = this.claimsFormGroup.controls.medicalPersonelName.value;
+      this.claimItem.medicalPersonelUnit = this.claimsFormGroup.controls.docunit.value;
+      //this.claimItem.medicalPersonelShortName = this.generateNameAbbreviation(this.claimsFormGroup.controls.medicalPersonelName);
+      this.claimItem.authorizationCode = this.claimsFormGroup.controls.auth.value;
+      this.claimItem.claimType = this.claimsFormGroup.controls.claimType.value;
+      console.log(this.claimsFormGroup.controls.docunit.value);
+      console.log(this.claimsFormGroup.controls.medicalPersonelName.value);
+      this.isProcessing = true;
+      this._claimService.create(this.claimItem).then((payload: any) => {
+        console.log(payload);
+        this.SelectedCheckinItem
+        this.isProcessing = false;
+        this.navigateListClaim();
+      }, error => {
+        this._toastr.error(error.message, "Failed!");
+        this.isProcessing = false;
+      })
+
+    } else {
+      console.log(this.claimsFormGroup.controls);
+      if (!this.claimsFormGroup.controls.medicalPersonelName.valid) {
+        this._toastr.error("Medical Personel name cannot be empty", "Failed!");
+      } else if (!this.claimsFormGroup.controls.clinicalNote.valid) {
+        this._toastr.error("Clinical note name cannot be empty", "Failed!");
+      }
+    }
   }
 
   navigateListClaim() {
