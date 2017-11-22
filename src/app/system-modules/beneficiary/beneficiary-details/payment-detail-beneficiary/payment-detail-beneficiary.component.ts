@@ -185,13 +185,16 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     };
 
     if (this.payment === 'flutterwave') {
-      if (data.tx.chargeResponse === '00' || data.tx.chargeResponse === '0') {
+      if (data.tx.chargeResponseCode === '00' || data.tx.chargeResponseCode === '0') {
         // redirect to a success page
         console.log('Succeeded');
-      } else {
-        // Pending, Validation.
         ref.reference = flutterwaveRes.tx;
         this.createPremium(ref);
+      } else if (data.tx.chargeResponseCode === '02' || data.tx.chargeResponseCode === '2') {
+        // Declined payment
+        this._toastr.error(data.respmsg, 'Payment Declined');
+      } else {
+        this._toastr.error(data.respmsg, 'Payment Declined');
       }
     } else {
       // payment is paystack
