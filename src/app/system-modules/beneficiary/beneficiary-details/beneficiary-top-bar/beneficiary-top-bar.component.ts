@@ -1,3 +1,4 @@
+import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Router } from '@angular/router';
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewChecked } from '@angular/core';
 
@@ -10,9 +11,17 @@ export class BeneficiaryTopBarComponent implements OnInit {
   @Input() policy: any = <any>{};
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
   isCheckIn = false;
-  constructor(private _router: Router) { }
+  canApprove = false;
+
+  constructor(
+    private _router: Router,
+    private locker: CoolLocalStorage
+  ) { }
 
   ngOnInit() {
+    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner') {
+      this.canApprove = true;
+    }
     if (this._router.url.endsWith('checkin')) {
       this.isCheckIn = true;
     } else if (this._router.url.endsWith('payment')) {

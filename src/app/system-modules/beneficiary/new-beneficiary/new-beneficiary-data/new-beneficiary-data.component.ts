@@ -319,7 +319,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
 
   _initialiseFormGroup() {
-    let date = (this.selectedBeneficiary.personId === undefined || this.selectedBeneficiary.personId === null) ? new Date() : new Date(this.selectedBeneficiary.personId.dateOfBirth);
+    let date = ((this.selectedBeneficiary.personId === undefined || this.selectedBeneficiary.personId === null)||(this.selectedBeneficiary.personId !== undefined && this.selectedBeneficiary.personId.dateOfBirth === undefined)) ? new Date() : new Date(this.selectedBeneficiary.personId.dateOfBirth);
     if (this.selectedBeneficiary.personId !== undefined) {
       let year = date.getFullYear();
       let month = date.getMonth() + 1;
@@ -381,8 +381,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   }
 
   validateAgaintUnderAge(control: AbstractControl) {
+    console.log(control.value);
     if (control.value !== undefined && control.value.jsdate !== undefined) {
       return this._beneficiaryService.validateAge(control.value).then(res => {
+        console.log(res)
         return res.body.response >= 18 ? null : { underage: true };
       });
     } else {

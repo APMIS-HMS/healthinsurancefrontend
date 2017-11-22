@@ -306,7 +306,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
   populateNewDependant(dependant, person, relationshipId) {
 
-    (<FormArray>this.frmDependants.controls['dependantArray']) = new FormArray([]);
+    this.frmDependants.controls['dependantArray'] = new FormArray([]);
 
 
     (<FormArray>this.frmDependants.controls['dependantArray'])
@@ -317,7 +317,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         middleName: [person !== undefined ? person.otherNames : ''],
         lastName: [person !== undefined ? person.lastName : '', [<any>Validators.required]],
         phonenumber: [person !== undefined ? person.phoneNumber : 0, [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
-        secondaryPhone: ['',<any>Validators.pattern(PHONE_REGEX)],
+        secondaryPhone: ['', <any>Validators.pattern(PHONE_REGEX)],
         email: [person !== undefined ? person.email : '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
         dob: [person !== undefined ? person.dateOfBirth : this.today, [<any>Validators.required]],
         gender: [person !== undefined ? person.gender : '', [<any>Validators.required]],

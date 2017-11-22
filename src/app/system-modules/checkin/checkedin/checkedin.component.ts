@@ -105,14 +105,26 @@ export class CheckedinComponent implements OnInit, OnDestroy {
 
 
   routeBeneficiaryDetails(check) {
-    this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin'])
-      .then(payload => {
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err)
-        this._systemService.off();
-      });
+    console.log(check)
+    if(check.otp.isVerified){
+      this._systemService.on();
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin'])
+        .then(payload => {
+          this._systemService.off();
+        }).catch(err => {
+          console.log(err)
+          this._systemService.off();
+        });
+    }else{
+      this._systemService.on();
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin-generate'])
+        .then(payload => {
+          this._systemService.off();
+        }).catch(err => {
+          console.log(err)
+          this._systemService.off();
+        });
+    }
   }
 
   navigate(url: string, id?: string) {

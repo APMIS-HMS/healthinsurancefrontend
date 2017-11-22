@@ -114,12 +114,12 @@ export class CheckinDetailsComponent implements OnInit {
     let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
     let policy$ = Observable.fromPromise(this._policyService.find({
       query:
-      {
-        $or: [
-          { principalBeneficiary: routeId },
-          { 'dependantBeneficiaries.beneficiary._id': routeId },
-        ]
-      }
+        {
+          $or: [
+            { principalBeneficiary: routeId },
+            { 'dependantBeneficiaries.beneficiary._id': routeId },
+          ]
+        }
     }));
 
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
@@ -278,6 +278,7 @@ export class CheckinDetailsComponent implements OnInit {
         this.hasCheckInToday = true;
         this.selectedCheckIn = payload.data[0];
         if (this.selectedCheckIn.confirmation !== undefined) {
+          console.log(1);
           this._initializedForm();
           this.checkinSect = false;
           this.checkedinSect = true;
@@ -286,6 +287,14 @@ export class CheckinDetailsComponent implements OnInit {
           // this.otp_show = false;
           // this.checkin_show = true;
           //route to generate
+          console.log(2);
+          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
+            this._systemService.off();
+          }).catch(err => {
+            console.log(err)
+            this._systemService.off();
+          });
+        } else {
           this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
             this._systemService.off();
           }).catch(err => {
@@ -294,7 +303,7 @@ export class CheckinDetailsComponent implements OnInit {
           });
         }
 
-      }else{
+      } else {
         this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
           this._systemService.off();
         }).catch(err => {
