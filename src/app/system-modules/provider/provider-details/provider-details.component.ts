@@ -7,7 +7,7 @@ import { FacilityService, SystemModuleService, UploadService } from './../../../
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { DURATIONS } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
-
+import { CoolLocalStorage } from 'angular2-cool-storage';
 @Component({
   selector: 'app-provider-details',
   templateUrl: './provider-details.component.html',
@@ -34,6 +34,7 @@ export class ProviderDetailsComponent implements OnInit {
   addApproval: boolean = false;
   facility: any = <any>{};
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
+  canApprove = false;
 
 	constructor(
     private _fb: FormBuilder,
@@ -44,9 +45,15 @@ export class ProviderDetailsComponent implements OnInit {
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
     private _uploadService: UploadService,
-  ) { }
+    private locker: CoolLocalStorage
+  ) {
+  }
 
   ngOnInit() {
+    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner') {
+      this.canApprove = true;
+    }
+
     this._headerEventEmitter.setRouteUrl('Provider Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
 

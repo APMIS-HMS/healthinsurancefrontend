@@ -41,7 +41,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.selectedAuthorization);
-    if(this.selectedAuthorization !== undefined){
+    if(this.selectedAuthorization !== undefined && this.selectedAuthorization.document !== undefined){
       let validDocs = this.selectedAuthorization.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
       if (validDocs.length === 0) {
         this.disableApprove = false;

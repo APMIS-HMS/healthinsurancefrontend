@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { SystemModuleService } from './../../../../services/common/system-module.service';
 import { Facility } from './../../../../models/organisation/facility';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 
 @Component({
   selector: 'app-tab-top-bar',
@@ -11,13 +12,18 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 export class TabTopBarComponent implements OnInit {
   @Input() selectedFacility: Facility = <Facility>{};
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
+  canApprove = false;
 
   constructor(
+    private locker: CoolLocalStorage,
     private _systemService: SystemModuleService,
     private _router: Router
   ) { }
 
   ngOnInit() {
+    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner') {
+      this.canApprove = true;
+    }
   }
 
   addApprovalClick(e) {
