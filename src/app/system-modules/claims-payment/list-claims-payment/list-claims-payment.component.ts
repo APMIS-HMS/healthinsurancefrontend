@@ -84,23 +84,23 @@ export class ListClaimsPaymentComponent implements OnInit {
     this._systemService.on();
     this._claimService.find({
       query: {
-        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
-         isQueuedForPayment: false,
-         'approvedDocumentation.response.isApprove': true,
-         $limit: this.limit, 
-         $skip: this.limit*this.index
+        'checkedinDetail.checkedInDetails.platformOwnerId._id': this.currentPlatform._id,
+        isQueuedForPayment: false,
+        'approvedDocumentation.response.isApprove': true,
+        $limit: this.limit,
+        $skip: this.limit * this.index
     }}).then((payload: any) => {
       console.log(payload);
       this.loading = false;
-      //this.claims = payload.data;
+      // this.claims = payload.data;
       this.claimsTotalEntries = payload.total;
-      if(this.claimsResetData !== true){ 
-        this.claims.push(...payload.data) 
-      }else{
+      if (this.claimsResetData !== true) {
+        this.claims.push(...payload.data);
+      } else {
         this.claimsResetData = false;
-        this.claims = payload.data; 
+        this.claims = payload.data;
       }
-      if(this.claims.length >= this.claimsTotalEntries){
+      if (this.claims.length >= this.claimsTotalEntries) {
         this.showClaimsLoadMore = false;
       }
       this._systemService.off();
