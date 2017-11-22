@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -7,7 +7,9 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 // import { Angular4PaystackComponent } from 'angular4-paystack';
 import { CurrentPlaformShortName, paystackClientKey, PAYMENTTYPES } from '../../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../../services/event-emitters/header-event-emitter.service';
-import { FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService } from '../../../../services/index';
+import {
+  FacilityService, SystemModuleService, BeneficiaryService, PolicyService, PremiumPaymentService
+} from '../../../../services/index';
 
 @Component({
   selector: 'app-payment-detail-beneficiary',
@@ -34,6 +36,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   openCashPaymentModal: boolean = false;
   cashPaymentProcessing: boolean = false;
   paymentTypes: any = PAYMENTTYPES;
+  payment: string = 'flutterwave'; // This is either flutterwave or paystack
 
   constructor(
     private _fb: FormBuilder,
@@ -42,6 +45,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     private _toastr: ToastsManager,
     private _route: ActivatedRoute,
     private _headerEventEmitter: HeaderEventEmitterService,
+    private _elementRef: ElementRef,
     // private _angular4Paystack: Angular4PaystackComponent,
     private _facilityService: FacilityService,
     private _systemService: SystemModuleService,
@@ -50,6 +54,13 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   ) {
 
   }
+
+  // ngAfterViewInit() {
+  //   let s = document.createElement('script');
+  //   s.type = 'text/javascript';
+  //   s.src = 'http://flw-pms-dev.eu-west-1.elasticbeanstalk.com/flwv3-pug/getpaidx/api/flwpbf-inline.js';
+  //   this._elementRef.nativeElement.appendChild(s);
+  // }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary Payment');
@@ -156,30 +167,21 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       amountPaid: this.policy.premiumPackageId.amount,
       paymentType: this.paymentType
     };
-    // Save into the Premium Payment Service
-    this._premiumPaymentService.create(ref).then((res: any) => {
-      console.log(res);
 
-      let verificationData = {
-        reference: res.reference,
-        premiumId: res._id
-      };
-      // Call paystack verification API
-      this._premiumPaymentService.verifyPaystackWithMiddleWare(verificationData).then((verifyRes: any) => {
-        console.log(verifyRes);
-        if (!!verifyRes) {
-          this.showPayment = false;
-          this.isForRenewal = true;
-          this._getPolicyDetails(verifyRes.body._id);
-          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
-          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
-        }
-      }).catch(err => {
-        console.log(err);
-      });
-    }).catch(err => {
-      console.log(err);
-    });
+    if (this.payment === 'flutterwave') {
+      if (data.tx.chargeResponse === '00' || data.tx.chargeResponse === '0') {
+        // redirect to a success page
+        console.log('Succeeded');
+      } else {
+        // Pending, Validation.
+        ref.reference = data.data.data;
+        this.createPremium(ref);
+      }
+    } else {
+      // payment is paystack
+      ref.reference = data;
+      this.createPremium(ref);
+    }
   }
 
   onClickCreateAndPaybatch(valid: boolean, value: any) {
@@ -235,6 +237,34 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     } else {
       this._toastr.error('Please fill in all required fields', 'Form ValidationError!');
     }
+  }
+
+  createPremium(ref) {
+    // Save into the Premium Payment Service
+    this._premiumPaymentService.create(ref).then((res: any) => {
+      console.log(res);
+
+      let verificationData = {
+        reference: res.reference,
+        premiumId: res._id,
+        payment: this.payment // flutterwave or paystack
+      };
+      // Call paystack verification API
+      this._premiumPaymentService.verifyPaymentWithMiddleWare(verificationData).then((verifyRes: any) => {
+        console.log(verifyRes);
+        if (!!verifyRes) {
+          this.showPayment = false;
+          this.isForRenewal = true;
+          this._getPolicyDetails(verifyRes.body._id);
+          this._getPreviousPolicies(this.routeId, this.currentPlatform._id);
+          this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   onClickPayCash() {
