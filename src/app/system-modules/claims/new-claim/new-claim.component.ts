@@ -643,7 +643,7 @@ export class NewClaimComponent implements OnInit {
         this.isProcessing = false;
         this.navigateListClaim();
       }, error => {
-        this._toastr.error(error, "Failed!");
+        this._toastr.error("Claim checked-in info not complete", "Failed!");
         this.isProcessing = false;
       })
 
