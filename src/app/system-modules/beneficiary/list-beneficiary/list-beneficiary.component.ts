@@ -129,7 +129,10 @@ export class ListBeneficiaryComponent implements OnInit {
 
   }
   reset() {
-    this.ngOnInit();
+    this.skipValue = 0;
+    this.beneficiaries = [];
+    this._getCurrentPlatform();
+    this.showLoadMore = true;
   }
   private _getPlans() {
     this._planService.find({}).then((payload: any) => {
