@@ -81,19 +81,21 @@ export class TopBarComponent implements OnInit {
     });
   }
 
-  setNotifier(){
-    this._notificationService.find({
-      query: {
-        'userType._id': this.user.userType._id,
-        $sort: { createdAt: -1 }
-      }
-    }).then((noOfUnReads: any) => {
-      let unReadItems = noOfUnReads.data.filter(x => x.isRead == false);
-      this.noUnReadAlert = unReadItems.length;
-      this.alerts = noOfUnReads.data;
-      //this.notificationMessage = this.alerts[this.alerts.length-1];
-      console.log(this.alerts);
-    });
+  setNotifier() {
+    if (!!this.user.userType && !!this.user.userType._id) {
+      this._notificationService.find({
+        query: {
+          'userType._id': this.user.userType._id,
+          $sort: { createdAt: -1 }
+        }
+      }).then((noOfUnReads: any) => {
+        let unReadItems = noOfUnReads.data.filter(x => x.isRead === false);
+        this.noUnReadAlert = unReadItems.length;
+        this.alerts = noOfUnReads.data;
+        // this.notificationMessage = this.alerts[this.alerts.length-1];
+        console.log(this.alerts);
+      });
+    }
   }
 
   _getCurrentPlatform() {
