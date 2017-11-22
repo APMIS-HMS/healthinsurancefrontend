@@ -3,7 +3,7 @@ import { PlanService } from './../../../services/plan/plan.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Observable } from 'rxjs/Rx';
 import { Beneficiary } from './../../../models/setup/beneficiary';
-import { CurrentPlaformShortName } from './../../../services/globals/config';
+import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
 import { PolicyService } from './../../../services/policy/policy.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -36,7 +36,7 @@ export class ListBeneficiaryComponent implements OnInit {
   planTypes: any[] = [];
   totalData:number;
   showLoadMore:Boolean = true;
-  limitValue = 4;
+  limitValue = TABLE_LIMIT_PER_VIEW;
   skipValue = 0;
   currentPlatform: any;
   user: any;
@@ -235,8 +235,11 @@ export class ListBeneficiaryComponent implements OnInit {
             });
           });
         }
+        console.log(id);
+        console.log(this.currentPlatform._id);
         this._beneficiaryService.countBenefeciaries(id).then(data => {
           this.totalData = data.body.count;
+          console.log(this.totalData);
           if(this.beneficiaries.length >= this.totalData){
             this.showLoadMore = false;
           }
