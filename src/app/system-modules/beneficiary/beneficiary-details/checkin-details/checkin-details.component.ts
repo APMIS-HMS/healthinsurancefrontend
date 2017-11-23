@@ -35,7 +35,7 @@ export class CheckinDetailsComponent implements OnInit {
   checkin_show = false;
   otp_generated = false;
   checkinSect = false;
-  checkedinSect = true;
+  checkedinSect = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
