@@ -31,7 +31,7 @@
             <div class="frm-item-wrap">
                 <label class="label">Hospital Name</label>
                 <div class="input-wrap">
-                    <input type="text" formControlName="hospital" disabled class="form-control" value="{{SelectedCheckinItem?.providerFacility}}">
+                    <input type="text" formControlName="hospital" disabled class="form-control" value="{{SelectedCheckinItem?.providerFacility?.providerId?.name}}">
                 </div>
                 <small class="alert-label" [hidden]="claimsFormGroup.controls.hospital.valid || claimsFormGroup.controls.hospital.pristine">
                     This is a required field.

@@ -32,7 +32,8 @@ export class ClaimsOthersTabComponent implements OnInit {
         if (this.user !== undefined && this.user.userType.name === 'Provider') {
           this._claimService.find({
             query: {
-              providerFacilityId: this.user.facilityId._id
+              providerFacilityId: this.user.facilityId._id,
+              '_id': param.id
             },
             $sort: { createdAt: -1 }
           }).then((payload: any) => {
@@ -57,7 +58,7 @@ export class ClaimsOthersTabComponent implements OnInit {
             });
             this.loading = false;
             console.log(param._id);
-            this.listOfClaims = payload.data.filter(x => x._id != param.id);
+            this.listOfClaims = payload.data;
             console.log(this.listOfClaims);
           });
         } if (this.user !== undefined && this.user.userType.name === 'Health Insurance Agent') {
@@ -72,45 +73,28 @@ export class ClaimsOthersTabComponent implements OnInit {
     this._claimService.find({
       query: {
         'checkedinDetail.checkedInDetails.policyObject.hiaId._id': this.user.facilityId._id,
-        '_id': param.id,
-        $limit: 1
+        '_id': param.id
       }
     }).then((payload: any) => {
-      let checkinId = {};
-      console.log(payload.data[0]);
-      if (payload.data[0].checkedinDetail.checkedInDetails != undefined) {
-        checkinId = payload.data[0].checkedinDetail.checkedInDetails._id;
-      } else {
-        checkinId = payload.data[0].checkedinDetail._id;
-      }
-      console.log(checkinId);
-      this._claimService.find({
-        query: {
-          'checkedinDetail.checkedInDetails.policyObject.hiaId._id': this.user.facilityId._id,
-          'checkedinDetail.checkedInDetails._id':checkinId, 
-        }
-      }).then((payload2: any) => {
-        console.log(payload2)
-        payload2.data.forEach(element => {
-          for (let i = element.documentations.length - 1; i >= 0; i--) {
-            if (element.documentations[i].response != undefined) {
-              if (element.documentations[i].response.isReject == true) {
-                element.status = 'Reject';
-              } else if (element.documentations[i].response.isQuery == true) {
-                element.status = 'Query';
-              } else if (element.documentations[i].response.isHold == true) {
-                element.status = 'Hold';
-              } else if (element.documentations[i].response.isApprove == true) {
-                element.status = 'Approved';
-              }
-              break;
-            } else {
-              element.status = 'Pending';
+      payload.data.forEach(element => {
+        for (let i = element.documentations.length - 1; i >= 0; i--) {
+          if (element.documentations[i].response != undefined) {
+            if (element.documentations[i].response.isReject == true) {
+              element.status = 'Reject';
+            } else if (element.documentations[i].response.isQuery == true) {
+              element.status = 'Query';
+            } else if (element.documentations[i].response.isHold == true) {
+              element.status = 'Hold';
+            } else if (element.documentations[i].response.isApprove == true) {
+              element.status = 'Approved';
             }
-          }});
-          this.loading = false;
-          this.listOfClaims = payload2.data;
-      })
+            break;
+          } else {
+            element.status = 'Pending';
+          }
+        }});
+        this.loading = false;
+        this.listOfClaims = payload.data;
       this._systemService.off();
     }).catch(err => {
       console.log(err);

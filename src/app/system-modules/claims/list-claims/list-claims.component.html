@@ -77,7 +77,7 @@
                     </span>
                 </td>
                 <td class="td">{{item?.checkedinDetail.plan}}</td>
-                <td class="td">{{item?.checkedinDetail.providerFacility}}</td>
+                <td class="td">{{item?.checkedinDetail?.providerFacility?.providerId?.name}}</td>
                 <td class="td">
                     <span class="green" *ngIf="item.status != 'Pending'">{{item?.status}}</span>
                     <span class="red" *ngIf="item.status == 'Pending'">{{item?.status}}</span>

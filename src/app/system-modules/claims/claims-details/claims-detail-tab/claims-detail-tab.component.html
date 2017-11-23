@@ -27,11 +27,12 @@
             <div class="group-wrap">
                 <div class="group-item">
                     <div class="item-label">Hospital Name:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject.providerId.name}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.providerFacility?.providerId?.name}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Provider ID:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.provider?.comment}}</div>
+                    <div class="item-val" *ngIf="opProviderId ==''">{{selectedClaim?.checkedinDetail?.checkedInDetails?.providerFacilityId?.provider?.providerId}}</div>
+                    <div class="item-val" *ngIf="opProviderId !=''">{{opProviderId}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Health Plan:</div>
@@ -66,7 +67,8 @@
                     <div class="letering">
                         <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span>
+                            <span class="letering-name"  *ngIf="selectedClaim.medicalPersonelName.firstName!=undefined">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span>
+                            <span class="letering-name"  *ngIf="selectedClaim.medicalPersonelName.firstName==undefined">{{selectedClaim.medicalPersonelName}}</span>
                             Requested Claims</div>
                     </div>
                 </div>
