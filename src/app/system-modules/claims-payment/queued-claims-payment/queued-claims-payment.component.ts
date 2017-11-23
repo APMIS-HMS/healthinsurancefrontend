@@ -128,7 +128,7 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getClaimsPayments();
