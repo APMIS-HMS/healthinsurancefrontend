@@ -27,11 +27,11 @@
             <div class="group-wrap">
                 <div class="group-item">
                     <div class="item-label">Hospital Name:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject.providerId.name}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.providerFacility}}-{{selectedClaim?.checkedinDetail?.checkedInDetails?.providerFacilityId?.name}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Provider ID:</div>
-                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.provider?.comment}}</div>
+                    <div class="item-val">{{selectedClaim?.checkedinDetail?.checkedInDetails?.providerFacilityId?.provider?.providerId}}</div>
                 </div>
                 <div class="group-item">
                     <div class="item-label">Health Plan:</div>

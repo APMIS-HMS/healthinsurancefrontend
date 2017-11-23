@@ -83,6 +83,7 @@ export class ClaimsDetailTabComponent implements OnInit {
   _getSelectedClaimItem(id) {
     this._claimService.get(id, {}).then((payload: any) => {
       this.selectedClaim = payload;
+      console.log(this.selectedClaim);
       this.selectedClaim.documentations.forEach(element => {
         if (element.response != undefined) {
           if (element.response.isReject == true) {

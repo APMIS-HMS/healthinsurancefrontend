@@ -244,17 +244,6 @@ export class NewClaimComponent implements OnInit {
       console.log(preauth_callback);
 
       if (preauth_callback.data.length > 0) {
-        if (preauth_callback.data.length > 1) {
-          var resultObject = preauth_callback.data.reduce(function (result, currentObject) {
-            for (var key in currentObject) {
-              if (currentObject.hasOwnProperty(key)) {
-                result[key] = currentObject[key];
-              }
-            }
-            return result;
-          }, {});
-          console.log(resultObject);
-        }
         this.isAuthorize = true;
         this.authorizeType = "Free for Service"
         this.SelectedCheckinItem = preauth_callback.data[0];
