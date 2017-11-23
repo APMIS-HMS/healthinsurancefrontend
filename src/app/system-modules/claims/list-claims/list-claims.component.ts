@@ -67,10 +67,11 @@ export class ListClaimsComponent implements OnInit {
   }
 
   private _getClaims() {
+    console.log("HIA");
     this._systemService.on();
     this._claimService.find({
       query: {
-        'checkedinDetail.checkedInDetails.policyObject.hiaId._id': this.user.facilityId._id
+        'checkedinDetail.providerFacility.hiaId._id': this.user.facilityId._id
       }
     }).then((payload: any) => {
       if (payload.data.length > 0) {

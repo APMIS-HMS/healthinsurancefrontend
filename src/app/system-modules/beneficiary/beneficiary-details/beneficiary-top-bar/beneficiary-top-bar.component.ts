@@ -19,7 +19,7 @@ export class BeneficiaryTopBarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner') {
+    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner' || JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Health Insurance Agent') {
       this.canApprove = true;
     }
     if (this._router.url.endsWith('checkin')) {
