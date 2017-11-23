@@ -33,17 +33,24 @@ export class ClaimsDetailTabComponent implements OnInit {
     private _headerEventEmitter: HeaderEventEmitterService,
     private _locker: CoolLocalStorage,
     private _claimService: ClaimService,
-    private _facilityService: FacilityService) { }
-
-  ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Claims Details');
-    this._headerEventEmitter.setMinorRouteUrl('Claims details reply and response page.');
+    private _facilityService: FacilityService) {
+    this.getAuthforClaimCreate();
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
         this._getSelectedClaimItem(param.id);
       }
     });
+  }
+
+  ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('Claims Details');
+    this._headerEventEmitter.setMinorRouteUrl('Claims details reply and response page.');
     this.getAuthforClaimCreate();
+    this._route.params.subscribe(param => {
+      if (param.id !== undefined) {
+        this._getSelectedClaimItem(param.id);
+      }
+    });
   }
 
   getAuthforClaimCreate() {
@@ -84,44 +91,49 @@ export class ClaimsDetailTabComponent implements OnInit {
 
 
   _getSelectedClaimItem(id) {
-    this._claimService.get(id, {}).then((payload: any) => {
-      this.selectedClaim = payload;
-      console.log(this.selectedClaim);
-      this.selectedClaim.documentations.forEach(element => {
-        if (element.response != undefined) {
-          if (element.response.isReject == true) {
-            this.status = "Reject";
-            this.isReject = true;
-          } else if (element.response.isQuery == true) {
-            this.isQuery = true;
-            this.status = "Query";
-          } else if (element.response.isHold == true) {
-            this.isHold = true;
-            this.status = "Query";
-          } else if (element.response.isApprove == true) {
-            this.isApproved = true;
-            this.status = "Approved";
+    try {
+      this._claimService.get(id, {}).then((payload: any) => {
+        this.selectedClaim = payload;
+        console.log(this.selectedClaim);
+        this.selectedClaim.documentations.forEach(element => {
+          if (element.response != undefined) {
+            if (element.response.isReject == true) {
+              this.status = "Reject";
+              this.isReject = true;
+            } else if (element.response.isQuery == true) {
+              this.isQuery = true;
+              this.status = "Query";
+            } else if (element.response.isHold == true) {
+              this.isHold = true;
+              this.status = "Query";
+            } else if (element.response.isApprove == true) {
+              this.isApproved = true;
+              this.status = "Approved";
+            }
+          } else {
+            this.status = "Pending";
           }
-        } else {
-          this.status = "Pending";
+        });
+
+        if (this.selectedClaim.checkedinDetail.checkedInDetails.providerFacilityId == undefined) {
+          this._facilityService.get(
+            this.selectedClaim.checkedinDetail.providerFacility.providerId._id, {
+              $select: ['provider.providerId']
+            }).then((payload2: any) => {
+              console.log(payload2);
+              this.opProviderId = payload2.provider.providerId;
+            })
         }
-      });
-
-      if (this.selectedClaim.checkedinDetail.checkedInDetails.providerFacilityId == undefined) {
-        this._facilityService.get(
-          this.selectedClaim.checkedinDetail.providerFacility.providerId._id, {
-            $select: ['provider.providerId']
-          }).then((payload2: any) => {
-            console.log(payload2);
-            this.opProviderId = payload2.provider.providerId;
-          })
-      }
 
 
-      console.log(new Date);
-      this.displayAge = differenceInYears(new Date(), this.selectedClaim.checkedinDetail.checkedInDetails.beneficiaryObject.personId.dateOfBirth);
-      console.log(this.displayAge);
-    });
+        console.log(new Date);
+        this.displayAge = differenceInYears(new Date(), this.selectedClaim.checkedinDetail.checkedInDetails.beneficiaryObject.personId.dateOfBirth);
+        console.log(this.displayAge);
+      }, error => { });
+    } catch (Exception) {
+      window.location.reload();
+    }
+
   }
 
 }

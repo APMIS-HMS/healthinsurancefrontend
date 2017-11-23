@@ -241,7 +241,7 @@
                             <li class="doc-subtitle">Reason(s):</li>
                             <li>
                                 <span *ngIf="item.response.reason !=''">
-                                    {{item.response.reason}}
+                                    {{item?.response?.reason}}
                                 </span>
                                 <span *ngIf="item.response.reason ==''">
                                     Nill
@@ -251,29 +251,29 @@
 
                         <div class="entry-wrap">
                             <li class="doc-subtitle">Name:</li>
-                            <li>{{item.response.name}}</li>
+                            <li>{{item?.response?.name}}</li>
                             <li>Lashma</li>
                         </div>
                     </ul>
                 </div>
                 <app-new-claim-tabs [claimItem]="selectedClaim" (closeDialog)="onReply($event)" *ngIf="item.response.isReply == true"></app-new-claim-tabs>
                 <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1 && item.response.isReply != true">
-                    <div class="btn btn-medium btn-grey-outline" *ngIf="selectedClaim.approvedDocumentation.response == undefined" (click)="onReply()">
-                        <i class="fa fa-reply"></i> REPLY {{item.response.isReply}}
+                    <div class="btn btn-medium btn-grey-outline" *ngIf="selectedClaim?.approvedDocumentation?.response == undefined" (click)="onReply()">
+                        <i class="fa fa-reply"></i> REPLY {{item?.response?.isReply}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="action-wrap" *ngIf="isAuthCreateClaim==true">
-    <button class="btn btn-medium btn-red" *ngIf="isApproved||isReject" (click)="rejectClaim()">REJECT</button>
-    <button class="btn btn-medium btn-red" *ngIf="isApproved||isQuery" (click)="queryClaim()">QUERY</button>
-    <button class="btn btn-medium btn-yellow" *ngIf="isApproved||isHold" (click)="holdClaim()">HOLD</button>
-    <button class="btn btn-medium btn-blue" *ngIf="!isApproved" (click)="approveClaim()">APPROVE</button>
-</div>
-
+<diV *ngIf="!isApproved">
+    <div class="action-wrap" *ngIf="isAuthCreateClaim">
+        <button class="btn btn-medium btn-red" *ngIf="!isReject" (click)="rejectClaim()">REJECT</button>
+        <button class="btn btn-medium btn-red" *ngIf="!isQuery" (click)="queryClaim()">QUERY</button>
+        <button class="btn btn-medium btn-yellow" *ngIf="!isHold" (click)="holdClaim()">HOLD</button>
+        <button class="btn btn-medium btn-blue" *ngIf="!isApproved" (click)="approveClaim()">APPROVE</button>
+    </div>
+</diV>
 <div *ngIf="modalApprove" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="modal_close()" class="close-modal">X</div>
