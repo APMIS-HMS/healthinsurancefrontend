@@ -5,7 +5,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName, PAYSTACK_CLIENT_KEY, PAYMENTTYPES } from '../../../../services/globals/config';
+import { CurrentPlaformShortName, PAYSTACK_CLIENT_KEY, FLUTTERWAVE_PUBLIC_KEY, PAYMENTTYPES } from '../../../../services/globals/config';
 import {
   SystemModuleService, FacilityService, PolicyService, PremiumPaymentService
 } from '../../../../services/index';
@@ -33,6 +33,7 @@ export class PremiumPaymentTabComponent implements OnInit {
   chequePayment: boolean = false;
   paymentType: string = 'e-Payment';
   paystackClientKey: string = PAYSTACK_CLIENT_KEY;
+  flutterwaveClientKey: string = FLUTTERWAVE_PUBLIC_KEY;
   paystackProcessing: boolean = false;
   refKey: number;
   unbatchedActiveTab: boolean = true;
@@ -42,6 +43,7 @@ export class PremiumPaymentTabComponent implements OnInit {
   totalCost = 0;
   premiumPaymentData: any;
   facility: any;
+  payment: string = 'flutterwave'; // This is either flutterwave or paystack
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
   };
@@ -164,22 +166,42 @@ export class PremiumPaymentTabComponent implements OnInit {
     if (!!this.premiumPaymentData && !!this.facility && this.premiumPaymentData._id && !!this.facility._id) {
       console.log('Payment Done');
       console.log(this.premiumPaymentData);
+
+      let flutterwaveRes = {
+        data: data.data.data,
+        tx: {
+          charged_amount: data.tx.charged_amount,
+          customer: data.tx.customer,
+          flwRef: data.tx.flwRef,
+          txRef: data.tx.txRef,
+          orderRef: data.tx.orderRef,
+          paymentType: data.tx.paymentType,
+          raveRef: data.tx.raveRef,
+          status: data.tx.status
+        }
+      };
+
       let payload = {
         premiumPaymentId: this.premiumPaymentData._id,
         action: 'update',
-        ref: data
+        ref: flutterwaveRes,
+        payment: this.payment
       };
 
       // Call paystack verification API
       this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes: any) => {
         console.log(verifyRes);
-        if (!!verifyRes.body._id) {
+        if (verifyRes.body.status === 'success') {
           this.showPaystack = false;
           this.openBatchModal = false;
           this.premiumPaymentData = {};
           this.onClickTab('batchedPayment');
           this._premiumPaymentService.setWhenDone(true);
           this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+        } else {
+          this.showPaystack = false;
+          this.openBatchModal = false;
+          this._toastr.error(verifyRes.body.message, 'Payment Error!');
         }
       }).catch(err => {
         console.log(err);

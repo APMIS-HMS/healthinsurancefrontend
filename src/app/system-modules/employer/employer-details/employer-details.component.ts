@@ -19,7 +19,7 @@ import { FacilityService, SystemModuleService } from './../../../services/index'
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
-
+import { CoolLocalStorage } from 'angular2-cool-storage';
 
 @Component({
   selector: 'app-employer-details',
@@ -113,8 +113,11 @@ export class EmployerDetailsComponent implements OnInit {
   hias: any[] = [];
   drugSearchResult = false;
   routeId: string;
+  canApprove: boolean = false;
+  user: any;
 
   constructor(
+    private _locker: CoolLocalStorage,
     private _router: Router,
     private _toastr: ToastsManager,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -137,6 +140,11 @@ export class EmployerDetailsComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Organisation Details');
     this._headerEventEmitter.setMinorRouteUrl('Details page');
+    this.user = (<any>this._locker.getObject('auth')).user;
+
+    if (!!this.user.userType && (this.user.userType.name === 'Platform Owner')) {
+      this.canApprove = true;
+    }
 
     this.SPONSORSHIP = [
       { 'id': 1, 'name': 'Self' },
@@ -180,14 +188,14 @@ export class EmployerDetailsComponent implements OnInit {
 
     this.stateControl.valueChanges.subscribe(value => {
       if (this.stateControl.valid) {
-        var filteredState = this.mStates.filter(x => x.name == this.stateControl.value);
+        var filteredState = this.mStates.filter(x => x.name === this.stateControl.value);
         this.mLga = filteredState[0].lgs;
       }
     });
 
     this.oStateControl.valueChanges.subscribe(value => {
       if (this.oStateControl.valid) {
-        var filteredState = this.oStates.filter(x => x.name == this.oStateControl.value);
+        var filteredState = this.oStates.filter(x => x.name === this.oStateControl.value);
         this.oLga = filteredState[0].lgs;
       }
     });

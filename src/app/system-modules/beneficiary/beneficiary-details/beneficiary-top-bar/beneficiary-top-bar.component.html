@@ -9,6 +9,6 @@
     </div>
 
     <div *ngIf="!isCheckIn" class="bar-icos">
-        <div (click)="addApprovalClick($event);" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
+        <div (click)="addApprovalClick($event);" *ngIf="canApprove" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
     </div>
 </div>

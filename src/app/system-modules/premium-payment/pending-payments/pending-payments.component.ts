@@ -121,16 +121,15 @@ export class PendingPaymentsComponent implements OnInit {
         policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
         policies.push(policy);
       });
-      //this.individualPolicies = policies;
+      // this.individualPolicies = policies;
       this.totalEntries = res.total;
-      if(this.resetData !== true) 
-      { 
-        this.individualPolicies.push(...policies) 
-      }else{ 
+      if (this.resetData !== true) {
+        this.individualPolicies.push(...policies);
+      } else {
         this.resetData = false;
-        this.individualPolicies = policies; 
+        this.individualPolicies = policies;
       }
-      if(this.individualPolicies.length >= this.totalEntries){
+      if (this.individualPolicies.length >= this.totalEntries) {
         this.individualShowLoadMore = false;
       }
       this._systemService.off();
@@ -150,7 +149,7 @@ export class PendingPaymentsComponent implements OnInit {
         'sponsorshipId.name': sponsorship,
         isPaid: false,
         $limit: this.limit,
-        $skip: this.index*this.limit,
+        $skip: this.index * this.limit,
         $sort: { createdAt: -1 }
       }
     }).then((res: any) => {
@@ -176,16 +175,16 @@ export class PendingPaymentsComponent implements OnInit {
           hasItem[0].noOfEmployees++;
         }
       });
-      this.totalEntries = res.total;
-      if(this.resetData !== true) { 
-        this.organisationPolicies.push(...res.data); 
-      }else{ 
-        this.resetData = false;
-        this.organisationPolicies = res.data; 
-      }
-      if(this.organisationPolicies.length >= this.OrganisationTotalEntries){
-        this.organisationShowLoadMore = false;
-      }
+      // this.totalEntries = res.total;
+      // if (this.resetData !== true) {
+      //   this.organisationPolicies.push(...res.data);
+      // } else {
+      //   this.resetData = false;
+      //   this.organisationPolicies = res.data;
+      // }
+      // if (this.organisationPolicies.length >= this.OrganisationTotalEntries) {
+      //   this.organisationShowLoadMore = false;
+      // }
       this._systemService.off();
     }).catch(error => {
       console.log(error);

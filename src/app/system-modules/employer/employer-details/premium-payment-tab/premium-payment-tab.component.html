@@ -75,7 +75,9 @@
         <div class="paystack-box" *ngIf="showPaystack">
             <div class="modal-title" style="font-weight: bold">Verify that you want to continue with payment</div>
             <div class="modal-title" style="font-weight: bold">Amount: &#x20A6; {{ totalCost }}</div>
-            <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (callback)="paymentDone($event)">Verify Payment</angular4-paystack>
+            <angular-4-flutterwave [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="'e-Payment'" [custom_description]="" [exclude_banks]=""
+                (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
+            <!-- <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (callback)="paymentDone($event)">Verify Payment</angular4-paystack> -->
         </div>
     </div>
 </div>

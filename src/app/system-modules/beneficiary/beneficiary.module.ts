@@ -15,7 +15,7 @@ import { NgModule } from '@angular/core';
 import { Angular4PaystackModule } from 'angular4-paystack';
 import { SharedModule } from '../../shared-modules/shared.module';
 import {
-    CountryService, UserTypeService, GenderService, TitleService, MaritalStatusService, WindowRef,
+    CountryService, UserTypeService, GenderService, TitleService, MaritalStatusService,
     PlanTypeService, BeneficiaryService, UploadService, SystemModuleService, FacilityService, PremiumPaymentService, PreAuthorizationService
 } from '../../services/index';
 import { beneficiaryRoutes } from './beneficiary.route';
@@ -59,7 +59,6 @@ import { CheckinDetailsGenerateComponent } from './beneficiary-details/checkin-d
         ClaimService,
         ReferralService,
         CheckInService,
-        PreAuthorizationService,
-        WindowRef ]
+        PreAuthorizationService]
 })
 export class BeneficiaryModule { }

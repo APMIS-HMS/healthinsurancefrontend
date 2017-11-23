@@ -13,6 +13,7 @@ import { PreAuthorizationListComponent } from '../system-modules/pre-authorizati
 import { LashmaCodesComponent } from './lashma-codes/lashma-codes.component';
 import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 import { Angular4FlutterwaveComponent } from './angular-4-flutterwave/angular-4-flutterwave.component';
+import { WindowRef } from '../services/index';
 
 @NgModule({
     declarations: [
@@ -50,6 +51,6 @@ import { Angular4FlutterwaveComponent } from './angular-4-flutterwave/angular-4-
         FormsModule,
         ReactiveFormsModule
     ],
-    providers: []
+    providers: [WindowRef]
 })
 export class SharedModule {}

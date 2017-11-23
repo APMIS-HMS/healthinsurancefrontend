@@ -73,7 +73,7 @@ export class Angular4FlutterwaveComponent implements OnInit {
   }
 
   onClickOpen() {
-    console.log("Clicked");
+    console.log('Clicked');
     this.btnTitle = 'Paying...';
     this.disableBtn = true;
   }
