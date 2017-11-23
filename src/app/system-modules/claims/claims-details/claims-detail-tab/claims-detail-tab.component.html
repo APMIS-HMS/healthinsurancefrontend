@@ -67,8 +67,8 @@
                     <div class="letering">
                         <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name"  *ngIf="selectedClaim.medicalPersonelName.firstName!=undefined">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span>
-                            <span class="letering-name"  *ngIf="selectedClaim.medicalPersonelName.firstName==undefined">{{selectedClaim.medicalPersonelName}}</span>
+                            <span class="letering-name" *ngIf="selectedClaim.medicalPersonelName.firstName!=undefined">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span>
+                            <span class="letering-name" *ngIf="selectedClaim.medicalPersonelName.firstName==undefined">{{selectedClaim.medicalPersonelName}}</span>
                             Requested Claims</div>
                     </div>
                 </div>
@@ -241,7 +241,7 @@
                             <li class="doc-subtitle">Reason(s):</li>
                             <li>
                                 <span *ngIf="item.response.reason !=''">
-                                        {{item.response.reason}}
+                                    {{item.response.reason}}
                                 </span>
                                 <span *ngIf="item.response.reason ==''">
                                     Nill
@@ -268,9 +268,9 @@
 </div>
 
 <div class="action-wrap" *ngIf="isAuthCreateClaim==true">
-    <button class="btn btn-medium btn-red" [disabled]="isReject" (click)="rejectClaim()">REJECT</button>
-    <button class="btn btn-medium btn-red" [disabled]="isQuery" (click)="queryClaim()">QUERY</button>
-    <button class="btn btn-medium btn-yellow" [disabled]="isHold" (click)="holdClaim()">HOLD</button>
+    <button class="btn btn-medium btn-red" [disabled]="isApproved||isReject" (click)="rejectClaim()">REJECT</button>
+    <button class="btn btn-medium btn-red" [disabled]="isApproved||isQuery" (click)="queryClaim()">QUERY</button>
+    <button class="btn btn-medium btn-yellow" [disabled]="isApproved||isHold" (click)="holdClaim()">HOLD</button>
     <button class="btn btn-medium btn-blue" [disabled]="isApproved" (click)="approveClaim()">APPROVE</button>
 </div>
 
