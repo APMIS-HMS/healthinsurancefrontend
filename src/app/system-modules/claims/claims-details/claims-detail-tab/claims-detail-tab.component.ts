@@ -34,13 +34,8 @@ export class ClaimsDetailTabComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _claimService: ClaimService,
     private _facilityService: FacilityService) {
-    this.getAuthforClaimCreate();
-    this._route.params.subscribe(param => {
-      if (param.id !== undefined) {
-        this._getSelectedClaimItem(param.id);
-      }
-    });
-  }
+      
+    }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Claims Details');
