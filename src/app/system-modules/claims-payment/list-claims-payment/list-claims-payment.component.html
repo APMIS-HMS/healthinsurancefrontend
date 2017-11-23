@@ -87,9 +87,9 @@
                     <td class="td">{{ claim?.dateClaimCreated | date }}</td>
                     <td class="td">{{ claim?.costingApprovalDocumentation }} NGN</td>
                     <td class="td">{{ claim?.claimNo }}</td>
-                    <td class="td">{{ claim?.checkedinDetail?.policyObject?.providerId?.provider?.providerId}}</td>
-                    <td class="td">{{ claim?.checkedinDetail?.policyObject?.planId?.name }}</td>
-                    <td class="td">{{ claim?.checkedinDetail?.policyObject?.hiaId?.name}}</td>
+                    <td class="td">{{ claim?.checkedinDetail?.checkedInDetails?.policyObject?.providerId?.provider?.providerId}}</td>
+                    <td class="td">{{ claim?.checkedinDetail?.plan }}</td>
+                    <td class="td">{{ claim?.checkedinDetail?.checkedInDetails?.policyObject?.hiaId?.name}}</td>
                     <td class="td text-center">
                         <i class="fa fa-check green" aria-hidden="true"></i>
                         <!-- <i *ngIf="provider.provider.facilityClass.includes('secondary')" class="fa fa-check green" aria-hidden="true"></i> -->

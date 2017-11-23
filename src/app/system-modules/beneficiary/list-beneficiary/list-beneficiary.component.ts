@@ -199,6 +199,7 @@ export class ListBeneficiaryComponent implements OnInit {
               $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
           }, this.user.facilityId._id, this.user.userType.name);
+          this.loading = false;
         }
       }
       this._systemService.off();
@@ -242,7 +243,7 @@ export class ListBeneficiaryComponent implements OnInit {
         this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
           this.totalData = data.body.count;
           console.log(this.totalData);
-          if(this.beneficiaries.length >= this.totalData){
+          if (this.beneficiaries.length >= this.totalData) {
             this.showLoadMore = false;
           }
         });

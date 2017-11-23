@@ -84,23 +84,23 @@ export class ListClaimsPaymentComponent implements OnInit {
     this._systemService.on();
     this._claimService.find({
       query: {
-        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
-         isQueuedForPayment: false,
-         'approvedDocumentation.response.isApprove': true,
-         $limit: this.limit, 
-         $skip: this.limit*this.index
+        'checkedinDetail.checkedInDetails.platformOwnerId._id': this.currentPlatform._id,
+        isQueuedForPayment: false,
+        'approvedDocumentation.response.isApprove': true,
+        $limit: this.limit,
+        $skip: this.limit * this.index
     }}).then((payload: any) => {
       console.log(payload);
       this.loading = false;
-      //this.claims = payload.data;
+      // this.claims = payload.data;
       this.claimsTotalEntries = payload.total;
-      if(this.claimsResetData !== true){ 
-        this.claims.push(...payload.data) 
-      }else{
+      if (this.claimsResetData !== true) {
+        this.claims.push(...payload.data);
+      } else {
         this.claimsResetData = false;
-        this.claims = payload.data; 
+        this.claims = payload.data;
       }
-      if(this.claims.length >= this.claimsTotalEntries){
+      if (this.claims.length >= this.claimsTotalEntries) {
         this.showClaimsLoadMore = false;
       }
       this._systemService.off();
@@ -122,16 +122,15 @@ export class ListClaimsPaymentComponent implements OnInit {
     }}).then((res: any) => {
       console.log(res);
       this.loading = false;
-      //this.capitationClaims = res.data;
+      // this.capitationClaims = res.data;
       this.capitationClaimsTotalEntries = res.total;
-      if(this.capitationClaimsResetData !== true) 
-      { 
-        this.capitationClaims.push(...res.data) 
-      }else{ 
+      if (this.capitationClaimsResetData !== true) {
+        this.capitationClaims.push(...res.data);
+      } else {
         this.capitationClaimsResetData = false;
-        this.capitationClaims = res.data; 
+        this.capitationClaims = res.data;
       }
-      if(this.capitationClaims.length >= this.capitationClaimsTotalEntries){
+      if (this.capitationClaims.length >= this.capitationClaimsTotalEntries) {
         this.showClaimsLoadMore = false;
       }
       this._systemService.off();
@@ -219,6 +218,7 @@ export class ListClaimsPaymentComponent implements OnInit {
       if (res.status && res.statusCode === 200) {
         this._toastr.success('Selected claims has been queued successfully!', 'Queueing Success!');
         this._getClaimsPayments();
+        this._router.navigate(['/modules/claims/queued-claims']);
       } else {
         this._toastr.error('There was a problem queueing claims. Please try again later!', 'Queueing Error!');
       }

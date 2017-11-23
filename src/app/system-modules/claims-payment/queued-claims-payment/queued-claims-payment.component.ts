@@ -128,7 +128,7 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res:any) => {
+    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getClaimsPayments();
@@ -140,14 +140,14 @@ export class QueuedClaimsPaymentComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-     this._systemService.on()
+     this._systemService.on();
       this._router.navigate([url + id]).then(res => {
         this._systemService.off();
       }).catch(err => {
         this._systemService.off();
       });
     } else {
-     this._systemService.on()
+     this._systemService.on();
       this._router.navigate([url]).then(res => {
         this._systemService.off();
       }).catch(err => {
