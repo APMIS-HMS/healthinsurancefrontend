@@ -244,6 +244,17 @@ export class NewClaimComponent implements OnInit {
       console.log(preauth_callback);
 
       if (preauth_callback.data.length > 0) {
+        if (preauth_callback.data.length > 1) {
+          var resultObject = preauth_callback.data.reduce(function (result, currentObject) {
+            for (var key in currentObject) {
+              if (currentObject.hasOwnProperty(key)) {
+                result[key] = currentObject[key];
+              }
+            }
+            return result;
+          }, {});
+          console.log(resultObject);
+        }
         this.isAuthorize = true;
         this.authorizeType = "Free for Service"
         this.SelectedCheckinItem = preauth_callback.data[0];
@@ -253,52 +264,111 @@ export class NewClaimComponent implements OnInit {
         this.SelectedCheckinItem.plan = this.SelectedCheckinItem.policyId.planTypeId.name;
         console.log(this.SelectedCheckinItem);
         preauth_callback.data.forEach(element => {
-          console.log("2" + element);
+          console.log(element);
           element.documentation.forEach(element2 => {
-            console.log(element2);
-            if (element2.document[3] != undefined) {
-              element2.document[3].clinicalDocumentation.forEach(item => {
-                this.symptomLists.push({
-                  "symptom": item.symptom.name,
-                  "duration": item.duration,
-                  "unit": item.unit.name
-                });
-              });
-            }
-            if (element2.document[4] != undefined) {
-              element2.document[4].clinicalDocumentation.forEach(item => {
-                this.procedureList.push({
-                  "procedure": item.procedure.name
-                });
-              });
-            }
-            if (element2.document[5] != undefined) {
-              element2.document[5].clinicalDocumentation.forEach(item => {
-                this.investigationList.push({
-                  "investigation": item.investigation.name
-                });
-              });
-            }
-            if (element2.document[6] != undefined) {
-              element2.document[6].clinicalDocumentation.forEach(item => {
-                this.diagnosisLists.push({
-                  "diagnosis": item.diagnosis.name,
-                  "type": item.diagnosisType.name
-                });
-              });
-            }
-            if (element2.document[7] != undefined) {
-              element2.document[7].clinicalDocumentation.forEach(item => {
-                this.drugList.push({
-                  "drug": item.drug.name,
-                  "quantity": item.quantity,
-                  "unit": item.unit.name
-                });
-              });
-            }
+            element2.document.forEach(element3 => {
+              if (element3.order == 1) {
+                if (element3.clinicalDocumentation != undefined) {
+                  element3.clinicalDocumentation.forEach(item => {
+                    this.symptomLists.push({
+                      "symptom": item.symptom.name,
+                      "duration": item.duration,
+                      "unit": item.unit.name
+                    });
+                  });
+                }
+              }
+              if (element3.order == 2) {
+                console.log(element3.clinicalDocumentation);
+                if (element3.clinicalDocumentation != undefined) {
+                  clinicNote += element3.clinicalDocumentation + " ";
+                  this.claimsFormGroup.controls.clinicalNote.setValue(clinicNote);
+                }
+              }
+              if (element3.order == 3) {
+                if (element3.clinicalDocumentation != undefined) {
+                  element3.clinicalDocumentation.forEach(item => {
+                    this.diagnosisLists.push({
+                      "diagnosis": item.diagnosis.name,
+                      "type": item.diagnosisType.name
+                    });
+                  });
+                }
+              }
+              if (element3.order == 4) {
+                if (element3.clinicalDocumentation != undefined) {
+                  element3.clinicalDocumentation.forEach(item => {
+                    this.investigationList.push({
+                      "investigation": item.investigation.name
+                    });
+                  });
+                }
+              }
+              if (element3.order == 5) {
+                if (element3.clinicalDocumentation != undefined) {
+                  element3.clinicalDocumentation.forEach(item => {
+                    this.drugList.push({
+                      "drug": item.drug.name,
+                      "quantity": item.quantity,
+                      "unit": item.unit.name
+                    });
+                  });
+                }
+              }
+              if (element3.order == 6) {
+                if (element3.clinicalDocumentation != undefined) {
+                  element3.clinicalDocumentation.forEach(item => {
+                    this.procedureList.push({
+                      "procedure": item.procedure.name
+                    });
+                  });
+                }
+              }
+            })
+            
+            // if (element2.document != undefined) {
+            //   element2.document[3].clinicalDocumentation.forEach(item => {
+            //     this.symptomLists.push({
+            //       "symptom": item.symptom.name,
+            //       "duration": item.duration,
+            //       "unit": item.unit.name
+            //     });
+            //   });
+            // }
+            // if (element2.document[4] != undefined) {
+            //   element2.document[4].clinicalDocumentation.forEach(item => {
+            //     this.procedureList.push({
+            //       "procedure": item.procedure.name
+            //     });
+            //   });
+            // }
+            // if (element2.document[5] != undefined) {
+            //   element2.document[5].clinicalDocumentation.forEach(item => {
+            //     this.investigationList.push({
+            //       "investigation": item.investigation.name
+            //     });
+            //   });
+            // }
+            // if (element2.document[6] != undefined) {
+            //   element2.document[6].clinicalDocumentation.forEach(item => {
+            //     this.diagnosisLists.push({
+            //       "diagnosis": item.diagnosis.name,
+            //       "type": item.diagnosisType.name
+            //     });
+            //   });
+            // }
+            // if (element2.document[7] != undefined) {
+            //   element2.document[7].clinicalDocumentation.forEach(item => {
+            //     this.drugList.push({
+            //       "drug": item.drug.name,
+            //       "quantity": item.quantity,
+            //       "unit": item.unit.name
+            //     });
+            //   });
+            // }
 
-            clinicNote += element2.document[0].clinicalDocumentation + " ";
-            this.claimsFormGroup.controls.clinicalNote.setValue(clinicNote);
+            // clinicNote += element2.document[0].clinicalDocumentation + " ";
+            // this.claimsFormGroup.controls.clinicalNote.setValue(clinicNote);
           })
         });
         this.claimsFormGroup.controls.medicalPersonelName.setValue(this.SelectedCheckinItem.medicalPersonelName);
