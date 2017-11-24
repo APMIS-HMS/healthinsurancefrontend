@@ -37,7 +37,7 @@
         <div class="payment-box">
             <div class="tab">
                 <div class="tab-ffs" (click)="onClickTab('feeForService');" [class.claim-tab-active]="ffsTabActive">Fee for Service</div>
-                <!-- <div class="tab-c" (click)="onClickTab('capitation');" [class.claim-tab-active]="cTabActive">Capitation</div> -->
+                <div class="tab-c" (click)="onClickTab('capitation');" [class.claim-tab-active]="cTabActive">Capitation</div>
             </div>
             <div class="queue-btn-box">
                 <button *ngIf="selectedFFSClaims.length > 0 && ffsTabActive" [disabled]="qFFSDisableBtn" (click)="onClickFFSQueueItemsSelected();" class="btn btn-medium btn-yellow">

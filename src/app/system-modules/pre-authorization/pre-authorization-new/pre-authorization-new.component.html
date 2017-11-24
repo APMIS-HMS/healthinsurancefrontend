@@ -1,5 +1,5 @@
 <div style="padding-top:2px;">
-    <section *ngIf="newAuth" class="app-content-wrap content shadow-RB">
+    <section *ngIf="newAuth" class="content shadow-RB">
 
         <div class="nut-tab-topSect-wrap">
             <div></div>
@@ -595,7 +595,7 @@
         <button (click)="send()" class="btn btn-medium btn-blue cta">SEND</button>
     </section>
 
-    <section *ngIf="newAuthConfirm" class="app-content-wrap content shadow-RB">
+    <section *ngIf="newAuthConfirm" class="content shadow-RB">
         <app-new-auth-confirm></app-new-auth-confirm>
         <button (click)="send()" class="btn btn-medium btn-blue cta">PREVIEW</button>
     </section>

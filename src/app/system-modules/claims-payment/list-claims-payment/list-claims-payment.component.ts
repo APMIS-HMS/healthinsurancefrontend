@@ -117,12 +117,35 @@ export class ListClaimsPaymentComponent implements OnInit {
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
          isActive: true,
-         $limit: this.limit, 
-         $skip: this.limit*this.index
+         $limit: this.limit,
+         $skip: this.limit * this.index
     }}).then((res: any) => {
       console.log(res);
       this.loading = false;
       // this.capitationClaims = res.data;
+
+      // res.data.forEach(claim => {
+      //   console.log(policy);
+      //   let hasItem = this.capitationClaims.filter(e => !!e.checkedinDetail.checkedInDetails.providerId._id && e.sponsor._id === policy.sponsor._id);
+
+      //   let modelPolicy: OrganizationPolicy = <OrganizationPolicy>{};
+      //   modelPolicy._id = policy._id;
+      //   modelPolicy.provider = policy.providerId;
+      //   modelPolicy.platformOwner = policy.platformOwnerId;
+      //   modelPolicy.sponsor = policy.sponsor;
+      //   modelPolicy.hia = policy.hiaId;
+
+      //   if (hasItem.length === 0) {
+      //     modelPolicy.noOfEmployees = 1;
+      //     modelPolicy.totalCost = policy.premiumPackageId.amount;
+      //     this.organisationPolicies.push(modelPolicy);
+      //   } else {
+      //     hasItem[0].totalCost += policy.premiumPackageId.amount;
+      //     hasItem[0].noOfEmployees++;
+      //   }
+      // });
+
+
       this.capitationClaimsTotalEntries = res.total;
       if (this.capitationClaimsResetData !== true) {
         this.capitationClaims.push(...res.data);
@@ -277,20 +300,20 @@ export class ListClaimsPaymentComponent implements OnInit {
     }
   }
 
-  claimsLoadMore(){
+  claimsLoadMore() {
     this._getClaimsPayments();
   }
-  capitationClaimsLoadMore(){
+  capitationClaimsLoadMore() {
     this._getClaimsCapitationPrice();
   }
 
-  claimsReset(){
+  claimsReset() {
     this.index = 0;
     this.claimsResetData = true;
     this._getClaimsPayments();
     this.showClaimsLoadMore = true;
   }
-  capitationClaimsReset(){
+  capitationClaimsReset() {
     this.index = 0;
     this.claimsResetData = true;
     this._getClaimsCapitationPrice();
