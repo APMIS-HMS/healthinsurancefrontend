@@ -30,13 +30,16 @@ export class ListClaimsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Claim List');
     this._headerEventEmitter.setMinorRouteUrl('List of all claims');
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
-    if (this.user.userType !== undefined && this.user.userType.name === 'Provider') {
+    console.log(this.user.userType.name);
+    if (this.user.userType !== undefined && this.user.userType.name === 'Provider') { 
+      console.log("Comfirm Provider");
+      console.log(this.user.facilityId._id );
       this._claimService.find({
         query: { providerFacilityId: this.user.facilityId._id },
         $sort: { createdAt: -1 }
       }).then((payload: any) => {
         if (payload.data.length > 0) {
+          console.log(payload.data);
           payload.data.forEach(element => {
             for (let i = element.documentations.length - 1; i >= 0; i--) {
               if (element.documentations[i].response !== undefined) {
@@ -58,7 +61,6 @@ export class ListClaimsComponent implements OnInit {
         }
         this.loading = false;
         this.listOfClaims = payload.data;
-        console.log(this.listOfClaims);
       });
     } if (this.user.userType !== undefined && this.user.userType.name === 'Health Insurance Agent') {
       this._getClaims();

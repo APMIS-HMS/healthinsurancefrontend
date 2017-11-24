@@ -33,9 +33,7 @@ export class ClaimsDetailTabComponent implements OnInit {
     private _headerEventEmitter: HeaderEventEmitterService,
     private _locker: CoolLocalStorage,
     private _claimService: ClaimService,
-    private _facilityService: FacilityService) {
-      
-    }
+    private _facilityService: FacilityService) {}
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Claims Details');
@@ -54,6 +52,31 @@ export class ClaimsDetailTabComponent implements OnInit {
     if (userUserType.userType.name == "Health Insurance Agent") {
       this.isAuthCreateClaim = true;
     }
+  }
+
+  handleClaimUpdated(claim) {
+    this.selectedClaim = claim;
+    console.log(this.selectedClaim);
+    this.selectedClaim.documentations.forEach(element => {
+      if (element.response != undefined) {
+        if (element.response.isReject == true) {
+          this.status = "Reject";
+          this.isReject = true;
+        } else if (element.response.isQuery == true) {
+          this.isQuery = true;
+          this.status = "Query";
+        } else if (element.response.isHold == true) {
+          this.isHold = true;
+          this.status = "Hold";
+        } else if (element.response.isApprove == true) {
+          this.isApproved = true;
+          this.status = "Approved";
+        }
+      } else {
+        this.status = "Pending";
+      }
+    });
+    this.selectedClaim = JSON.parse(JSON.stringify(this.selectedClaim));
   }
 
   approveClaim() {
@@ -100,7 +123,7 @@ export class ClaimsDetailTabComponent implements OnInit {
               this.status = "Query";
             } else if (element.response.isHold == true) {
               this.isHold = true;
-              this.status = "Query";
+              this.status = "Hold";
             } else if (element.response.isApprove == true) {
               this.isApproved = true;
               this.status = "Approved";
@@ -119,8 +142,6 @@ export class ClaimsDetailTabComponent implements OnInit {
               this.opProviderId = payload2.provider.providerId;
             })
         }
-
-
         console.log(new Date);
         this.displayAge = differenceInYears(new Date(), this.selectedClaim.checkedinDetail.checkedInDetails.beneficiaryObject.personId.dateOfBirth);
         console.log(this.displayAge);

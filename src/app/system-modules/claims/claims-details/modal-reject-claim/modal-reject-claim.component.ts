@@ -12,6 +12,8 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 export class ModalRejectClaimComponent implements OnInit {
   @Input() claimDetail: Claim = <Claim>{};
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() claimUpdated = new EventEmitter();
+
   user:any=<any>{};
 
   claimsRejectFormGroup: FormGroup;
@@ -50,8 +52,9 @@ export class ModalRejectClaimComponent implements OnInit {
     console.log(this.claimDetail);
     this._claimService.update(this.claimDetail).then((payload: any) => {
       console.log(payload);
-      this.closeModal.emit(true);
     });
+    this.claimUpdated.emit(true);
+    this.closeModal.emit(true);
   }
 
 }

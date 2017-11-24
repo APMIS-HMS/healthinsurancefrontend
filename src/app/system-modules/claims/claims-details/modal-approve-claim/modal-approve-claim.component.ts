@@ -13,11 +13,16 @@ export class ModalApproveClaimComponent implements OnInit {
 
   @Input() claimDetail: Claim = <Claim>{};
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
-  user:any=<any>{};
+  @Output() claimUpdated = new EventEmitter();
+
+
+  user: any = <any>{};
 
   claimsApproveFormGroup: FormGroup;
 
-  constructor(private _fb: FormBuilder, private _claimService: ClaimService,private _locker: CoolLocalStorage) { }
+  constructor(private _fb: FormBuilder, private _claimService: ClaimService, private _locker: CoolLocalStorage) {
+
+  }
 
   ngOnInit() {
     this.claimsApproveFormGroup = this._fb.group({
@@ -26,7 +31,7 @@ export class ModalApproveClaimComponent implements OnInit {
       institution: ['']
     });
     this.user = (<any>this._locker.getObject('auth')).user;
-    let fullName = this.user.firstName +" "+this.user.lastName;
+    let fullName = this.user.firstName + " " + this.user.lastName;
     this.claimsApproveFormGroup.controls.name.setValue(fullName);
     this.claimsApproveFormGroup.controls.institution.setValue(this.user.facilityId.name);
   }
@@ -42,19 +47,20 @@ export class ModalApproveClaimComponent implements OnInit {
       "Institution": this.claimsApproveFormGroup.controls.institution.value,
       "isApprove": true
     }
-    if(this.claimDetail.documentations[this.claimDetail.documentations.length-1].response == undefined){
-      this.claimDetail.documentations[this.claimDetail.documentations.length-1].response = response;
-      this.claimDetail.approvedDocumentation = this.claimDetail.documentations[this.claimDetail.documentations.length-1];
-    }else{
-      this.claimDetail.documentations.push({"response":response});
-      this.claimDetail.approvedDocumentation = this.claimDetail.documentations[this.claimDetail.documentations.length-1];
+    if (this.claimDetail.documentations[this.claimDetail.documentations.length - 1].response == undefined) {
+      this.claimDetail.documentations[this.claimDetail.documentations.length - 1].response = response;
+      this.claimDetail.approvedDocumentation = this.claimDetail.documentations[this.claimDetail.documentations.length - 1];
+    } else {
+      this.claimDetail.documentations.push({ "response": response });
+      this.claimDetail.approvedDocumentation = this.claimDetail.documentations[this.claimDetail.documentations.length - 1];
     }
     this.claimDetail.documentations[0].response = response;
     console.log(this.claimDetail);
     this._claimService.update(this.claimDetail).then((payload: any) => {
       console.log(payload);
-      this.closeModal.emit(true);
     });
+    this.claimUpdated.emit(this.claimDetail);
+    this.closeModal.emit(true);
   }
 
 }
