@@ -50,19 +50,20 @@ export class PreAuthorizationListComponent implements OnInit {
     this._systemService.on();
     this._preAuthorizationService.find({query: {
       $sort: { createdAt: -1 },
-      $limit: this.limit, 
-      $skip: this.limit*this.index
+      $limit: this.limit,
+      $skip: this.limit * this.index
     }}).then((payload: any) => {
+      console.log(payload);
       this.loading = false;
-      //this.authorizations = payload.data;
+      // this.authorizations = payload.data;
       this.totalEntries = payload.total;
-      if(this.resetData !== true) { 
-        this.authorizations.push(...payload.data) 
-      }else{ 
+      if (this.resetData !== true) {
+        this.authorizations.push(...payload.data);
+      } else {
         this.resetData = false;
-        this.authorizations = payload.data; 
+        this.authorizations = payload.data;
       }
-      if(this.authorizations.length >= this.totalEntries){
+      if (this.authorizations.length >= this.totalEntries) {
         this.showLoadMore = false;
       }
       this._systemService.off();
@@ -98,11 +99,11 @@ export class PreAuthorizationListComponent implements OnInit {
     });
   }
 
-  loadMore(){
+  loadMore() {
     this._getPreAuthorizations();
   }
 
-  reset(){
+  reset() {
     this.index = 0;
     this.resetData = true;
     this._getPreAuthorizations();

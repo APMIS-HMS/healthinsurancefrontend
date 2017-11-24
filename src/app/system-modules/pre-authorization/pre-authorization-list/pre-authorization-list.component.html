@@ -41,7 +41,7 @@
                 <th class="th">Date and Time</th>
                 <th class="th">Patient Name</th>
                 <th class="th">LASHMA ID</th>
-                <th class="th">HIA</th>
+                <!-- <th class="th">HIA</th> -->
                 <th class="th">Health Care Provider</th>
                 <th class="th">Status</th>
                 <th class="th">Reason for Request</th>
@@ -53,32 +53,32 @@
 
         <tbody class="tbody">
             <tr class="tr" *ngIf="authorizations.length === 0 && !loading">
-                <td class="text-center" colspan="11">No data available in table</td>
+                <td class="text-center" colspan="10">No data available in table</td>
             </tr>
             <tr class="tr" *ngIf="authorizations.length === 0 && loading">
-                <td class="text-center" colspan="11">
+                <td class="text-center" colspan="10">
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
             <tr *ngFor="let auth of authorizations; let i = index;" class="tr">
-                <td class="td">{{ i+1 }}</td>
-                <td class="td">{{auth.createdAt | date}}</td>
-                <td class="td">{{auth?.personId?.lastName}} {{auth?.personId?.firstName}} {{auth?.personId?.otherNames}}</td>
-                <td class="td">{{auth?.beneficiaryObject?.platformOwnerNumber}}</td>
-                <td class="td">Healthy Health LTD</td>
-                <td class="td">{{auth?.checkedInDetails?.providerFacilityId?.name}}</td>
-                <td class="td">
+                <td class="td hover" (click)="navigateDetail(auth)">{{ i+1 }}</td>
+                <td class="td hover" (click)="navigateDetail(auth)">{{auth.createdAt | date}}</td>
+                <td class="td hover" (click)="navigateDetail(auth)">{{auth?.personId?.lastName}} {{auth?.personId?.firstName}} {{auth?.personId?.otherNames}}</td>
+                <td class="td hover" (click)="navigateDetail(auth)">{{auth?.beneficiaryObject?.platformOwnerNumber}}</td>
+                <!-- <td class="td" (click)="navigateDetail(auth)">Healthy Health LTD</td> -->
+                <td class="td hover" (click)="navigateDetail(auth)">{{auth?.checkedInDetails?.providerFacilityId?.name}}</td>
+                <td class="td hover" (click)="navigateDetail(auth)">
                     <span class="green">{{auth?.approvedStatus?.name}}</span>
                 </td>
-                <td class="td">
+                <td class="td hover" (click)="navigateDetail(auth)">
                     <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
                     {{(auth.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
                 </td>
-                <td class="td">
-                    <span *ngIf="!selectedCheckIn?.isEmergency">No
+                <td class="td text-center hover" (click)="navigateDetail(auth)">
+                    <span *ngIf="!selectedCheckIn?.isEmergency">
                         <i class="fa fa-times red" aria-hidden="true"></i>
                     </span>
-                    <span *ngIf="selectedCheckIn?.isEmergency">Yes
+                    <span *ngIf="selectedCheckIn?.isEmergency">
                         <i class="fa fa-check green" aria-hidden="true"></i>
                     </span>
                 </td>
@@ -89,7 +89,7 @@
                         <div class="tip-content">{{auth.documentation[0].document[1].clinicalDocumentation}}</div>
                     </div>
                 </td>
-                <td class="td td-icos" (click)="navigateDetail(auth)">
+                <td class="td td-icos hover" (click)="navigateDetail(auth)">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>
