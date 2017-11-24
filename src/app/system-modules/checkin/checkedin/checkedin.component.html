@@ -72,22 +72,22 @@
                     <td class="text-center" colspan="12">
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
-                </tr> 
-                <tr *ngFor="let check of checkedIns; let i = index;" class="tr">
-                    <td class="td">{{ i+1 }}</td>
-                    <td class="td">{{check.createdAt | date}}</td>
-                    <td class="td">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
-                    <td class="td">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
-                    <td class="td" class="text-center">
+                </tr>
+                <tr *ngFor="let check of checkedIns; let i = index;" class="tr hover">
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{ i+1 }}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.createdAt | date}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
+                    <td class="td" class="text-center" (click)="routeBeneficiaryDetails(check)">
                         <i *ngIf="check.policyObject?.isPaid" class="fa fa-check green" aria-hidden="true"></i>
                         <i *ngIf="!check.policyObject?.isPaid" class="fa fa-check red" aria-hidden="true"></i>
                     </td>
-                    <td class="td">{{check.encounterType.name}}</td>
-                    <td class="td"><span class="green">{{check.encounterStatus.name}}</span></td>
-                    <td class="td"><span class="green">Active</span></td>
-                    <td class="text-center"><i class="fa fa-times red" aria-hidden="true"></i></td>
-                    <td class="td">{{check.claimType.name}}</td>
-                    <td class="td">Filed</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.encounterType.name}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)"><span class="green">{{check.encounterStatus.name}}</span></td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)"><span class="green">Active</span></td>
+                    <td class="text-center" (click)="routeBeneficiaryDetails(check)"><i class="fa fa-times red" aria-hidden="true"></i></td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.claimType.name}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">Filed</td>
                     <td (click)="routeBeneficiaryDetails(check)"><i class="fa fa-chevron-right"></i></td>
                 </tr>
             </tbody>
