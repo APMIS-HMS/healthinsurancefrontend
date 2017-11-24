@@ -72,7 +72,8 @@ select {
     align-items: center;
     padding: 20px 0;
 }
-.cta-right{
+
+.cta-right {
     display: flex;
     justify-content: flex-end;
 }
@@ -85,7 +86,8 @@ select {
     outline: 0;
     border: 0;
 }
-.logo-wrap img{
+
+.logo-wrap img {
     width: 100px;
     height: 100px;
     margin-bottom: 10px;
@@ -113,10 +115,12 @@ button {
     justify-content: center;
     align-items: center;
 }
-.btn-radius-x1{
+
+.btn-radius-x1 {
     border-radius: 10px;
 }
-.btn-radius-x2{
+
+.btn-radius-x2 {
     border-radius: 20px;
 }
 
@@ -292,7 +296,8 @@ button {
     -moz-box-shadow: 2px 16px 31px 0px rgba(0, 0, 0, 0.54);
     box-shadow: 2px 16px 31px 0px rgba(0, 0, 0, 0.54);
 }
-.mobile-menu-wrap{
+
+.mobile-menu-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -304,7 +309,8 @@ button {
     background: #fff;
     position: relative;
 }
-.mobile-menu{
+
+.mobile-menu {
     position: absolute;
     background: #fff;
     text-align: left;
@@ -314,10 +320,12 @@ button {
     width: 173px;
     border: 1px solid $grey-2;
 }
-.mobile-menu li{
+
+.mobile-menu li {
     padding: 5px 0;
     border-bottom: 1px solid $grey-2;
 }
+
 .inpage-tabs {
     position: relative;
     display: flex;
@@ -639,6 +647,11 @@ input[type="checkbox"].switch_1:checked:after {
     padding: 10px;
 }
 
+.text-right {
+    text-align: right !important;
+    padding: 10px;
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -844,62 +857,67 @@ input[type="checkbox"].switch_1:checked:after {
     align-items: center;
     font-weight: bold;
 }
-.link-right{
+
+.link-right {
     width: 100%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 10px;
 }
-.link-item{
+
+.link-item {
     font-size: $font-x3;
     color: $brand-primary;
     cursor: pointer;
     text-decoration: underline;
 }
-.link-item:hover{
+
+.link-item:hover {
     color: $red;
 }
-.radioButton {
-	width: 20px;
-	height: 20px;
-	background: #ddd;
-	margin: 15px 10px;
 
-	border-radius: 100%;
-	position: relative;
-	box-shadow: 0px 1px 3px rgba(122, 122, 122, 0.5);
+.radioButton {
+    width: 20px;
+    height: 20px;
+    background: #ddd;
+    margin: 15px 10px;
+    border-radius: 100%;
+    position: relative;
+    box-shadow: 0px 1px 3px rgba(122, 122, 122, 0.5);
 }
 
 .radioButton label {
-	display: block;
-	width: 15px;
-	height: 15px;
-	border-radius: 100px;
-
-	transition: all .5s ease;
-	cursor: pointer;
-	position: absolute;
-	top: 3px;
-	left: 2px;
-	z-index: 1;
-
-	background: #333;
-	box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 100px;
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    z-index: 1;
+    background: #333;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.5);
 }
-.tabsect-wrap{
+
+.tabsect-wrap {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+
 /**
  * Create the radio event for the label
  */
-.radioButton input[type=radio]:checked + label {
-	background: #7060ff;
+
+.radioButton input[type=radio]:checked+label {
+    background: #7060ff;
 }
-.search-results{
+
+.search-results {
     padding: 10px;
     font-size: $font-x3;
     z-index: 2;
@@ -913,15 +931,18 @@ input[type="checkbox"].switch_1:checked:after {
     box-shadow: 5px 5px 5px 0px rgba(217, 217, 217, 0.55);
     border: 1px solid $grey-2;
 }
-.search-results li{
+
+.search-results li {
     cursor: pointer;
     padding: 5px;
     border-bottom: 1px solid $grey-2;
 }
-.search-results li:hover{
+
+.search-results li:hover {
     background: $grey-1;
 }
-.tab-title-mobile{
+
+.tab-title-mobile {
     display: none;
     margin: 0 auto;
     padding: 20px 0;
@@ -929,73 +950,73 @@ input[type="checkbox"].switch_1:checked:after {
     font-size: $font-x4;
 }
 
-
 @media only screen and (max-width: 1300px) {
     .app-content-wrap {
         width: 90%;
     }
 }
-@media only screen and (max-width: 960px){
-    .mobile-menu-wrap{
+
+@media only screen and (max-width: 960px) {
+    .mobile-menu-wrap {
         display: block;
     }
-    .tab-title-mobile{
+    .tab-title-mobile {
         display: block;
     }
-    .inpage-tabs li{
+    .inpage-tabs li {
         display: none;
     }
 }
-@media only screen and (max-width: 780px){
-    .list-search-wrap{
+
+@media only screen and (max-width: 780px) {
+    .list-search-wrap {
         display: flex;
         flex-wrap: wrap;
         flex-direction: column-reverse;
         align-items: flex-start;
-
-        .btn-medium{
+        .btn-medium {
             width: 90%;
         }
-        .search-wrap{
+        .search-wrap {
             margin-top: 20px;
             margin-bottom: -10px;
         }
     }
-    .shadow-RB{
+    .shadow-RB {
         overflow-y: auto;
-    }.list-filter-wrap{
+    }
+    .list-filter-wrap {
         background: transparent;
         padding: 0;
     }
-    
-    .nut-tab-topSect-wrap{
+    .nut-tab-topSect-wrap {
         display: flex;
         flex-wrap: wrap;
         flex-direction: column-reverse;
         align-items: flex-start;
-        .btn-grey-outline{
+        .btn-grey-outline {
             width: 90%;
             margin-bottom: 20px;
         }
-        .nut-label{
+        .nut-label {
             display: none;
         }
     }
-    .content{
+    .content {
         padding: 10px;
     }
-    
 }
+
 @media only screen and (max-width: 600px) {
-    .frm-wrap{
+    .frm-wrap {
         width: 90%;
         margin: 0 auto;
     }
-    .content-top-bar{
+    .content-top-bar {
         font-size: $font-x2;
         display: block;
     }
-    .content-top-bar div{
+    .content-top-bar div {
         width: 100%;
         margin: 10px auto;
         flex-wrap: wrap;

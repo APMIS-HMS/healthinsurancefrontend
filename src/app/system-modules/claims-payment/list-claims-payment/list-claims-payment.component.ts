@@ -82,32 +82,37 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsPayments() {
     this._systemService.on();
-    this._claimService.find({
-      query: {
-        'checkedinDetail.checkedInDetails.platformOwnerId._id': this.currentPlatform._id,
-        isQueuedForPayment: false,
-        'approvedDocumentation.response.isApprove': true,
-        $limit: this.limit,
-        $skip: this.limit * this.index
-    }}).then((payload: any) => {
-      console.log(payload);
-      this.loading = false;
-      // this.claims = payload.data;
-      this.claimsTotalEntries = payload.total;
-      if (this.claimsResetData !== true) {
-        this.claims.push(...payload.data);
-      } else {
-        this.claimsResetData = false;
-        this.claims = payload.data;
-      }
-      if (this.claims.length >= this.claimsTotalEntries) {
-        this.showClaimsLoadMore = false;
-      }
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    });
+    console.log(this.currentPlatform);
+    this._claimService
+      .find({
+        query: {
+          'checkedinDetail.checkedInDetails.platformOwnerId._id': this.currentPlatform._id,
+          isQueuedForPayment: false,
+          'approvedDocumentation.response.isApprove': true,
+          $limit: this.limit,
+          $skip: this.limit * this.index
+        }
+      })
+      .then((payload: any) => {
+        console.log(payload);
+        this.loading = false;
+        // this.claims = payload.data;
+        this.claimsTotalEntries = payload.total;
+        if (this.claimsResetData !== true) {
+          this.claims.push(...payload.data);
+        } else {
+          this.claimsResetData = false;
+          this.claims = payload.data;
+        }
+        if (this.claims.length >= this.claimsTotalEntries) {
+          this.showClaimsLoadMore = false;
+        }
+        this._systemService.off();
+      })
+      .catch(error => {
+        console.log(error);
+        this._systemService.off();
+      });
   }
 
 
