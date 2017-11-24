@@ -257,9 +257,11 @@
                     </ul>
                 </div>
                 <app-new-claim-tabs [claimItem]="selectedClaim" (closeDialog)="onReply($event)" *ngIf="item.response.isReply == true"></app-new-claim-tabs>
-                <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1 && item.response.isReply != true">
-                    <div class="btn btn-medium btn-grey-outline" *ngIf="selectedClaim?.approvedDocumentation?.response == undefined" (click)="onReply()">
-                        <i class="fa fa-reply"></i> REPLY {{item?.response?.isReply}}
+                <div [hidden]="isAuthCreateClaim">
+                    <div class="reply-wrap" *ngIf="selectedClaim.documentations.length == i+1 && item.response.isReply != true">
+                        <div class="btn btn-medium btn-grey-outline" *ngIf="selectedClaim?.approvedDocumentation?.response == undefined" (click)="onReply()">
+                            <i class="fa fa-reply"></i> REPLY
+                        </div>
                     </div>
                 </div>
             </div>
@@ -277,27 +279,27 @@
 <div *ngIf="modalApprove" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="modal_close()" class="close-modal">X</div>
-        <app-modal-approve-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-approve-claim>
+        <app-modal-approve-claim [claimDetail]="selectedClaim" (claimUpdated)="handleClaimUpdated(selectedClaim)" (closeModal)="modal_close()"></app-modal-approve-claim>
     </div>
 </div>
 
 <div *ngIf="modalReject" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="modal_close()" class="close-modal">X</div>
-        <app-modal-reject-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-reject-claim>
+        <app-modal-reject-claim [claimDetail]="selectedClaim" (claimUpdated)="handleClaimUpdated(selectedClaim)" (closeModal)="modal_close()"></app-modal-reject-claim>
     </div>
 </div>
 
 <div *ngIf="modalQuery" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="modal_close()" class="close-modal">X</div>
-        <app-modal-query-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-query-claim>
+        <app-modal-query-claim [claimDetail]="selectedClaim" (claimUpdated)="handleClaimUpdated(selectedClaim)" (closeModal)="modal_close()"></app-modal-query-claim>
     </div>
 </div>
 
 <div *ngIf="modalHold" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="modal_close()" class="close-modal">X</div>
-        <app-modal-hold-claim [claimDetail]="selectedClaim" (closeModal)="modal_close()"></app-modal-hold-claim>
+        <app-modal-hold-claim [claimDetail]="selectedClaim" (claimUpdated)="handleClaimUpdated(selectedClaim)" (closeModal)="modal_close()"></app-modal-hold-claim>
     </div>
 </div>

@@ -22,6 +22,7 @@ import { DrugService } from './../../../services/common/drug.service';
 import { DrugPackSizeService } from '../../../services/common/drug-pack-size.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SystemModuleService } from './../../../services/index';
+import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 import 'rxjs/add/operator/filter';
 import { Observable, Subscription } from 'rxjs/Rx';
@@ -117,9 +118,12 @@ export class NewClaimComponent implements OnInit {
     private _checkInService: CheckInService,
     private _claimService: ClaimService,
     private _userService: UserService,
+    private _headerEventEmitter: HeaderEventEmitterService,
     private _investigationService: InvestigationService) { }
 
   ngOnInit() {
+    this._headerEventEmitter.setRouteUrl('New Claims');
+    this._headerEventEmitter.setMinorRouteUrl('Create a claim');
     this.user = (<any>this._locker.getObject('auth')).user;
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {

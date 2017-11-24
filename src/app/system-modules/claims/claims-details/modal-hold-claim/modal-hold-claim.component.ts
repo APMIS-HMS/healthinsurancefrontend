@@ -13,6 +13,7 @@ export class ModalHoldClaimComponent implements OnInit {
 
   @Input() claimDetail: Claim = <Claim>{};
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() claimUpdated = new EventEmitter();
   
   claimsHoldFormGroup: FormGroup;
   user:any=<any>{};
@@ -54,8 +55,9 @@ export class ModalHoldClaimComponent implements OnInit {
     console.log(this.claimDetail);
     this._claimService.update(this.claimDetail).then((payload: any) => {
       console.log(payload);
-      this.closeModal.emit(true);
     });
+    this.claimUpdated.emit(true);
+    this.closeModal.emit(true);
   }
 
 }

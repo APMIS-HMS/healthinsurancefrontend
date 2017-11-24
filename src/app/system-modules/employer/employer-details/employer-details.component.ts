@@ -72,6 +72,7 @@ export class EmployerDetailsComponent implements OnInit {
   oLgaControl = new FormControl();
   lgaControl = new FormControl();
   hiaControl = new FormControl();
+  providerControl = new FormControl();
   platformControl = new FormControl();
   facilityTypeControl = new FormControl();
   planTypeControl = new FormControl();
@@ -223,6 +224,11 @@ export class EmployerDetailsComponent implements OnInit {
       this.titles = payload.data;
     });
 
+    // _gets() {
+    //   this._titleService.find({}).then((payload: any) => {
+    //     this.titles = payload.data;
+    //   });
+
     if (this._router.url.endsWith('payment')) {
       this.navigate('payment');
     } else if (this._router.url.endsWith('beneficiary')) {
@@ -275,7 +281,11 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   _getPlatforms() {
-    this._facilityService.find({}).then((payload: any) => {
+    this._facilityService.find({
+      query:{
+        $select: ['provider.providerId', 'facilityType.name']
+      }
+    }).then((payload: any) => {
       if (payload.data.length > 0) {
         this.platforms = payload.data;
       }
@@ -465,6 +475,10 @@ export class EmployerDetailsComponent implements OnInit {
 
   onHia(event, index) {
     this.orderExcelPolicies[index].policy.hia = this.hiaControl.value;
+  }
+
+  onProvider(event, index) {
+    this.orderExcelPolicies[index].policy.providerId = this.providerControl.value;
   }
 
   onPlanTypes(event, index) {

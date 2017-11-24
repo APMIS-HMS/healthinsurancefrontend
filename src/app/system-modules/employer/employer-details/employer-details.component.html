@@ -175,6 +175,7 @@
                         <th class="th">platformOwner</th>
                         <th class="th">FacilityType</th>
                         <th class="th">Hia</th>
+                        <th class="th">Provider</th>
                         <th class="th">PlanType</th>
                         <th class="th">Plan</th>
                         <th class="th">Premium Package</th>
@@ -364,6 +365,19 @@
                                 <input [formControl]="hiaControl" (change)="onHia($event,i)" value="{{item?.policy?.hia}}" [class.invalidvalue]="checkHiaValue(item?.policy?.facilityType,item?.policy?.hia,platforms) == false">
                             </div>
                         </td>
+                        <td class="td hover">
+                                <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
+                                    <span style="color:Red" *ngIf="checkValue(item?.policy?.providerId,platforms,provider.providerId) == false">
+                                        Invalid
+                                    </span>
+                                    <span *ngIf="checkValue(item?.policy?.providerId,platforms,provider.providerId) == true">
+                                        {{item?.policy?.providerId}}
+                                    </span>
+                                </div>
+                                <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
+                                    <input [formControl]="providerControl" (change)="onProvider($event,i)" value="{{item?.policy?.providerId}}" [class.invalidvalue]="checkValue(item?.policy?.providerId,platforms,provider.providerId) == false">
+                                </div>
+                            </td>
                         <td class="td hover">
                             <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
                                 <span style="color:Red" *ngIf="checkValue(item?.policy?.planType,planTypes,'name') == false">
