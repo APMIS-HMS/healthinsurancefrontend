@@ -201,22 +201,22 @@ export class EmployerDetailsComponent implements OnInit {
       }
     });
 
-    this.platformControl.valueChanges
-      .debounceTime(350)
-      .distinctUntilChanged()
-      .subscribe(value => {
-        this.drugSearchResult = false;
-        this._facilityService.find({
-          query: {
-            'platformOwnerId.name': value,
-            $limit: 1
-          }
-        }).then((payload: any) => {
-          if (payload.data.length > 0) {
+    // this.platformControl.valueChanges
+    //   .debounceTime(350)
+    //   .distinctUntilChanged()
+    //   .subscribe(value => {
+    //     this.drugSearchResult = false;
+    // this._facilityService.find({
+    //   query: {
+    //     'platformOwnerId.name': value,
+    //     $limit: 1
+    //   }
+    // }).then((payload: any) => {
+    //   if (payload.data.length > 0) {
 
-          }
-        });
-      });
+    //   }
+    // });
+    //});
   }
 
   _getTitles() {
@@ -282,8 +282,8 @@ export class EmployerDetailsComponent implements OnInit {
 
   _getPlatforms() {
     this._facilityService.find({
-      query:{
-        $select: ['provider.providerId', 'facilityType.name']
+      query: {
+        $select: ['name', 'provider', 'facilityType', 'platformOwnerId']
       }
     }).then((payload: any) => {
       if (payload.data.length > 0) {
@@ -409,8 +409,30 @@ export class EmployerDetailsComponent implements OnInit {
     } else {
       return false;
     }
-
   }
+
+  checkProviderValue(providerId, data) {
+    let val = data.filter(function (x) {
+      if (x.provider != undefined) {
+        if (x.provider.providerId != undefined) {
+          if (x.provider.providerId.toString().toLowerCase() == providerId.toString().toLowerCase()) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        }
+      }
+    });
+    if (val.length > 0) {
+      console.log("True");
+      return true;
+    } else {
+      console.log("false");
+      return false;
+    }
+  }
+
   checkPremiumValue(param, data) {
     let val = data.filter(x => x.name == param);
     if (val.length > 0) {
@@ -690,10 +712,10 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   save() {
-    var counter = 0;
+    var badUpload = [];
     var retainedOrderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
     var checkOrderExcelPolicies = this.orderExcelPolicies.filter(x => x.isCheck == true);
-    
+
     this.orderExcelPolicies = retainedOrderExcelPolicies;
     var groups = {};
     var bObj = {};
@@ -723,30 +745,40 @@ export class EmployerDetailsComponent implements OnInit {
     }
     console.log(this.beneficiaries);
     this.isProcessing = true
+    var replicaBeneficiaries = JSON.parse(JSON.stringify(this.beneficiaries));
     this.beneficiaries = JSON.parse(JSON.stringify(this.beneficiaries));
     this.beneficiaries.forEach((uploadItem, index) => {
       this._bulkBeneficiaryUploadService.create(uploadItem).then(payload => {
         if (payload.body.policyObject == undefined) {
           const text = payload.body;
-          this._toastr.error(text, 'Failed!');
-        } else {
-          counter = index + 1;
-          checkOrderExcelPolicies.forEach((o, i) => {
-            if (o.principalIndex == index) {
-              checkOrderExcelPolicies.splice(i);
-              this.orderExcelPolicies = checkOrderExcelPolicies;
-            }
-          })
+          this._toastr.error(text.Details, 'Failed!');
+          badUpload.push(replicaBeneficiaries[index])
         }
-        this.nSuccess += 1;
         if (index == this.beneficiaries.length - 1) {
+          let counter = this.beneficiaries.length - badUpload.length;
           let content = counter.toString() + "/" + this.beneficiaries.length + "was uploaded";
           this._toastr.success(content, 'Success!');
           this.isProcessing = false;
-          this.nSuccess = 0;
-          this.nFailed = 0;
-          // this.orderExcelPolicies = retainedOrderExcelPolicies;
-          // this.orderExcelPolicies = [];
+          this.orderExcelPolicies = [];
+          if (badUpload.length > 0) {
+            badUpload.forEach((element, index) => {
+              let principal = element.principal;
+              principal.policy = element.policy;
+              principal.isPrincipal = true;
+              principal.isEdit = false;
+              principal.isCheck = false;
+              principal.principalIndex = index;
+              this.orderExcelPolicies.push(principal);
+              element.dependent.forEach(item => {
+                item.isPrincipal = false;
+                item.isEdit = false;
+                item.isCheck = false;
+                item.principalIndex = index;
+                this.orderExcelPolicies.push(item);
+              });
+            });
+          }
+
         }
         console.log(payload);
       }, error => {
