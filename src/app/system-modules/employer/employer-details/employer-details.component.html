@@ -367,15 +367,15 @@
                         </td>
                         <td class="td hover">
                                 <div *ngIf="!item.isEdit==true && item.isPrincipal==true" class="td-value">
-                                    <span style="color:Red" *ngIf="checkValue(item?.policy?.providerId,platforms,provider.providerId) == false">
+                                    <span style="color:Red" *ngIf="checkProviderValue(item?.policy?.providerId,platforms) == false">
                                         Invalid
                                     </span>
-                                    <span *ngIf="checkValue(item?.policy?.providerId,platforms,provider.providerId) == true">
+                                    <span *ngIf="checkProviderValue(item?.policy?.providerId,platforms) == true">
                                         {{item?.policy?.providerId}}
                                     </span>
                                 </div>
                                 <div *ngIf="item.isEdit==true && item.isPrincipal==true" class="input-wrap">
-                                    <input [formControl]="providerControl" (change)="onProvider($event,i)" value="{{item?.policy?.providerId}}" [class.invalidvalue]="checkValue(item?.policy?.providerId,platforms,provider.providerId) == false">
+                                    <input [formControl]="providerControl" (change)="onProvider($event,i)" value="{{item?.policy?.providerId}}" [class.invalidvalue]="checkProviderValue(item?.policy?.providerId,platforms) == false">
                                 </div>
                             </td>
                         <td class="td hover">
