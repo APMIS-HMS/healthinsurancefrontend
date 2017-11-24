@@ -99,14 +99,14 @@ export class ListEmployerComponent implements OnInit {
             || item.employer.cin.toLowerCase().includes(strVal.toLowerCase())
             || item.businessContact.lastName.toLowerCase().includes(strVal.toLowerCase())
             || item.businessContact.firstName.toLowerCase().includes(strVal.toLowerCase())
-            || item.businessContact.phoneNumber.includes(strVal.toLowerCase())) 
+            || item.businessContact.phoneNumber.includes(strVal.toLowerCase()))
         })
       });
-  
+
   }
 
   ngAfterViewInit(){
-    
+
   }
 
   onClickEdit(employer) {
@@ -139,18 +139,18 @@ export class ListEmployerComponent implements OnInit {
 
 
   private _getAllPolicies(query) {
-    
+
     this._facilityService.find(query).then((res: any) => {
       this.loading = false;
       console.log(res.total);
       this.totalData = res.total;
       if (res.data.length > 0) {
         //this.employers = res.data;
-        if(this.resetData !== true) { 
-          this.employers.push(...res.data); 
-        }else{ 
+        if(this.resetData !== true) {
+          this.employers.push(...res.data);
+        }else{
           this.resetData = false;
-          this.employers = res.data 
+          this.employers = res.data
         }
         this.local_employers = this.employers;
       }
@@ -163,23 +163,27 @@ export class ListEmployerComponent implements OnInit {
   }
 
   private _getEmployers() {
-    if (this.user !== undefined && this.user.userType.name === 'Platform Owner') {
+    if (this.user !== undefined && (!!this.user.userType && this.user.userType.name === 'Platform Owner')) {
       this.isPlatformOwner = true;
-      let query = { query: { 'platformOwnerId._id': this.currentPlatform._id, $limit: this.limit, $skip: this.index*this.limit ,'facilityType._id': this.selectedUserType._id, } };
-      this._getAllPolicies(query)
-    } else if (this.user !== undefined && this.user.userType.name === 'Health Insurance Agent') {
+      let query = { query: {
+        'platformOwnerId._id': this.currentPlatform._id,
+        $limit: this.limit, $skip: this.index * this.limit,
+        'facilityType._id': this.selectedUserType._id}
+      };
+      this._getAllPolicies(query);
+    } else if (this.user !== undefined && (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent')) {
       console.log('agent');
-      let query = 
-        {
-          query:
-          {
-            'facilityType._id': this.selectedUserType._id, 'platformOwnerId._id': this.currentPlatform._id,
-            'employer.hias._id': this.user.facilityId._id, $limit: this.limit, $skip: this.index*this.limit 
-          }
-        };
-        this._getAllPolicies(query);
+      let query = { query: {
+        'facilityType._id': this.selectedUserType._id,
+        'platformOwnerId._id': this.currentPlatform._id,
+        'employer.hias._id': this.user.facilityId._id,
+        $limit: this.limit, $skip: this.index * this.limit}
+      };
+      this._getAllPolicies(query);
 
-        this.index++; 
+      this.index++;
+    } else {
+      this.loading = false;
     }
   }
 
@@ -222,7 +226,7 @@ export class ListEmployerComponent implements OnInit {
   }
 
   loadMore(){
-    this._getEmployers();   
+    this._getEmployers();
 
   }
 
