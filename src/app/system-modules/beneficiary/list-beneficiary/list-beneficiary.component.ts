@@ -64,8 +64,8 @@ export class ListBeneficiaryComponent implements OnInit {
       this._getPerson();
     }
 
-    
-    
+
+
   }
 
   ngOnInit() {
@@ -87,7 +87,7 @@ export class ListBeneficiaryComponent implements OnInit {
         const temp = this.beneficiaries.filter(x => x.isActive === (value === 'true') ? true : false);
         this.beneficiaries = temp;
       }
-    }); 
+    });
 
     this.filterTypeControl.valueChanges.subscribe((value) => {
       this.beneficiaries = this.mainBeneficiaries;
@@ -146,7 +146,6 @@ export class ListBeneficiaryComponent implements OnInit {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        
         // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
         if (!!this.user.userType && this.user.userType.name === 'Provider') {
           this._getAllPolicies({
@@ -198,10 +197,10 @@ export class ListBeneficiaryComponent implements OnInit {
               $sort: { createdAt: -1 },
               $select: { 'platformOwnerId.$': 1, 'hiaId.name': 1, 'principalBeneficiary': 1, 'dependantBeneficiaries': 1, 'isActive': 1 }
             }
-          }, this.user.facilityId._id, this.user.userType.name);
-          this.loading = false;
+          }, this.user.facilityId._id, '');
         }
       }
+      this.loading = false;
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
@@ -240,14 +239,16 @@ export class ListBeneficiaryComponent implements OnInit {
           });
         }
         console.log(this.user);
-        this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
-          this.totalData = data.body.count;
-          console.log(this.totalData);
-          if (this.beneficiaries.length >= this.totalData) {
-            this.showLoadMore = false;
-          }
-        });
-        this.mainBeneficiaries = this.beneficiaries;
+        if (!!userType && userType !== '') {
+          this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
+            this.totalData = data.body.count;
+            console.log(this.totalData);
+            if (this.beneficiaries.length >= this.totalData) {
+              this.showLoadMore = false;
+            }
+          });
+          this.mainBeneficiaries = this.beneficiaries;
+        }
         this._systemService.off();
         this.loading = false;
       }).catch(err => {

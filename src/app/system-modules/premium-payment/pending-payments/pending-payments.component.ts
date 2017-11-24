@@ -14,14 +14,14 @@ import { Policy, OrganizationPolicy } from '../../../models/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
-  selector: 'app-pending-payments',
-  templateUrl: './pending-payments.component.html',
-  styleUrls: ['./pending-payments.component.scss']
+  selector: "app-pending-payments",
+  templateUrl: "./pending-payments.component.html",
+  styleUrls: ["./pending-payments.component.scss"]
 })
 export class PendingPaymentsComponent implements OnInit {
   paymentGroup: FormGroup;
   listsearchControl = new FormControl();
-  filterHiaControl = new FormControl('All');
+  filterHiaControl = new FormControl("All");
   pastDueDate = new FormControl();
   employer = new FormControl();
   dateRange = new FormControl();
@@ -47,17 +47,19 @@ export class PendingPaymentsComponent implements OnInit {
   showPaystack: boolean = false;
   premiumPaymentData: any;
   sponsorship: any = SPONSORSHIP;
+  limitValue = 3;
+  skipValue = 0;
 
-  totalEntries:number;
-  OrganisationTotalEntries:number;
-  individualShowLoadMore:any = true;
-  organisationShowLoadMore:any = true;
-  limit:number = TABLE_LIMIT_PER_VIEW;
-  resetData:Boolean;
-  index:number = 0;
+  totalEntries: number;
+  OrganisationTotalEntries: number;
+  individualShowLoadMore: any = true;
+  organisationShowLoadMore: any = true;
+  limit: number = TABLE_LIMIT_PER_VIEW;
+  resetData: Boolean;
+  index: number = 0;
 
   public myDatePickerOptions: IMyDpOptions = {
-    dateFormat: 'dd-mmm-yyyy',
+    dateFormat: 'dd-mmm-yyyy'
   };
 
   public today: IMyDate;
@@ -72,11 +74,13 @@ export class PendingPaymentsComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _policyService: PolicyService,
     private _premiumPaymentService: PremiumPaymentService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('PREMIUM PAYMENT ');
-    this._headerEventEmitter.setMinorRouteUrl('Pending payments for both individuals and organizations');
+    this._headerEventEmitter.setMinorRouteUrl(
+      'Pending payments for both individuals and organizations'
+    );
     this.user = (<any>this._locker.getObject('auth')).user;
     this._getCurrentPlatform();
 
@@ -98,98 +102,99 @@ export class PendingPaymentsComponent implements OnInit {
       }
     });
 
-    this.refKey = (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
+    this.refKey =
+      (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
   }
 
   private _getIndividualPolicies() {
     const sponsorship = this.sponsorship.filter(e => e.name.toLowerCase() === 'self')[0].name;
     let policies = [];
     this._systemService.on();
-    this._policyService.find({
-      query: {
-        'platformOwnerId._id': this.currentPlatform._id,
-        'sponsorshipId.name': sponsorship,
-        isPaid: false,
-        $limit: this.limit,
-        $skip: this.index*this.limit,
-        $sort: { createdAt: -1 }
-      }
-    }).then((res: any) => {
-      console.log(res);
-      this.individualLoading = false;
-      res.data.forEach(policy => {
-        policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
-        policies.push(policy);
+    this._policyService
+      .find({
+        query: {
+          'platformOwnerId._id': this.currentPlatform._id,
+          'sponsorshipId.name': sponsorship,
+          isPaid: false,
+          $limit: this.limit,
+          $skip: this.index * this.limit,
+          $sort: { createdAt: -1 }
+        }
+      })
+      .then((res: any) => {
+        console.log(res);
+        this.individualLoading = false;
+        res.data.forEach(policy => {
+          policy.dueDate = this.addDays(
+            new Date(),
+            policy.premiumPackageId.durationInDay
+          );
+          policies.push(policy);
+        });
+        // this.individualPolicies = policies;
+        this.totalEntries = res.total;
+        if (this.resetData !== true) {
+          this.individualPolicies.push(...policies);
+        } else {
+          this.resetData = false;
+          this.individualPolicies = policies;
+        }
+        if (this.individualPolicies.length >= this.totalEntries) {
+          this.individualShowLoadMore = false;
+        }
+        this._systemService.off();
+      })
+      .catch(error => {
+        console.log(error);
+        this._systemService.off();
       });
-      // this.individualPolicies = policies;
-      this.totalEntries = res.total;
-      if (this.resetData !== true) {
-        this.individualPolicies.push(...policies);
-      } else {
-        this.resetData = false;
-        this.individualPolicies = policies;
-      }
-      if (this.individualPolicies.length >= this.totalEntries) {
-        this.individualShowLoadMore = false;
-      }
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    });
   }
 
-  private _getOrganisationPolicies() {
+  private _getOrganisationPolicies(query, id, userType) {
     this._systemService.on();
-    const sponsorship = this.sponsorship.filter(e => e.name.toLowerCase() === 'organization')[0].name;
 
-    this._policyService.find({
-      query: {
-        'platformOwnerId._id': this.currentPlatform._id,
-        'sponsorshipId.name': sponsorship,
-        isPaid: false,
-        $limit: this.limit,
-        $skip: this.index * this.limit,
-        $sort: { createdAt: -1 }
-      }
-    }).then((res: any) => {
-      // console.log(res);
-      this.organisationLoading = false;
-      res.data.forEach(policy => {
-        console.log(policy);
-        let hasItem = this.organisationPolicies.filter(e => !!e.sponsor && (e.sponsor._id === policy.sponsor._id));
+    this._policyService.find(query).then((res: any) => {
+        console.log(res);
 
-        let modelPolicy: OrganizationPolicy = <OrganizationPolicy>{};
-        modelPolicy._id = policy._id;
-        modelPolicy.provider = policy.providerId;
-        modelPolicy.platformOwner = policy.platformOwnerId;
-        modelPolicy.sponsor = policy.sponsor;
-        modelPolicy.hia = policy.hiaId;
+        this.organisationLoading = false;
+        res.data.forEach(policy => {
+          console.log(policy);
+          let hasItem = this.organisationPolicies.filter(
+            e => !!e.sponsor && e.sponsor._id === policy.sponsor._id
+          );
 
-        if (hasItem.length === 0) {
-          modelPolicy.noOfEmployees = 1;
-          modelPolicy.totalCost = policy.premiumPackageId.amount;
-          this.organisationPolicies.push(modelPolicy);
-        } else {
-          hasItem[0].totalCost += policy.premiumPackageId.amount;
-          hasItem[0].noOfEmployees++;
-        }
+          let modelPolicy: OrganizationPolicy = <OrganizationPolicy>{};
+          modelPolicy._id = policy._id;
+          modelPolicy.provider = policy.providerId;
+          modelPolicy.platformOwner = policy.platformOwnerId;
+          modelPolicy.sponsor = policy.sponsor;
+          modelPolicy.hia = policy.hiaId;
+
+          if (hasItem.length === 0) {
+            modelPolicy.noOfEmployees = 1;
+            modelPolicy.totalCost = policy.premiumPackageId.amount;
+            this.organisationPolicies.push(modelPolicy);
+          } else {
+            hasItem[0].totalCost += policy.premiumPackageId.amount;
+            hasItem[0].noOfEmployees++;
+          }
+        });
+        // this.totalEntries = res.total;
+        // if (this.resetData !== true) {
+        //   this.organisationPolicies.push(...res.data);
+        // } else {
+        //   this.resetData = false;
+        //   this.organisationPolicies = res.data;
+        // }
+        // if (this.organisationPolicies.length >= this.OrganisationTotalEntries) {
+        //   this.organisationShowLoadMore = false;
+        // }
+        this._systemService.off();
+      })
+      .catch(error => {
+        console.log(error);
+        this._systemService.off();
       });
-      // this.totalEntries = res.total;
-      // if (this.resetData !== true) {
-      //   this.organisationPolicies.push(...res.data);
-      // } else {
-      //   this.resetData = false;
-      //   this.organisationPolicies = res.data;
-      // }
-      // if (this.organisationPolicies.length >= this.OrganisationTotalEntries) {
-      //   this.organisationShowLoadMore = false;
-      // }
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    });
   }
 
   addDays(date, days) {
@@ -198,22 +203,87 @@ export class PendingPaymentsComponent implements OnInit {
     return result.toDateString(); // .toISOString();
   }
 
-
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
-      if (res.data.length > 0) {
-        this.currentPlatform = res.data[0];
-        this._getIndividualPolicies();
-        this._getOrganisationPolicies();
-      }
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
+    console.log(this.user);
+    const sponsorship = this.sponsorship.filter(e => e.name.toLowerCase() === 'organization')[0].name;
+
+    this._facilityService
+      .find({ query: { shortName: CurrentPlaformShortName } })
+      .then((res: any) => {
+        if (res.data.length > 0) {
+          this.currentPlatform = res.data[0];
+          this._getIndividualPolicies();
+
+          if (!!this.user.userType && this.user.userType.name === 'Provider') {
+            this._getOrganisationPolicies(
+              {
+                query: {
+                  'platformOwnerId._id': this.currentPlatform._id,
+                  'sponsorshipId.name': sponsorship,
+                  'providerId._id': this.user.facilityId._id,
+                  isPaid: false,
+                  $limit: this.limit,
+                  $skip: this.index * this.limit,
+                  $sort: { createdAt: -1 }
+                }
+              },
+              this.user.facilityId._id,
+              this.user.userType.name
+            );
+          } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+            console.log('multi');
+            this._getOrganisationPolicies(
+              {
+                query: {
+                  'platformOwnerId._id': this.currentPlatform._id,
+                  'hiaId._id': this.user.facilityId._id,
+                  'sponsorshipId.name': sponsorship,
+                  isPaid: false,
+                  $limit: this.limitValue,
+                  $skip: this.skipValue * this.limitValue,
+                  $sort: { createdAt: -1 }
+                }
+              }, this.user.facilityId._id, this.user.userType.name
+            );
+          } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
+            this._getOrganisationPolicies(
+              {
+                query: {
+                  'platformOwnerId._id': this.currentPlatform._id,
+                  'sponsor._id': this.user.facilityId._id,
+                  'sponsorshipId.name': sponsorship,
+                  isPaid: false,
+                  $limit: this.limitValue,
+                  $skip: this.skipValue * this.limitValue,
+                  $sort: { createdAt: -1 }
+                }
+              },
+              this.user.facilityId._id,
+              this.user.userType.name
+            );
+          } else if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+            console.log('platform owner');
+            this._getOrganisationPolicies(
+              {
+                query: {
+                  'platformOwnerId._id': this.user.facilityId._id,
+                  $limit: this.limitValue,
+                  $skip: this.skipValue * this.limitValue,
+                  $sort: { createdAt: -1 },
+                }
+              }, this.user.facilityId._id, this.user.userType.name
+            );
+          } else {
+            this.organisationLoading = false;
+          }
+        }
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
-
-
 
   // onCheckSelectedToPay(index: number, policy: Policy) {
   //   console.log(policy);
@@ -327,31 +397,41 @@ export class PendingPaymentsComponent implements OnInit {
   navigate(url: string, id: string) {
     if (!!id) {
       this._systemService.on();
-      this._router.navigate([url + id]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
+      this._router
+        .navigate([url + id])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
     } else {
       this._systemService.off();
-      this._router.navigate([url]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
+      this._router
+        .navigate([url])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
     }
   }
 
-  loadMore(){
+  loadMore() {
     this._getCurrentPlatform();
   }
 
-  reset(){
+  reset() {
     this.index = 0;
     this.resetData = true;
     this._getCurrentPlatform();
-    if(this.individualActiveTab) { this.individualShowLoadMore = true; this.organisationShowLoadMore = false; }
-    else{ this.organisationShowLoadMore = true; this.individualShowLoadMore = false; }
+    if (this.individualActiveTab) {
+      this.individualShowLoadMore = true;
+      this.organisationShowLoadMore = false;
+    } else {
+      this.organisationShowLoadMore = true;
+      this.individualShowLoadMore = false;
+    }
   }
-
 }
