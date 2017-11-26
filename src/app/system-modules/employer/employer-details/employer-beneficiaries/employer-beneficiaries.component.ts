@@ -76,9 +76,8 @@ export class EmployerBeneficiariesComponent implements OnInit {
       this._systemService.on();
       this._policyService.find(query).then((res: any) => {
         this.loading = false;
-        console.log(res)
         if (res.data.length > 0) {
-          res.data.forEach(policy => {
+          res.data.forEach((policy, i) => {
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
@@ -88,7 +87,7 @@ export class EmployerBeneficiariesComponent implements OnInit {
             principal.planTypeId = policy.planTypeId;
             principal.policy = policy;
             this.beneficiaries.push(principal);
-            policy.dependantBeneficiaries.forEach(innerPolicy => {
+            policy.dependantBeneficiaries.forEach((innerPolicy,j) => {
               innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
               innerPolicy.beneficiary.isPrincipal = false;
               innerPolicy.beneficiary.principalId = principal._id;
@@ -104,6 +103,7 @@ export class EmployerBeneficiariesComponent implements OnInit {
         this.mainBeneficiaries = this.beneficiaries;
         this._systemService.off();
         this.loading = false;
+        console.log(this.mainBeneficiaries.length)
         console.log(this.mainBeneficiaries)
       }).catch(err => {
         console.log(err)
@@ -119,9 +119,7 @@ export class EmployerBeneficiariesComponent implements OnInit {
   }
 
   private applyQuery(facility) {
-    console.log(facility)
     if (facility !== undefined) {
-      console.log(1)
       // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
       if (facility.facilityType !== undefined && facility.facilityType.name === 'Provider') {
         console.log(2)
@@ -198,7 +196,7 @@ export class EmployerBeneficiariesComponent implements OnInit {
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        this._getPolicies();
+        //this._getPolicies();
       }
       this._systemService.off();
     }).catch(err => {

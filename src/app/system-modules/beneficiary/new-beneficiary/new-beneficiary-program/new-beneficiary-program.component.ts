@@ -112,7 +112,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
     } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
-      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
+      console.log("Its an Employer");
+      console.log(this.sponsorships);
+      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1])
     }
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {

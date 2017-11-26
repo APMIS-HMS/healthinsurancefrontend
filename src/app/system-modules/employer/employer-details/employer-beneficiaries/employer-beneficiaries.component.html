@@ -18,76 +18,38 @@
         <tr *ngFor="let policy of mainBeneficiaries; let i=index" class="tr">
             <td class="td hover">{{i+1}}</td>
             <td class="td hover">
-                <span *ngIf="!isEdit" class="td-value">{{policy.personId?.lastName}} {{policy.personId?.lastName}}</span>
-                <div *ngIf="isEdit" class="input-wrap">
-                    <input [formControl]="nameControl" type="text">
-                </div>
+                <span class="td-value">{{policy.personId?.lastName}} {{policy.personId?.lastName}}</span>
             </td>
             <td class="td hover">
-                <span *ngIf="!isEdit" class="td-value">{{policy.personId?.gender.name}}</span>
-                <div *ngIf="isEdit" class="input-wrap">
-                    <select [formControl]="genderControl">
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </div>
+                <span class="td-value">{{policy.personId?.gender.name}}</span>
             </td>
             <td class="td hover">
-                <span *ngIf="!isEdit && policy.isPrincipal" class="baller td-value">P</span>
-                <span *ngIf="!isEdit && !policy.isPrincipal" class="baller td-value">D</span>
-                <div *ngIf="isEdit" class="input-wrap">
-                    <select [formControl]="typeControl">
-                        <option>P</option>
-                        <option>D</option>
-                    </select>
-                </div>
-                <!-- <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary.dependantCount}}</span>
-                <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
-                <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span> -->
+                <span *ngIf="policy.isPrincipal" class="baller td-value">P</span>
+                <span *ngIf="!policy.isPrincipal" class="baller td-value">D</span>
             </td>
 
             <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span *ngIf="!isEdit" class="td-value">{{policy?.platformOwnerNumber}}</span>
-                <div *ngIf="isEdit" class="input-wrap">
-                    <input [formControl]="idControl" type="text">
-                </div>
+                <span class="td-value">{{policy?.platformOwnerNumber}}</span>
             </td>
             <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span *ngIf="!isEdit" class="td-value">{{policy?.personId?.dateOfBirth|date}}</span>
-                <div *ngIf="isEdit" class="input-wrap">
-                    <my-date-picker name="dobControl" [options]="myDatePickerOptions" [selDate]="today" [formControl]="dobControl"></my-date-picker>
-                </div>
+                <span class="td-value">{{policy?.personId?.dateOfBirth|date}}</span>
             </td>
             <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span *ngIf="!isEdit" class="td-value">Ikorodu</span>
-                <div *ngIf="isEdit" class="input-wrap">
-                    <select [formControl]="lgaControl">
-                        <option>P</option>
-                        <option>D</option>
-                    </select>
-                </div>
+                <span  class="td-value">Ikorodu</span>
             </td>
             <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span *ngIf="!isEdit" class="td-value">Hygia</span>
-                <div *ngIf="isEdit" class="searchable-input">
-                    <input type="text" [formControl]="hiaControl" class="form-control">
-                    <ul *ngIf="hiaResult" class="search-results">
-                        <li>Hygia</li>
-                    </ul>
-                </div>
+                <span class="td-value">{{policy?.policy?.hiaId?.name}}</span>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span *ngIf="!isEdit" class="tbl-status-active td-value">Active</span>
-                <div *ngIf="isEdit" class="input-wrap">
-                    <select [formControl]="statusControl">
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-                </div>
+            <!-- <td class="td hover" (click)="navigateDetailBeneficiary()">
+                <span class="tbl-status-active td-value">Active</span>
+            </td> -->
+            <td class="td" (click)="navigateDetailBeneficiary()">
+                <span class="{{ policy.isActive ? 'tbl-status-active': 'tbl-status-inactive' }}">
+                    {{ policy.isActive ? 'Active': 'Inactive' }}
+                </span>
             </td>
-            <td class="td td-icos">
-                <i *ngIf="!isEdit" class="fa fa-edit" (click)="editRow()"></i>
-                <i *ngIf="isEdit" class="fa fa-check" (click)="editRow()"></i>
+            <td class="td hover">
+                <i class="fa fa-chevron-right"></i>
             </td>
         </tr>
     </tbody>

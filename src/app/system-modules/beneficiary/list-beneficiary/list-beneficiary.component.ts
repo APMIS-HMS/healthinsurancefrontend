@@ -71,6 +71,7 @@ export class ListBeneficiaryComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
+    console.log(this.user.userType);
     if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
@@ -171,7 +172,7 @@ export class ListBeneficiaryComponent implements OnInit {
         } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
           this._getAllPolicies({
             query: {
-              'employerId._id': this.user.facilityId._id,
+              'sponsor._id': this.user.facilityId._id,
               $limit: this.limitValue,
               $skip: this.skipValue * this.limitValue,
               $sort: { createdAt: -1 },
@@ -238,7 +239,7 @@ export class ListBeneficiaryComponent implements OnInit {
             });
           });
         }
-        console.log(this.user);
+        console.log(this.beneficiaries);
         if (!!userType && userType !== '') {
           this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
             this.totalData = data.body.count;

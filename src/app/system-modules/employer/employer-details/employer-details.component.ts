@@ -257,9 +257,9 @@ export class EmployerDetailsComponent implements OnInit {
   _getState() {
     this._countryService.find({
       query:
-      {
-        'name': 'Nigeria'
-      }
+        {
+          'name': 'Nigeria'
+        }
     }).then((payload: any) => {
       if (payload.data[0] != undefined) {
         this.mStates = payload.data[0].states;
@@ -270,9 +270,9 @@ export class EmployerDetailsComponent implements OnInit {
   _getOriginState() {
     this._countryService.find({
       query:
-      {
-        'name': 'Nigeria'
-      }
+        {
+          'name': 'Nigeria'
+        }
     }).then((payload: any) => {
       if (payload.data[0] != undefined) {
         this.oStates = payload.data[0].states;
@@ -521,6 +521,9 @@ export class EmployerDetailsComponent implements OnInit {
 
   onSponsor(event, index) {
     this.orderExcelPolicies[index].policy.sponsorship = this.sponsorshipControl.value;
+    if (this.sponsorshipControl.value.toString().toLowerCase() != "self") {
+      this.orderExcelPolicies[index].policy.sponsor = this.facility;
+    }
   }
 
   private _getCurrentPlatform() {
@@ -636,8 +639,8 @@ export class EmployerDetailsComponent implements OnInit {
   }
 
   showImageBrowseDlg() {
-    this.fileInput.nativeElement.click();
     this.isUploading = true;
+    this.fileInput.nativeElement.click();
   }
 
   excelDateToJSDate(date) {
@@ -715,7 +718,7 @@ export class EmployerDetailsComponent implements OnInit {
     var badUpload = [];
     var retainedOrderExcelPolicies = JSON.parse(JSON.stringify(this.orderExcelPolicies));
     var checkOrderExcelPolicies = this.orderExcelPolicies.filter(x => x.isCheck == true);
-
+    console.log(checkOrderExcelPolicies);
     this.orderExcelPolicies = retainedOrderExcelPolicies;
     var groups = {};
     var bObj = {};
