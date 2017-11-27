@@ -11,6 +11,7 @@
             <th class="th">HIA</th>
             <th class="th">Status</th>
             <td class="th">Action</td>
+            <th class="th"></th>
         </tr>
     </thead>
 
@@ -28,27 +29,30 @@
                 <span *ngIf="!policy.isPrincipal" class="baller td-value">D</span>
             </td>
 
-            <td class="td hover" (click)="navigateDetailBeneficiary()">
+            <td class="td hover" (click)="navigateDetailBeneficiary(policy)">
                 <span class="td-value">{{policy?.platformOwnerNumber}}</span>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary()">
+            <td class="td hover" (click)="navigateDetailBeneficiary(policy)">
                 <span class="td-value">{{policy?.personId?.dateOfBirth|date}}</span>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary()">
-                <span  class="td-value">Ikorodu</span>
+            <td class="td hover" (click)="navigateDetailBeneficiary(policy)">
+                <span  class="td-value">{{policy.personId?.homeAddress?.lga?.name}}</span>
             </td>
-            <td class="td hover" (click)="navigateDetailBeneficiary()">
+            <td class="td hover" (click)="navigateDetailBeneficiary(policy)">
                 <span class="td-value">{{policy?.policy?.hiaId?.name}}</span>
             </td>
-            <!-- <td class="td hover" (click)="navigateDetailBeneficiary()">
+            <!-- <td class="td hover" (click)="navigateDetailBeneficiary(policy)">
                 <span class="tbl-status-active td-value">Active</span>
             </td> -->
-            <td class="td" (click)="navigateDetailBeneficiary()">
+            <td class="td" (click)="navigateDetailBeneficiary(policy)">
                 <span class="{{ policy.isActive ? 'tbl-status-active': 'tbl-status-inactive' }}">
                     {{ policy.isActive ? 'Active': 'Inactive' }}
                 </span>
             </td>
-            <td class="td hover">
+            <td class="td td-icos">
+                <i *ngIf="policy.isPrincipal" class="fa fa-edit" (click)="navigateEditBeneficiary(policy)"></i>
+            </td>
+            <td class="td" (click)="navigateDetailBeneficiary(policy)">
                 <i class="fa fa-chevron-right"></i>
             </td>
         </tr>

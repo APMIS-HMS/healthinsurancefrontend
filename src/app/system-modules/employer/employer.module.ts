@@ -14,7 +14,6 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { employerRoutes } from './employer.route';
 import { EmployerComponent } from './employer.component';
 import { EmployerDetailsComponent } from './employer-details/employer-details.component';
-import { ExcelUploadItemsComponent } from './employer-details/excel-upload-items/excel-upload-items.component';
 import { NewEmployerComponent } from './new-employer/new-employer.component';
 import { EmployerBeneficiariesComponent } from './employer-details/employer-beneficiaries/employer-beneficiaries.component';
 import { PremiumPaymentTabComponent } from './employer-details/premium-payment-tab/premium-payment-tab.component';
@@ -34,7 +33,6 @@ import { BatchedComponent } from './employer-details/premium-payment-tab/batched
         NewEmployerComponent, EmployerBeneficiariesComponent,
         PremiumPaymentTabComponent,
         UnbatchedComponent,
-        ExcelUploadItemsComponent,
         BatchedComponent
     ],
     providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,

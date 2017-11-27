@@ -213,7 +213,6 @@ export class ListBeneficiaryComponent implements OnInit {
     // this.tempBeneficiaries = [];
     try {
       this._systemService.on();
-
       this._policyService.find(query).then((res: any) => {
         this.loading = false;
         if (res.data.length > 0 ) {

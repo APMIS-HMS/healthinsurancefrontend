@@ -87,7 +87,7 @@ export class EmployerBeneficiariesComponent implements OnInit {
             principal.planTypeId = policy.planTypeId;
             principal.policy = policy;
             this.beneficiaries.push(principal);
-            policy.dependantBeneficiaries.forEach((innerPolicy,j) => {
+            policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
               innerPolicy.beneficiary.person = innerPolicy.beneficiary.personId;
               innerPolicy.beneficiary.isPrincipal = false;
               innerPolicy.beneficiary.principalId = principal._id;
@@ -207,7 +207,32 @@ export class EmployerBeneficiariesComponent implements OnInit {
   editRow() {
     this.isEdit = !this.isEdit;
   }
-  navigateDetailBeneficiary() {
+
+  navigateEditBeneficiary(beneficiary) {
+    this._systemService.on();
+    this._router.navigate(['/modules/beneficiary/new/principal', beneficiary._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
+  }
+
+  navigateDetailBeneficiary(beneficiary) {
+    if (beneficiary.isPrincipal) {
+      this._systemService.on();
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
+    } else {
+      this._systemService.on();
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
+    }
 
   }
 }
