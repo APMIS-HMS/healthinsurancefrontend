@@ -110,17 +110,11 @@
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
                 <tr class="tr">
-                    <th class="th" *ngIf="capitationClaims.length > 0" (change)="onCheckPayAllCapitation($event);"><input type="checkbox"></th>
                     <th class="th">No</th>
-                    <th class="th">Date</th>
-                    <th class="th">Amount Due</th>
-                    <th class="th">Claim ID</th>
                     <th class="th">Provider ID</th>
-                    <th class="th">Health Care Plan</th>
-                    <th class="th">Responsible HIA</th>
+                    <th class="th">No. of Beneficiaries</th>
                     <th class="th">Capitation</th>
                     <th class="th">Status</th>
-                    <th class="th">Queue for payment</th>
                     <th class="th"></th>
                 </tr>
             </thead>
@@ -134,25 +128,16 @@
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
-                <tr *ngFor="let claim of capitationClaims; let i = index;" class="tr">
+                <tr *ngFor="let capitation of capitationClaims; let i = index;" class="tr hover">
+                    <td class="td">{{ i+1 }}</td>
+                    <td class="td">{{ capitation?.providerId?.provider?.providerId }}</td>
+                    <td class="td">{{ capitation?.noOfBeneficiaries }}</td>
+                    <td class="td text-center green"><i class="fa fa-check"></i></td>
                     <td class="td">
-                        <input (change)="onCheckPayItemCapitation(i, claim);" [attr.checked]="claim.isChecked ? true : null" type="checkbox">
+                        <span class="green" *ngIf="capitation?.isActive">Active</span>
+                        <span class="red" *ngIf="!capitation?.isActive">Inactive</span>
                     </td>
-                    <td class="td">1</td>
-                    <td class="td">11th Oct 2017</td>
-                    <td class="td">1450 NGN</td>
-                    <td class="td">324234 - AC</td>
-                    <td class="td">Hosp 18B</td>
-                    <td class="td">Formal Sector</td>
-                    <td class="td">Healthcare Security Limited</td>
-                    <td class="td">
-                        <input type="checkbox">
-                    </td>
-                    <td class="td"><span class="red">Not Paid</span></td>
-                    <td class="td">
-                        <input (change)="onCheckCQueue(i, $event, claim);" type="checkbox">
-                    </td>
-                    <td class="td td-icos" routerLink="/modules/claims/claims-payment/{{claim._id}}">
+                    <td class="td td-icos" routerLink="/modules/claims/capitation/{{capitation._id}}">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>

@@ -9,6 +9,7 @@ import { ListClaimsPaymentComponent } from './list-claims-payment/list-claims-pa
 import { QueuedClaimsPaymentComponent } from './queued-claims-payment/queued-claims-payment.component';
 import { ClaimsPaymentService, ClaimService, CapitationFeeService, PolicyService, BeneficiaryService } from '../../services/index';
 import { ListDetailsClaimsComponent } from './list-details-claims/list-details-claims.component';
+import { CapitationPaymentComponent } from './capitation-payment/capitation-payment.component';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { ListDetailsClaimsComponent } from './list-details-claims/list-details-c
         ClaimsPaymentDetailsComponent,
         ListClaimsPaymentComponent,
         QueuedClaimsPaymentComponent,
-        ListDetailsClaimsComponent],
+        ListDetailsClaimsComponent,
+        CapitationPaymentComponent],
     providers: [ClaimsPaymentService, ClaimService, CapitationFeeService, PolicyService, BeneficiaryService]
 })
 export class ClaimsPaymentModule { }
