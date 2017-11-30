@@ -137,7 +137,7 @@
                         <span class="green" *ngIf="capitation?.isActive">Active</span>
                         <span class="red" *ngIf="!capitation?.isActive">Inactive</span>
                     </td>
-                    <td class="td td-icos" routerLink="/modules/claims/capitation/{{capitation._id}}">
+                    <td class="td td-icos" routerLink="/modules/claims/capitation/{{capitation?.providerId?._id}}">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>

@@ -10,13 +10,13 @@ import { SystemModuleService, FacilityService, CapitationFeeService, PolicyServi
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
-  selector: "app-capitation-payment",
-  templateUrl: "./capitation-payment.component.html",
-  styleUrls: ["./capitation-payment.component.scss"]
+  selector: 'app-capitation-payment',
+  templateUrl: './capitation-payment.component.html',
+  styleUrls: ['./capitation-payment.component.scss']
 })
 export class CapitationPaymentComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterHiaControl = new FormControl("All");
+  filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
   currentPlatform: any;
@@ -36,14 +36,14 @@ export class CapitationPaymentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl("Capitation Payment");
-    this._headerEventEmitter.setMinorRouteUrl("Capitation list");
+    this._headerEventEmitter.setRouteUrl('Capitation Payment');
+    this._headerEventEmitter.setMinorRouteUrl('Capitation list');
 
     this._route.params.subscribe(param => {
       console.log(param);
       if (!!param.id) {
-        this._getPolicy(param.id);
-        this._getCurrentPlatform();
+        // this._getPolicy(param.id);
+        this._getCurrentPlatform(param.id);
       }
     });
   }
@@ -60,11 +60,12 @@ export class CapitationPaymentComponent implements OnInit {
     this._policyService
       .find({
         query: {
+          'platformOwnerId._id': this.currentPlatform._id,
           isActive: true,
+          isPaid: true,
           'providerId._id': id
         }
-      })
-      .then((res: any) => {
+      }).then((res: any) => {
         console.log(res);
         this.loading = false;
         this._systemService.off();
@@ -89,12 +90,12 @@ export class CapitationPaymentComponent implements OnInit {
   //     });
   // }
 
-  _getCurrentPlatform() {
+  private _getCurrentPlatform(providerId) {
     this._facilityService
       .find({
         query: {
           shortName: CurrentPlaformShortName,
-          $select: ["name", "shortName", "address.state"]
+          $select: ['name', 'shortName', 'address.state']
         }
       })
       .then((res: any) => {
@@ -102,6 +103,7 @@ export class CapitationPaymentComponent implements OnInit {
           if (res.data.length > 0) {
             console.log(res);
             this.currentPlatform = res.data[0];
+            this._getPolicy(providerId);
           }
         }
       })
