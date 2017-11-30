@@ -1,0 +1,43 @@
+<div class="user-sect">
+    <div class="user-img-wrap">
+        <img src="../../../assets/img/users/default.png">
+    </div>
+
+    <div (click)="close_onClick()" class="menu-close">X</div>
+</div>
+
+<div class="username-wrap">
+    <div *ngIf="user !== undefined && user.lastName !== undefined" class="username">{{user?.lastName}} {{user?.firstName}}</div>
+    <div *ngIf="user !== undefined && user.lastName === undefined" class="username">{{user?.email}}</div>
+    <div class="pipe">|</div>
+    <div (click)="signOut()" class="user-logout">Logout</div>
+</div>
+
+<ul class="menu-links" *ngIf="ready">
+    <div class="menu-group">
+        <li routerLink="/modules/welcome" (click)="close_onClick()" class="menu-link">HOME</li>
+        <li *ngIf="hasBeneficiary" routerLink="/modules/beneficiary/beneficiaries" (click)="close_onClick()" class="menu-link">BENEFICIARIES</li>
+        <li *ngIf="hasPremiumPayment" routerLink="/modules/premium-payment/pending" (click)="close_onClick()" class="menu-link">PREMIUM PAYMENTS</li>
+        <li *ngIf="hasOrganisation" routerLink="/modules/employer/employers" (click)="close_onClick()" class="menu-link">ORGANISATIONS</li>
+        <li *ngIf="hasProvider" routerLink="/modules/provider/providers" (click)="close_onClick()" class="menu-link">PROVIDERS</li>
+        <li *ngIf="hasHIA" routerLink="/modules/hia/hias" (click)="close_onClick()" class="menu-link">HIA</li>
+        <li *ngIf="hasPlan" routerLink="/modules/plan/plans" (click)="close_onClick()" class="menu-link">PLANS</li>
+        <li *ngIf="hasCheckIn" routerLink="/modules/checkin/checkedin" (click)="close_onClick()" class="menu-link">CHECK IN</li>
+        <li *ngIf="hasClaim" routerLink="/modules/claim/claims" (click)="close_onClick()" class="menu-link">CLAIMS</li>
+        <li *ngIf="hasReferral" routerLink="/modules/referal/referals" (click)="close_onClick()" class="menu-link">REFFERALS</li>
+        <li *ngIf="hasAuthorization" (click)="close_onClick()" routerLink="/modules/pre-auth/pre-authorizations" class="menu-link">AUTHORIZATIONS</li>
+        <li *ngIf="hasClaimPayment" (click)="close_onClick()" routerLink="/modules/claims/claims-payment" class="menu-link">CLAIMS PAYMENT</li>
+        <li *ngIf="hasComplaint" (click)="close_onClick()" class="menu-link">COMPLAINTS</li>
+        <li *ngIf="hasFundManagement" (click)="close_onClick()" class="menu-link">FUND MANAGEMENT</li>
+        <li *ngIf="hasAnalytics" (click)="close_onClick()" class="menu-link">ANALYTICS</li>
+        <li *ngIf="hasPlatform" routerLink="/modules/platform/platforms" (click)="close_onClick()" class="menu-link">PLATFORMS</li>
+        <li *ngIf="hasRoleManagement" routerLink="/modules/role/roles" (click)="close_onClick()" class="menu-link">ROLES MANAGEMENT</li>
+        <li *ngIf="hasAccessManagement" routerLink="/modules/access" (click)="close_onClick()" class="menu-link">ACCESS MANAGEMENT</li>
+        <li *ngIf="hasUserManagement" routerLink="/modules/user/users" (click)="close_onClick()" class="menu-link">USER MANAGEMENT</li>
+    </div>
+</ul>
+<ul class="ready" *ngIf="!ready">
+    <li>
+        Loading menu....
+    </li>
+</ul>

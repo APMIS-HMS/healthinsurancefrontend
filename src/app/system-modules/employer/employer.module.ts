@@ -1,38 +1,42 @@
-import { IndustryService } from './../../services/common/industry.service';
-import { IndustryTypesService } from './../../services/api-services/setup/industry-type.service';
-import { UserTypeService } from './../../services/common/user-type.service';
-import { CountryService } from './../../services/common/country.service';
-import { BankService } from './../../services/common/bank.service';
+import { PlanService } from './../../services/plan/plan.service';
+import { ClaimService } from './../../services/common/claim.service';
+import { TitleService } from './../../services/common/titles.service';
+import { RelationshipService } from './../../services/common/relationship.service';
+import { PolicyService } from './../../services/policy/policy.service';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { Angular4PaystackModule } from 'angular4-paystack';
+import { SharedModule } from '../../shared-modules/shared.module';
+import {
+    FacilityService, IndustryService, CountryService, BankService, ContactPositionService,
+    UserTypeService, SystemModuleService, BeneficiaryService, MaritalStatusService, PlanTypeService, PremiumPaymentService,BulkBeneficiaryUploadService
+} from './../../services/index';
+import { MyDatePickerModule } from 'mydatepicker';
 import { employerRoutes } from './employer.route';
-
 import { EmployerComponent } from './employer.component';
-import { ListEmployersComponent } from './list-employers/list-employers.component';
+import { EmployerDetailsComponent } from './employer-details/employer-details.component';
 import { NewEmployerComponent } from './new-employer/new-employer.component';
-import { DetailsEmployerComponent } from './details-employer/details-employer.component';
-import { NewRequestComponent } from './new-request/new-request.component';
+import { EmployerBeneficiariesComponent } from './employer-details/employer-beneficiaries/employer-beneficiaries.component';
+import { PremiumPaymentTabComponent } from './employer-details/premium-payment-tab/premium-payment-tab.component';
+import { UnbatchedComponent } from './employer-details/premium-payment-tab/unbatched/unbatched.component';
+import { BatchedComponent } from './employer-details/premium-payment-tab/batched/batched.component';
 
 @NgModule({
+    imports: [
+        SharedModule,
+        employerRoutes,
+        MyDatePickerModule,
+        Angular4PaystackModule
+    ],
     declarations: [
         EmployerComponent,
-        ListEmployersComponent,
-        NewEmployerComponent,
-        DetailsEmployerComponent,
-        NewRequestComponent
+        EmployerDetailsComponent,
+        NewEmployerComponent, EmployerBeneficiariesComponent,
+        PremiumPaymentTabComponent,
+        UnbatchedComponent,
+        BatchedComponent
     ],
-    exports: [],
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        employerRoutes
-    ],
-    providers: [BankService, CountryService, UserTypeService, IndustryService]
+    providers: [FacilityService, IndustryService, CountryService, BankService, ContactPositionService, PlanService,
+        UserTypeService, SystemModuleService, BeneficiaryService, PolicyService, TitleService, ClaimService,
+        MaritalStatusService, PlanTypeService, PremiumPaymentService,BatchedComponent,BulkBeneficiaryUploadService, RelationshipService]
 })
-
-export class EmployerModule {
-
-}
+export class EmployerModule { }

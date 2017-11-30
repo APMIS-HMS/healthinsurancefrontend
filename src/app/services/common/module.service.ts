@@ -18,14 +18,6 @@ export class ModuleService {
     this._socket = _socketService.getService('modules');
   }
 
-  findAll() {
-    return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('modules').then((socket: any) => {
-        return socket.find();
-      }))
-    });
-  }
-
   find(query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('modules').then((socket: any) => {

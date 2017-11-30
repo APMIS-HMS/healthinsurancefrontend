@@ -1,0 +1,103 @@
+<div class="list-search-wrap">
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
+
+    <div class="btn btn-medium btn-blue" routerLink="/modules/hia/new">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD HIA
+    </div>
+</div>
+
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
+
+        <div class="input-wrap">
+            <label>Type</label>
+            <select [formControl]="filterTypeControl" class="form-control">
+                <option value="All" selected>All</option>
+                <option [ngValue]="item.name" *ngFor="let item of hiaTypes">{{item.name}}</option>
+              </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Created By</label>
+            <select [formControl]="createdByControl">
+                <option>All</option>
+              </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Grade</label>
+            <select [formControl]="utilizedByControl" (change)="onSelectedGrade($event.target.value)">
+                <option selected value="All">All</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+              </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Status</label>
+            <select [formControl]="statusControl" (change)="onSelectedStatus($event.target.value)">
+                <option selected value="All">All</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+        </div>
+
+        <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">No</th>
+                <th class="th">Name</th>
+                <th class="th">Type</th>
+                <th class="th">Contact Person</th>
+                <th class="th">Phone Number</th>
+                <th class="th">Grade</th>
+                <th class="th">Status</th>
+                <td class="th">Action</td>
+                <th class="th"></th>
+            </tr>
+        </thead>
+
+        <tbody class="tbody">
+            <tr class="tr" *ngIf="hias.length === 0 && !loading">
+                <td class="text-center" colspan="11">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="hias.length === 0 && loading">
+                <td class="text-center" colspan="11">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
+            <tr *ngFor="let hia of hias; let i = index;" class="tr">
+                <td class="td">{{i+1}}</td>
+                <td class="td">{{hia.name}}</td>
+                <td class="td">{{hia.hia.type.name}}</td>
+                <td class="td">{{hia.itContact.lastName}} {{hia.itContact.firstName}}</td>
+                <td class="td">{{hia.itContact.phoneNumber}}</td>
+                <td class="td">{{hia.hia.grade.name}}</td>
+                <td (click)="navigateViewHIADetail(hia); " class="td hover {{ hia.isConfirmed ? ' tbl-status-active': ' tbl-status-inactive' }} ">
+                    {{ hia.isConfirmed ? 'Active': 'Inactive' }}
+                </td>
+                <td class="td td-icos">
+                    <i class="fa fa-edit" (click)="navigateEditHIA(hia);"></i>
+                </td>
+                <td (click)="navigateViewHIADetail(hia)"><i class="fa fa-chevron-right"></i></td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="list-buttom">
+        <div *ngIf="hias.length > 0">
+            <div class="list-summary">Showing 1 to {{ hias.length }} of {{ totalEntries }} entries (filtered from {{ totalEntries }} total entries)</div>
+            <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="showLoadMore">Load More</div>
+        </div>
+    </div>
+</div>

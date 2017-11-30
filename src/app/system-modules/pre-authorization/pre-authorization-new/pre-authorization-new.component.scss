@@ -1,0 +1,61 @@
+@import '../../../../assets/libs/variables.scss';
+
+.cta{
+    margin: 0 auto;
+}
+.frm-title{
+    font-weight: bold;
+    margin: 40px 0 20px 0;
+    font-size: $font-x3;
+}
+.input-wrap-x2{
+    width: 100%;
+    display: flex;
+}
+.frm-group .frm-item-wrap .input-wrap input, .frm-group .frm-item-wrap .input-wrap select {
+    width: auto; 
+    margin-right: 5px;
+}
+.btn-blue-outline{
+    width: 265px;
+    margin-top: 20px;
+}
+.frm-subsect{
+    background:  $grey-1;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto
+}
+.tbl-wrap{
+    background: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.fa-times{
+    color: $red;
+    font-size: $font-x4;
+    cursor: pointer;
+}
+.searchable-input{
+    position: relative;
+}
+.form-control-textArea{
+    min-width: 89%;
+    min-height: 100px;
+}
+.inner-label{
+    font-size: $font-x3;
+    color: $grey-3;
+}
+.frm-item-wrap .inputWrap select {
+    width: 310px;
+    margin-top: 10px;
+}
+.input-wrap{
+    width: 70%;
+    justify-content: flex-start;
+}
+.label{
+    width: 30%;
+}

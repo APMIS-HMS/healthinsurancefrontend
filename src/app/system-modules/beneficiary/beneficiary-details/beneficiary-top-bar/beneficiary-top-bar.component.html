@@ -1,0 +1,14 @@
+<div class="content-top-bar">
+    <div class="bar-labels">
+        <div>Household ID: {{ policy?.policyId }}</div>
+        <div>Registered By: {{ policy?.platformOwnerId?.shortName }}</div>
+        <div>Plan Name: {{ policy?.planId?.name }}</div>
+        <div>Status: <span class="{{ policy?.isActive ? 'text-green' : 'text-red' }}">{{ policy?.isActive ? 'Active' : 'Inactive' }}</span></div>
+        <div *ngIf="policy?.isPaid && policy?.validityPeriods.length > 0">Premium: Valid until {{ policy?.validityPeriods[policy?.validityPeriods.length - 1].validTill | date }}</div>
+        <div *ngIf="!policy?.isPaid">Premium: <span class="text-red">Not Paid</span></div>
+    </div>
+
+    <div *ngIf="!isCheckIn" class="bar-icos">
+        <div (click)="addApprovalClick($event);" *ngIf="canApprove" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
+    </div>
+</div>

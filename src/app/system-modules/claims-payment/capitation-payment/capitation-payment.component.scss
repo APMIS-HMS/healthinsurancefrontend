@@ -1,0 +1,11 @@
+@import '../../../../assets/libs/variables.scss';
+.list-filter-wrap {
+    flex-direction: column;
+    padding: 10px 10px 0px 10px;
+    .filter-box {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        float: left;
+    }
+}

@@ -9,13 +9,27 @@ export class SystemModuleService {
   private notificationAnnouncedSource = new Subject<Object>();
   notificationAnnounced$ = this.notificationAnnouncedSource.asObservable();
 
+  private beneficiaryTabAnnouncedSource = new Subject<Object>();
+  beneficiaryTabAnnounced$ = this.beneficiaryTabAnnouncedSource.asObservable();
+
   private broadCastOnlineSource = new Subject<Object>();
   broadCastOnlineSource$ = this.broadCastOnlineSource.asObservable();
+
+  private loggedInUserAnnouncedSource = new Subject<Object>();
+  loggedInUserAnnounced = this.loggedInUserAnnouncedSource.asObservable();
 
   constructor(private locker: CoolLocalStorage) {
   }
   announceNotification(notification: Object) {
     this.notificationAnnouncedSource.next(notification);
+  }
+
+  announceBeneficiaryTabNotification(notification: Object) {
+    this.beneficiaryTabAnnouncedSource.next(notification);
+  }
+
+  announceLoggedInUser(userObject: Object) {
+    this.loggedInUserAnnouncedSource.next(userObject);
   }
 
   onlineStatusBroadCast(status: Object) {

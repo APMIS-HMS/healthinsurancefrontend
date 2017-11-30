@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <section class="content">
     <div class="row">
         <div class="col-12 col-sm-8">
@@ -14,8 +15,58 @@
             <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/platform/new">
                 <i class="fa fa-plus-circle"></i> Add Platform
             </a>
-        </div>
+=======
+<div class="list-search-wrap">
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
     </div>
+
+    <div class="btn btn-medium btn-blue" (click)="navigateNewPlatform()">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PLATFORM
+    </div>
+</div>
+
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
+
+        <div class="input-wrap">
+            <label>Type</label>
+            <select [formControl]="filterTypeControl" class="form-control">
+        <option value="All" selected>All</option>
+        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Created By</label>
+            <select [formControl]="createdByControl">
+        <option>All</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Utilized By</label>
+            <select [formControl]="utilizedByControl">
+        <option>All</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Status</label>
+            <select [formControl]="statusControl" (change)="onSelectedStatus($event.target.value)">
+        <option selected value="All">All</option>
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+>>>>>>> remotes/origin/redesign
+        </div>
+
+        <div class="btn btn-medium btn-blue-outline">RESET</div>
+    </div>
+<<<<<<< HEAD
     <div class="row">
         <section class="col-12">
             <div class="filter-box">
@@ -96,5 +147,55 @@
                 <button class="btn bg-yellow btn-flat">Load More</button>
             </div>
         </section>
+=======
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">No</th>
+                <th class="th">Name</th>
+                <th class="th">Type</th>
+                <th class="th">Number of HIAs</th>
+                <th class="th">Created By</th>
+                <th class="th">Week</th>
+                <th class="th">Premium Month</th>
+                <th class="th">Year</th>
+                <th class="th">Status</th>
+                <th class="th"></th>
+            </tr>
+        </thead>
+
+        <tbody class="tbody">
+            <tr class="tr" *ngIf="owners.length === 0 && !loading">
+                <td class="text-center" colspan="10">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="owners.length === 0 && loading">
+                <td class="text-center" colspan="10">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
+            <tr *ngFor="let owner of owners; let i = index;" class="tr">
+                <td (click)="navigateEditPlatform(owner)" class="td td-hover">{{ i+1 }}</td>
+                <td (click)="navigateEditPlatform(owner)" class="td td-hover">{{owner.name}}</td>
+                <td class="td">{{owner.shortName}}</td>
+                <td class="td"><a href="{{owner.website}}" target="_blank">{{owner.shortName}} website</a></td>
+                <td class="td">{{owner.email}}</td>
+                <td class="td">{{owner.businessContact.lastName}} {{owner.businessContact.firstName}}</td>
+                <td class="td">{{owner.businessContact.phoneNumber}}</td>
+                <td class="td">{{owner.businessContact.email}}</td>
+                <td class="td">
+                    <span class="{{ owner.isTokenVerified ? 'tbl-status-active': 'tbl-status-inactive' }}"> 
+                        {{ owner.isTokenVerified ? 'Active': 'Inactive' }}
+                    </span>
+                </td>
+                <td routerLink="/modules/platform/platforms/{{owner._id}}"><i class="fa fa-chevron-right"></i></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="list-buttom" *ngIf="owners.length > 0">
+        <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+        <div class="btn btn-medium btn-yellow">Load More</div>
+>>>>>>> remotes/origin/redesign
     </div>
-</section>
+</div>

@@ -1,0 +1,67 @@
+<section class="app-content-wrap">
+    
+    <div class="content shadow-RB">
+        <div class="list-search-wrap">
+            <div class="search-wrap">
+                <label class="label-xx">Search:</label>
+                <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+        
+            <div routerLink="/modules/access" class="btn btn-medium btn-blue">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ACCESSIBILITY
+            </div>
+        </div>
+        <form class="grey-bg" [formGroup]="roleFormGroup" novalidate>
+            <div class="frm-item-wrap">
+                <label class="label">Role Name</label>
+                <div class="input-wrap">
+                    <input formControlName="roleName" class="form-control">
+                </div>
+                <small class="alert-label" [hidden]="roleFormGroup.controls.roleName.valid || roleFormGroup.controls.roleName.pristine">
+                    This is a required field.
+                </small>
+            </div>
+
+            <div class="list-boxes">
+              <div class="list-box">
+                <ul class="list-a">
+                  <li (click)="onSelectModule(module)" *ngFor="let module of modules">{{module.name}}</li>
+                </ul>
+              </div>
+
+              <div class="list-box">
+                <ul class="list-b">
+                  <li *ngFor="let access of accessibilities">
+                      <label class="control control--checkbox">{{access.accessibility.name}}
+                        <input type="checkbox" [checked]="access.checked" (change)="accessbilityChange($event, access)"/>
+                        <div class="control__indicator"></div>
+                      </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+                
+            <table class="table">
+                <thead class="thead">
+                    <tr class="tr">
+                        <th class="th">Module</th>
+                        <th class="th">Accessibility</th>
+                        <th class="th"></th>
+                    </tr>
+                </thead>
+                <tbody class="tbody">
+                    <tr *ngFor="let role of roles" class="tr">
+                        <td class="td">{{role.module.name}}</td>
+                        <td class="td">{{role.accessibility.name}}</td>
+                        <td class="td-icos">
+                          <i (click)="remove(role.accessibility.accessibility)" class="fa fa-trash"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button (click)="onClickAddRole(roleFormGroup.valid, roleFormGroup.value)" class="btn btn-medium btn-blue"> <i class="fa fa-plus"></i> {{btnText}}</button>
+        </form>
+    </div>
+</section>

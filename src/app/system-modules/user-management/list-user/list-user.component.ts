@@ -1,10 +1,14 @@
+import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
+import { CoolLocalStorage } from 'angular2-cool-storage';
+import { SystemModuleService } from './../../../services/common/system-module.service';
+import { Router } from '@angular/router';
+import { UserService } from './../../../services/common/user.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
-import { SystemModuleService } from './../../../services/common/system-module.service';
-import { PersonService, RoleService } from '../../../services/index';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { FacilityService } from '../../../services/common/facility.service';
+import { LoadingBarService } from '@ngx-loading-bar/core';
+import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-list-user',
@@ -12,110 +16,159 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
   styleUrls: ['./list-user.component.scss']
 })
 export class ListUserComponent implements OnInit {
+
+  listsearchControl = new FormControl();
+  filterTypeControl = new FormControl();
+  createdByControl = new FormControl();
+  utilizedByControl = new FormControl();
+  statusControl = new FormControl();
+
   addRoleForm: FormGroup;
   users: any = <any>[];
   roles: any = <any>[];
   loading: Boolean = true;
   closeResult: String;
   selectedUser: any = <any>{};
+  auth: any = <any>{};
+  currentPlatform:any;
+  index:any = 0 ;
+  totalEntries:number;
+  showLoadMore:Boolean = true;
+  limit:number = TABLE_LIMIT_PER_VIEW;
+  resetData:Boolean;
 
   constructor(
     private _fb: FormBuilder,
     private _toastr: ToastsManager,
-    private modalService: NgbModal,
+    private _userService: UserService,
+    private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
-    private _personService: PersonService,
-    private _roleService: RoleService,
-    private _systemService: SystemModuleService
+    private _systemService: SystemModuleService,
+    private _facilityService:FacilityService,
+    private _locker: CoolLocalStorage
   ) { }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('List Users');
-    // this._toastr.success('Beneficiary has been created successfully!', 'Success!');
+    this._headerEventEmitter.setRouteUrl('User List');
+    this._headerEventEmitter.setMinorRouteUrl('List of all users');
+    this.auth = (<any>this._locker.getObject('auth')).user;
+    this._getCurrentPlatform();
+  }
+	private _getCurrentPlatform() {
+		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+			if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._getUsers();
+			}
+		}).catch(err => console.log(err));
+  }
+  
+  _getUsers() {
 
-    this.addRoleForm = this._fb.group({
-      role: this._fb.array([])
+    this._systemService.on();
+    if (this.auth.userType === undefined) {
+      this._userService.find({
+        query: { $sort: {createdAt: -1}}
+      }).then((payload: any) => {
+        console.log(payload);
+        this.loading = false;
+        this.totalEntries = payload.total;
+        //Array.prototype.push.apply(this.users,payload.data); 
+        if(this.resetData !== true)
+        { 
+          this.users.push(...payload.data); 
+        }else{ 
+          this.resetData = false;
+          this.users = payload.data;
+        }
+        if(this.totalEntries <= this.users.length){
+          this.showLoadMore = false;
+        }
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
+    } else if (this.auth.userType.name === 'Platform Owner') {
+      console.log(this.auth.userType);
+      this._userService.find({
+        query: {
+          'platformOwnerId._id': this.currentPlatform._id,
+          $limit:this.limit,
+          $skip: this.index*this.limit,
+          $sort: { createdAt: -1 }
+        }
+      }).then((payload: any) => {
+        console.log(payload);
+        this.loading = false;
+        this.totalEntries = payload.total;
+        //Array.prototype.push.apply(this.users,payload.data);
+        if(this.resetData !== true)
+        { 
+          this.users.push(...payload.data); 
+        }else{ 
+          this.resetData = false;
+          this.users = payload.data;
+        }
+        if(this.totalEntries <= this.users.length){
+          this.showLoadMore = false;
+        }
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
+    }
+
+    this.index++;
+
+  }
+
+  navigateEditUser(user) {
+    this._systemService.on();
+    this._router.navigate(['/modules/user/new', user._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err)
+      this._systemService.off();
     });
-
-    this._getRoles();
-    this._getPersons();
   }
 
-  onClickActivate(user: any) {
-    console.log(user);
-    user.isActive = user.isActive ? false : true;
-
-    this._personService.update(user).then((res: any) => {
-      this._getPersons();
-      const isActive = user.isActive ? 'activated' : 'deactivated';
-      const text = user.firstName + ' ' + user.lastName + ' has been ' + isActive + ' successfully!';
-      this._toastr.success(text, 'Success!');
-    }).catch(err => this._toastr.error('There was a problem updating user. Please try again later!', 'Error!'));
+  showDetails(user) {
+    this._systemService.on();
+    this._router.navigate(['/modules/user/users', user._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      console.log(err);
+      this._systemService.off();
+    });
   }
 
-  onChangeRole(role: any, isChecked: Boolean) {
-    const roleFormArray = <FormArray>this.addRoleForm.controls.role;
-
-    if (isChecked) {
-      console.log(isChecked);
-      // emailFormArray.push(new FormControl(email));
+  navigate(url: string, id?: string) {
+    if (!!id) {
+     this._systemService.on()
+      this._router.navigate([url + id]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     } else {
-      // let index = emailFormArray.controls.findIndex(x => x.value == email)
-      // emailFormArray.removeAt(index);
+     this._systemService.on()
+      this._router.navigate([url]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     }
   }
 
-  onClickAddRole() {
-    console.log(this.selectedUser);
-  }
-  
-
-  private _getPersons() {
-    this._systemService.on();
-    this._personService.findAll().then((res: any) => {
-      this._systemService.off();
-      if (res.data.length > 0) {
-        console.log(res);
-        this.users = res.data;
-      }
-    }).catch(err => {
-      this._systemService.off();
-    });
-  }
-  
-  
-  private _getRoles() {
-    this._systemService.on();
-    this._roleService.findAll().then((res: any) => {
-      console.log(res);
-      this._systemService.off();
-      if (res.data.length > 0) {
-        console.log(res);
-        this.roles = res.data;
-      }
-    }).catch(err => {
-      this._systemService.off();
-    });
+  loadMore(){
+    this._getUsers();
   }
 
-  open(content, user) {
-    this.selectedUser = user;
-    // this.modalService.open('Hi tehre!');
-    this.modalService.open(content).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  reset(){
+    this.index = 0;
+    this.resetData = true;
+    this._getUsers();
+    this.showLoadMore = true;
   }
 
 }

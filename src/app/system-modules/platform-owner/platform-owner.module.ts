@@ -1,35 +1,28 @@
-import { CountryService } from './../../services/common/country.service';
-import { CountriesService } from './../../services/api-services/setup/countries.service';
-import { BankService } from './../../services/common/bank.service';
+import { MyDatePickerModule } from 'mydatepicker';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared-modules/shared.module';
+import {
+    ContactPositionService,
+    PlatformOwnerService,
+    CountryService,
+    CapitationFeeService
+} from '../../services/index';
+
+import { BankService } from '../../services/common/bank.service';
 
 import { platformRoutes } from './platform-owner.route';
-
 import { PlatformOwnerComponent } from './platform-owner.component';
-import { NewPlatformComponent } from './new-platform/new-platform.component';
 import { ListPlatformComponent } from './list-platform/list-platform.component';
-import { DetailsPlatformComponent } from './details-platform/details-platform.component';
-import { PlatformOwnerService } from '../../services/index';
+import { NewPlatformComponent } from './new-platform/new-platform.component';
+import { PlatformDetailsComponent } from './platform-details/platform-details.component';
 
 @NgModule({
-    declarations: [
-    PlatformOwnerComponent,
-    NewPlatformComponent,
-    ListPlatformComponent,
-    DetailsPlatformComponent
-    ],
-    exports: [],
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        platformRoutes
+        SharedModule,
+        platformRoutes,
+        MyDatePickerModule
     ],
-    providers: [PlatformOwnerService, BankService, CountryService]
+    declarations: [PlatformOwnerComponent, ListPlatformComponent, NewPlatformComponent, PlatformDetailsComponent],
+    providers: [ContactPositionService, PlatformOwnerService, CountryService, BankService, CapitationFeeService ]
 })
-
-export class PlatformOwnerModule {
-
-}
+export class PlatformOwnerModule { }

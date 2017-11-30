@@ -18,14 +18,6 @@ export class RoleService {
     this._rest = _restService.getService('roles');
     this._socket = _socketService.getService('roles');
   }
-
-  findAll() {
-    return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('roles').then((socket: any) => {
-        return socket.find();
-      }))
-    });
-  }
   
   find(query: any) {
     return new Promise((resolve, reject) => {

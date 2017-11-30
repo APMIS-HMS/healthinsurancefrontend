@@ -1,7 +1,11 @@
+import { Router } from '@angular/router';
 import { SystemModuleService } from './system-module.service';
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+let request = require('superagent');
 
 
 @Injectable()
@@ -15,7 +19,7 @@ export class FacilityService {
     private _socketService: SocketService,
     private _restService: RestService,
     private locker: CoolLocalStorage,
-    private _systmeService: SystemModuleService
+    private _systmeService: SystemModuleService,
   ) {
     this._rest = _restService.getService('facilities');
     this._socket = _socketService.getService('facilities');
@@ -24,9 +28,17 @@ export class FacilityService {
   find(query: any) {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('facilities').then((socket: any) => {
-        return socket.find(query);
+        if(socket != undefined){
+          return socket.find(query);
+        }else{
+          console.log(socket)
+          reject('a promise transaction has failed');
+        }
       }))
     });
+  }
+  findWithOutAuth(query: any) {
+    return this._socket.find(query);
   }
 
   get(id: string, query: any) {
@@ -56,6 +68,14 @@ export class FacilityService {
         return this._socket.remove(id, query);
       }))
     });
+  }
+
+  sendSMSWithMiddleWare(body: any) {
+    let host = this._restService.getHost();
+    let path = host + '/api/send-sms';
+    return request
+      .post(path)
+      .send(body);
   }
 
 }

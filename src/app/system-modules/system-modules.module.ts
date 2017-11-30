@@ -1,22 +1,31 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// Bootstrap
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '../shared-modules/shared.module';
 
 import { SystemModulesComponent } from './system-modules.component';
 import { systemModulesRoutes } from './system-modules.route';
-
-import { HeaderEventEmitterService } from '../services/event-emitters/header-event-emitter.service';
-import { ContactPositionService } from '../services/index';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { TopBarComponent } from './top-bar/top-bar.component';
+import { MainMenuComponent } from './main-menu/main-menu.component';
+import { ModuleService, RoleService} from '../services/index';
+import { AccessManagementComponent } from './access-management/access-management.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { ChangePassComponent } from './top-bar/change-pass/change-pass.component';
+import { NotificationService } from './../services/common/notification.service';
+import { NotificationsModule } from 'angular-notice'
+
+
 @NgModule({
     declarations: [
-        SystemModulesComponent
+        SystemModulesComponent,
+        TopBarComponent,
+        MainMenuComponent,
+        AccessManagementComponent,
+        WelcomeComponent,
+        ChangePassComponent
     ],
     exports: [],
-    imports: [NgbModule, systemModulesRoutes, LoadingBarModule.forRoot(), CommonModule],
-    providers: [HeaderEventEmitterService, ContactPositionService]
+    imports: [systemModulesRoutes, LoadingBarModule.forRoot(), SharedModule,NotificationsModule ],
+    providers: [ModuleService, RoleService, NotificationService]
 })
 
 export class SystemModules {

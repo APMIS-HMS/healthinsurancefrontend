@@ -11,9 +11,10 @@ import { Injectable } from '@angular/core';
 const rx = require('feathers-reactive');
 const RxJS = require('rxjs');
 
-// const HOST = 'http://192.168.20.101:3031'; // Live
+// const HOST = 'http://172.16.16.40:3031'; // Live
+// const HOST = 'http://192.168.1.4:3031'; // Live
 const HOST = 'http://localhost:3031'; // Your base server URL here
-// const HOST = 'http://insuranceapi.azurewebsites.net';
+//const  HOST = 'http://insuranceapi.azurewebsites.net';
 
 @Injectable()
 export class SocketService {
@@ -22,7 +23,7 @@ export class SocketService {
     public onlineStatus = false;
 
     constructor(
-        private locker: CoolLocalStorage, private _systemService:SystemModuleService
+        private locker: CoolLocalStorage, private _systemService: SystemModuleService
     ) {
         this.socket = io(HOST);
 
@@ -32,45 +33,37 @@ export class SocketService {
             .configure(hooks())
             .configure(authentication({ storage: window.localStorage }));
 
-        console.log(this.socket)
         this.socket.on('reconnect', (value) => {
-            console.log(value)
             this.onlineStatus = true;
-            this._systemService.onlineStatusBroadCast({status:'On'});
-        })
-        this.socket.on('disconnect', (value)=>{
-            console.log(value);
+            this._systemService.onlineStatusBroadCast({ status: 'On' });
+        });
+        this.socket.on('disconnect', (value) => {
             this.onlineStatus = false;
-            this._systemService.onlineStatusBroadCast({status:'Off'});
-        })
+            this._systemService.onlineStatusBroadCast({ status: 'Off' });
+        });
         this.socket.on('connect', () => {
-            console.log('connected');
             this.onlineStatus = true;
-            this._systemService.onlineStatusBroadCast({status:'On'});
-        })
-        this.socket.on('connecting', (value)=>{
-            console.log(value)
-        })
-        this.socket.on('reauthentication-error', (value)=>{
-            console.log(value)
+            this._systemService.onlineStatusBroadCast({ status: 'On' });
+        });
+        this.socket.on('connecting', (value) => {
+        });
+        this.socket.on('reauthentication-error', (value) => {
             this.onlineStatus = false;
-            this._systemService.onlineStatusBroadCast({status:'Off'});
-        })
+            this._systemService.onlineStatusBroadCast({ status: 'Off' });
+        });
         this.socket.on('logout', (value) => {
-            console.log(value)
-        })
-        this.socket.on('reconnected', (value)=>{
-            console.log(value)
-        })
-        this.socket.on('disconnected', (value)=>{
-            console.log(value)
-        })
+        });
+        this.socket.on('reconnected', (value) => {
+        });
+        this.socket.on('disconnected', (value) => {
+        });
     }
     logOut() {
         this.locker.clear();
-        this._app.logout();
+        return this._app.logout();
     }
     loginIntoApp(query: any) {
+        console.log(query);
         return this._app.authenticate({
             strategy: 'local',
             'email': query.email,
@@ -79,24 +72,23 @@ export class SocketService {
     }
     getService(value: any) {
         if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
-            let token = this.locker.getItem('auth');
+            const token = this.locker.getItem('auth');
             const copyInvestigation = JSON.parse(token);
             this._app.authenticate({ strategy: 'jwt', accessToken: copyInvestigation.accessToken })
         }
-        return this._app.service(value)
+        return this._app.service(value);
     }
     authenticateUser(service) {
         if (this.locker.getItem('auth') !== undefined && this.locker.getItem('auth') != null) {
             return new Promise((resolve, reject) => {
-                let token = this.locker.getItem('auth');
+                const  token: any = this.locker.getItem('auth');
                 const copyToken = JSON.parse(token);
+                // console.log(copyToken.accessToken)
                 resolve(this._app.authenticate({ strategy: 'jwt', accessToken: copyToken.accessToken }).then(payload => {
                     this.socket = this.getService(service);
                     return Promise.resolve(this.socket);
                 }, error => {
-                    // console.log(error)
-                }).catch(err =>{
-                    console.log(err)
+                }).catch(err => {
                 }));
 
             });

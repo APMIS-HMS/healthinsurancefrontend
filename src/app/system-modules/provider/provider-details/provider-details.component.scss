@@ -1,0 +1,43 @@
+@import '../../hia/hia-details/hia-details.component.scss';
+.modal-wrap {
+    min-width: 800px;
+    min-height: 320px;
+}
+
+.modal-title {
+    text-align: left;
+    font-size: 20px;
+    color: $brand-primary;
+}
+
+.box-left {
+    width: 30%;
+    float: left;
+    height: 100%;
+}
+
+.box-right {
+    width: 70%;
+    float: left;
+    height: 100%;
+    .box {
+        padding: 0px 20px;
+        max-height: 240px;
+        height: auto;
+        overflow-y: auto;
+    }
+}
+
+.form-item-wrap {
+    input,
+    select {
+        width: 100%;
+    }
+}
+
+.btn-box {
+    width: 100%;
+    button {
+        float: left;
+    }
+}

@@ -3,28 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { roleRoutes } from './role.route';
-import { RoleService, ModuleService } from '../../services/index';
 import { RoleComponent } from './role.component';
-
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ListRoleComponent } from '../role/list-role/list-role.component';
+import { ListRolesComponent } from './list-roles/list-roles.component';
+import { NewRoleComponent } from './new-role/new-role.component';
+import { RoleDetailsComponent } from './role-details/role-details.component';
 
 @NgModule({
-    declarations: [
-        RoleComponent,
-        ListRoleComponent,
-    ],
-    exports: [],
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        NgbModule,
         roleRoutes
     ],
-    providers: [RoleService, ModuleService]
+    declarations: [RoleComponent, ListRolesComponent, NewRoleComponent, RoleDetailsComponent],
+    providers: []
 })
-
-export class RoleModule {
-
-}
+export class RoleModule { }

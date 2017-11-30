@@ -1,0 +1,11 @@
+<div class="content-top-bar">
+    <div class="bar-labels">
+        <div>Grade: {{selectedFacility?.hia?.grade?.name}}</div>
+        <div>Status: <span class="{{ selectedFacility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ selectedFacility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
+        <div *ngIf="selectedFacility?.isConfirmed && selectedFacility?.hia?.validityPeriods.length > 0">Full License: Valid till {{ selectedFacility?.hia?.validityPeriods[selectedFacility?.hia?.validityPeriods.length - 1].validTill | date }}</div>
+    </div>
+
+    <div class="bar-icos">
+        <div (click)="addApprovalClick($event);" *ngIf="canApprove" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
+    </div>
+</div>

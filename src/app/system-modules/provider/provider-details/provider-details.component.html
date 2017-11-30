@@ -1,0 +1,214 @@
+<div class="in-content-wrap">
+    <div (click)="navigateProviders('/modules/provider/providers')" class="back-btn">
+        <i class="fa fa-chevron-left"></i> BACK TO PROVIDERS
+    </div>
+
+    <ul class="inpage-tabs">
+        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Provider Details</li>
+        <li (click)="tabBeneficiaries_click()" [class.tab-active]="tab_beneficiaries">Beneficiaries</li>
+    </ul>
+
+    <div class="tab-content shadow-RB">
+        <div *ngIf="tab_details" class="tab-pane fade show active">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>{{ facility?.name }}</div>
+                    <div>Status: <span class="{{ facility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ facility?.isConfirmed ? 'Authorized' : 'Not Authorized' }}</span></div>
+                    <div *ngIf="facility?.isConfirmed && facility?.provider?.validityPeriods.length > 0">Full License: Valid till {{ facility?.provider?.validityPeriods[facility?.provider?.validityPeriods.length - 1].validTill | date }}</div>
+                </div>
+
+                <!-- <div class="bar-icos">
+                    <i (click)="addApprovalClick();" class="fa fa-pencil" aria-hidden="true"></i>
+                </div> -->
+                <div class="bar-icos">
+                    <div (click)="addApprovalClick();" *ngIf="canApprove" class="btn btn-medium btn-white-outline btn-radius-x2"> APPROVAL</div>
+                </div>
+            </div>
+
+            <div class="details-wrap">
+                <div class="detail-item">
+                    <div class="item-label item-head">Provider Detail</div>
+
+                    <div class="detail-content">
+                        <div class="logo-wrap">
+                            <img *ngIf="facility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility.logo.thumbnail)">
+                            <img *ngIf="facility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
+                        </div>
+                        <div class="group-wrap">
+                            <div class="item-label">{{ facility?.name }}</div>
+                            <!-- <div class="item-val">{{ facility?.provider.industry.name }}</div> -->
+                            <div class="item-val">{{ facility?.address?.street }}</div>
+                            <div class="item-val">{{ facility?.address?.lga.name }} - {{ facility?.address?.state?.name }}</div>
+                            <div class="item-val">{{ facility?.phoneNumber }}</div>
+                        </div>
+                        <div class="group-wrap">
+                            <div class="group-item">
+                                <div class="item-label">HEFEEMA Status:</div>
+                                <div class="item-val">{{ facility?.provider?.hefeemaStatus.name }}</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Ownership:</div>
+                                <div class="item-val">{{ facility?.provider?.facilityOwnership?.name }}</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Facility Type:</div>
+                                <div class="item-val">{{ facility?.provider?.facilityType?.name }}</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Facility Class:</div>
+                                <div class="item-val">
+                                    <span *ngFor="let class of facility?.provider?.facilityClass">{{ class }}</span>
+                                </div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Registration Date:</div>
+                                <div class="item-val">12th Jun, 2017.</div>
+                            </div>
+                            <div class="group-item">
+                                <div class="item-label">Bank Account:</div>
+                                <div class="item-val">{{ facility?.bankDetails?.accountNumber }}</div>
+                            </div>
+                        </div>
+                        <div class="group-wrap">
+                            <input type="checkbox" class="item-label">Accept Terms and Conditions
+                        </div>
+                        <i (click)="navigateProviders('/modules/provider/new/', facility?._id)" class="ico-cirle fa fa-pencil"></i>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="item-label item-head">Managing Director's Contact</div>
+
+                    <div class="detail-content">
+                        <div class="hia-user">
+                            <img *ngIf="facility?.businessContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.businessContact?.image?.thumbnail)">
+                            <img *ngIf="facility?.businessContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+                        </div>
+                        <div class="group-wrap">
+                            <div class="item-val">{{ facility?.businessContact?.firstName }} {{ facility?.businessContact?.lastName }}</div>
+                            <div class="item-val">{{ facility?.businessContact?.phoneNumber }}</div>
+                            <div class="item-val">{{ facility?.businessContact?.email }}</div>
+                            <!-- <div class="item-val">{{ facility?.businessContact?.position.name }}</div> -->
+                        </div>
+                        <i (click)="navigateproviders('/modules/provider/new/', facility?._id)" class="ico-cirle fa fa-pencil"></i>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="item-label item-head">HMO Officer's Contact</div>
+
+                    <div class="detail-content">
+                        <div class="hia-user">
+                            <img *ngIf="facility?.hmoContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.hmoContact?.image?.thumbnail)">
+                            <img *ngIf="facility?.hmoContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+                        </div>
+                        <div class="group-wrap">
+                            <div class="item-val">{{ facility?.hmoContact?.firstName }} {{ facility?.hmoContact?.lastName }}</div>
+                            <div class="item-val">{{ facility?.hmoContact?.phoneNumber }}</div>
+                            <div class="item-val">{{ facility?.hmoContact?.email }}</div>
+                            <!-- <div class="item-val">{{ facility?.hmoContact?.position.name }}</div> -->
+                        </div>
+                        <i (click)="navigateproviders('/modules/provider/new/', facility?._id)" class="ico-cirle fa fa-pencil"></i>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="item-label item-head">IT Contact</div>
+
+                    <div class="detail-content">
+                        <div class="hia-user">
+                            <img *ngIf="facility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.facility?.itContact?.image?.thumbnail)">
+                            <img *ngIf="facility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+                        </div>
+                        <div class="group-wrap">
+                            <div class="item-val">{{ facility?.itContact?.firstName }} {{ facility?.itContact?.lastName }}</div>
+                            <div class="item-val">{{ facility?.itContact?.phoneNumber }}</div>
+                            <div class="item-val">{{ facility?.itContact?.email }}</div>
+                            <div class="item-val">{{ facility?.itContact?.position?.name }}</div>
+                        </div>
+                        <i (click)="navigateProviders('/modules/provider/new/', facility?._id)" class="ico-cirle fa fa-pencil"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf='tab_beneficiaries' class="tab-pane fade show active">
+            <app-list-beneficiary></app-list-beneficiary>
+        </div>
+    </div>
+</div>
+<div *ngIf="addApproval" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="addApprovalClick();" class="close-modal">X</div>
+        <div class="modal-title">EDIT STATUS - <em>{{ facility?.name }}</em></div>
+        <div class="list-boxes">
+            <div class="box-left">
+                <div *ngIf="!facility?.isConfirmed" style="padding: 10px 0px;">
+                    <form [formGroup]="approvalFormGroup" novalidate>
+                        <div class="form-item-wrap">
+                            <label class="label">Duration</label>
+                            <div class="input-wrap">
+                                <input type="number" min="1" formControlName="duration" class="form-control" placeholder="Duration">
+                            </div>
+                        </div>
+                        <div class="form-item-wrap">
+                            <label class="label">Unit</label>
+                            <div class="input-wrap">
+                                <select formControlName="unit" class="form-control">
+                                    <option value="" disabled>Select Unit</option>
+                                    <option [ngValue]="duration" *ngFor="let duration of durations; let i=index">{{ duration.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="btn-box">
+                        <button class="btn btn-medium btn-green" style="float:left;" (click)="onClickApprove(approvalFormGroup.valid, approvalFormGroup.value);" [innerHtml]="approvalBtn"></button>
+                        <button class="btn btn-medium" style="float:right;" (click)="addApprovalClick();">Cancel</button>
+                    </div>
+                </div>
+                <div *ngIf="facility?.isConfirmed" style="padding: 70px 0px;">
+                    <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivate();">DEACTIVATE LICENSE</button>
+                </div>
+            </div>
+
+            <div class="box-right">
+                <div class="text-center">
+                    <span>List of Previous Licenses</span>
+                </div>
+                <div class="box">
+                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                        <thead class="thead">
+                            <tr class="tr">
+                                <th class="th">No</th>
+                                <th class="th">Duration</th>
+                                <th class="th">Created At</th>
+                                <th class="th">Status</th>
+                                <th class="th">Valid Till</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="tbody">
+                            <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && !loading">
+                                <td class="text-center" colspan="5">No data available in table</td>
+                            </tr>
+                            <tr class="tr" *ngIf="facility?.provider?.validityPeriods?.length === 0 && loading">
+                                <td class="text-center" colspan="5">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let provider of facility?.provider?.validityPeriods; let i = index;" class="tr">
+                                <td class="td hover">{{ i+1 }}</td>
+                                <td class="td hover">{{ provider.duration }} {{ provider.unit.name }}</td>
+                                <td class="td hover">{{ provider.createdAt | date }}</td>
+                                <td class="td hover">
+                                    <span class="{{provider.isActive ? 'green': 'red'}}">{{ provider.isActive ? 'Active': 'Inactive' }}</span>
+                                </td>
+                                <td class="td hover">{{ provider.validTill | date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+<div>
+    <div class="list-search-wrap">
+        <div class="search-wrap">
+            <label class="label-xx">Search:</label>
+            <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="search">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+
+        <div (click)="navigate('/modules/checkin/new');" class="btn btn-medium btn-blue">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> NEW CHECK-IN
+        </div>
+    </div>
+
+    <div class="shadow-RB">
+        <div class="list-filter-wrap">
+            <div class="label-xx">Filters:</div>
+
+            <div class="input-wrap">
+                <label>Type</label>
+                <select [formControl]="filterTypeControl">
+            <option>All</option>
+            </select>
+            </div>
+
+            <div class="input-wrap">
+                <label>Created By</label>
+                <select [formControl]="createdByControl">
+            <option>All</option>
+            </select>
+            </div>
+
+            <div class="input-wrap">
+                <label>Utilized By</label>
+                <select [formControl]="utilizedByControl">
+            <option>All</option>
+            </select>
+            </div>
+
+            <div class="input-wrap">
+                <label>Status</label>
+                <select [formControl]="statusControl">
+            <option>All</option>
+            </select>
+            </div>
+
+            <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
+        </div>
+
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">No</th>
+                    <th class="th">Date of Encounter</th>
+                    <th class="th">Patient</th>
+                    <th class="th">LASHMA ID</th>
+                    <th class="th">Premium Status</th>
+                    <th class="th">Encounter Type</th>
+                    <th class="th">Encounter Status</th>
+                    <th class="th">Expiration Status</th>
+                    <th class="th">Pre Auth Requested</th>
+                    <th class="th">Capitation</th>
+                    <th class="th">Fee For Service</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="checkedIns.length === 0 && !loading">
+                    <td class="text-center" colspan="12">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="checkedIns.length === 0 && loading">
+                    <td class="text-center" colspan="12">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr *ngFor="let check of checkedIns; let i = index;" class="tr hover">
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{ i+1 }}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.createdAt | date}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
+                    <td class="td" class="text-center" (click)="routeBeneficiaryDetails(check)">
+                        <i *ngIf="check.policyObject?.isPaid" class="fa fa-check green" aria-hidden="true"></i>
+                        <i *ngIf="!check.policyObject?.isPaid" class="fa fa-check red" aria-hidden="true"></i>
+                    </td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.encounterType.name}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)"><span class="green">{{check.encounterStatus.name}}</span></td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)"><span class="green">Active</span></td>
+                    <td class="text-center" (click)="routeBeneficiaryDetails(check)"><i class="fa fa-times red" aria-hidden="true"></i></td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.claimType.name}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">Filed</td>
+                    <td (click)="routeBeneficiaryDetails(check)"><i class="fa fa-chevron-right"></i></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="list-buttom">
+            <div *ngIf="checkedIns.length > 0">
+                <div class="list-summary">Showing 1 to {{ checkedIns.length }} of {{ totalEntries }} entries (filtered from {{ totalEntries }} total entries)</div>
+                <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="showLoadMore">Load More</div>
+            </div>
+        </div>
+    </div>
+</div>

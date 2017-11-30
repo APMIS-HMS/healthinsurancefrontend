@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html class="no-js" lang="">
 
@@ -211,3 +212,17 @@
 </body>
 
 </html>
+=======
+<ngx-loading-bar></ngx-loading-bar>
+<div class="tab-wrap">
+    <app-top-bar (showMenu)="menu_onClick($event)"></app-top-bar>
+</div>
+
+<div *ngIf = "menuToggle" class="menu-wrap scroll shadow-RB animated fadeIn">
+    <app-main-menu (closeMenu)="close_onClick($event)" ></app-main-menu>
+</div>
+
+<div (click)="close_onClick($event)" class="app-content-container">
+    <router-outlet></router-outlet>
+</div>
+>>>>>>> remotes/origin/redesign

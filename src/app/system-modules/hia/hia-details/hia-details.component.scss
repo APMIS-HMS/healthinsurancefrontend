@@ -1,0 +1,174 @@
+@import '../../../../assets/libs/variables.scss';
+.status {
+    color: $orange;
+}
+
+.inpage-tabs li {
+    padding: 10px;
+}
+
+.details-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: $font-x2;
+}
+
+.left-wrap {
+    display: flex;
+    justify-content: flex-start;
+    width: 80%;
+}
+
+.right-wrap {
+    width: 20%;
+}
+
+.detail-item {
+    margin-right: 30px;
+    padding-right: 34px;
+}
+
+.detail-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.detail-content {
+    position: relative;
+}
+
+.hia-logo {
+    margin: 10px 0;
+}
+
+.hia-logo img {
+    width: 100%;
+}
+
+.hia-user {
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hia-user img {
+    width: 100%;
+}
+
+.pd-tag {
+    position: absolute;
+    background: $grey-2;
+    border: 1px solid $grey-3;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    top: 0;
+    left: 0;
+}
+
+.item-head {
+    margin-bottom: 20px;
+}
+
+.item-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.item-label-x2 {
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.item-val {
+    color: $grey-3;
+}
+
+.group-wrap {
+    margin: 10px 0;
+}
+
+.group-item {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.ico-cirle {
+    position: absolute;
+    right: -40px;
+    top: 0;
+}
+
+.modal-wrap {
+    min-width: 800px;
+    min-height: 320px;
+}
+
+.modal-title {
+    text-align: left;
+    font-size: 20px;
+    color: $brand-primary;
+}
+
+.box-left {
+    width: 30%;
+    float: left;
+    height: 100%;
+}
+
+.box-right {
+    width: 70%;
+    float: left;
+    height: 100%;
+    .box {
+        padding: 0px 20px;
+        max-height: 240px;
+        height: auto;
+        overflow-y: auto;
+    }
+}
+
+.form-item-wrap {
+    input,
+    select {
+        width: 100%;
+    }
+}
+
+.btn-box {
+    width: 100%;
+    button {
+        float: left;
+    }
+}
+
+
+@media only screen and (max-width: 960px){
+    .left-wrap {
+        display: block;
+    }
+    .detail-item{
+        margin-bottom: 20px;
+        border: 1px solid $grey-2;
+        padding: 20px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    .details-wrap{
+        display: block;
+    }
+    .right-wrap, .left-wrap{
+        width: 100%;
+    }
+}

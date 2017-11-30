@@ -1,0 +1,84 @@
+<div (click)="notifier_hide()" class="app-content-wrap">
+    <div class="bar-wrap">
+        <div class="sect-a">
+            <div (click)="menu_show()" class="menuico">
+                <div class="menu-label">MENU</div>
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </div>
+
+            <div class="platform-wrap">
+                <div class="platform-logo">
+                    <img src="../../../assets/img/logos/lagos-state-logo.jpg">
+                </div>
+                <div class="platform-label">LAGOS STATE HEALTH MANAGEMENT AGENCY</div>
+            </div>
+        </div>
+        <div class="sect-b">
+            <div class="search-wrap">
+                <input class="top-tab-search" [formControl]="appsearchControl" type="search" placeholder="Search here...">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <!-- <div class="x">x</div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="title-tab">
+    <div class="app-content-wrap">
+        <div class="bar-wrap">
+            <div (click)="notifier_hide()" class="bar-left">
+                <span class="title">{{ pageInView }}</span>
+                <span class="post-title">- {{ minorPageInView }}</span>
+            </div>
+            <div class="bar-right">
+                <div class="user-wrap">
+                    <div (click)="userMenu_toggle()" class="user-img-wrap">
+                        <img src="../../../assets/img/users/default.png">
+                    </div>
+                    <div (click)="userMenu_toggle()" class="user-text-wrap">
+                        <div *ngIf="user?.facilityId !== undefined" class="user-name">{{user?.lastName}} {{user?.firstName}}</div>
+                        <div *ngIf="user?.facilityId === undefined" class="user-name">{{user?.email}}</div>
+                        <div class="user-others">{{user?.facilityId?.name}}</div>
+                    </div>
+
+                    <div *ngIf="user_menu" class="user-options">
+                        <div class="opt-menu-close">
+                            <i (click)="userMenu_hide()" class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                        <ul (click)="userMenu_hide()" class="option-items">
+                            <li (click)="showPass_show()" class="option-item">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                <span>Change Password</span>
+                            </li>
+                            <li (click)="signOut()" class="option-item">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                <span>Log Out</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="icons-wrap">
+                    <i (click)="notifier_toggle()" class="fa fa-bell-o" aria-hidden="true">
+                        <span class="notify-count" *ngIf="noUnReadAlert>0">{{noUnReadAlert}}</span>
+                    </i>
+                </div>
+            </div>
+
+            <ul *ngIf="notifier" class="notify-wrap shadow-b">
+                <li class="notify-item" [class.unread]="item.isRead==false" *ngFor="let item of alerts" (click)="navigateDetailBeneficiary(item)">
+                    <div class="notify-title">{{item.title}}</div>
+                    <div class="notify-content">{{item.body}}</div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="changePass" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-change-pass (closeModal)="modal_close()"></app-change-pass>
+    </div>
+</div>

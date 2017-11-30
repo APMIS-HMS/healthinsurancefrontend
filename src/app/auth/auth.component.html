@@ -1,42 +1,18 @@
-<!doctype html>
-<html class="no-js" lang="">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>APMIS HMO</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Place favicon.ico in the root directory -->
+<div id="auth-content-wrapper">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-</head>
-
-<body>
-
-    <div id="auth-content-wrapper">
-        <div class="container-fluid">
-            <div class="auth-logo-box">
-                <div class="col-12 logo-box">
-                    <img src="assets/img/lagos-state-logo.jpg" class="img-circle img-thumbnail" alt="">
-                </div>
-                <div class="col-12 text-center text-white logo-text">
-                    <h5>LAGOS STATE HEALTH MANAGEMENT AGENCY</h5>
-                </div>
+    <div>
+        <div class="platform-wrap">
+            <div class="platform-img shadow-RB">
+                <img src="assets/img/logos/lagos-state-logo.jpg">
             </div>
-            <div class="auth-box">
-                <ul class="nav nav-tabs">
-                    <li [class.active]="tabActive && tabId == 'login'"><a data-toggle="tab" (click)="onClickTab('login');" routerLink="/auth/login">LOGIN</a></li>
-                    <li [class.active]="tabActive && tabId == 'register'"><a data-toggle="tab" (click)="onClickTab('register');" routerLink="/auth/sign-up">SIGN UP</a></li>
-                </ul>
-                <div class="tab-content">
-                    <router-outlet></router-outlet>
-                </div>
-            </div>
+            <div class="platform-label">LAGOS STATE HEALTH MANAGEMENT AGENCY</div>
+        </div>
+    
+        <div class="frm-wrap">
+            <router-outlet></router-outlet>
         </div>
     </div>
-</body>
-
-</html>
+    
+</div>

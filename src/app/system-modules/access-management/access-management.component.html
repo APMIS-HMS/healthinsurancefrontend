@@ -1,0 +1,62 @@
+<section class="app-content-wrap">
+
+    <div class="content shadow-RB">
+        <div class="list-search-wrap">
+            <div class="search-wrap">
+                <label class="label-xx">Search:</label>
+                <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </div>
+
+            <div routerLink="/modules/role/new" class="btn btn-medium btn-blue">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD ROLES
+            </div>
+        </div>
+        <form class="grey-bg" [formGroup]="accessFormGroup" novalidate>
+            <div class="frm-item-wrap">
+                <label class="label">Module</label>
+                <div class="input-wrap">
+                    <select formControlName="module" class="form-control">
+                        <option  value="" selected>All</option>
+                        <option *ngFor="let module of modules"  [ngValue]="module">{{module.name}}</option>
+                    </select>
+                    <small class="alert-label" [hidden]="accessFormGroup.controls.module.valid || accessFormGroup.controls.module.pristine">
+                            This is a required field.
+                        </small>
+                </div>
+            </div>
+            <div class="frm-item-wrap">
+                <label class="label">Accessibility</label>
+                <div class="input-wrap">
+                    <input type="text" formControlName="accessibility" class="form-control">
+                    <small class="alert-label" [hidden]="accessFormGroup.controls.accessibility.valid || accessFormGroup.controls.accessibility.pristine">
+                            This is a required field.
+                        </small>
+                </div>
+            </div>
+            <button [disabled]="!accessFormGroup.valid || disableAddAccessBtn" (click)="onClickAddAccess(accessFormGroup.valid, accessFormGroup.value)" class="btn btn-medium btn-blue" [innerHtml]="addAccessBtnText"></button>
+        </form>
+
+        <table class="table">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">No</th>
+                    <th class="th">Module</th>
+                    <th class="th">Accessibility</th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr class="tr" *ngFor="let access of selectedModule?.accessibilities; let i = index">
+                    <td class="td">{{ i+ 1 }}</td>
+                    <td class="td">{{ selectedModule?.name }}</td>
+                    <td class="td">{{ access.name }}</td>
+                    <td class="td-icos">
+                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-edit"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

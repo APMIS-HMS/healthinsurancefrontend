@@ -1,0 +1,30 @@
+<div class="in-content-wrap">
+    <div routerLink="/modules/claim/claims" class="back-btn">
+        <i class="fa fa-chevron-left"></i> BACK TO CLAIMS
+    </div>
+
+    <ul class="inpage-tabs">
+        <li (click)="tabDetails_click()" [class.tab-active]="tab_details">Claim Details</li>
+        <li (click)="tabOther_click()" [class.tab-active]="tab_other">Other Claims</li>
+        <!-- <li (click)="tabComplaints_click()" [class.tab-active]="tab_complaints">Complaints</li>
+        <li (click)="tabReferals_click()" [class.tab-active]="tab_referals">Referals</li> -->
+    </ul>
+
+    <div class="tab-content shadow-RB">
+        <div *ngIf="tab_details" class="tab-pane fade show active">
+            <app-claims-top-bar></app-claims-top-bar>
+
+            <div class="details-wrap">
+                <app-claims-detail-tab style="width:100%;"></app-claims-detail-tab>
+            </div>
+        </div>
+
+        <div *ngIf="tab_other" class="tab-pane fade show active">
+            <app-claims-top-bar></app-claims-top-bar>
+
+            <div class="details-wrap">
+                <app-claims-others-tab style="width:100%;"></app-claims-others-tab>
+            </div>
+        </div>
+    </div>
+</div>

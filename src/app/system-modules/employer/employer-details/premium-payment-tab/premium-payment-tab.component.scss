@@ -1,0 +1,76 @@
+@import '../../../../../assets/libs/variables.scss';
+.list-filter-wrap {
+    flex-direction: column;
+    padding: 10px 10px 0px 10px;
+    min-height: 60px;
+    .filter-box {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        float: left;
+    }
+    .payment-box {
+        width: 100%;
+        padding-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        .tab {
+            display: flex;
+            .tab-ffs,
+            .tab-c {
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid #474747;
+                margin-right: 10px;
+                margin-left: -10px;
+                padding: 10px;
+            }
+            .tab-ffs {
+                &.claim-tab-active {
+                    background-color: #474747;
+                    color: #fff;
+                }
+            }
+            .tab-c {
+                &.claim-tab-active {
+                    background-color: #474747;
+                    color: #fff;
+                }
+            }
+        }
+        .queue-btn-box {
+            .btn {
+                margin-bottom: 5px;
+            }
+        }
+    }
+}
+
+.modal-wrap {
+    width: 250px;
+    height: 200px;
+    min-width: 250px;
+    min-height: 200px;
+}
+
+.total-cost-box {
+    width: 94%;
+    padding: 20px;
+    text-align: right;
+}
+
+.paystack-box {
+    .paystack-btn {
+        width: 150px;
+        padding: 10px;
+        margin-left: 65px;
+    }
+}
+
+.paystack-btn {
+    width: 150px;
+    padding: 10px;
+    margin-left: 65px;
+}

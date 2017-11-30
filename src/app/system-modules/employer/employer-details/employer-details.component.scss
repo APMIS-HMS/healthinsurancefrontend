@@ -1,0 +1,38 @@
+@import '../../hia/hia-details/hia-details.component.scss';
+.modal-wrap {
+    height: 150px;
+    width: 450px;
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.btn-box {
+    width: 260px;
+    padding: 30px 100px;
+}
+
+.td-icos {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.input-wrap {
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.searchable-input {
+    width: 100%;
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+.invalidvalue{
+    border-color: red;
+    border-width: 1px solid;
+}

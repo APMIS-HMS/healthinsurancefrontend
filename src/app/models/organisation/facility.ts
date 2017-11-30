@@ -11,6 +11,7 @@ export interface Facility {
     phoneNumber: string;
     email: string;
     businessContact: Contact;
+    hmoContact: Contact;
     itContact: Contact;
     provider?: Provider;
     hia?: HIA;
@@ -19,9 +20,11 @@ export interface Facility {
     address?: Address;
     bankDetails?: BankDetail;
     facilityType?: any;
+    platformOwnerId: any;
     website: string;
     lasraaId: string;
     shortName: string;
     verificationToken: string;
     isTokenVerified: boolean;
+    isConfirmed: boolean;
 }

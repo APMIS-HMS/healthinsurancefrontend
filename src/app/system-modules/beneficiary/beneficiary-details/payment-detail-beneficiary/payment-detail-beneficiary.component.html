@@ -1,0 +1,209 @@
+<div>
+    <div class="content-top-bar">
+        <div class="bar-labels">
+            <div>
+                <label>Registered by:</label>
+                <span>{{ policy?.platformOwnerId?.shortName }}</span>
+            </div>
+        </div>
+        <div class="bar-icons">
+            <div>Household ID:
+                <span>{{ policy?.policyId }}</span>
+            </div>
+        </div>
+        <div class="bar-icos">
+            <div>Status:
+                <span *ngIf="policy?.isActive" style="color: green;">Active</span>
+                <span *ngIf="!policy?.isActive" style="color: red;">Inactive</span>
+            </div>
+        </div>
+        <div class="bar-icons">
+            <div>Plan Name:
+                <span>{{ policy?.planId?.name }}</span>
+            </div>
+        </div>
+        <!-- <div class="bar-labels" style="font-size: 10px">
+            <div>
+                <label>Formal sector plan</label>
+            </div>
+        </div> -->
+    </div>
+    <div class="check-payment-status">
+        <div class="check-payment-left">
+            <div *ngIf="policy?.isPaid">
+                Premium Category: {{ policy?.premiumCategoryId?.name }}
+                <br> Payment Status:<span class="green"> Paid</span>, Due Date: <span class="green">{{ policy?.dueDate }}</span>
+            </div>
+            <div *ngIf="!policy?.isPaid">
+                Payment status:<span class="red"> Not Paid</span>
+            </div>
+        </div>
+        <div class="check-payment-right">
+            <button (click)="onClickShowPayment();" class="btn btn-medium btn-blue cta show-payment">Pay Premium</button>
+        </div>
+    </div>
+    <div class="align-chac" *ngIf="showPayment">
+        <div *ngIf="!isForRenewal">
+            <div class="chac-box">
+                <div class="frm-inner-title">Health Insurance Agent</div>
+                <div class="frm-item-wrap">
+                    <label class="label">HIA</label>
+                    <div class="inputWrap">
+                        {{ policy?.hiaId?.name }}
+                    </div>
+                </div>
+
+                <div class="frm-inner-title">Primary Health Care Provider</div>
+                <div class="frm-item-wrap">
+                    <label class="label">Provider Name</label>
+                    <div class="inputWrap">
+                        {{ policy?.providerId?.name }}
+                    </div>
+                </div>
+
+                <!-- <div class="frm-inner-title">Plan Type</div> -->
+                <div class="frm-item-wrap">
+                    <label class="label">Plan Type</label>
+                    <div class="inputWrap">
+                        {{ policy?.planTypeId?.name }}
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Plan Name:</label>
+                    <div class="inputWrap">
+                        {{ policy?.planId?.name }}
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Premium Category:</label>
+                    <div class="inputWrap">
+                        {{ policy?.premiumCategoryId?.name }}
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Premium Package:</label>
+                    <div class="inputWrap">
+                        {{ policy?.premiumPackageId?.category?.name }} ({{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }} {{ policy?.premiumPackageId?.amount }})
+                    </div>
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label">Sponsorship:</label>
+                    <div class="inputWrap">
+                        {{ policy?.sponsorshipId?.name }}
+                    </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Payment Period:</label>
+                    <div class="inputWrap">
+                        {{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}(s)
+                    </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Amount to be paid:</label>
+                    <div class="inputWrap">
+                        &#x20A6;{{ policy?.premiumPackageId?.amount }}
+                    </div>
+                </div>
+            </div>
+            <div class="pay-btn-detail-wrap">
+                <div class="payment-option">
+                    <form [formGroup]="paymentOptionGroup">
+                        <select formControlName="paymentOption">
+                            <option value="e-Payment" selected>e-Payment</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </form>
+                </div>
+                <!-- <a (click)="getpaidSetupdd();" class="btn btn-medium btn-blue cta" data-PBFPubKey="FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X" data-txref="rave-checkout-1511132266" data-amount="50000" data-customer_email="user@example.com" data-currency="NGN" data-pay_button_text="e-Payment"
+                    data-country="NG" data-custom_title="Sabaoth" data-custom_description="" data-redirect_url="" data-custom_logo="" data-payment_method="both" data-exclude_banks=""></a> -->
+                <angular-4-flutterwave *ngIf="withPaystack" [amount]="policy?.premiumPackageId?.amount" [customer_email]="policy?.principalBeneficiary?.personId?.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'"
+                    [custom_title]="'e-Payment'" [custom_description]="" [exclude_banks]="" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
+                <!-- <button *ngIf="withPaystack" (click)="getpaidSetup();" class="btn btn-medium btn-blue cta">Flutterwave Setup</button> -->
+                <!-- <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.personId?.email" [amount]="policy?.premiumPackageId?.amountInKobo" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()"
+                    (callback)="paymentDone($event)">e-Payment</angular4-paystack> -->
+                <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
+                <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickPayCash();" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
+            </div>
+        </div>
+        <div *ngIf="isForRenewal" style="text-align:center;width:100%">
+            <button (click)="onClickRenewPremium();" class="btn btn-medium btn-blue cta show-payment">Renew Premium</button>
+        </div>
+    </div>
+    <div style="padding: 10px 10px 30px 10px;">
+        <div class="text-center" style="font-weight: bold">
+            <span>Payment History</span>
+        </div>
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">No</th>
+                    <th class="th">Due Date</th>
+                    <th class="th">LASHMA ID</th>
+                    <th class="th">Amount Paid</th>
+                    <th class="th">Duration Policy</th>
+                    <th class="th">Policy ID</th>
+                    <th class="th">Health Plan</th>
+                    <th class="th">Responsible HIA</th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="previousPolicies.length === 0 && !previousPolicyLoading">
+                    <td class="text-center" colspan="8">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="previousPolicies.length === 0 && previousPolicyLoading">
+                    <td class="text-center" colspan="8">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr *ngFor="let policy of previousPolicies; let i = index;" class="tr">
+                    <td class="td">{{i+1}}</td>
+                    <td class="td">{{ policy?.dueDate }}</td>
+                    <td class="td">{{ policy?.principalBeneficiary?.platformOwnerNumber }}</td>
+                    <td class="td" style="color: green;">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
+                    <td class="td">{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}</td>
+                    <td class="td">{{ policy?.policyId }}</td>
+                    <td class="td">{{ policy?.planId?.name }}</td>
+                    <td class="td">{{ policy?.hiaId?.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="list-buttom" *ngIf="previousPolicies.length > 0">
+        <div class="list-summary">Showing 1 to {{ previousPolicies.length }} of {{ previousPolicies.length }} entries (filtered from {{ previousPolicies.length }} total entries)</div>
+        <div class="btn btn-medium btn-yellow">Load More</div>
+    </div>
+</div>
+
+<div *ngIf="openCashPaymentModal" class="modal-overlay">
+    <div class="modal-wrap shadow-RB" style="max-width:450px;min-height: 230px;min-width:400px;">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <div>
+            <div class="modal-title" style="font-weight: bold;text-align: center;padding:20px;">Cash Payment</div>
+            <div>
+                <form [formGroup]="cashPaymentGroup">
+                    <div class="frm-item-wrap">
+                        <label for="" style="padding: 20px 35px 20px 20px;">Amount</label>
+                        <input type="number" formControlName="amount" placeholder="Amount">
+                    </div>
+                    <div class="frm-item-wrap">
+                        <label for="" style="padding: 20px;">Comment</label>
+                        <textarea style="height:150px;width:280px;padding:10px;" formControlName="comment" placeholder="Comment"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div style="text-align: center">
+                <button class="btn btn-medium btn-green cta" (click)="onClickCreateAndPaybatch(cashPaymentGroup.valid, cashPaymentGroup.value);" style="width:150px;padding:10px;margin-left:122px;">
+                    <span *ngIf="!cashPaymentProcessing">Pay</span>
+                    <span *ngIf="cashPaymentProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

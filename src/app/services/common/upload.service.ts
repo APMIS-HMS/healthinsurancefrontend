@@ -17,10 +17,21 @@ export class UploadService {
     return request
       .post(path)
       .send(formData);
-  }
+  }//uploadexcel
+
+  uploadExcelFile(formData) {
+    const host = this._restService.getHost();
+    const path = host + '/upload-excel';
+    return request
+      .post(path)
+      .send(formData);
+  }//uploadexcel
+
   transform(url) {
-    url = this._restService.getHost() + '/' + url + '?';// + new Date().getTime();
-    return this._sanitizer.bypassSecurityTrustResourceUrl(url);
+    url = this._restService.getHost() + '/' + url + '?'; + new Date().getTime();
+    return url;
+    // url = this._restService.getHost() + url + '?' + new Date().getTime();
+    // return this._sanitizer.bypassSecurityTrustResourceUrl(url);
   }
   checkOnlineStatus() {
     return this._sockerService.onlineStatus;

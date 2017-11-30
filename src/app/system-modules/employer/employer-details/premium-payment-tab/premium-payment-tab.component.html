@@ -1,0 +1,83 @@
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="filter-box">
+            <!-- <div class="label-xx">Filters:</div>
+            <div class="input-wrap">
+                <label>HIA</label>
+                <select [formControl]="filterHiaControl" class="form-control">
+                <option value="All" selected>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>Past Due Date</label>
+                <select [formControl]="pastDueDate" class="form-control">
+                <option>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>LASHMA ID</label>
+                <select [formControl]="employer" class="form-control">
+                <option>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>Date Range</label>
+                <div style="width:150px;margin-right:10px;">
+                    <my-date-picker name="dateRange" [options]="myDatePickerOptions" [selDate]="today"></my-date-picker>
+                </div>
+            </div>
+            <div class="btn btn-medium btn-blue-outline">RESET</div> -->
+        </div>
+        <div class="payment-box">
+            <div class="tab">
+                <div class="tab-ffs" (click)="onClickTab('unbatchedPayment');" [class.claim-tab-active]="unbatchedActiveTab">Unbatched Payment</div>
+                <div class="tab-c" (click)="onClickTab('batchedPayment');" [class.claim-tab-active]="batchedActiveTab">Batched Payment</div>
+            </div>
+            <div class="addInd-btn-box" *ngIf="unbatchedActiveTab && selectedPolicies.length > 0">
+                <button class="btn btn-medium btn-yellow" (click)="onClickOpenBatchModal();">Create Batch</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="unbatchedActiveTab">
+        <app-unbatched></app-unbatched>
+    </div>
+    <div *ngIf="batchedActiveTab">
+        <app-batched></app-batched>
+    </div>
+</div>
+
+<div *ngIf="openBatchModal" class="modal-overlay">
+    <div class="modal-wrap shadow-RB" style="max-width:150px">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <div *ngIf="!showPaystack">
+            <div class="modal-title" style="font-weight: bold">Create Batch</div>
+            <div>
+                <form [formGroup]="paymentGroup">
+                    <div class="frm-item-wrap">
+                        <input type="text" formControlName="batchNo" placeholder="Batch Name">
+                    </div>
+                    <div class="frm-item-wrap">
+                        <select formControlName="paymentType">
+                            <option value="e-Payment" selected>e-Payment</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <button *ngIf="withPaystack" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatch(paymentGroup.valid, paymentGroup.value);" style="width:150px;padding:10px;margin-left:10px;">
+                <span *ngIf="!paystackProcessing">e-Payment</span>
+                <span *ngIf="paystackProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
+            </button>
+            <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickCreateAndPaybatchCash();" style="width:150px;padding:10px;margin-left:10px;">PAY</button>
+        </div>
+        <div class="paystack-box" *ngIf="showPaystack">
+            <div class="modal-title" style="font-weight: bold">Verify that you want to continue with payment</div>
+            <div class="modal-title" style="font-weight: bold">Amount: &#x20A6; {{ totalCost }}</div>
+            <angular-4-flutterwave [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="'e-Payment'" [custom_description]="" [exclude_banks]=""
+                (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
+            <!-- <angular4-paystack [key]="paystackClientKey" [email]="user.email" [amount]="totalCost*100" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-green paystack-btn'" (close)="paymentCancel()" (callback)="paymentDone($event)">Verify Payment</angular4-paystack> -->
+        </div>
+    </div>
+</div>

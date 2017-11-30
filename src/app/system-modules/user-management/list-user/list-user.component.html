@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <section class="content">
     <div class="row">
         <div class="col-12 col-sm-8">
@@ -9,13 +10,21 @@
                     </div> -->
                 </div>
             </div>
+=======
+<div class="">
+    <div class="list-search-wrap">
+        <div class="search-wrap">
+            <label class="label-xx">Search:</label>
+            <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="search for user">
+            <i class="fa fa-search" aria-hidden="true"></i>
+>>>>>>> remotes/origin/redesign
         </div>
-        <div class="col-12 col-sm-4">
-            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/user/new">
-                <i class="fa fa-plus-circle"></i> New User
-            </a>
+
+        <div (click)="navigate('/modules/user/new');" class="btn btn-medium btn-blue">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> NEW USER
         </div>
     </div>
+<<<<<<< HEAD
     <div class="row">
         <section class="col-12">
             <div class="filter-box">
@@ -101,46 +110,97 @@
             </div>
             <div class="col-xs-12 text-center">
                 <button class="btn bg-yellow btn-flat">Load More</button>
-            </div>
-        </section>
-    </div>
+=======
 
-    <ng-template #content let-c="close" let-d="dismiss">
-        <div class="modal-header">
-            <h4 class="modal-title">Add Role</h4>
-            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="row pad-all">
-                <div class="col">
-                    <h6 class="modal-title">Add one or more role to the user selected</h6>
-                </div>
+    <div class="shadow-RB">
+        <div class="list-filter-wrap">
+            <div class="label-xx">Filters:</div>
+
+            <div class="input-wrap">
+                <label>Type</label>
+                <select [formControl]="filterTypeControl">
+            <option>All</option>
+            </select>
+>>>>>>> remotes/origin/redesign
             </div>
-            <div class="row">
-                <!-- <form [formGroup]="addRoleForm"> -->
-                <div class="col-12" *ngFor="let role of roles">
-                    <div class="check-box-container">
-                        <label class="switch">
-                                <input type="checkbox"  [attr.checked]="selectedUser.isActive ? true : null" class="input-action-leader-board"/>
-                                <div class="slider round"></div>{{ role.name }}
-                            </label>
-                        <!-- <label>
-                                <input type="checkbox" formControlName="role"  class="check-box"/>{{ role.name }}
-                            </label> -->
-                    </div>
-                </div>
-                <!-- </form> -->
+
+            <div class="input-wrap">
+                <label>Created By</label>
+                <select [formControl]="createdByControl">
+            <option>All</option>
+            </select>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <button class="btn btn-primary btn-flat" (click)="onClickAddRole();">Add Selected</button>
-                </div>
+
+            <div class="input-wrap">
+                <label>Utilized By</label>
+                <select [formControl]="utilizedByControl">
+            <option>All</option>
+            </select>
+            </div>
+
+            <div class="input-wrap">
+                <label>Status</label>
+                <select [formControl]="statusControl">
+            <option>All</option>
+            </select>
+            </div>
+
+            <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
+        </div>
+
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">No</th>
+                    <th class="th">Platform</th>
+                    <th class="th">ShortName</th>
+                    <th class="th">Name</th>
+                    <th class="th">Email</th>
+                    <th class="th">Type</th>
+                    <th class="th">Organisation</th>
+                    <th class="th">Added on</th>
+                    <th class="th">Status</th>
+                    <th class="th"></th>
+                    <th class="th"></th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="users.length === 0 && !loading">
+                    <td class="text-center" colspan="10">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="users.length === 0 && loading">
+                    <td class="text-center" colspan="10">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr *ngFor="let user of users; let i=index" class="tr">
+                    <td class="td">{{i+1}}</td>
+                    <td class="td">{{user.platformOwnerId?.name}}</td>
+                    <td class="td">{{user.platformOwnerId?.shortName}}</td>
+                    <td class="td">{{user.lastName}} {{user.firstName}}</td>
+                    <td class="td">{{user.email}}</td>
+                    <td class="td">{{user.userType?.name}}</td>
+                    <td class="td">{{user.facilityId?.name}}</td>
+                    <td class="td">{{user.createdAt | date:'short'}}</td>
+                    <td>
+                        <span *ngIf="user.isActive" class="td tbl-status-active">Active</span>
+                        <span *ngIf="!user.isActive" class="td tbl-status-inactive">InActive</span>
+                    </td>
+                    <td class="td td-icos">
+                        <i class="fa fa-edit" (click)="navigateEditUser(user)"></i>
+                    </td>
+                    <td (click)="showDetails(user)"><i class="fa fa-chevron-right"></i></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="list-buttom">
+            <div *ngIf="users.length > 0">
+                <div class="list-summary">Showing 1 to {{ users.length }} of {{ totalEntries }} entries (filtered from {{ totalEntries }} total entries)</div>
+                <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="showLoadMore">Load More</div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-        </div>
-    </ng-template>
-</section>
+    </div>
+</div>

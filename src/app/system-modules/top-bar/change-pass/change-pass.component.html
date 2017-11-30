@@ -1,0 +1,37 @@
+<div>
+    <div class="loginmodal-title">Change Password</div>
+    <div class="form-box">
+        <form accept-charset="utf-8" [formGroup]="changePassFormGroup" novalidate>
+
+            <div class="form-field-wrap">
+                <div class="inputWrap">
+                  <input type="password" class="form-control" formControlName="old_pass" name="old_pass" placeholder="Old Password" size="50" maxlength="255" />
+                  <small class="alert-label" [hidden]="changePassFormGroup.controls.old_pass.valid || changePassFormGroup.controls.old_pass.pristine">
+                      Old password is required.
+                  </small>
+                </div>
+            </div>
+            <div class="form-field-wrap">
+              <div class="inputWrap">
+                <input type="password" class="form-control" formControlName="password" name="password" placeholder="New Password" size="50" maxlength="255" />
+                <small class="alert-label" [hidden]="changePassFormGroup.controls.password.valid || changePassFormGroup.controls.password.pristine">
+                    New password is required.
+                </small>
+              </div>
+            </div>
+            <div class="form-field-wrap">
+              <div class="inputWrap">
+                <input type="password" class="form-control" formControlName="cpassword" name="cpassword" placeholder="Confirm Password" size="50" maxlength="255" />
+                <small class="alert-label" [hidden]="changePassFormGroup.controls.cpassword.valid || changePassFormGroup.controls.cpassword.pristine">
+                    Please confirm your password.
+                </small>
+              </div>
+            </div>
+            
+
+            <button (click)="changePassword(changePassFormGroup.value, changePassFormGroup.valid) " class="btn btn-medium btn-blue">
+                <span>CHANGE PASSWORD</span>
+            </button>
+        </form>
+    </div>
+</div>

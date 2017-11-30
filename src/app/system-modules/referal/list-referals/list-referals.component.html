@@ -1,0 +1,102 @@
+<div class="list-search-wrap">
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="HIA or status">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
+
+</div>
+
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
+
+        <div class="input-wrap">
+            <label>Responsible HIA</label>
+            <select [formControl]="filterHiaControl" class="form-control">
+                <option value="All" selected>All</option>
+            </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Hospital Name</label>
+            <select [formControl]="hospitalControl">
+                <option>All</option>
+            </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Health Care Plan</label>
+            <select [formControl]="planControl">
+                <option>All</option>
+            </select>
+        </div>
+
+        <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">S/No</th>
+                <th class="th">LASHMA ID</th>
+                <th class="th">Patient Name</th>
+                <th class="th">Date</th>
+                <th class="th">Referal Code</th>
+                <th class="th">Refering Provider</th>
+                <th class="th">Destination Provider</th>
+                <th class="th">Status</th>
+                <th class="th">Reason</th>
+                <th class="th">Emergency</th>
+                <th class="th"></th>
+                <th class="th"></th>
+            </tr>
+        </thead>
+
+        <tbody class="tbody">
+            <tr class="tr" *ngIf="authorizations.length === 0 && !loading">
+                <td class="text-center" colspan="12">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="authorizations.length === 0 && loading">
+                <td class="text-center" colspan="12">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
+            <tr *ngFor="let referral of authorizations; let i =index" class="tr">
+                <td class="td">{{i+1}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.personId?.lastName}} {{referral.checkedInDetails?.beneficiaryObject?.personId?.firstName}}</td>
+                <td class="td">{{referral.timeOfRequest|date:'short'}}</td>
+                <td class="td">{{referral.authorizationCode}}</td>
+                <td class="td">{{referral.referingProvider?.name}}</td>
+                <td class="td">{{referral.destinationProvider?.name}}</td>
+                <td class="td">
+                    <span *ngIf="referral.hiaApproved" class="green">Active</span>
+                    <span *ngIf="!referral.hiaApproved" class="red">Active</span>
+                </td>
+                <td class="td">
+                    <!-- {{ (str.length>6)? (str | slice:0:6)+'..':(str) }} -->
+                    {{(referral.documentation[0].document[1].clinicalDocumentation | slice:0:10) +'...'}}
+                </td>
+                <td class="td">Emergency</td>
+                <td class="td tip-td">
+                    <i class="fa fa-info fa-circle"></i>
+                    <div class="tooltip">
+                        <div class="tip-title">{{referral.documentation[0].document[1].type}}</div>
+                        <div class="tip-content">{{referral.documentation[0].document[1].clinicalDocumentation}}</div>
+                    </div>
+                </td>
+                <td class="td td-icos" (click)="navigateDetail(referral)">
+                    <i class="fa fa-chevron-right"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="list-buttom">
+        <div *ngIf="authorizations.length > 0">
+            <div class="list-summary">Showing 1 to {{ authorizations.length }} of {{ totalEntries }} entries (filtered from {{ totalEntries }} total entries)</div>
+            <div class="btn btn-medium btn-yellow" (click)="loadMore()" *ngIf="showLoadMore">Load More</div>
+        </div>
+    </div>
+</div>

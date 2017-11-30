@@ -1,0 +1,21 @@
+@import '../../../../assets/libs/variables.scss';
+
+.app-content-wrap{
+    background: #fff;
+    padding: 20px;
+    margin: 20px auto;
+}
+.list-search-wrap {
+    border-bottom: 1px solid $grey-2;
+    margin-bottom: 20px;
+}
+.top-tab-search{
+    border: 1px solid $grey-2;
+}
+.tbl-wrap{
+    max-height: 700px;
+    overflow-y: auto;
+}
+tr{
+    cursor: pointer;
+}

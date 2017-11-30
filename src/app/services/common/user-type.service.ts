@@ -12,23 +12,29 @@ export class UserTypeService {
     private _locker: CoolLocalStorage
   ) {
     this._rest = _restService.getService('user-types');
-  }
-
-  find(query?: any) {
-    return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
-        return this._socket.find(query);
-      }))
-    });
+    this._socket = _socketService.getService('user-types');
   }
 
   findAll() {
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
         return socket.find();
-      }))
+      }));
     });
   }
+
+  find(query?: any) {
+    return new Promise((resolve, reject) => {
+      resolve(this._socketService.authenticateUser('user-types').then((socket: any) => {
+        return this._socket.find(query);
+      }));
+    });
+  }
+
+  findWithOutAuth() {
+    return this._socket.find();
+  }
+
   get(id: string, query: any) {
     return this._rest.get(id, query);
   }

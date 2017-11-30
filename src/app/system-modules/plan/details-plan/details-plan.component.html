@@ -1,161 +1,150 @@
-<section class="content">
-    <div class="row" style="padding:10px 0;">
-        <div class="col-12 no-padding">
-            <button class="btn btn-default text-brand border-brand" routerLink="/modules/plan/plans">
-              <i class="fa fa-chevron-left"></i> BACK TO HEALTHPLAN MANAGEMENT
-            </button>
-        </div>
+<div class="in-content-wrap">
+    <div class="back-btn" (click)="navigate('/modules/plan/plans')">
+        <i class="fa fa-chevron-left"></i> BACK TO HEALTHPLAN
     </div>
 
-    <ul class="inpage-tabs"> 
-        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">HIAS</li>
-        <li (click)="tabPremiums_click()" [class.tab-active]="tab_premiums">Premiums</li>
-        <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
+    <ul class="inpage-tabs">
+        <li (click)="tabHia_click()" [class.tab-active]="tab_hias">Plan</li>
+        <!-- <li (click)="tabPremiums_click()" [class.tab-active]="tab_premiums">Premiums</li> -->
+        <li (click)="tabDetail_click()" [class.tab-active]="tab_detail">Plan Detail</li>
+        <!-- <li (click)="tabDrugs_click()" [class.tab-active]="tab_drugs">Drugs</li>
         <li (click)="tabTests_click()" [class.tab-active]="tab_tests">Tests</li>
         <li (click)="tabProcedures_click()" [class.tab-active]="tab_procedures">Procedures</li>
-        <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li>
-        <!-- <li><a data-toggle="tab" href="#menu5">Payment History</a></li>
-      <li><a data-toggle="tab" href="#menu6">Claims</a></li>
-      <li><a data-toggle="tab" href="#menu7">Complaints</a></li>
-      <li><a data-toggle="tab" href="#menu8">Referrals</a></li>-->
+        <li (click)="tabDiagnosis_click()" [class.tab-active]="tab_diagnosis">Diagnosis</li> -->
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content shadow-RB">
         <div *ngIf="tab_hias" class="tab-pane fade show active">
-            <div class="row">
+            <div>
                 <div class="content-top-bar">
-                    <img src="../../../../assets/img/lagos-state-logo.jpg">
-                    <div>Lagos State Health Plan</div>
-                    <div>Type: Formal Sector</div>
-                    <div>Status: <span class="status">Active</span></div>
+                    <div class="bar-labels">
+                        <!-- <div class="tab-logo">
+                            <img src="../../../../assets/img/logos/lagos-state-logo.jpg">
+                        </div> -->
+                        <div>Plan: {{selectedPlan?.name}}</div>
+                        <div>Type: {{selectedPlan?.planType.name}}</div>
+                        <div>Status:
+                            <span *ngIf="selectedPlan?.isActive === true" class="active-status">Active</span>
+                            <span *ngIf="!selectedPlan?.isActive === true" class="inactive-status">InActive</span>
+                        </div>
+                    </div>
+
+                    <div class="bar-icos"></div>
                 </div>
 
                 <section class="tab-cont content">
-                    <div class="row">
-                        <div class="col-12 col-sm-8 no-padding">
-                            <div class="form-group">
-                                <div class="col-sm-10 no-padding">
-                                    <div class="input-group">
-                                        <input type="search" class="form-control" placeholder="Name of Health Insurance Agent" aria-describedby="basic-addon2">
-                                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
-                                    </div>
-                                </div>
+                    <div class="list-search-wrap">
+                        <div class="search-wrap">
+                            <!-- <label class="label-xx">Search:</label>
+                            <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Name of Health Insurance Agent">
+                            <i class="fa fa-search" aria-hidden="true"></i> -->
+                        </div>
+                        <div class="cta-right">
+                            <div style="margin-right:3px;" (click)="navigateEditPlan(selectedPlan)" class="btn btn-medium btn-blue">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PREMIUM
+                            </div>
+                            <div class="btn btn-medium btn-blue" (click)="navigateNewPlan()">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PLAN
                             </div>
                         </div>
-                        <div class="col-12 col-sm-4 no-padding">
-                            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/plan/new-plan">
-                                <i class="fa fa-plus-circle"></i> ADD PLAN
-                            </a>
+                    </div>
+                    <section>
+                        <table class="table">
+                            <thead class="thead">
+                                <tr class="tr">
+                                    <th class="th">S/N</th>
+                                    <th class="th">Category</th>
+                                    <th class="th">Amount</th>
+                                    <th class="th">Duration</th>
+                                    <th class="th"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody">
+                                <tr class="tr" *ngIf="selectedPlan?.premiums?.length === 0">
+                                    <td class="td" style="text-align: center;" colspan="5">No data available in table</td>
+                                </tr>
+                                <tr class="tr" *ngFor="let premium of selectedPlan?.premiums; let i = index;">
+                                    <td class="td">{{ i+1 }}</td>
+                                    <td class="td">{{ premium.category.name }}</td>
+                                    <td class="td">{{ premium.amount }}</td>
+                                    <td class="td">{{ premium.duration }} {{ premium.unit.name }}</td>
+                                    <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="list-buttom" *ngIf="selectedPlan?.premiums?.length > 0">
+                            <div class="list-summary">Showing 1 to {{ selectedPlan?.premiums?.length }} of {{ selectedPlan?.premiums?.length }} entries (filtered from {{ selectedPlan?.premiums?.length }} total entries)</div>
+                            <div class="btn btn-medium btn-yellow">Load More</div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <section class="col-12">
-                            <div class="table-responsive">
-                                <table class="table table-striped" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr class="bg-gray text-white">
-                                            <th>Health Insurance Agent</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="tr-link">
-                                            <td>Healthcare Security Limited</td>
-                                            <td><i class="fa fa-trash"></i></td>
-                                        </tr>
-                                        <tr class="tr-link">
-                                            <td>Multi Shield Nigeria Limited</td>
-                                            <td><i class="fa fa-trash"></i></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-12 text-center">
-                                <button class="btn bg-yellow btn-flat">LOAD MORE</button>
-                            </div>
-                        </section>
-                    </div>
+                    </section>
                 </section>
             </div>
         </div>
-        <div *ngIf="tab_premiums" class="tab-pane fade show active">
+        <!-- <div *ngIf="tab_premiums" class="tab-pane fade show active">
             <div class="row">
                 <div class="content-top-bar">
-                    <img src="../../../../assets/img/lagos-state-logo.jpg">
-                    <div>Lagos State Health Plan</div>
-                    <div>Type: Formal Sector</div>
-                    <div>Status: <span class="status">Active</span></div>
-                </div>
-
-                <section class="tab-cont content">
-                    <div class="row">
-                        <div class="col-12 col-sm-8 no-padding">
-                            <div class="form-group">
-                                <div class="col-sm-10 no-padding">
-                                    <div class="input-group">
-                                        <input type="search" class="form-control" placeholder="Name of Health Insurance Agent" aria-describedby="basic-addon2">
-                                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="bar-labels">
+                        <div class="tab-logo">
+                            <img src="../../../../assets/img/logos/lagos-state-logo.jpg">
                         </div>
-                        <div class="col-12 col-sm-4 no-padding">
-                            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/plan/new-plan">
-                                <i class="fa fa-plus-circle"></i> ADD PREMIUM
-                            </a>
+                        <div>Plan: {{selectedPlan?.name}}</div>
+                        <div>Type: {{selectedPlan?.planType.name}}</div>
+                        <div>Status:
+                            <span *ngIf="selectedPlan?.isActive === true" class="active-status">Active</span>
+                            <span *ngIf="!selectedPlan?.isActive === true" class="inactive-status">InActive</span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 no-padding">
-                          <div class="table-responsive">
-                              <table class="table table-striped" cellspacing="0" width="100%">
-                                  <thead>
-                                      <tr class="bg-gray text-white">
-                                          <th>Amount</th>
-                                          <th>Duration</th>
-                                          <th></th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                      <tr>
-                                          <td>20.000</td>
-                                          <td>Monthly</td>
-                                          <td class="td-icos">
-                                            <i class="fa fa-edit"></i>
-                                            <i class="fa fa-trash"></i> 
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td>5.000</td>
-                                          <td>Weekly</td>
-                                          <td class="td-icos">
-                                            <i class="fa fa-edit"></i>
-                                            <i class="fa fa-trash"></i> 
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td>20.000</td>
-                                          <td>Monthly</td>
-                                          <td class="td-icos">
-                                            <i class="fa fa-edit"></i>
-                                            <i class="fa fa-trash"></i> 
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td>20.000</td>
-                                          <td>Monthly</td>
-                                          <td class="td-icos">
-                                            <i class="fa fa-edit"></i>
-                                            <i class="fa fa-trash"></i> 
-                                          </td>
-                                      </tr>
-                                  </tbody>
-                              </table>
-                          </div>
+
+                    <div class="bar-icos"></div>
+                </div>
+
+                <section class="tab-cont content" style="padding-bottom: 30px;">
+                    <div class="list-search-wrap">
+                        <div class="search-wrap">
+                            <label class="label-xx">Search:</label>
+                            <input class="top-tab-search" [formControl]="premiumsearchControl" type="search" placeholder="Search Premium">
+                            <i class="fa fa-search" aria-hidden="true"></i>
                         </div>
+
+                        <div (click)="navigateEditPlan(selectedPlan)" class="btn btn-medium btn-blue">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD PREMIUM
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead class="thead">
+                            <tr class="tr">
+                                <th class="th">S/N</th>
+                                <th class="th">Category</th>
+                                <th class="th">Amount</th>
+                                <th class="th">Duration</th>
+                                <th class="th"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody">
+                            <tr class="tr" *ngIf="selectedPlan?.premiums?.length === 0">
+                                <td class="td" style="text-align: center;" colspan="5">No data available in table</td>
+                            </tr>
+                            <tr class="tr" *ngFor="let premium of selectedPlan?.premiums; let i = index;">
+                                <td class="td">{{ i+1 }}</td>
+                                <td class="td">{{ premium.category.name }}</td>
+                                <td class="td">{{ premium.amount }}</td>
+                                <td class="td">{{ premium.duration }} {{ premium.unit.name }}</td>
+                                <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="list-buttom" *ngIf="selectedPlan?.premiums?.length > 0">
+                        <div class="list-summary">Showing 1 to {{ selectedPlan?.premiums?.length }} of {{ selectedPlan?.premiums?.length }} entries (filtered from {{ selectedPlan?.premiums?.length }} total entries)</div>
+                        <div class="btn btn-medium btn-yellow">Load More</div>
                     </div>
                 </section>
             </div>
+        </div> -->
+        <div *ngIf="tab_detail" class="tab-pane fade show active">
+            <app-lashma-codes></app-lashma-codes>
         </div>
     </div>
-</section>
+</div>

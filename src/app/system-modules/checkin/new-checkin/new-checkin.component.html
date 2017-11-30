@@ -1,0 +1,58 @@
+<div class="app-content-wrap shadow-RB">
+    <div class="list-search-wrap">
+        <div class="search-wrap">
+            <label class="label-xx">Search:</label>
+            <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="search">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </div>
+
+        <div class="btn btn-medium btn-grey-outline" (click)="navigate('/modules/checkin/checkedin');">
+            <i class="fa fa-times"></i> CANCEL
+        </div>
+    </div>
+
+    <div class="tbl-wrap">
+
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">Name</th>
+                    <th class="th">Gender</th>
+                    <th class="th">LASHMA ID</th>
+                    <th class="th">Type</th>
+                    <th class="th">Date of Birth</th>
+                    <th class="th">Status</th>
+                    <th class="th">Premium Paid</th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="beneficiaries.length === 0">
+                    <td class="text-center" colspan="7">
+                        <i class="text-center">No data available in table</i>
+                    </td>
+                </tr>
+                <tr *ngFor="let beneficiary of beneficiaries" class="tr" (click)="routeBeneficiaryDetails(beneficiary)">
+                    <td class="td">{{beneficiary?.personId?.lastName}} {{beneficiary?.personId?.firstName}}</td>
+                    <td class="td">{{beneficiary?.personId?.gender?.name}}</td>
+                    <td class="td">{{beneficiary?.platformOwnerNumber}}</td>
+                    <td class="td">
+                        <span *ngIf="beneficiary?.isPrincipal" class="baller">P</span>
+                        <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary?.dependantCount}}</span>
+                        <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
+                        <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
+                    </td>
+                    <td class="td">{{beneficiary?.personId?.dateOfBirth | date}}</td>
+                    <td class="td">
+                        <span *ngIf="beneficiary?.policy.isActive" class="green">Active</span>
+                        <span *ngIf="!beneficiary?.policy.isActive" class="red">InActive</span>
+                    </td>
+                    <td class="td">
+                        <span *ngIf="beneficiary?.policy.isPaid" class="green">Premium Paid</span>
+                        <span *ngIf="!beneficiary?.policy.isPaid" class="red">Premium Not Paid</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

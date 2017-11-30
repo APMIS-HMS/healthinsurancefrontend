@@ -1,0 +1,355 @@
+<div class="claims-inner-wrap">
+    <div class="left-sect">
+        <div class="left-fixed shadow-b">
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">Date of Birth:</div>
+                    <div class="item-val">{{selectedAuthorization?.personId.dateOfBirth | date}}</div>
+                </div>
+                <div *ngIf="selectedAuthorization !== undefined" class="group-item">
+                    <div class="item-label">Age:</div>
+                    <div class="item-val">{{getAge()}} Year(s)</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Gender:</div>
+                    <div class="item-val">{{selectedAuthorization?.personId.gender.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">LASRRA ID:</div>
+                    <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject?.stateID}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">LAASHMA ID:</div>
+                    <div class="item-val">{{selectedAuthorization?.beneficiaryObject.platformOwnerNumber}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">POLICY ID:</div>
+                    <div class="item-val">{{selectedAuthorization?.policyId.policyId}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">POLICY STATUS:</div>
+                    <div class="item-val">
+                        <span *ngIf="selectedAuthorization?.policyId?.isActive" class="text-green">Active</span>
+                        <span *ngIf="!selectedAuthorization?.policyId?.isActive" class="text-red">InActive</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">Hospital Name:</div>
+                    <div class="item-val">{{selectedAuthorization?.checkedInDetails?.providerFacilityId?.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Provider ID:</div>
+                    <div class="item-val">{{selectedAuthorization?.checkedInDetails?.providerFacilityId?.provider?.providerId}}</div>
+                </div>
+
+                <div class="group-item">
+                    <div class="item-label">Encounter Type:</div>
+                    <div class="item-val">{{selectedAuthorization?.checkedInDetails?.encounterType?.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Status:</div>
+                    <div class="item-val">
+                        <span class="lemon--green">{{selectedAuthorization?.checkedInDetails?.claimStatus?.name}}</span>
+                    </div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Date when patient was checked in:</div>
+                    <div class="item-val">{{selectedAuthorization?.checkedInDetails?.confirmation | date}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Date when claims was checked out:</div>
+                    <div class="item-val"></div>
+                </div>
+            </div>
+
+
+            <div class="group-wrap">
+                <div class="group-item">
+                    <div class="item-label">Health Insurance Agency:</div>
+                    <div class="item-val">{{selectedAuthorization?.policyId?.hiaId?.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Health Insurance Agency ID:</div>
+                    <div class="item-val">{{selectedAuthorization?.policyId?.hiaId?.hia?.cin}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Health Plan Type:</div>
+                    <div class="item-val">{{selectedAuthorization?.policyId?.planTypeId?.name}}</div>
+                </div>
+                <div class="group-item">
+                    <div class="item-label">Health Plan:</div>
+                    <div class="item-val">{{selectedAuthorization?.planId?.name}}</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="right-sect">
+        <div *ngFor="let transaction of selectedAuthorization?.documentation; let i=index">
+            <div class="request-sect card">
+                <div class="headArea-1">
+                    <div class="count">{{getCount(i)}}</div>
+                    <div class="letering">
+                        <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
+                        <div class="letering-2">
+                            <span class="letering-name">{{selectedAuthorization?.medicalPersonelName.lastName}} {{selectedAuthorization?.medicalPersonelName.firstName}}</span> Requested Pre-Authorization</div>
+                    </div>
+                </div>
+                <div class="doc-wrap">
+                    <div class="doc-title">Clinical Information</div>
+
+                    <ul *ngFor="let doc of orderDocuments(transaction.document)" class="doc-entries">
+                        <div *ngIf="doc.order === 1" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Complaints</th>
+                                                <th class="th">Duration</th>
+                                                <!-- <th class="th">Approval Status</th> -->
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                                                <td class="td">{{cliDoc.symptom.name}}</td>
+                                                <td class="td">{{cliDoc.duration}} {{cliDoc.unit.name}}</td>
+                                                <!-- <td>
+                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                        </td> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                        <div *ngIf="doc.order === 2" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                {{doc.clinicalDocumentation}}
+                            </li>
+                        </div>
+                        <div *ngIf="doc.order === 3" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Diagnosis</th>
+                                                <th class="th">Diagnosis Type</th>
+                                                <!-- <th class="th">Approval Status</th> -->
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                                                <td class="td">{{cliDoc.diagnosis.name}}</td>
+                                                <td class="td">{{cliDoc.diagnosisType.name}}</td>
+                                                <!-- <td>
+                          <select [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                        </td> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                        <div *ngIf="doc.order === 4" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Investigation</th>
+                                                <th class="th">Amount</th>
+                                                <th class="th">Approval Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                                                <td class="td">{{cliDoc.investigation.name}}</td>
+                                                <td class="td">{{cliDoc.investigation.Amount}}</td>
+                                                <td>
+                                                    <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                        <div *ngIf="doc.order === 5" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Drug</th>
+                                                <th class="th">Quantity</th>
+                                                <th class="th">Approval Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                                                <td class="td">{{cliDoc.drug.name}}</td>
+                                                <td class="td">{{cliDoc.quantity}} {{cliDoc.unit.name}}</td>
+                                                <td>
+                                                    <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                        <div *ngIf="doc.order === 6" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                <div class="tbl-wrap">
+                                    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                        <thead class="thead">
+                                            <tr class="tr">
+                                                <th class="th">Procedure</th>
+                                                <th class="th">Amount</th>
+                                                <th class="th">Approval Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tbody">
+                                            <tr *ngFor="let cliDoc of doc.clinicalDocumentation" class="tr">
+                                                <td class="td">{{cliDoc.procedure.name}}</td>
+                                                <td class="td">{{cliDoc.procedure.Amount}}</td>
+                                                <td>
+                                                    <select [disabled]="cliDoc.approvedStatus.id===2 || i < (selectedAuthorization?.documentation.length-1)" (change)="validateResponse(doc, cliDoc, transaction)" [(ngModel)]="cliDoc.approvedStatus" class="form-control" [compareWith]='compare'>
+                            <option value="" disabled selected>Select Encounter Type</option>
+                            <option *ngFor="let encounter of requestStatus" [ngValue]="encounter">{{encounter.name}}</option>
+                          </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                        <div *ngIf="doc.order === 7" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                {{doc.clinicalDocumentation}}
+                            </li>
+                        </div>
+                        <div *ngIf="doc.order === 8" class="entry-wrap">
+                            <li class="doc-subtitle">{{doc.type}}</li>
+                            <li>
+                                {{doc.clinicalDocumentation}}
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+
+
+                <div class="action-wrap" *ngIf="transaction.response=== undefined && user?.userType.name==='Health Insurance Agent'">
+                    <button class="btn btn-medium btn-red" [disabled]="disableReject" (click)="rejectClaim(transaction)">REJECT</button>
+                    <button class="btn btn-medium btn-red" [disabled]="disableQuery" (click)="queryClaim(transaction)">QUERY</button>
+                    <button class="btn btn-medium btn-yellow" [disabled]="disableHold" (click)="holdClaim(transaction)">HOLD</button>
+                    <button class="btn btn-medium btn-blue" [disabled]="disableApprove" (click)="approveClaim(transaction)">APPROVE</button>
+                    <button class="btn btn-medium btn-red" (click)="cancel()">CANCEL</button>
+                </div>
+            </div>
+
+            <div *ngIf="transaction.response!== undefined" class="response-sect card">
+                <div class="headArea-2">
+                    <div class="count">{{getCount(i,true)}}</div>
+                    <div class="letering">
+                        <div class="letering-1">Reaction Sent {{transaction.response.createdAt | date:'short'}}</div>
+                        <div class="letering-2">
+                            <span class="letering-name">LASHMA</span>
+                            <span class="red">{{transaction.approvedStatus.past}}</span> Request</div>
+                    </div>
+                </div>
+                <div class="doc-wrap">
+                    <ul class="doc-entries">
+                        <div class="entry-wrap">
+                            <li class="doc-subtitle">Reason for Denial:</li>
+                            <li>{{transaction.response.reason}}</li>
+                        </div>
+
+                        <div class="entry-wrap">
+                            <li class="doc-subtitle">Name:</li>
+                            <li>{{transaction.response.by}}</li>
+                            <li>Lashma</li>
+                        </div>
+                    </ul>
+                </div>
+                <hr>
+
+                <div *ngIf="reply && i === (selectedAuthorization?.documentation.length-1)">
+                    <app-new-preauth-tabs #child [selectedAuthorization]="selectedAuthorization" [selectedTransaction]="selectedTransaction"></app-new-preauth-tabs>
+                </div>
+
+                <div class="reply-wrap">
+                    <div (click)="replyOk(transaction)" *ngIf="!reply && i === (selectedAuthorization?.documentation.length-1) && transaction.approvedStatus.id !== 2  && user?.userType.name==='Provider'" class="btn btn-medium btn-grey-outline">
+                        <i class="fa fa-reply"></i> REPLY
+                    </div>
+                    <div *ngIf="reply && i === (selectedAuthorization?.documentation.length-1)" class="btn btn-medium btn-blue" (click)="sendReply()">
+                        <i class="fa fa-save"></i> SEND
+                    </div>
+                    <div *ngIf="reply && i === (selectedAuthorization?.documentation.length-1)" class="btn btn-medium btn-blue" (click)="cancelReply()">
+                        <i class="fa fa-ban"></i> CANCEL
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="modalApprove" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-approve-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-approve-authorization>
+    </div>
+</div>
+
+<div *ngIf="modalReject" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-reject-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-reject-authorization>
+    </div>
+</div>
+
+<div *ngIf="modalQuery" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-query-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-query-authorization>
+    </div>
+</div>
+
+<div *ngIf="modalHold" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-modal-hold-authorization [selectedTransaction]="selectedTransaction" [selectedAuthorization]="selectedAuthorization" (closeModal)="modal_close()"></app-modal-hold-authorization>
+    </div>
+</div>

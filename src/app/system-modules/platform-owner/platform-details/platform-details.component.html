@@ -1,0 +1,216 @@
+<div class="in-content-wrap">
+    <div class="back-btn" (click)="navigateToPlatforms()">
+        <i class="fa fa-chevron-left"></i> BACK TO PLATFORM
+    </div>
+
+    <ul class="inpage-tabs">
+        <li (click)="tabClick('platform')" [class.tab-active]="tabPlatform">Platform</li>
+        <li (click)="tabClick('hia')" [class.tab-active]="tabHia">HIAs</li>
+        <li (click)="tabClick('provider')" [class.tab-active]="tabProvider">Providers</li>
+        <li (click)="tabClick('employer')" [class.tab-active]="tabEmployer">Employers</li>
+        <li (click)="tabClick('beneficiary')" [class.tab-active]="tabBeneficiary">Beneficiaries</li>
+        <li (click)="tabClick('capitation')" [class.tab-active]="tabCapitation">Capitation Fee</li>
+    </ul>
+
+    <div>
+        <div *ngIf="tabPlatform" class="tab-pane fade show active shadow-RB">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div class="tab-logo">
+                        <img *ngIf="selectedFacility.logo !== undefined" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)">
+                        <img *ngIf="selectedFacility.logo === undefined" src="../../../../assets/img/logos/default.png">
+                    </div>
+                    <div>{{ selectedFacility?.name }}</div>
+                    <div>Status: <span class="{{ selectedFacility?.isConfirmed ? 'text-green' : 'text-red' }}">{{ selectedFacility?.isConfirmed ? 'Active' : 'Inactive' }}</span></div>
+                </div>
+
+                <div class="bar-icos"></div>
+            </div>
+            <section class="tab-cont content">
+                <section>
+                    <div class="details-wrap">
+                        <div class="detail-item">
+                            <div class="item-label item-head">Platform Owner Detail</div>
+
+                            <div class="detail-content">
+                                <img *ngIf="selectedFacility.logo !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility.logo.thumbnail)">
+                                <img *ngIf="selectedFacility.logo === undefined" class="hia-logo" src="../../../../assets/img/logos/default.png">
+                                <div class="group-wrap">
+                                    <div class="item-label">{{selectedFacility?.name}}</div>
+                                    <div class="item-val">{{ selectedFacility?.facilityType?.name }}</div>
+                                    <div class="item-val">{{selectedFacility?.address?.street}}</div>
+                                    <div class="item-val">{{selectedFacility?.address?.neighbourhood}} - {{selectedFacility?.address?.state.name}}</div>
+                                    <div class="item-val">{{selectedFacility?.phoneNumber}}</div>
+                                </div>
+                                <div class="group-wrap">
+                                    <div class="group-item">
+                                        <div class="item-label">Short Name:</div>
+                                        <div class="item-val">{{selectedFacility?.shortName}}</div>
+                                    </div>
+                                    <div class="group-item">
+                                        <div class="item-label">Email:</div>
+                                        <div class="item-val">{{selectedFacility?.email}}</div>
+                                    </div>
+                                    <div class="group-item">
+                                        <div class="item-label">Bank Name:</div>
+                                        <div class="item-val">{{selectedFacility?.bankDetails?.name}}</div>
+                                    </div>
+                                    <div class="group-item">
+                                        <div class="item-label">Bank Account Number:</div>
+                                        <div class="item-val">{{selectedFacility?.bankDetails?.accountNumber}}</div>
+                                    </div>
+                                </div>
+                                <i (click)="navigate('/modules/platform/new/', selectedFacility?._id);" class="ico-cirle fa fa-pencil"></i>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="item-label item-head">Business Contact</div>
+                            <div class="detail-content">
+                                <div class="hia-user">
+                                    <img *ngIf="selectedFacility?.businessContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility?.businessContact?.image?.thumbnail)">
+                                    <img *ngIf="selectedFacility?.businessContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+                                </div>
+                                <div class="group-wrap">
+                                    <div class="item-val">{{selectedFacility?.businessContact?.lastName}} {{selectedFacility?.businessContact?.firstName}}</div>
+                                    <div class="item-val">{{selectedFacility?.businessContact?.phoneNumber}}</div>
+                                    <div class="item-val">{{selectedFacility?.businessContact?.email}}</div>
+                                    <div class="item-val">{{selectedFacility?.businessContact?.position.name}}</div>
+                                </div>
+                                <i (click)="navigate('/modules/platform/new/', selectedFacility?._id);" class="ico-cirle fa fa-pencil"></i>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="item-label item-head">IT Contact</div>
+                            <div class="detail-content">
+                                <div class="hia-user">
+                                    <img *ngIf="selectedFacility?.itContact?.image !== undefined" class="hia-logo" [src]="_uploadService.transform(this.selectedFacility?.itContact?.image?.thumbnail)">
+                                    <img *ngIf="selectedFacility?.itContact?.image === undefined" class="hia-logo" src="../../../../assets/img/users/default.png">
+                                </div>
+                                <div class="group-wrap">
+                                    <div class="item-val">{{selectedFacility?.itContact?.lastName}} {{selectedFacility?.itContact?.firstName}}</div>
+                                    <div class="item-val">{{selectedFacility?.itContact?.phoneNumber}}</div>
+                                    <div class="item-val">{{selectedFacility?.itContact?.email}}</div>
+                                    <div class="item-val">{{selectedFacility?.itContact?.position?.name}}</div>
+                                </div>
+                                <i (click)="navigate('/modules/platform/new/', selectedFacility?._id);" class="ico-cirle fa fa-pencil"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </div>
+        <div *ngIf="tabHia" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Health Insurance Agents</div>
+                </div>
+            </div>
+            <app-list-hia class="tab-content"></app-list-hia>
+        </div>
+        <div *ngIf="tabProvider" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Health Care Providers</div>
+                </div>
+            </div>
+            <app-list-provider class="tab-content"></app-list-provider>
+        </div>
+        <div *ngIf="tabEmployer" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Employers</div>
+                </div>
+            </div>
+            <app-list-employer class="tab-content"></app-list-employer>
+        </div>
+        <div *ngIf="tabBeneficiary" class="tab-pane fade tab-content-box">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Beneficiaries</div>
+                </div>
+            </div>
+            <app-list-beneficiary class="tab-content"></app-list-beneficiary>
+        </div>
+        <div *ngIf="tabCapitation" class="tab-pane fade tab-content-box shadow-RB">
+            <div class="content-top-bar">
+                <div class="bar-labels">
+                    <div>Capitation</div>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="list-boxes">
+                    <div class="box-left">
+                        <div *ngIf="true" style="padding: 10px 0px;">
+                            <form [formGroup]="capitationFormGroup" novalidate>
+                                <div class="form-item-wrap">
+                                    <label class="label">Amount</label>
+                                    <div class="input-wrap">
+                                        <input type="number" min="1" formControlName="amount" class="form-control" placeholder="Amount">
+                                    </div>
+                                </div>
+                                <div class="form-item-wrap">
+                                    <label class="label">End Date</label>
+                                    <div class="input-wrap">
+                                        <my-date-picker [options]="myDatePickerOptions" [selDate]="today" formControlName="endDate"></my-date-picker>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="btn-box">
+                                <button class="btn btn-medium btn-green" style="float:left;" [disabled]="!capitationFormGroup.valid || disableActiveCapitation" (click)="onClickApprove(capitationFormGroup.valid, capitationFormGroup.value);">
+                                    <span *ngIf="activateCapitationBtnProcessing">PLEASE WAIT... &nbsp;<i class="fa fa-spinner fa-spin"></i></span>
+                                    <span *ngIf="activateCapitationBtnText">ACTIVATE FEE &nbsp; <i class="fa fa-check"></i></span>
+                                </button>
+                                <button class="btn btn-medium" style="float:right;" (click)="onClickCancelCapitation();">Cancel</button>
+                            </div>
+                        </div>
+                        <div *ngIf="false" style="padding: 70px 0px;">
+                            <button class="btn btn-medium btn-red" style="float:left;" (click)="onClickDeactivateCapitation();">DEACTIVATE FEE</button>
+                        </div>
+                    </div>
+
+                    <div class="box-right">
+                        <div class="text-center">
+                            <span>List of Previous Capitation Fees</span>
+                        </div>
+                        <div class="box">
+                            <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+                                <thead class="thead">
+                                    <tr class="tr">
+                                        <th class="th">No</th>
+                                        <th class="th">Amount</th>
+                                        <th class="th">Created At</th>
+                                        <th class="th">Valid Till</th>
+                                        <th class="th">Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="tbody">
+                                    <tr class="tr" *ngIf="capitationFees.length === 0 && !capitationLoading">
+                                        <td class="text-center" colspan="4">No data available in table</td>
+                                    </tr>
+                                    <tr class="tr" *ngIf="capitationFees.length === 0 && capitationLoading">
+                                        <td class="text-center" colspan="4">
+                                            <i class="fa fa-spinner fa-spin"></i>
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor="let capitation of capitationFees; let i = index;" class="tr">
+                                        <td class="td hover">{{ i+1 }}</td>
+                                        <td class="td hover">{{ capitation.amount }}</td>
+                                        <td class="td hover">{{ capitation.createdAt | date }}</td>
+                                        <td class="td hover">{{ capitation.endDate | date }}</td>
+                                        <td class="td hover">
+                                            <span *ngIf="capitation.isActive" class="green">Active</span>
+                                            <span *ngIf="!capitation.isActive" class="red">Inactive</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+@import './assets/libs/variables.scss';
+
+.table{
+    width: 100%;
+    position: relative;
+    border-collapse: collapse;
+    font-size: $font-x2;
+    background: #fff;
+}
+.table, .td { 
+    border: 0 solid transparent;
+} 
+.th {
+    background: $grey-4;
+    font-family: $font-titles;
+    color: $grey-1;
+    border: 0 solid transparent;
+    text-align: left;
+    padding: 10px;
+    font-weight: normal;
+}
+.td {
+    vertical-align: center;
+    text-align: left;
+    padding: 10px;
+    position: relative;
+}
+.tr:hover {background-color: $grey-1}
+.tr:nth-child(even) {background-color: $grey-1}
+
+
+.tbl-actionRow{
+    position: relative;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+// .tbl-actionRow .tbl-title{
+//     position: absolute; 
+//     left: 10px;
+//     font-size: 14px;
+//     color: #0288D1;
+// }
+// .tbl-actionRow .tbl-search{
+//     position: absolute; 
+//     right: 10px;
+// }
+.td-ctaWrap{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.td-ctaWrap i{
+    cursor: pointer;
+}
+.td-ctaWrap i:hover, th i:hover{
+    color: $green;
+}
+.td-trash-circle{
+    width: 6px;
+    height: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-x2;
+    color: #fff;
+    background: $brand-primary;
+    cursor: pointer;
+    border-radius: 100%;
+    margin-top: 4px;
+}
+.td-trash-circle:hover{
+    background: $red;
+}
+.th i{
+    margin-right: 10px;
+    cursor: pointer;
+}
+.td .empWrap {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.td .empWrap .list-img{
+    margin: 5px;
+}
+.tbl-status-active{
+    color: $brand-success;
+}
+.tbl-status-inactive{
+    color: $red;
+}
+.td-icos {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 18px;
+    color: #777;
+}
+
+.td-icos i {
+    padding: 5px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.td-icos i:hover {
+    color: #007bff;
+}

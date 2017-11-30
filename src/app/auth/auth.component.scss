@@ -1,70 +1,36 @@
-@import '../../styles.scss';
-.auth-box {
+@import '../../assets/libs/variables.scss';
+
+#auth-content-wrapper {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: $brand-primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.platform-wrap{
+    margin: 0 auto;
+}
+.platform-img{
+    width: 90px;
+    background: #fff;
+    height: 90px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px;
+}
+.platform-img img{
+    width: 100%;
+}
+.platform-label{
+    color: #fff;
+    font-size: $font-x3;
     margin: 10px auto;
-    min-width: 280px;
-    max-width: 400px;
-}
-
-.auth-logo-box {
-    //margin: 50px auto;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 100px;
-    margin-bottom: 10px;
-    min-width: 280px;
-    max-width: 400px;
-    .logo-box {
-        img {
-            border-radius: 50%;
-            margin: 10px auto;
-            height: 100px;
-            display: block;
-        }
-    }
-    .logo-text {
-        h5 {
-            font-size: 14px;
-        }
-    }
-}
-
-.nav-tabs {
-    border-bottom: none;
-    li {
-        width: 50%;
-        background-color: $gray-lighter; //#eee;
-        border-bottom: $border-color;
-        &.active {
-            background-color: $white;
-            border-bottom: $white;
-        }
-        a {
-            padding: 10px;
-            border: none;
-            width: 100%;
-            display: block;
-            //border-bottom: $border-color;
-            border-radius: 0;
-            color: $gray-light;
-            margin: 0;
-            text-align: center;
-            font-size: 15px;
-            font-weight: bold;
-            &:hover {
-                background-color: $gray-lighter;
-            }
-            &:active,
-            &:focus,
-            &:visited {
-                text-decoration: none !important;
-            }
-        }
-    }
-}
-
-.tab-content {
-    background-color: $white;
-    border-left: 1px solid $border-color;
-    border-right: 1px solid $border-color;
-    border-bottom: 1px solid $border-color;
+    text-align: center;
 }

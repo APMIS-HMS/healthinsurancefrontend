@@ -1,0 +1,113 @@
+@import '../../../hia/hia-details/hia-details.component.scss';
+.check-payment-status {
+    width: 98%;
+    height: 30px;
+    text-align: right;
+    padding: 10px;
+    .check-payment-left {
+        width: 70%;
+        float: left;
+        text-align: left;
+    }
+    .check-payment-right {
+        width: 30%;
+        float: right;
+        text-align: right;
+    }
+}
+
+.show-payment {
+    display: inline;
+}
+
+.align-chac {
+    display: block;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.chac-box {
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    margin-top: 5px;
+    ;
+}
+
+.chac-box-right {
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: grey;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    float: left;
+    padding: 10px 10px 0px 10px;
+}
+
+.chac-box-right-header {
+    width: 78%;
+    height: 15;
+    text-align: center !important;
+    padding: 10px;
+    border: 2px solid rgb(111, 132, 255);
+}
+
+.chac-box-right-header-lab {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+.payBorder {
+    border: 1px solid #ccc;
+    width: 200px;
+    padding: 5px;
+    height: 50px;
+    margin-right: 50px;
+}
+
+.btn-ePay {
+    border: 1px solid blue;
+    width: 350px;
+    padding: 5px;
+    width: 128px;
+    background: whitesmoke;
+    color: blue;
+}
+
+.pay-detail-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.pay-label-detail-wrap {
+    display: flex;
+    justify-content: space-around;
+    -webkit-box-align: center;
+    align-items: center;
+    position: relative;
+    margin-right: 85px;
+}
+
+.pay-btn-detail-wrap {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    position: relative;
+    text-align: center !important;
+    padding: 10px 0px;
+    .payment-option {
+        padding: 10px;
+    }
+}

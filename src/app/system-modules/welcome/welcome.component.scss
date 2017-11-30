@@ -1,0 +1,76 @@
+@import '../../../assets/libs/variables.scss';
+
+.welcome-wrap{
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 23vh;
+}
+.minor-text{
+    color: $brand-primary;
+    font-size: 20px;
+    font-style: italic;
+}
+.major-text{
+    color: $grey-2;
+    font-size: 90px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #000, 
+    3px 3px 5px $grey-2;
+}
+.in-wrap{
+    text-align: center;
+    padding: 20px;
+    margin-right: 20px;
+}
+.notifier-header{
+    background: $grey-1;
+    border: 1px solid $grey-3;
+    color: $grey-3;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    text-align: center;
+}
+.pointer-arr{
+    font-size: 60px;
+    color: $grey-2;
+    margin: 0 20px;
+    text-shadow: 1px 1px 1px #000, 
+    3px 3px 5px $grey-2;
+}
+.notifier-list{
+    background: #fff;
+    height: 170px;
+    width: 100%;
+    border-left: 1px solid $grey-3;
+    border-right: 1px solid $grey-3;
+    border-bottom: 1px solid $grey-3;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.notifier{
+    padding: 10px 20px;
+    color: $grey-3;
+    font-size: $font-x2;
+    cursor: pointer;
+}
+.notifier:hover{
+    background: $grey-1;
+}
+.notifier-title {
+    font-weight: bold;
+    color: $brand-primary;
+}
+.notifier-date {
+    color: #ff2500;
+    font-style: italic;
+    margin-bottom: 5px;
+    border-bottom: 1px solid $grey-2;
+}
+
+@media only screen and (max-width: 500px) {
+    .major-text{
+        font-size: 60px;
+    }
+}

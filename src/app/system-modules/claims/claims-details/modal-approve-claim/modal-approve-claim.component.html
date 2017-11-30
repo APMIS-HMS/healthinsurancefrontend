@@ -1,0 +1,34 @@
+<div class="modal-title">Approve Claim - {{claimDetail.claimNo}}</div>
+
+<form [formGroup]="claimsApproveFormGroup" novalidate>
+    <div class="frm-item-wrap">
+        <label class="label">Reason</label>
+        <div class="input-wrap" style="width:100%;">
+            <textarea formControlName="reason" class="form-control-textArea"></textarea>
+        </div>
+        <small class="alert-label" [hidden]="claimsApproveFormGroup.controls.reason.valid || claimsApproveFormGroup.controls.reason.pristine">
+            This is a required field.
+        </small>
+    </div>
+
+    <div class="frm-item-wrap">
+        <label class="label">Name</label>
+        <div class="input-wrap">
+            <input type="text" formControlName="name" class="form-control">
+        </div>
+        <small class="alert-label" [hidden]="claimsApproveFormGroup.controls.name.valid || claimsApproveFormGroup.controls.name.pristine">
+            This is a required field (minimum 3 and max of 50 characters).
+        </small>
+    </div>
+
+    <div class="frm-item-wrap">
+        <label class="label">Institution</label>
+        <div class="input-wrap">
+            <input type="text" formControlName="institution" class="form-control">
+        </div>
+        <small class="alert-label" [hidden]="claimsApproveFormGroup.controls.institution.valid || claimsApproveFormGroup.controls.institution.pristine">
+            Choose state from the dropdown.
+        </small>
+    </div>
+    <button class="btn btn-medium btn-blue cta" (click)="onResponse()">OK</button>
+</form>
