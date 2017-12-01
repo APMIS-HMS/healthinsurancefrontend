@@ -8,88 +8,6 @@
                 <i class="fa fa-times"></i> CANCEL
             </div>
         </div>
-<<<<<<< HEAD
-    </div>
-    <div class="row pad-all border-top">
-        <div class="col-12">
-            <form [formGroup]="userFormGroup" novalidate>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-12 form-group col-md-6">
-                            <label class="col-12 no-padding control-label">User Type</label>
-                            <div class="col-12 no-padding">
-                                <label for="type-own">
-                                    <input type="radio" formControlName="userType" id="type-own" value="own">&nbsp;&nbsp;Own &nbsp;
-                                </label>
-                                <label for="type-others">
-                                    <input type="radio" formControlName="userType" id="type-others" value="others">&nbsp;&nbsp;Others &nbsp;
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-12 form-group col-md-6">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12" *ngIf="showOwnerDropdown">
-                    <div class="row">
-                        <div class="col-12 form-group col-md-6">
-                            <label class="col-12 no-padding control-label">Platform Owner</label>
-                            <div class="col-12 no-padding">
-                                <select formControlName="platformOwner" class="form-control">
-                                    <option value=" " disabled selected>Select Owner</option>
-                                    <option *ngFor="let owner of owners" [ngValue]="owner">{{owner.name}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 form-group col-md-6">
-                            <div *ngIf="selectedDropdown === 'HIA'">
-                                <label class="col-12 no-padding control-label">HIAs</label>
-                                <div class="col-12 no-padding">
-                                    <select formControlName="platformOwner" class="form-control">
-                                        <option value=" " disabled selected>Select HIA</option>
-                                        <option *ngFor="let owner of owners" [ngValue]="owner">{{owner.name}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div *ngIf="selectedDropdown === 'HIA'">
-                                <label class="col-12 no-padding control-label">Employers</label>
-                                <div class="col-12 no-padding">
-                                    <select formControlName="platformOwner" class="form-control">
-                                        <option value=" " disabled selected>Select Employer</option>
-                                        <option *ngFor="let owner of owners" [ngValue]="owner">{{owner.name}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-12 form-group col-md-6">
-                            <label class="col-12 no-padding control-label">Gender</label>
-                            <div class="col-12 no-padding">
-                                <label for="bene-male">
-                                    <input type="radio" formControlName="gender" id="bene-male" value="male">&nbsp;Male&nbsp;&nbsp;&nbsp;
-                                </label>
-                                <label for="bene-female">
-                                    <input type="radio" formControlName="gender" id="bene-female" value="female">&nbsp;Female &nbsp;
-                                </label>
-                                <small class="alert-label" [hidden]="userFormGroup.controls.email.valid || userFormGroup.controls.email.pristine">
-                                    This is a required field.
-                                </small>
-                            </div>
-                        </div>
-                        <div class="col-12 form-group col-md-6">
-                            <label class="col-12 no-padding control-label">Last Name</label>
-                            <div class="col-12 no-padding">
-                                <input type="text" formControlName="lastName" class="form-control">
-                                <small class="alert-label" [hidden]="userFormGroup.controls.lastName.valid || userFormGroup.controls.lastName.pristine">
-                                    This is a required field (minimum 3 and max of 50 characters).
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-=======
 
         <form [formGroup]="userFormGroup" novalidate>
             <div class="frm-item-wrap">
@@ -109,7 +27,6 @@
                         <option value=" " disabled selected>Select Facility</option>
                         <option *ngFor="let user of facilities" [ngValue]="user">{{user.name}}</option>
                     </select>
->>>>>>> remotes/origin/redesign
                 </div>
             </div>
 

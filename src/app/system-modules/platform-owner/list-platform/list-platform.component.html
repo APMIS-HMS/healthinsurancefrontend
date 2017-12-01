@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-<section class="content">
-    <div class="row">
-        <div class="col-12 col-sm-8">
-            <div class="form-group">
-                <div class="col-sm-10 no-padding">
-                    <!-- <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Name or ID Number" aria-describedby="basic-addon2">
-                        <span class="input-group-addon bg-yellow" id="basic-addon2"><i class="fa fa-search"></i></span>
-                    </div> -->
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-4">
-            <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/platform/new">
-                <i class="fa fa-plus-circle"></i> Add Platform
-            </a>
-=======
 <div class="list-search-wrap">
     <div class="search-wrap">
         <label class="label-xx">Search:</label>
@@ -61,93 +43,10 @@
         <option value="true">Active</option>
         <option value="false">Inactive</option>
       </select>
->>>>>>> remotes/origin/redesign
         </div>
 
         <div class="btn btn-medium btn-blue-outline">RESET</div>
     </div>
-<<<<<<< HEAD
-    <div class="row">
-        <section class="col-12">
-            <div class="filter-box">
-                <h5>Filters:</h5>
-                <div class="row no-margin-right">
-                    <div class="form-group col-sm-6 col-md-6 no-padding">
-                        <label class="col-12 control-label">Name: </label>
-                        <div class="col-12">
-                            <select class="form-control">
-                              <option value="asc">Asccending</option>
-                              <option value="dsc">Desccending</option>
-                          </select>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6 col-md-6">
-                        <label class="col-12 no-padding control-label">Status: </label>
-                        <div class="row no-margin-left no-margin-right">
-                            <div class="col-8 no-padding">
-                                <select class="form-control">
-                                  <option value="active">Active</option>
-                                  <option value="inactive">Inactive</option>
-                              </select>
-                            </div>
-                            <div class="col-4 no-padding">
-                                <button type="" class="btn btn-default btn-flat text-brand border-brand pull-right">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="col-12">
-            <div class="table-responsive">
-                <table class="table table-striped" cellspacing="0" width="100%">
-                    <thead>
-                        <tr class="bg-gray text-white">
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Alias</th>
-                            <th>Website</th>
-                            <th>Email</th>
-                            <th>Contact Name</th>
-                            <th>Contact Phone No.</th>
-                            <th>Contact Email</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngIf="owners.length === 0 && !loading">
-                            <td class="text-center" colspan="10">No data available in table</td>
-                        </tr>
-                        <tr *ngIf="owners.length === 0 && loading">
-                            <td class="text-center" colspan="10">
-                                <i class="fa fa-spinner fa-spin"></i>
-                            </td>
-                        </tr>
-                        <tr *ngFor="let owner of owners; let i = index;" class="tr-link">
-                            <td>{{ i+1 }}</td>
-                            <td>{{owner.name}}</td>
-                            <td>{{owner.shortName}}</td>
-                            <td><a href="{{owner.website}}" target="_blank">{{owner.shortName}} website</a></td>
-                            <td>{{owner.email}}</td>
-                            <td>{{owner.businessContact.lastName}} {{owner.businessContact.firstName}}</td>
-                            <td>{{owner.businessContact.phoneNumber}}</td>
-                            <td>{{owner.businessContact.email}}</td>
-                            <td>
-                                <span class="{{ owner.isTokenVerified ? 'text-success': 'text-red' }}"> 
-                                    {{ owner.isTokenVerified ? 'Active': 'Inactive' }}
-                                </span>
-                            </td>
-                            <td routerLink="/modules/platform/platforms/{{owner._id}}"><i class="fa fa-chevron-right"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-12 text-center">
-                <button class="btn bg-yellow btn-flat">Load More</button>
-            </div>
-        </section>
-=======
 
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
@@ -196,6 +95,5 @@
     <div class="list-buttom" *ngIf="owners.length > 0">
         <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
         <div class="btn btn-medium btn-yellow">Load More</div>
->>>>>>> remotes/origin/redesign
     </div>
 </div>
