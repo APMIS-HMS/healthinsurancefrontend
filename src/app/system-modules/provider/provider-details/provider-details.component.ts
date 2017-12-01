@@ -1,4 +1,4 @@
-import { FacilityService } from './../../../models/setup/facilityservice';
+
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -10,6 +10,7 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { SystemModuleService } from '../../../services/common/system-module.service';
 import { UploadService } from '../../../services/common/upload.service';
+import { FacilityService } from '../../../services/index';
 @Component({
   selector: 'app-provider-details',
   templateUrl: './provider-details.component.html',

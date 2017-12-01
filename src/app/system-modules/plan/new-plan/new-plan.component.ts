@@ -49,16 +49,11 @@ export class NewPlanComponent implements OnInit {
     private _planService: PlanService,
     private _planTypeService: PlanTypeService,
     private _systemService: SystemModuleService,
-<<<<<<< HEAD
-    private _premiumTypeService:PremiumTypeService
-	) { }
-=======
     private _premiumTypeService: PremiumTypeService,
     private _facilityService: FacilityService,
     private _route: ActivatedRoute,
     private _router:Router,
     private _locker: CoolLocalStorage) { }
->>>>>>> remotes/origin/redesign
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Plan');
@@ -80,8 +75,6 @@ export class NewPlanComponent implements OnInit {
     this._getCurrentPlatform();
     this._getPlanTypes();
     this._getPremiumTypes();
-<<<<<<< HEAD
-=======
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
@@ -90,7 +83,6 @@ export class NewPlanComponent implements OnInit {
       }
     })
   }
->>>>>>> remotes/origin/redesign
 
   _getPlan(id) {
     this._systemService.on();
@@ -117,14 +109,6 @@ export class NewPlanComponent implements OnInit {
       console.log(err);
       this._systemService.off();
     });
-<<<<<<< HEAD
-    
-    this.planPremiumFormGroup = this._fb.group({
-      planCategory: [1, [<any>Validators.required]],
-			planDuration: [1, [<any>Validators.required]],
-			planAmount: [0, [<any>Validators.required]],
-			planUnit: ['', [<any>Validators.required]]
-=======
   }
 
 
@@ -147,7 +131,6 @@ export class NewPlanComponent implements OnInit {
     }).catch(err => {
       console.log(err)
       this._systemService.off();
->>>>>>> remotes/origin/redesign
     });
   }
   onClickPremiumNext() {
@@ -233,14 +216,6 @@ export class NewPlanComponent implements OnInit {
   }
 
 
-  _getPremiumTypes(){
-    this._premiumTypeService.find({}).then((payload:any) =>{
-      this.premiumTypes = payload.data;
-      console.log(this.premiumTypes)
-    }).catch(err =>{
-    })
-  }
-
   onClickAddPlan(valid: Boolean, value: any) {
     if (valid) {
       this.tab_details = false;
@@ -259,71 +234,13 @@ export class NewPlanComponent implements OnInit {
         facilityId: this.user.user.facilityId,
         isActive: value.planStatus,
         premiums: []
-<<<<<<< HEAD
-      }
-    } else {
-      console.log('Not valid');
-    }
-  }
-  
-  
-  onClickAddPremium(valid: Boolean, value: any) {
-    if (valid) {
-      const premium = <PlanPremium> {
-        category: value.planCategory,
-        amount: value.planAmount,
-        duration: value.planDuration,
-        unit: value.planUnit.name,
-        durationInDay: value.planUnit.days
-=======
->>>>>>> remotes/origin/redesign
       };
     } else {
       console.log('Not valid');
     }
   }
 
-<<<<<<< HEAD
-  onClickPremiumNext() {
-    if (!!this.plan.name) {
-      this.disablePremiumNextBtn = true;
-      this.premiumNextBtn = 'Saving Plan... <i class="fa fa-spinner fa-spin"></i>';
-      // Save plan
-      this._systemService.on();
-      this._planService.create(this.plan).then(res => {
-        this._systemService.off();
-        this._toastr.success('Plan has been created successfully.', 'Success');
-        this.premiumNextBtn = 'Save <i class="fa fa-check" aria-hidden="true"></i>';
-        this.disablePremiumNextBtn = false;
-        this.planDetailFormGroup.reset();
-        this.planPremiumFormGroup.reset();
-        this.planDetailFormGroup.controls['planStatus'].setValue(true);
-        this.tabDetails_click();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      });
-    } else {
-      console.log('Plan Does not exist.');
-    }
-  }
-
-  private _getPlanTypes() {
-    this._systemService.on();
-    this._planTypeService.findAll().then((res: any) => {
-      this._systemService.off();
-      if (res.data.length > 0) {
-        this.planTypes = res.data;
-      }
-    }).catch(err => {
-      this._systemService.off();
-    });
-  }
-  
-  tabPremium_click(){
-=======
   tabPremium_click() {
->>>>>>> remotes/origin/redesign
     this.tab_details = false;
     this.tab_premium = true;
     this.tab_drugs = false;

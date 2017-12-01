@@ -86,8 +86,6 @@ export class ListPlatformComponent implements OnInit {
     })
   }
 
-<<<<<<< HEAD
-=======
   onSelectedStatus(item) {
     this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id,isTokenVerified:item, $limit: 200 } }).then((payload: any) => {
       this.owners = payload.data;
@@ -99,7 +97,6 @@ export class ListPlatformComponent implements OnInit {
     }
   }
 
->>>>>>> remotes/origin/redesign
   private _getUserTypes() {
     this._systemService.on();
     this._userTypeService.find({}).then((payload: any) => {

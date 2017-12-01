@@ -1,5 +1,4 @@
 import { UserService } from './../../../services/common/user.service';
-import { FacilityService } from './../../../models/setup/facilityservice';
 import { authModulesRoutes } from './../../../auth/auth.route';
 import { ReferralAuthorization } from './../../../models/referral/referral';
 import { ReferralService } from './../../../services/referral/referral.service';
@@ -28,6 +27,7 @@ import { ProcedureService } from '../../../services/common/procedure.service';
 import { DiagnosisService } from '../../../services/common/diagnosis.service';
 import { DrugService } from '../../../services/common/drug.service';
 import { DiagnosisTypeService } from '../../../services/common/diagnosis-type.service';
+import { FacilityService } from '../../../services/index';
 
 @Component({
   selector: 'app-new-referal',
