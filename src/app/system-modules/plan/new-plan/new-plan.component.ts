@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-import { PremiumTypeService } from './../../../services/common/premium-type.service';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-=======
 import { ActivatedRoute, Router } from '@angular/router';
->>>>>>> remotes/origin/redesign
 
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { Component, OnInit } from '@angular/core'; 
@@ -35,17 +29,12 @@ export class NewPlanComponent implements OnInit {
   saveBtn: String = 'SAVE <i class="fa fa-check" aria-hidden="true"></i>';
   premiumNextBtn: String = 'SAVE <i class="fa fa-check" aria-hidden="true"></i>';
   disablePremiumNextBtn: Boolean = false;
-<<<<<<< HEAD
-  premiumTypes:any[] = [];
-  
-=======
   premiumTypes: any[] = [];
   currentPlatform: any;
   user: any;
   selectedPlan: any;
   selectedPremium: any;
 
->>>>>>> remotes/origin/redesign
   tab_details = true;
   tab_premium = false;
   tab_drugs = false;
