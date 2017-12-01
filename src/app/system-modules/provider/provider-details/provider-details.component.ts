@@ -1,16 +1,13 @@
-
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { FacilityService, SystemModuleService, UploadService } from './../../../services/index';
 import { Facility, Employer, Address, BankDetail, Contact } from './../../../models/index';
 import { DURATIONS } from '../../../services/globals/config';
 import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { SystemModuleService } from '../../../services/common/system-module.service';
-import { UploadService } from '../../../services/common/upload.service';
-import { FacilityService } from '../../../services/index';
 @Component({
   selector: 'app-provider-details',
   templateUrl: './provider-details.component.html',

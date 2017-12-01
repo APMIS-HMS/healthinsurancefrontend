@@ -1,4 +1,3 @@
-import { UserService } from './../../../services/common/user.service';
 import { authModulesRoutes } from './../../../auth/auth.route';
 import { ReferralAuthorization } from './../../../models/referral/referral';
 import { ReferralService } from './../../../services/referral/referral.service';
@@ -14,20 +13,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import { SystemModuleService, CheckInService, SymptomService, ProcedureService, DiagnosisService, DrugService, DiagnosisTypeService, FacilityService, UserService } from '../../../services/index';
 import { DrugPackSizeService } from '../../../services/common/drug-pack-size.service';
 import { PolicyService } from '../../../services/policy/policy.service';
 import { ToastsManager } from 'ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationService } from '../../../services/pre-authorization/pre-authorization.service';
 import * as moment from 'moment';
-import { SystemModuleService } from '../../../services/common/system-module.service';
-import { CheckInService } from '../../../services/common/check-in.service';
-import { SymptomService } from '../../../services/common/symptoms.service';
-import { ProcedureService } from '../../../services/common/procedure.service';
-import { DiagnosisService } from '../../../services/common/diagnosis.service';
-import { DrugService } from '../../../services/common/drug.service';
-import { DiagnosisTypeService } from '../../../services/common/diagnosis-type.service';
-import { FacilityService } from '../../../services/index';
 
 @Component({
   selector: 'app-new-referal',

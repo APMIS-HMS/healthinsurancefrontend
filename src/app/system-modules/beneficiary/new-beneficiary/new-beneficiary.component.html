@@ -1,50 +1,79 @@
-<section class="content">
-    <div class="nut-tab-topSect-wrap">
-        <div class="nutTabs-wrap">
-
-            <div (click)="tabPersonalData_click()" [class.active-nut]="tab_personalData" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1" style="background:transparent;"></div>
-                        <div class="stroke-2"></div>
+<div style="padding-top:2px;">
+        <section class="app-content-wrap content shadow-RB">
+    
+            <div class="nut-tab-topSect-wrap"> 
+                <div class="nutTabs-wrap">
+        
+                    <div (click)="tabPersonalData_click()" [class.active-nut]="tab_personalData" class="nutTab-wrap">
+                        <div class="nut-outer">
+                            <div class="nut-inner"></div>
+                            <!-- <div class="nut-stroke">
+                                <div class="stroke-1" style="background:transparent;"></div>
+                                <div class="stroke-2"></div>
+                            </div> -->
+                        </div>
+                        <div class="nut-label">Principal</div>
+                    </div>
+        
+                    <div (click)="tabDependants_click()"  [class.active-nut]="tab_dependants" class="nutTab-wrap">
+                        <div class="nut-outer">
+                            <div class="nut-inner"></div>
+                            <!-- <div class="nut-stroke">
+                                <div class="stroke-1"></div>
+                                <div class="stroke-2"></div>
+                            </div> -->
+                        </div>
+                        <div class="nut-label">Dependants</div>
+                    </div>
+    
+                    <div (click)="tabNOK_click()"  [class.active-nut]="tab_nok" class="nutTab-wrap">
+                        <div class="nut-outer">
+                            <div class="nut-inner"></div>
+                            <!-- <div class="nut-stroke">
+                                <div class="stroke-1"></div>
+                                <div class="stroke-2"></div>
+                            </div> -->
+                        </div>
+                        <div class="nut-label">Next OF Kin</div>
+                    </div>
+        
+                    <div (click)="tabProgram_click()" [class.active-nut]="tab_program" class="nutTab-wrap">
+                        <div class="nut-outer">
+                            <div class="nut-inner"></div>
+                            <!-- <div class="nut-stroke">
+                                <div class="stroke-1"></div>
+                                <div class="stroke-2"></div>
+                            </div> -->
+                        </div>
+                        <div class="nut-label">Program</div>
+                    </div>
+        
+                    <div (click)="tabConfirm_click()" [class.active-nut]="tab_confirm" class="nutTab-wrap">
+                        <div class="nut-outer">
+                            <div class="nut-inner"></div>
+                            <!-- <div class="nut-stroke">
+                                <div class="stroke-1"></div>
+                                <div class="stroke-2" style="display:none;"></div>
+                            </div> -->
+                        </div>
+                        <div class="nut-label">Complete</div>
                     </div>
                 </div>
-                <div class="nut-label">Personal Data</div>
-            </div>
-
-            <div (click)="tabDependants_click()" [class.active-nut]="tab_dependants" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2"></div>
-                    </div>
+            
+                <div *ngIf="!tab_confirm" class="btn btn-medium btn-grey-outline" routerLink="/modules/beneficiary/beneficiaries">
+                    <i class="fa fa-times"></i> CANCEL
                 </div>
-                <div class="nut-label">Dependants</div>
             </div>
-
-            <div (click)="tabProgram_click()" [class.active-nut]="tab_program" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Program</div>
+            <router-outlet></router-outlet>
+    
+            <!-- <div *ngIf="tab_personalData">
+                <app-new-beneficiary-data></app-new-beneficiary-data>
             </div>
-
-            <div (click)="tabConfirm_click()" [class.active-nut]="tab_confirm" class="nutTab-wrap">
-                <div class="nut-outer">
-                    <div class="nut-inner"></div>
-                    <div class="nut-stroke">
-                        <div class="stroke-1"></div>
-                        <div class="stroke-2" style="display:none;"></div>
-                    </div>
-                </div>
-                <div class="nut-label">Confirm</div>
+    
+            <div *ngIf="tab_dependants && selectedBeneficiary !== undefined">
+                <app-new-beneficiary-dependant [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-dependant>
             </div>
+<<<<<<< HEAD
         </div>
 
         <div class="btn-wrap">
@@ -367,224 +396,19 @@
                 </form>
             </div>
 
+=======
+    
+>>>>>>> redesign
             <div *ngIf="tab_program">
-                <form [formGroup]="frmProgram" novalidate>
-                    <div class="frm-inner-title">Health Insurance Agent</div>
-
-                    <div class="col-12 pad-all">
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label">HIA Name</label>
-                            <div class="col-sm-8">
-                                <select formControlName="hiaName" class="form-control">
-                                        <option  value="" selected>this time HIA</option>
-                                        <option  value="">that season HIA</option>
-                                    </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="frm-inner-title">Program</div>
-
-                    <div class="col-12 pad-all">
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label">Type</label>
-                            <div class="col-sm-8">
-                                <select formControlName="programType" class="form-control">
-                                        <option  value="" selected>this time HIA</option>
-                                        <option  value="">that season HIA</option>
-                                    </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 pad-all">
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label">Name</label>
-                            <div class="col-sm-8">
-                                <select formControlName="programName" class="form-control">
-                                        <option  value="" selected>this time HIA</option>
-                                        <option  value="">that season HIA</option>
-                                    </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="frm-inner-title">Primary Health Care Provider</div>
-
-                    <div class="col-12 pad-all">
-                        <div class="form-group row">
-                            <label class="col-sm-4 control-label">Provider Name</label>
-                            <div class="col-sm-8">
-                                <select formControlName="providerName" class="form-control">
-                                        <option  value="" selected>this time HIA</option>
-                                        <option  value="">that season HIA</option>
-                                    </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 pad-all">
-                        <label class="col-sm-4 control-label"></label>
-                        <div class="col-sm-8">
-                            <button class="btn bg-brand btn-flat border-brand text-white" (click)="onClickStepOne(stepOneFormGroup.value, stepOneFormGroup.valid);">
-                                    NEXT &nbsp; <i class="fa fa-chevron-right"></i>
-                                </button>
-                        </div>
-                    </div>
-                </form>
+                <app-new-beneficiary-program [selectedBeneficiary]="selectedBeneficiary" [dependants]="dependants"></app-new-beneficiary-program>
             </div>
-
+    
+            <div *ngIf="tab_nok">
+                <app-new-beneficiary-nok [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-nok>
+            </div>
+    
             <div *ngIf="tab_confirm">
-                <section class="content confirm-sect1">
-
-                    <div id="home" class="tab-pane fade show active">
-                        <div class="row pad-all">
-                            <div class="col-sm-3 no-padding">
-                                <div class="box-content-header">
-                                    <span>Personal Data</span>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row pad-all">
-                                        <div class="col-12">
-                                            <div class="person-wrap col-10 no-padding">
-                                                <div class="img-box">
-                                                    <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-responsive img-circle">
-                                                </div>
-                                                <button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button>
-                                            </div>
-                                            <div class="col-2 no-padding">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row pad-all">
-                                        <div class="col-12">
-                                            <span><b>D.O.B: </b> 23-12-1986</span><br>
-                                            <span><b>LASRRA ID: </b> 23-12-1986</span><br>
-                                            <span><b>LASHMA ID: </b> 23-12-1986</span><br>
-                                            <span><b>CIN: </b> 23-12-1986</span><br>
-                                        </div>
-                                        <div class="col-12 pad-up">
-                                            <span>Professor Chisimdi Damian Ezeanieto<br> +234 8093802990</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 no-padding">
-                                <div class="box-content-header">
-                                    <span>Dependant</span>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row pad-all">
-                                        <div class="col-12">
-                                            <div class="person-wrap col-10 no-padding">
-                                                <div class="img-box">
-                                                    <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-responsive img-circle">
-                                                </div>
-                                                <button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button>
-                                            </div>
-                                            <div class="col-2 no-padding">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row pad-all">
-                                        <div class="col-12">
-                                            <span><b>D.O.B: </b> 23-12-1986</span><br>
-                                            <span><b>LASRRA ID: </b> 23-12-1986</span><br>
-                                            <span><b>LASHMA ID: </b> 23-12-1986</span><br>
-                                            <span><b>CIN: </b> 23-12-1986</span><br>
-                                        </div>
-                                        <div class="col-12 pad-up">
-                                            <span>Professor Chisimdi Damian Ezeanieto<br> +234 8093802990</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 no-padding">
-                                <div class="box-content-header">
-                                    <span>Dependant</span>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row pad-all">
-                                        <div class="col-12">
-                                            <div class="person-wrap col-10 no-padding">
-                                                <div class="img-box">
-                                                    <img src="assets/img/Chimamanda-Ngozi-Adichie-Natural-Hair-3.jpg" alt="" class="img-responsive img-circle">
-                                                </div>
-                                                <button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button>
-                                            </div>
-                                            <div class="col-2 no-padding">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row pad-all">
-                                        <div class="col-12">
-                                            <span><b>D.O.B: </b> 23-12-1986</span><br>
-                                            <span><b>LASRRA ID: </b> 23-12-1986</span><br>
-                                            <span><b>LASHMA ID: </b> 23-12-1986</span><br>
-                                            <span><b>CIN: </b> 23-12-1986</span><br>
-                                        </div>
-                                        <div class="col-12 pad-up">
-                                            <span>Professor Chisimdi Damian Ezeanieto<br> +234 8093802990</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="confirm-sect2">
-                    <div class="col-12 no-padding">
-                        <div class="row">
-                            <div class="col-sm-4 no-padding">
-                                <div class="col-12 box-content-header">
-                                    <span>Health Care Insurance Agent</span>
-                                </div>
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-8">Health Care Security Limited</div>
-                                        <div class="col-4"><button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 no-padding">
-                                <div class="col-12 box-content-header">
-                                    <span>Program</span>
-                                </div>
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-8">Health Care Secure Formal</div>
-                                        <div class="col-4"><button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 no-padding">
-                                <div class="col-12 box-content-header">
-                                    <span>Care Provider Details</span>
-                                </div>
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-8">Lagos State University Hospital</div>
-                                        <div class="col-4"><button class="btn bg-brand btn-round text-white"><i class="fa fa-edit"></i></button></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row" style="padding-top:20px;">
-                            <div class="col-12 col-sm-4"></div>
-                            <div class="col-12 col-sm-4"></div>
-                            <div class="col-12 col-sm-4">
-                                <a class="btn btn-primary btn-flat pull-right" routerLink="/modules/beneficiary/new">
-                                    CONFIRM
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <app-new-beneficiary-confirm [policy]="policy"></app-new-beneficiary-confirm>
+            </div> -->
+        </section>
     </div>
-</section>

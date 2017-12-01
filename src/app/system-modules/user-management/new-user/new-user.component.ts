@@ -137,27 +137,6 @@ export class NewUserComponent implements OnInit {
         this.caders = val.caders;
       }
     });
-
-    this.userFormGroup.controls['userType'].setValue('own');
-    this.userFormGroup.controls['gender'].setValue('male');
-
-    this.userFormGroup.controls['userType'].valueChanges.subscribe(val => {
-      console.log(val);
-      if (val === 'own') {
-        this.showOwnerDropdown = false;
-      } else if (val === 'others') {
-        this.showOwnerDropdown = true;
-      }
-    });
-
-    this.userFormGroup.controls['platformOwner'].valueChanges.subscribe(val => {
-      console.log(val);
-      if (val === 'own') {
-        this.showOwnerDropdown = false;
-      } else if (val === 'others') {
-        this.showOwnerDropdown = true;
-      }
-    });
   }
   _getUser(id) {
     this._userService.get(id, {}).then((payload: any) => {
