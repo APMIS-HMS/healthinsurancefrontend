@@ -8,4 +8,40 @@
         width: 100%;
         float: left;
     }
+    .payment-box {
+        width: 100%;
+        padding-top: 10px;
+        margin-left: -20px;
+        display: flex;
+        justify-content: space-between;
+        .tab {
+            display: flex;
+            .tab-ffs,
+            .tab-c {
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid #474747;
+                padding: 10px;
+            }
+            .tab-ffs {
+                &.claim-tab-active {
+                    background-color: #474747;
+                    color: #fff;
+                }
+            }
+            .tab-c {
+                &.claim-tab-active {
+                    background-color: #474747;
+                    color: #fff;
+                }
+            }
+        }
+        .queue-btn-box {
+            .btn {
+                margin-bottom: 5px;
+            }
+        }
+    }
 }

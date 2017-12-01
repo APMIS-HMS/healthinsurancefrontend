@@ -10,18 +10,24 @@ import { SystemModuleService, FacilityService, CapitationFeeService, PolicyServi
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
-  selector: 'app-capitation-payment',
-  templateUrl: './capitation-payment.component.html',
-  styleUrls: ['./capitation-payment.component.scss']
+  selector: "app-capitation-payment",
+  templateUrl: "./capitation-payment.component.html",
+  styleUrls: ["./capitation-payment.component.scss"]
 })
 export class CapitationPaymentComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterHiaControl = new FormControl('All');
+  filterHiaControl = new FormControl("All");
   hospitalControl = new FormControl();
   planControl = new FormControl();
   currentPlatform: any;
   capitations: any = <any>[];
+  selectedCapitations: any = <any>[];
   loading: boolean = true;
+  totalCost: number = 0;
+  totalQuantity: number = 0;
+  cBtnText: boolean = true;
+  cBtnProcessing: boolean = false;
+  cDisableBtn: boolean = false;
 
   constructor(
     private _router: Router,
@@ -36,8 +42,8 @@ export class CapitationPaymentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Capitation Payment');
-    this._headerEventEmitter.setMinorRouteUrl('Capitation list');
+    this._headerEventEmitter.setRouteUrl("Capitation Payment");
+    this._headerEventEmitter.setMinorRouteUrl("Capitation list");
 
     this._route.params.subscribe(param => {
       console.log(param);
@@ -48,27 +54,101 @@ export class CapitationPaymentComponent implements OnInit {
     });
   }
 
-  onCheckAllQueue(policy) {
-    console.log(policy);
+  onCheckAllQueue(isChecked) {
+    console.log(isChecked);
+    let counter = 0;
+    this.capitations.forEach(policy => {
+      counter++;
+      policy.isChecked = isChecked;
+
+      if (policy.isChecked) {
+        this.totalQuantity++;
+        this.totalCost += policy.premiumPackageId.amount;
+        this.selectedCapitations.push(policy);
+      } else {
+        this.totalQuantity--;
+        this.totalCost -= policy.premiumPackageId.amount;
+      }
+    });
+
+    if (counter === this.capitations.length && !isChecked) {
+      this.selectedCapitations = [];
+    }
+
+    // } else {
+    //   // Remove from the selected Claim
+    //   console.log(index);
+    //   policy.isChecked = false;
+    //   this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
+    // }
   }
 
-  onCheckQueue(policy) {
+  onCheckQueue(index, policy) {
     console.log(policy);
+    if (policy.isChecked === undefined) {
+      policy.isChecked = true;
+      this.selectedCapitations.push(policy);
+    } else if (!policy.isChecked) {
+      console.log(policy.isChecked);
+
+      let found: boolean = false;
+      policy.isChecked = true;
+      this.selectedCapitations = this.selectedCapitations.filter(
+        x => x._id !== policy._id
+      );
+      // let cLength = this.selectedCapitations.length;
+
+      // if (cLength > 0) {
+      //   while (cLength--) {
+      //     console.log(this.selectedCapitations[cLength]);
+      //   }
+      // } else {
+      //   this.selectedCapitations.push(policy);
+      // }
+      // this.selectedCapitations.forEach(e => {
+      //   if (e => e._id === policy._id) {
+      //     found = true;
+      //   } else {
+      //     found = false;
+      //   }
+      // });
+
+      // if (!found) {
+      //   this.selectedCapitations.push(policy);
+      // }
+    } else {
+      policy.isChecked = false;
+      this.selectedCapitations = this.selectedCapitations.filter(
+        x => x._id !== policy._id
+      );
+    }
+    console.log(this.selectedCapitations);
+  }
+
+  onClickPayItemsSelected() {
+    console.log("Ready to pay");
   }
 
   private _getPolicy(id) {
     this._policyService
       .find({
         query: {
-          'platformOwnerId._id': this.currentPlatform._id,
+          "platformOwnerId._id": this.currentPlatform._id,
           isActive: true,
           isPaid: true,
-          'providerId._id': id
+          "providerId._id": id
         }
-      }).then((res: any) => {
+      })
+      .then((res: any) => {
         console.log(res);
         this.loading = false;
         this._systemService.off();
+        if (res.data.length > 0) {
+          this._headerEventEmitter.setMinorRouteUrl(
+            res.data[0].providerId.name
+          );
+          this.capitations = res.data;
+        }
       })
       .catch(error => {
         console.log(error);
@@ -76,26 +156,12 @@ export class CapitationPaymentComponent implements OnInit {
       });
   }
 
-  // _getCurrentPlatform() {
-  //   this._facilityService
-  //     .find({ query: { shortName: CurrentPlaformShortName } })
-  //     .then((res: any) => {
-  //       if (res.data.length > 0) {
-  //         console.log(res);
-  //         this.currentPlatform = res.data[0];
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }
-
   private _getCurrentPlatform(providerId) {
     this._facilityService
       .find({
         query: {
           shortName: CurrentPlaformShortName,
-          $select: ['name', 'shortName', 'address.state']
+          $select: ["name", "shortName", "address.state"]
         }
       })
       .then((res: any) => {
