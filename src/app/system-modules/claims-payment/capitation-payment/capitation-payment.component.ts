@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs/Rx';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName } from '../../../services/globals/config';
+import { CurrentPlaformShortName, FLUTTERWAVE_PUBLIC_KEY } from '../../../services/globals/config';
 import { SystemModuleService, FacilityService, CapitationFeeService, PolicyService } from '../../../services/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
@@ -19,6 +19,7 @@ export class CapitationPaymentComponent implements OnInit {
   filterHiaControl = new FormControl("All");
   hospitalControl = new FormControl();
   planControl = new FormControl();
+  flutterwaveClientKey: string = FLUTTERWAVE_PUBLIC_KEY;
   currentPlatform: any;
   capitations: any = <any>[];
   selectedCapitations: any = <any>[];
@@ -28,6 +29,8 @@ export class CapitationPaymentComponent implements OnInit {
   cBtnText: boolean = true;
   cBtnProcessing: boolean = false;
   cDisableBtn: boolean = false;
+  user: any;
+  refKey: string;
 
   constructor(
     private _router: Router,
@@ -45,6 +48,9 @@ export class CapitationPaymentComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl("Capitation Payment");
     this._headerEventEmitter.setMinorRouteUrl("Capitation list");
 
+    this.user = (<any>this._locker.getObject("auth")).user;
+    console.log(this.user);
+
     this._route.params.subscribe(param => {
       console.log(param);
       if (!!param.id) {
@@ -52,6 +58,8 @@ export class CapitationPaymentComponent implements OnInit {
         this._getCurrentPlatform(param.id);
       }
     });
+
+    this.refKey = (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
   }
 
   onCheckAllQueue(isChecked) {
@@ -127,6 +135,14 @@ export class CapitationPaymentComponent implements OnInit {
 
   onClickPayItemsSelected() {
     console.log("Ready to pay");
+  }
+
+  paymentDone() {
+    console.log("Done");
+  }
+
+  paymentCancel() {
+    console.log("cancelled");
   }
 
   private _getPolicy(id) {

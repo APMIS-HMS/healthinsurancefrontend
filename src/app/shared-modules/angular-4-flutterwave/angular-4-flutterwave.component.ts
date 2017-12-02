@@ -23,6 +23,7 @@ export class Angular4FlutterwaveComponent implements OnInit {
   @Input() PBFPubKey: string;
   @Input() exclude_banks: string;
   @Input() pay_button_text: string;
+  @Input() btnColor: string;
   btnTitle: string = 'Pay with flutterwave';
   disableBtn: boolean = false;
 
@@ -33,6 +34,7 @@ export class Angular4FlutterwaveComponent implements OnInit {
 
   ngOnInit() {
     this.btnTitle = this.custom_title;
+    this.btnColor = this.btnColor;
   }
 
   setup() {
@@ -51,6 +53,7 @@ export class Angular4FlutterwaveComponent implements OnInit {
       txref: this.txref,
       PBFPubKey: this.PBFPubKey,
       exclude_banks: this.exclude_banks,
+      payment_method: this.payment_method,
       onclose: function () {
         _this.onClickClose();
         return _this.close.emit();

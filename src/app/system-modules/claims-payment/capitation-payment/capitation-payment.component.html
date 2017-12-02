@@ -40,10 +40,12 @@
         <div class="payment-box">
             <div class="tab"></div>
             <div class="queue-btn-box">
-                <button *ngIf="selectedCapitations.length > 0" [disabled]="cDisableBtn" (click)="onClickPayItemsSelected();" class="btn btn-medium btn-yellow">
+                <angular-4-flutterwave *ngIf="selectedCapitations.length > 0" [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'account'" [custom_title]="'e-Payment'"
+                    [custom_description]="" [exclude_banks]="" [btnColor]="'btn-yellow'" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
+                <!-- <button *ngIf="selectedCapitations.length > 0" [disabled]="cDisableBtn" (click)="onClickPayItemsSelected();" class="btn btn-medium btn-yellow">
                     <span *ngIf="cBtnText">Pay Items Selected</span>
                     <span *ngIf="cBtnProcessing">Paying Items...&nbsp; <i class="fa fa-spinner fa-spin"></i></span>
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
