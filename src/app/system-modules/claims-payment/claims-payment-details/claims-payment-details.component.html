@@ -1,5 +1,5 @@
 <div class="in-content-wrap">
-    <div routerLink="/modules/claims/claims-payment" class="back-btn">
+    <div routerLink="/modules/claims/claims-payment/{{ selectedClaim?.providerFacilityId }}" class="back-btn">
         <i class="fa fa-chevron-left"></i> BACK TO CLAIMS PAYMENT
     </div>
 
@@ -261,9 +261,9 @@
                 </div>
             </div>
 
-            <div class="action-wrap" *ngIf="!selectedClaim?.isQueuedForPayment">
+            <!-- <div class="action-wrap" *ngIf="!selectedClaim?.isQueuedForPayment">
                 <div class="btn btn-medium btn-yellow" (click)="onClickQueueForPayment()">Queue For Payment</div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

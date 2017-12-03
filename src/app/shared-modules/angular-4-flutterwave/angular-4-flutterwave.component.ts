@@ -4,9 +4,9 @@ import { HeaderEventEmitterService } from '../../services/event-emitters/header-
 import { FlutterwaveService, WindowRef } from '../../services/index';
 
 @Component({
-  selector: 'angular-4-flutterwave',
-  templateUrl: './angular-4-flutterwave.component.html',
-  styleUrls: ['./angular-4-flutterwave.component.scss']
+  selector: "angular-4-flutterwave",
+  templateUrl: "./angular-4-flutterwave.component.html",
+  styleUrls: ["./angular-4-flutterwave.component.scss"]
 })
 export class Angular4FlutterwaveComponent implements OnInit {
   @Output() close: EventEmitter<any> = new EventEmitter();
@@ -24,16 +24,13 @@ export class Angular4FlutterwaveComponent implements OnInit {
   @Input() exclude_banks: string;
   @Input() pay_button_text: string;
   @Input() btnColor: string;
-  btnTitle: string = 'Pay with flutterwave';
+  @Input() btnTitle: string = "Pay with flutterwave";
   disableBtn: boolean = false;
 
-  constructor(
-    private _windowRef: WindowRef
-  ) {
-  }
+  constructor(private _windowRef: WindowRef) {}
 
   ngOnInit() {
-    this.btnTitle = this.custom_title;
+    this.btnTitle = this.btnTitle;
     this.btnColor = this.btnColor;
   }
 
@@ -50,16 +47,17 @@ export class Angular4FlutterwaveComponent implements OnInit {
       custom_logo: this.custom_logo,
       custom_description: this.custom_description,
       custom_title: this.custom_title,
+      btnTitle: this.btnTitle,
       txref: this.txref,
       PBFPubKey: this.PBFPubKey,
       exclude_banks: this.exclude_banks,
       payment_method: this.payment_method,
-      onclose: function () {
+      onclose: function() {
         _this.onClickClose();
         return _this.close.emit();
       },
-      callback: function (res) {
-        console.log('This is the response returned after a charge');
+      callback: function(res) {
+        console.log("This is the response returned after a charge");
         return _this.callback.emit(res);
       }
     });
@@ -67,7 +65,7 @@ export class Angular4FlutterwaveComponent implements OnInit {
 
   onClickCallback(response) {
     this.callback.emit(response);
-    console.log('This is the response returned after a charge', response);
+    console.log("This is the response returned after a charge", response);
     // if (response.tx.chargeResponse === '00' || response.tx.chargeResponse === '0') {
     //   // redirect to a success page
     // } else {
@@ -76,14 +74,13 @@ export class Angular4FlutterwaveComponent implements OnInit {
   }
 
   onClickOpen() {
-    console.log('Clicked');
-    this.btnTitle = 'Paying...';
+    console.log("Clicked");
+    this.btnTitle = "Paying...";
     this.disableBtn = true;
   }
 
   onClickClose() {
     this.disableBtn = false;
-    this.btnTitle = this.custom_title;
+    this.btnTitle = this.btnTitle;
   }
-
 }

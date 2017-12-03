@@ -65,24 +65,36 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   private _getClaimsPayments() {
     this._systemService.on();
     this._claimsPaymentService.find({
-      query: {
-        'checkedinDetail.platformOwnerId._id': this.currentPlatform._id,
-        isPaymentMade: false
-    }}).then((res: any) => {
-      console.log(res);
-      this.loading = false;
-      res.data.forEach(claim => {
-        console.log(claim);
-        if (claim.checkedinDetail.providerFacilityId._id) {
-
+        query: {
+          'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+          isPaymentMade: false
         }
+      }).then((res: any) => {
+        console.log(res);
+        this.loading = false;
+        // // Group claims based on provider
+        // let i = res.data.length;
+        // while (i--) {
+        //   console.log(res.data[i]);
+        //   let claim = res.data[i];
+        //   const providerId = claim.checkedinDetail.checkedInDetails.providerFacilityId._id;
+        //   let hasItem = this.claims.filter(e => providerId === e.checkedinDetail.checkedInDetails.providerFacilityId._id);
+
+        //   if (hasItem.length === 0) {
+        //     claim.noOfClaims = 1;
+        //     claim.totalCost = claim.costingApprovalDocumentation;
+        //     this.claims.push(claim);
+        //   } else {
+        //     hasItem[0].totalCost += claim.costingApprovalDocumentation;
+        //     hasItem[0].noOfClaims++;
+        //   }
+        // }
+
+        this._systemService.off();
+      }).catch(error => {
+        console.log(error);
+        this._systemService.off();
       });
-      this.claims = res.data;
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    });
   }
 
   onCheckAllSelectedItemsToPay(event) {
@@ -128,14 +140,19 @@ export class QueuedClaimsPaymentComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
-      if (res.data.length > 0) {
-        this.currentPlatform = res.data[0];
-        this._getClaimsPayments();
-      }
-    }).catch(err => {
-      console.log(err);
-    });
+    this._facilityService.find({
+        query: {
+          shortName: CurrentPlaformShortName,
+          $select: ["name", "shortName", "address.state"]
+        }
+      }).then((res: any) => {
+        if (res.data.length > 0) {
+          this.currentPlatform = res.data[0];
+          this._getClaimsPayments();
+        }
+      }).catch(err => {
+        console.log(err);
+      });
   }
 
   navigate(url: string, id?: string) {

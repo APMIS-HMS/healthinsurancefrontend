@@ -83,40 +83,53 @@ export class ListClaimsPaymentComponent implements OnInit {
   private _getClaimsPayments() {
     this._systemService.on();
     console.log(this.currentPlatform);
-    this._claimService
-      .find({
+    this._claimService.find({
         query: {
-          "checkedinDetail.checkedInDetails.platformOwnerId._id": this
-            .currentPlatform._id,
-          isQueuedForPayment: false,
+          "checkedinDetail.beneficiaryObject.platformOwnerId._id": this.currentPlatform._id,
+          isPaid: false,
           "approvedDocumentation.response.isApprove": true,
           $limit: this.limit,
           $skip: this.limit * this.index
         }
-      })
-      .then((payload: any) => {
-        console.log(payload);
+      }).then((res: any) => {
+        console.log(res);
         this.loading = false;
-        // this.claims = payload.data;
-        this.claimsTotalEntries = payload.total;
-        if (this.claimsResetData !== true) {
-          this.claims.push(...payload.data);
-        } else {
-          this.claimsResetData = false;
-          this.claims = payload.data;
+        // Group claims based on provider
+        let i = res.data.length;
+        while (i--) {
+          console.log(res.data[i]);
+          let claim = res.data[i];
+          const providerId = claim.checkedinDetail.checkedInDetails.providerFacilityId._id;
+          let hasItem = this.claims.filter(e => providerId === e.checkedinDetail.checkedInDetails.providerFacilityId._id);
+
+          if (hasItem.length === 0) {
+            claim.noOfClaims = 1;
+            claim.totalCost = claim.costingApprovalDocumentation;
+            this.claims.push(claim);
+          } else {
+            hasItem[0].totalCost += claim.costingApprovalDocumentation;
+            hasItem[0].noOfClaims++;
+          }
         }
-        if (this.claims.length >= this.claimsTotalEntries) {
-          this.showClaimsLoadMore = false;
-        }
+        // this.claims = res.data;
+        // this.claimsTotalEntries = res.total;
+        // if (this.claimsResetData !== true) {
+        //   this.claims.push(...res.data);
+        // } else {
+        //   this.claimsResetData = false;
+        //   this.claims = res.data;
+        // }
+        // if (this.claims.length >= this.claimsTotalEntries) {
+        //   this.showClaimsLoadMore = false;
+        // }
         this._systemService.off();
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log(error);
         this._systemService.off();
       });
   }
 
-  private _getClaimsCapitationFromBeneficiary() {
+  private _getClaimsCapitationFromPolicy() {
     this._systemService.on();
     this._policyService
       .find({
@@ -180,7 +193,7 @@ export class ListClaimsPaymentComponent implements OnInit {
       .then((res: any) => {
         console.log(res);
         this.capitationPrice = res;
-        this._getClaimsCapitationFromBeneficiary();
+        this._getClaimsCapitationFromPolicy();
         this._systemService.off();
       })
       .catch(error => {
@@ -189,7 +202,7 @@ export class ListClaimsPaymentComponent implements OnInit {
       });
   }
 
-  _getCurrentPlatform() {
+  private _getCurrentPlatform() {
     this._facilityService
       .find({
         query: {
@@ -268,25 +281,17 @@ export class ListClaimsPaymentComponent implements OnInit {
       queuedBy: this.user
     };
 
-    this._claimsPaymentService
-      .createMultipleItem(body)
-      .then((res: any) => {
+    this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
         console.log(res);
         this.qFFSBtnText = true;
         this.qFFSBtnProcessing = false;
         this.qFFSDisableBtn = false;
-        if (res.status && res.statusCode === 200) {
-          this._toastr.success(
-            "Selected claims has been queued successfully!",
-            "Queueing Success!"
-          );
+        if (res.status === 'success') {
+          this._toastr.success("Selected claims has been queued successfully!", "Queueing Success!");
           this._getClaimsPayments();
           this._router.navigate(["/modules/claims/queued-claims"]);
         } else {
-          this._toastr.error(
-            "There was a problem queueing claims. Please try again later!",
-            "Queueing Error!"
-          );
+          this._toastr.error("There was a problem queueing claims. Please try again later!", "Queueing Error!");
         }
       })
       .catch(err => console.log(err));

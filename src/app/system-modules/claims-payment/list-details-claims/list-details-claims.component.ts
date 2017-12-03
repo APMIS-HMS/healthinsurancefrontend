@@ -113,18 +113,18 @@ export class ListDetailsClaimsComponent implements OnInit {
 
   navigate(url: string, id?: string) {
     if (!!id) {
-     this._systemService.on()
+     this._systemService.on();
       this._router.navigate([url + id]).then(res => {
-        this._systemService.off()
+        this._systemService.off();
       }).catch(err => {
-        this._systemService.off()
+        this._systemService.off();
       });
     } else {
-     this._systemService.on()
+     this._systemService.on();
       this._router.navigate([url]).then(res => {
-        this._systemService.off()
+        this._systemService.off();
       }).catch(err => {
-        this._systemService.off()
+        this._systemService.off();
       });
     }
   }

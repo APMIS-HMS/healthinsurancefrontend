@@ -137,8 +137,36 @@ export class CapitationPaymentComponent implements OnInit {
     console.log("Ready to pay");
   }
 
-  paymentDone() {
-    console.log("Done");
+  paymentDone(cData) {
+    console.log(cData);
+    let policies = [];
+    // All policies that is being paid for.
+    let i = this.selectedCapitations.length;
+    while (i--) {
+      console.log(this.selectedCapitations[i]);
+      policies.push({
+        policyId: this.selectedCapitations[i].policyId,
+        policyCollectionId: this.selectedCapitations[i]._id
+      });
+    }
+
+    let flutterwaveRes = {
+      data: cData.data.data,
+      tx:  {
+        charged_amount: cData.tx.charged_amount,
+        customer: cData.tx.customer,
+        flwRef: cData.tx.flwRef,
+        txRef: cData.tx.txRef,
+        orderRef: cData.tx.orderRef,
+        paymentType: cData.tx.paymentType,
+        raveRef: cData.tx.raveRef,
+        status: cData.tx.status
+      }
+    };
+
+    console.log(policies);
+    console.log(flutterwaveRes);
+    // Call middleware
   }
 
   paymentCancel() {
