@@ -238,6 +238,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
     this._checkInService.create(model).then((payload: any) => {
       this._systemService.off();
       this.selectedCheckIn = payload;
+      console.log(this.selectedCheckIn);
       this.otp_generated = true;
     }).catch(err => {
       console.log(err);
@@ -259,6 +260,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
       .then((payload: any) => {
         console.log(payload);
         if (payload !== undefined) {
+          var o = payload;
           // this.checkinSect = false;
           // this.checkedinSect = true;
           // this.selectedCheckIn = payload;
