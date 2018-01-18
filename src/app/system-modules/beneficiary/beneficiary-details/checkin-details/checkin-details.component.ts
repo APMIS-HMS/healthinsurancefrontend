@@ -217,7 +217,6 @@ export class CheckinDetailsComponent implements OnInit {
     this._checkInService.create(model).then((payload: any) => {
       this._systemService.off();
       this.selectedCheckIn = payload;
-      this._locker.setObject("checkInValue", payload);
       console.log(payload);
       this.otp_generated = true;
     }).catch(err => {
@@ -372,13 +371,11 @@ export class CheckinDetailsComponent implements OnInit {
     this.selectedCheckIn = undefined;
   }
   checkOut() {
-    this.selectedCheckIn = this._locker.getObject("checkInValue");
     let checkOut = {
       checkOutBy: this.user._id,
     };
     this.selectedCheckIn.checkOut = checkOut;
     this.selectedCheckIn.isCheckedOut = true;
-    
     this._checkInService.update(this.selectedCheckIn).then(payload => {
       console.log(payload);
       this._toastr.success('You have successfully checked out this patient', "Checked Out");
@@ -394,7 +391,6 @@ export class CheckinDetailsComponent implements OnInit {
   }
   navigateToNewClaim() {
     this._systemService.on();
-    this.selectedCheckIn = this._locker.getObject("checkInValue");
     this._router.navigate(['/modules/claim/new', this.selectedCheckIn._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
@@ -404,7 +400,6 @@ export class CheckinDetailsComponent implements OnInit {
   }
   navigateToNewAuthorization() {
     this._systemService.on();
-    this.selectedCheckIn = this._locker.getObject("checkInValue");
     this._router.navigate(['/modules/pre-auth/new', this.selectedCheckIn._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
@@ -414,7 +409,6 @@ export class CheckinDetailsComponent implements OnInit {
   }
   navigateToNewReferal() {
     this._systemService.on();
-    this.selectedCheckIn = this._locker.getObject("checkInValue");
     this._router.navigate(['/modules/referal/new', this.selectedCheckIn._id]).then(res => {
       this._systemService.off();
     }).catch(err => {

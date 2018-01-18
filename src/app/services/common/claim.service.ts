@@ -17,6 +17,7 @@ export class ClaimService {
   ) {
     this._rest = _restService.getService('cliams');
     this._socket = _socketService.getService('claims');
+    this._socket.timeout = 10000;
   }
 
   find(query: any) {
