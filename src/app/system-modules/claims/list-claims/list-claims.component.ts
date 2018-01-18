@@ -76,7 +76,8 @@ export class ListClaimsComponent implements OnInit {
     this._systemService.on();
     this._claimService.find({
       query: {
-        'checkedinDetail.providerFacility.hiaId._id': this.user.facilityId._id
+        'checkedinDetail.providerFacility.hiaId._id': this.user.facilityId._id,
+        $sort: { createdAt: -1 }
       }
     }).then((payload: any) => {
       if (payload.data.length > 0) {

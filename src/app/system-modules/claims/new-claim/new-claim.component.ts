@@ -244,19 +244,19 @@ export class NewClaimComponent implements OnInit {
   _getSelectedCheckinItem(checkinId) {
     var clinicNote = "";
     console.log(checkinId);
-    this._preAuthorizationService.find({ query: { "checkedInDetails": checkinId } }).then((preauth_callback: any) => {
+    this._preAuthorizationService.find({ query: { "checkedInDetails": checkinId,'approvedStatus.id':2 } }).then((preauth_callback: any) => {
       console.log(preauth_callback);
-
-      if (preauth_callback.data.length > 0) {
+      var preauth_callback_ = preauth_callback.data.filter(x=>x.checkedInDetails.isCheckedOut == false);
+      if (preauth_callback_.length > 0) {
         this.isAuthorize = true;
         this.authorizeType = "Free for Service"
-        this.SelectedCheckinItem = preauth_callback.data[0];
+        this.SelectedCheckinItem = preauth_callback_[0];
         this.SelectedCheckinItem.checkedInDetails.beneficiaryObject = {};
         this.SelectedCheckinItem.checkedInDetails.beneficiaryObject = this.SelectedCheckinItem.beneficiaryObject;
         this.SelectedCheckinItem.providerFacility = this.SelectedCheckinItem.policyId;
         this.SelectedCheckinItem.plan = this.SelectedCheckinItem.policyId.planTypeId.name;
         console.log(this.SelectedCheckinItem);
-        preauth_callback.data.forEach(element => {
+        preauth_callback_.forEach(element => {
           console.log(element);
           element.documentation.forEach(element2 => {
             element2.document.forEach(element3 => {
@@ -375,7 +375,7 @@ export class NewClaimComponent implements OnInit {
         this.SelectedCheckinItem.medicalPersonelName = {};
         this.SelectedCheckinItem.medicalPersonelName._id = 0;
         this.SelectedCheckinItem.medicalPersonelUnit = "";
-        this._checkInService.find({ query: { _id: checkinId, $limit: 1 } }).then((payload: any) => {
+        this._checkInService.find({ query: { _id: checkinId,'isCheckedOut':false, $limit: 1 } }).then((payload: any) => {
           console.log(payload.data[0]);
           this.SelectedCheckinItem.checkedInDetails = payload.data[0];
           this.SelectedCheckinItem.providerFacility = this.SelectedCheckinItem.checkedInDetails.policyObject;
