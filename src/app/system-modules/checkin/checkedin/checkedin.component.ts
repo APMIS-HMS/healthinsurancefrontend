@@ -106,6 +106,7 @@ export class CheckedinComponent implements OnInit, OnDestroy {
 
   routeBeneficiaryDetails(check) {
     console.log(check)
+    this._locker.setObject("checkValue", check);
     if(check.otp.isVerified){
       this._systemService.on();
       this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin'])
