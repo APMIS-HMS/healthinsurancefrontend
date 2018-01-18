@@ -10,13 +10,13 @@ import { SystemModuleService, FacilityService, CapitationFeeService, PolicyServi
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
-  selector: "app-capitation-payment",
-  templateUrl: "./capitation-payment.component.html",
-  styleUrls: ["./capitation-payment.component.scss"]
+  selector: 'app-capitation-payment',
+  templateUrl: './capitation-payment.component.html',
+  styleUrls: ['./capitation-payment.component.scss']
 })
 export class CapitationPaymentComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterHiaControl = new FormControl("All");
+  filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
   flutterwaveClientKey: string = FLUTTERWAVE_PUBLIC_KEY;
@@ -45,10 +45,10 @@ export class CapitationPaymentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl("Capitation Payment");
-    this._headerEventEmitter.setMinorRouteUrl("Capitation list");
+    this._headerEventEmitter.setRouteUrl('Capitation Payment');
+    this._headerEventEmitter.setMinorRouteUrl('Capitation list');
 
-    this.user = (<any>this._locker.getObject("auth")).user;
+    this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.user);
 
     this._route.params.subscribe(param => {
@@ -101,9 +101,7 @@ export class CapitationPaymentComponent implements OnInit {
 
       let found: boolean = false;
       policy.isChecked = true;
-      this.selectedCapitations = this.selectedCapitations.filter(
-        x => x._id !== policy._id
-      );
+      this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
       // let cLength = this.selectedCapitations.length;
 
       // if (cLength > 0) {
@@ -126,15 +124,13 @@ export class CapitationPaymentComponent implements OnInit {
       // }
     } else {
       policy.isChecked = false;
-      this.selectedCapitations = this.selectedCapitations.filter(
-        x => x._id !== policy._id
-      );
+      this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
     }
     console.log(this.selectedCapitations);
   }
 
   onClickPayItemsSelected() {
-    console.log("Ready to pay");
+    console.log('Ready to pay');
   }
 
   paymentDone(cData) {
@@ -170,81 +166,69 @@ export class CapitationPaymentComponent implements OnInit {
   }
 
   paymentCancel() {
-    console.log("cancelled");
+    console.log('cancelled');
   }
 
   private _getPolicy(id) {
-    this._policyService
-      .find({
-        query: {
-          "platformOwnerId._id": this.currentPlatform._id,
-          isActive: true,
-          isPaid: true,
-          "providerId._id": id
-        }
-      })
-      .then((res: any) => {
-        console.log(res);
-        this.loading = false;
-        this._systemService.off();
-        if (res.data.length > 0) {
-          this._headerEventEmitter.setMinorRouteUrl(
-            res.data[0].providerId.name
-          );
-          this.capitations = res.data;
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        this._systemService.off();
-      });
+    this._policyService.find({
+      query: {
+        'platformOwnerId._id': this.currentPlatform._id,
+        isActive: true,
+        isPaid: true,
+        'providerId._id': id
+      }
+    }).then((res: any) => {
+      console.log(res);
+      this.loading = false;
+      this._systemService.off();
+      if (res.data.length > 0) {
+        this._headerEventEmitter.setMinorRouteUrl(
+          res.data[0].providerId.name
+        );
+        this.capitations = res.data;
+      }
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
   }
 
   private _getCurrentPlatform(providerId) {
-    this._facilityService
-      .find({
-        query: {
-          shortName: CurrentPlaformShortName,
-          $select: ["name", "shortName", "address.state"]
-        }
-      })
-      .then((res: any) => {
+    this._facilityService.find({
+      query: {
+        shortName: CurrentPlaformShortName,
+        $select: ['name', 'shortName', 'address.state']
+      }
+    }).then((res: any) => {
+      if (res.data.length > 0) {
         if (res.data.length > 0) {
-          if (res.data.length > 0) {
-            console.log(res);
-            this.currentPlatform = res.data[0];
-            this._getPolicy(providerId);
-          }
+          console.log(res);
+          this.currentPlatform = res.data[0];
+          this._getPolicy(providerId);
         }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   navigate(url: string, id?: string) {
     if (!!id) {
       this._systemService.on();
-      this._router
-        .navigate([url + id])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          console.log(err);
-          this._systemService.off();
-        });
+      this._router.navigate([url + id]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      });
     } else {
       this._systemService.on();
-      this._router
-        .navigate([url])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          console.log(err);
-          this._systemService.off();
-        });
+      this._router.navigate([url]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        console.log(err);
+        this._systemService.off();
+      });
     }
   }
 }
