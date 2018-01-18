@@ -73,7 +73,8 @@ export class ClaimsOthersTabComponent implements OnInit {
     this._claimService.find({
       query: {
         'checkedinDetail.checkedInDetails.policyObject.hiaId._id': this.user.facilityId._id,
-        '_id': param.id
+        '_id': param.id,
+        $sort: { dateClaimCreated: -1 }
       }
     }).then((payload: any) => {
       payload.data.forEach(element => {

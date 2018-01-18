@@ -270,9 +270,9 @@
 </div>
 <diV *ngIf="!isApproved">
     <div class="action-wrap" *ngIf="isAuthCreateClaim">
-        <button class="btn btn-medium btn-red" *ngIf="!isReject" (click)="rejectClaim()">REJECT</button>
-        <button class="btn btn-medium btn-red" *ngIf="!isQuery" (click)="queryClaim()">QUERY</button>
-        <button class="btn btn-medium btn-yellow" *ngIf="!isHold" (click)="holdClaim()">HOLD</button>
+        <button class="btn btn-medium btn-red" *ngIf="!isApproved||!isReject" (click)="rejectClaim()">REJECT</button>
+        <button class="btn btn-medium btn-red" *ngIf="!isApproved||!isQuery" (click)="queryClaim()">QUERY</button>
+        <button class="btn btn-medium btn-yellow" *ngIf="!isApproved||!isHold" (click)="holdClaim()">HOLD</button>
         <button class="btn btn-medium btn-blue" *ngIf="!isApproved" (click)="approveClaim()">APPROVE</button>
     </div>
 </diV>
