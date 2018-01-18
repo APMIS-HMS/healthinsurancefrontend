@@ -108,7 +108,14 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     console.log(this.user);
     if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
       this.isHIA = true;
-      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1])
+      this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1]);
+      let index = this.hias.findIndex(x => x._id === this.user.facilityId._id);
+      if (index > -1) {
+        this.frmProgram.controls.hiaName.setValue(this.hias[index]);
+        const hia = this.frmProgram.controls.hiaName.value;
+        console.log(this.frmProgram.controls.hiaName.value);
+        this._getOrganizations(this.currentPlatform._id, hia._id);
+      }
     } else if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
     } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
@@ -294,7 +301,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         this.currentPlatform = res.data[0];
         this._getHIAs(this.currentPlatform._id);
         this._getProviders(this.currentPlatform._id);
-        this._getOrganizations(this.currentPlatform._id);
+        // this._getOrganizations(this.currentPlatform._id);
       }
     }).catch(err => {
       this._systemService.off();
@@ -315,8 +322,11 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       if (this.user.userType.name === 'Health Insurance Agent') {
         this.isHIA = true;
         let index = this.hias.findIndex(x => x._id === this.user.facilityId._id);
-        if(index > -1){
+        if (index > -1) {
           this.frmProgram.controls.hiaName.setValue(this.hias[index]);
+          const hia = this.frmProgram.controls.hiaName.value;
+          console.log(this.frmProgram.controls.hiaName.value);
+          this._getOrganizations(platformOwnerId, hia._id);
         }
       }
     }).catch(err => {
@@ -329,7 +339,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this._systemService.on();
     this._facilityService.find({
       query: {
-        'facilityType.name': 'Provider', 'platformOwnerId._id': platformOwnerId,
+        'facilityType.name': 'Provider', 'provider.facilityClass': 'primary', 'platformOwnerId._id': platformOwnerId,
         $select: ['name', 'provider']
       }
     }).then((res: any) => {
@@ -352,11 +362,13 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     });
   }
 
-  _getOrganizations(platformOwnerId) {
+  _getOrganizations(platformOwnerId, hiaId) {
+    console.log(platformOwnerId);
+    console.log(hiaId);
     this._systemService.on();
     this._facilityService.find({
       query: {
-        'facilityType.name': 'Employer', 'platformOwnerId._id': platformOwnerId,
+        'facilityType.name': 'Employer', 'platformOwnerId._id': platformOwnerId, 'employer.hias._id': hiaId
         // $select: ['name', 'Employer.providerId']
       }
     }).then((res: any) => {
@@ -427,5 +439,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       });
     }
 
+  }
+
+  onSelectChange(event) {
+    console.log(event);
   }
 }
