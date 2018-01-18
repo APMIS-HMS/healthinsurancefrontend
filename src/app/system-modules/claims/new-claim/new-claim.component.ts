@@ -701,8 +701,6 @@ export class NewClaimComponent implements OnInit {
       console.log(this.claimsFormGroup.controls.medicalPersonelName.value);
       this.isProcessing = true;
       this._claimService.create(this.claimItem).then((payload: any) => {
-        console.log(payload);
-        this.SelectedCheckinItem
         this.isProcessing = false;
         this.navigateListClaim();
       }, error => {
