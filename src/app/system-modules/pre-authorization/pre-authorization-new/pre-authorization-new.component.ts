@@ -380,7 +380,7 @@ export class PreAuthorizationNewComponent implements OnInit {
   }
   _getCheckedIn(id) {
     this._systemService.on();
-    this._checkInService.get(id, {}).then((payload: any) => {
+    this._checkInService.get(id, {}).then((payload: any) => {         //Pre-authorization should be done CheckIn that hasn't been checkout
       this.selectedCheckIn = payload;
       this._initializeFormGroup();
       //this._getPolicy();
