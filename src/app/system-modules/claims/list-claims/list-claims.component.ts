@@ -36,7 +36,7 @@ export class ListClaimsComponent implements OnInit {
       console.log(this.user.facilityId._id );
       this._claimService.find({
         query: { providerFacilityId: this.user.facilityId._id },
-        $sort: { createdAt: -1 }
+        $sort: { dateClaimCreated: -1 }
       }).then((payload: any) => {
         if (payload.data.length > 0) {
           console.log(payload.data);
