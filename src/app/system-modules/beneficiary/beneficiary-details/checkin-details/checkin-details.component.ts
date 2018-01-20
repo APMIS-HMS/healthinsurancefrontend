@@ -217,6 +217,7 @@ export class CheckinDetailsComponent implements OnInit {
     this._checkInService.create(model).then((payload: any) => {
       this._systemService.off();
       this.selectedCheckIn = payload;
+      console.log(payload);
       this.otp_generated = true;
     }).catch(err => {
       console.log(err);

@@ -76,6 +76,7 @@ export class CheckedinComponent implements OnInit, OnDestroy {
       }
     }).then((payload: any) => {
       this.loading = false;
+      console.log(payload);
       //this.checkedIns = payload.data;
       this.totalEntries = payload.total;
       if(this.resetData !== true) { 

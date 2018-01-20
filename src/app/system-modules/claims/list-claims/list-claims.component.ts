@@ -35,8 +35,10 @@ export class ListClaimsComponent implements OnInit {
       console.log("Comfirm Provider");
       console.log(this.user.facilityId._id );
       this._claimService.find({
-        query: { providerFacilityId: this.user.facilityId._id },
-        $sort: { createdAt: -1 }
+        query: { 
+          providerFacilityId: this.user.facilityId._id,
+          $sort: { updatedAt: -1 }
+         }
       }).then((payload: any) => {
         if (payload.data.length > 0) {
           console.log(payload.data);
@@ -75,11 +77,10 @@ export class ListClaimsComponent implements OnInit {
     console.log("HIA");
     this._systemService.on();
     this._claimService.find({
-      query: {
-        'checkedinDetail.providerFacility.hiaId._id': this.user.facilityId._id,
-        $sort: { dateClaimCreated: -1 }
-      }
+      query: { 'checkedinDetail.providerFacility.hiaId._id': this.user.facilityId._id },
+      $sort: { updatedAt: -1 }
     }).then((payload: any) => {
+      console.log(payload);
       if (payload.data.length > 0) {
         payload.data.forEach(element => {
           for (let i = element.documentations.length - 1; i >= 0; i--) {
