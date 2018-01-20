@@ -14,13 +14,17 @@ export class ProviderGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       const user = JSON.parse(this.locker.getItem('auth')).user;
-      if (user.userType.name !== 'Platform Owner') {
-        if (user.userType.name === 'Provider') {
-          this.router.navigate(['/modules/provider/providers/' + user.facilityId._id]);
+      if (!!user.userType) {
+        if (user.userType.name !== 'Platform Owner') {
+          if (user.userType.name === 'Provider') {
+            this.router.navigate(['/modules/provider/providers/' + user.facilityId._id]);
+          }
+          return false;
+        } else {
+          return true;
         }
-        return false;
       } else {
-        return true;
+        return false;
       }
   }
 }

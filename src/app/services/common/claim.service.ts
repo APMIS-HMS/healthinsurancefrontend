@@ -1,6 +1,8 @@
 import { SocketService, RestService } from './../../feathers/feathers.service';
 import { Injectable } from '@angular/core';
 import { CoolLocalStorage } from 'angular2-cool-storage';
+import { Observable } from 'rxjs/Observable';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 
 @Injectable()
@@ -13,9 +15,10 @@ export class ClaimService {
   constructor(
     private _socketService: SocketService,
     private _restService: RestService,
-    private locker: CoolLocalStorage 
+    private locker: CoolLocalStorage,
+    private _http: Http
   ) {
-    this._rest = _restService.getService('cliams');
+    this._rest = _restService.getService('claims');
     this._socket = _socketService.getService('claims');
   }
 

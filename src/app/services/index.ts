@@ -51,3 +51,4 @@ export * from './premium-payment/premium-payment.service';
 export * from './pre-authorization/pre-authorization.service';
 export * from './flutterwave/flutterwave.service';
 export * from './common/winref.service';
+export * from './provider-recipient/provider-recipient.service';

@@ -42,12 +42,9 @@
             <div class="btn btn-medium btn-blue-outline">RESET</div>
         </div>
         <div class="payment-box">
-            <angular-4-flutterwave *ngIf="selectedClaims.length > 0" [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="selectedClaims[0]?.checkedinDetail?.providerFacility?.providerId?.name"
-                [custom_description]="selectedClaims[0]?.checkedinDetail?.checkedInDetails?.providerFacilityId?.bankDetails?.accountNumber" [btnTitle]="'e-Payment'" [exclude_banks]="" [btnColor]="'btn-yellow'" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
-            <!-- <button *ngIf="selectedClaims.length > 0" [disabled]="disablePayBtn" (click)="onClickPayClaim();" class="btn btn-medium btn-yellow">
-              <span *ngIf="payClaimBtnText">Pay Claim</span>
-              <span *ngIf="payClaimBtnProcessing">Paying Claim...&nbsp; <i class="fa fa-spinner fa-spin"></i></span>
-            </button> -->
+            <!-- <angular-4-flutterwave *ngIf="selectedClaims.length > 0" [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="selectedClaims[0]?.checkedinDetail?.providerFacility?.providerId?.name"
+                [custom_description]="selectedClaims[0]?.checkedinDetail?.checkedInDetails?.providerFacilityId?.bankDetails?.accountNumber" [btnTitle]="'e-Payment'" [exclude_banks]="" [btnColor]="'btn-yellow'" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave> -->
+            <button *ngIf="selectedClaims.length > 0" (click)="onClickShowPayClaim();" class="btn btn-medium btn-yellow"> Pay Claim</button>
         </div>
     </div>
 
@@ -104,5 +101,11 @@
             <div class="list-summary">Showing 1 to {{ claims.length }} of {{ claims.length }} entries (filtered from {{ claims.length }} total entries)</div>
             <div class="btn btn-medium btn-yellow">Load More</div>
         </div>
+    </div>
+</div>
+<div *ngIf="payClaim" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-pay-claim [hiaDetails]="hiaDetails" [claims]="claims" (closeModal)="modal_close()"></app-pay-claim>
     </div>
 </div>

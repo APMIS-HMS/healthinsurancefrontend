@@ -25,6 +25,7 @@ export class ClaimsProviderDetailsComponent implements OnInit {
   claims: any = [];
   selectedClaims: any = [];
   loading: boolean = true;
+  payClaim: boolean = false;
   payClaimBtnText: boolean = true;
   payClaimBtnProcessing: boolean = false;
   disablePayBtn: boolean = false;
@@ -33,6 +34,7 @@ export class ClaimsProviderDetailsComponent implements OnInit {
   flutterwaveClientKey: string = FLUTTERWAVE_PUBLIC_KEY;
   totalCost: number = 0;
   payment: string = 'flutterwave'; // This is either flutterwave or paystack
+  hiaDetails: any = <any>{};
 
   constructor(
     private _router: Router,
@@ -80,30 +82,23 @@ export class ClaimsProviderDetailsComponent implements OnInit {
 
   private _getClaimsPayments() {
     this._systemService.on();
-    this._claimsService
-      .find({
+    this._claimsService.find({
         query: {
-          'checkedinDetail.beneficiaryObject.platformOwnerId._id': this
-            .currentPlatform._id,
+          'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
           providerFacilityId: this.routeId,
           isPaid: false
         }
-      })
-      .then((res: any) => {
+      }).then((res: any) => {
         console.log(res);
         this.loading = false;
         if (res.data.length > 0) {
           this.claims = res.data;
-          const facilitiyName =
-            res.data[0].checkedinDetail.checkedInDetails.providerFacilityId
-              .name;
-          this._headerEventEmitter.setMinorRouteUrl(
-            'Unpaid claims for ' + facilitiyName
-          );
+          this.hiaDetails = res.data[0].checkedinDetail.policyId.hiaId;
+          const facilitiyName = res.data[0].checkedinDetail.checkedInDetails.providerFacilityId.name;
+          this._headerEventEmitter.setMinorRouteUrl('Unpaid claims for ' + facilitiyName);
         }
         this._systemService.off();
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log(error);
         this._systemService.off();
       });
@@ -228,45 +223,44 @@ export class ClaimsProviderDetailsComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService
-      .find({
-        query: {
-          shortName: CurrentPlaformShortName,
-          $select: ['name', 'shortName', 'address.state']
-        }
-      })
-      .then((res: any) => {
-        if (res.data.length > 0) {
-          this.currentPlatform = res.data[0];
-          this._getClaimsPayments();
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this._facilityService.find({
+      query: {
+        shortName: CurrentPlaformShortName,
+        $select: ['name', 'shortName', 'address.state']
+      }
+    }).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._getClaimsPayments();
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  onClickShowPayClaim() {
+    this.payClaim = !this.payClaim;
+  }
+
+  modal_close() {
+    this.payClaim = false;
   }
 
   navigate(url: string, id?: string) {
     if (!!id) {
       this._systemService.on();
-      this._router
-        .navigate([url + id])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+      this._router.navigate([url + id]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     } else {
       this._systemService.on();
-      this._router
-        .navigate([url])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+      this._router.navigate([url]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     }
   }
 }
