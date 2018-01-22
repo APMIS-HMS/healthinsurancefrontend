@@ -45,9 +45,12 @@
             <div class="btn btn-medium btn-blue-outline">RESET</div>
         </div>
         <div class="payment-box">
-            <!-- <angular-4-flutterwave *ngIf="selectedClaims.length > 0" [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="selectedClaims[0]?.checkedinDetail?.providerFacility?.providerId?.name"
+            <div class="tab"></div>
+            <div class="queue-btn-box">
+                <!-- <angular-4-flutterwave *ngIf="selectedClaims.length > 0" [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="selectedClaims[0]?.checkedinDetail?.providerFacility?.providerId?.name"
                 [custom_description]="selectedClaims[0]?.checkedinDetail?.checkedInDetails?.providerFacilityId?.bankDetails?.accountNumber" [btnTitle]="'e-Payment'" [exclude_banks]="" [btnColor]="'btn-yellow'" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave> -->
-            <button *ngIf="selectedClaims.length > 0" (click)="onClickShowPayClaim();" class="btn btn-medium btn-yellow"> Pay Claim</button>
+                <button *ngIf="selectedClaims.length > 0" (click)="onClickShowPayClaim();" class="btn btn-medium btn-yellow"> Pay Claim</button>
+            </div>
         </div>
     </div>
 

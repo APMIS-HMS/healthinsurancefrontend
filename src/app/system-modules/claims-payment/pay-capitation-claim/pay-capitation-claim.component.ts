@@ -8,20 +8,20 @@ import { CoolLocalStorage } from 'angular2-cool-storage';
 import { CurrentPlaformShortName, FLUTTERWAVE_PUBLIC_KEY } from './../../../services/globals/config';
 import {
   SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService, ClaimService,
-  BankService, ProviderRecipientService
+  BankService, ProviderRecipientService, CapitationFeeService
 } from '../../../services/index';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
-  selector: 'app-pay-claim',
-  templateUrl: './pay-claim.component.html',
-  styleUrls: ['./pay-claim.component.scss']
+  selector: 'app-pay-capitation-claim',
+  templateUrl: './pay-capitation-claim.component.html',
+  styleUrls: ['./pay-capitation-claim.component.scss']
 })
-export class PayClaimComponent implements OnInit {
+export class PayCapitationClaimComponent implements OnInit {
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() selectedUser;
-  @Input() hiaDetails;
-  @Input() claims;
+  // @Input() hiaDetails;
+  @Input() capitations;
   routeId: string;
   selectedFacility: any = <any>{};
   currentPlatform: any = <any>{};
@@ -40,6 +40,7 @@ export class PayClaimComponent implements OnInit {
   confirmedPayment: boolean = false;
   totalAmount: number = 0;
   user: any;
+  capitationPrice: any;
 
   constructor(
     private _router: Router,
@@ -50,7 +51,8 @@ export class PayClaimComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _facilityService: FacilityService,
     private _claimService: ClaimService,
-    private _providerRecipientService: ProviderRecipientService
+    private _providerRecipientService: ProviderRecipientService,
+    private _capitationFeeService: CapitationFeeService
   ) {
     this._route.params.subscribe(param => {
       console.log(param);
@@ -62,15 +64,15 @@ export class PayClaimComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.claims);
+    console.log(this.capitations);
     console.log(this.selectedFacility);
-    console.log(this.hiaDetails);
+    // console.log(this.hiaDetails);
     console.log(this.user);
 
-    if (this.claims.length > 0) {
-      this.totalAmount = this.claims.reduce((acc, obj) => acc + obj.costingApprovalDocumentation, 0);
+    if (this.capitations.length > 0) {
+      // this.totalAmount = this.capitations.reduce((acc, obj) => acc + obj.costingApprovalDocumentation, 0);
     }
-    console.log(this.totalAmount);
+    // console.log(this.totalAmount);
     this._getFacility();
     this._getCurrentPlatform();
   }
@@ -83,7 +85,7 @@ export class PayClaimComponent implements OnInit {
 
       const payload = {
         platformOwnerId: this.currentPlatform._id,
-        hiaId: this.hiaDetails._id,
+        // hiaId: this.hiaDetails._id,
         providerId: this.selectedFacility._id,
         accountNumber: this.selectedFacility.bankDetails.accountNumber,
         bankCode: this.selectedFacility.bankDetails.bank.name
@@ -116,7 +118,7 @@ export class PayClaimComponent implements OnInit {
         this.disablePayRecipient = true;
         this.payRecipient = false;
         this.payingRecipient = true;
-        const claimIds = this.claims.map(x => x._id);
+        const policies = this.capitations.map(x => x._id);
         // Remove unwanted data.
         const provider = {
           _id: this.selectedFacility._id,
@@ -124,29 +126,32 @@ export class PayClaimComponent implements OnInit {
           provider: {
             providerId: this.selectedFacility.provider.providerId
           }
-        }
-        delete this.hiaDetails.hia.validityPeriods;
+        };
         delete this.user.roles;
 
-        const payload = {
+        const payload = <any> {
           platformOwnerId: this.currentPlatform,
-          hiaId: this.hiaDetails,
           providerId: provider,
-          claimIds: claimIds,
-          amount: this.totalAmount,
-          claimType: 'Fee for service',
+          policies: policies,
+          amount: this.capitationPrice.amount * policies.length,
+          claimType: 'Capitation',
           paidBy: this.user,
           paidByType: this.user.userType
         };
 
-        this._providerRecipientService.payProviderAccount(payload).then(res => {
+        if (this.user.userType.name === 'Health Insurance Agent') {
+          payload.hiaId = this.user.facilityId;
+        }
+
+        this._providerRecipientService.payCapitationClaim(payload).then(res => {
           console.log(res);
           if (res.status === 'success') {
             this.disablePayRecipient = false;
             this.payRecipient = true;
             this.payingRecipient = false;
             this.confirmedPayment = true;
-            const text = `You successfully paid ${this.selectedFacility.name} the sum of ${this.totalAmount} for ${claimIds.length} claims.`;
+            const amount = this.capitationPrice.amount;
+            const text = `You successfully paid ${this.selectedFacility.name} the sum of ${amount} for ${policies.length} claims.`;
             this._toastr.success(text, 'Success!');
             this._toastr.info('Redirecting...', 'Redirecting!');
             setTimeout(() => {
@@ -167,42 +172,23 @@ export class PayClaimComponent implements OnInit {
     }
   }
 
-
-  // private onClickConfirmRecipient() {
-  //   if (!!this.user.userType && (this.user.userType.name === 'Platform Owner' || this.user.userType.name === 'Health Insurance Agent')) {
-  //     if (!!this.selectedFacility._id && !!this.currentPlatform._id) {
-  //       const otp = this.otp.value;
-  //       this.disablePayRecipient = true;
-  //       this.payRecipient = false;
-  //       this.payingRecipient = true;
-  //       const claimIds = this.claims.map(x => x._id);
-
-  //       const payload = {
-  //         platformOwnerId: this.currentPlatform._id,
-  //         hiaId: this.hiaDetails._id,
-  //         providerId: this.selectedFacility._id,
-  //         claimIds: claimIds,
-  //         otp: otp,
-  //         paidBy: this.user._id,
-  //         paidByType: this.user.userType.name
-  //       };
-
-  //       this._providerRecipientService.confirmProviderAccount(payload).then(res => {
-  //         console.log(res);
-  //         this.disableConfirmRecipient = false;
-  //         this.confirmedPayment = true;
-  //         this.confirmRecipient = false;
-  //         this.confirmingRecipient = false;
-  //       }).catch(err => {
-  //         console.log(err);
-  //       });
-  //     } else {
-
-  //     }
-  //   } else {
-
-  //   }
-  // }
+  private _getClaimsCapitationPrice(id: string) {
+    this._systemService.on();
+    this._capitationFeeService.find({
+      query: {
+        'platformOwnerId._id': id,
+        isActive: true
+      }
+    }).then((res: any) => {
+      console.log(res);
+      this.capitationPrice = res.data[0];
+      this._getProviderRecipient();
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
+  }
 
   private _getCurrentPlatform() {
     this._facilityService.find({
@@ -213,7 +199,23 @@ export class PayClaimComponent implements OnInit {
     }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        this._getProviderRecipient();
+        this._getClaimsCapitationPrice(this.currentPlatform._id);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  private _getHia() {
+    this._facilityService.find({
+      query: {
+        shortName: CurrentPlaformShortName,
+        $select: ['name', 'shortName', 'address.state']
+      }
+    }).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        this._getClaimsCapitationPrice(this.currentPlatform._id);
       }
     }).catch(err => {
       console.log(err);
@@ -225,7 +227,7 @@ export class PayClaimComponent implements OnInit {
       query: {
         platformOwnerId: this.currentPlatform._id,
         providerId: this.routeId,
-        hiaId: this.hiaDetails._id,
+        // hiaId: this.hiaDetails._id,
         isRecipientConfirmed: true
       }
     }).then((res: any) => {
@@ -242,15 +244,15 @@ export class PayClaimComponent implements OnInit {
   private _getFacility() {
     this._systemService.on();
     this._facilityService.get(this.routeId, {}).then((res: any) => {
-        console.log(res);
-        if (!!res._id) {
-          this.selectedFacility = res;
-        }
-        this._systemService.off();
-      }).catch(error => {
-        console.log(error);
-        this._systemService.off();
-      });
+      console.log(res);
+      if (!!res._id) {
+        this.selectedFacility = res;
+      }
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
   }
 
   onClickCloseModal() {

@@ -11,6 +11,9 @@
     <div (click)="navigate('/modules/claims/claims-payment');" class="back-btn">
         <i class="fa fa-chevron-left"></i> BACK TO CLAIMS PAYMENT
     </div>
+    <div (click)="navigate('/modules/claims/paid-claims');" class="back-btn">
+        PAID CLAIMS <i class="fa fa-chevron-right"></i>
+    </div>
 </div>
 
 <div class="shadow-RB">
@@ -40,12 +43,13 @@
         <div class="payment-box">
             <div class="tab"></div>
             <div class="queue-btn-box">
-                <angular-4-flutterwave *ngIf="selectedCapitations.length > 0" [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="capitations[0].providerId.name"
-                    [custom_description]="capitations[0].providerId.bankDetails.accountNumber" [btnTitle]="'e-Payment'" [exclude_banks]="" [btnColor]="'btn-yellow'" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
+                <!-- <angular-4-flutterwave *ngIf="selectedCapitations.length > 0" [amount]="totalCost" [customer_email]="user.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'noussd'" [custom_title]="capitations[0].providerId.name"
+                    [custom_description]="capitations[0].providerId.bankDetails.accountNumber" [btnTitle]="'e-Payment'" [exclude_banks]="" [btnColor]="'btn-yellow'" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave> -->
                 <!-- <button *ngIf="selectedCapitations.length > 0" [disabled]="cDisableBtn" (click)="onClickPayItemsSelected();" class="btn btn-medium btn-yellow">
                     <span *ngIf="cBtnText">Pay Items Selected</span>
                     <span *ngIf="cBtnProcessing">Paying Items...&nbsp; <i class="fa fa-spinner fa-spin"></i></span>
                 </button> -->
+                <button *ngIf="selectedClaims.length > 0" (click)="onClickShowPayClaim();" class="btn btn-medium btn-yellow"> Pay Claim</button>
             </div>
         </div>
     </div>
@@ -54,42 +58,43 @@
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
                 <tr class="tr">
-                    <th class="th" *ngIf="capitations.length > 0" (change)="onCheckAllQueue($event.target.checked);"><input type="checkbox"></th>
+                    <th class="th" *ngIf="capitations.length > 0" (change)="onCheckAllSelectedItemsToPay($event);"><input type="checkbox"></th>
                     <th class="th">No</th>
                     <th class="th">Date</th>
-                    <th class="th">Amount Paid</th>
+                    <th class="th">Last Date Paid</th>
                     <th class="th">Provider ID</th>
                     <th class="th">Health Care Plan</th>
                     <th class="th">Responsible HIA</th>
                     <th class="th">Capitation</th>
-                    <th class="th">Status</th>
                     <th class="th"></th>
                 </tr>
             </thead>
 
             <tbody class="tbody">
                 <tr class="tr" *ngIf="capitations.length === 0 && !loading">
-                    <td class="text-center" colspan="11">No data available in table</td>
+                    <td class="text-center" colspan="10">No data available in table</td>
                 </tr>
                 <tr class="tr" *ngIf="capitations.length === 0 && loading">
-                    <td class="text-center" colspan="11">
+                    <td class="text-center" colspan="10">
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
                 <tr *ngFor="let capitation of capitations; let i = index;" class="tr hover">
                     <td class="td">
-                        <input (change)="onCheckQueue(i, capitation);" [attr.checked]="capitation.isChecked ? true : null" type="checkbox">
+                        <input (change)="onCheckSelectedItem(i, capitation);" [attr.checked]="capitation.isChecked ? true : null" type="checkbox">
                     </td>
                     <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">{{ i+1 }}</td>
                     <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">{{ capitation?.updatedAt | date }}</td>
-                    <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">&#x20A6; {{ capitation?.premiumPackageId?.amount }}</td>
+                    <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">
+                        <span *ngIf="capitation?.lastCapitationPaidDate === undefined">Null</span>
+                        <span *ngIf="capitation?.lastCapitationPaidDate !== undefined">{{ capitation?.lastCapitationPaidDate | date:'short' }}</span>
+                    </td>
                     <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">{{ capitation?.providerId?.provider?.providerId }}</td>
                     <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">{{ capitation?.planId?.name }}</td>
                     <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">{{ capitation?.hiaId?.name }}</td>
                     <td class="td text-center" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">
                         <i class="fa fa-check green" aria-hidden="true"></i>
                     </td>
-                    <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment"><span class="red">Not Paid</span></td>
                     <td class="td td-icos" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">
                         <i class="fa fa-chevron-right"></i>
                     </td>
@@ -104,9 +109,9 @@
     </div>
 </div>
 
-<!-- <div *ngIf="payClaim" class="modal-overlay">
+<div *ngIf="payClaim" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="modal_close()" class="close-modal">X</div>
-        <app-pay-claim [hiaDetails]="hiaDetails" [claims]="claims" (closeModal)="modal_close()"></app-pay-claim>
+        <app-pay-capitation-claim [capitations]="capitations" (closeModal)="modal_close()"></app-pay-capitation-claim>
     </div>
-</div> -->
+</div>

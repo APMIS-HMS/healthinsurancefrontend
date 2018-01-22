@@ -19,7 +19,6 @@ export class CapitationPaymentComponent implements OnInit {
   filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
-  flutterwaveClientKey: string = FLUTTERWAVE_PUBLIC_KEY;
   currentPlatform: any;
   capitations: any = <any>[];
   selectedCapitations: any = <any>[];
@@ -30,7 +29,9 @@ export class CapitationPaymentComponent implements OnInit {
   cBtnProcessing: boolean = false;
   cDisableBtn: boolean = false;
   user: any;
-  refKey: string;
+  payClaim: boolean = false;
+  hiaDetails: any = <any>{};
+  selectedClaims: any = [];
 
   constructor(
     private _router: Router,
@@ -58,123 +59,155 @@ export class CapitationPaymentComponent implements OnInit {
         this._getCurrentPlatform(param.id);
       }
     });
-
-    this.refKey = (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
   }
 
-  onCheckAllQueue(isChecked) {
-    console.log(isChecked);
-    let counter = 0;
-    this.capitations.forEach(policy => {
-      counter++;
-      policy.isChecked = isChecked;
+  onCheckSelectedItem(index, capitation: any) {
+    console.log(capitation);
+    if (!capitation.isChecked) {
+      this.selectedClaims.push(capitation);
+    } else {
+      // Remove from the selected Claim
+      if (this.selectedClaims.length > 0) {
+        this.selectedClaims.splice(index, 1);
+      }
+    }
+    console.log(this.selectedClaims);
+  }
 
-      if (policy.isChecked) {
-        this.totalQuantity++;
-        this.totalCost += policy.premiumPackageId.amount;
-        this.selectedCapitations.push(policy);
+  onCheckAllSelectedItemsToPay(event) {
+    this.capitations.forEach((capitation, i) => {
+      if (event.srcElement.checked) {
+        capitation.isChecked = true;
+        // let value = this.selectedClaims.reduce((t, c) => t.costingApprovalDocumentation + c.costingApprovalDocumentation, 0);
+        // console.log(value);
+        // this.totalCost += capitation.costingApprovalDocumentation;
+        this.selectedClaims.push(capitation);
       } else {
-        this.totalQuantity--;
-        this.totalCost -= policy.premiumPackageId.amount;
+        capitation.isChecked = false;
+        // this.totalCost -= capitation.costingApprovalDocumentation;
+        this.selectedClaims = [];
       }
     });
-
-    if (counter === this.capitations.length && !isChecked) {
-      this.selectedCapitations = [];
-    }
-
-    // } else {
-    //   // Remove from the selected Claim
-    //   console.log(index);
-    //   policy.isChecked = false;
-    //   this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
-    // }
+    console.log(this.totalCost);
   }
 
-  onCheckQueue(index, policy) {
-    console.log(policy);
-    if (policy.isChecked === undefined) {
-      policy.isChecked = true;
-      this.selectedCapitations.push(policy);
-    } else if (!policy.isChecked) {
-      console.log(policy.isChecked);
+  // onCheckAllQueue(isChecked) {
+  //   console.log(isChecked);
+  //   let counter = 0;
+  //   this.capitations.forEach(policy => {
+  //     counter++;
+  //     policy.isChecked = isChecked;
 
-      let found: boolean = false;
-      policy.isChecked = true;
-      this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
-      // let cLength = this.selectedCapitations.length;
+  //     if (policy.isChecked) {
+  //       this.totalQuantity++;
+  //       this.totalCost += policy.premiumPackageId.amount;
+  //       this.selectedCapitations.push(policy);
+  //     } else {
+  //       this.totalQuantity--;
+  //       this.totalCost -= policy.premiumPackageId.amount;
+  //     }
+  //   });
 
-      // if (cLength > 0) {
-      //   while (cLength--) {
-      //     console.log(this.selectedCapitations[cLength]);
-      //   }
-      // } else {
-      //   this.selectedCapitations.push(policy);
-      // }
-      // this.selectedCapitations.forEach(e => {
-      //   if (e => e._id === policy._id) {
-      //     found = true;
-      //   } else {
-      //     found = false;
-      //   }
-      // });
+  //   if (counter === this.capitations.length && !isChecked) {
+  //     this.selectedCapitations = [];
+  //   }
 
-      // if (!found) {
-      //   this.selectedCapitations.push(policy);
-      // }
-    } else {
-      policy.isChecked = false;
-      this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
-    }
-    console.log(this.selectedCapitations);
+  //   // } else {
+  //   //   // Remove from the selected Claim
+  //   //   console.log(index);
+  //   //   policy.isChecked = false;
+  //   //   this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
+  //   // }
+  // }
+
+  // onCheckQueue(index, policy) {
+  //   console.log(policy);
+  //   if (policy.isChecked === undefined) {
+  //     policy.isChecked = true;
+  //     this.selectedCapitations.push(policy);
+  //   } else if (!policy.isChecked) {
+  //     console.log(policy.isChecked);
+
+  //     let found: boolean = false;
+  //     policy.isChecked = true;
+  //     this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
+  //     // let cLength = this.selectedCapitations.length;
+
+  //     // if (cLength > 0) {
+  //     //   while (cLength--) {
+  //     //     console.log(this.selectedCapitations[cLength]);
+  //     //   }
+  //     // } else {
+  //     //   this.selectedCapitations.push(policy);
+  //     // }
+  //     // this.selectedCapitations.forEach(e => {
+  //     //   if (e => e._id === policy._id) {
+  //     //     found = true;
+  //     //   } else {
+  //     //     found = false;
+  //     //   }
+  //     // });
+
+  //     // if (!found) {
+  //     //   this.selectedCapitations.push(policy);
+  //     // }
+  //   } else {
+  //     policy.isChecked = false;
+  //     this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
+  //   }
+  //   console.log(this.selectedCapitations);
+  // }
+
+  // onClickPayItemsSelected() {
+  //   console.log('Ready to pay');
+  // }
+
+  // paymentDone(cData) {
+  //   console.log(cData);
+  //   let policies = [];
+  //   // All policies that is being paid for.
+  //   let i = this.selectedCapitations.length;
+  //   while (i--) {
+  //     console.log(this.selectedCapitations[i]);
+  //     policies.push({
+  //       policyId: this.selectedCapitations[i].policyId,
+  //       policyCollectionId: this.selectedCapitations[i]._id
+  //     });
+  //   }
+
+  //   let flutterwaveRes = {
+  //     data: cData.data.data,
+  //     tx:  {
+  //       charged_amount: cData.tx.charged_amount,
+  //       customer: cData.tx.customer,
+  //       flwRef: cData.tx.flwRef,
+  //       txRef: cData.tx.txRef,
+  //       orderRef: cData.tx.orderRef,
+  //       paymentType: cData.tx.paymentType,
+  //       raveRef: cData.tx.raveRef,
+  //       status: cData.tx.status
+  //     }
+  //   };
+
+  //   console.log(policies);
+  //   console.log(flutterwaveRes);
+  //   // Call middleware
+  // }
+
+  // paymentCancel() {
+  //   console.log('cancelled');
+  // }
+
+  onClickShowPayClaim() {
+    this.payClaim = !this.payClaim;
   }
 
-  onClickPayItemsSelected() {
-    console.log('Ready to pay');
-  }
-
-  paymentDone(cData) {
-    console.log(cData);
-    let policies = [];
-    // All policies that is being paid for.
-    let i = this.selectedCapitations.length;
-    while (i--) {
-      console.log(this.selectedCapitations[i]);
-      policies.push({
-        policyId: this.selectedCapitations[i].policyId,
-        policyCollectionId: this.selectedCapitations[i]._id
-      });
-    }
-
-    let flutterwaveRes = {
-      data: cData.data.data,
-      tx:  {
-        charged_amount: cData.tx.charged_amount,
-        customer: cData.tx.customer,
-        flwRef: cData.tx.flwRef,
-        txRef: cData.tx.txRef,
-        orderRef: cData.tx.orderRef,
-        paymentType: cData.tx.paymentType,
-        raveRef: cData.tx.raveRef,
-        status: cData.tx.status
-      }
-    };
-
-    console.log(policies);
-    console.log(flutterwaveRes);
-    // Call middleware
-  }
-
-  paymentCancel() {
-    console.log('cancelled');
-  }
-
-  private _getPolicy(id) {
+  private _getPolicy(id: string) {
     console.log(id);
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
-        'providerId._id': id,
+        // 'providerId._id': id,
         isActive: true,
         isPaid: true,
       }
@@ -183,10 +216,8 @@ export class CapitationPaymentComponent implements OnInit {
       this.loading = false;
       this._systemService.off();
       if (res.data.length > 0) {
-        this._headerEventEmitter.setMinorRouteUrl(
-          res.data[0].providerId.name
-        );
         this.capitations = res.data;
+        this._headerEventEmitter.setMinorRouteUrl(res.data[0].providerId.name);
       }
     }).catch(error => {
       console.log(error);
@@ -211,6 +242,10 @@ export class CapitationPaymentComponent implements OnInit {
     }).catch(err => {
       console.log(err);
     });
+  }
+
+  modal_close() {
+    this.payClaim = false;
   }
 
   navigate(url: string, id?: string) {

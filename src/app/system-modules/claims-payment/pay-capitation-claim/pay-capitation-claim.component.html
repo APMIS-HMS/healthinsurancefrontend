@@ -1,0 +1,65 @@
+<div class="modal-title">Pay Claim</div>
+<div class="list-boxes">
+    <div>
+        <div *ngIf="!loading && !recipientCreated">
+            <div>
+                <div class="frm-item-wrap">
+                    <label class="label">Bank</label>
+                    <div class="inputWrap">
+                        <input [disabled]="true" type="text" class="form-control" [value]="selectedFacility?.bankDetails?.bank?.name">
+                    </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Bank Account Name</label>
+                    <div class="inputWrap">
+                        <input [disabled]="true" type="text" class="form-control" [value]="selectedFacility?.bankDetails?.name">
+                    </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Bank Account Number</label>
+                    <div class="inputWrap">
+                        <input [disabled]="true" type="text" class="form-control" [value]="selectedFacility?.bankDetails?.accountNumber">
+                    </div>
+                </div>
+            </div>
+            <div class="btn-box">
+                <button [disabled]="disableVerifyRecipient" class="btn btn-medium btn-blue" (click)="onClickVerifyRecipient()">
+                <span *ngIf="verifyRecipient"><i class="fa fa-plus-circle" aria-hidden="true"></i> VERIFY RECIPIENT</span>
+                <span *ngIf="verifyingRecipient">VERIFYING RECIPIENT... <i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+              </button>
+            </div>
+        </div>
+        <div *ngIf="!loading && recipientCreated">
+            <div>
+                <div class="bill-box">
+                    You are about to pay <b>{{ selectedFacility.name }}</b> the sum of <b>&#x20A6;{{ capitationPrice?.amount*capitations?.length }}</b> for <b>{{ capitations.length }}</b> claims
+                </div>
+                <div class="btn-box">
+                    <button [disabled]="disablePayRecipient" class="btn btn-medium btn-blue" (click)="onClickPayRecipient()">
+                  <span *ngIf="payRecipient"><i class="fa fa-plus-circle" aria-hidden="true"></i> PAY RECIPIENT</span>
+                  <span *ngIf="payingRecipient">PAYING RECIPIENT... <i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                </button>
+                </div>
+            </div>
+            <!-- <div *ngIf="confirmedPayment">
+                <div>
+                    <div class="frm-item-wrap">
+                        <label class="label">Enter OTP sent to you.</label>
+                        <div class="inputWrap">
+                            <input [formControl]="otp" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-box" style="margin-left: 28%;margin-right: 28%;">
+                    <button [disabled]="disableConfirmRecipient" class="btn btn-medium btn-blue" (click)="onClickConfirmRecipient()">
+                      <span *ngIf="confirmRecipient"><i class="fa fa-plus-circle" aria-hidden="true"></i> CONFIRM RECIPIENT</span>
+                      <span *ngIf="confirmingRecipient">CONFIRMING RECIPIENT... <i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                    </button>
+                </div>
+            </div> -->
+        </div>
+        <div class="loading-box" *ngIf="loading && !recipientCreated">
+            <div><i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i></div>
+        </div>
+    </div>
+</div>

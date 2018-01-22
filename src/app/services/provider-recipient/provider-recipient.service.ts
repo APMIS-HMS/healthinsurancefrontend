@@ -70,14 +70,14 @@ export class ProviderRecipientService {
     });
   }
 
-  // public confirmProviderAccount(payload): Promise<any> {
-  //   const host = this._restService.getHost() + '/pay-claim-confirmation';
-  //   const headers = new Headers();
-  //   headers.append('Content-Type', 'application/json');
+  public payCapitationClaim(payload): Promise<any> {
+    const host = this._restService.getHost() + '/pay-capitation-claim';
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
 
-  //   return this._http.post(host, payload, { headers: headers }).toPromise()
-  //     .then((res) => this.extractData(res)).catch(error => this.handleErrorPromise(error));
-  // }
+    return this._http.post(host, payload, { headers: headers }).toPromise()
+      .then((res) => this.extractData(res)).catch(error => this.handleErrorPromise(error));
+  }
 
   public payProviderAccount(payload): Promise<any> {
     const host = this._restService.getHost() + '/pay-claim';

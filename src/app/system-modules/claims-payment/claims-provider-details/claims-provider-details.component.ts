@@ -26,14 +26,9 @@ export class ClaimsProviderDetailsComponent implements OnInit {
   selectedClaims: any = [];
   loading: boolean = true;
   payClaim: boolean = false;
-  payClaimBtnText: boolean = true;
-  payClaimBtnProcessing: boolean = false;
   disablePayBtn: boolean = false;
   routeId: string;
-  refKey: string;
-  flutterwaveClientKey: string = FLUTTERWAVE_PUBLIC_KEY;
   totalCost: number = 0;
-  payment: string = 'flutterwave'; // This is either flutterwave or paystack
   hiaDetails: any = <any>{};
 
   constructor(
@@ -62,8 +57,6 @@ export class ClaimsProviderDetailsComponent implements OnInit {
       }
     });
 
-    this.refKey =
-      (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
     this._getCurrentPlatform();
   }
 
