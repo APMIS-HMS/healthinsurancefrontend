@@ -15,12 +15,12 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
 
 @Component({
   selector: "app-list-claims-payment",
-  templateUrl: "./list-claims-payment.component.html",
-  styleUrls: ["./list-claims-payment.component.scss"]
+  templateUrl: './list-claims-payment.component.html',
+  styleUrls: ['./list-claims-payment.component.scss']
 })
 export class ListClaimsPaymentComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterHiaControl = new FormControl("All");
+  filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
   ffsTabActive: boolean = true;
@@ -64,9 +64,9 @@ export class ListClaimsPaymentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl("Claims Payment List");
-    this._headerEventEmitter.setMinorRouteUrl("Unpaid Claims payment list");
-    this.user = (<any>this._locker.getObject("auth")).user;
+    this._headerEventEmitter.setRouteUrl('Claims Payment List');
+    this._headerEventEmitter.setMinorRouteUrl('Unpaid Claims payment list');
+    this.user = (<any>this._locker.getObject('auth')).user;
     console.log(this.user);
 
     this._getCurrentPlatform();
@@ -85,9 +85,9 @@ export class ListClaimsPaymentComponent implements OnInit {
     console.log(this.currentPlatform);
     this._claimService.find({
         query: {
-          "checkedinDetail.beneficiaryObject.platformOwnerId._id": this.currentPlatform._id,
+          'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
           isPaid: false,
-          "approvedDocumentation.response.isApprove": true,
+          'approvedDocumentation.response.isApprove': true,
           $limit: this.limit,
           $skip: this.limit * this.index
         }
@@ -131,17 +131,15 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsCapitationFromPolicy() {
     this._systemService.on();
-    this._policyService
-      .find({
+    this._policyService.find({
         query: {
-          "platformOwnerId._id": this.currentPlatform._id,
+          'platformOwnerId._id': this.currentPlatform._id,
           isActive: true,
           isPaid: true,
           $limit: this.limit,
           $skip: this.limit * this.index
         }
-      })
-      .then((res: any) => {
+      }).then((res: any) => {
         console.log(res);
         this.loading = false;
         let i = res.data.length;
@@ -149,9 +147,7 @@ export class ListClaimsPaymentComponent implements OnInit {
         while (i--) {
           console.log(res.data[i]);
           let policy = res.data[i];
-          let hasItem = this.capitationClaims.filter(
-            e => e.providerId._id === policy.providerId._id
-          );
+          let hasItem = this.capitationClaims.filter(e => e.providerId._id === policy.providerId._id);
 
           if (hasItem.length === 0) {
             policy.noOfBeneficiaries = 1;
@@ -174,8 +170,7 @@ export class ListClaimsPaymentComponent implements OnInit {
         //   this.showClaimsLoadMore = false;
         // }
         this._systemService.off();
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log(error);
         this._systemService.off();
       });
@@ -183,44 +178,38 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsCapitationPrice() {
     this._systemService.on();
-    this._capitationFeeService
-      .find({
-        query: {
-          "platformOwnerId._id": this.currentPlatform._id,
-          isActive: true
-        }
-      })
-      .then((res: any) => {
-        console.log(res);
-        this.capitationPrice = res;
-        this._getClaimsCapitationFromPolicy();
-        this._systemService.off();
-      })
-      .catch(error => {
-        console.log(error);
-        this._systemService.off();
-      });
+    this._capitationFeeService.find({
+      query: {
+        'platformOwnerId._id': this.currentPlatform._id,
+        isActive: true
+      }
+    }).then((res: any) => {
+      console.log(res);
+      this.capitationPrice = res.data[0];
+      this._getClaimsCapitationFromPolicy();
+      this._systemService.off();
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
   }
 
   private _getCurrentPlatform() {
-    this._facilityService
-      .find({
-        query: {
-          shortName: CurrentPlaformShortName,
-          $select: ["name", "shortName", "address.state"]
-        }
-      })
-      .then((res: any) => {
-        if (res.data.length > 0) {
-          console.log(res);
-          this.currentPlatform = res.data[0];
-          this._getClaimsPayments();
-          this._getClaimsCapitationPrice();
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this._facilityService.find({
+      query: {
+        shortName: CurrentPlaformShortName,
+        $select: ['name', 'shortName', 'address.state']
+      }
+    }).then((res: any) => {
+      if (res.data.length > 0) {
+        console.log(res);
+        this.currentPlatform = res.data[0];
+        this._getClaimsPayments();
+        this._getClaimsCapitationPrice();
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   // _getCurrentPlatform() {
@@ -281,20 +270,19 @@ export class ListClaimsPaymentComponent implements OnInit {
       queuedBy: this.user
     };
 
-    this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
-        console.log(res);
-        this.qFFSBtnText = true;
-        this.qFFSBtnProcessing = false;
-        this.qFFSDisableBtn = false;
-        if (res.status === 'success') {
-          this._toastr.success("Selected claims has been queued successfully!", "Queueing Success!");
-          this._getClaimsPayments();
-          this._router.navigate(["/modules/claims/queued-claims"]);
-        } else {
-          this._toastr.error("There was a problem queueing claims. Please try again later!", "Queueing Error!");
-        }
-      })
-      .catch(err => console.log(err));
+    // this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
+    //     console.log(res);
+    //     this.qFFSBtnText = true;
+    //     this.qFFSBtnProcessing = false;
+    //     this.qFFSDisableBtn = false;
+    //     if (res.status === 'success') {
+    //       this._toastr.success("Selected claims has been queued successfully!", "Queueing Success!");
+    //       this._getClaimsPayments();
+    //       this._router.navigate(["/modules/claims/queued-claims"]);
+    //     } else {
+    //       this._toastr.error("There was a problem queueing claims. Please try again later!", "Queueing Error!");
+    //     }
+    //   }).catch(err => console.log(err));
   }
 
   onClickCQueueItemsSelected() {
@@ -314,15 +302,15 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   onCheckPayAllCapitation() {
-    console.log("Capitation Payment");
+    console.log('Capitation Payment');
   }
 
   onCheckPayItemCapitation() {
-    console.log("Item Capitation");
+    console.log('Item Capitation');
   }
 
   onClickTab(tabName: string) {
-    if (tabName === "feeForService") {
+    if (tabName === 'feeForService') {
       this.ffsTabActive = true;
       this.cTabActive = false;
     } else {
@@ -334,24 +322,18 @@ export class ListClaimsPaymentComponent implements OnInit {
   navigate(url: string, id?: string) {
     if (!!id) {
       this._systemService.on();
-      this._router
-        .navigate([url + id])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+      this._router.navigate([url + id]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     } else {
       this._systemService.on();
-      this._router
-        .navigate([url])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+      this._router.navigate([url]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     }
   }
 

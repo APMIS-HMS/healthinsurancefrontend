@@ -14,6 +14,7 @@ import {
 import { CapitationPaymentComponent } from './capitation-payment/capitation-payment.component';
 import { ClaimsProviderDetailsComponent } from './claims-provider-details/claims-provider-details.component';
 import { PayClaimComponent } from './pay-claim/pay-claim.component';
+import { ListPaidClaimsComponent } from './list-paid-claims/list-paid-claims.component';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { PayClaimComponent } from './pay-claim/pay-claim.component';
         // ListDetailsClaimsComponent,
         CapitationPaymentComponent,
         ClaimsProviderDetailsComponent,
-        PayClaimComponent],
+        PayClaimComponent,
+        ListPaidClaimsComponent],
   providers: [
     ClaimsPaymentService, ClaimService, CapitationFeeService, PolicyService, BeneficiaryService, BankService, ProviderRecipientService
   ]

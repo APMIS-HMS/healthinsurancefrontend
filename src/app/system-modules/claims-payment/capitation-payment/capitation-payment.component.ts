@@ -170,12 +170,13 @@ export class CapitationPaymentComponent implements OnInit {
   }
 
   private _getPolicy(id) {
+    console.log(id);
     this._policyService.find({
       query: {
         'platformOwnerId._id': this.currentPlatform._id,
+        'providerId._id': id,
         isActive: true,
         isPaid: true,
-        'providerId._id': id
       }
     }).then((res: any) => {
       console.log(res);

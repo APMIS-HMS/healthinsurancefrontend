@@ -89,7 +89,7 @@
                     <td class="td text-center" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">
                         <i class="fa fa-check green" aria-hidden="true"></i>
                     </td>
-                    <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment"><span class="green">Paid</span></td>
+                    <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment"><span class="red">Not Paid</span></td>
                     <td class="td td-icos" routerLink="/modules/beneficiary/beneficiaries/{{capitation._id}}/payment">
                         <i class="fa fa-chevron-right"></i>
                     </td>
@@ -103,3 +103,10 @@
         </div>
     </div>
 </div>
+
+<!-- <div *ngIf="payClaim" class="modal-overlay">
+    <div class="modal-wrap shadow-RB">
+        <div (click)="modal_close()" class="close-modal">X</div>
+        <app-pay-claim [hiaDetails]="hiaDetails" [claims]="claims" (closeModal)="modal_close()"></app-pay-claim>
+    </div>
+</div> -->

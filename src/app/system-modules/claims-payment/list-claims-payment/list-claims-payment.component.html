@@ -5,9 +5,9 @@
         <i class="fa fa-search" aria-hidden="true"></i>
     </div>
 
-    <!-- <div class="btn btn-medium btn-blue" (click)="navigate('/modules/claims/queued-claims');">
-        <i class="fa fa-plus-circle" aria-hidden="true"></i> QUEUED CLAIM FOR PAYMENT
-    </div> -->
+    <div (click)="navigate('/modules/claims/paid-claims');" class="back-btn">
+        PAID CLAIMS <i class="fa fa-chevron-right"></i>
+    </div>
 </div>
 
 <div class="shadow-RB">
@@ -39,7 +39,7 @@
                 <div class="tab-ffs" (click)="onClickTab('feeForService');" [class.claim-tab-active]="ffsTabActive">Fee for Service</div>
                 <div class="tab-c" (click)="onClickTab('capitation');" [class.claim-tab-active]="cTabActive">Capitation</div>
             </div>
-            <div class="queue-btn-box">
+            <!-- <div class="queue-btn-box">
                 <button *ngIf="selectedFFSClaims.length > 0 && ffsTabActive" [disabled]="qFFSDisableBtn" (click)="onClickFFSQueueItemsSelected();" class="btn btn-medium btn-yellow">
                     <span *ngIf="qFFSBtnText">Queue Items Selected</span>
                     <span *ngIf="qFFSBtnProcessing">Queueing Items...&nbsp; <i class="fa fa-spinner fa-spin"></i></span>
@@ -48,59 +48,11 @@
                     <span *ngIf="qCBtnText">Queue Items Selected</span>
                     <span *ngIf="qCBtnProcessing">Queueing Items...&nbsp; <i class="fa fa-spinner fa-spin"></i></span>
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 
     <div *ngIf="ffsTabActive">
-        <!-- <table class="table" cellpadding="0" cellspacing="0" border="0.5">
-            <thead class="thead">
-                <tr class="tr">
-                    <th class="th" *ngIf="claims.length > 0" (change)="onCheckAllFFSToQueue($event);"><input type="checkbox"></th>
-                    <th class="th">No</th>
-                    <th class="th">Date</th>
-                    <th class="th">Amount Due</th>
-                    <th class="th">Claim ID</th>
-                    <th class="th">Provider ID</th>
-                    <th class="th">Health Care Plan</th>
-                    <th class="th">Responsible HIA</th>
-                    <th class="th">Fee for Service</th>
-                    <th class="th">Status</th>
-                    <th class="th"></th>
-                </tr>
-            </thead>
-
-            <tbody class="tbody">
-                <tr class="tr" *ngIf="claims.length === 0 && !loading">
-                    <td class="text-center" colspan="11">No data available in table</td>
-                </tr>
-                <tr class="tr" *ngIf="claims.length === 0 && loading">
-                    <td class="text-center" colspan="11">
-                        <i class="fa fa-spinner fa-spin"></i>
-                    </td>
-                </tr>
-                <tr *ngFor="let claim of claims; let i = index;" class="tr">
-                    <td class="td">
-                        <input (change)="onCheckFFSQueue(i, claim);" [attr.checked]="claim.isChecked ? true : null" type="checkbox">
-                    </td>
-                    <td class="td">{{ i+1 }}</td>
-                    <td class="td">{{ claim?.dateClaimCreated | date }}</td>
-                    <td class="td text-right">&#x20A6; {{ claim?.costingApprovalDocumentation }}</td>
-                    <td class="td">{{ claim?.claimNo }}</td>
-                    <td class="td">{{ claim?.checkedinDetail?.checkedInDetails?.providerFacilityId?.provider?.providerId }}</td>
-                    <td class="td">{{ claim?.checkedinDetail?.plan }}</td>
-                    <td class="td">{{ claim?.checkedinDetail?.providerFacility?.hiaId?.name }}</td>
-                    <td class="td text-center">
-                        <i class="fa fa-check green" aria-hidden="true"></i>
-                    </td>
-                    <td class="td"><span class="red">Not Paid</span></td>
-                    <td class="td td-icos" routerLink="/modules/claims/claims-payment/{{claim._id}}">
-                        <i class="fa fa-chevron-right"></i>
-                    </td>
-                </tr>
-            </tbody>
-        </table> -->
-
         <table class="table" cellpadding="0" cellspacing="0" border="0.5">
             <thead class="thead">
                 <tr class="tr">
@@ -161,14 +113,14 @@
 
             <tbody class="tbody">
                 <tr class="tr" *ngIf="capitationClaims.length === 0 && !loading">
-                    <td class="text-center" colspan="11">No data available in table</td>
+                    <td class="text-center" colspan="6">No data available in table</td>
                 </tr>
                 <tr class="tr" *ngIf="capitationClaims.length === 0 && loading">
-                    <td class="text-center" colspan="11">
+                    <td class="text-center" colspan="6">
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
-                <tr *ngFor="let capitation of capitationClaims; let i = index;" class="tr hover">
+                <tr *ngFor="let capitation of capitationClaims; let i = index;" class="tr hover" routerLink="/modules/claims/capitation/{{capitation?.providerId?._id}}">
                     <td class="td">{{ i+1 }}</td>
                     <td class="td">{{ capitation?.providerId?.provider?.providerId }}</td>
                     <td class="td">{{ capitation?.noOfBeneficiaries }}</td>
@@ -177,7 +129,7 @@
                         <span class="green" *ngIf="capitation?.isActive">Active</span>
                         <span class="red" *ngIf="!capitation?.isActive">Inactive</span>
                     </td>
-                    <td class="td td-icos" routerLink="/modules/claims/capitation/{{capitation?.providerId?._id}}">
+                    <td class="td td-icos">
                         <i class="fa fa-chevron-right"></i>
                     </td>
                 </tr>

@@ -160,63 +160,63 @@ export class ClaimsProviderDetailsComponent implements OnInit {
   //   }
   // }
 
-  paymentDone(cData) {
-    console.log(cData);
-    let claims = [];
+  // paymentDone(cData) {
+  //   console.log(cData);
+  //   let claims = [];
 
-    if (this.selectedClaims.length > 0) {
-      this.selectedClaims.forEach(claim => {
-        claims.push(claim._id);
-      });
+  //   if (this.selectedClaims.length > 0) {
+  //     this.selectedClaims.forEach(claim => {
+  //       claims.push(claim._id);
+  //     });
 
-      let flutterwaveRes = {
-        data: cData.data.data,
-        tx: {
-          charged_amount: cData.tx.charged_amount,
-          customer: cData.tx.customer,
-          flwRef: cData.tx.flwRef,
-          txRef: cData.tx.txRef,
-          orderRef: cData.tx.orderRef,
-          paymentType: cData.tx.paymentType,
-          raveRef: cData.tx.raveRef,
-          status: cData.tx.status
-        }
-      };
+  //     let flutterwaveRes = {
+  //       data: cData.data.data,
+  //       tx: {
+  //         charged_amount: cData.tx.charged_amount,
+  //         customer: cData.tx.customer,
+  //         flwRef: cData.tx.flwRef,
+  //         txRef: cData.tx.txRef,
+  //         orderRef: cData.tx.orderRef,
+  //         paymentType: cData.tx.paymentType,
+  //         raveRef: cData.tx.raveRef,
+  //         status: cData.tx.status
+  //       }
+  //     };
 
-      let claim = {
-        platformOwnerId: this.currentPlatform,
-        claims: claims,
-        reference: this.payment === 'flutterwave' ? flutterwaveRes : cData,
-        paidBy: this.user,
-        amount: this.totalCost,
-        paymentType: 'e-payment'
-      };
+  //     let claim = {
+  //       platformOwnerId: this.currentPlatform,
+  //       claims: claims,
+  //       reference: this.payment === 'flutterwave' ? flutterwaveRes : cData,
+  //       paidBy: this.user,
+  //       amount: this.totalCost,
+  //       paymentType: 'e-payment'
+  //     };
 
-      // Create claims payment
-      this._claimsPaymentService.create(claim).then((res: any) => {
-          console.log(res);
-          if (!!res._id) {
-            // Call middleware to update the claims.
-            const body = { claims: claims, reference: { flwRef: cData.tx.flwRef, raveRef: cData.tx.raveRef }};
-            this._claimsPaymentService.payMultipleItem(body).then((paymentRes: any) => {
-              console.log(paymentRes);
-              if (paymentRes.status === 'success') {
-                this.payClaimBtnText = true;
-                this.payClaimBtnProcessing = false;
-                this.disablePayBtn = false;
-                this.selectedClaims = [];
-                this._getClaimsPayments();
-                this._toastr.success('Payment completed successfully.', 'Payment completed!');
-              } else {
-                this._toastr.error('There was a problem updating payment.', 'Payment Error!');
-              }
-            }).catch(err => console.log(err));
-          }
-        }).catch(err => {
-          console.log(err);
-        });
-    }
-  }
+  //     // Create claims payment
+  //     this._claimsPaymentService.create(claim).then((res: any) => {
+  //         console.log(res);
+  //         if (!!res._id) {
+  //           // Call middleware to update the claims.
+  //           const body = { claims: claims, reference: { flwRef: cData.tx.flwRef, raveRef: cData.tx.raveRef }};
+  //           this._claimsPaymentService.payMultipleItem(body).then((paymentRes: any) => {
+  //             console.log(paymentRes);
+  //             if (paymentRes.status === 'success') {
+  //               this.payClaimBtnText = true;
+  //               this.payClaimBtnProcessing = false;
+  //               this.disablePayBtn = false;
+  //               this.selectedClaims = [];
+  //               this._getClaimsPayments();
+  //               this._toastr.success('Payment completed successfully.', 'Payment completed!');
+  //             } else {
+  //               this._toastr.error('There was a problem updating payment.', 'Payment Error!');
+  //             }
+  //           }).catch(err => console.log(err));
+  //         }
+  //       }).catch(err => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }
 
   paymentCancel() {
     console.log('Cancelled');

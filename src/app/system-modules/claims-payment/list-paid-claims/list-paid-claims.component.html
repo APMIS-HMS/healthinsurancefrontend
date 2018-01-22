@@ -1,0 +1,85 @@
+<div class="list-search-wrap">
+    <div (click)="navigate('/modules/claims/claims-payment');" class="back-btn">
+        <i class="fa fa-chevron-left"></i> BACK TO UNPAID CLAIMS PAYMENT
+    </div>
+</div>
+
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="filter-box">
+            <div class="label-xx">Filters:</div>
+            <div class="input-wrap">
+                <label>Responsible HIA</label>
+                <select [formControl]="filterHiaControl" class="form-control">
+                <option value="All" selected>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>Hospital Name</label>
+                <select [formControl]="hospitalControl">
+                <option>All</option>
+              </select>
+            </div>
+            <div class="input-wrap">
+                <label>Health Care Plan</label>
+                <select [formControl]="planControl">
+                <option>All</option>
+              </select>
+            </div>
+            <div class="btn btn-medium btn-blue-outline">RESET</div>
+        </div>
+    </div>
+
+    <div>
+        <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+            <thead class="thead">
+                <tr class="tr">
+                    <th class="th">No</th>
+                    <th class="th">Date</th>
+                    <th class="th">Amount Paid</th>
+                    <th class="th">No. of Claims</th>
+                    <th class="th">Provider ID</th>
+                    <th class="th">Fee for Service</th>
+                    <th class="th">Capitation</th>
+                    <th class="th">Paid By</th>
+                    <th class="th">Status</th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody">
+                <tr class="tr" *ngIf="claims.length === 0 && !loading">
+                    <td class="text-center" colspan="9">No data available in table</td>
+                </tr>
+                <tr class="tr" *ngIf="claims.length === 0 && loading">
+                    <td class="text-center" colspan="9">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr *ngFor="let claim of claims; let i = index;" class="tr hover" routerLink="/modules/claims/claims-payment/{{ claim?.providerFacilityId }}">
+                    <td class="td">{{ i+1 }}</td>
+                    <td class="td">{{ claim?.createdAt | date:'short' }}</td>
+                    <td class="td text-right">&#x20A6; {{ claim?.amount }}</td>
+                    <td class="td text-right">{{ claim?.claims?.length }}</td>
+                    <td class="td">{{ claim?.providerId?.provider?.providerId }}</td>
+                    <td class="td text-center">
+                        <i *ngIf="claim.claimType == 'Fee for service'" class="fa fa-check green" aria-hidden="true"></i>
+                        <i *ngIf="claim.claimType == 'Capitation'" class="fa fa-times red" aria-hidden="true"></i>
+                    </td>
+                    <td class="td text-center">
+                        <i *ngIf="claim.claimType == 'Capitation'" class="fa fa-check green" aria-hidden="true"></i>
+                        <i *ngIf="claim.claimType == 'Fee for service'" class="fa fa-times red" aria-hidden="true"></i>
+                    </td>
+                    <td class="td">
+                        {{ claim?.paidBy?.firstName}} {{ claim?.paidBy?.lastName}}
+                    </td>
+                    <td class="td"><span class="green">Paid</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="list-buttom">
+            <div class="list-summary">Showing 1 to {{claims.length}} of {{claimsTotalEntries}} entries (filtered from {{claimsTotalEntries}} total entries)</div>
+            <div class="btn btn-medium btn-yellow">Load More</div>
+        </div>
+    </div>
+</div>

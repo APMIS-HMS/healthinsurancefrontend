@@ -3,10 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { ClaimsPaymentComponent } from './claims-payment.component';
 import { ClaimsPaymentDetailsComponent } from './claims-payment-details/claims-payment-details.component';
 import { ListClaimsPaymentComponent } from './list-claims-payment/list-claims-payment.component';
-// import { QueuedClaimsPaymentComponent } from './queued-claims-payment/queued-claims-payment.component';
-// import { ListDetailsClaimsComponent } from './list-details-claims/list-details-claims.component';
 import { CapitationPaymentComponent } from './capitation-payment/capitation-payment.component';
 import { ClaimsProviderDetailsComponent } from './claims-provider-details/claims-provider-details.component';
+import { ListPaidClaimsComponent } from './list-paid-claims/list-paid-claims.component';
 
 const CLAIMS_PAYMENT_ROUTES: Routes = [
     {
@@ -16,8 +15,7 @@ const CLAIMS_PAYMENT_ROUTES: Routes = [
             { path: 'capitation/:id', component: CapitationPaymentComponent },
             { path: 'claims-payment/:id', component: ClaimsProviderDetailsComponent },
             { path: 'claims-payment/:providerId/details/:id', component: ClaimsPaymentDetailsComponent },
-            // { path: 'queued-claims', component: QueuedClaimsPaymentComponent },
-            // { path: 'queued-claims/:id', component: ListDetailsClaimsComponent }
+            { path: 'paid-claims', component: ListPaidClaimsComponent },
         ]
     }
 ];
