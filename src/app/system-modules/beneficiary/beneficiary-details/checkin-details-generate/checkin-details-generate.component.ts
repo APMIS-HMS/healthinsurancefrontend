@@ -36,7 +36,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
   checkin_show = false;
   otp_generated = false;
   checkinSect = false;
-  checkedinSect = false;
+  // checkedinSect = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -122,7 +122,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
         console.log(1);
         this._initializedForm();
         this.checkinSect = false;
-        this.checkedinSect = true;
+        // this.checkedinSect = true;
       } else if (this.selectedCheckIn.otp.isVerified) {
         console.log(2);
         this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
@@ -168,8 +168,13 @@ export class CheckinDetailsGenerateComponent implements OnInit {
       if (results[1].data.length > 0) {
         this.policy = results[1].data[0];
       }
-      if (this.paramcId !== undefined) {
+      console.log(this.paramcId);
+      if (this.paramcId !== undefined && this.paramcId !== 'checkin-generate') {
+        console.log('is here')
         this._getCheckedIn();
+      }else{
+        // this.checkedinSect = true;
+        this.checkinSect = true;
       }
 
       this._systemService.off();

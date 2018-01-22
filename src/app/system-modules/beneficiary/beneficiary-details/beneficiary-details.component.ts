@@ -321,8 +321,18 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
     this.tab_checkin = false;
-    console.log('/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramcId + '/checkin-generate');
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramcId + '/checkin-generate'])
+    // console.log('/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramcId + '/checkin-generate');
+    if (this.paramcId === 'checkin-generate') {
+      console.log(1)
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkin-generate']).then(payload =>{
+        console.log(2)
+      },error =>{
+        console.log(error);
+      })
+    } else {
+      this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramcId + '/checkin-generate'])
+    }
+
     this.tab_checkinHistory = false;
     this.tab_checkinGenerate = true;
     this.tabTitle = "Check In - Generate";
@@ -334,7 +344,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
     this.tab_checkin = false;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId +'/' + this.paramId + '/checkedin-history'])
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramId + '/checkedin-history'])
     this.tab_checkinHistory = true;
     this.tab_checkinGenerate = false;
     this.tabTitle = "Check In history";

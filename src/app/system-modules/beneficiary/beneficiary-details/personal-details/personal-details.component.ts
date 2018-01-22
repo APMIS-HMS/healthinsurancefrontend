@@ -12,6 +12,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 import { FacilityService } from '../../../../services/index';
+import { CoolLocalStorage } from 'angular2-cool-storage/src/cool-local-storage';
 
 @Component({
   selector: 'app-personal-details',
@@ -46,7 +47,8 @@ export class PersonalDetailsComponent implements OnInit {
     private _systemService: SystemModuleService,
     private _beneficiaryService: BeneficiaryService,
     private _policyService: PolicyService,
-    private _uploadService: UploadService
+    private _uploadService: UploadService,
+    private _locker:CoolLocalStorage
   ) { }
 
   ngOnInit() {
@@ -68,7 +70,8 @@ export class PersonalDetailsComponent implements OnInit {
     this._systemService.on();
 
     // let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
-    let policy$ = Observable.fromPromise(this._policyService.get(routeId, {}));
+    const policyId = this._locker.getObject('policyID').toString();
+    let policy$ = Observable.fromPromise(this._policyService.get(policyId, {}));
 
     Observable.forkJoin([policy$]).subscribe((results: any) => {
       console.log(results);
@@ -76,7 +79,7 @@ export class PersonalDetailsComponent implements OnInit {
       if (this.isCheckIn) {
         this.tabCheckin_click();
       }
-
+      this.tabCheckin_click();
       if (!!results) {
         this._headerEventEmitter.setMinorRouteUrl('Household: ' + results[0].policyId);
         this.dependants = results[0].dependantBeneficiaries;
