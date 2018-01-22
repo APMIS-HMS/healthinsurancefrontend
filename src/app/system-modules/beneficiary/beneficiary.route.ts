@@ -23,6 +23,18 @@ const BENEFICIARY_ROUTES: Routes = [
             { path: '', redirectTo: 'beneficiaries', pathMatch: 'full' },
             { path: 'beneficiaries', component: ListBeneficiaryComponent },
             {
+                path: 'beneficiaries/:id/:cid', component: BeneficiaryDetailsComponent,
+                children: [
+                    { path: '', component: PersonalDetailsComponent },
+                    { path: 'checkin', component: CheckinDetailsComponent },
+                    { path: 'checkin-generate', component: CheckinDetailsGenerateComponent },
+                    { path: 'checkedin-history', component: CheckinHistoryComponent },
+                    { path: 'payment', component: PaymentDetailBeneficiaryComponent },
+                    { path: 'claims', component: ListClaimsComponent },
+                    { path: 'referrals', component: ListReferalsComponent }
+                ]
+            },
+            {
                 path: 'beneficiaries/:id', component: BeneficiaryDetailsComponent,
                 children: [
                     { path: '', component: PersonalDetailsComponent },

@@ -19,6 +19,7 @@ import { IMyDpOptions, IMyDate } from 'mydatepicker';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as differenceInYears from 'date-fns/difference_in_years';
 import { FacilityService } from '../../../../services/index';
+import { error } from 'util';
 
 @Component({
   selector: 'app-checkin-details',
@@ -56,6 +57,7 @@ export class CheckinDetailsComponent implements OnInit {
   user: any;
   policy: any;
   hasCheckInToday = false;
+  paramcId: any;
 
   constructor(private _fb: FormBuilder,
     private _toastr: ToastsManager,
@@ -78,6 +80,8 @@ export class CheckinDetailsComponent implements OnInit {
 
   ngOnInit() {
     this._route.parent.params.subscribe(params => {
+      console.log(params);
+      this.paramcId = params.cid;
       this._getBeneficiaryDetails(params.id);
     });
     this.today = {
@@ -126,7 +130,11 @@ export class CheckinDetailsComponent implements OnInit {
       this._headerEventEmitter.setMinorRouteUrl(results[0].name);
       this.beneficiary = results[0];
       console.log('has today')
-      this._hasCheckInToday();
+      if (this.paramcId === undefined) {
+        this._hasCheckInToday();
+      } else {
+        this._getCheckedIn();
+      }
 
       if (results[1].data.length > 0) {
         // this.dependants = results[1].data[0].dependantBeneficiaries;
@@ -139,6 +147,34 @@ export class CheckinDetailsComponent implements OnInit {
     }, error => {
       this._systemService.off();
     });
+  }
+  _getCheckedIn() {
+    this._checkInService.get(this.paramcId, {}).then((payload: CheckIn) => {
+      this.selectedCheckIn = payload;
+      console.log(payload);
+
+
+
+      this.hasCheckInToday = true;
+      if (this.selectedCheckIn.confirmation !== undefined) {
+        console.log(1);
+        this._initializedForm();
+        this.checkinSect = false;
+        this.checkedinSect = true;
+      } else if (this.selectedCheckIn.otp.isVerified) {
+        console.log(2);
+        this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
+          this._systemService.off();
+        }).catch(err => {
+          console.log(err)
+          this._systemService.off();
+        });
+      }
+
+
+    }).catch(eror => {
+      console.log(eror)
+    })
   }
   _initializedForm() {
     if (this.selectedCheckIn !== undefined && this.selectedCheckIn._id !== undefined) {
@@ -389,6 +425,7 @@ export class CheckinDetailsComponent implements OnInit {
       console.log(err);
     })
   }
+
   navigateToNewClaim() {
     this._systemService.on();
     this._router.navigate(['/modules/claim/new', this.selectedCheckIn._id]).then(res => {

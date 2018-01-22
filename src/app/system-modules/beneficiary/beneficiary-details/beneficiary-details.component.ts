@@ -36,6 +36,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
   isHistory = false;
   isGenerate = false;
   paramId: any;
+  paramcId: any;
   user: any;
   isBeneficiary = false;
   tabTitle = "Personal Details";
@@ -53,7 +54,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     private _uploadService: UploadService,
     private _locker: CoolLocalStorage
   ) {
-    this._router.events.subscribe((routerEvent:Event) =>{
+    this._router.events.subscribe((routerEvent: Event) => {
       this._checkRouterEvent(routerEvent);
     })
   }
@@ -68,14 +69,16 @@ export class BeneficiaryDetailsComponent implements OnInit {
     }
 
     this._route.params.subscribe(param => {
+      console.log(param);
       if (!!param.id) {
         this.paramId = param.id;
+        this.paramcId = param.cid;
         this._getBeneficiaryDetails(param.id);
       }
     });
   }
-  private _checkRouterEvent(event:Event){
-    if(event instanceof NavigationEnd){
+  private _checkRouterEvent(event: Event) {
+    if (event instanceof NavigationEnd) {
       console.log('fire')
       if (this._router.url.endsWith('checkin')) {
         this.tab_checkinGenerate = false;
@@ -95,7 +98,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
         this.isCheckIn = true;
         this.isHistory = true;
         this.isGenerate = false;
-      } else if (this._router.url.endsWith('checkin-generate')){
+      } else if (this._router.url.endsWith('checkin-generate')) {
         this.tab_checkinGenerate = true;
         this.tab_checkin = false;
         this.tab_checkinHistory = false;
@@ -168,10 +171,10 @@ export class BeneficiaryDetailsComponent implements OnInit {
       //       sender: 'Me',
       //       receiver: '08056679920'
       //     };
-  
+
       //     this._facilityService.sendSMSWithMiddleWare(smsData).then((payload: any) => {
       //     }).catch(err => console.log(err));
-  
+
       //     setTimeout(e => {
       //       this.addApprovalClick();
       //     }, 1000);
@@ -305,7 +308,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
     this.tab_checkin = true;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkin'])
+    // const path = '/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/' + check._id + '/checkin';
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramcId + '/checkin'])
     this.tab_checkinHistory = false;
     this.tab_checkinGenerate = false;
     this.tabTitle = "Check In";
@@ -317,7 +321,8 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
     this.tab_checkin = false;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkin-generate'])
+    console.log('/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramcId + '/checkin-generate');
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/' + this.paramcId + '/checkin-generate'])
     this.tab_checkinHistory = false;
     this.tab_checkinGenerate = true;
     this.tabTitle = "Check In - Generate";
@@ -329,7 +334,7 @@ export class BeneficiaryDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = false;
     this.tab_checkin = false;
-    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId + '/checkedin-history'])
+    this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.paramId +'/' + this.paramId + '/checkedin-history'])
     this.tab_checkinHistory = true;
     this.tab_checkinGenerate = false;
     this.tabTitle = "Check In history";
