@@ -185,6 +185,7 @@ export class NewCheckinComponent implements OnInit {
     } else {
       this._locker.setObject('policyID', beneficiary.policyId);
       this._systemService.on();
+      console.log('Beneficiary ID: '+ beneficiary._id);
       this._router.navigate(['/modules/beneficiary/beneficiaries/' + beneficiary._id + '/checkin-generate'])
         .then(payload => {
           console.log(payload);

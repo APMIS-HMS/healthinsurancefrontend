@@ -33,12 +33,12 @@ export class CheckedinComponent implements OnInit, OnDestroy {
   checkedIns: CheckIn[] = [];
   loading: boolean = false;
   user: any;
-  checkInSubscription:Subscription;
-  totalEntries:number;
-  showLoadMore:any = true;
-  limit:number = TABLE_LIMIT_PER_VIEW;
-  resetData:Boolean;
-  index:number = 0;
+  checkInSubscription: Subscription;
+  totalEntries: number;
+  showLoadMore: any = true;
+  limit: number = TABLE_LIMIT_PER_VIEW;
+  resetData: Boolean;
+  index: number = 0;
 
   constructor(
     private _toastr: ToastsManager,
@@ -54,9 +54,9 @@ export class CheckedinComponent implements OnInit, OnDestroy {
     this._headerEventEmitter.setRouteUrl('Check In');
     this._headerEventEmitter.setMinorRouteUrl('Check In Beneficiaries');
     this.user = (<any>this._locker.getObject('auth')).user;
-    this._getCheckedIn(); 
+    this._getCheckedIn();
 
-    this.checkInSubscription = this._checkInService.listner.subscribe(payload =>{
+    this.checkInSubscription = this._checkInService.listner.subscribe(payload => {
       console.log(payload);
     })
   }
@@ -68,7 +68,7 @@ export class CheckedinComponent implements OnInit, OnDestroy {
         'providerFacilityId._id': this.user.facilityId._id,
         'isCheckedOut': false,
         $limit: this.limit,
-        $skip: this.index*this.limit,
+        $skip: this.index * this.limit,
         // $client: {
         //   checkedInToday: true
         // },
@@ -77,15 +77,16 @@ export class CheckedinComponent implements OnInit, OnDestroy {
     }).then((payload: any) => {
       this.loading = false;
       console.log(payload);
+
       //this.checkedIns = payload.data;
       this.totalEntries = payload.total;
-      if(this.resetData !== true) { 
-        this.checkedIns.push(...payload.data) 
-      }else{ 
+      if (this.resetData !== true) {
+        this.checkedIns.push(...payload.data)
+      } else {
         this.resetData = false;
-        this.checkedIns = payload.data 
+        this.checkedIns = payload.data
       }
-      if(this.checkedIns.length >= this.totalEntries){
+      if (this.checkedIns.length >= this.totalEntries) {
         this.showLoadMore = false;
       }
       this._systemService.off();
@@ -107,18 +108,23 @@ export class CheckedinComponent implements OnInit, OnDestroy {
 
   routeBeneficiaryDetails(check) {
     console.log(check)
-    if(check.otp.isVerified){
+    if (check.otp.isVerified) {
+      console.log('www')
       this._systemService.on();
-      this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin'])
+      const path = '/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/' + check._id + '/checkin';
+      console.log(path);
+      this._router.navigate([path])
         .then(payload => {
           this._systemService.off();
         }).catch(err => {
           console.log(err)
           this._systemService.off();
         });
-    }else{
+    } else {
+      console.log('eeees')
       this._systemService.on();
-      this._router.navigate(['/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/checkin-generate'])
+      const path = '/modules/beneficiary/beneficiaries/' + check.beneficiaryId + '/' + check._id + '/checkin-generate';
+      this._router.navigate([path])
         .then(payload => {
           this._systemService.off();
         }).catch(err => {
@@ -147,11 +153,11 @@ export class CheckedinComponent implements OnInit, OnDestroy {
   }
 
 
-  loadMore(){
+  loadMore() {
     this._getCheckedIn();
   }
 
-  reset(){
+  reset() {
     this.index = 0;
     this.resetData = true;
     this._getCheckedIn();
