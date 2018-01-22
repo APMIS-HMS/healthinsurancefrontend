@@ -142,8 +142,11 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     });
 
     this.frmProgram.controls['sponsorship'].valueChanges.subscribe(value => {
-      if (value === 'Self') {
-
+      console.log(value);
+      if (value.name === 'Self') {
+        this.isHIA = false;
+      } else {
+        this.isHIA = true;
       }
     });
     this._getCurrentPlatform();
