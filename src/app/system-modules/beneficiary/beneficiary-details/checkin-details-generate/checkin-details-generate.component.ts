@@ -35,8 +35,8 @@ export class CheckinDetailsGenerateComponent implements OnInit {
   otp_show = true;
   checkin_show = false;
   otp_generated = false;
-  checkinSect = true;
-  checkedinSect = false;
+  checkinSect = false;
+  // checkedinSect = false;
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
@@ -53,10 +53,11 @@ export class CheckinDetailsGenerateComponent implements OnInit {
   selectedClaimStatus: any;
   selectedEncounterType: any;
   selectedEncounterStatus: any;
-  selectedCheckIn: CheckIn;
+  selectedCheckIn: CheckIn = undefined;
   user: any;
   policy: any;
   hasCheckInToday = false;
+  paramcId: any;
 
   constructor(private _fb: FormBuilder,
     private _toastr: ToastsManager,
@@ -78,7 +79,11 @@ export class CheckinDetailsGenerateComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('wowdlslsllsdkl')
     this._route.parent.params.subscribe(params => {
+      if (params.cid !== undefined) {
+        this.paramcId = params.cid;
+      }
       this._getBeneficiaryDetails(params.id);
     });
     this.today = {
@@ -104,6 +109,36 @@ export class CheckinDetailsGenerateComponent implements OnInit {
 
   }
 
+  _getCheckedIn() {
+    this._checkInService.get(this.paramcId, {}).then((payload: CheckIn) => {
+      this.selectedCheckIn = payload;
+      console.log(payload);
+
+
+      this.checkinSect = true;
+      this.hasCheckInToday = true;
+
+      if (this.selectedCheckIn.confirmation !== undefined) {
+        console.log(1);
+        this._initializedForm();
+        this.checkinSect = false;
+        // this.checkedinSect = true;
+      } else if (this.selectedCheckIn.otp.isVerified) {
+        console.log(2);
+        this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
+          this._systemService.off();
+        }).catch(err => {
+          console.log(err)
+          this._systemService.off();
+        });
+      }
+
+
+    }).catch(eror => {
+      console.log(eror)
+    })
+  }
+
   private _getUserFacility() {
     this._facilityService.get(this.user.facilityId._id, {}).then(payload => {
       this.user.facilityId = payload;
@@ -117,12 +152,12 @@ export class CheckinDetailsGenerateComponent implements OnInit {
     let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
     let policy$ = Observable.fromPromise(this._policyService.find({
       query:
-      {
-        $or: [
-          { principalBeneficiary: routeId },
-          { 'dependantBeneficiaries.beneficiary._id': routeId },
-        ]
-      }
+        {
+          $or: [
+            { principalBeneficiary: routeId },
+            { 'dependantBeneficiaries.beneficiary._id': routeId },
+          ]
+        }
     }));
 
     Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
@@ -132,6 +167,14 @@ export class CheckinDetailsGenerateComponent implements OnInit {
 
       if (results[1].data.length > 0) {
         this.policy = results[1].data[0];
+      }
+      console.log(this.paramcId);
+      if (this.paramcId !== undefined && this.paramcId !== 'checkin-generate') {
+        console.log('is here')
+        this._getCheckedIn();
+      }else{
+        // this.checkedinSect = true;
+        this.checkinSect = true;
       }
 
       this._systemService.off();
@@ -208,10 +251,10 @@ export class CheckinDetailsGenerateComponent implements OnInit {
         this.otp_show = false;
         this.checkin_show = true;
         this._initializedForm();
-      }else{
+      } else {
         this._toastr.warning('Invalid or expired OTP supplied, check and try again', 'OTP');
       }
-    }).catch(err =>{
+    }).catch(err => {
       this._systemService.off();
     })
   }

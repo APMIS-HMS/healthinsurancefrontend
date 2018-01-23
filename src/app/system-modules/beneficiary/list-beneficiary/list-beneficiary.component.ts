@@ -214,7 +214,6 @@ export class ListBeneficiaryComponent implements OnInit {
     try {
       this._systemService.on();
       this._policyService.find(query).then((res: any) => {
-        this.loading = false;
         if (res.data.length > 0 ) {
           console.log(res);
           res.data.forEach((policy, i) => {
@@ -237,6 +236,8 @@ export class ListBeneficiaryComponent implements OnInit {
               this.beneficiaries.push(innerPolicy.beneficiary);
             });
           });
+        }else{
+          this.loading = false;
         }
         console.log(this.beneficiaries);
         if (!!userType && userType !== '') {
@@ -315,6 +316,7 @@ export class ListBeneficiaryComponent implements OnInit {
 
   navigateDetailBeneficiary(beneficiary) {
     if (beneficiary.isPrincipal) {
+      this._locker.setObject('policyID', beneficiary.policyId);
       this._systemService.on();
       this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
         this._systemService.off();
@@ -322,6 +324,7 @@ export class ListBeneficiaryComponent implements OnInit {
         this._systemService.off();
       });
     } else {
+      this._locker.setObject('policyID', beneficiary.policyId);
       this._systemService.on();
       this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
         this._systemService.off();

@@ -31,6 +31,7 @@ export class ListPaidClaimsComponent implements OnInit {
   limit: number = TABLE_LIMIT_PER_VIEW;
   claimsResetData: Boolean;
   index: number = 0;
+  claimsTotalEntries:any;
 
   constructor(
     private _router: Router,
