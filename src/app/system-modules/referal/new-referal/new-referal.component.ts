@@ -274,6 +274,7 @@ export class NewReferalComponent implements OnInit {
     this._facilityService.find({
       query: {
         'facilityType.name': 'Provider',
+        'provider.facilityClass': 'secondary',
         'platformOwnerId._id': this.currentPlatform._id
       }
     }).then((payload: any) => {

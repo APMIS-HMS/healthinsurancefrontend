@@ -121,7 +121,8 @@ export class CheckinDetailsGenerateComponent implements OnInit {
       if (this.selectedCheckIn.confirmation !== undefined) {
         console.log(1);
         this._initializedForm();
-        this.checkinSect = false;
+        console.log('ww23');
+        this.checkinSect = true;
         // this.checkedinSect = true;
       } else if (this.selectedCheckIn.otp.isVerified) {
         console.log(2);
@@ -172,7 +173,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
       if (this.paramcId !== undefined && this.paramcId !== 'checkin-generate') {
         console.log('is here')
         this._getCheckedIn();
-      }else{
+      } else {
         // this.checkedinSect = true;
         this.checkinSect = true;
       }
@@ -183,6 +184,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
     });
   }
   _initializedForm() {
+    console.log('start');
     if (this.selectedCheckIn !== undefined && this.selectedCheckIn._id !== undefined) {
       this.today = {
         year: new Date(this.selectedCheckIn.encounterDateTime).getFullYear(),
@@ -205,6 +207,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
       encounterDate: [this.selectedCheckIn != null ? this.selectedCheckIn.encounterDateTime : this.today, [<any>Validators.required]],
       encounterStatus: [this.selectedCheckIn != null ? this.selectedCheckIn.encounterStatus : '', [<any>Validators.required]]
     });
+    console.log('end');
   }
 
   otp_verify() {
@@ -308,7 +311,7 @@ export class CheckinDetailsGenerateComponent implements OnInit {
           // this.checkedinSect = true;
           // this.selectedCheckIn = payload;
           // this._initializedForm();
-          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.selectedCheckIn.beneficiaryId + '/checkin'])
+          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.selectedCheckIn.beneficiaryId + '/' + this.selectedCheckIn._id + '/checkin'])
             .then(payload => {
               this._systemService.off();
             }).catch(err => {
