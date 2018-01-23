@@ -32,6 +32,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   selectedFFSClaims: any = [];
   selectedCClaims: any = [];
   loading: boolean = true;
+  cloading: boolean = true;
   qFFSBtnText: boolean = true;
   qFFSBtnProcessing: boolean = false;
   qFFSDisableBtn: boolean = false;
@@ -80,18 +81,9 @@ export class ListClaimsPaymentComponent implements OnInit {
   //   });
   // }
 
-  private _getClaimsPayments() {
+  private _getClaimsPayments(query: any) {
     this._systemService.on();
-    console.log(this.currentPlatform);
-    this._claimService.find({
-        query: {
-          'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
-          isPaid: false,
-          'approvedDocumentation.response.isApprove': true,
-          $limit: this.limit,
-          $skip: this.limit * this.index
-        }
-      }).then((res: any) => {
+    this._claimService.find(query).then((res: any) => {
         console.log(res);
         this.loading = false;
         // Group claims based on provider
@@ -129,19 +121,11 @@ export class ListClaimsPaymentComponent implements OnInit {
       });
   }
 
-  private _getClaimsCapitationFromPolicy() {
+  private _getClaimsCapitationFromPolicy(query: any) {
     this._systemService.on();
-    this._policyService.find({
-        query: {
-          'platformOwnerId._id': this.currentPlatform._id,
-          isActive: true,
-          isPaid: true,
-          $limit: this.limit,
-          $skip: this.limit * this.index
-        }
-      }).then((res: any) => {
+    this._policyService.find(query).then((res: any) => {
         console.log(res);
-        this.loading = false;
+        this.cloading = false;
         let i = res.data.length;
 
         while (i--) {
@@ -156,8 +140,6 @@ export class ListClaimsPaymentComponent implements OnInit {
             hasItem[0].noOfBeneficiaries++;
           }
         }
-
-        console.log(this.capitationClaims);
 
         // this.capitationClaimsTotalEntries = res.total;
         // if (this.capitationClaimsResetData !== true) {
@@ -186,7 +168,26 @@ export class ListClaimsPaymentComponent implements OnInit {
     }).then((res: any) => {
       console.log(res);
       this.capitationPrice = res.data[0];
-      this._getClaimsCapitationFromPolicy();
+      if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+        this._getClaimsCapitationFromPolicy({
+          query: {
+            'platformOwnerId._id': this.currentPlatform._id,
+            isActive: true,
+            isPaid: true,
+          }
+        }
+        );
+      } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+        this._getClaimsCapitationFromPolicy({
+          query: {
+            'platformOwnerId._id': this.currentPlatform._id,
+            'hiaId.hia.type._id': this.user.userType._id,
+            isActive: true,
+            isPaid: true,
+          }
+        }
+        );
+      }
       this._systemService.off();
     }).catch(error => {
       console.log(error);
@@ -204,7 +205,31 @@ export class ListClaimsPaymentComponent implements OnInit {
       if (res.data.length > 0) {
         console.log(res);
         this.currentPlatform = res.data[0];
-        this._getClaimsPayments();
+        if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+          this._getClaimsPayments({
+              query: {
+                'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+                isPaid: false,
+                'approvedDocumentation.response.isApprove': true,
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            }
+          );
+        } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          this._getClaimsPayments({
+            query: {
+                'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+                'checkedinDetail.policyId.hiaId.hia.type._id': this.user.userType._id,
+                isPaid: false,
+                'approvedDocumentation.response.isApprove': true,
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            }
+          );
+        }
+
         this._getClaimsCapitationPrice();
       }
     }).catch(err => {
@@ -338,7 +363,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   claimsLoadMore() {
-    this._getClaimsPayments();
+    // this._getClaimsPayments();
   }
   capitationClaimsLoadMore() {
     this._getClaimsCapitationPrice();
@@ -347,7 +372,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   claimsReset() {
     this.index = 0;
     this.claimsResetData = true;
-    this._getClaimsPayments();
+    // this._getClaimsPayments();
     this.showClaimsLoadMore = true;
   }
   capitationClaimsReset() {

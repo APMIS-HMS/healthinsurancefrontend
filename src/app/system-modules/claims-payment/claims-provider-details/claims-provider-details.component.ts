@@ -57,31 +57,24 @@ export class ClaimsProviderDetailsComponent implements OnInit {
       }
     });
 
-    this._getCurrentPlatform();
+    this._getCurrentPlatform(this.routeId);
   }
 
-  onCheckSelectedItem(index, claim: Claim) {
-    console.log(claim);
-    if (!claim.isChecked) {
+  onCheckSelectedItem(index: number, claim: Claim, isChecked: boolean) {
+    console.log(isChecked);
+    if (isChecked) {
+      this.totalCost += claim.costingApprovalDocumentation;
       this.selectedClaims.push(claim);
     } else {
       // Remove from the selected Claim
-      if (this.selectedClaims.length > 0) {
-        this.selectedClaims.splice(index, 1);
-      }
+      this.totalCost -= claim.costingApprovalDocumentation;
+      this.selectedClaims = this.selectedClaims.filter(x => x._id !== claim._id);
     }
-    console.log(this.selectedClaims);
   }
 
-  private _getClaimsPayments() {
+  private _getClaimsPayments(query: any) {
     this._systemService.on();
-    this._claimsService.find({
-        query: {
-          'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
-          providerFacilityId: this.routeId,
-          isPaid: false
-        }
-      }).then((res: any) => {
+    this._claimsService.find(query).then((res: any) => {
         console.log(res);
         this.loading = false;
         if (res.data.length > 0) {
@@ -97,18 +90,19 @@ export class ClaimsProviderDetailsComponent implements OnInit {
       });
   }
 
-  onCheckAllSelectedItemsToPay(event) {
-    this.claims.forEach((claim, i) => {
-      if (event.srcElement.checked) {
+  onCheckAllSelectedItemsToPay(isChecked: boolean) {
+    console.log(isChecked);
+
+    this.claims.forEach(claim => {
+      console.log(claim);
+      if (isChecked) {
         claim.isChecked = true;
-        // let value = this.selectedClaims.reduce((t, c) => t.costingApprovalDocumentation + c.costingApprovalDocumentation, 0);
-        // console.log(value);
         this.totalCost += claim.costingApprovalDocumentation;
         this.selectedClaims.push(claim);
       } else {
         claim.isChecked = false;
         this.totalCost -= claim.costingApprovalDocumentation;
-        this.selectedClaims = [];
+        this.selectedClaims = this.selectedClaims.filter(x => x._id !== claim._id);
       }
     });
     console.log(this.totalCost);
@@ -215,7 +209,7 @@ export class ClaimsProviderDetailsComponent implements OnInit {
     console.log('Cancelled');
   }
 
-  private _getCurrentPlatform() {
+  private _getCurrentPlatform(providerId) {
     this._facilityService.find({
       query: {
         shortName: CurrentPlaformShortName,
@@ -224,7 +218,24 @@ export class ClaimsProviderDetailsComponent implements OnInit {
     }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
-        this._getClaimsPayments();
+        if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+          this._getClaimsPayments({
+            query: {
+              'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+              providerFacilityId: providerId,
+              isPaid: false
+            }
+          });
+        } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          this._getClaimsPayments({
+            query: {
+              'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+              'checkedinDetail.policyId.hiaId.hia.type._id': this.user.userType._id,
+              providerFacilityId: providerId,
+              isPaid: false
+            }
+          });
+        }
       }
     }).catch(err => {
       console.log(err);

@@ -31,8 +31,11 @@
         </div>
         <div *ngIf="!loading && recipientCreated">
             <div>
+                <div class="text-center">
+                    Capitation Fee is: <b>&#x20A6;{{ capitationPrice?.amount }}</b>
+                </div>
                 <div class="bill-box">
-                    You are about to pay <b>{{ selectedFacility.name }}</b> the sum of <b>&#x20A6;{{ capitationPrice?.amount*capitations?.length }}</b> for <b>{{ capitations.length }}</b> claims
+                    You are about to pay <b>{{ selectedFacility.name }}</b> the sum of <b>&#x20A6;{{ capitationPrice?.amount*capitations?.length }}</b> for <b>{{ capitations.length }}</b> claim(s)
                 </div>
                 <div class="btn-box">
                     <button [disabled]="disablePayRecipient" class="btn btn-medium btn-blue" (click)="onClickPayRecipient()">
