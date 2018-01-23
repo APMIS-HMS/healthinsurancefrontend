@@ -32,7 +32,7 @@
         <div *ngIf="!loading && recipientCreated">
             <div>
                 <div class="bill-box">
-                    You are about to pay <b>{{ selectedFacility.name }}</b> the sum of <b>&#x20A6;{{ totalAmount }}</b> for <b>{{ claims.length }}</b> claims
+                    You are about to pay <b>{{ selectedFacility.name }}</b> the sum of <b>&#x20A6;{{ totalAmount }}</b> for <b>{{ claims.length }}</b> claim(s)
                 </div>
                 <div class="btn-box">
                     <button [disabled]="disablePayRecipient" class="btn btn-medium btn-blue" (click)="onClickPayRecipient()">

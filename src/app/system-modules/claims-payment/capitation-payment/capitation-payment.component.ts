@@ -61,34 +61,27 @@ export class CapitationPaymentComponent implements OnInit {
     });
   }
 
-  onCheckSelectedItem(index, capitation: any) {
+  onCheckSelectedItem(index, capitation: any, isChecked: boolean) {
     console.log(capitation);
-    if (!capitation.isChecked) {
+    if (isChecked) {
       this.selectedClaims.push(capitation);
     } else {
       // Remove from the selected Claim
-      if (this.selectedClaims.length > 0) {
-        this.selectedClaims.splice(index, 1);
-      }
+      this.selectedClaims = this.selectedClaims.filter(x => x._id !== capitation._id);
     }
     console.log(this.selectedClaims);
   }
 
-  onCheckAllSelectedItemsToPay(event) {
+  onCheckAllSelectedItemsToPay(isChecked: boolean) {
     this.capitations.forEach((capitation, i) => {
-      if (event.srcElement.checked) {
+      if (isChecked) {
         capitation.isChecked = true;
-        // let value = this.selectedClaims.reduce((t, c) => t.costingApprovalDocumentation + c.costingApprovalDocumentation, 0);
-        // console.log(value);
-        // this.totalCost += capitation.costingApprovalDocumentation;
         this.selectedClaims.push(capitation);
       } else {
         capitation.isChecked = false;
-        // this.totalCost -= capitation.costingApprovalDocumentation;
-        this.selectedClaims = [];
+        this.selectedClaims = this.selectedClaims.filter(x => x._id !== capitation._id);
       }
     });
-    console.log(this.totalCost);
   }
 
   // onCheckAllQueue(isChecked) {
@@ -202,23 +195,22 @@ export class CapitationPaymentComponent implements OnInit {
     this.payClaim = !this.payClaim;
   }
 
-  private _getPolicy(id: string) {
-    console.log(id);
-    // { name: { $regex: value, '$options': 'i' } },
-    this._policyService.find({
-      query: {
-        // 'platformOwnerId._id': this.currentPlatform._id,
-        'providerId._id': { $regex: id, '$options': 'i' },
-        
-        // isActive: true,
-        // isPaid: true,
-      }
-    }).then((res: any) => {
+  private _getPolicy(query: any, id: string) {
+    this._policyService.find(query).then((res: any) => {
       console.log(res);
       this.loading = false;
       this._systemService.off();
       if (res.data.length > 0) {
-        this.capitations = res.data;
+        // Remove this later
+        if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          res.data.forEach(policy => {
+            if (policy.providerId._id === id) {
+              this.capitations.push(policy);
+            }
+          });
+        } else {
+          this.capitations = res.data;
+        }
         this._headerEventEmitter.setMinorRouteUrl(res.data[0].providerId.name);
       }
     }).catch(error => {
@@ -238,7 +230,28 @@ export class CapitationPaymentComponent implements OnInit {
         if (res.data.length > 0) {
           console.log(res);
           this.currentPlatform = res.data[0];
-          this._getPolicy(providerId);
+          if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+            this._getPolicy({
+              query: {
+                'platformOwnerId._id': this.currentPlatform._id,
+                // 'providerId._id': providerId,
+                isActive: true,
+                isPaid: true,
+              }
+            }, providerId
+            );
+          } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+            this._getPolicy({
+              query: {
+                'platformOwnerId._id': this.currentPlatform._id,
+                // 'providerId._id': providerId,
+                'hiaId.hia.type._id': this.user.userType._id,
+                isActive: true,
+                isPaid: true,
+              }
+            }, providerId
+            );
+          }
         }
       }
     }).catch(err => {

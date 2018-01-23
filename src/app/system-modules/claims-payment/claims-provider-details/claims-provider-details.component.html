@@ -57,7 +57,9 @@
     <table class="table" cellpadding="0" cellspacing="0" border="0.5">
         <thead class="thead">
             <tr class="tr">
-                <th class="th" *ngIf="claims.length > 0" (change)="onCheckAllSelectedItemsToPay($event);"><input type="checkbox"></th>
+                <th class="th" *ngIf="claims.length > 0">
+                    <input type="checkbox" (change)="onCheckAllSelectedItemsToPay($event.target.checked);" [checked]="claims.length === selectedClaims.length">
+                </th>
                 <th class="th">No</th>
                 <th class="th">Date</th>
                 <th class="th">Amount Due</th>
@@ -80,22 +82,22 @@
                     <i class="fa fa-spinner fa-spin"></i>
                 </td>
             </tr>
-            <tr *ngFor="let claim of claims; let i = index;" class="tr hover" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">
+            <tr *ngFor="let claim of claims; let i = index;" class="tr hover">
                 <td class="td">
-                    <input (change)="onCheckSelectedItem(i, claim);" [attr.checked]="claim.isChecked ? true : null" type="checkbox">
+                    <input (change)="onCheckSelectedItem(i, claim, $event.target.checked);" [checked]="claim.isChecked" type="checkbox">
                 </td>
-                <td class="td">{{ i+1 }}</td>
-                <td class="td">{{ claim?.dateClaimCreated | date }}</td>
-                <td class="td text-right">&#x20A6; {{ claim?.costingApprovalDocumentation }}</td>
-                <td class="td">{{ claim?.claimNo }}</td>
-                <td class="td">{{ claim?.checkedinDetail?.checkedInDetails?.providerFacilityId?.provider?.providerId }}</td>
-                <td class="td">{{ claim?.checkedinDetail?.plan }}</td>
-                <td class="td">{{ claim?.checkedinDetail?.providerFacility?.hiaId?.name }}</td>
-                <td class="td text-center">
+                <td class="td" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">{{ i+1 }}</td>
+                <td class="td" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">{{ claim?.dateClaimCreated | date }}</td>
+                <td class="td text-right" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">&#x20A6; {{ claim?.costingApprovalDocumentation }}</td>
+                <td class="td" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">{{ claim?.claimNo }}</td>
+                <td class="td" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">{{ claim?.checkedinDetail?.checkedInDetails?.providerFacilityId?.provider?.providerId }}</td>
+                <td class="td" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">{{ claim?.checkedinDetail?.plan }}</td>
+                <td class="td" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">{{ claim?.checkedinDetail?.providerFacility?.hiaId?.name }}</td>
+                <td class="td text-center" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">
                     <i class="fa fa-check green" aria-hidden="true"></i>
                 </td>
-                <td class="td"><span class="red">Not Paid</span></td>
-                <td class="td td-icos">
+                <td class="td" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}"><span class="red">Not Paid</span></td>
+                <td class="td td-icos" routerLink="/modules/claims/claims-payment/{{claim?.providerFacilityId}}/details/{{claim?._id}}">
                     <i class="fa fa-chevron-right"></i>
                 </td>
             </tr>
@@ -112,6 +114,6 @@
 <div *ngIf="payClaim" class="modal-overlay">
     <div class="modal-wrap shadow-RB">
         <div (click)="modal_close()" class="close-modal">X</div>
-        <app-pay-claim [hiaDetails]="hiaDetails" [claims]="claims" (closeModal)="modal_close()"></app-pay-claim>
+        <app-pay-claim [hiaDetails]="hiaDetails" [claims]="selectedClaims" (closeModal)="modal_close()"></app-pay-claim>
     </div>
 </div>
