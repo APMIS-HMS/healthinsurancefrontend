@@ -9,7 +9,7 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
-  
+
 
 
   constructor(
@@ -17,7 +17,7 @@ export class WelcomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('LASHMA');
+    this._headerEventEmitter.setRouteUrl('SHIMA');
     this._headerEventEmitter.setMinorRouteUrl('Welcome Page');
   }
 

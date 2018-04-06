@@ -1,1422 +1,1415 @@
 {
-   "policyObject":{
-      "__v":0,
-      "platformOwnerId":{
-         "_id":"59cb9f57aca59f1f54201c07",
-         "address":{
-            "city":{
-               "createdAt":"2017-09-25T11:59:42.305Z",
-               "updatedAt":"2017-09-25T11:59:42.305Z",
-               "_id":"59c8efae4be1bb0ac48ea37e",
-               "name":"Ikeja"
+    "policyObject": {
+        "__v": 0,
+        "platformOwnerId": {
+            "_id": "59cb9f57aca59f1f54201c07",
+            "address": {
+                "city": {
+                    "createdAt": "2017-09-25T11:59:42.305Z",
+                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                    "_id": "59c8efae4be1bb0ac48ea37e",
+                    "name": "Ikeja"
+                },
+                "lga": {
+                    "createdAt": "2017-09-25T11:59:42.305Z",
+                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                    "_id": "59c8efae4be1bb0ac48ea38a",
+                    "name": "Ikeja"
+                },
+                "neighbourhood": "Alausa",
+                "state": {
+                    "createdAt": "2017-09-25T11:59:42.304Z",
+                    "updatedAt": "2017-09-25T11:59:42.304Z",
+                    "_id": "59c8efae4be1bb0ac48ea379",
+                    "name": "Lagos State"
+                },
+                "street": "State Secretariat",
+                "_id": "59cb9f57aca59f1f54201c0b",
+                "updatedAt": "2017-09-27T12:53:43.519Z",
+                "createdAt": "2017-09-27T12:53:43.519Z"
             },
-            "lga":{
-               "createdAt":"2017-09-25T11:59:42.305Z",
-               "updatedAt":"2017-09-25T11:59:42.305Z",
-               "_id":"59c8efae4be1bb0ac48ea38a",
-               "name":"Ikeja"
+            "bankDetails": {
+                "accountNumber": "993848483",
+                "bank": {
+                    "__v": 0,
+                    "createdAt": "2017-09-21T14:09:16.535Z",
+                    "updatedAt": "2017-09-21T14:09:16.535Z",
+                    "code": "001",
+                    "name": "CENTRAL BANK OF NIGERIA",
+                    "_id": "59c3c80c64b18f07603239d9"
+                },
+                "name": "LASHAMA",
+                "_id": "59cb9f57aca59f1f54201c0a",
+                "updatedAt": "2017-09-27T12:53:43.519Z",
+                "createdAt": "2017-09-27T12:53:43.518Z"
             },
-            "neighbourhood":"Alausa",
-            "state":{
-               "createdAt":"2017-09-25T11:59:42.304Z",
-               "updatedAt":"2017-09-25T11:59:42.304Z",
-               "_id":"59c8efae4be1bb0ac48ea379",
-               "name":"Lagos State"
+            "businessContact": {
+                "lastName": "Ambode",
+                "firstName": "Lawal",
+                "email": "sales@lashma.com",
+                "phoneNumber": "08028372745",
+                "position": {
+                    "__v": 0,
+                    "createdAt": "2017-09-23T12:49:57.742Z",
+                    "updatedAt": "2017-09-23T12:49:57.742Z",
+                    "name": "Head Of Service",
+                    "_id": "59c658751c05be1610eeaf79"
+                },
+                "_id": "59cb9f57aca59f1f54201c09",
+                "updatedAt": "2017-09-27T12:53:43.518Z",
+                "createdAt": "2017-09-27T12:53:43.518Z"
             },
-            "street":"State Secretariat",
-            "_id":"59cb9f57aca59f1f54201c0b",
-            "updatedAt":"2017-09-27T12:53:43.519Z",
-            "createdAt":"2017-09-27T12:53:43.519Z"
-         },
-         "bankDetails":{
-            "accountNumber":"993848483",
-            "bank":{
-               "__v":0,
-               "createdAt":"2017-09-21T14:09:16.535Z",
-               "updatedAt":"2017-09-21T14:09:16.535Z",
-               "code":"001",
-               "name":"CENTRAL BANK OF NIGERIA",
-               "_id":"59c3c80c64b18f07603239d9"
+            "itContact": {
+                "lastName": "Mary",
+                "firstName": "Johnson",
+                "email": "tech@lashma.com",
+                "phoneNumber": "08077662254",
+                "position": {
+                    "__v": 0,
+                    "createdAt": "2017-09-23T12:49:32.376Z",
+                    "updatedAt": "2017-09-23T12:49:32.376Z",
+                    "name": "IT - Managers",
+                    "_id": "59c6585c1c05be1610eeaf77"
+                },
+                "_id": "59cb9f57aca59f1f54201c08",
+                "updatedAt": "2017-09-27T12:53:43.518Z",
+                "createdAt": "2017-09-27T12:53:43.518Z"
             },
-            "name":"LASHAMA",
-            "_id":"59cb9f57aca59f1f54201c0a",
-            "updatedAt":"2017-09-27T12:53:43.519Z",
-            "createdAt":"2017-09-27T12:53:43.518Z"
-         },
-         "businessContact":{
-            "lastName":"Ambode",
-            "firstName":"Lawal",
-            "email":"sales@lashma.com",
-            "phoneNumber":"08028372745",
-            "position":{
-               "__v":0,
-               "createdAt":"2017-09-23T12:49:57.742Z",
-               "updatedAt":"2017-09-23T12:49:57.742Z",
-               "name":"Head Of Service",
-               "_id":"59c658751c05be1610eeaf79"
+            "email": "info@lashma.com",
+            "website": "http://www.lashma.com",
+            "shortName": "SHIMA",
+            "name": "Lagos State Health Management Agency",
+            "phoneNumber": "08028372745",
+            "facilityType": {
+                "__v": 0,
+                "createdAt": "2017-09-19T21:40:44.108Z",
+                "updatedAt": "2017-09-19T21:40:44.108Z",
+                "name": "Platform Owner",
+                "_id": "59c18edc8778c62c9490c2ae"
             },
-            "_id":"59cb9f57aca59f1f54201c09",
-            "updatedAt":"2017-09-27T12:53:43.518Z",
-            "createdAt":"2017-09-27T12:53:43.518Z"
-         },
-         "itContact":{
-            "lastName":"Mary",
-            "firstName":"Johnson",
-            "email":"tech@lashma.com",
-            "phoneNumber":"08077662254",
-            "position":{
-               "__v":0,
-               "createdAt":"2017-09-23T12:49:32.376Z",
-               "updatedAt":"2017-09-23T12:49:32.376Z",
-               "name":"IT - Managers",
-               "_id":"59c6585c1c05be1610eeaf77"
-            },
-            "_id":"59cb9f57aca59f1f54201c08",
-            "updatedAt":"2017-09-27T12:53:43.518Z",
-            "createdAt":"2017-09-27T12:53:43.518Z"
-         },
-         "email":"info@lashma.com",
-         "website":"http://www.lashma.com",
-         "shortName":"LASHMA",
-         "name":"Lagos State Health Management Agency",
-         "phoneNumber":"08028372745",
-         "facilityType":{
-            "__v":0,
-            "createdAt":"2017-09-19T21:40:44.108Z",
-            "updatedAt":"2017-09-19T21:40:44.108Z",
-            "name":"Platform Owner",
-            "_id":"59c18edc8778c62c9490c2ae"
-         },
-         "updatedAt":"2017-09-27T12:53:43.517Z",
-         "createdAt":"2017-09-27T12:53:43.517Z",
-         "isTokenVerified":false,
-         "__v":0
-      },
-      "principalBeneficiary":{
-         "person":{
-            "nextOfKin":[
+            "updatedAt": "2017-09-27T12:53:43.517Z",
+            "createdAt": "2017-09-27T12:53:43.517Z",
+            "isTokenVerified": false,
+            "__v": 0
+        },
+        "principalBeneficiary": {
+            "person": {
+                "nextOfKin": [
 
-            ],
-            "employees":[
+                ],
+                "employees": [
 
-            ],
-            "isActive":true,
-            "createdAt":"2017-10-11T01:03:51.156Z",
-            "updatedAt":"2017-10-11T01:03:51.156Z",
-            "profileImageObject":{
-               "createdAt":"2017-10-11T22:50:46.781Z",
-               "updatedAt":"2017-10-11T22:50:46.781Z",
-               "thumbnail":"/uploads/thumbnails/59dea046eb1e25189447062d-100.jpg",
-               "size":"4757",
-               "path":"public/uploads/image/59dea046eb1e25189447062d.jpg",
-               "filename":"59dea046eb1e25189447062d.jpg",
-               "destination":"./public/uploads/image",
-               "mimetype":"image/png",
-               "encoding":"7bit",
-               "originalname":"images.png",
-               "fieldname":"platform",
-               "_id":"59dea046eb1e25189447062e"
-            },
-            "__v":0,
-            "title":{
-               "_id":"59d3475492e9a61fec0faf75",
-               "name":"Dr.",
-               "updatedAt":"2017-10-03T08:16:20.885Z",
-               "createdAt":"2017-10-03T08:16:20.885Z",
-               "__v":0
-            },
-            "stateOfOrigin":{
-               "name":"Ogun State",
-               "_id":"59c8efae4be1bb0ac48ea331",
-               "updatedAt":"2017-09-25T11:59:42.299Z",
-               "createdAt":"2017-09-25T11:59:42.299Z"
-            },
-            "platformOnwerId":"59cb9f57aca59f1f54201c07",
-            "phoneNumber":"08028983456",
-            "otherNames":"Omolabi",
-            "mothersMaidenName":"Kuforiji",
-            "maritalStatus":{
-               "_id":"59d35c892fedb608503106f1",
-               "name":"Married",
-               "updatedAt":"2017-10-03T09:46:49.474Z",
-               "createdAt":"2017-10-03T09:46:49.474Z",
-               "__v":0
-            },
-            "lgaOfOrigin":{
-               "name":"Ifo",
-               "_id":"59c8efae4be1bb0ac48ea343",
-               "updatedAt":"2017-09-25T11:59:42.300Z",
-               "createdAt":"2017-09-25T11:59:42.300Z"
-            },
-            "lastName":"Michael",
-            "homeAddress":{
-               "createdAt":"2017-10-11T01:03:51.159Z",
-               "updatedAt":"2017-10-11T01:03:51.159Z",
-               "_id":"59dd6df72a4ff919d8f7adc8",
-               "street":"16, Alao Ekun Street,",
-               "state":{
-                  "lgs":[
-                     {
-                        "createdAt":"2017-09-25T11:59:42.306Z",
-                        "updatedAt":"2017-09-25T11:59:42.306Z",
-                        "_id":"59c8efae4be1bb0ac48ea393",
-                        "name":"Ajeromi-Ifelodun"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.306Z",
-                        "updatedAt":"2017-09-25T11:59:42.306Z",
-                        "_id":"59c8efae4be1bb0ac48ea392",
-                        "name":"Alimosho"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea391",
-                        "name":"Amuwo-Odofin"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea390",
-                        "name":"Apapa"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea38f",
-                        "name":"Badagry"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea38e",
-                        "name":"Epe"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea38d",
-                        "name":"Eti Osa"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea38c",
-                        "name":"Ibeju-Lekki"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea38b",
-                        "name":"Ifako-Ijaiye"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea38a",
-                        "name":"Ikeja"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea389",
-                        "name":"Ikorodu"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea388",
-                        "name":"Kosofe"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea387",
-                        "name":"Lagos Island"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea386",
-                        "name":"Lagos Mainland"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea385",
-                        "name":"Mushin"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea384",
-                        "name":"Ojo"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea383",
-                        "name":"Oshodi-Isolo"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea382",
-                        "name":"Shomolu"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea381",
-                        "name":"Surulere"
-                     }
-                  ],
-                  "cities":[
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea380",
-                        "name":"Badagry"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea37f",
-                        "name":"Epe"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea37e",
-                        "name":"Ikeja"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea37d",
-                        "name":"Ikorodu"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.305Z",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "_id":"59c8efae4be1bb0ac48ea37c",
-                        "name":"Lagos"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.304Z",
-                        "updatedAt":"2017-09-25T11:59:42.304Z",
-                        "_id":"59c8efae4be1bb0ac48ea37b",
-                        "name":"Mushin"
-                     },
-                     {
-                        "createdAt":"2017-09-25T11:59:42.304Z",
-                        "updatedAt":"2017-09-25T11:59:42.304Z",
-                        "_id":"59c8efae4be1bb0ac48ea37a",
-                        "name":"Shomolu"
-                     }
-                  ],
-                  "createdAt":"2017-09-25T11:59:42.304Z",
-                  "updatedAt":"2017-09-25T11:59:42.304Z",
-                  "_id":"59c8efae4be1bb0ac48ea379",
-                  "name":"Lagos State"
-               },
-               "neighbourhood":"Tin-Can Island",
-               "lga":{
-                  "name":"Apapa",
-                  "_id":"59c8efae4be1bb0ac48ea390",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "createdAt":"2017-09-25T11:59:42.305Z"
-               }
-            },
-            "gender":{
-               "__v":0,
-               "createdAt":"2017-10-03T08:14:23.859Z",
-               "updatedAt":"2017-10-03T08:14:23.859Z",
-               "name":"Male",
-               "_id":"59d346df92e9a61fec0faf71"
-            },
-            "firstName":"James",
-            "email":"james_labi@mail.com",
-            "dateOfBirth":"1967-04-04T23:00:00.000Z",
-            "_id":"59dd6df72a4ff919d8f7adc7"
-         },
-         "_include":[
-            "person"
-         ],
-         "__v":0,
-         "numberOfUnderAge":3,
-         "isActive":true,
-         "createdAt":"2017-10-11T01:03:51.185Z",
-         "updatedAt":"2017-10-11T01:03:51.185Z",
-         "platformOwnerNumber":"RZGUM31P",
-         "personId":"59dd6df72a4ff919d8f7adc7",
-         "platformOwnerId":{
-            "_id":"59cb9f57aca59f1f54201c07",
-            "address":{
-               "city":{
-                  "createdAt":"2017-09-25T11:59:42.305Z",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "_id":"59c8efae4be1bb0ac48ea37e",
-                  "name":"Ikeja"
-               },
-               "lga":{
-                  "createdAt":"2017-09-25T11:59:42.305Z",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "_id":"59c8efae4be1bb0ac48ea38a",
-                  "name":"Ikeja"
-               },
-               "neighbourhood":"Alausa",
-               "state":{
-                  "createdAt":"2017-09-25T11:59:42.304Z",
-                  "updatedAt":"2017-09-25T11:59:42.304Z",
-                  "_id":"59c8efae4be1bb0ac48ea379",
-                  "name":"Lagos State"
-               },
-               "street":"State Secretariat",
-               "_id":"59cb9f57aca59f1f54201c0b",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "createdAt":"2017-09-27T12:53:43.519Z"
-            },
-            "bankDetails":{
-               "accountNumber":"993848483",
-               "bank":{
-                  "__v":0,
-                  "createdAt":"2017-09-21T14:09:16.535Z",
-                  "updatedAt":"2017-09-21T14:09:16.535Z",
-                  "code":"001",
-                  "name":"CENTRAL BANK OF NIGERIA",
-                  "_id":"59c3c80c64b18f07603239d9"
-               },
-               "name":"LASHAMA",
-               "_id":"59cb9f57aca59f1f54201c0a",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "createdAt":"2017-09-27T12:53:43.518Z"
-            },
-            "businessContact":{
-               "lastName":"Ambode",
-               "firstName":"Lawal",
-               "email":"sales@lashma.com",
-               "phoneNumber":"08028372745",
-               "position":{
-                  "__v":0,
-                  "createdAt":"2017-09-23T12:49:57.742Z",
-                  "updatedAt":"2017-09-23T12:49:57.742Z",
-                  "name":"Head Of Service",
-                  "_id":"59c658751c05be1610eeaf79"
-               },
-               "_id":"59cb9f57aca59f1f54201c09",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "createdAt":"2017-09-27T12:53:43.518Z"
-            },
-            "itContact":{
-               "lastName":"Mary",
-               "firstName":"Johnson",
-               "email":"tech@lashma.com",
-               "phoneNumber":"08077662254",
-               "position":{
-                  "__v":0,
-                  "createdAt":"2017-09-23T12:49:32.376Z",
-                  "updatedAt":"2017-09-23T12:49:32.376Z",
-                  "name":"IT - Managers",
-                  "_id":"59c6585c1c05be1610eeaf77"
-               },
-               "_id":"59cb9f57aca59f1f54201c08",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "createdAt":"2017-09-27T12:53:43.518Z"
-            },
-            "email":"info@lashma.com",
-            "website":"http://www.lashma.com",
-            "shortName":"LASHMA",
-            "name":"Lagos State Health Management Agency",
-            "phoneNumber":"08028372745",
-            "facilityType":{
-               "__v":0,
-               "createdAt":"2017-09-19T21:40:44.108Z",
-               "updatedAt":"2017-09-19T21:40:44.108Z",
-               "name":"Platform Owner",
-               "_id":"59c18edc8778c62c9490c2ae"
-            },
-            "updatedAt":"2017-09-27T12:53:43.517Z",
-            "createdAt":"2017-09-27T12:53:43.517Z",
-            "isTokenVerified":false,
-            "__v":0
-         },
-         "_id":"59dd6df72a4ff919d8f7adc9"
-      },
-      "hiaId":{
-         "isTokenVerified":false,
-         "createdAt":"2017-10-08T19:36:42.968Z",
-         "updatedAt":"2017-10-08T19:36:42.968Z",
-         "address":{
-            "createdAt":"2017-10-08T19:36:42.973Z",
-            "updatedAt":"2017-10-08T19:36:42.973Z",
-            "city":{
-               "name":"Epe",
-               "_id":"59c8efae4be1bb0ac48ea37f",
-               "updatedAt":"2017-09-25T11:59:42.305Z",
-               "createdAt":"2017-09-25T11:59:42.305Z"
-            },
-            "lga":{
-               "name":"Apapa",
-               "_id":"59c8efae4be1bb0ac48ea390",
-               "updatedAt":"2017-09-25T11:59:42.305Z",
-               "createdAt":"2017-09-25T11:59:42.305Z"
-            },
-            "neighbourhood":"Airport",
-            "state":{
-               "name":"Lagos State",
-               "_id":"59c8efae4be1bb0ac48ea379",
-               "updatedAt":"2017-09-25T11:59:42.304Z",
-               "createdAt":"2017-09-25T11:59:42.304Z"
-            },
-            "street":"Plot 101, Ajao Estate",
-            "_id":"59da7e4a3a7f47190cafe6f4"
-         },
-         "bankDetails":{
-            "createdAt":"2017-10-08T19:36:42.973Z",
-            "updatedAt":"2017-10-08T19:36:42.973Z",
-            "accountNumber":"0033984432",
-            "bank":{
-               "_id":"59c3c80c64b18f07603239e3",
-               "name":"ENTERPRISE BANK",
-               "code":"084",
-               "updatedAt":"2017-09-21T14:09:16.536Z",
-               "createdAt":"2017-09-21T14:09:16.536Z",
-               "__v":0
-            },
-            "name":"MULTISHIELD",
-            "_id":"59da7e4a3a7f47190cafe6f3"
-         },
-         "businessContact":{
-            "createdAt":"2017-10-08T19:36:42.972Z",
-            "updatedAt":"2017-10-08T19:36:42.972Z",
-            "lastName":"Ikechukwu",
-            "firstName":"Banabas",
-            "email":"business@multishield.com",
-            "phoneNumber":"09021983476",
-            "position":{
-               "_id":"59c658751c05be1610eeaf79",
-               "name":"Head Of Service",
-               "updatedAt":"2017-09-23T12:49:57.742Z",
-               "createdAt":"2017-09-23T12:49:57.742Z",
-               "__v":0
-            },
-            "_id":"59da7e4a3a7f47190cafe6f2"
-         },
-         "itContact":{
-            "createdAt":"2017-10-08T19:36:42.972Z",
-            "updatedAt":"2017-10-08T19:36:42.972Z",
-            "lastName":"Owolabi",
-            "firstName":"Bayo",
-            "email":"it@multishield.com",
-            "phoneNumber":"07023829900",
-            "position":{
-               "_id":"59c6585c1c05be1610eeaf77",
-               "name":"IT - Managers",
-               "updatedAt":"2017-09-23T12:49:32.376Z",
-               "createdAt":"2017-09-23T12:49:32.376Z",
-               "__v":0
-            },
-            "_id":"59da7e4a3a7f47190cafe6f1"
-         },
-         "hia":{
-            "createdAt":"2017-10-08T19:36:42.972Z",
-            "updatedAt":"2017-10-08T19:36:42.972Z",
-            "nhisNumber":"99-AUD88",
-            "cin":"CIN-990033",
-            "registrationDate":"2005-03-15T23:00:00.000Z",
-            "_id":"59da7e4a3a7f47190cafe6f0",
-            "type":{
-               "__v":0,
-               "createdAt":"2017-10-08T20:53:08.334Z",
-               "updatedAt":"2017-10-08T20:53:08.334Z",
-               "name":"Health Insurance Agency",
-               "_id":"59da9034dd72e929643b04a2"
-            },
-            "grade":{
-               "__v":0,
-               "createdAt":"2017-10-08T20:50:14.170Z",
-               "updatedAt":"2017-10-08T20:50:14.170Z",
-               "name":"A",
-               "_id":"59da8f86dd72e929643b049e"
-            }
-         },
-         "email":"info@multishield.com",
-         "name":"Multi Shield Nigeria Limited",
-         "phoneNumber":"08099238746",
-         "facilityType":{
-            "__v":0,
-            "createdAt":"2017-09-19T21:41:55.994Z",
-            "updatedAt":"2017-09-19T21:41:55.994Z",
-            "name":"Health Insurance Agent",
-            "_id":"59c18f238778c62c9490c2af"
-         },
-         "platformOwnerId":{
-            "__v":0,
-            "isTokenVerified":false,
-            "createdAt":"2017-09-27T12:53:43.517Z",
-            "updatedAt":"2017-09-27T12:53:43.517Z",
-            "facilityType":{
-               "_id":"59c18edc8778c62c9490c2ae",
-               "name":"Platform Owner",
-               "updatedAt":"2017-09-19T21:40:44.108Z",
-               "createdAt":"2017-09-19T21:40:44.108Z",
-               "__v":0
-            },
-            "phoneNumber":"08028372745",
-            "name":"Lagos State Health Management Agency",
-            "shortName":"LASHMA",
-            "website":"http://www.lashma.com",
-            "email":"info@lashma.com",
-            "itContact":{
-               "createdAt":"2017-09-27T12:53:43.518Z",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "_id":"59cb9f57aca59f1f54201c08",
-               "position":{
-                  "_id":"59c6585c1c05be1610eeaf77",
-                  "name":"IT - Managers",
-                  "updatedAt":"2017-09-23T12:49:32.376Z",
-                  "createdAt":"2017-09-23T12:49:32.376Z",
-                  "__v":0
-               },
-               "phoneNumber":"08077662254",
-               "email":"tech@lashma.com",
-               "firstName":"Johnson",
-               "lastName":"Mary"
-            },
-            "businessContact":{
-               "createdAt":"2017-09-27T12:53:43.518Z",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "_id":"59cb9f57aca59f1f54201c09",
-               "position":{
-                  "_id":"59c658751c05be1610eeaf79",
-                  "name":"Head Of Service",
-                  "updatedAt":"2017-09-23T12:49:57.742Z",
-                  "createdAt":"2017-09-23T12:49:57.742Z",
-                  "__v":0
-               },
-               "phoneNumber":"08028372745",
-               "email":"sales@lashma.com",
-               "firstName":"Lawal",
-               "lastName":"Ambode"
-            },
-            "bankDetails":{
-               "createdAt":"2017-09-27T12:53:43.518Z",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "_id":"59cb9f57aca59f1f54201c0a",
-               "name":"LASHAMA",
-               "bank":{
-                  "_id":"59c3c80c64b18f07603239d9",
-                  "name":"CENTRAL BANK OF NIGERIA",
-                  "code":"001",
-                  "updatedAt":"2017-09-21T14:09:16.535Z",
-                  "createdAt":"2017-09-21T14:09:16.535Z",
-                  "__v":0
-               },
-               "accountNumber":"993848483"
-            },
-            "address":{
-               "createdAt":"2017-09-27T12:53:43.519Z",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "_id":"59cb9f57aca59f1f54201c0b",
-               "street":"State Secretariat",
-               "state":{
-                  "name":"Lagos State",
-                  "_id":"59c8efae4be1bb0ac48ea379",
-                  "updatedAt":"2017-09-25T11:59:42.304Z",
-                  "createdAt":"2017-09-25T11:59:42.304Z"
-               },
-               "neighbourhood":"Alausa",
-               "lga":{
-                  "name":"Ikeja",
-                  "_id":"59c8efae4be1bb0ac48ea38a",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "createdAt":"2017-09-25T11:59:42.305Z"
-               },
-               "city":{
-                  "name":"Ikeja",
-                  "_id":"59c8efae4be1bb0ac48ea37e",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "createdAt":"2017-09-25T11:59:42.305Z"
-               }
-            },
-            "_id":"59cb9f57aca59f1f54201c07"
-         },
-         "logo":{
-            "createdAt":"2017-10-08T19:36:42.970Z",
-            "updatedAt":"2017-10-08T19:36:42.970Z",
-            "fieldname":"platform",
-            "originalname":"20031568_248125772344219_7746723842221665934_n.jpg",
-            "encoding":"7bit",
-            "mimetype":"image/jpeg",
-            "destination":"./public/uploads/image",
-            "filename":"59da7e4a3a7f47190cafe6ed.jpg",
-            "path":"public/uploads/image/59da7e4a3a7f47190cafe6ed.jpg",
-            "size":"100044",
-            "thumbnail":"/uploads/thumbnails/59da7e4a3a7f47190cafe6ed-100.jpg",
-            "_id":"59da7e4a3a7f47190cafe6ef"
-         },
-         "__v":0,
-         "_id":"59da7e4a3a7f47190cafe6ee"
-      },
-      "providerId":{
-         "isTokenVerified":false,
-         "isConfirmed":false,
-         "createdAt":"2017-10-10T22:10:41.279Z",
-         "updatedAt":"2017-10-10T22:10:41.279Z",
-         "address":{
-            "createdAt":"2017-10-10T22:10:41.279Z",
-            "updatedAt":"2017-10-10T22:10:41.279Z",
-            "_id":"59dd4561c2f9bd5c90a4d6cd",
-            "city":{
-               "name":"Ikeja",
-               "_id":"59c8efae4be1bb0ac48ea37e",
-               "updatedAt":"2017-09-25T11:59:42.305Z",
-               "createdAt":"2017-09-25T11:59:42.305Z"
-            },
-            "lga":{
-               "createdAt":"2017-09-25T11:59:42.305Z",
-               "updatedAt":"2017-09-25T11:59:42.305Z",
-               "_id":"59c8efae4be1bb0ac48ea38f",
-               "name":"Badagry"
-            },
-            "neighbourhood":"Secretariat",
-            "state":{
-               "createdAt":"2017-09-25T11:59:42.304Z",
-               "updatedAt":"2017-09-25T11:59:42.304Z",
-               "_id":"59c8efae4be1bb0ac48ea379",
-               "name":"Lagos State"
-            },
-            "street":"Plot 90, Ajao Estate"
-         },
-         "bankDetails":{
-            "createdAt":"2017-10-10T22:10:41.281Z",
-            "updatedAt":"2017-10-10T22:10:41.281Z",
-            "_id":"59dd4561c2f9bd5c90a4d6ce",
-            "accountNumber":"0039339932",
-            "bank":{
-               "_id":"59c3c80c64b18f07603239d9",
-               "name":"CENTRAL BANK OF NIGERIA",
-               "code":"001",
-               "updatedAt":"2017-09-21T14:09:16.535Z",
-               "createdAt":"2017-09-21T14:09:16.535Z",
-               "__v":0
-            },
-            "name":"University College Hospital"
-         },
-         "businessContact":{
-            "createdAt":"2017-10-10T22:10:41.282Z",
-            "updatedAt":"2017-10-10T22:10:41.282Z",
-            "_id":"59dd4561c2f9bd5c90a4d6cf",
-            "lastName":"Segun",
-            "firstName":"Ajayi",
-            "email":"sales@uch.com",
-            "phoneNumber":"07029382922",
-            "position":{
-               "_id":"59c658751c05be1610eeaf79",
-               "name":"Head Of Service",
-               "updatedAt":"2017-09-23T12:49:57.742Z",
-               "createdAt":"2017-09-23T12:49:57.742Z",
-               "__v":0
-            }
-         },
-         "itContact":{
-            "createdAt":"2017-10-10T22:10:41.283Z",
-            "updatedAt":"2017-10-10T22:10:41.283Z",
-            "_id":"59dd4561c2f9bd5c90a4d6d0",
-            "lastName":"Olumide",
-            "firstName":"Bakare",
-            "email":"hod@uch.com",
-            "phoneNumber":"09022998483",
-            "position":{
-               "_id":"59c6585c1c05be1610eeaf77",
-               "name":"IT - Managers",
-               "updatedAt":"2017-09-23T12:49:32.376Z",
-               "createdAt":"2017-09-23T12:49:32.376Z",
-               "__v":0
-            }
-         },
-         "provider":{
-            "facilityClass":[
-               "tertiary"
-            ],
-            "createdAt":"2017-10-10T22:10:41.283Z",
-            "updatedAt":"2017-10-10T22:10:41.283Z",
-            "_id":"59dd4561c2f9bd5c90a4d6d1",
-            "facilityOwnership":{
-               "_id":"59ca6a87960c9b38f023f3cc",
-               "name":"Federal Government",
-               "updatedAt":"2017-09-26T14:56:07.870Z",
-               "createdAt":"2017-09-26T14:56:07.870Z",
-               "__v":0
-            },
-            "facilityType":{
-               "__v":0,
-               "createdAt":"2017-09-26T14:54:32.457Z",
-               "updatedAt":"2017-09-26T14:54:32.457Z",
-               "name":"Teaching Hospital",
-               "_id":"59ca6a28960c9b38f023f3ca"
-            },
-            "facilityGrade":{
-               "_id":"59dd3847363bb04814114a7c",
-               "name":"A",
-               "updatedAt":"2017-10-10T21:14:47.963Z",
-               "createdAt":"2017-10-10T21:14:47.963Z",
-               "__v":0
-            },
-            "hefeemaNumber":"9494-IPO",
-            "hefeemaStatus":{
-               "_id":"59dd37ef19db173fec15f282",
-               "name":"Non-Accredited",
-               "updatedAt":"2017-10-10T21:13:19.412Z",
-               "createdAt":"2017-10-10T21:13:19.412Z",
-               "__v":0
-            },
-            "lasrraId":"94958",
-            "comment":"Just another comment"
-         },
-         "email":"info@uch.com",
-         "name":"University College Hospital",
-         "phoneNumber":"0903997389",
-         "facilityType":{
-            "__v":0,
-            "createdAt":"2017-09-19T21:42:04.337Z",
-            "updatedAt":"2017-09-19T21:42:04.337Z",
-            "name":"Provider",
-            "_id":"59c18f2c8778c62c9490c2b0"
-         },
-         "platformOwnerId":{
-            "__v":0,
-            "isTokenVerified":false,
-            "createdAt":"2017-09-27T12:53:43.517Z",
-            "updatedAt":"2017-09-27T12:53:43.517Z",
-            "facilityType":{
-               "_id":"59c18edc8778c62c9490c2ae",
-               "name":"Platform Owner",
-               "updatedAt":"2017-09-19T21:40:44.108Z",
-               "createdAt":"2017-09-19T21:40:44.108Z",
-               "__v":0
-            },
-            "phoneNumber":"08028372745",
-            "name":"Lagos State Health Management Agency",
-            "shortName":"LASHMA",
-            "website":"http://www.lashma.com",
-            "email":"info@lashma.com",
-            "itContact":{
-               "createdAt":"2017-09-27T12:53:43.518Z",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "_id":"59cb9f57aca59f1f54201c08",
-               "position":{
-                  "_id":"59c6585c1c05be1610eeaf77",
-                  "name":"IT - Managers",
-                  "updatedAt":"2017-09-23T12:49:32.376Z",
-                  "createdAt":"2017-09-23T12:49:32.376Z",
-                  "__v":0
-               },
-               "phoneNumber":"08077662254",
-               "email":"tech@lashma.com",
-               "firstName":"Johnson",
-               "lastName":"Mary"
-            },
-            "businessContact":{
-               "createdAt":"2017-09-27T12:53:43.518Z",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "_id":"59cb9f57aca59f1f54201c09",
-               "position":{
-                  "_id":"59c658751c05be1610eeaf79",
-                  "name":"Head Of Service",
-                  "updatedAt":"2017-09-23T12:49:57.742Z",
-                  "createdAt":"2017-09-23T12:49:57.742Z",
-                  "__v":0
-               },
-               "phoneNumber":"08028372745",
-               "email":"sales@lashma.com",
-               "firstName":"Lawal",
-               "lastName":"Ambode"
-            },
-            "bankDetails":{
-               "createdAt":"2017-09-27T12:53:43.518Z",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "_id":"59cb9f57aca59f1f54201c0a",
-               "name":"LASHAMA",
-               "bank":{
-                  "_id":"59c3c80c64b18f07603239d9",
-                  "name":"CENTRAL BANK OF NIGERIA",
-                  "code":"001",
-                  "updatedAt":"2017-09-21T14:09:16.535Z",
-                  "createdAt":"2017-09-21T14:09:16.535Z",
-                  "__v":0
-               },
-               "accountNumber":"993848483"
-            },
-            "address":{
-               "createdAt":"2017-09-27T12:53:43.519Z",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "_id":"59cb9f57aca59f1f54201c0b",
-               "street":"State Secretariat",
-               "state":{
-                  "name":"Lagos State",
-                  "_id":"59c8efae4be1bb0ac48ea379",
-                  "updatedAt":"2017-09-25T11:59:42.304Z",
-                  "createdAt":"2017-09-25T11:59:42.304Z"
-               },
-               "neighbourhood":"Alausa",
-               "lga":{
-                  "name":"Ikeja",
-                  "_id":"59c8efae4be1bb0ac48ea38a",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "createdAt":"2017-09-25T11:59:42.305Z"
-               },
-               "city":{
-                  "name":"Ikeja",
-                  "_id":"59c8efae4be1bb0ac48ea37e",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "createdAt":"2017-09-25T11:59:42.305Z"
-               }
-            },
-            "_id":"59cb9f57aca59f1f54201c07"
-         },
-         "_id":"59dd3e1a363bb04814114a95"
-      },
-      "planTypeId":{
-         "__v":0,
-         "createdAt":"2017-09-27T15:34:38.302Z",
-         "updatedAt":"2017-09-27T15:34:38.303Z",
-         "name":"Formal Insurance",
-         "_id":"59cbc50e9b1cfd1d18ad4a36"
-      },
-      "planId":{
-         "isActive":true,
-         "premiums":[
-            {
-               "createdAt":"2017-10-09T15:34:25.828Z",
-               "updatedAt":"2017-10-09T15:34:25.828Z",
-               "_id":"59db9701fc68650ba016af7d",
-               "durationInDay":30,
-               "unit":{
-                  "id":2,
-                  "name":"Month",
-                  "days":30,
-                  "selected":false
-               },
-               "duration":2,
-               "amount":2200,
-               "category":{
-                  "_id":"59d18387def44c28fc66bd74",
-                  "name":"Individual",
-                  "updatedAt":"2017-10-02T00:08:39.796Z",
-                  "createdAt":"2017-10-02T00:08:39.796Z",
-                  "__v":0
-               }
-            },
-            {
-               "createdAt":"2017-10-09T17:40:18.855Z",
-               "updatedAt":"2017-10-09T17:40:18.855Z",
-               "durationInDay":365,
-               "unit":{
-                  "selected":true,
-                  "days":365,
-                  "name":"Year",
-                  "id":1
-               },
-               "duration":1,
-               "amount":6000,
-               "category":{
-                  "__v":0,
-                  "createdAt":"2017-10-02T00:08:51.018Z",
-                  "updatedAt":"2017-10-02T00:08:51.018Z",
-                  "name":"HouseHold",
-                  "_id":"59d18393def44c28fc66bd75"
-               },
-               "_id":"59dbb482fc68650ba016af7e"
-            },
-            {
-               "createdAt":"2017-10-09T17:46:11.090Z",
-               "updatedAt":"2017-10-09T17:46:11.090Z",
-               "_id":"59dbb5e3fc68650ba016af7f",
-               "category":{
-                  "__v":0,
-                  "createdAt":"2017-10-02T00:08:39.796Z",
-                  "updatedAt":"2017-10-02T00:08:39.796Z",
-                  "name":"Individual",
-                  "_id":"59d18387def44c28fc66bd74"
-               },
-               "amount":600,
-               "duration":1,
-               "unit":{
-                  "selected":false,
-                  "days":7,
-                  "name":"Week",
-                  "id":3
-               },
-               "durationInDay":7
-            }
-         ],
-         "createdAt":"2017-10-09T15:34:25.826Z",
-         "updatedAt":"2017-10-09T15:34:25.826Z",
-         "__v":0,
-         "facilityId":{
-            "facilityType":{
-               "_id":"59c18edc8778c62c9490c2ae",
-               "name":"Platform Owner",
-               "updatedAt":"2017-09-19T21:40:44.108Z",
-               "createdAt":"2017-09-19T21:40:44.108Z",
-               "__v":0
-            },
-            "phoneNumber":"08028372745",
-            "name":"Lagos State Health Management Agency",
-            "shortName":"LASHMA",
-            "email":"info@lashma.com",
-            "_id":"59cb9f57aca59f1f54201c07"
-         },
-         "userType":{
-            "__v":0,
-            "createdAt":"2017-09-19T21:40:44.108Z",
-            "updatedAt":"2017-09-19T21:40:44.108Z",
-            "name":"Platform Owner",
-            "_id":"59c18edc8778c62c9490c2ae"
-         },
-         "platformOwnerId":{
-            "_id":"59cb9f57aca59f1f54201c07",
-            "address":{
-               "city":{
-                  "createdAt":"2017-09-25T11:59:42.305Z",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "_id":"59c8efae4be1bb0ac48ea37e",
-                  "name":"Ikeja"
-               },
-               "lga":{
-                  "createdAt":"2017-09-25T11:59:42.305Z",
-                  "updatedAt":"2017-09-25T11:59:42.305Z",
-                  "_id":"59c8efae4be1bb0ac48ea38a",
-                  "name":"Ikeja"
-               },
-               "neighbourhood":"Alausa",
-               "state":{
-                  "createdAt":"2017-09-25T11:59:42.304Z",
-                  "updatedAt":"2017-09-25T11:59:42.304Z",
-                  "_id":"59c8efae4be1bb0ac48ea379",
-                  "name":"Lagos State"
-               },
-               "street":"State Secretariat",
-               "_id":"59cb9f57aca59f1f54201c0b",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "createdAt":"2017-09-27T12:53:43.519Z"
-            },
-            "bankDetails":{
-               "accountNumber":"993848483",
-               "bank":{
-                  "__v":0,
-                  "createdAt":"2017-09-21T14:09:16.535Z",
-                  "updatedAt":"2017-09-21T14:09:16.535Z",
-                  "code":"001",
-                  "name":"CENTRAL BANK OF NIGERIA",
-                  "_id":"59c3c80c64b18f07603239d9"
-               },
-               "name":"LASHAMA",
-               "_id":"59cb9f57aca59f1f54201c0a",
-               "updatedAt":"2017-09-27T12:53:43.519Z",
-               "createdAt":"2017-09-27T12:53:43.518Z"
-            },
-            "businessContact":{
-               "lastName":"Ambode",
-               "firstName":"Lawal",
-               "email":"sales@lashma.com",
-               "phoneNumber":"08028372745",
-               "position":{
-                  "__v":0,
-                  "createdAt":"2017-09-23T12:49:57.742Z",
-                  "updatedAt":"2017-09-23T12:49:57.742Z",
-                  "name":"Head Of Service",
-                  "_id":"59c658751c05be1610eeaf79"
-               },
-               "_id":"59cb9f57aca59f1f54201c09",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "createdAt":"2017-09-27T12:53:43.518Z"
-            },
-            "itContact":{
-               "lastName":"Mary",
-               "firstName":"Johnson",
-               "email":"tech@lashma.com",
-               "phoneNumber":"08077662254",
-               "position":{
-                  "__v":0,
-                  "createdAt":"2017-09-23T12:49:32.376Z",
-                  "updatedAt":"2017-09-23T12:49:32.376Z",
-                  "name":"IT - Managers",
-                  "_id":"59c6585c1c05be1610eeaf77"
-               },
-               "_id":"59cb9f57aca59f1f54201c08",
-               "updatedAt":"2017-09-27T12:53:43.518Z",
-               "createdAt":"2017-09-27T12:53:43.518Z"
-            },
-            "email":"info@lashma.com",
-            "website":"http://www.lashma.com",
-            "shortName":"LASHMA",
-            "name":"Lagos State Health Management Agency",
-            "phoneNumber":"08028372745",
-            "facilityType":{
-               "__v":0,
-               "createdAt":"2017-09-19T21:40:44.108Z",
-               "updatedAt":"2017-09-19T21:40:44.108Z",
-               "name":"Platform Owner",
-               "_id":"59c18edc8778c62c9490c2ae"
-            },
-            "updatedAt":"2017-09-27T12:53:43.517Z",
-            "createdAt":"2017-09-27T12:53:43.517Z",
-            "isTokenVerified":false,
-            "__v":0
-         },
-         "planType":{
-            "_id":"59cbc50e9b1cfd1d18ad4a36",
-            "name":"Formal Insurance",
-            "updatedAt":"2017-09-27T15:34:38.303Z",
-            "createdAt":"2017-09-27T15:34:38.302Z",
-            "__v":0
-         },
-         "name":"Formal Sector",
-         "_id":"59db9701fc68650ba016af7c"
-      },
-      "premiumCategoryId":{
-         "__v":0,
-         "createdAt":"2017-10-02T00:08:51.018Z",
-         "updatedAt":"2017-10-02T00:08:51.018Z",
-         "name":"HouseHold",
-         "_id":"59d18393def44c28fc66bd75"
-      },
-      "policyId":"103443",
-      "_id":"59debc14eb1e251894470633",
-      "updatedAt":"2017-10-12T00:49:24.414Z",
-      "createdAt":"2017-10-12T00:49:24.414Z",
-      "isActive":false,
-      "dependantBeneficiaries":[
-         {
-            "beneficiary":{
-               "numberOfUnderAge":0,
-               "isActive":true,
-               "createdAt":"2017-10-12T00:49:24.402Z",
-               "updatedAt":"2017-10-12T00:49:24.402Z",
-               "_id":"59debc14eb1e251894470632",
-               "platformOwnerNumber":"LASHMA/1709/0003",
-               "personId":{
-                  "__v":0,
-                  "dateOfBirth":"1993-05-12T23:00:00.000Z",
-                  "email":"ojobola@yahoo.com",
-                  "firstName":"Bola",
-                  "gender":{
-                     "__v":0,
-                     "createdAt":"2017-10-03T08:14:14.265Z",
-                     "updatedAt":"2017-10-03T08:14:14.265Z",
-                     "name":"Female",
-                     "_id":"59d346d692e9a61fec0faf70"
-                  },
-                  "homeAddress":{
-                     "lga":{
-                        "name":"Apapa",
-                        "_id":"59c8efae4be1bb0ac48ea390",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "createdAt":"2017-09-25T11:59:42.305Z"
-                     },
-                     "neighbourhood":"Tin-Can Island",
-                     "state":{
-                        "lgs":[
-                           {
-                              "createdAt":"2017-09-25T11:59:42.306Z",
-                              "updatedAt":"2017-09-25T11:59:42.306Z",
-                              "_id":"59c8efae4be1bb0ac48ea393",
-                              "name":"Ajeromi-Ifelodun"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.306Z",
-                              "updatedAt":"2017-09-25T11:59:42.306Z",
-                              "_id":"59c8efae4be1bb0ac48ea392",
-                              "name":"Alimosho"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea391",
-                              "name":"Amuwo-Odofin"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea390",
-                              "name":"Apapa"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea38f",
-                              "name":"Badagry"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea38e",
-                              "name":"Epe"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea38d",
-                              "name":"Eti Osa"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea38c",
-                              "name":"Ibeju-Lekki"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea38b",
-                              "name":"Ifako-Ijaiye"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea38a",
-                              "name":"Ikeja"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea389",
-                              "name":"Ikorodu"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea388",
-                              "name":"Kosofe"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea387",
-                              "name":"Lagos Island"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea386",
-                              "name":"Lagos Mainland"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea385",
-                              "name":"Mushin"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea384",
-                              "name":"Ojo"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea383",
-                              "name":"Oshodi-Isolo"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea382",
-                              "name":"Shomolu"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea381",
-                              "name":"Surulere"
-                           }
+                ],
+                "isActive": true,
+                "createdAt": "2017-10-11T01:03:51.156Z",
+                "updatedAt": "2017-10-11T01:03:51.156Z",
+                "profileImageObject": {
+                    "createdAt": "2017-10-11T22:50:46.781Z",
+                    "updatedAt": "2017-10-11T22:50:46.781Z",
+                    "thumbnail": "/uploads/thumbnails/59dea046eb1e25189447062d-100.jpg",
+                    "size": "4757",
+                    "path": "public/uploads/image/59dea046eb1e25189447062d.jpg",
+                    "filename": "59dea046eb1e25189447062d.jpg",
+                    "destination": "./public/uploads/image",
+                    "mimetype": "image/png",
+                    "encoding": "7bit",
+                    "originalname": "images.png",
+                    "fieldname": "platform",
+                    "_id": "59dea046eb1e25189447062e"
+                },
+                "__v": 0,
+                "title": {
+                    "_id": "59d3475492e9a61fec0faf75",
+                    "name": "Dr.",
+                    "updatedAt": "2017-10-03T08:16:20.885Z",
+                    "createdAt": "2017-10-03T08:16:20.885Z",
+                    "__v": 0
+                },
+                "stateOfOrigin": {
+                    "name": "Ogun State",
+                    "_id": "59c8efae4be1bb0ac48ea331",
+                    "updatedAt": "2017-09-25T11:59:42.299Z",
+                    "createdAt": "2017-09-25T11:59:42.299Z"
+                },
+                "platformOnwerId": "59cb9f57aca59f1f54201c07",
+                "phoneNumber": "08028983456",
+                "otherNames": "Omolabi",
+                "mothersMaidenName": "Kuforiji",
+                "maritalStatus": {
+                    "_id": "59d35c892fedb608503106f1",
+                    "name": "Married",
+                    "updatedAt": "2017-10-03T09:46:49.474Z",
+                    "createdAt": "2017-10-03T09:46:49.474Z",
+                    "__v": 0
+                },
+                "lgaOfOrigin": {
+                    "name": "Ifo",
+                    "_id": "59c8efae4be1bb0ac48ea343",
+                    "updatedAt": "2017-09-25T11:59:42.300Z",
+                    "createdAt": "2017-09-25T11:59:42.300Z"
+                },
+                "lastName": "Michael",
+                "homeAddress": {
+                    "createdAt": "2017-10-11T01:03:51.159Z",
+                    "updatedAt": "2017-10-11T01:03:51.159Z",
+                    "_id": "59dd6df72a4ff919d8f7adc8",
+                    "street": "16, Alao Ekun Street,",
+                    "state": {
+                        "lgs": [{
+                                "createdAt": "2017-09-25T11:59:42.306Z",
+                                "updatedAt": "2017-09-25T11:59:42.306Z",
+                                "_id": "59c8efae4be1bb0ac48ea393",
+                                "name": "Ajeromi-Ifelodun"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.306Z",
+                                "updatedAt": "2017-09-25T11:59:42.306Z",
+                                "_id": "59c8efae4be1bb0ac48ea392",
+                                "name": "Alimosho"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea391",
+                                "name": "Amuwo-Odofin"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea390",
+                                "name": "Apapa"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea38f",
+                                "name": "Badagry"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea38e",
+                                "name": "Epe"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea38d",
+                                "name": "Eti Osa"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea38c",
+                                "name": "Ibeju-Lekki"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea38b",
+                                "name": "Ifako-Ijaiye"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea38a",
+                                "name": "Ikeja"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea389",
+                                "name": "Ikorodu"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea388",
+                                "name": "Kosofe"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea387",
+                                "name": "Lagos Island"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea386",
+                                "name": "Lagos Mainland"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea385",
+                                "name": "Mushin"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea384",
+                                "name": "Ojo"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea383",
+                                "name": "Oshodi-Isolo"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea382",
+                                "name": "Shomolu"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea381",
+                                "name": "Surulere"
+                            }
                         ],
-                        "cities":[
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea380",
-                              "name":"Badagry"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea37f",
-                              "name":"Epe"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea37e",
-                              "name":"Ikeja"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea37d",
-                              "name":"Ikorodu"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.305Z",
-                              "updatedAt":"2017-09-25T11:59:42.305Z",
-                              "_id":"59c8efae4be1bb0ac48ea37c",
-                              "name":"Lagos"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.304Z",
-                              "updatedAt":"2017-09-25T11:59:42.304Z",
-                              "_id":"59c8efae4be1bb0ac48ea37b",
-                              "name":"Mushin"
-                           },
-                           {
-                              "createdAt":"2017-09-25T11:59:42.304Z",
-                              "updatedAt":"2017-09-25T11:59:42.304Z",
-                              "_id":"59c8efae4be1bb0ac48ea37a",
-                              "name":"Shomolu"
-                           }
+                        "cities": [{
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea380",
+                                "name": "Badagry"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea37f",
+                                "name": "Epe"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea37e",
+                                "name": "Ikeja"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea37d",
+                                "name": "Ikorodu"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.305Z",
+                                "updatedAt": "2017-09-25T11:59:42.305Z",
+                                "_id": "59c8efae4be1bb0ac48ea37c",
+                                "name": "Lagos"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.304Z",
+                                "updatedAt": "2017-09-25T11:59:42.304Z",
+                                "_id": "59c8efae4be1bb0ac48ea37b",
+                                "name": "Mushin"
+                            },
+                            {
+                                "createdAt": "2017-09-25T11:59:42.304Z",
+                                "updatedAt": "2017-09-25T11:59:42.304Z",
+                                "_id": "59c8efae4be1bb0ac48ea37a",
+                                "name": "Shomolu"
+                            }
                         ],
-                        "createdAt":"2017-09-25T11:59:42.304Z",
-                        "updatedAt":"2017-09-25T11:59:42.304Z",
-                        "_id":"59c8efae4be1bb0ac48ea379",
-                        "name":"Lagos State"
-                     },
-                     "street":"16, Alao Ekun Street,",
-                     "_id":"59dd6df72a4ff919d8f7adc8",
-                     "updatedAt":"2017-10-11T01:03:51.159Z",
-                     "createdAt":"2017-10-11T01:03:51.159Z"
-                  },
-                  "lastName":"Ojo",
-                  "otherNames":"Remi",
-                  "phoneNumber":"08039382322",
-                  "platformOnwerId":"59cb9f57aca59f1f54201c07",
-                  "title":{
-                     "__v":0,
-                     "createdAt":"2017-10-03T08:15:58.982Z",
-                     "updatedAt":"2017-10-03T08:15:58.982Z",
-                     "name":"Mrs.",
-                     "_id":"59d3473e92e9a61fec0faf73"
-                  },
-                  "_id":"59debc14eb1e251894470631",
-                  "updatedAt":"2017-10-12T00:49:24.379Z",
-                  "createdAt":"2017-10-12T00:49:24.378Z",
-                  "isActive":true,
-                  "employees":[
-
-                  ],
-                  "nextOfKin":[
-
-                  ]
-               },
-               "platformOwnerId":{
-                  "__v":0,
-                  "isTokenVerified":false,
-                  "createdAt":"2017-09-27T12:53:43.517Z",
-                  "updatedAt":"2017-09-27T12:53:43.517Z",
-                  "facilityType":{
-                     "_id":"59c18edc8778c62c9490c2ae",
-                     "name":"Platform Owner",
-                     "updatedAt":"2017-09-19T21:40:44.108Z",
-                     "createdAt":"2017-09-19T21:40:44.108Z",
-                     "__v":0
-                  },
-                  "phoneNumber":"08028372745",
-                  "name":"Lagos State Health Management Agency",
-                  "shortName":"LASHMA",
-                  "website":"http://www.lashma.com",
-                  "email":"info@lashma.com",
-                  "itContact":{
-                     "createdAt":"2017-09-27T12:53:43.518Z",
-                     "updatedAt":"2017-09-27T12:53:43.518Z",
-                     "_id":"59cb9f57aca59f1f54201c08",
-                     "position":{
-                        "_id":"59c6585c1c05be1610eeaf77",
-                        "name":"IT - Managers",
-                        "updatedAt":"2017-09-23T12:49:32.376Z",
-                        "createdAt":"2017-09-23T12:49:32.376Z",
-                        "__v":0
-                     },
-                     "phoneNumber":"08077662254",
-                     "email":"tech@lashma.com",
-                     "firstName":"Johnson",
-                     "lastName":"Mary"
-                  },
-                  "businessContact":{
-                     "createdAt":"2017-09-27T12:53:43.518Z",
-                     "updatedAt":"2017-09-27T12:53:43.518Z",
-                     "_id":"59cb9f57aca59f1f54201c09",
-                     "position":{
-                        "_id":"59c658751c05be1610eeaf79",
-                        "name":"Head Of Service",
-                        "updatedAt":"2017-09-23T12:49:57.742Z",
-                        "createdAt":"2017-09-23T12:49:57.742Z",
-                        "__v":0
-                     },
-                     "phoneNumber":"08028372745",
-                     "email":"sales@lashma.com",
-                     "firstName":"Lawal",
-                     "lastName":"Ambode"
-                  },
-                  "bankDetails":{
-                     "createdAt":"2017-09-27T12:53:43.518Z",
-                     "updatedAt":"2017-09-27T12:53:43.519Z",
-                     "_id":"59cb9f57aca59f1f54201c0a",
-                     "name":"LASHAMA",
-                     "bank":{
-                        "_id":"59c3c80c64b18f07603239d9",
-                        "name":"CENTRAL BANK OF NIGERIA",
-                        "code":"001",
-                        "updatedAt":"2017-09-21T14:09:16.535Z",
-                        "createdAt":"2017-09-21T14:09:16.535Z",
-                        "__v":0
-                     },
-                     "accountNumber":"993848483"
-                  },
-                  "address":{
-                     "createdAt":"2017-09-27T12:53:43.519Z",
-                     "updatedAt":"2017-09-27T12:53:43.519Z",
-                     "_id":"59cb9f57aca59f1f54201c0b",
-                     "street":"State Secretariat",
-                     "state":{
-                        "name":"Lagos State",
-                        "_id":"59c8efae4be1bb0ac48ea379",
-                        "updatedAt":"2017-09-25T11:59:42.304Z",
-                        "createdAt":"2017-09-25T11:59:42.304Z"
-                     },
-                     "neighbourhood":"Alausa",
-                     "lga":{
-                        "name":"Ikeja",
-                        "_id":"59c8efae4be1bb0ac48ea38a",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "createdAt":"2017-09-25T11:59:42.305Z"
-                     },
-                     "city":{
-                        "name":"Ikeja",
-                        "_id":"59c8efae4be1bb0ac48ea37e",
-                        "updatedAt":"2017-09-25T11:59:42.305Z",
-                        "createdAt":"2017-09-25T11:59:42.305Z"
-                     }
-                  },
-                  "_id":"59cb9f57aca59f1f54201c07"
-               },
-               "__v":0
+                        "createdAt": "2017-09-25T11:59:42.304Z",
+                        "updatedAt": "2017-09-25T11:59:42.304Z",
+                        "_id": "59c8efae4be1bb0ac48ea379",
+                        "name": "Lagos State"
+                    },
+                    "neighbourhood": "Tin-Can Island",
+                    "lga": {
+                        "name": "Apapa",
+                        "_id": "59c8efae4be1bb0ac48ea390",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "createdAt": "2017-09-25T11:59:42.305Z"
+                    }
+                },
+                "gender": {
+                    "__v": 0,
+                    "createdAt": "2017-10-03T08:14:23.859Z",
+                    "updatedAt": "2017-10-03T08:14:23.859Z",
+                    "name": "Male",
+                    "_id": "59d346df92e9a61fec0faf71"
+                },
+                "firstName": "James",
+                "email": "james_labi@mail.com",
+                "dateOfBirth": "1967-04-04T23:00:00.000Z",
+                "_id": "59dd6df72a4ff919d8f7adc7"
             },
-            "relationshipId":{
-               "__v":0,
-               "createdAt":"2017-10-10T15:46:48.630Z",
-               "updatedAt":"2017-10-10T15:46:48.630Z",
-               "name":"Child",
-               "_id":"59dceb68cff59231c032df32"
+            "_include": [
+                "person"
+            ],
+            "__v": 0,
+            "numberOfUnderAge": 3,
+            "isActive": true,
+            "createdAt": "2017-10-11T01:03:51.185Z",
+            "updatedAt": "2017-10-11T01:03:51.185Z",
+            "platformOwnerNumber": "RZGUM31P",
+            "personId": "59dd6df72a4ff919d8f7adc7",
+            "platformOwnerId": {
+                "_id": "59cb9f57aca59f1f54201c07",
+                "address": {
+                    "city": {
+                        "createdAt": "2017-09-25T11:59:42.305Z",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "_id": "59c8efae4be1bb0ac48ea37e",
+                        "name": "Ikeja"
+                    },
+                    "lga": {
+                        "createdAt": "2017-09-25T11:59:42.305Z",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "_id": "59c8efae4be1bb0ac48ea38a",
+                        "name": "Ikeja"
+                    },
+                    "neighbourhood": "Alausa",
+                    "state": {
+                        "createdAt": "2017-09-25T11:59:42.304Z",
+                        "updatedAt": "2017-09-25T11:59:42.304Z",
+                        "_id": "59c8efae4be1bb0ac48ea379",
+                        "name": "Lagos State"
+                    },
+                    "street": "State Secretariat",
+                    "_id": "59cb9f57aca59f1f54201c0b",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "createdAt": "2017-09-27T12:53:43.519Z"
+                },
+                "bankDetails": {
+                    "accountNumber": "993848483",
+                    "bank": {
+                        "__v": 0,
+                        "createdAt": "2017-09-21T14:09:16.535Z",
+                        "updatedAt": "2017-09-21T14:09:16.535Z",
+                        "code": "001",
+                        "name": "CENTRAL BANK OF NIGERIA",
+                        "_id": "59c3c80c64b18f07603239d9"
+                    },
+                    "name": "LASHAMA",
+                    "_id": "59cb9f57aca59f1f54201c0a",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "createdAt": "2017-09-27T12:53:43.518Z"
+                },
+                "businessContact": {
+                    "lastName": "Ambode",
+                    "firstName": "Lawal",
+                    "email": "sales@lashma.com",
+                    "phoneNumber": "08028372745",
+                    "position": {
+                        "__v": 0,
+                        "createdAt": "2017-09-23T12:49:57.742Z",
+                        "updatedAt": "2017-09-23T12:49:57.742Z",
+                        "name": "Head Of Service",
+                        "_id": "59c658751c05be1610eeaf79"
+                    },
+                    "_id": "59cb9f57aca59f1f54201c09",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "createdAt": "2017-09-27T12:53:43.518Z"
+                },
+                "itContact": {
+                    "lastName": "Mary",
+                    "firstName": "Johnson",
+                    "email": "tech@lashma.com",
+                    "phoneNumber": "08077662254",
+                    "position": {
+                        "__v": 0,
+                        "createdAt": "2017-09-23T12:49:32.376Z",
+                        "updatedAt": "2017-09-23T12:49:32.376Z",
+                        "name": "IT - Managers",
+                        "_id": "59c6585c1c05be1610eeaf77"
+                    },
+                    "_id": "59cb9f57aca59f1f54201c08",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "createdAt": "2017-09-27T12:53:43.518Z"
+                },
+                "email": "info@lashma.com",
+                "website": "http://www.lashma.com",
+                "shortName": "SHIMA",
+                "name": "Lagos State Health Management Agency",
+                "phoneNumber": "08028372745",
+                "facilityType": {
+                    "__v": 0,
+                    "createdAt": "2017-09-19T21:40:44.108Z",
+                    "updatedAt": "2017-09-19T21:40:44.108Z",
+                    "name": "Platform Owner",
+                    "_id": "59c18edc8778c62c9490c2ae"
+                },
+                "updatedAt": "2017-09-27T12:53:43.517Z",
+                "createdAt": "2017-09-27T12:53:43.517Z",
+                "isTokenVerified": false,
+                "__v": 0
             },
-            "policyId":"103443-0",
-            "_id":"59debc14eb1e251894470634",
-            "updatedAt":"2017-10-12T00:49:24.415Z",
-            "createdAt":"2017-10-12T00:49:24.415Z",
-            "isActive":false
-         }
-      ]
-   }
+            "_id": "59dd6df72a4ff919d8f7adc9"
+        },
+        "hiaId": {
+            "isTokenVerified": false,
+            "createdAt": "2017-10-08T19:36:42.968Z",
+            "updatedAt": "2017-10-08T19:36:42.968Z",
+            "address": {
+                "createdAt": "2017-10-08T19:36:42.973Z",
+                "updatedAt": "2017-10-08T19:36:42.973Z",
+                "city": {
+                    "name": "Epe",
+                    "_id": "59c8efae4be1bb0ac48ea37f",
+                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                    "createdAt": "2017-09-25T11:59:42.305Z"
+                },
+                "lga": {
+                    "name": "Apapa",
+                    "_id": "59c8efae4be1bb0ac48ea390",
+                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                    "createdAt": "2017-09-25T11:59:42.305Z"
+                },
+                "neighbourhood": "Airport",
+                "state": {
+                    "name": "Lagos State",
+                    "_id": "59c8efae4be1bb0ac48ea379",
+                    "updatedAt": "2017-09-25T11:59:42.304Z",
+                    "createdAt": "2017-09-25T11:59:42.304Z"
+                },
+                "street": "Plot 101, Ajao Estate",
+                "_id": "59da7e4a3a7f47190cafe6f4"
+            },
+            "bankDetails": {
+                "createdAt": "2017-10-08T19:36:42.973Z",
+                "updatedAt": "2017-10-08T19:36:42.973Z",
+                "accountNumber": "0033984432",
+                "bank": {
+                    "_id": "59c3c80c64b18f07603239e3",
+                    "name": "ENTERPRISE BANK",
+                    "code": "084",
+                    "updatedAt": "2017-09-21T14:09:16.536Z",
+                    "createdAt": "2017-09-21T14:09:16.536Z",
+                    "__v": 0
+                },
+                "name": "MULTISHIELD",
+                "_id": "59da7e4a3a7f47190cafe6f3"
+            },
+            "businessContact": {
+                "createdAt": "2017-10-08T19:36:42.972Z",
+                "updatedAt": "2017-10-08T19:36:42.972Z",
+                "lastName": "Ikechukwu",
+                "firstName": "Banabas",
+                "email": "business@multishield.com",
+                "phoneNumber": "09021983476",
+                "position": {
+                    "_id": "59c658751c05be1610eeaf79",
+                    "name": "Head Of Service",
+                    "updatedAt": "2017-09-23T12:49:57.742Z",
+                    "createdAt": "2017-09-23T12:49:57.742Z",
+                    "__v": 0
+                },
+                "_id": "59da7e4a3a7f47190cafe6f2"
+            },
+            "itContact": {
+                "createdAt": "2017-10-08T19:36:42.972Z",
+                "updatedAt": "2017-10-08T19:36:42.972Z",
+                "lastName": "Owolabi",
+                "firstName": "Bayo",
+                "email": "it@multishield.com",
+                "phoneNumber": "07023829900",
+                "position": {
+                    "_id": "59c6585c1c05be1610eeaf77",
+                    "name": "IT - Managers",
+                    "updatedAt": "2017-09-23T12:49:32.376Z",
+                    "createdAt": "2017-09-23T12:49:32.376Z",
+                    "__v": 0
+                },
+                "_id": "59da7e4a3a7f47190cafe6f1"
+            },
+            "hia": {
+                "createdAt": "2017-10-08T19:36:42.972Z",
+                "updatedAt": "2017-10-08T19:36:42.972Z",
+                "nhisNumber": "99-AUD88",
+                "cin": "CIN-990033",
+                "registrationDate": "2005-03-15T23:00:00.000Z",
+                "_id": "59da7e4a3a7f47190cafe6f0",
+                "type": {
+                    "__v": 0,
+                    "createdAt": "2017-10-08T20:53:08.334Z",
+                    "updatedAt": "2017-10-08T20:53:08.334Z",
+                    "name": "Health Insurance Agency",
+                    "_id": "59da9034dd72e929643b04a2"
+                },
+                "grade": {
+                    "__v": 0,
+                    "createdAt": "2017-10-08T20:50:14.170Z",
+                    "updatedAt": "2017-10-08T20:50:14.170Z",
+                    "name": "A",
+                    "_id": "59da8f86dd72e929643b049e"
+                }
+            },
+            "email": "info@multishield.com",
+            "name": "Multi Shield Nigeria Limited",
+            "phoneNumber": "08099238746",
+            "facilityType": {
+                "__v": 0,
+                "createdAt": "2017-09-19T21:41:55.994Z",
+                "updatedAt": "2017-09-19T21:41:55.994Z",
+                "name": "Health Insurance Agent",
+                "_id": "59c18f238778c62c9490c2af"
+            },
+            "platformOwnerId": {
+                "__v": 0,
+                "isTokenVerified": false,
+                "createdAt": "2017-09-27T12:53:43.517Z",
+                "updatedAt": "2017-09-27T12:53:43.517Z",
+                "facilityType": {
+                    "_id": "59c18edc8778c62c9490c2ae",
+                    "name": "Platform Owner",
+                    "updatedAt": "2017-09-19T21:40:44.108Z",
+                    "createdAt": "2017-09-19T21:40:44.108Z",
+                    "__v": 0
+                },
+                "phoneNumber": "08028372745",
+                "name": "Lagos State Health Management Agency",
+                "shortName": "SHIMA",
+                "website": "http://www.lashma.com",
+                "email": "info@lashma.com",
+                "itContact": {
+                    "createdAt": "2017-09-27T12:53:43.518Z",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "_id": "59cb9f57aca59f1f54201c08",
+                    "position": {
+                        "_id": "59c6585c1c05be1610eeaf77",
+                        "name": "IT - Managers",
+                        "updatedAt": "2017-09-23T12:49:32.376Z",
+                        "createdAt": "2017-09-23T12:49:32.376Z",
+                        "__v": 0
+                    },
+                    "phoneNumber": "08077662254",
+                    "email": "tech@lashma.com",
+                    "firstName": "Johnson",
+                    "lastName": "Mary"
+                },
+                "businessContact": {
+                    "createdAt": "2017-09-27T12:53:43.518Z",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "_id": "59cb9f57aca59f1f54201c09",
+                    "position": {
+                        "_id": "59c658751c05be1610eeaf79",
+                        "name": "Head Of Service",
+                        "updatedAt": "2017-09-23T12:49:57.742Z",
+                        "createdAt": "2017-09-23T12:49:57.742Z",
+                        "__v": 0
+                    },
+                    "phoneNumber": "08028372745",
+                    "email": "sales@lashma.com",
+                    "firstName": "Lawal",
+                    "lastName": "Ambode"
+                },
+                "bankDetails": {
+                    "createdAt": "2017-09-27T12:53:43.518Z",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "_id": "59cb9f57aca59f1f54201c0a",
+                    "name": "LASHAMA",
+                    "bank": {
+                        "_id": "59c3c80c64b18f07603239d9",
+                        "name": "CENTRAL BANK OF NIGERIA",
+                        "code": "001",
+                        "updatedAt": "2017-09-21T14:09:16.535Z",
+                        "createdAt": "2017-09-21T14:09:16.535Z",
+                        "__v": 0
+                    },
+                    "accountNumber": "993848483"
+                },
+                "address": {
+                    "createdAt": "2017-09-27T12:53:43.519Z",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "_id": "59cb9f57aca59f1f54201c0b",
+                    "street": "State Secretariat",
+                    "state": {
+                        "name": "Lagos State",
+                        "_id": "59c8efae4be1bb0ac48ea379",
+                        "updatedAt": "2017-09-25T11:59:42.304Z",
+                        "createdAt": "2017-09-25T11:59:42.304Z"
+                    },
+                    "neighbourhood": "Alausa",
+                    "lga": {
+                        "name": "Ikeja",
+                        "_id": "59c8efae4be1bb0ac48ea38a",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "createdAt": "2017-09-25T11:59:42.305Z"
+                    },
+                    "city": {
+                        "name": "Ikeja",
+                        "_id": "59c8efae4be1bb0ac48ea37e",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "createdAt": "2017-09-25T11:59:42.305Z"
+                    }
+                },
+                "_id": "59cb9f57aca59f1f54201c07"
+            },
+            "logo": {
+                "createdAt": "2017-10-08T19:36:42.970Z",
+                "updatedAt": "2017-10-08T19:36:42.970Z",
+                "fieldname": "platform",
+                "originalname": "20031568_248125772344219_7746723842221665934_n.jpg",
+                "encoding": "7bit",
+                "mimetype": "image/jpeg",
+                "destination": "./public/uploads/image",
+                "filename": "59da7e4a3a7f47190cafe6ed.jpg",
+                "path": "public/uploads/image/59da7e4a3a7f47190cafe6ed.jpg",
+                "size": "100044",
+                "thumbnail": "/uploads/thumbnails/59da7e4a3a7f47190cafe6ed-100.jpg",
+                "_id": "59da7e4a3a7f47190cafe6ef"
+            },
+            "__v": 0,
+            "_id": "59da7e4a3a7f47190cafe6ee"
+        },
+        "providerId": {
+            "isTokenVerified": false,
+            "isConfirmed": false,
+            "createdAt": "2017-10-10T22:10:41.279Z",
+            "updatedAt": "2017-10-10T22:10:41.279Z",
+            "address": {
+                "createdAt": "2017-10-10T22:10:41.279Z",
+                "updatedAt": "2017-10-10T22:10:41.279Z",
+                "_id": "59dd4561c2f9bd5c90a4d6cd",
+                "city": {
+                    "name": "Ikeja",
+                    "_id": "59c8efae4be1bb0ac48ea37e",
+                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                    "createdAt": "2017-09-25T11:59:42.305Z"
+                },
+                "lga": {
+                    "createdAt": "2017-09-25T11:59:42.305Z",
+                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                    "_id": "59c8efae4be1bb0ac48ea38f",
+                    "name": "Badagry"
+                },
+                "neighbourhood": "Secretariat",
+                "state": {
+                    "createdAt": "2017-09-25T11:59:42.304Z",
+                    "updatedAt": "2017-09-25T11:59:42.304Z",
+                    "_id": "59c8efae4be1bb0ac48ea379",
+                    "name": "Lagos State"
+                },
+                "street": "Plot 90, Ajao Estate"
+            },
+            "bankDetails": {
+                "createdAt": "2017-10-10T22:10:41.281Z",
+                "updatedAt": "2017-10-10T22:10:41.281Z",
+                "_id": "59dd4561c2f9bd5c90a4d6ce",
+                "accountNumber": "0039339932",
+                "bank": {
+                    "_id": "59c3c80c64b18f07603239d9",
+                    "name": "CENTRAL BANK OF NIGERIA",
+                    "code": "001",
+                    "updatedAt": "2017-09-21T14:09:16.535Z",
+                    "createdAt": "2017-09-21T14:09:16.535Z",
+                    "__v": 0
+                },
+                "name": "University College Hospital"
+            },
+            "businessContact": {
+                "createdAt": "2017-10-10T22:10:41.282Z",
+                "updatedAt": "2017-10-10T22:10:41.282Z",
+                "_id": "59dd4561c2f9bd5c90a4d6cf",
+                "lastName": "Segun",
+                "firstName": "Ajayi",
+                "email": "sales@uch.com",
+                "phoneNumber": "07029382922",
+                "position": {
+                    "_id": "59c658751c05be1610eeaf79",
+                    "name": "Head Of Service",
+                    "updatedAt": "2017-09-23T12:49:57.742Z",
+                    "createdAt": "2017-09-23T12:49:57.742Z",
+                    "__v": 0
+                }
+            },
+            "itContact": {
+                "createdAt": "2017-10-10T22:10:41.283Z",
+                "updatedAt": "2017-10-10T22:10:41.283Z",
+                "_id": "59dd4561c2f9bd5c90a4d6d0",
+                "lastName": "Olumide",
+                "firstName": "Bakare",
+                "email": "hod@uch.com",
+                "phoneNumber": "09022998483",
+                "position": {
+                    "_id": "59c6585c1c05be1610eeaf77",
+                    "name": "IT - Managers",
+                    "updatedAt": "2017-09-23T12:49:32.376Z",
+                    "createdAt": "2017-09-23T12:49:32.376Z",
+                    "__v": 0
+                }
+            },
+            "provider": {
+                "facilityClass": [
+                    "tertiary"
+                ],
+                "createdAt": "2017-10-10T22:10:41.283Z",
+                "updatedAt": "2017-10-10T22:10:41.283Z",
+                "_id": "59dd4561c2f9bd5c90a4d6d1",
+                "facilityOwnership": {
+                    "_id": "59ca6a87960c9b38f023f3cc",
+                    "name": "Federal Government",
+                    "updatedAt": "2017-09-26T14:56:07.870Z",
+                    "createdAt": "2017-09-26T14:56:07.870Z",
+                    "__v": 0
+                },
+                "facilityType": {
+                    "__v": 0,
+                    "createdAt": "2017-09-26T14:54:32.457Z",
+                    "updatedAt": "2017-09-26T14:54:32.457Z",
+                    "name": "Teaching Hospital",
+                    "_id": "59ca6a28960c9b38f023f3ca"
+                },
+                "facilityGrade": {
+                    "_id": "59dd3847363bb04814114a7c",
+                    "name": "A",
+                    "updatedAt": "2017-10-10T21:14:47.963Z",
+                    "createdAt": "2017-10-10T21:14:47.963Z",
+                    "__v": 0
+                },
+                "hefeemaNumber": "9494-IPO",
+                "hefeemaStatus": {
+                    "_id": "59dd37ef19db173fec15f282",
+                    "name": "Non-Accredited",
+                    "updatedAt": "2017-10-10T21:13:19.412Z",
+                    "createdAt": "2017-10-10T21:13:19.412Z",
+                    "__v": 0
+                },
+                "lasrraId": "94958",
+                "comment": "Just another comment"
+            },
+            "email": "info@uch.com",
+            "name": "University College Hospital",
+            "phoneNumber": "0903997389",
+            "facilityType": {
+                "__v": 0,
+                "createdAt": "2017-09-19T21:42:04.337Z",
+                "updatedAt": "2017-09-19T21:42:04.337Z",
+                "name": "Provider",
+                "_id": "59c18f2c8778c62c9490c2b0"
+            },
+            "platformOwnerId": {
+                "__v": 0,
+                "isTokenVerified": false,
+                "createdAt": "2017-09-27T12:53:43.517Z",
+                "updatedAt": "2017-09-27T12:53:43.517Z",
+                "facilityType": {
+                    "_id": "59c18edc8778c62c9490c2ae",
+                    "name": "Platform Owner",
+                    "updatedAt": "2017-09-19T21:40:44.108Z",
+                    "createdAt": "2017-09-19T21:40:44.108Z",
+                    "__v": 0
+                },
+                "phoneNumber": "08028372745",
+                "name": "Lagos State Health Management Agency",
+                "shortName": "SHIMA",
+                "website": "http://www.lashma.com",
+                "email": "info@lashma.com",
+                "itContact": {
+                    "createdAt": "2017-09-27T12:53:43.518Z",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "_id": "59cb9f57aca59f1f54201c08",
+                    "position": {
+                        "_id": "59c6585c1c05be1610eeaf77",
+                        "name": "IT - Managers",
+                        "updatedAt": "2017-09-23T12:49:32.376Z",
+                        "createdAt": "2017-09-23T12:49:32.376Z",
+                        "__v": 0
+                    },
+                    "phoneNumber": "08077662254",
+                    "email": "tech@lashma.com",
+                    "firstName": "Johnson",
+                    "lastName": "Mary"
+                },
+                "businessContact": {
+                    "createdAt": "2017-09-27T12:53:43.518Z",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "_id": "59cb9f57aca59f1f54201c09",
+                    "position": {
+                        "_id": "59c658751c05be1610eeaf79",
+                        "name": "Head Of Service",
+                        "updatedAt": "2017-09-23T12:49:57.742Z",
+                        "createdAt": "2017-09-23T12:49:57.742Z",
+                        "__v": 0
+                    },
+                    "phoneNumber": "08028372745",
+                    "email": "sales@lashma.com",
+                    "firstName": "Lawal",
+                    "lastName": "Ambode"
+                },
+                "bankDetails": {
+                    "createdAt": "2017-09-27T12:53:43.518Z",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "_id": "59cb9f57aca59f1f54201c0a",
+                    "name": "LASHAMA",
+                    "bank": {
+                        "_id": "59c3c80c64b18f07603239d9",
+                        "name": "CENTRAL BANK OF NIGERIA",
+                        "code": "001",
+                        "updatedAt": "2017-09-21T14:09:16.535Z",
+                        "createdAt": "2017-09-21T14:09:16.535Z",
+                        "__v": 0
+                    },
+                    "accountNumber": "993848483"
+                },
+                "address": {
+                    "createdAt": "2017-09-27T12:53:43.519Z",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "_id": "59cb9f57aca59f1f54201c0b",
+                    "street": "State Secretariat",
+                    "state": {
+                        "name": "Lagos State",
+                        "_id": "59c8efae4be1bb0ac48ea379",
+                        "updatedAt": "2017-09-25T11:59:42.304Z",
+                        "createdAt": "2017-09-25T11:59:42.304Z"
+                    },
+                    "neighbourhood": "Alausa",
+                    "lga": {
+                        "name": "Ikeja",
+                        "_id": "59c8efae4be1bb0ac48ea38a",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "createdAt": "2017-09-25T11:59:42.305Z"
+                    },
+                    "city": {
+                        "name": "Ikeja",
+                        "_id": "59c8efae4be1bb0ac48ea37e",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "createdAt": "2017-09-25T11:59:42.305Z"
+                    }
+                },
+                "_id": "59cb9f57aca59f1f54201c07"
+            },
+            "_id": "59dd3e1a363bb04814114a95"
+        },
+        "planTypeId": {
+            "__v": 0,
+            "createdAt": "2017-09-27T15:34:38.302Z",
+            "updatedAt": "2017-09-27T15:34:38.303Z",
+            "name": "Formal Insurance",
+            "_id": "59cbc50e9b1cfd1d18ad4a36"
+        },
+        "planId": {
+            "isActive": true,
+            "premiums": [{
+                    "createdAt": "2017-10-09T15:34:25.828Z",
+                    "updatedAt": "2017-10-09T15:34:25.828Z",
+                    "_id": "59db9701fc68650ba016af7d",
+                    "durationInDay": 30,
+                    "unit": {
+                        "id": 2,
+                        "name": "Month",
+                        "days": 30,
+                        "selected": false
+                    },
+                    "duration": 2,
+                    "amount": 2200,
+                    "category": {
+                        "_id": "59d18387def44c28fc66bd74",
+                        "name": "Individual",
+                        "updatedAt": "2017-10-02T00:08:39.796Z",
+                        "createdAt": "2017-10-02T00:08:39.796Z",
+                        "__v": 0
+                    }
+                },
+                {
+                    "createdAt": "2017-10-09T17:40:18.855Z",
+                    "updatedAt": "2017-10-09T17:40:18.855Z",
+                    "durationInDay": 365,
+                    "unit": {
+                        "selected": true,
+                        "days": 365,
+                        "name": "Year",
+                        "id": 1
+                    },
+                    "duration": 1,
+                    "amount": 6000,
+                    "category": {
+                        "__v": 0,
+                        "createdAt": "2017-10-02T00:08:51.018Z",
+                        "updatedAt": "2017-10-02T00:08:51.018Z",
+                        "name": "HouseHold",
+                        "_id": "59d18393def44c28fc66bd75"
+                    },
+                    "_id": "59dbb482fc68650ba016af7e"
+                },
+                {
+                    "createdAt": "2017-10-09T17:46:11.090Z",
+                    "updatedAt": "2017-10-09T17:46:11.090Z",
+                    "_id": "59dbb5e3fc68650ba016af7f",
+                    "category": {
+                        "__v": 0,
+                        "createdAt": "2017-10-02T00:08:39.796Z",
+                        "updatedAt": "2017-10-02T00:08:39.796Z",
+                        "name": "Individual",
+                        "_id": "59d18387def44c28fc66bd74"
+                    },
+                    "amount": 600,
+                    "duration": 1,
+                    "unit": {
+                        "selected": false,
+                        "days": 7,
+                        "name": "Week",
+                        "id": 3
+                    },
+                    "durationInDay": 7
+                }
+            ],
+            "createdAt": "2017-10-09T15:34:25.826Z",
+            "updatedAt": "2017-10-09T15:34:25.826Z",
+            "__v": 0,
+            "facilityId": {
+                "facilityType": {
+                    "_id": "59c18edc8778c62c9490c2ae",
+                    "name": "Platform Owner",
+                    "updatedAt": "2017-09-19T21:40:44.108Z",
+                    "createdAt": "2017-09-19T21:40:44.108Z",
+                    "__v": 0
+                },
+                "phoneNumber": "08028372745",
+                "name": "Lagos State Health Management Agency",
+                "shortName": "SHIMA",
+                "email": "info@lashma.com",
+                "_id": "59cb9f57aca59f1f54201c07"
+            },
+            "userType": {
+                "__v": 0,
+                "createdAt": "2017-09-19T21:40:44.108Z",
+                "updatedAt": "2017-09-19T21:40:44.108Z",
+                "name": "Platform Owner",
+                "_id": "59c18edc8778c62c9490c2ae"
+            },
+            "platformOwnerId": {
+                "_id": "59cb9f57aca59f1f54201c07",
+                "address": {
+                    "city": {
+                        "createdAt": "2017-09-25T11:59:42.305Z",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "_id": "59c8efae4be1bb0ac48ea37e",
+                        "name": "Ikeja"
+                    },
+                    "lga": {
+                        "createdAt": "2017-09-25T11:59:42.305Z",
+                        "updatedAt": "2017-09-25T11:59:42.305Z",
+                        "_id": "59c8efae4be1bb0ac48ea38a",
+                        "name": "Ikeja"
+                    },
+                    "neighbourhood": "Alausa",
+                    "state": {
+                        "createdAt": "2017-09-25T11:59:42.304Z",
+                        "updatedAt": "2017-09-25T11:59:42.304Z",
+                        "_id": "59c8efae4be1bb0ac48ea379",
+                        "name": "Lagos State"
+                    },
+                    "street": "State Secretariat",
+                    "_id": "59cb9f57aca59f1f54201c0b",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "createdAt": "2017-09-27T12:53:43.519Z"
+                },
+                "bankDetails": {
+                    "accountNumber": "993848483",
+                    "bank": {
+                        "__v": 0,
+                        "createdAt": "2017-09-21T14:09:16.535Z",
+                        "updatedAt": "2017-09-21T14:09:16.535Z",
+                        "code": "001",
+                        "name": "CENTRAL BANK OF NIGERIA",
+                        "_id": "59c3c80c64b18f07603239d9"
+                    },
+                    "name": "LASHAMA",
+                    "_id": "59cb9f57aca59f1f54201c0a",
+                    "updatedAt": "2017-09-27T12:53:43.519Z",
+                    "createdAt": "2017-09-27T12:53:43.518Z"
+                },
+                "businessContact": {
+                    "lastName": "Ambode",
+                    "firstName": "Lawal",
+                    "email": "sales@lashma.com",
+                    "phoneNumber": "08028372745",
+                    "position": {
+                        "__v": 0,
+                        "createdAt": "2017-09-23T12:49:57.742Z",
+                        "updatedAt": "2017-09-23T12:49:57.742Z",
+                        "name": "Head Of Service",
+                        "_id": "59c658751c05be1610eeaf79"
+                    },
+                    "_id": "59cb9f57aca59f1f54201c09",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "createdAt": "2017-09-27T12:53:43.518Z"
+                },
+                "itContact": {
+                    "lastName": "Mary",
+                    "firstName": "Johnson",
+                    "email": "tech@lashma.com",
+                    "phoneNumber": "08077662254",
+                    "position": {
+                        "__v": 0,
+                        "createdAt": "2017-09-23T12:49:32.376Z",
+                        "updatedAt": "2017-09-23T12:49:32.376Z",
+                        "name": "IT - Managers",
+                        "_id": "59c6585c1c05be1610eeaf77"
+                    },
+                    "_id": "59cb9f57aca59f1f54201c08",
+                    "updatedAt": "2017-09-27T12:53:43.518Z",
+                    "createdAt": "2017-09-27T12:53:43.518Z"
+                },
+                "email": "info@lashma.com",
+                "website": "http://www.lashma.com",
+                "shortName": "SHIMA",
+                "name": "Lagos State Health Management Agency",
+                "phoneNumber": "08028372745",
+                "facilityType": {
+                    "__v": 0,
+                    "createdAt": "2017-09-19T21:40:44.108Z",
+                    "updatedAt": "2017-09-19T21:40:44.108Z",
+                    "name": "Platform Owner",
+                    "_id": "59c18edc8778c62c9490c2ae"
+                },
+                "updatedAt": "2017-09-27T12:53:43.517Z",
+                "createdAt": "2017-09-27T12:53:43.517Z",
+                "isTokenVerified": false,
+                "__v": 0
+            },
+            "planType": {
+                "_id": "59cbc50e9b1cfd1d18ad4a36",
+                "name": "Formal Insurance",
+                "updatedAt": "2017-09-27T15:34:38.303Z",
+                "createdAt": "2017-09-27T15:34:38.302Z",
+                "__v": 0
+            },
+            "name": "Formal Sector",
+            "_id": "59db9701fc68650ba016af7c"
+        },
+        "premiumCategoryId": {
+            "__v": 0,
+            "createdAt": "2017-10-02T00:08:51.018Z",
+            "updatedAt": "2017-10-02T00:08:51.018Z",
+            "name": "HouseHold",
+            "_id": "59d18393def44c28fc66bd75"
+        },
+        "policyId": "103443",
+        "_id": "59debc14eb1e251894470633",
+        "updatedAt": "2017-10-12T00:49:24.414Z",
+        "createdAt": "2017-10-12T00:49:24.414Z",
+        "isActive": false,
+        "dependantBeneficiaries": [{
+            "beneficiary": {
+                "numberOfUnderAge": 0,
+                "isActive": true,
+                "createdAt": "2017-10-12T00:49:24.402Z",
+                "updatedAt": "2017-10-12T00:49:24.402Z",
+                "_id": "59debc14eb1e251894470632",
+                "platformOwnerNumber": "SHIMA/1709/0003",
+                "personId": {
+                    "__v": 0,
+                    "dateOfBirth": "1993-05-12T23:00:00.000Z",
+                    "email": "ojobola@yahoo.com",
+                    "firstName": "Bola",
+                    "gender": {
+                        "__v": 0,
+                        "createdAt": "2017-10-03T08:14:14.265Z",
+                        "updatedAt": "2017-10-03T08:14:14.265Z",
+                        "name": "Female",
+                        "_id": "59d346d692e9a61fec0faf70"
+                    },
+                    "homeAddress": {
+                        "lga": {
+                            "name": "Apapa",
+                            "_id": "59c8efae4be1bb0ac48ea390",
+                            "updatedAt": "2017-09-25T11:59:42.305Z",
+                            "createdAt": "2017-09-25T11:59:42.305Z"
+                        },
+                        "neighbourhood": "Tin-Can Island",
+                        "state": {
+                            "lgs": [{
+                                    "createdAt": "2017-09-25T11:59:42.306Z",
+                                    "updatedAt": "2017-09-25T11:59:42.306Z",
+                                    "_id": "59c8efae4be1bb0ac48ea393",
+                                    "name": "Ajeromi-Ifelodun"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.306Z",
+                                    "updatedAt": "2017-09-25T11:59:42.306Z",
+                                    "_id": "59c8efae4be1bb0ac48ea392",
+                                    "name": "Alimosho"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea391",
+                                    "name": "Amuwo-Odofin"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea390",
+                                    "name": "Apapa"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea38f",
+                                    "name": "Badagry"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea38e",
+                                    "name": "Epe"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea38d",
+                                    "name": "Eti Osa"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea38c",
+                                    "name": "Ibeju-Lekki"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea38b",
+                                    "name": "Ifako-Ijaiye"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea38a",
+                                    "name": "Ikeja"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea389",
+                                    "name": "Ikorodu"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea388",
+                                    "name": "Kosofe"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea387",
+                                    "name": "Lagos Island"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea386",
+                                    "name": "Lagos Mainland"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea385",
+                                    "name": "Mushin"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea384",
+                                    "name": "Ojo"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea383",
+                                    "name": "Oshodi-Isolo"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea382",
+                                    "name": "Shomolu"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea381",
+                                    "name": "Surulere"
+                                }
+                            ],
+                            "cities": [{
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea380",
+                                    "name": "Badagry"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea37f",
+                                    "name": "Epe"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea37e",
+                                    "name": "Ikeja"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea37d",
+                                    "name": "Ikorodu"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.305Z",
+                                    "updatedAt": "2017-09-25T11:59:42.305Z",
+                                    "_id": "59c8efae4be1bb0ac48ea37c",
+                                    "name": "Lagos"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.304Z",
+                                    "updatedAt": "2017-09-25T11:59:42.304Z",
+                                    "_id": "59c8efae4be1bb0ac48ea37b",
+                                    "name": "Mushin"
+                                },
+                                {
+                                    "createdAt": "2017-09-25T11:59:42.304Z",
+                                    "updatedAt": "2017-09-25T11:59:42.304Z",
+                                    "_id": "59c8efae4be1bb0ac48ea37a",
+                                    "name": "Shomolu"
+                                }
+                            ],
+                            "createdAt": "2017-09-25T11:59:42.304Z",
+                            "updatedAt": "2017-09-25T11:59:42.304Z",
+                            "_id": "59c8efae4be1bb0ac48ea379",
+                            "name": "Lagos State"
+                        },
+                        "street": "16, Alao Ekun Street,",
+                        "_id": "59dd6df72a4ff919d8f7adc8",
+                        "updatedAt": "2017-10-11T01:03:51.159Z",
+                        "createdAt": "2017-10-11T01:03:51.159Z"
+                    },
+                    "lastName": "Ojo",
+                    "otherNames": "Remi",
+                    "phoneNumber": "08039382322",
+                    "platformOnwerId": "59cb9f57aca59f1f54201c07",
+                    "title": {
+                        "__v": 0,
+                        "createdAt": "2017-10-03T08:15:58.982Z",
+                        "updatedAt": "2017-10-03T08:15:58.982Z",
+                        "name": "Mrs.",
+                        "_id": "59d3473e92e9a61fec0faf73"
+                    },
+                    "_id": "59debc14eb1e251894470631",
+                    "updatedAt": "2017-10-12T00:49:24.379Z",
+                    "createdAt": "2017-10-12T00:49:24.378Z",
+                    "isActive": true,
+                    "employees": [
+
+                    ],
+                    "nextOfKin": [
+
+                    ]
+                },
+                "platformOwnerId": {
+                    "__v": 0,
+                    "isTokenVerified": false,
+                    "createdAt": "2017-09-27T12:53:43.517Z",
+                    "updatedAt": "2017-09-27T12:53:43.517Z",
+                    "facilityType": {
+                        "_id": "59c18edc8778c62c9490c2ae",
+                        "name": "Platform Owner",
+                        "updatedAt": "2017-09-19T21:40:44.108Z",
+                        "createdAt": "2017-09-19T21:40:44.108Z",
+                        "__v": 0
+                    },
+                    "phoneNumber": "08028372745",
+                    "name": "Lagos State Health Management Agency",
+                    "shortName": "SHIMA",
+                    "website": "http://www.lashma.com",
+                    "email": "info@lashma.com",
+                    "itContact": {
+                        "createdAt": "2017-09-27T12:53:43.518Z",
+                        "updatedAt": "2017-09-27T12:53:43.518Z",
+                        "_id": "59cb9f57aca59f1f54201c08",
+                        "position": {
+                            "_id": "59c6585c1c05be1610eeaf77",
+                            "name": "IT - Managers",
+                            "updatedAt": "2017-09-23T12:49:32.376Z",
+                            "createdAt": "2017-09-23T12:49:32.376Z",
+                            "__v": 0
+                        },
+                        "phoneNumber": "08077662254",
+                        "email": "tech@lashma.com",
+                        "firstName": "Johnson",
+                        "lastName": "Mary"
+                    },
+                    "businessContact": {
+                        "createdAt": "2017-09-27T12:53:43.518Z",
+                        "updatedAt": "2017-09-27T12:53:43.518Z",
+                        "_id": "59cb9f57aca59f1f54201c09",
+                        "position": {
+                            "_id": "59c658751c05be1610eeaf79",
+                            "name": "Head Of Service",
+                            "updatedAt": "2017-09-23T12:49:57.742Z",
+                            "createdAt": "2017-09-23T12:49:57.742Z",
+                            "__v": 0
+                        },
+                        "phoneNumber": "08028372745",
+                        "email": "sales@lashma.com",
+                        "firstName": "Lawal",
+                        "lastName": "Ambode"
+                    },
+                    "bankDetails": {
+                        "createdAt": "2017-09-27T12:53:43.518Z",
+                        "updatedAt": "2017-09-27T12:53:43.519Z",
+                        "_id": "59cb9f57aca59f1f54201c0a",
+                        "name": "LASHAMA",
+                        "bank": {
+                            "_id": "59c3c80c64b18f07603239d9",
+                            "name": "CENTRAL BANK OF NIGERIA",
+                            "code": "001",
+                            "updatedAt": "2017-09-21T14:09:16.535Z",
+                            "createdAt": "2017-09-21T14:09:16.535Z",
+                            "__v": 0
+                        },
+                        "accountNumber": "993848483"
+                    },
+                    "address": {
+                        "createdAt": "2017-09-27T12:53:43.519Z",
+                        "updatedAt": "2017-09-27T12:53:43.519Z",
+                        "_id": "59cb9f57aca59f1f54201c0b",
+                        "street": "State Secretariat",
+                        "state": {
+                            "name": "Lagos State",
+                            "_id": "59c8efae4be1bb0ac48ea379",
+                            "updatedAt": "2017-09-25T11:59:42.304Z",
+                            "createdAt": "2017-09-25T11:59:42.304Z"
+                        },
+                        "neighbourhood": "Alausa",
+                        "lga": {
+                            "name": "Ikeja",
+                            "_id": "59c8efae4be1bb0ac48ea38a",
+                            "updatedAt": "2017-09-25T11:59:42.305Z",
+                            "createdAt": "2017-09-25T11:59:42.305Z"
+                        },
+                        "city": {
+                            "name": "Ikeja",
+                            "_id": "59c8efae4be1bb0ac48ea37e",
+                            "updatedAt": "2017-09-25T11:59:42.305Z",
+                            "createdAt": "2017-09-25T11:59:42.305Z"
+                        }
+                    },
+                    "_id": "59cb9f57aca59f1f54201c07"
+                },
+                "__v": 0
+            },
+            "relationshipId": {
+                "__v": 0,
+                "createdAt": "2017-10-10T15:46:48.630Z",
+                "updatedAt": "2017-10-10T15:46:48.630Z",
+                "name": "Child",
+                "_id": "59dceb68cff59231c032df32"
+            },
+            "policyId": "103443-0",
+            "_id": "59debc14eb1e251894470634",
+            "updatedAt": "2017-10-12T00:49:24.415Z",
+            "createdAt": "2017-10-12T00:49:24.415Z",
+            "isActive": false
+        }]
+    }
 }
