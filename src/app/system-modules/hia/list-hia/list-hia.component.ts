@@ -78,6 +78,7 @@ export class ListHiaComponent implements OnInit {
       .switchMap((term) => Observable.fromPromise(
         this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index } })))
       .subscribe((payload: any) => {
+        console.log(payload);
         var strVal = this.listsearchControl.value;
         this.hias = payload.data.filter(function (item) {
           return (item.name.toLowerCase().includes(strVal.toLowerCase())
@@ -90,38 +91,36 @@ export class ListHiaComponent implements OnInit {
       });
 
   }
-  
-  private _checkUser(){
-    if(this.user !== undefined && this.user.userType.name !== "Platform Owner"){
-      if(this.user.userType.name === 'Health Insurance Agent'){
+
+  private _checkUser() {
+    if (!!this.user && !!this.user.userType && this.user.userType.name !== 'Platform Owner'){
+      if (this.user.userType.name === 'Health Insurance Agent') {
+        this._systemService.on();
         this._router.navigate(['/modules/hia/hias', this.user.facilityId._id]).then(res => {
           this._systemService.off();
         }).catch(err => {
           this._systemService.off();
         });
       }
-    }else{
+    } else {
       this._getUserTypes();
     }
   }
 
   _getHIAs() {
     this._systemService.on();
-    this._facilityService.find(
-      {
-        query:
-        {
-          'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index
-        }
-      }).then((payload: any) => {
+    this._facilityService.find({
+        query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit * this.index }
+      }).then((res: any) => {
         this.loading = false;
-        this.hias = payload.data;
-        console.log(this.hias);
         this._systemService.off();
+        console.log(res);
+        if (res.data.length > 0) {
+          this.hias = res.data;
+        }
       }).catch(error => {
-        console.log(error);
         this._systemService.off();
-      })
+      });
   }
 
   private _getUserTypes() {
@@ -153,11 +152,11 @@ export class ListHiaComponent implements OnInit {
       this._systemService.off();
       //this.hiaTypes = payload.data;
       this.totalEntries = payload.total;
-      if(this.resetData !== true) { 
-        this.hiaTypes.push(...payload.data) 
-      }else{ 
+      if(this.resetData !== true) {
+        this.hiaTypes.push(...payload.data)
+      }else{
         this.resetData = false;
-        this.hiaTypes = payload.data 
+        this.hiaTypes = payload.data
       }
       if(this.hiaTypes.length >= this.totalEntries){
         this.showLoadMore = false;

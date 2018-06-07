@@ -60,18 +60,22 @@ export class ListBeneficiaryComponent implements OnInit {
       });
     this.user = (<any>this._locker.getObject('auth')).user;
 
+    console.log(this.user);
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this._getPerson();
+    } else if (!!this.user.roles) {
+      const hasSuperAdmin = this.user.roles.filter(x => x.name === 'Super Platform Admin');
+
+      if (hasSuperAdmin.length > 0) {
+        this._getPerson();
+      }
     }
-
-
-
   }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
-    console.log(this.user.userType);
+
     if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
@@ -79,7 +83,6 @@ export class ListBeneficiaryComponent implements OnInit {
     }
 
     this._getPlans();
-    console.log(this._getCurrentPlatform());
 
     this.statusControl.valueChanges.subscribe((value) => {
       if (value === 'All') {
@@ -95,17 +98,15 @@ export class ListBeneficiaryComponent implements OnInit {
       if (value === 'All') {
         this.beneficiaries = this.mainBeneficiaries;
       } else {
-        let temp = this.beneficiaries.filter(x => x.planTypeId._id === value._id);
+        const temp = this.beneficiaries.filter(x => x.planTypeId._id === value._id);
         this.beneficiaries = temp;
       }
     });
   }
   _getPerson() {
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
-      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
-        query: {
-          'personId.email': this.user.email
-        }
+      const beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({
+        query: { 'personId.email': this.user.email }
       }));
       Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
         if (results[0].data.length > 0) {
@@ -122,12 +123,11 @@ export class ListBeneficiaryComponent implements OnInit {
               });
             }
           }).catch(errin => {
-          })
+          });
         }
       }, error => {
-      })
+      });
     }
-
   }
   reset() {
     this.skipValue = 0;
@@ -138,13 +138,13 @@ export class ListBeneficiaryComponent implements OnInit {
   private _getPlans() {
     this._planService.find({}).then((payload: any) => {
       this.planTypes = payload.data;
-    }).catch(err => {
-
-    })
+    }).catch(err => {});
   }
   private _getCurrentPlatform() {
+    console.log('get pla');
     this._systemService.on();
     this._facilityService.find({ query: { shortName: CurrentPlaformShortName } }).then((res: any) => {
+      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
@@ -159,7 +159,6 @@ export class ListBeneficiaryComponent implements OnInit {
             }
           }, this.user.facilityId._id, this.user.userType.name);
         } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
-          console.log('multi')
           this._getAllPolicies({
             query: {
               'hiaId._id': this.user.facilityId._id,
@@ -211,6 +210,7 @@ export class ListBeneficiaryComponent implements OnInit {
   private _getAllPolicies(query, id, userType) {
     //this.beneficiaries = [];
     // this.tempBeneficiaries = [];
+    console.log(query);
     try {
       this._systemService.on();
       this._policyService.find(query).then((res: any) => {
@@ -236,7 +236,7 @@ export class ListBeneficiaryComponent implements OnInit {
               this.beneficiaries.push(innerPolicy.beneficiary);
             });
           });
-        }else{
+        } else {
           this.loading = false;
         }
         console.log(this.beneficiaries);
@@ -272,21 +272,21 @@ export class ListBeneficiaryComponent implements OnInit {
 
   private _getInActiveBeneficiaries(platformId) {
     this._systemService.on();
-    let policy$ = Observable.fromPromise(this._policyService.find({ 'platformOwnerId._id': platformId, isActive: true }));
-    let benefic$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
+    const policy$ = Observable.fromPromise(this._policyService.find({ 'platformOwnerId._id': platformId, isActive: true }));
+    const benefic$ = Observable.fromPromise(this._beneficiaryService.find({ 'platformOwnerId._id': platformId }));
 
     Observable.forkJoin([policy$, benefic$]).subscribe((results: any) => {
-      let beneficiaryList: any[] = results[1].data;
+      const beneficiaryList: any[] = results[1].data;
       results[0].data.forEach(policy => {
-        let principal = policy.principalBeneficiary;
+        const principal = policy.principalBeneficiary;
         const index = beneficiaryList.findIndex(x => x._id === principal._id);
         if (index > -1) {
           beneficiaryList.splice(index);
         }
         policy.dependantBeneficiaries.forEach(innerPolicy => {
-          const index = beneficiaryList.findIndex(x => x._id === innerPolicy.beneficiary._id);
-          if (index > -1) {
-            beneficiaryList.splice(index);
+          const findIndex = beneficiaryList.findIndex(x => x._id === innerPolicy.beneficiary._id);
+          if (findIndex > -1) {
+            beneficiaryList.splice(findIndex);
           }
         });
       });
