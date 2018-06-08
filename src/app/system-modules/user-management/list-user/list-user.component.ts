@@ -59,10 +59,12 @@ export class ListUserComponent implements OnInit {
 			if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getUsers();
-			}
+      } else if(this.auth.userType === undefined){
+        this._getUsers();
+      }
 		}).catch(err => console.log(err));
   }
-  
+
   _getUsers() {
 
     this._systemService.on();
@@ -73,11 +75,11 @@ export class ListUserComponent implements OnInit {
         console.log(payload);
         this.loading = false;
         this.totalEntries = payload.total;
-        //Array.prototype.push.apply(this.users,payload.data); 
+        //Array.prototype.push.apply(this.users,payload.data);
         if(this.resetData !== true)
-        { 
-          this.users.push(...payload.data); 
-        }else{ 
+        {
+          this.users.push(...payload.data);
+        }else{
           this.resetData = false;
           this.users = payload.data;
         }
@@ -103,9 +105,9 @@ export class ListUserComponent implements OnInit {
         this.totalEntries = payload.total;
         //Array.prototype.push.apply(this.users,payload.data);
         if(this.resetData !== true)
-        { 
-          this.users.push(...payload.data); 
-        }else{ 
+        {
+          this.users.push(...payload.data);
+        }else{
           this.resetData = false;
           this.users = payload.data;
         }

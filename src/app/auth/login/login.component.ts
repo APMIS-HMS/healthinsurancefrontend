@@ -86,10 +86,10 @@ export class LoginComponent implements OnInit {
           }
         })
         .then((pays: any) => {
+          let accessibilities = [];
           pays.data.forEach(roleItem => {
             if (!!roleItem.accessibilities) {
-              const accessibilities = roleItem.accessibilities;
-              this._locker.setObject("accessibilities", accessibilities);
+              accessibilities = accessibilities.concat(roleItem.accessibilities);
             }
             this.setLoggedInUser(
               this.loginFormGroup.controls["email"].value,
@@ -106,6 +106,7 @@ export class LoginComponent implements OnInit {
               );
             });
           });
+          this._locker.setObject("accessibilities", accessibilities);
         })
         .catch(err => {});
     } catch (error) {}
