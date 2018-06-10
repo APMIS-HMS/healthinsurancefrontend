@@ -76,8 +76,8 @@ export class NewEmployerComponent implements OnInit {
     });
   }
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('New Employer');
-    this._headerEventEmitter.setMinorRouteUrl('Create new employer');
+    this._headerEventEmitter.setRouteUrl('New Organization');
+    this._headerEventEmitter.setMinorRouteUrl('Create new organization');
     this._getCurrentPlatform();
     this._initialiseFormGroup();
     this._getIndustries();
@@ -87,7 +87,7 @@ export class NewEmployerComponent implements OnInit {
     this._getBanks();
     this._getUserTypes();
   }
-  
+
   _initialiseFormGroup() {
     console.log(this.selectedFacilityId);
     this.employerFormGroup = this._fb.group({
