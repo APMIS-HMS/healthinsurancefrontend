@@ -17,7 +17,7 @@ export class WelcomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('SHIMA');
+    this._headerEventEmitter.setRouteUrl('ASHIA');
     this._headerEventEmitter.setMinorRouteUrl('Welcome Page');
   }
 
