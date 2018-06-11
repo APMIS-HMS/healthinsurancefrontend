@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { LoadingBarService } from '@ngx-loading-bar/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+// import { CoolLocalStorage } from 'angular2-cool-storage';
+// import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Observable } from 'rxjs/Observable';
 import {
-	FacilityService, GenderService, UserService, SystemModuleService, UserTypeService, PersonService
+	FacilityService, SystemModuleService, UserTypeService, PersonService
 } from './../../services/index';
 import { AuthService } from './../services/auth.service';
-import { Facility, Person, User } from './../../models/index';
+import { Person } from './../../models/index';
 import { CurrentPlaformShortName } from '../../services/globals/config';
 import { PasswordValidation } from '../../services/common/password-validation';
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
+// const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
 const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
-const NUMERIC_REGEX = /^[0-9]+$/;
+// const NUMERIC_REGEX = /^[0-9]+$/;
 @Component({
 	selector: 'app-signup',
 	templateUrl: './signup.component.html',
@@ -36,12 +36,13 @@ export class SignupComponent implements OnInit {
 		private _router: Router,
 		private _authService: AuthService,
 		private _personService: PersonService,
-		private _locker: CoolLocalStorage,
+		// private _locker: CoolLocalStorage,
 		private _facilityService: FacilityService,
 		private _systemService: SystemModuleService,
-		private _genderService: GenderService,
+		// private _genderService: GenderService,
 		private _userTypeService: UserTypeService,
-		private _userService: UserService) { }
+    // private _userService: UserService
+  ) { }
 
 	ngOnInit() {
 		this.signupFormGroup = this._fb.group({
@@ -182,7 +183,7 @@ export class SignupComponent implements OnInit {
 	private _getUserType() {
 		this._systemService.on();
 		this._userTypeService.findWithOutAuth().then((res: any) => {
-			this._systemService.off();
+      this._systemService.off();
 			if (res.data.length > 0) {
 				const index = res.data.findIndex(x => x.name === 'Beneficiary');
 				if (index > -1) {
@@ -218,21 +219,21 @@ export class SignupComponent implements OnInit {
 		);
 	}
 
-	private _getGender() {
-		this._genderService.find({}).then(payload => {
+	// private _getGender() {
+	// 	this._genderService.find({}).then(payload => {
 
-		}).catch(err => console.log(err));
-	}
+	// 	}).catch(err => console.log(err));
+	// }
 
-	private logUser(user: any): Promise<any> {
-		return new Promise<any>(
-			(resolve, reject) => {
-				this._authService.login(user).then(res => {
-					resolve(res);
-				}).catch(err => {
-					reject(err);
-				});
-			}
-		);
-	}
+	// private logUser(user: any): Promise<any> {
+	// 	return new Promise<any>(
+	// 		(resolve, reject) => {
+	// 			this._authService.login(user).then(res => {
+	// 				resolve(res);
+	// 			}).catch(err => {
+	// 				reject(err);
+	// 			});
+	// 		}
+	// 	);
+	// }
 }
