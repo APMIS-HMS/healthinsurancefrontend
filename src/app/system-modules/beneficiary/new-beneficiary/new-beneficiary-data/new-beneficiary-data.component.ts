@@ -51,6 +51,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
   states: any[] = [];
   lgs: any[] = [];
   towns: any[] = [];
+  residenceTowns: any[] = [];
   residenceLgs: any[] = [];
   cities: any[] = [];
   genders: any[] = [];
@@ -355,6 +356,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       noOfChildrenU18: [this.selectedBeneficiary != null ? this.selectedBeneficiary.numberOfUnderAge : 0, [<any>Validators.required]],
       streetName: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.homeAddress.street : '', [<any>Validators.required]],
       lga: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.homeAddress.lga : '', [<any>Validators.required]],
+      town: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.homeAddress.town : '', [<any>Validators.required]],
       neighbourhood: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.homeAddress.neighbourhood : '', [<any>Validators.required]],
       mothermaidenname: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.mothersMaidenName : '', []]
     });
@@ -372,6 +374,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
     this.stepOneFormGroup.controls['stateOfOrigin'].valueChanges.subscribe(value => {
       if (value !== null) {
         this._getLgaAndCities(value);
+        this._getLga(value);
       }
     });
 
@@ -379,6 +382,13 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       console.log(value);
       if (value !== null) {
         this.towns = value.towns;
+      }
+    });
+
+    this.stepOneFormGroup.controls['lga'].valueChanges.subscribe(value => {
+      console.log(value);
+      if (value !== null) {
+        this.residenceTowns = value.towns;
       }
     });
   }
@@ -426,6 +436,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       this._systemService.off();
       if (payload.data.length > 0) {
         const states = payload.data[0].states;
+        console.log(states);
         if (states.length > 0) {
           this.residenceLgs = states[0].lgs;
           this.selectedState = states[0];
@@ -434,7 +445,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
 
     }).catch(error => {
       this._systemService.off();
-    })
+    });
   }
 
   startCamera() {
@@ -504,14 +515,16 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       console.log('this.user => ', this.user);
       if (!this.user.completeRegistration && !!this.user.userType && this.user.userType.name === 'Beneficiary') {
         let address: Address = <Address>{};
+        delete value.lga.towns;
+        delete value.lgaOfOrigin.towns;
         address.lga = value.lga;
+        address.town = value.town;
         address.neighbourhood = value.neighbourhood;
         address.state = this.selectedState;
+        address.street = value.streetName;
         delete address.state.cities;
         delete address.state.lgs;
-        delete address.lga.towns;
-        delete value.lgaOfOrigin.towns;
-        address.street = value.streetName;
+        // delete address.lga.towns;
 
         this.person.dateOfBirth = value.dob.jsdate;
         this.person.email = value.email;
@@ -527,6 +540,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
         this.person.platformOnwerId = this.currentPlatform._id;
         this.person.stateOfOrigin = value.stateOfOrigin;
         this.person.townOfOrigin = value.townOfOrigin;
+        this.person.town = value.town;
         this.person.villageOfOrigin = value.villageOfOrigin;
         this.person.title = value.title;
 
@@ -600,6 +614,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
             let person$ = Observable.fromPromise(this._personService.update(this.person));
             Observable.forkJoin([person$]).subscribe((results: any) => {
               console.log(results);
+              console.log(this.selectedBeneficiary);
               if (results[0] !== undefined) {
                 let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
                 beneficiary.numberOfUnderAge = value.noOfChildrenU18;
@@ -607,18 +622,21 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
                 beneficiary.stateID = value.lasrraId;
                 beneficiary.personId = results[0];
 
+                console.log(beneficiary);
                 if (this.selectedBeneficiary._id !== undefined) {
                   this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                    console.log('paym1 => ', paym);
                     this._systemService.off();
                     this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
                     }).catch(err => {
-                      console.log(err)
+                      console.log(err);
                     });
                   }).catch(erm => {
                     console.log(erm);
                   });
                 } else {
                   this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                    console.log('paym1 => ', paym);
                     this._systemService.off();
                     this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
                     }).catch(err => {
@@ -682,12 +700,15 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
           console.log(1);
           let personId: Person = this.selectedBeneficiary.personId;
           let address: Address = this.selectedBeneficiary.personId.homeAddress;
+          delete value.lga.towns;
+          delete value.lgaOfOrigin.towns;
           address.lga = value.lga;
+          address.town = value.town;
           address.neighbourhood = value.neighbourhood;
           address.state = this.selectedState;
+          address.street = value.streetName;
           delete address.state.cities;
           delete address.state.lgs;
-          address.street = value.streetName;
 
           personId.dateOfBirth = value.dob.jsdate;
           personId.email = value.email;
@@ -702,6 +723,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
           personId.phoneNumber = value.phonenumber;
           personId.platformOnwerId = this.currentPlatform._id;
           personId.stateOfOrigin = value.stateOfOrigin;
+          personId.townOfOrigin = value.townOfOrigin;
+          personId.villageOfOrigin = value.villageOfOrigin;
           personId.title = value.title;
 
           let fileBrowser = this.fileInput.nativeElement;
@@ -867,12 +890,15 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
           console.log(2)
           let personId: Person = <Person>{};
           let address: Address = <Address>{};
+          delete value.lga.towns;
+          delete value.lgaOfOrigin.towns;
           address.lga = value.lga;
+          address.town = value.town;
           address.neighbourhood = value.neighbourhood;
           address.state = this.selectedState;
+          address.street = value.streetName;
           delete address.state.cities;
           delete address.state.lgs;
-          address.street = value.streetName;
 
           personId.dateOfBirth = value.dob.jsdate;
           personId.email = value.email;
