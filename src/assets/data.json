@@ -77,7 +77,7 @@
             },
             "email": "info@lashma.com",
             "website": "http://www.lashma.com",
-            "shortName": "SHIMA",
+            "shortName": "ASHIA",
             "name": "Lagos State Health Management Agency",
             "phoneNumber": "08028372745",
             "facilityType": {
@@ -424,7 +424,7 @@
                 },
                 "email": "info@lashma.com",
                 "website": "http://www.lashma.com",
-                "shortName": "SHIMA",
+                "shortName": "ASHIA",
                 "name": "Lagos State Health Management Agency",
                 "phoneNumber": "08028372745",
                 "facilityType": {
@@ -563,7 +563,7 @@
                 },
                 "phoneNumber": "08028372745",
                 "name": "Lagos State Health Management Agency",
-                "shortName": "SHIMA",
+                "shortName": "ASHIA",
                 "website": "http://www.lashma.com",
                 "email": "info@lashma.com",
                 "itContact": {
@@ -797,7 +797,7 @@
                 },
                 "phoneNumber": "08028372745",
                 "name": "Lagos State Health Management Agency",
-                "shortName": "SHIMA",
+                "shortName": "ASHIA",
                 "website": "http://www.lashma.com",
                 "email": "info@lashma.com",
                 "itContact": {
@@ -962,7 +962,7 @@
                 },
                 "phoneNumber": "08028372745",
                 "name": "Lagos State Health Management Agency",
-                "shortName": "SHIMA",
+                "shortName": "ASHIA",
                 "email": "info@lashma.com",
                 "_id": "59cb9f57aca59f1f54201c07"
             },
@@ -1049,7 +1049,7 @@
                 },
                 "email": "info@lashma.com",
                 "website": "http://www.lashma.com",
-                "shortName": "SHIMA",
+                "shortName": "ASHIA",
                 "name": "Lagos State Health Management Agency",
                 "phoneNumber": "08028372745",
                 "facilityType": {
@@ -1093,7 +1093,7 @@
                 "createdAt": "2017-10-12T00:49:24.402Z",
                 "updatedAt": "2017-10-12T00:49:24.402Z",
                 "_id": "59debc14eb1e251894470632",
-                "platformOwnerNumber": "SHIMA/1709/0003",
+                "platformOwnerNumber": "ASHIA/1709/0003",
                 "personId": {
                     "__v": 0,
                     "dateOfBirth": "1993-05-12T23:00:00.000Z",
@@ -1319,7 +1319,7 @@
                     },
                     "phoneNumber": "08028372745",
                     "name": "Lagos State Health Management Agency",
-                    "shortName": "SHIMA",
+                    "shortName": "ASHIA",
                     "website": "http://www.lashma.com",
                     "email": "info@lashma.com",
                     "itContact": {
