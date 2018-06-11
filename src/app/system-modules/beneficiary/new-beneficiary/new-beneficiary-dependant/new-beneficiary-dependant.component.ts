@@ -94,7 +94,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   _getBeneficiary(id) {
     this._systemService.on();
     this._beneficiaryService.get(id, {}).then((payload: any) => {
-      console.log(payload)
+      console.log(payload);
       this.selectedBeneficiary = payload;
       this._getPerson();
       this._systemService.off();
@@ -104,7 +104,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     })
   }
   _getPerson() {
-    if (this.user.userType.name === "Beneficiary") {
+    if (this.user.userType.name === 'Beneficiary') {
       let person$ = Observable.fromPromise(this._personService.find({
         query: {
           email: this.user.email
@@ -128,22 +128,23 @@ export class NewBeneficiaryDependantComponent implements OnInit {
               principalBeneficiary: results[1].data[0]._id
             }
           }).then((policies: any) => {
-            console.log(policies)
+            console.log(policies);
             if (policies.data.length > 0) {
               console.log('policy')
               policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
                 this.populateNewDependant(beneficiary.beneficiary, beneficiary.beneficiary.personId, beneficiary.relationshipId);
-              })
+              });
             } else {
               this.selectedBeneficiary = results[1].data[0];
-              console.log(this.selectedBeneficiary)
-              if (!this.isEventBased) {
-                this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
+              console.log('selectedBeneficiary => ', this.selectedBeneficiary);
+              // console.log(this.selectedBeneficiary)
+              // if (!this.isEventBased) {
+              //   this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
 
-                }).catch(err => {
-                  console.log(err)
-                });
-              }
+              //   }).catch(err => {
+              //     console.log(err)
+              //   });
+              // }
 
             }
           }).catch(errin => {

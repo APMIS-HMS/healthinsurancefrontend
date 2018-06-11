@@ -18,6 +18,8 @@ export interface Person {
     nationality?: any;
     stateOfOrigin?: any;
     lgaOfOrigin?: any;
+    townOfOrigin?: any;
+    villageOfOrigin?: any;
     maritalStatus?: any;
     nextOfKin?: NextOfKin[];
     organisations?: any[];
