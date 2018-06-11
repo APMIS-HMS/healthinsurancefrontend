@@ -132,7 +132,26 @@
                 Choose L.G.A of origin from the dropdown.
             </small>
         </div>
-
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Town/City</label>
+        <div class="inputWrap">
+            <select formControlName="townOrigin" class="form-control" [compareWith]='compare'>
+                <option value="" selected>Select Town/City</option>
+            </select>
+            <small class="alert-label" [hidden]="stepOneFormGroup.controls.townOrigin.valid || stepOneFormGroup.controls.townOrigin.pristine">
+                Choose Town/City of origin from the dropdown.
+            </small>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Village</label>
+        <div class="inputWrap">
+            <input type="text" formControlName="villageOrigin" class="form-control">
+            <small class="alert-label" [hidden]="stepOneFormGroup.controls.villageOrigin.valid || stepOneFormGroup.controls.villageOrigin.pristine">
+                This is a required field (minimum 3 and max of 50 characters).
+            </small>
+        </div>
     </div>
     <div class="frm-item-wrap">
         <label class="label">Marital Status</label>
@@ -165,7 +184,7 @@
         </div>
     </div>
     <div class="frm-item-wrap">
-        <label class="label">LGA/LCDA of Residence</label>
+        <label class="label">LGA of Residence</label>
         <div class="inputWrap">
             <select formControlName="lga" class="form-control" [compareWith]='compare'>
                 <option value="" selected>Local Government Area</option>

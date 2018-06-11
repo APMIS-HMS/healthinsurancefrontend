@@ -352,6 +352,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit, After
       lasrraId: [this.selectedBeneficiary != null ? this.selectedBeneficiary.stateID : '', []],
       stateOfOrigin: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.stateOfOrigin : '', [<any>Validators.required]],
       lgaOfOrigin: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.lgaOfOrigin : '', [<any>Validators.required]],
+      townOrigin: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.lgaOfOrigin : '', [<any>Validators.required]],
+      villageOrigin: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.lgaOfOrigin : '', [<any>Validators.required]],
       maritalStatus: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.maritalStatus : '', [<any>Validators.required]],
       noOfChildrenU18: [this.selectedBeneficiary != null ? this.selectedBeneficiary.numberOfUnderAge : 0, [<any>Validators.required]],
       streetName: [this.selectedBeneficiary.personId != null ? this.selectedBeneficiary.personId.homeAddress.street : '', [<any>Validators.required]],
