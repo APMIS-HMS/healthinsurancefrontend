@@ -1,27 +1,24 @@
-
 //fonts
-$font-main: 'Montserrat', sans-serif;
-$font-titles: 'Josefin Sans', sans-serif;
-
+$font-main: 'Montserrat',
+sans-serif;
+$font-titles: 'Josefin Sans',
+sans-serif;
 $app-content-width: 90%;
-
-//colors 
+//colors
+$brand-primary: rgba(7, 65, 137, 1);
 $brand-primary: rgba(7, 65, 137, 1);
 $brand-secondary: #fff;
 $brand-success: #5cb85c;
 $brand-info: #B4D5DF;
 $brand-warning: #f0ad4e;
 $unread-bg: #ffefda;
-
 $title-fontcolor: #EFF7FD;
 $posttitle-fontcolor: #DEEAF3;
-
 $grey-1: #f8f8f8;
 $grey-1b: #E4E4E4;
 $grey-2: #bebebe;
 $grey-3: #777;
 $grey-4: #474747;
-
 $blue: #063642;
 $green: #29C92C;
 $lemon-green: #C8FF00;
@@ -31,7 +28,6 @@ $red: #ff2500;
 $pink: #CD0069;
 $purple: #6C71C4;
 $aqua: #00c0ef;
-
 //font-sizes
 $font-x1: 10px;
 $font-x2: 12px;

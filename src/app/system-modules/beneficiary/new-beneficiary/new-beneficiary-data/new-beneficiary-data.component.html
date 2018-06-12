@@ -39,7 +39,7 @@
     <div class="frm-item-wrap">
         <label class="label">First Name</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="text" formControlName="firstName" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="text" formControlName="firstName" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.firstName.valid || stepOneFormGroup.controls.firstName.pristine">
                 First name is required.
             </small>
@@ -57,13 +57,13 @@
     <div class="frm-item-wrap">
         <label class="label">Mother's Maiden Name</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="text" formControlName="mothermaidenname" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="text" formControlName="mothermaidenname" class="form-control">
         </div>
     </div>
     <div class="frm-item-wrap">
         <label class="label">Email</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="email" formControlName="email" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="email" formControlName="email" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.email.valid || stepOneFormGroup.controls.email.pristine">
                 Enter a valid email address.
             </small>
@@ -72,7 +72,7 @@
     <div class="frm-item-wrap">
         <label class="label">Phone number</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="text" formControlName="phonenumber" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="text" formControlName="phonenumber" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.phonenumber.valid || stepOneFormGroup.controls.phonenumber.pristine">
                 Enter a valid phone number.
             </small>
@@ -98,7 +98,7 @@
             </small>
         </div>
     </div>
-    <div class="frm-item-wrap">
+    <!-- <div class="frm-item-wrap">
         <label class="label">LASRRA ID
             <small>number</small>
         </label>
@@ -108,7 +108,7 @@
                 This field is required.
             </small>
         </div>
-    </div>
+    </div> -->
     <div class="frm-item-wrap">
         <label class="label">State of Origin</label>
         <div class="inputWrap">
@@ -124,7 +124,7 @@
     <div class="frm-item-wrap">
         <label class="label">L.G.A of Origin</label>
         <div class="inputWrap">
-            <select formControlName="lgaOfOrigin" class="form-control" [compareWith]='compare'>
+            <select formControlName="lgaOfOrigin" class="form-control" [compareWith]='compareLocal'>
                 <option value="" selected>Select L.G.A of origin</option>
                 <option *ngFor="let lga of lgs" [ngValue]="lga">{{lga.name}}</option>
             </select>
@@ -132,7 +132,27 @@
                 Choose L.G.A of origin from the dropdown.
             </small>
         </div>
-
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Town/City</label>
+        <div class="inputWrap">
+            <select formControlName="townOfOrigin" class="form-control" [compareWith]='compareTown'>
+                <option value="" selected>Select Town/City</option>
+                <option *ngFor="let town of towns" [ngValue]="town">{{town.name}}</option>
+            </select>
+            <small class="alert-label" [hidden]="stepOneFormGroup.controls.townOfOrigin.valid || stepOneFormGroup.controls.townOfOrigin.pristine">
+                Choose Town/City of origin from the dropdown.
+            </small>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Village</label>
+        <div class="inputWrap">
+            <input type="text" formControlName="villageOfOrigin" class="form-control">
+            <small class="alert-label" [hidden]="stepOneFormGroup.controls.villageOfOrigin.valid || stepOneFormGroup.controls.villageOfOrigin.pristine">
+                This is a required field (minimum 3 and max of 50 characters).
+            </small>
+        </div>
     </div>
     <div class="frm-item-wrap">
         <label class="label">Marital Status</label>
@@ -165,7 +185,7 @@
         </div>
     </div>
     <div class="frm-item-wrap">
-        <label class="label">LGA/LCDA of Residence</label>
+        <label class="label">L.G.A of Residence</label>
         <div class="inputWrap">
             <select formControlName="lga" class="form-control" [compareWith]='compare'>
                 <option value="" selected>Local Government Area</option>
@@ -173,6 +193,18 @@
             </select>
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.lga.valid || stepOneFormGroup.controls.lga.pristine">
                 This is a required field (minimum 3 and max of 50 characters).
+            </small>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Town/City of Residence</label>
+        <div class="inputWrap">
+            <select formControlName="town" class="form-control" [compareWith]='compareTown'>
+                <option value="" selected>Select Town/City</option>
+                <option *ngFor="let town of residenceTowns" [ngValue]="town">{{town.name}}</option>
+            </select>
+            <small class="alert-label" [hidden]="stepOneFormGroup.controls.town.valid || stepOneFormGroup.controls.town.pristine">
+                Choose Town/City of origin from the dropdown.
             </small>
         </div>
     </div>
@@ -216,6 +248,26 @@
                     <img #blah id="blah" class="image-holder" src="assets/img/users/default.png" />
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <div class="input-wrap">
+            <div>
+                I <b>{{stepOneFormGroup.controls?.firstName?.value }} {{stepOneFormGroup.controls?.lastName?.value }}</b> the assured, do hereby declare that all the foregoing answers are true, that I have not concealed nor withheld anything with which
+                the assurer should be acquainted with in order to assess my eligibility for health insurance.
+                <!-- Are there any additional facts affecting the risk of assurance of your health of which the AGENCY (ASHIA) should be made aware?-->
+                I agree that these and all statements I have made or shall make to the assurer or to its medical examiner(s) in connection with this or previous proposal(s) shall be the basis of this contract.<br>
+            </div>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <div class="input-wrap-disclaimer">
+            <label>
+                  <input type="checkbox" formControlName="disclaimer" > I accept the terms and conditions.
+                </label>
+            <small class="alert-label" [hidden]="stepOneFormGroup.controls.disclaimer.valid || stepOneFormGroup.controls.disclaimer.pristine">
+                    Accept terms and conditions.
+                </small>
         </div>
     </div>
     <div style="margin:10px auto;display:flex;justify-content:center;">

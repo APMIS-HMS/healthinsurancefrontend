@@ -32,7 +32,7 @@ export class TopBarComponent implements OnInit {
   changePass = false;
   noUnReadAlert = 0;
   notificationMessage="";
-  
+
 
   constructor(
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -58,20 +58,19 @@ export class TopBarComponent implements OnInit {
     } catch (error) {
       this._router.navigate(['auth/login']);
     }
-    
+
     // console.log(userUserType.userType._id);
 
     this._policyService._listenerCreate.subscribe(payload => {
       // let title = "New Policy - " + payload.policyId;
       // let content = payload.principalBeneficiary.personId.firstName + " " + payload.principalBeneficiary.personId.firstName + " " + "added " + payload.dependantBeneficiaries.length + " dependant(s)";
-      console.log("-----broadcast create object-------");
       this.setNotifier();
     });
 
     this._policyService._listenerUpdate.subscribe(payload => {
       this.setNotifier();
     });
-    
+
     this.setNotifier();
   }
 

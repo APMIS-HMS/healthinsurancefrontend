@@ -1,4 +1,4 @@
-<app-beneficiary-top-bar  [policy]="policy"></app-beneficiary-top-bar>
+<app-beneficiary-top-bar [policy]="policy"></app-beneficiary-top-bar>
 <div class="details-wrap">
     <div class="left-wrap">
         <div class="detail-item blue-bg">
@@ -30,7 +30,7 @@
                         <div class="item-val">{{beneficiary?.personId?.maritalStatus?.name}}</div>
                     </div>
                     <div class="group-item">
-                        <div class="item-label">LASHMA ID:</div>
+                        <div class="item-label">ASHIA ID:</div>
                         <div class="item-val">{{beneficiary?.platformOwnerNumber}}</div>
                     </div>
                     <div class="group-wrap">
@@ -54,14 +54,14 @@
             </div>
         </div>
     </div>
-   
+
 
     <div *ngIf="checkedinSect" class="right-wrap">
         <div class="top-cta-wrap">
             <div (click)="navigateToNewClaim()" class="btn btn-medium btn-yellow">GENERATE CLAIM</div>
             <div (click)="navigateToNewReferal()" class="btn btn-medium btn-yellow">NEW REFERAL</div>
             <div (click)="navigateToNewAuthorization()" class="btn btn-medium btn-yellow">NEW AUTHORIZATION</div>
-            <div (click)="checkOut()"  class="btn btn-medium btn-yellow">CHECK OUT</div>
+            <div (click)="checkOut()" class="btn btn-medium btn-yellow">CHECK OUT</div>
         </div>
 
         <div class="right-content">

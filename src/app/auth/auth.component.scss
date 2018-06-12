@@ -1,5 +1,4 @@
 @import '../../assets/libs/variables.scss';
-
 #auth-content-wrapper {
     width: 100vw;
     height: 100vh;
@@ -10,10 +9,12 @@
     justify-content: center;
     align-items: center;
 }
-.platform-wrap{
+
+.platform-wrap {
     margin: 0 auto;
 }
-.platform-img{
+
+.platform-img {
     width: 90px;
     background: #fff;
     height: 90px;
@@ -23,14 +24,17 @@
     align-items: center;
     margin: 0 auto;
     overflow: hidden;
-    padding: 10px;
+    padding: 15px;
 }
-.platform-img img{
+
+.platform-img img {
     width: 100%;
 }
-.platform-label{
+
+.platform-label {
     color: #fff;
     font-size: $font-x3;
     margin: 10px auto;
+    padding: 10px;
     text-align: center;
 }

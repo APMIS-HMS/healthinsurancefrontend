@@ -47,7 +47,7 @@ export class ListHiaComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('HIA List');
     this._headerEventEmitter.setMinorRouteUrl('All HIAs');
-    this.user = (<any>this._locker.getObject("auth")).user;
+    this.user = (<any>this._locker.getObject('auth')).user;
 
     this._checkUser();
     // this._getUserTypes();
@@ -63,7 +63,7 @@ export class ListHiaComponent implements OnInit {
           });
         });
 
-        if (payload == "All") {
+        if (payload == 'All') {
           this._facilityService.find({ query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index } }).then((payload2: any) => {
             this.hias = payload2.data;
           });
@@ -90,45 +90,40 @@ export class ListHiaComponent implements OnInit {
       });
 
   }
-  
-  private _checkUser(){
-    if(this.user !== undefined && this.user.userType.name !== "Platform Owner"){
-      if(this.user.userType.name === 'Health Insurance Agent'){
+
+  private _checkUser() {
+    if (this.user !== undefined && this.user.userType.name !== 'Platform Owner'){
+      if (this.user.userType.name === 'Health Insurance Agent'){
         this._router.navigate(['/modules/hia/hias', this.user.facilityId._id]).then(res => {
           this._systemService.off();
         }).catch(err => {
           this._systemService.off();
         });
       }
-    }else{
+    } else {
       this._getUserTypes();
     }
   }
 
   _getHIAs() {
     this._systemService.on();
-    this._facilityService.find(
-      {
-        query:
-        {
-          'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index
-        }
-      }).then((payload: any) => {
-        this.loading = false;
-        this.hias = payload.data;
-        console.log(this.hias);
-        this._systemService.off();
-      }).catch(error => {
-        console.log(error);
-        this._systemService.off();
-      })
+    this._facilityService.find({
+      query: { 'facilityType._id': this.selectedUserType._id, $limit: this.limit, $skip: this.limit*this.index }
+    }).then((payload: any) => {
+      console.log(payload);
+      this._systemService.off();
+      this.loading = false;
+      this.hias = payload.data;
+    }).catch(error => {
+      console.log(error);
+      this._systemService.off();
+    });
   }
 
   private _getUserTypes() {
     this._systemService.on();
     this._userTypeService.find({}).then((payload: any) => {
       this._systemService.off();
-      console.log(payload);
       if (payload.data.length > 0) {
         const index = payload.data.findIndex(x => x.name === 'Health Insurance Agent');
         if (index > -1) {
@@ -140,31 +135,29 @@ export class ListHiaComponent implements OnInit {
       }
     }, error => {
       this._systemService.off();
-    })
+    });
   }
 
   _getHiaTypes() {
     this._systemService.on();
     this._hiaTypeService.find({
-      query: {
-        $limit: this.limit, $skip: this.limit*this.index
-      }
+      query: { $limit: this.limit, $skip: this.limit*this.index }
     }).then((payload: any) => {
       this._systemService.off();
       //this.hiaTypes = payload.data;
       this.totalEntries = payload.total;
-      if(this.resetData !== true) { 
-        this.hiaTypes.push(...payload.data) 
-      }else{ 
+      if (this.resetData !== true) {
+        this.hiaTypes.push(...payload.data)
+      } else {
         this.resetData = false;
-        this.hiaTypes = payload.data 
+        this.hiaTypes = payload.data;
       }
-      if(this.hiaTypes.length >= this.totalEntries){
+      if (this.hiaTypes.length >= this.totalEntries) {
         this.showLoadMore = false;
       }
     }).catch(err => {
       this._systemService.off();
-    })
+    });
   }
 
   onSelectedStatus(item: any) {
