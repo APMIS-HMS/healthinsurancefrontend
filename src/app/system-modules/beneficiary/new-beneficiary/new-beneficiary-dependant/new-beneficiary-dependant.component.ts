@@ -220,7 +220,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
           dob: [this.today, [<any>Validators.required]],
           gender: ['', [<any>Validators.required]],
           relationship: ['', [<any>Validators.required]],
-          lasrraId: ['', []],
+          // lasrraId: ['', []],
           readOnly: [false]
         })
       ])
@@ -297,7 +297,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
           dob: [this.today, [<any>Validators.required]],
           gender: ['', [<any>Validators.required]],
           relationship: ['', [<any>Validators.required]],
-          lasrraId: ['', []],
+          // lasrraId: ['', []],
           readOnly: [false]
         })
         );
@@ -323,7 +323,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         dob: [person !== undefined ? person.dateOfBirth : this.today, [<any>Validators.required]],
         gender: [person !== undefined ? person.gender : '', [<any>Validators.required]],
         relationship: [relationshipId !== undefined ? relationshipId : '', [<any>Validators.required]],
-        lasrraId: [dependant !== undefined ? dependant.stateID : '', []],
+        // lasrraId: [dependant !== undefined ? dependant.stateID : '', []],
         readOnly: [false],
         id: []
       })
@@ -416,7 +416,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
 
       let beneficiary: Beneficiary = <Beneficiary>{};
-      beneficiary.stateID = group.lasrraId;
+      // beneficiary.stateID = group.lasrraId;
       beneficiary.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
 
 
