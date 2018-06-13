@@ -14,8 +14,7 @@ const RxJS = require('rxjs');
 // const HOST = 'http://172.16.16.40:3031'; // Live
 // const HOST = 'http://192.168.1.4:3031'; // Live
 const HOST = 'https://insuranceapi.azurewebsites.net';
-// const HOST = 'http://localhost:3032';  // Your base server URL here
-
+// const HOST = "http://localhost:3032"; // Your base server URL here
 
 @Injectable()
 export class SocketService {
@@ -34,11 +33,11 @@ export class SocketService {
                     .configure(hooks())
                     .configure(authentication({storage: window.localStorage}));
 
-    this.socket.on('reconnect', (value) => {
+    this.socket.on('reconnect', value => {
       this.onlineStatus = true;
       this._systemService.onlineStatusBroadCast({status: 'On'});
     });
-    this.socket.on('disconnect', (value) => {
+    this.socket.on('disconnect', value => {
       this.onlineStatus = false;
       this._systemService.onlineStatusBroadCast({status: 'Off'});
     });
@@ -46,14 +45,14 @@ export class SocketService {
       this.onlineStatus = true;
       this._systemService.onlineStatusBroadCast({status: 'On'});
     });
-    this.socket.on('connecting', (value) => {});
-    this.socket.on('reauthentication-error', (value) => {
+    this.socket.on('connecting', value => {});
+    this.socket.on('reauthentication-error', value => {
       this.onlineStatus = false;
       this._systemService.onlineStatusBroadCast({status: 'Off'});
     });
-    this.socket.on('logout', (value) => {});
-    this.socket.on('reconnected', (value) => {});
-    this.socket.on('disconnected', (value) => {});
+    this.socket.on('logout', value => {});
+    this.socket.on('reconnected', value => {});
+    this.socket.on('disconnected', value => {});
   }
   logOut() {
     this.locker.clear();
@@ -61,7 +60,7 @@ export class SocketService {
   }
   loginIntoApp(query: any) {
     return this._app.authenticate(
-        {strategy: 'local', 'email': query.email, 'password': query.password});
+        {strategy: 'local', email: query.email, password: query.password});
   }
   getService(value: any) {
     if (this.locker.getItem('auth') !== undefined &&
@@ -69,7 +68,7 @@ export class SocketService {
       const token = this.locker.getItem('auth');
       const copyInvestigation = JSON.parse(token);
       this._app.authenticate(
-          {strategy: 'jwt', accessToken: copyInvestigation.accessToken})
+          {strategy: 'jwt', accessToken: copyInvestigation.accessToken});
     }
     return this._app.service(value);
   }
@@ -108,7 +107,7 @@ export class RestService {
       this._app = feathers()
                       .configure(rest(HOST).superagent(superagent, {
                         headers: {
-                          'authorization': 'Bearer ' + auth.accessToken
+                          authorization: 'Bearer ' + auth.accessToken
                         }
                       }))  // Fire up rest
                       .configure(rx(RxJS, {listStrategy: 'always'}))
@@ -125,7 +124,7 @@ export class RestService {
   }
   loginIntoApp(query) {
     return this._app.authenticate(
-        {strategy: 'local', 'email': query.email, 'password': query.password});
+        {strategy: 'local', email: query.email, password: query.password});
   }
   getService(value: any) {
     if (this.locker.getItem('auth') !== undefined &&
@@ -134,7 +133,7 @@ export class RestService {
       this._app = feathers()
                       .configure(rest(HOST).superagent(superagent, {
                         headers: {
-                          'authorization': 'Bearer ' + auth.accessToken
+                          authorization: 'Bearer ' + auth.accessToken
                         }
                       }))  // Fire up rest
                       .configure(rx(RxJS, {listStrategy: 'always'}))

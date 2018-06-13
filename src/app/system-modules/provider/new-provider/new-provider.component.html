@@ -299,7 +299,7 @@
                 </div>
             </div> -->
             <div class="frm-item-wrap">
-                <label class="label">HEFAMAA Number</label>
+                <label class="label">ASHIA Number</label>
                 <div class="inputWrap">
                     <input type="text" formControlName="hefeemaNumber" class="form-control">
                     <small class="alert-label" [hidden]="providerFormGroup.controls.hefeemaNumber.valid || providerFormGroup.controls.hefeemaNumber.pristine">
@@ -308,11 +308,11 @@
                 </div>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">HEFAMAA Status</label>
+                <label class="label">ASHIA Status</label>
                 <div class="inputWrap">
                     <select formControlName="hefeemaStatus" class="form-control" [compareWith]="compareStatus">
                       <option value="" selected>Select Status</option>
-                      <option *ngFor="let status of HEFAMAA_STATUSES" [ngValue]="status">{{ status.name }}</option>
+                      <option *ngFor="let status of ASHIA_STATUSES" [ngValue]="status">{{ status.name }}</option>
                   </select>
                     <small class="alert-label" [hidden]="providerFormGroup.controls.hefeemaStatus.valid || providerFormGroup.controls.hefeemaStatus.pristine">
                       This is a required field.
