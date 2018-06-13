@@ -1,6 +1,6 @@
 // Place your settings in this file to overwrite the default settings
 {
-  "files.autoSave": "off",
+  "files.autoSave": "onFocusChange",
   "workbench.iconTheme": "vscode-icons",
   "git.confirmSync": false,
   "vsicons.projectDetection.disableDetect": true,
