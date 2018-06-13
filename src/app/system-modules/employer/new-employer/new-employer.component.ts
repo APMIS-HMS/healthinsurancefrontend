@@ -36,6 +36,7 @@ export class NewEmployerComponent implements OnInit {
   countries: any[] = [];
   states: any[] = [];
   lgs: any[] = [];
+  towns: any[] = [];
   cities: any[] = [];
   banks: any[] = [];
   userTypes: any[] = [];
@@ -181,6 +182,12 @@ export class NewEmployerComponent implements OnInit {
         this._getLgaAndCities(this.selectedCountry._id, value);
       }
     });
+
+    this.employerFormGroup.controls['lga'].valueChanges.subscribe(value => {
+      if (value !== null) {
+        this.towns = value.towns;
+      }
+    });
     if (this.facility !== undefined) {
       this.selectedState = this.facility.address.state;
       this.employerFormGroup.controls['type'].setValue(
@@ -216,10 +223,16 @@ export class NewEmployerComponent implements OnInit {
     return s1._id === s2._id;
   }
   compareCity(c1: any, c2: any) {
-    return c1._id === c2._id;
+    if (c1 !== null && c2 !== null) {
+      return c2.name === c2.name;
+    }
+    return false;
   }
   compareLGA(l1: any, l2: any) {
-    return l1._id === l2._id;
+    if (l1 !== null && l2 !== null) {
+      return l2._id === l2._id;
+    }
+    return false;
   }
   compareIndustry(l1: any, l2: any) {
     return l1._id === l2._id;
@@ -308,35 +321,29 @@ export class NewEmployerComponent implements OnInit {
 
   _getLgaAndCities(_id, state) {
     this._systemService.on();
-    this._countriesService
-        .find({
-          query:
-              {_id: _id, 'states.name': state.name, $select: {'states.$': 1}}
-        })
-        .then((payload: any) => {
-          this._systemService.off();
-          if (payload.data.length > 0) {
-            const states = payload.data[0].states;
-            if (states.length > 0) {
-              this.cities = states[0].cities;
-              this.lgs = states[0].lgs;
-            }
-          }
-        })
-        .catch(error => {
-          this._systemService.off();
-        })
+    this._countriesService.find({
+      query: {_id: _id, 'states.name': state.name, $select: {'states.$': 1}}
+    }).then((payload: any) => {
+      this._systemService.off();
+      if (payload.data.length > 0) {
+        const states = payload.data[0].states;
+        if (states.length > 0) {
+          this.cities = states[0].cities;
+          this.lgs = states[0].lgs;
+        }
+      }
+    }).catch(error => {
+      this._systemService.off();
+    });
   }
   _getBanks() {
     this._systemService.on();
-    this._bankService.find({query: {$limit: 200}})
-        .then((payload: any) => {
-          this._systemService.off();
-          this.banks = payload.data;
-        })
-        .catch(err => {
-          this._systemService.off();
-        })
+    this._bankService.find({query: {$limit: 200}}).then((payload: any) => {
+      this._systemService.off();
+      this.banks = payload.data;
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   _extractBusinessContact(businessContact?: Contact) {
@@ -379,6 +386,7 @@ export class NewEmployerComponent implements OnInit {
     if (address === undefined) {
       address = <Address>{};
     }
+    delete this.employerFormGroup.controls['lga'].value.towns;
     address.city = this.employerFormGroup.controls['city'].value;
     address.lga = this.employerFormGroup.controls['lga'].value;
     address.neighbourhood =
