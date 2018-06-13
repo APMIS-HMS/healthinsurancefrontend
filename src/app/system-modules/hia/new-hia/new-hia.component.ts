@@ -43,6 +43,7 @@ export class NewHiaComponent implements OnInit {
   countries: any[] = [];
   states: any[] = [];
   lgs: any[] = [];
+  towns: any[] = [];
   cities: any[] = [];
   banks: any[] = [];
   btnText: boolean = true;
@@ -325,6 +326,12 @@ export class NewHiaComponent implements OnInit {
         );
       }
     });
+
+    this.hiaFormGroup.controls['lga'].valueChanges.subscribe(value => {
+      if (value !== null) {
+        this.towns = value.towns;
+      }
+    });
   }
 
   _getCountries() {
@@ -444,6 +451,7 @@ export class NewHiaComponent implements OnInit {
     if (address === undefined) {
       address = <Address>{};
     }
+    delete this.hiaFormGroup.controls['lga'].value.towns;
     address.city = this.hiaFormGroup.controls['city'].value;
     address.lga = this.hiaFormGroup.controls['lga'].value;
     address.neighbourhood = this.hiaFormGroup.controls['neighbourhood'].value;
@@ -797,6 +805,13 @@ export class NewHiaComponent implements OnInit {
 
   compareState(s1: any, s2: any) {
     return s1._id === s2._id;
+  }
+
+  compareCity(c1: any, c2: any) {
+    if (c1 !== null && c2 !== null) {
+      return c2.name === c2.name;
+    }
+    return false;
   }
 
   compare(l1: any, l2: any) {

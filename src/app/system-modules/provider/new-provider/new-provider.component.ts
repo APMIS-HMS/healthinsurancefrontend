@@ -44,6 +44,7 @@ export class NewProviderComponent implements OnInit {
   countries: any[] = [];
   states: any[] = [];
   lgs: any[] = [];
+  towns: any[] = [];
   cities: any[] = [];
   banks: any[] = [];
   userTypes: any[] = [];
@@ -265,6 +266,12 @@ export class NewProviderComponent implements OnInit {
       this.selectedState = value;
       if (value !== null && this.selectedCountry !== undefined) {
         this._getLgaAndCities(this.selectedCountry._id, value);
+      }
+    });
+
+    this.providerFormGroup.controls['lga'].valueChanges.subscribe(value => {
+      if (value !== null) {
+        this.towns = value.towns;
       }
     });
 
@@ -516,6 +523,7 @@ export class NewProviderComponent implements OnInit {
     if (address === undefined) {
       address = <Address>{};
     }
+    delete this.providerFormGroup.controls['lga'].value.towns;
     address.city = this.providerFormGroup.controls['city'].value;
     address.lga = this.providerFormGroup.controls['lga'].value;
     address.neighbourhood =
