@@ -22,7 +22,9 @@ export const environment = {
   platform: "${process.env.LASHMA_PLATFORM_NAME}",
   logo: "${process.env.LASHMA_LOGO}",
   secondary_logo: "",
-  title: "${process.env.LASHMA_TITLE}"
+  title: "${process.env.LASHMA_TITLE}",
+  primary-color: "${process.env.LASHMA_TITLE_TAB_COLOR}",
+  background-color: "${process.env.LASHMA_BACKGROUND_COLOR}"
 };
 `;
 if (environment === 'prod.huwe') {
@@ -32,7 +34,9 @@ if (environment === 'prod.huwe') {
     platform: "${process.env.HUWE_PLATFORM_NAME}",
     logo: "${process.env.HUWE_LOGO}",
     secondary_logo: "",
-    title: "${process.env.HUWE_TITLE}"
+    title: "${process.env.HUWE_TITLE}",
+    primary-color: "${process.env.HUWE_TITLE_TAB_COLOR}",
+    background-color: "${process.env.HUWE_BACKGROUND_COLOR}"
   };
   `;
 } else if (environment === 'prod.lagos') {
@@ -41,7 +45,9 @@ if (environment === 'prod.huwe') {
     production: ${isProd},
     platform: "${process.env.LASHMA_PLATFORM_NAME}",
     logo: "${process.env.LASHMA_LOGO}",
-    title: "${process.env.LASHMA_TITLE}"
+    title: "${process.env.LASHMA_TITLE}",
+    primary-color: "${process.env.LASHMA_TITLE_TAB_COLOR}",
+    background-color: "${process.env.LASHMA_BACKGROUND_COLOR}"
   };
   `;
 } else if (environment === 'prod.nhis') {
@@ -50,7 +56,9 @@ if (environment === 'prod.huwe') {
     production: ${isProd},
     platform: "${process.env.NHIS_PLATFORM_NAME}",
     logo: "${process.env.NHIS_LOGO}",
-    title: "${process.env.NHIS_TITLE}"
+    title: "${process.env.NHIS_TITLE}",
+    primary-color: "${process.env.NHIS_TITLE_TAB_COLOR}",
+    background-color: "${process.env.NHIS_BACKGROUND_COLOR}"
   };
   `;
 }
