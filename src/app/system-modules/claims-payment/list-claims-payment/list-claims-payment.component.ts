@@ -1,26 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
+import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
+import { LoadingBarService } from "@ngx-loading-bar/core";
+import { CoolLocalStorage } from "angular2-cool-storage";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
+import { Observable, Subscription } from "rxjs/Rx";
+
+import { environment } from "../../../../environments/environment";
+import { Claim } from "../../../models/index";
 import {
-  SystemModuleService, UserTypeService, FacilityService, ClaimService, ClaimsPaymentService,
-  CapitationFeeService, PolicyService, BeneficiaryService
-} from '../../../services/index';
-import { Claim } from '../../../models/index';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+  BeneficiaryService,
+  CapitationFeeService,
+  ClaimService,
+  ClaimsPaymentService,
+  FacilityService,
+  PolicyService,
+  SystemModuleService,
+  UserTypeService
+} from "../../../services/index";
+
+import { HeaderEventEmitterService } from "./../../../services/event-emitters/header-event-emitter.service";
+import { TABLE_LIMIT_PER_VIEW } from "./../../../services/globals/config";
 
 @Component({
   selector: "app-list-claims-payment",
-  templateUrl: './list-claims-payment.component.html',
-  styleUrls: ['./list-claims-payment.component.scss']
+  templateUrl: "./list-claims-payment.component.html",
+  styleUrls: ["./list-claims-payment.component.scss"]
 })
 export class ListClaimsPaymentComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterHiaControl = new FormControl('All');
+  filterHiaControl = new FormControl("All");
   hospitalControl = new FormControl();
   planControl = new FormControl();
   ffsTabActive: boolean = true;
@@ -48,6 +57,7 @@ export class ListClaimsPaymentComponent implements OnInit {
   claimsResetData: Boolean;
   capitationClaimsResetData: Boolean;
   index: number = 0;
+  platformName: any;
 
   constructor(
     private _router: Router,
@@ -62,12 +72,14 @@ export class ListClaimsPaymentComponent implements OnInit {
     private _beneficiaryService: BeneficiaryService,
     private _capitationFeeService: CapitationFeeService,
     private _policyService: PolicyService
-  ) {}
+  ) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Claims Payment List');
-    this._headerEventEmitter.setMinorRouteUrl('Unpaid Claims payment list');
-    this.user = (<any>this._locker.getObject('auth')).user;
+    this._headerEventEmitter.setRouteUrl("Claims Payment List");
+    this._headerEventEmitter.setMinorRouteUrl("Unpaid Claims payment list");
+    this.user = (<any>this._locker.getObject("auth")).user;
     console.log(this.user);
 
     this._getCurrentPlatform();
@@ -83,7 +95,9 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsPayments(query: any) {
     this._systemService.on();
-    this._claimService.find(query).then((res: any) => {
+    this._claimService
+      .find(query)
+      .then((res: any) => {
         console.log(res);
         this.loading = false;
         // Group claims based on provider
@@ -91,8 +105,13 @@ export class ListClaimsPaymentComponent implements OnInit {
         while (i--) {
           console.log(res.data[i]);
           let claim = res.data[i];
-          const providerId = claim.checkedinDetail.checkedInDetails.providerFacilityId._id;
-          let hasItem = this.claims.filter(e => providerId === e.checkedinDetail.checkedInDetails.providerFacilityId._id);
+          const providerId =
+            claim.checkedinDetail.checkedInDetails.providerFacilityId._id;
+          let hasItem = this.claims.filter(
+            e =>
+              providerId ===
+              e.checkedinDetail.checkedInDetails.providerFacilityId._id
+          );
 
           if (hasItem.length === 0) {
             claim.noOfClaims = 1;
@@ -115,7 +134,8 @@ export class ListClaimsPaymentComponent implements OnInit {
         //   this.showClaimsLoadMore = false;
         // }
         this._systemService.off();
-      }).catch(error => {
+      })
+      .catch(error => {
         console.log(error);
         this._systemService.off();
       });
@@ -123,7 +143,9 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsCapitationFromPolicy(query: any) {
     this._systemService.on();
-    this._policyService.find(query).then((res: any) => {
+    this._policyService
+      .find(query)
+      .then((res: any) => {
         console.log(res);
         this.cloading = false;
         let i = res.data.length;
@@ -131,7 +153,9 @@ export class ListClaimsPaymentComponent implements OnInit {
         while (i--) {
           console.log(res.data[i]);
           let policy = res.data[i];
-          let hasItem = this.capitationClaims.filter(e => e.providerId._id === policy.providerId._id);
+          let hasItem = this.capitationClaims.filter(
+            e => e.providerId._id === policy.providerId._id
+          );
 
           if (hasItem.length === 0) {
             policy.noOfBeneficiaries = 1;
@@ -148,11 +172,13 @@ export class ListClaimsPaymentComponent implements OnInit {
         //   this.capitationClaimsResetData = false;
         //   this.capitationClaims = res.data;
         // }
-        // if (this.capitationClaims.length >= this.capitationClaimsTotalEntries) {
+        // if (this.capitationClaims.length >=
+        // this.capitationClaimsTotalEntries) {
         //   this.showClaimsLoadMore = false;
         // }
         this._systemService.off();
-      }).catch(error => {
+      })
+      .catch(error => {
         console.log(error);
         this._systemService.off();
       });
@@ -160,98 +186,99 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsCapitationPrice() {
     this._systemService.on();
-    this._capitationFeeService.find({
-      query: {
-        'platformOwnerId._id': this.currentPlatform._id,
-        isActive: true
-      }
-    }).then((res: any) => {
-      console.log(res);
-      this.capitationPrice = res.data[0];
-      if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
-        this._getClaimsCapitationFromPolicy({
-          query: {
-            'platformOwnerId._id': this.currentPlatform._id,
-            isActive: true,
-            isPaid: true,
-          }
+    this._capitationFeeService
+      .find({
+        query: {
+          "platformOwnerId._id": this.currentPlatform._id,
+          isActive: true
         }
-        );
-      } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
-        this._getClaimsCapitationFromPolicy({
-          query: {
-            'platformOwnerId._id': this.currentPlatform._id,
-            'hiaId.hia.type._id': this.user.userType._id,
-            isActive: true,
-            isPaid: true,
-          }
+      })
+      .then((res: any) => {
+        console.log(res);
+        this.capitationPrice = res.data[0];
+        if (
+          !!this.user.userType &&
+          this.user.userType.name === "Platform Owner"
+        ) {
+          this._getClaimsCapitationFromPolicy({
+            query: {
+              "platformOwnerId._id": this.currentPlatform._id,
+              isActive: true,
+              isPaid: true
+            }
+          });
+        } else if (
+          !!this.user.userType &&
+          this.user.userType.name === "Health Insurance Agent"
+        ) {
+          this._getClaimsCapitationFromPolicy({
+            query: {
+              "platformOwnerId._id": this.currentPlatform._id,
+              "hiaId.hia.type._id": this.user.userType._id,
+              isActive: true,
+              isPaid: true
+            }
+          });
         }
-        );
-      }
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    });
+        this._systemService.off();
+      })
+      .catch(error => {
+        console.log(error);
+        this._systemService.off();
+      });
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.find({
-      query: {
-        shortName: CurrentPlaformShortName,
-        $select: ['name', 'shortName', 'address.state']
-      }
-    }).then((res: any) => {
-      if (res.data.length > 0) {
-        console.log(res);
-        this.currentPlatform = res.data[0];
-        if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
-          this._getClaimsPayments({
-              query: {
-                'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
-                isPaid: false,
-                'approvedDocumentation.response.isApprove': true,
-                $limit: this.limit,
-                $skip: this.limit * this.index
-              }
-            }
-          );
-        } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
-          this._getClaimsPayments({
-            query: {
-                'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
-                'checkedinDetail.policyId.hiaId.hia.type._id': this.user.userType._id,
-                isPaid: false,
-                'approvedDocumentation.response.isApprove': true,
-                $limit: this.limit,
-                $skip: this.limit * this.index
-              }
-            }
-          );
+    this._facilityService
+      .find({
+        query: {
+          shortName: this.platformName,
+          $select: ["name", "shortName", "address.state"]
         }
+      })
+      .then((res: any) => {
+        if (res.data.length > 0) {
+          console.log(res);
+          this.currentPlatform = res.data[0];
+          if (
+            !!this.user.userType &&
+            this.user.userType.name === "Platform Owner"
+          ) {
+            this._getClaimsPayments({
+              query: {
+                "checkedinDetail.beneficiaryObject.platformOwnerId._id": this
+                  .currentPlatform._id,
+                isPaid: false,
+                "approvedDocumentation.response.isApprove": true,
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            });
+          } else if (
+            !!this.user.userType &&
+            this.user.userType.name === "Health Insurance Agent"
+          ) {
+            this._getClaimsPayments({
+              query: {
+                "checkedinDetail.beneficiaryObject.platformOwnerId._id": this
+                  .currentPlatform._id,
+                "checkedinDetail.policyId.hiaId.hia.type._id": this.user
+                  .userType._id,
+                isPaid: false,
+                "approvedDocumentation.response.isApprove": true,
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            });
+          }
 
-        this._getClaimsCapitationPrice();
-      }
-    }).catch(err => {
-      console.log(err);
-    });
+          this._getClaimsCapitationPrice();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
-
-  // _getCurrentPlatform() {
-  //   this._facilityService
-  //     .find({ query: { shortName: CurrentPlaformShortName } })
-  //     .then((res: any) => {
-  //       if (res.data.length > 0) {
-  //         console.log(res);
-  //         this.currentPlatform = res.data[0];
-  //         this._getClaimsPayments();
-  //         this._getClaimsCapitationPrice();
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }
 
   onCheckFFSQueue(index, claim: Claim) {
     if (!claim.isChecked) {
@@ -290,10 +317,7 @@ export class ListClaimsPaymentComponent implements OnInit {
     });
 
     delete this.user.roles;
-    const body = {
-      claims: claimsIds,
-      queuedBy: this.user
-    };
+    const body = { claims: claimsIds, queuedBy: this.user };
 
     // this._claimsPaymentService.createMultipleItem(body).then((res: any) => {
     //     console.log(res);
@@ -301,11 +325,12 @@ export class ListClaimsPaymentComponent implements OnInit {
     //     this.qFFSBtnProcessing = false;
     //     this.qFFSDisableBtn = false;
     //     if (res.status === 'success') {
-    //       this._toastr.success("Selected claims has been queued successfully!", "Queueing Success!");
-    //       this._getClaimsPayments();
+    //       this._toastr.success("Selected claims has been queued
+    //       successfully!", "Queueing Success!"); this._getClaimsPayments();
     //       this._router.navigate(["/modules/claims/queued-claims"]);
     //     } else {
-    //       this._toastr.error("There was a problem queueing claims. Please try again later!", "Queueing Error!");
+    //       this._toastr.error("There was a problem queueing claims. Please try
+    //       again later!", "Queueing Error!");
     //     }
     //   }).catch(err => console.log(err));
   }
@@ -327,15 +352,15 @@ export class ListClaimsPaymentComponent implements OnInit {
   }
 
   onCheckPayAllCapitation() {
-    console.log('Capitation Payment');
+    console.log("Capitation Payment");
   }
 
   onCheckPayItemCapitation() {
-    console.log('Item Capitation');
+    console.log("Item Capitation");
   }
 
   onClickTab(tabName: string) {
-    if (tabName === 'feeForService') {
+    if (tabName === "feeForService") {
       this.ffsTabActive = true;
       this.cTabActive = false;
     } else {
@@ -347,18 +372,24 @@ export class ListClaimsPaymentComponent implements OnInit {
   navigate(url: string, id?: string) {
     if (!!id) {
       this._systemService.on();
-      this._router.navigate([url + id]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
+      this._router
+        .navigate([url + id])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
     } else {
       this._systemService.on();
-      this._router.navigate([url]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
+      this._router
+        .navigate([url])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
     }
   }
 

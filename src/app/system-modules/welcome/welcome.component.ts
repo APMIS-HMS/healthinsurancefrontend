@@ -1,27 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {Title} from '@angular/platform-browser';
-import {NavigationEnd, Router} from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { Title } from "@angular/platform-browser";
+import { NavigationEnd, Router } from "@angular/router";
 
-import {environment} from '../../../environments/environment';
+import { environment } from "../../../environments/environment";
 
-import {HeaderEventEmitterService} from './../../services/event-emitters/header-event-emitter.service';
-
+import { HeaderEventEmitterService } from "./../../services/event-emitters/header-event-emitter.service";
 
 @Component({
-  selector: 'app-welcome',
-  templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.scss']
+  selector: "app-welcome",
+  templateUrl: "./welcome.component.html",
+  styleUrls: ["./welcome.component.scss"]
 })
 export class WelcomeComponent implements OnInit {
-  title = '';
+  title = "";
   platformName: string;
   platformLogo: string;
   secondaryLogo: string;
 
-
   constructor(
-      private _headerEventEmitter: HeaderEventEmitterService,
-      private titleService: Title) {
+    private _headerEventEmitter: HeaderEventEmitterService,
+    private titleService: Title
+  ) {
     this.title = environment.title;
     this.titleService.setTitle(this.title);
     this.platformName = environment.platform;
@@ -30,7 +29,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('LASHMA');
-    this._headerEventEmitter.setMinorRouteUrl('Welcome Page');
+    this._headerEventEmitter.setRouteUrl(this.platformName);
+    this._headerEventEmitter.setMinorRouteUrl("Welcome Page");
   }
 }

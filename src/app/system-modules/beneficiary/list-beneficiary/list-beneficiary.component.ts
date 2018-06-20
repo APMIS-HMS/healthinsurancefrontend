@@ -8,9 +8,10 @@ import {CoolLocalStorage} from 'angular2-cool-storage';
 import {ToastsManager} from 'ng2-toastr/ng2-toastr';
 import {Observable} from 'rxjs/Rx';
 
+import {environment} from '../../../../environments/environment';
+
 import {Beneficiary} from './../../../models/setup/beneficiary';
 import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
-import {CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW} from './../../../services/globals/config';
 import {BeneficiaryService, FacilityService, PlanTypeService, SystemModuleService, UploadService, UserTypeService} from './../../../services/index';
 import {PlanService} from './../../../services/plan/plan.service';
 import {PolicyService} from './../../../services/policy/policy.service';
@@ -39,6 +40,7 @@ export class ListBeneficiaryComponent implements OnInit {
   currentPlatform: any;
   user: any;
   hasCreateBeneficiary: Boolean = false;
+  platformName: string;
 
   constructor(
       private _router: Router,
@@ -49,6 +51,7 @@ export class ListBeneficiaryComponent implements OnInit {
       private _beneficiaryService: BeneficiaryService,
       private _policyService: PolicyService, private _planService: PlanService,
       private _locker: CoolLocalStorage, private _toastr: ToastsManager) {
+    this.platformName = environment.platform;
     this._router.events.filter(event => event instanceof NavigationEnd)
         .subscribe(e => {});
     this.user = (<any>this._locker.getObject('auth')).user;
@@ -140,7 +143,7 @@ export class ListBeneficiaryComponent implements OnInit {
   }
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({query: {shortName: CurrentPlaformShortName}})
+    this._facilityService.find({query: {shortName: this.platformName}})
         .then((res: any) => {
           if (res.data.length > 0) {
             this.currentPlatform = res.data[0];

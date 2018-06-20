@@ -8,7 +8,6 @@ import {Observable} from 'rxjs/Observable';
 
 import {environment} from '../../../environments/environment';
 import {PasswordValidation} from '../../services/common/password-validation';
-import {CurrentPlaformShortName} from '../../services/globals/config';
 
 import {Facility, Person, User} from './../../models/index';
 import {FacilityService, GenderService, PersonService, SystemModuleService, UserService, UserTypeService} from './../../services/index';
@@ -92,8 +91,7 @@ export class SignupComponent implements OnInit {
         (results: any) => {
           this._systemService.off();
           if (results[0].data.length > 0) {
-            this.signupFormGroup.controls['email'].setErrors(
-                {'duplicate': true});
+            this.signupFormGroup.controls['email'].setErrors({duplicate: true});
           }
         },
         error => {
@@ -113,7 +111,7 @@ export class SignupComponent implements OnInit {
           this._systemService.off();
           if (results[0].data.length > 0) {
             this.signupFormGroup.controls['phoneNumber'].setErrors(
-                {'duplicate': true});
+                {duplicate: true});
           }
         },
         error => {
@@ -133,7 +131,7 @@ export class SignupComponent implements OnInit {
           lastName: value.lastName,
           email: value.email,
           phoneNumber: value.phoneNumber,
-          mothersMaidenName: value.mothersMaidenName,
+          mothersMaidenName: value.mothersMaidenName
         };
 
         const user = {
@@ -198,7 +196,8 @@ export class SignupComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({query: {shortName: platformName}})
+    this._facilityService
+        .findWithOutAuth({query: {shortName: this.platformName}})
         .then(res => {
           if (res.data.length > 0) {
             this.currentPlatform = res.data[0];
@@ -249,12 +248,7 @@ export class SignupComponent implements OnInit {
   }
 
   private _getGender() {
-    this._genderService.find({})
-        .then(
-            payload => {
-
-            })
-        .catch(err => {});
+    this._genderService.find({}).then(payload => {}).catch(err => {});
   }
 
   private logUser(user: any): Promise<any> {

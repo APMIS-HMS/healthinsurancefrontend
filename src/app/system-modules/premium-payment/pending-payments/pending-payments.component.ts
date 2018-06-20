@@ -1,17 +1,34 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-// import { Angular4PaystackModule } from 'angular4-paystack';
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import {
-  CurrentPlaformShortName, PAYSTACK_CLIENT_KEY, PAYMENTTYPES, SPONSORSHIP, TABLE_LIMIT_PER_VIEW
-} from '../../../services/globals/config';
-import { SystemModuleService, FacilityService, ClaimsPaymentService, PolicyService, PremiumPaymentService } from '../../../services/index';
-import { Policy, OrganizationPolicy } from '../../../models/index';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from "@angular/forms";
+import { Router } from "@angular/router";
+import { LoadingBarService } from "@ngx-loading-bar/core";
+import { CoolLocalStorage } from "angular2-cool-storage";
+// import { Angular4PaystackModule } from 'angular4-paystack';
+import { IMyDate, IMyDpOptions } from "mydatepicker";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
+
+import { environment } from "../../../../environments/environment";
+import { OrganizationPolicy, Policy } from "../../../models/index";
+import {
+  PAYMENTTYPES,
+  PAYSTACK_CLIENT_KEY,
+  SPONSORSHIP,
+  TABLE_LIMIT_PER_VIEW
+} from "../../../services/globals/config";
+import {
+  ClaimsPaymentService,
+  FacilityService,
+  PolicyService,
+  PremiumPaymentService,
+  SystemModuleService
+} from "../../../services/index";
+
+import { HeaderEventEmitterService } from "./../../../services/event-emitters/header-event-emitter.service";
 
 @Component({
   selector: "app-pending-payments",
@@ -41,7 +58,7 @@ export class PendingPaymentsComponent implements OnInit {
   chequePayment: boolean = false;
   paystackProcessing: boolean = false;
   refKey: number;
-  paymentType: string = 'e-Payment';
+  paymentType: string = "e-Payment";
   totalCost: number = 0;
   totalItem: number = 0;
   showPaystack: boolean = false;
@@ -58,11 +75,10 @@ export class PendingPaymentsComponent implements OnInit {
   resetData: Boolean;
   index: number = 0;
 
-  public myDatePickerOptions: IMyDpOptions = {
-    dateFormat: 'dd-mmm-yyyy'
-  };
+  public myDatePickerOptions: IMyDpOptions = { dateFormat: "dd-mmm-yyyy" };
 
   public today: IMyDate;
+  platformName: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -74,24 +90,26 @@ export class PendingPaymentsComponent implements OnInit {
     private _locker: CoolLocalStorage,
     private _policyService: PolicyService,
     private _premiumPaymentService: PremiumPaymentService
-  ) {}
+  ) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('PREMIUM PAYMENT ');
+    this._headerEventEmitter.setRouteUrl("PREMIUM PAYMENT ");
     this._headerEventEmitter.setMinorRouteUrl(
-      'Pending payments for both individuals and organizations'
+      "Pending payments for both individuals and organizations"
     );
-    this.user = (<any>this._locker.getObject('auth')).user;
+    this.user = (<any>this._locker.getObject("auth")).user;
     this._getCurrentPlatform();
 
     this.paymentGroup = this._fb.group({
-      batchNo: ['', [<any>Validators.required]],
-      paymentType: ['e-Payment', [<any>Validators.required]]
+      batchNo: ["", [<any>Validators.required]],
+      paymentType: ["e-Payment", [<any>Validators.required]]
     });
 
-    this.paymentGroup.controls['paymentType'].valueChanges.subscribe(value => {
+    this.paymentGroup.controls["paymentType"].valueChanges.subscribe(value => {
       this.paymentType = value;
-      if (value === 'Cash' || value === 'Cheque') {
+      if (value === "Cash" || value === "Cheque") {
         this.cashPayment = true;
         this.chequePayment = true;
         this.withPaystack = false;
@@ -103,18 +121,20 @@ export class PendingPaymentsComponent implements OnInit {
     });
 
     this.refKey =
-      (this.user ? this.user._id.substr(20) : '') + new Date().getTime();
+      (this.user ? this.user._id.substr(20) : "") + new Date().getTime();
   }
 
   private _getIndividualPolicies() {
-    const sponsorship = this.sponsorship.filter(e => e.name.toLowerCase() === 'self')[0].name;
+    const sponsorship = this.sponsorship.filter(
+      e => e.name.toLowerCase() === "self"
+    )[0].name;
     let policies = [];
     this._systemService.on();
     this._policyService
       .find({
         query: {
-          'platformOwnerId._id': this.currentPlatform._id,
-          'sponsorshipId.name': sponsorship,
+          "platformOwnerId._id": this.currentPlatform._id,
+          "sponsorshipId.name": sponsorship,
           isPaid: false,
           $limit: this.limit,
           $skip: this.index * this.limit,
@@ -153,7 +173,9 @@ export class PendingPaymentsComponent implements OnInit {
   private _getOrganisationPolicies(query, id, userType) {
     this._systemService.on();
 
-    this._policyService.find(query).then((res: any) => {
+    this._policyService
+      .find(query)
+      .then((res: any) => {
         console.log(res);
 
         this.organisationLoading = false;
@@ -186,7 +208,8 @@ export class PendingPaymentsComponent implements OnInit {
         //   this.resetData = false;
         //   this.organisationPolicies = res.data;
         // }
-        // if (this.organisationPolicies.length >= this.OrganisationTotalEntries) {
+        // if (this.organisationPolicies.length >=
+        // this.OrganisationTotalEntries) {
         //   this.organisationShowLoadMore = false;
         // }
         this._systemService.off();
@@ -206,22 +229,24 @@ export class PendingPaymentsComponent implements OnInit {
   private _getCurrentPlatform() {
     this._systemService.on();
     console.log(this.user);
-    const sponsorship = this.sponsorship.filter(e => e.name.toLowerCase() === 'organization')[0].name;
+    const sponsorship = this.sponsorship.filter(
+      e => e.name.toLowerCase() === "organization"
+    )[0].name;
 
     this._facilityService
-      .find({ query: { shortName: CurrentPlaformShortName } })
+      .find({ query: { shortName: this.platformName } })
       .then((res: any) => {
         if (res.data.length > 0) {
           this.currentPlatform = res.data[0];
           this._getIndividualPolicies();
 
-          if (!!this.user.userType && this.user.userType.name === 'Provider') {
+          if (!!this.user.userType && this.user.userType.name === "Provider") {
             this._getOrganisationPolicies(
               {
                 query: {
-                  'platformOwnerId._id': this.currentPlatform._id,
-                  'sponsorshipId.name': sponsorship,
-                  'providerId._id': this.user.facilityId._id,
+                  "platformOwnerId._id": this.currentPlatform._id,
+                  "sponsorshipId.name": sponsorship,
+                  "providerId._id": this.user.facilityId._id,
                   isPaid: false,
                   $limit: this.limit,
                   $skip: this.index * this.limit,
@@ -231,28 +256,17 @@ export class PendingPaymentsComponent implements OnInit {
               this.user.facilityId._id,
               this.user.userType.name
             );
-          } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
-            console.log('multi');
+          } else if (
+            !!this.user.userType &&
+            this.user.userType.name === "Health Insurance Agent"
+          ) {
+            console.log("multi");
             this._getOrganisationPolicies(
               {
                 query: {
-                  'platformOwnerId._id': this.currentPlatform._id,
-                  'hiaId._id': this.user.facilityId._id,
-                  'sponsorshipId.name': sponsorship,
-                  isPaid: false,
-                  $limit: this.limitValue,
-                  $skip: this.skipValue * this.limitValue,
-                  $sort: { createdAt: -1 }
-                }
-              }, this.user.facilityId._id, this.user.userType.name
-            );
-          } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
-            this._getOrganisationPolicies(
-              {
-                query: {
-                  'platformOwnerId._id': this.currentPlatform._id,
-                  'sponsor._id': this.user.facilityId._id,
-                  'sponsorshipId.name': sponsorship,
+                  "platformOwnerId._id": this.currentPlatform._id,
+                  "hiaId._id": this.user.facilityId._id,
+                  "sponsorshipId.name": sponsorship,
                   isPaid: false,
                   $limit: this.limitValue,
                   $skip: this.skipValue * this.limitValue,
@@ -262,17 +276,41 @@ export class PendingPaymentsComponent implements OnInit {
               this.user.facilityId._id,
               this.user.userType.name
             );
-          } else if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
-            console.log('platform owner');
+          } else if (
+            !!this.user.userType &&
+            this.user.userType.name === "Employer"
+          ) {
             this._getOrganisationPolicies(
               {
                 query: {
-                  'platformOwnerId._id': this.user.facilityId._id,
+                  "platformOwnerId._id": this.currentPlatform._id,
+                  "sponsor._id": this.user.facilityId._id,
+                  "sponsorshipId.name": sponsorship,
+                  isPaid: false,
                   $limit: this.limitValue,
                   $skip: this.skipValue * this.limitValue,
-                  $sort: { createdAt: -1 },
+                  $sort: { createdAt: -1 }
                 }
-              }, this.user.facilityId._id, this.user.userType.name
+              },
+              this.user.facilityId._id,
+              this.user.userType.name
+            );
+          } else if (
+            !!this.user.userType &&
+            this.user.userType.name === "Platform Owner"
+          ) {
+            console.log("platform owner");
+            this._getOrganisationPolicies(
+              {
+                query: {
+                  "platformOwnerId._id": this.user.facilityId._id,
+                  $limit: this.limitValue,
+                  $skip: this.skipValue * this.limitValue,
+                  $sort: { createdAt: -1 }
+                }
+              },
+              this.user.facilityId._id,
+              this.user.userType.name
             );
           } else {
             this.organisationLoading = false;
@@ -292,7 +330,8 @@ export class PendingPaymentsComponent implements OnInit {
   //     this.selectedOrganizationPolicies.push(policy);
   //   } else {
   //     policy.isChecked = false;
-  //     this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
+  //     this.selectedOrganizationPolicies =
+  //     this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
   //     console.log(this.selectedOrganizationPolicies);
   //   }
   // }
@@ -318,8 +357,8 @@ export class PendingPaymentsComponent implements OnInit {
   //     facilityId: this.user.facilityId,
   //     email: this.user.email,
   //     isActive: this.user.isActive,
-  //     platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
-  //     phoneNumber: this.user.phoneNumber
+  //     platformOwnerId: (!!this.user.platformOwnerId) ?
+  //     this.user.platformOwnerId : '', phoneNumber: this.user.phoneNumber
   //   };
 
   //   let ref = {
@@ -355,7 +394,8 @@ export class PendingPaymentsComponent implements OnInit {
   //     };
   //     console.log('Call API');
   //     // Call paystack verification API
-  //     this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes: any) => {
+  //     this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes:
+  //     any) => {
   //       console.log(verifyRes);
   //       if (!!verifyRes.body._id) {
   //         this._getOrganisationPolicies();
@@ -364,7 +404,8 @@ export class PendingPaymentsComponent implements OnInit {
   //         this.premiumPaymentData = {};
   //         this.ngOnInit();
   //         // this._router.navigate(['/modules/premium-payment/previous']);
-  //         this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+  //         this._toastr.success('Policy has been activated successfully.',
+  //         'Payment Completed!');
   //       }
   //     }).catch(err => {
   //       console.log(err);
@@ -373,7 +414,7 @@ export class PendingPaymentsComponent implements OnInit {
   // }
 
   onClickTab(tabName: string) {
-    if (tabName === 'individualPayment') {
+    if (tabName === "individualPayment") {
       this.individualActiveTab = true;
       this.organisationActiveTab = false;
     } else {

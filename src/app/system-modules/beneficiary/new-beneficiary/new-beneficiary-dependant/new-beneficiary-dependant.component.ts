@@ -17,8 +17,8 @@ import { GenderService } from './../../../../services/common/gender.service';
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName } from '../../../../services/globals/config';
 import { UserTypeService, BankService, CountryService, FacilityService, SystemModuleService, UploadService } from '../../../../services/index';
+import { environment } from '../../../../../environments/environment';
 
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -52,6 +52,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   };
 
   public today: IMyDate;
+  platformName: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -74,6 +75,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _policyService: PolicyService,
     private _beneficiaryService: BeneficiaryService
   ) {
+    this.platformName = environment.platform;
   }
 
   ngOnInit() {
@@ -228,7 +230,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   _getCurrentPlatform() {
     this._facilityService.find({
       query:
-      { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }
+      { shortName: this.platformName, $select: ['name', 'shortName', 'address.state'] }
     }).then((res: any) => {
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
