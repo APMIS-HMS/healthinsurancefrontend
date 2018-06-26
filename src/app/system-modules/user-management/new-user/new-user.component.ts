@@ -88,6 +88,7 @@ export class NewUserComponent implements OnInit {
     this._initializedUser();
 
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
     // this._getGenders();
     this._getUserTypes();
     this._getProfessions();
@@ -263,7 +264,8 @@ export class NewUserComponent implements OnInit {
         if (this.user.userType === undefined) {
           value.platformOwnerId = value.facilityId;
         } else {
-          value.platformOwnerId = this.user.platformOwnerId;
+          // value.platformOwnerId = this.user.platformOwnerId;
+          value.platformOwnerId = this.user.facilityId;
         }
 
         if (value.userType.name === 'Provider') {
@@ -300,9 +302,9 @@ export class NewUserComponent implements OnInit {
             });
           }).catch(err => {
             this._systemService.off()
-          })
-
+          });
         } else {
+          console.log(value);
           this._userService.create(value).then(payload => {
             this._systemService.off();
             this._toastr.success('You have successfully created a user!', 'Success!');

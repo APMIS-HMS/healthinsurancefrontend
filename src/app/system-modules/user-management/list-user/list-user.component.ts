@@ -50,6 +50,7 @@ export class ListUserComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('User List');
     this._headerEventEmitter.setMinorRouteUrl('List of all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
+    console.log(this.auth);
     this._getCurrentPlatform();
   }
   private _getCurrentPlatform() {
@@ -58,6 +59,7 @@ export class ListUserComponent implements OnInit {
         .then(res => {
           if (res.data.length > 0) {
             this.currentPlatform = res.data[0];
+            console.log(this.currentPlatform);
             this._getUsers();
           } else if (this.auth.userType === undefined) {
             this._getUsers();
