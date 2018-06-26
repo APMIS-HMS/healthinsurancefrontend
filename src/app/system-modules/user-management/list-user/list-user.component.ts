@@ -94,7 +94,7 @@ export class ListUserComponent implements OnInit {
       this._userService
           .find({
             query: {
-              // 'platformOwnerId._id': this.currentPlatform._id,
+              'platformOwnerId._id': this.currentPlatform._id,
               $limit: this.limit,
               $skip: this.index * this.limit,
               $sort: {createdAt: -1}
