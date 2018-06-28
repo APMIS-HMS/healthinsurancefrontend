@@ -65,7 +65,7 @@ export class ListUserComponent implements OnInit {
             this._getUsers();
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {});
   }
 
   _getUsers() {
@@ -73,10 +73,8 @@ export class ListUserComponent implements OnInit {
     if (this.auth.userType === undefined) {
       this._userService.find({query: {$sort: {createdAt: -1}}})
           .then((payload: any) => {
-            console.log(payload);
             this.loading = false;
             this.totalEntries = payload.total;
-            // Array.prototype.push.apply(this.users,payload.data);
             if (this.resetData !== true) {
               this.users.push(...payload.data);
             } else {
@@ -92,7 +90,6 @@ export class ListUserComponent implements OnInit {
             this._systemService.off();
           });
     } else if (this.auth.userType.name === 'Platform Owner') {
-      console.log(this.auth.userType);
       this._userService
           .find({
             query: {
@@ -103,7 +100,6 @@ export class ListUserComponent implements OnInit {
             }
           })
           .then((payload: any) => {
-            console.log(payload);
             this.loading = false;
             this.totalEntries = payload.total;
             // Array.prototype.push.apply(this.users,payload.data);
@@ -144,7 +140,6 @@ export class ListUserComponent implements OnInit {
           this._systemService.off();
         })
         .catch(err => {
-          console.log(err);
           this._systemService.off();
         });
   }

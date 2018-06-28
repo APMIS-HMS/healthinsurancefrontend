@@ -5,6 +5,7 @@ import {LoadingBarService} from '@ngx-loading-bar/core';
 import {CoolLocalStorage} from 'angular2-cool-storage';
 
 import {environment} from '../../../../environments/environment';
+import {FacilityService} from '../../../services';
 
 import {SystemModuleService} from './../../../services/common/system-module.service';
 import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
@@ -30,12 +31,14 @@ export class PreAuthorizationListComponent implements OnInit {
   resetData: Boolean;
   index: number = 0;
   platformName: any;
+  currentPlatform: any;
 
   constructor(
       private _router: Router,
       private _headerEventEmitter: HeaderEventEmitterService,
       private _systemService: SystemModuleService,
       private _preAuthorizationService: PreAuthorizationService,
+      private _facilityService: FacilityService,
       private _locker: CoolLocalStorage) {
     this.platformName = environment.platform;
   }
@@ -44,9 +47,19 @@ export class PreAuthorizationListComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._headerEventEmitter.setRouteUrl('Pre-Authorization List');
     this._headerEventEmitter.setMinorRouteUrl('All pre-authorizations');
-    this._getPreAuthorizations();
+    this._getCurrentPlatform();
   }
-
+  private _getCurrentPlatform() {
+    this._facilityService
+        .findWithOutAuth({query: {shortName: this.platformName}})
+        .then(res => {
+          if (res.data.length > 0) {
+            this.currentPlatform = res.data[0];
+            this._getPreAuthorizations();
+          }
+        })
+        .catch(err => {});
+  }
   _getPreAuthorizations() {
     if (this.user.userType.name === 'Provider') {
     }
@@ -60,7 +73,6 @@ export class PreAuthorizationListComponent implements OnInit {
           }
         })
         .then((payload: any) => {
-          console.log(payload);
           this.loading = false;
           // this.authorizations = payload.data;
           this.totalEntries = payload.total;
@@ -76,7 +88,6 @@ export class PreAuthorizationListComponent implements OnInit {
           this._systemService.off();
         })
         .catch(err => {
-          console.log(err);
           this._systemService.off();
         });
   }
@@ -105,14 +116,8 @@ export class PreAuthorizationListComponent implements OnInit {
 
   navigateDetail(auth) {
     this._router.navigate(['/modules/pre-auth/pre-authorizations', auth._id])
-        .then(
-            payload => {
-
-            })
-        .catch(
-            err => {
-
-            });
+        .then(payload => {})
+        .catch(err => {});
   }
 
   loadMore() {

@@ -45,7 +45,6 @@ export class ListReferalsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Referral List');
     this._headerEventEmitter.setMinorRouteUrl('All Referrals');
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
     this._getReferrals();
   }
 
@@ -117,7 +116,6 @@ export class ListReferalsComponent implements OnInit {
             this._systemService.off();
           });
     } else {
-      console.log('You are not required to view this content...');
       this.loading = false;
     }
     this.index++;
@@ -129,9 +127,7 @@ export class ListReferalsComponent implements OnInit {
             payload => {
 
             })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(err => {});
   }
 
   loadMore() {
