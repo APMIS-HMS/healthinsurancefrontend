@@ -263,10 +263,8 @@ export class NewProviderComponent implements OnInit {
       // logoStatus:[<any>Validators.required],
       // servicesRendered:[<any>Validators.required]
     });
-    console.log(this.facility);
 
     this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
-      console.log(this.selectedCountry);
       this.selectedState = value;
       if (value !== null && this.selectedCountry !== undefined) {
         this._getLgaAndCities(this.selectedCountry._id, value);
@@ -285,14 +283,12 @@ export class NewProviderComponent implements OnInit {
     this._facilityService
         .findWithOutAuth({query: {shortName: this.platformName}})
         .then(res => {
-          console.log(res);
           if (res.data.length > 0) {
             this.currentPlatform = res.data[0];
             this._systemService.off();
           }
         })
         .catch(err => {
-          console.log(err);
           this._systemService.off();
         });
   }
@@ -608,7 +604,6 @@ export class NewProviderComponent implements OnInit {
       this.disableBtn = true;
 
       let facility = this._extractFacility();
-      console.log(facility);
       if (!!this.facility) {
         // Edit Provider.
         Promise
@@ -617,7 +612,6 @@ export class NewProviderComponent implements OnInit {
               this.uploadItContact()
             ])
             .then((allResult: any) => {
-              console.log(allResult);
               if (allResult[0] !== undefined &&
                   allResult[0].body[0] !== undefined &&
                   allResult[0].body.length > 0) {
@@ -645,7 +639,6 @@ export class NewProviderComponent implements OnInit {
               facility._id = this.selectedFacilityId;
               facility.platformOwnerId = this.currentPlatform;
               facility.provider.providerId = this.facility.provider.providerId;
-              console.log(facility);
               this._facilityService.update(facility)
                   .then((payload: any) => {
                     this._systemService.off();
@@ -663,7 +656,6 @@ export class NewProviderComponent implements OnInit {
                         'primary');
                   })
                   .catch(err => {
-                    console.log(err);
                     this._systemService.off();
                     this.btnText = true;
                     this.btnProcessing = false;
@@ -686,7 +678,6 @@ export class NewProviderComponent implements OnInit {
               this.uploadItContact()
             ])
             .then((allResult: any) => {
-              console.log(allResult);
               if (allResult[0] !== undefined &&
                   allResult[0].body[0] !== undefined &&
                   allResult[0].body.length > 0) {
@@ -727,7 +718,6 @@ export class NewProviderComponent implements OnInit {
                     this._router.navigate(['/modules/provider/providers']);
                   })
                   .catch(err => {
-                    console.log(err);
                     this._systemService.off();
                     this.btnText = true;
                     this.btnProcessing = false;
@@ -822,7 +812,6 @@ export class NewProviderComponent implements OnInit {
           var reader = new FileReader();
           let that = this;
           reader.onload = function(e: any) {
-            console.log(e);
             that.logoImage.nativeElement.src = e.target.result;
             that._systemService.off();
           };

@@ -67,6 +67,7 @@ export class PreAuthorizationListComponent implements OnInit {
     this._preAuthorizationService
         .find({
           query: {
+            platformOwnerId: this.currentPlatform._id,
             $sort: {createdAt: -1},
             $limit: this.limit,
             $skip: this.limit * this.index

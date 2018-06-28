@@ -106,7 +106,6 @@ export class ListEmployerComponent implements OnInit {
         .subscribe((payload: any) => {
           var strVal = this.listsearchControl.value;
           this.employers = payload.data.filter(function(item) {
-            console.log(item);
             return (
                 item.name.toLowerCase().includes(strVal.toLowerCase()) ||
                 item.email.toLowerCase().includes(strVal.toLowerCase()) ||
@@ -127,9 +126,7 @@ export class ListEmployerComponent implements OnInit {
 
   ngAfterViewInit() {}
 
-  onClickEdit(employer) {
-    console.log(employer);
-  }
+  onClickEdit(employer) {}
 
   _getIndustries() {
     this._industryService.find({})
@@ -138,12 +135,10 @@ export class ListEmployerComponent implements OnInit {
             this.industries = res.data;
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {});
   }
 
-  onSelectedIndustry(item) {
-    console.log(item.name);
-  }
+  onSelectedIndustry(item) {}
 
   onSelectedStatus(item: any) {
     this.employers = this.local_employers;
@@ -177,7 +172,6 @@ export class ListEmployerComponent implements OnInit {
     this._facilityService.find(query)
         .then((res: any) => {
           this.loading = false;
-          console.log(res.total);
           this.totalData = res.total;
           if (res.data.length > 0) {
             // this.employers = res.data;
@@ -193,7 +187,7 @@ export class ListEmployerComponent implements OnInit {
             this.showLoadMore = false;
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {});
   }
 
   private _getEmployers() {
@@ -214,7 +208,6 @@ export class ListEmployerComponent implements OnInit {
         this.user !== undefined &&
         (!!this.user.userType &&
          this.user.userType.name === 'Health Insurance Agent')) {
-      console.log('agent');
       let query = {
         query: {
           'facilityType._id': this.selectedUserType._id,
@@ -239,7 +232,7 @@ export class ListEmployerComponent implements OnInit {
             this.currentPlatform = res.data[0];
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {});
   }
 
   private _getUserTypes() {
@@ -256,7 +249,6 @@ export class ListEmployerComponent implements OnInit {
         const index = results[0].data.findIndex(x => x.name === 'Employer');
         if (index > -1) {
           this.selectedUserType = results[0].data[index];
-          console.log(this.selectedUserType);
           this._getEmployers();
         } else {
           this.selectedUserType = undefined;
@@ -286,7 +278,6 @@ export class ListEmployerComponent implements OnInit {
 
   navigateToDetails(id: string) {
     this._systemService.on();
-    console.log(id);
     this._router.navigate(['/modules/employer/employers/' + id])
         .then(res => {
           this._systemService.off();

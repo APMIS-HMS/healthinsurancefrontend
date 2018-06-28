@@ -67,13 +67,11 @@ export class ListPaidClaimsComponent implements OnInit {
           }
         })
         .then((res: any) => {
-          console.log(res);
           this.loading = false;
           this.claims = res.data;
           this._systemService.off();
         })
         .catch(error => {
-          console.log(error);
           this._systemService.off();
         });
   }
@@ -92,9 +90,7 @@ export class ListPaidClaimsComponent implements OnInit {
             this._getPaidClaims();
           }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(err => {});
   }
 
   navigate(url: string, id?: string) {

@@ -112,14 +112,12 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
     this._getGenders();
     this._getTitles();
     this._getMaritalStatus();
-    console.log(this.user)
     if (!this.user.completeRegistration && !!this.user.userType &&
         this.user.userType.name === 'Beneficiary') {
       this.isCompleteRegistration = false;
       this._getUser();
       this._getPerson();
-    }
-    else if (
+    } else if (
         !!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this._getPerson();
     }
@@ -161,7 +159,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
               payload.phoneNumber);
           this.stepOneFormGroup.controls.email.setValue(payload.email);
         })
-        .catch(err => {console.log(err)})
+        .catch(err => {})
   }
 
   _getPerson() {
@@ -169,46 +167,37 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
         this._personService.find({query: {email: this.user.email}}));
     let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find(
         {query: {'personId.email': this.user.email}}));
-    Observable.forkJoin([person$, beneficiary$])
-        .subscribe(
-            (results: any) => {
-              if (results[0].data.length > 0) {
-                this.person = results[0].data[0];
-                this.stepOneFormGroup.controls.mothermaidenname.setValue(
-                    this.person.mothersMaidenName);
+    Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+      if (results[0].data.length > 0) {
+        this.person = results[0].data[0];
+        this.stepOneFormGroup.controls.mothermaidenname.setValue(
+            this.person.mothersMaidenName);
+      }
+      if (results[1].data.length > 0) {
+        this._policyService
+            .find({query: {principalBeneficiary: results[1].data[0]._id}})
+            .then((policies: any) => {
+              if (policies.data.length > 0) {
+                this.selectedBeneficiary = results[1].data[0];
+                this._router
+                    .navigate([
+                      '/modules/beneficiary/beneficiaries',
+                      this.selectedBeneficiary._id
+                    ])
+                    .then(
+                        payload => {
+                            // this._systemService.announceBeneficiaryTabNotification({
+                            // tab: 'Two', beneficiary: paym });
+                        })
+                    .catch(err => {});
+              } else {
+                this.selectedBeneficiary = results[1].data[0];
+                this._initialiseFormGroup();
               }
-              if (results[1].data.length > 0) {
-                this._policyService
-                    .find(
-                        {query: {principalBeneficiary: results[1].data[0]._id}})
-                    .then((policies: any) => {
-                      console.log(policies)
-                      if (policies.data.length > 0) {
-                        this.selectedBeneficiary = results[1].data[0];
-                        this._router
-                            .navigate([
-                              '/modules/beneficiary/beneficiaries',
-                              this.selectedBeneficiary._id
-                            ])
-                            .then(
-                                payload => {
-                                    // this._systemService.announceBeneficiaryTabNotification({
-                                    // tab: 'Two', beneficiary: paym });
-                                })
-                            .catch(err => {console.log(err)});
-                      }
-                      else {
-                        this.selectedBeneficiary = results[1].data[0];
-                        this._initialiseFormGroup();
-                        console.log(this.selectedBeneficiary)
-                      }
-                    })
-                    .catch(errin => {console.log(errin)})
-              }
-            },
-            error => {
-              console.log(error);
             })
+            .catch(errin => {})
+      }
+    }, error => {})
     // this._personService.find({
     //   query: {
     //     email: this.user.email
@@ -245,9 +234,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
             }
           }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(err => {});
   }
   _getMaritalStatus() {
     this._systemService.on();
@@ -287,12 +274,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
     this._beneficiaryService.get(id, {})
         .then((payload: any) => {
           this.selectedBeneficiary = payload;
-          console.log(this.selectedBeneficiary);
           this._initialiseFormGroup();
           this._systemService.off();
         })
         .catch(err => {
-          console.log(err);
           this._systemService.off();
         })
   }
@@ -494,10 +479,8 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
   }
 
   validateAgaintUnderAge(control: AbstractControl) {
-    console.log(control.value);
     if (control.value !== undefined && control.value.jsdate !== undefined) {
       return this._beneficiaryService.validateAge(control.value).then(res => {
-        console.log(res)
         return res.body.response >= 18 ? null : {underage: true};
       });
     } else {
@@ -656,7 +639,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                             paym._id
                                           ])
                                           .then(payload => {})
-                                          .catch(err => {console.log(err)});
+                                          .catch(err => {});
                                     } else {
                                       this._router
                                           .navigate([
@@ -664,12 +647,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                             paym._id
                                           ])
                                           .then(payload => {})
-                                          .catch(err => {console.log(err)});
+                                          .catch(err => {});
                                     }
                                   })
-                                  .catch(erm => {
-                                    console.log(erm);
-                                  })
+                                  .catch(erm => {})
                             } else {
                               this._beneficiaryService.create(beneficiary)
                                   .then((paym: any) => {
@@ -680,18 +661,18 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                           paym._id
                                         ])
                                         .then(payload => {})
-                                        .catch(err => {console.log(err)});
+                                        .catch(err => {});
                                   })
-                                  .catch(erm => {
-                                    console.log(erm);
-                                  })
+                                  .catch(
+                                      erm => {
+
+                                      })
                             }
 
                           } else {
                           }
                         },
                         error => {
-                          console.log(error);
                           this._systemService.off();
                         })
                   }
@@ -723,11 +704,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                   paym._id
                                 ])
                                 .then(payload => {})
-                                .catch(err => {console.log(err)});
+                                .catch(err => {});
                           })
-                          .catch(erm => {
-                            console.log(erm);
-                          })
+                          .catch(erm => {})
                     } else {
                       this._beneficiaryService.create(beneficiary)
                           .then((paym: any) => {
@@ -738,18 +717,15 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                   paym._id
                                 ])
                                 .then(payload => {})
-                                .catch(err => {console.log(err)});
+                                .catch(err => {});
                           })
-                          .catch(erm => {
-                            console.log(erm);
-                          })
+                          .catch(erm => {})
                     }
 
                   } else {
                   }
                 },
                 error => {
-                  console.log(error);
                   this._systemService.off();
                 })
           }
@@ -781,11 +757,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                 '/modules/beneficiary/new/dependants', paym._id
                               ])
                               .then(payload => {})
-                              .catch(err => {console.log(err)});
+                              .catch(err => {});
                         })
-                        .catch(erm => {
-                          console.log(erm);
-                        })
+                        .catch(erm => {})
                   } else {
                     this._beneficiaryService.create(beneficiary)
                         .then((paym: any) => {
@@ -795,18 +769,15 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                 '/modules/beneficiary/new/dependants', paym._id
                               ])
                               .then(payload => {})
-                              .catch(err => {console.log(err)});
+                              .catch(err => {});
                         })
-                        .catch(erm => {
-                          console.log(erm);
-                        })
+                        .catch(erm => {})
                   }
 
                 } else {
                 }
               })
               .catch(err => {
-                console.log(err);
                 this._systemService.off();
               })
         }
@@ -814,7 +785,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
       } else {
         if (this.selectedBeneficiary !== undefined &&
             this.selectedBeneficiary._id !== undefined) {
-          console.log(1)
           let personId: Person = this.selectedBeneficiary.personId;
           let address: Address = this.selectedBeneficiary.personId.homeAddress;
           address.lga = value.lga;
@@ -844,7 +814,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
           let fileBrowser = this.fileInput.nativeElement;
           this._systemService.on();
           if (personId.profileImageObject === undefined) {
-            console.log('1a')
             if (fileBrowser.files && fileBrowser.files[0]) {
               this.upload()
                   .then((result: any) => {
@@ -877,7 +846,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                               paym._id
                                             ])
                                             .then(payload => {})
-                                            .catch(err => {console.log(err)});
+                                            .catch(err => {});
                                       } else {
                                         this._router
                                             .navigate([
@@ -885,12 +854,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                               paym._id
                                             ])
                                             .then(payload => {})
-                                            .catch(err => {console.log(err)});
+                                            .catch(err => {});
                                       }
                                     })
-                                    .catch(erm => {
-                                      console.log(erm);
-                                    })
+                                    .catch(erm => {})
                               } else {
                                 this._beneficiaryService.create(beneficiary)
                                     .then((paym: any) => {
@@ -901,11 +868,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                             paym._id
                                           ])
                                           .then(payload => {})
-                                          .catch(err => {console.log(err)});
+                                          .catch(err => {});
                                     })
-                                    .catch(erm => {
-                                      console.log(erm);
-                                    })
+                                    .catch(erm => {})
                               }
 
                             } else {
@@ -930,7 +895,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                             // });
                           })
                           .catch(err => {
-                            console.log(err);
                             this._systemService.off();
                           })
                     }
@@ -938,8 +902,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                   .catch(err => {
                     this._systemService.off();
                   })
-            }
-            else {
+            } else {
               this._personService.update(personId)
                   .then((payload: any) => {
                     if (payload !== undefined) {
@@ -961,11 +924,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                     paym._id
                                   ])
                                   .then(payload => {})
-                                  .catch(err => {console.log(err)});
+                                  .catch(err => {});
                             })
-                            .catch(erm => {
-                              console.log(erm);
-                            })
+                            .catch(erm => {})
                       }
                       else {
                         this._beneficiaryService.create(beneficiary)
@@ -977,11 +938,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                     paym._id
                                   ])
                                   .then(payload => {})
-                                  .catch(err => {console.log(err)});
+                                  .catch(err => {});
                             })
-                            .catch(erm => {
-                              console.log(erm);
-                            })
+                            .catch(erm => {})
                       }
 
                     } else {
@@ -1004,7 +963,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                     // tab: 'Two', beneficiary: this.selectedBeneficiary });
                   })
                   .catch(err => {
-                    console.log(err);
                     this._systemService.off();
                   })
             }
@@ -1030,11 +988,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                   paym._id
                                 ])
                                 .then(payload => {})
-                                .catch(err => {console.log(err)});
+                                .catch(err => {});
                           })
-                          .catch(erm => {
-                            console.log(erm);
-                          })
+                          .catch(erm => {})
                     } else {
                       this._beneficiaryService.create(beneficiary)
                           .then((paym: any) => {
@@ -1045,11 +1001,9 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                   paym._id
                                 ])
                                 .then(payload => {})
-                                .catch(err => {console.log(err)});
+                                .catch(err => {});
                           })
-                          .catch(erm => {
-                            console.log(erm);
-                          })
+                          .catch(erm => {})
                     }
 
                   } else {
@@ -1071,7 +1025,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                   // tab: 'Two', beneficiary: this.selectedBeneficiary });
                 })
                 .catch(err => {
-                  console.log(err);
                   this._systemService.off();
                 })
           }
@@ -1079,7 +1032,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
 
 
         } else {
-          console.log(2)
           let personId: Person = <Person>{};
           let address: Address = <Address>{};
           address.lga = value.lga;
@@ -1130,7 +1082,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                           })
                           .then(payload => {
                             // should be sending selectedbeneficiary to steptwo
-                            console.log(payload)
 
                             if (payload.statusCode === 200 &&
                                 payload.error === false) {
@@ -1154,7 +1105,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                             // this._systemService.announceBeneficiaryTabNotification({
                                             // tab: 'Two', beneficiary: paym });
                                         })
-                                    .catch(err => {console.log(err)});
+                                    .catch(err => {});
                               } else {
                                 this._router
                                     .navigate([
@@ -1162,7 +1113,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                       this.selectedBeneficiary._id
                                     ])
                                     .then(payload => {})
-                                    .catch(err => {console.log(err)});
+                                    .catch(err => {});
                               }
 
 
@@ -1174,12 +1125,10 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                           })
                           .catch(err => {
                             this._systemService.off();
-                            console.log(err);
                           })
                     }
                   })
                   .catch(err => {
-                    console.log(err);
                     this._systemService.off();
                   })
             } else {
@@ -1191,7 +1140,6 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                     platform: this.currentPlatform
                   })
                   .then(payload => {
-                    console.log(payload)
                     if (payload.statusCode === 200 && payload.error === false) {
                       payload.body.beneficiary.personId = payload.body.personId;
                       this.selectedBeneficiary = payload.body.beneficiary;
@@ -1208,7 +1156,7 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                     // this._systemService.announceBeneficiaryTabNotification({
                                     // tab: 'Two', beneficiary: paym });
                                 })
-                            .catch(err => {console.log(err)});
+                            .catch(err => {});
                       } else {
                         this._router
                             .navigate([
@@ -1216,13 +1164,12 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                               this.selectedBeneficiary._id
                             ])
                             .then(payload => {})
-                            .catch(err => {console.log(err)});
+                            .catch(err => {});
                       }
                     }
                     this._systemService.off();
                   })
                   .catch(err => {
-                    console.log(err);
                     this._systemService.off();
                   })
             }
@@ -1248,14 +1195,13 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
                                 // this._systemService.announceBeneficiaryTabNotification({
                                 // tab: 'Two', beneficiary: paym });
                             })
-                        .catch(err => {console.log(err)});
+                        .catch(err => {});
                     // this._systemService.announceBeneficiaryTabNotification({
                     // tab: 'Two', beneficiary: this.selectedBeneficiary });
                   }
                   this._systemService.off();
                 })
                 .catch(err => {
-                  console.log(err);
                   this._systemService.off();
                 })
           }
@@ -1275,15 +1221,12 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
           });
       if (this.user.platformOwnerId !== undefined &&
           this.user.platformOwnerId._id === undefined) {
-        console
-            .log('free')
-            // this.stepOneFormGroup.controls.firstName.setErrors(null);
-            // this.stepOneFormGroup.controls.lastName.setErrors(null);
-            // this.stepOneFormGroup.controls.phonenumber.setErrors(null);
-            // this.stepOneFormGroup.controls.email.setErrors(null);
-            this.stepOneFormGroup.controls.email.markAsUntouched()
+        // this.stepOneFormGroup.controls.firstName.setErrors(null);
+        // this.stepOneFormGroup.controls.lastName.setErrors(null);
+        // this.stepOneFormGroup.controls.phonenumber.setErrors(null);
+        // this.stepOneFormGroup.controls.email.setErrors(null);
+        this.stepOneFormGroup.controls.email.markAsUntouched()
         // this.stepOneFormGroup.controls.email.mar()
-        console.log(this.stepOneFormGroup.controls.firstName)
       }
     }
   }

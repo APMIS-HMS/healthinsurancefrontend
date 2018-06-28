@@ -141,7 +141,6 @@ export class PendingPaymentsComponent implements OnInit {
           this._systemService.off();
         })
         .catch(error => {
-          console.log(error);
           this._systemService.off();
         });
   }
@@ -151,11 +150,8 @@ export class PendingPaymentsComponent implements OnInit {
 
     this._policyService.find(query)
         .then((res: any) => {
-          console.log(res);
-
           this.organisationLoading = false;
           res.data.forEach(policy => {
-            console.log(policy);
             let hasItem = this.organisationPolicies.filter(
                 e => !!e.sponsor && e.sponsor._id === policy.sponsor._id);
 
@@ -189,7 +185,6 @@ export class PendingPaymentsComponent implements OnInit {
           this._systemService.off();
         })
         .catch(error => {
-          console.log(error);
           this._systemService.off();
         });
   }
@@ -202,7 +197,6 @@ export class PendingPaymentsComponent implements OnInit {
 
   private _getCurrentPlatform() {
     this._systemService.on();
-    console.log(this.user);
     const sponsorship =
         this.sponsorship.filter(e => e.name.toLowerCase() === 'organization')[0]
             .name;
@@ -231,7 +225,6 @@ export class PendingPaymentsComponent implements OnInit {
             } else if (
                 !!this.user.userType &&
                 this.user.userType.name === 'Health Insurance Agent') {
-              console.log('multi');
               this._getOrganisationPolicies(
                   {
                     query: {
@@ -264,7 +257,6 @@ export class PendingPaymentsComponent implements OnInit {
             } else if (
                 !!this.user.userType &&
                 this.user.userType.name === 'Platform Owner') {
-              console.log('platform owner');
               this._getOrganisationPolicies(
                   {
                     query: {

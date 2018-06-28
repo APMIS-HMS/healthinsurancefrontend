@@ -150,7 +150,7 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
                       payload => {
 
                       })
-                  .catch(err2 => {console.log(err2)});
+                  .catch(err2 => {});
             })
             .catch(
                 err => {

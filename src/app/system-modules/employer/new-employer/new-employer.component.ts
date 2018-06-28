@@ -90,7 +90,6 @@ export class NewEmployerComponent implements OnInit {
   }
 
   _initialiseFormGroup() {
-    console.log(this.selectedFacilityId);
     this.employerFormGroup = this._fb.group({
       employerName: [
         this.facility != null ? this.facility.name : '',
@@ -181,7 +180,6 @@ export class NewEmployerComponent implements OnInit {
     });
 
     this.employerFormGroup.controls['state'].valueChanges.subscribe(value => {
-      console.log(this.selectedCountry);
       this.selectedState = value;
       if (value !== null && this.selectedCountry !== undefined) {
         this._getLgaAndCities(this.selectedCountry._id, value);
@@ -197,15 +195,11 @@ export class NewEmployerComponent implements OnInit {
   _getCurrentPlatform() {
     this._facilityService.find({query: {shortName: this.platformName}})
         .then((res: any) => {
-          console.log(res);
           if (res.data.length > 0) {
             this.currentPlatform = res.data[0];
-            console.log(this.currentPlatform);
           }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(err => {});
   }
 
   _getEmployerDetails(routeId) {
@@ -440,7 +434,6 @@ export class NewEmployerComponent implements OnInit {
       this.disableBtn = true;
 
       let facility = this._extractFacility();
-      console.log(facility);
       if (!!this.selectedFacilityId) {
         // Edit Employer.
         Promise
@@ -448,7 +441,6 @@ export class NewEmployerComponent implements OnInit {
               this.uploadLogo(), this.uploadBContact(), this.uploadItContact()
             ])
             .then((allResult: any) => {
-              console.log(allResult);
               if (allResult[0] !== undefined &&
                   allResult[0].body[0] !== undefined &&
                   allResult[0].body.length > 0) {
@@ -471,7 +463,6 @@ export class NewEmployerComponent implements OnInit {
               facility.employer.cin = this.facility.employer.cin;
               this._facilityService.update(facility)
                   .then((payload: any) => {
-                    console.log(payload);
                     this._systemService.off();
                     // this.employerFormGroup.reset();
                     this.navigateEmployers(
@@ -483,7 +474,6 @@ export class NewEmployerComponent implements OnInit {
                     this.disableBtn = false;
                   })
                   .catch(err => {
-                    console.log(err);
                     this.btnText = true;
                     this.btnProcessing = false;
                     this.disableBtn = false;
@@ -497,7 +487,6 @@ export class NewEmployerComponent implements OnInit {
               this.uploadLogo(), this.uploadBContact(), this.uploadItContact()
             ])
             .then((allResult: any) => {
-              console.log(allResult);
               if (allResult[0] !== undefined &&
                   allResult[0].body[0] !== undefined &&
                   allResult[0].body.length > 0) {
@@ -518,7 +507,6 @@ export class NewEmployerComponent implements OnInit {
 
               this._facilityService.create(facility)
                   .then(payload => {
-                    console.log(payload);
                     // this.employerFormGroup.reset();
                     this._systemService.off();
                     this._toastr.success(
@@ -529,7 +517,6 @@ export class NewEmployerComponent implements OnInit {
                     this.disableBtn = false;
                   })
                   .catch(err => {
-                    console.log(err);
                     this.btnText = true;
                     this.btnProcessing = false;
                     this.disableBtn = false;
@@ -615,7 +602,6 @@ export class NewEmployerComponent implements OnInit {
           var reader = new FileReader();
           let that = this;
           reader.onload = function(e: any) {
-            console.log(e);
             that.logoImage.nativeElement.src = e.target.result;
             that._systemService.off();
           };

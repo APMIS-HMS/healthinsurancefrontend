@@ -1,10 +1,11 @@
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { SystemModuleService } from './../../../services/common/system-module.service';
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {IMyDate, IMyDpOptions} from 'mydatepicker';
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
 
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
+import {HeaderEventEmitterService} from '../../../services/event-emitters/header-event-emitter.service';
+
+import {SystemModuleService} from './../../../services/common/system-module.service';
 
 @Component({
   selector: 'app-new-beneficiary',
@@ -17,14 +18,11 @@ export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
       this.tabPersonalData_click();
     } else if (this._router.url.includes('dependants')) {
       this.tabDependants_click();
-    }
-    else if (this._router.url.includes('next-of-kin')) {
+    } else if (this._router.url.includes('next-of-kin')) {
       this.tabNOK_click();
-    }
-    else if (this._router.url.includes('program')) {
+    } else if (this._router.url.includes('program')) {
       this.tabProgram_click();
-    }
-    else if (this._router.url.includes('complete')) {
+    } else if (this._router.url.includes('complete')) {
       this.tabConfirm_click();
     }
   }
@@ -39,35 +37,33 @@ export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
   dependants: any[] = [];
   policy: any;
   constructor(
-    private _toastr: ToastsManager,
-    private _headerEventEmitter: HeaderEventEmitterService,
-    private _systemService: SystemModuleService,
-    private _router: Router,
-    private _route: ActivatedRoute
-  ) { }
+      private _toastr: ToastsManager,
+      private _headerEventEmitter: HeaderEventEmitterService,
+      private _systemService: SystemModuleService, private _router: Router,
+      private _route: ActivatedRoute) {}
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Beneficiary');
-    this._headerEventEmitter.setMinorRouteUrl('Create new beneficiary')
+    this._headerEventEmitter
+        .setMinorRouteUrl('Create new beneficiary')
 
-    this._router.events.filter((event: any) => event instanceof NavigationEnd)
-      .subscribe(
-      event => {
-        let currentRoute = this._route.root; // route is an instance of ActiveRoute
-        console.log(event.url)
-        if (event.url.includes('principal')) {
-          this.tabPersonalData_click();
-        } else if (event.url.includes('dependants')) {
-          this.tabDependants_click();
-        } else if (event.url.includes('next-of-kin')) {
-          this.tabNOK_click();
-        } else if (event.url.includes('program')) {
-          this.tabProgram_click();
-        } else if (event.url.includes('complete')) {
-          this.tabConfirm_click();
-        }
-      }
-      );
+            this._router.events
+        .filter((event: any) => event instanceof NavigationEnd)
+        .subscribe(event => {
+          let currentRoute =
+              this._route.root;  // route is an instance of ActiveRoute
+          if (event.url.includes('principal')) {
+            this.tabPersonalData_click();
+          } else if (event.url.includes('dependants')) {
+            this.tabDependants_click();
+          } else if (event.url.includes('next-of-kin')) {
+            this.tabNOK_click();
+          } else if (event.url.includes('program')) {
+            this.tabProgram_click();
+          } else if (event.url.includes('complete')) {
+            this.tabConfirm_click();
+          }
+        });
   }
 
   tabConfirm_click() {

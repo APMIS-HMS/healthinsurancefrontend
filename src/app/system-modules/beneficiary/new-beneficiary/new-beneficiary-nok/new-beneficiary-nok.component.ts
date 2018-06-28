@@ -106,67 +106,51 @@ export class NewBeneficiaryNokComponent implements OnInit {
           this._personService.find({query: {email: this.user.email}}));
       let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find(
           {query: {'personId.email': this.user.email}}));
-      Observable.forkJoin([person$, beneficiary$])
-          .subscribe(
-              (results: any) => {
-                console.log(results);
-                if (results[0].data.length > 0) {
-                  this.person = results[0].data[0];
-                }
-                if (results[1].data.length > 0) {
-                  this._policyService
-                      .find({
-                        query: {principalBeneficiary: results[1].data[0]._id}
+      Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (results[1].data.length > 0) {
+          this._policyService
+              .find({query: {principalBeneficiary: results[1].data[0]._id}})
+              .then((policies: any) => {
+                if (policies.data.length > 0) {
+                  policies.data[0].dependantBeneficiaries.forEach(
+                      beneficiary => {
+                          // this.populateNewDependant(beneficiary.beneficiary,
+                          // beneficiary.beneficiary.personId,
+                          // beneficiary.relationshipId);
                       })
-                      .then((policies: any) => {
-                        console.log(policies)
-                        if (policies.data.length > 0) {
-                          policies.data[0].dependantBeneficiaries.forEach(
-                              beneficiary => {
-                                  // this.populateNewDependant(beneficiary.beneficiary,
-                                  // beneficiary.beneficiary.personId,
-                                  // beneficiary.relationshipId);
-                              })
-                        }
-                      })
-                      .catch(errin => {console.log(errin)})
                 }
-              },
-              error => {
-                console.log(error);
               })
+              .catch(errin => {})
+        }
+      }, error => {})
     } else {
       let person$ = Observable.fromPromise(this._personService.find(
           {query: {_id: this.selectedBeneficiary.personId._id}}));
 
-      Observable.forkJoin([person$]).subscribe(
-          (results: any) => {
-            if (results[0].data.length > 0) {
-              this.person = results[0].data[0];
-            }
-            if (this.selectedBeneficiary !== undefined) {
-              this._policyService
-                  .find({
-                    query:
-                        {principalBeneficiary: this.selectedBeneficiary._id}
-                  })
-                  .then((policies: any) => {
-                    console.log(policies)
-                    if (policies.data.length > 0) {
-                      policies.data[0].dependantBeneficiaries.forEach(
-                          beneficiary => {
-                              // this.populateNewDependant(beneficiary.beneficiary,
-                              // beneficiary.beneficiary.personId,
-                              // beneficiary.relationshipId);
-                          })
-                    }
-                  })
-                  .catch(errin => {console.log(errin)})
-            }
-          },
-          error => {
-            console.log(error);
-          })
+      Observable.forkJoin([person$]).subscribe((results: any) => {
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (this.selectedBeneficiary !== undefined) {
+          this._policyService
+              .find(
+                  {query: {principalBeneficiary: this.selectedBeneficiary._id}})
+              .then((policies: any) => {
+                if (policies.data.length > 0) {
+                  policies.data[0].dependantBeneficiaries.forEach(
+                      beneficiary => {
+                          // this.populateNewDependant(beneficiary.beneficiary,
+                          // beneficiary.beneficiary.personId,
+                          // beneficiary.relationshipId);
+                      })
+                }
+              })
+              .catch(errin => {})
+        }
+      }, error => {})
     }
   }
 
@@ -205,9 +189,7 @@ export class NewBeneficiaryNokComponent implements OnInit {
             this.currentPlatform = res.data[0];
           }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(err => {});
   }
   _getRelationships() {
     this._systemService.on();
@@ -301,7 +283,7 @@ export class NewBeneficiaryNokComponent implements OnInit {
             payload => {
 
             })
-        .catch(err => {console.log(err)});
+        .catch(err => {});
   }
   canProceed() {
     return this.frmNok['controls']
@@ -310,7 +292,6 @@ export class NewBeneficiaryNokComponent implements OnInit {
                .length > 0;
   }
   onClickStepTwo(dependants) {
-    console.log(dependants)
     let savedFiltered = dependants.controls.dependantArray.controls.filter(
         x => x.value.readOnly === true && x.valid);
     let dependantList: any[] = [];
@@ -341,9 +322,9 @@ export class NewBeneficiaryNokComponent implements OnInit {
                   payload => {
 
                   })
-              .catch(err => {console.log(err)});
+              .catch(err => {});
         })
-        .catch(err => {console.log(err)})
+        .catch(err => {})
 
     // this._systemService.announceBeneficiaryTabNotification({ tab: 'Four',
     // beneficiary: this.selectedBeneficiary, dependants: dependantList })

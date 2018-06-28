@@ -88,7 +88,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.selectedBeneficiary);
     this.frmProgram = this._fb.group({
       hiaName: [''],
       programType: ['', [<any>Validators.required]],
@@ -101,7 +100,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       sponsorshipType: ['', []],
     });
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
     if (!!this.user.userType &&
         this.user.userType.name === 'Health Insurance Agent') {
       this.isHIA = true;
@@ -110,25 +108,20 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       if (index > -1) {
         this.frmProgram.controls.hiaName.setValue(this.hias[index]);
         const hia = this.frmProgram.controls.hiaName.value;
-        console.log(this.frmProgram.controls.hiaName.value);
         this._getOrganizations(this.currentPlatform._id, hia._id);
       }
     } else if (
         !!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0])
     } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
-      console.log('Its an Employer');
-      console.log(this.sponsorships);
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1])
     }
 
     this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
-      console.log(value);
       this._getPlanByType(value._id);
     });
 
     this.frmProgram.controls['programName'].valueChanges.subscribe(value => {
-      console.log(value);
       this.premiumPackages = value.premiums;
       this.filteredPremiumPackages = value.premiums;
     });
@@ -143,7 +136,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         });
 
     this.frmProgram.controls['sponsorship'].valueChanges.subscribe(value => {
-      console.log(value);
       if (value.name === 'Self') {
         this.isHIA = false;
       } else {
@@ -153,9 +145,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this._getCurrentPlatform();
     this._getPlanTypes();
     this._getPremiumTypes();
-    console.log(this.dependants);
     this._route.params.subscribe(param => {
-      console.log(param)
       if (param.id !== undefined) {
         this._getBeneficiary(param.id);
       }
@@ -165,7 +155,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   _getUser() {
     this._userService.get(this.user._id, {})
         .then((payload: any) => {})
-        .catch(err => {console.log(err)})
+        .catch(err => {})
   }
 
   _getPerson() {
@@ -174,66 +164,53 @@ export class NewBeneficiaryProgramComponent implements OnInit {
           this._personService.find({query: {email: this.user.email}}));
       let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find(
           {query: {'personId.email': this.user.email}}));
-      Observable.forkJoin([person$, beneficiary$])
-          .subscribe(
-              (results: any) => {
-                if (results[0].data.length > 0) {
-                  this.person = results[0].data[0];
-                }
-                if (results[1].data.length > 0) {
-                  this._policyService
-                      .find({
-                        query: {principalBeneficiary: results[1].data[0]._id}
-                      })
-                      .then((policies: any) => {
-                        if (policies.data.length > 0) {
-                        } else {
-                          this.selectedBeneficiary = results[1].data[0];
-                          if (!this.isEventBased) {
-                            this._router
-                                .navigate([
-                                  '/modules/beneficiary/new/principal',
-                                  this.selectedBeneficiary._id
-                                ])
-                                .then(
-                                    payload => {
+      Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (results[1].data.length > 0) {
+          this._policyService
+              .find({query: {principalBeneficiary: results[1].data[0]._id}})
+              .then((policies: any) => {
+                if (policies.data.length > 0) {
+                } else {
+                  this.selectedBeneficiary = results[1].data[0];
+                  if (!this.isEventBased) {
+                    this._router
+                        .navigate([
+                          '/modules/beneficiary/new/principal',
+                          this.selectedBeneficiary._id
+                        ])
+                        .then(
+                            payload => {
 
-                                    })
-                                .catch(err => {console.log(err)});
-                          }
-                        }
-                      })
-                      .catch(errin => {console.log(errin)})
+                            })
+                        .catch(err => {});
+                  }
                 }
-              },
-              error => {
-                console.log(error);
               })
+              .catch(errin => {})
+        }
+      }, error => {})
     } else {
       let person$ = Observable.fromPromise(this._personService.find(
           {query: {_id: this.selectedBeneficiary.personId._id}}));
 
-      Observable.forkJoin([person$]).subscribe(
-          (results: any) => {
-            if (results[0].data.length > 0) {
-              this.person = results[0].data[0];
-            }
-            if (this.selectedBeneficiary !== undefined) {
-              this._policyService
-                  .find({
-                    query:
-                        {principalBeneficiary: this.selectedBeneficiary._id}
-                  })
-                  .then((policies: any) => {
-                    if (policies.data.length > 0) {
-                    }
-                  })
-                  .catch(errin => {console.log(errin)})
-            }
-          },
-          error => {
-            console.log(error);
-          })
+      Observable.forkJoin([person$]).subscribe((results: any) => {
+        if (results[0].data.length > 0) {
+          this.person = results[0].data[0];
+        }
+        if (this.selectedBeneficiary !== undefined) {
+          this._policyService
+              .find(
+                  {query: {principalBeneficiary: this.selectedBeneficiary._id}})
+              .then((policies: any) => {
+                if (policies.data.length > 0) {
+                }
+              })
+              .catch(errin => {})
+        }
+      }, error => {})
     }
   }
 
@@ -252,7 +229,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
           this._systemService.off();
         })
         .catch(err => {
-          console.log(err);
           this._systemService.off();
         })
   }
@@ -301,7 +277,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         })
         .catch(err => {
           this._systemService.off();
-          console.log(err);
         });
   }
 
@@ -325,14 +300,12 @@ export class NewBeneficiaryProgramComponent implements OnInit {
             if (index > -1) {
               this.frmProgram.controls.hiaName.setValue(this.hias[index]);
               const hia = this.frmProgram.controls.hiaName.value;
-              console.log(this.frmProgram.controls.hiaName.value);
               this._getOrganizations(platformOwnerId, hia._id);
             }
           }
         })
         .catch(err => {
           this._systemService.off();
-          console.log(err);
         });
   }
 
@@ -353,7 +326,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         })
         .catch(err => {
           this._systemService.off();
-          console.log(err);
         });
   }
 
@@ -366,13 +338,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         })
         .catch(err => {
           this._systemService.off();
-          console.log(err);
         });
   }
 
   _getOrganizations(platformOwnerId, hiaId) {
-    console.log(platformOwnerId);
-    console.log(hiaId);
     this._systemService.on();
     this._facilityService
         .find({
@@ -385,17 +354,14 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         })
         .then((res: any) => {
           this._systemService.off();
-          console.log(res);
           this.organizations = res.data;
         })
         .catch(err => {
           this._systemService.off();
-          console.log(err);
         });
   }
 
   onClickStepFour(value, valid) {
-    console.log(value);
     if (valid) {
       let policy: any = <any>{};
       policy.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
@@ -408,11 +374,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.premiumPackageId = value.premiumPackage;
       policy.sponsorshipId = value.sponsorship;
       if (policy.sponsorshipId.id === 2) {
-        console.log('am in')
         if (this.user.userType.name === 'Employer') {
           policy.sponsor = this.user.facilityId;
-        }
-        else if (this.user.userType.name === 'Health Insurance Agent') {
+        } else if (this.user.userType.name === 'Health Insurance Agent') {
           policy.sponsor = value.organization;
           policy.sponsorshipType = value.sponsorshipType;
           // sponsorship: ['', [<any>Validators.required]],
@@ -428,7 +392,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         policy: policy,
         platform: this.selectedBeneficiary.platformOwnerId
       };
-      console.log(body);
 
       this._beneficiaryService.updateWithMiddleWare(body)
           .then(payload => {
@@ -441,13 +404,11 @@ export class NewBeneficiaryProgramComponent implements OnInit {
                     payload => {
 
                     })
-                .catch(err => {console.log(err)});
+                .catch(err => {});
             this._toastr.success(
                 'Your Policy item has been generated!', 'Success');
           })
-          .catch(err => {
-            console.log(err);
-          });
+          .catch(err => {});
     } else {
       let counter = 0;
       this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
@@ -461,7 +422,5 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     }
   }
 
-  onSelectChange(event) {
-    console.log(event);
-  }
+  onSelectChange(event) {}
 }
