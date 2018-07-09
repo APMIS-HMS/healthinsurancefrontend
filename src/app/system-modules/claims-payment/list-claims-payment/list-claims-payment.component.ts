@@ -125,8 +125,8 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsCapitationFromPolicy(query: any) {
     this._systemService.on();
-    this._policyService.find(query)
-        .then((res: any) => {
+    this._policyService.find(query).then((res: any) => {
+      console.log(res);
           this.cloading = false;
           let i = res.data.length;
 

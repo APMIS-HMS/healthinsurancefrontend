@@ -153,7 +153,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     }).then((res: any) => {
       this.previousPolicyLoading = false;
       if (res.data.length > 0 && res.data[0].validityPeriods && res.data[0].validityPeriods.length > 0) {
-        // console.log(res.data);
         // res.data.forEach(policy => {
         //   policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
         //   this.previousPolicies.push(policy);
@@ -182,7 +181,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   }
 
   paymentDone(data) {
-    console.log(data);
     let resData;
     let policies = [];
     // All policies that is being paid for.
@@ -190,7 +188,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       policyId: this.policy.policyId,
       policyCollectionId: this.policy._id
     });
-    console.log(this.paymentType);
+
     if (this.paymentType === 'Flutterwave') {
       resData = {
         data: data.data.data,
@@ -221,7 +219,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
     if (this.paymentType === 'Flutterwave') {
       if (data.tx.chargeResponseCode === '00' || data.tx.chargeResponseCode === '0') {
         // redirect to a success page
-        console.log('Succeeded');
         ref.reference = resData.tx;
         this.createPremium(ref);
       } else if (data.tx.chargeResponseCode === '02' || data.tx.chargeResponseCode === '2') {
@@ -238,7 +235,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
   onClickCreateAndPaybatch(valid: boolean, value: any) {
     if (valid) {
-      console.log(value);
       this.cashPaymentProcessing = true;
       let policies = [];
 
@@ -272,9 +268,7 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
         action: 'create'
       };
 
-      console.log(ref);
       this._premiumPaymentService.payWidthCashWithMiddleWare(ref).then((res: any) => {
-          console.log(res);
           if (!!res) {
             this.showPayment = false;
             this.isForRenewal = true;
@@ -297,8 +291,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
   createPremium(ref) {
     // Save into the Premium Payment Service
     this._premiumPaymentService.create(ref).then((res: any) => {
-        console.log(res);
-
         let verificationData = {
           reference: res.reference,
           premiumId: res._id,
@@ -307,7 +299,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
 
         // Call paystack verification API
         this._premiumPaymentService.verifyPaymentWithMiddleWare(verificationData).then((verifyRes: any) => {
-            console.log(verifyRes);
             if (!!verifyRes) {
               if (verifyRes.body.status === 'success') {
                 this.showPayment = false;
@@ -334,7 +325,6 @@ export class PaymentDetailBeneficiaryComponent implements OnInit {
       this.policy.premiumPackageId.amount
     );
     this.openCashPaymentModal = true;
-    console.log('Pay Cash');
   }
 
   modal_close() {
