@@ -1,21 +1,24 @@
-import { ActivatedRoute } from '@angular/router';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { SystemModuleService } from './../../../../services/common/system-module.service';
-import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
-import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
-import { NewPreauthTabsComponent } from './../../pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
-import { REQUEST_STATUS } from './../../../../services/globals/config';
-import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {CoolLocalStorage} from 'angular2-cool-storage';
 import * as differenceInYears from 'date-fns/difference_in_years';
 import * as moment from 'moment';
+
+import {environment} from '../../../../../environments/environment';
+
+import {PreAuthorizationDocument} from './../../../../models/authorization/authorization';
+import {SystemModuleService} from './../../../../services/common/system-module.service';
+import {REQUEST_STATUS} from './../../../../services/globals/config';
+import {PreAuthorizationService} from './../../../../services/pre-authorization/pre-authorization.service';
+import {NewPreauthTabsComponent} from './../../pre-authorization-new/new-preauth-tabs/new-preauth-tabs.component';
+
 @Component({
   selector: 'app-authorization-details-tab',
   templateUrl: './authorization-details-tab.component.html',
   styleUrls: ['./authorization-details-tab.component.scss']
 })
 export class AuthorizationDetailsTabComponent implements OnInit {
-  @ViewChild('child')
-  private child: NewPreauthTabsComponent;
+  @ViewChild('child') private child: NewPreauthTabsComponent;
   @Input() selectedAuthorization: any;
   modalApprove = false;
   modalReject = false;
@@ -31,57 +34,57 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   lastI: number = 0;
   lastJ: number = 0;
   user: any;
+  platformName: any;
   constructor(
-    private _preAuthorizationService: PreAuthorizationService,
-    private _systemService: SystemModuleService,
-    private _locker: CoolLocalStorage,
-    private _route:ActivatedRoute
-  ) { }
+      private _preAuthorizationService: PreAuthorizationService,
+      private _systemService: SystemModuleService,
+      private _locker: CoolLocalStorage, private _route: ActivatedRoute) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.selectedAuthorization);
-    if(this.selectedAuthorization !== undefined && this.selectedAuthorization.document !== undefined){
-      let validDocs = this.selectedAuthorization.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+    if (this.selectedAuthorization !== undefined &&
+        this.selectedAuthorization.document !== undefined) {
+      let validDocs = this.selectedAuthorization.document.filter(
+          x => x.order === 4 || x.order === 5 || x.order === 6);
       if (validDocs.length === 0) {
         this.disableApprove = false;
       }
     }
     // this.testDateDiff();
-    this._route.params.subscribe(param =>{
+    this._route.params.subscribe(param => {
       this._getAuthorizationDetails(param.id);
     })
   }
 
   _getAuthorizationDetails(id) {
     this._systemService.on();
-    this._preAuthorizationService.get(id, {}).then((payload:any) => {
-      this._systemService.off();
-      payload.documentation.forEach(doc =>{
-        let validDocs = doc.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
-        if (validDocs.length === 0) {
-          this.disableApprove = false;
-        }
-      })
-     
-      // this.selectedAuthorization = payload;
-    }).catch(err => {
-      console.log(err)
-      this._systemService.off();
-    });
+    this._preAuthorizationService.get(id, {})
+        .then((payload: any) => {
+          this._systemService.off();
+          payload.documentation.forEach(doc => {
+            let validDocs = doc.document.filter(
+                x => x.order === 4 || x.order === 5 || x.order === 6);
+            if (validDocs.length === 0) {
+              this.disableApprove = false;
+            }
+          })
+
+          // this.selectedAuthorization = payload;
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   getAge() {
     return differenceInYears(
-      new Date(),
-      this.selectedAuthorization.personId.dateOfBirth
-    );
+        new Date(), this.selectedAuthorization.personId.dateOfBirth);
   }
   getDateDiff(date1, date2) {
-    var b = moment(date1),
-      a = moment(date2),
-      intervals: any = ['years', 'months', 'weeks', 'days'],
-      out = [];
+    var b = moment(date1), a = moment(date2),
+        intervals: any = ['years', 'months', 'weeks', 'days'], out = [];
 
     for (var i = 0; i < intervals.length; i++) {
       var diff = a.diff(b, intervals[i]);
@@ -92,15 +95,14 @@ export class AuthorizationDetailsTabComponent implements OnInit {
   };
 
   testDateDiff() {
-    var today = new Date(),
-      newYear = new Date(today.getFullYear(), 0, 1),
-      y2k = new Date(2000, 0, 1);
+    var today = new Date(), newYear = new Date(today.getFullYear(), 0, 1),
+        y2k = new Date(2000, 0, 1);
 
     //(AS OF NOV 29, 2016)
-    //Time since New Year: 0 years, 10 months, 4 weeks, 0 days
+    // Time since New Year: 0 years, 10 months, 4 weeks, 0 days
     console.log('Time since New Year: ' + this.getDateDiff(newYear, today));
 
-    //Time since Y2K: 16 years, 10 months, 4 weeks, 0 days
+    // Time since Y2K: 16 years, 10 months, 4 weeks, 0 days
     console.log('Time since Y2K: ' + this.getDateDiff(y2k, today));
   }
 
@@ -113,9 +115,9 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     this.disableApprove = true;
   }
   validateResponse(doc, cliDoc, transaction: PreAuthorizationDocument) {
-    console.log('yyyyy')
     this.disableAll();
-    let validDocs = transaction.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+    let validDocs = transaction.document.filter(
+        x => x.order === 4 || x.order === 5 || x.order === 6);
     let pendingDocs: any[] = [];
     let approvedDocs: any[] = [];
     let rejectedDocs: any[] = [];
@@ -126,7 +128,8 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     console.log(validDocs)
     if (validDocs.length === 0) {
       this.disableApprove = false;
-    } else {
+    }
+    else {
       validDocs.forEach(doc => {
         doc.clinicalDocumentation.forEach(cliDoc => {
           counter = counter + 1;
@@ -146,7 +149,6 @@ export class AuthorizationDetailsTabComponent implements OnInit {
       let hasDecided = false;
 
       if (approvedDocs.length === counter) {
-        console.log('wwwwww')
         this.disableApprove = false;
         hasDecided = true;
       } else if (rejectedDocs.length === counter) {
@@ -160,8 +162,8 @@ export class AuthorizationDetailsTabComponent implements OnInit {
         hasDecided = true;
       }
       if (hasDecided === false) {
-
-        if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
+        if (rejectedDocs.length > 0 || queriedDocs.length > 0 ||
+            approvedDocs.length > 0 || heldDocs.length > 0) {
           this.disableQuery = false;
         }
       }
@@ -188,7 +190,7 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     this._getAuthorizationDetails(this.selectedAuthorization._id);
   }
   orderDocuments(documents) {
-    return documents.sort(function (a, b) {
+    return documents.sort(function(a, b) {
       return parseFloat(a.order) - parseFloat(b.order);
     });
   }
@@ -216,14 +218,11 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     this.selectedTransaction = transaction;
     this.modalQuery = true;
   }
-  save_authorization() {
-
-  }
+  save_authorization() {}
   isOdd(num) {
     return num % 2;
   }
   getCount(i: number, isSecond = false) {
-
     if (i === 0) {
       if (isSecond === false) {
         this.lastI = i + 1;
@@ -243,7 +242,6 @@ export class AuthorizationDetailsTabComponent implements OnInit {
         return this.lastJ;
       }
     }
-
   }
   modal_close() {
     this.modalApprove = false;
@@ -251,5 +249,4 @@ export class AuthorizationDetailsTabComponent implements OnInit {
     this.modalQuery = false;
     this.modalHold = false;
   }
-
 }

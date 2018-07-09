@@ -5,7 +5,7 @@
             <th class="th">Name</th>
             <th class="th">Gender</th>
             <th class="th">Type</th>
-            <th class="th">LASHMA ID</th>
+            <th class="th">{{platformName}} ID</th>
             <th class="th">DOB</th>
             <th class="th">L.G.A</th>
             <th class="th">HIA</th>
@@ -36,7 +36,7 @@
                 <span class="td-value">{{policy?.personId?.dateOfBirth|date}}</span>
             </td>
             <td class="td hover" (click)="navigateDetailBeneficiary(policy)">
-                <span  class="td-value">{{policy.personId?.homeAddress?.lga?.name}}</span>
+                <span class="td-value">{{policy.personId?.homeAddress?.lga?.name}}</span>
             </td>
             <td class="td hover" (click)="navigateDetailBeneficiary(policy)">
                 <span class="td-value">{{policy?.policy?.hiaId?.name}}</span>
