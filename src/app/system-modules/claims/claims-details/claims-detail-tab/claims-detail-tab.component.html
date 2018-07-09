@@ -68,8 +68,7 @@
                         <div class="letering-1">Request Sent {{item.createdAt|date:'medium'}}</div>
                         <div class="letering-2">
                             <span class="letering-name" *ngIf="selectedClaim.medicalPersonelName.firstName!=undefined">{{selectedClaim.medicalPersonelName.firstName}} {{selectedClaim.medicalPersonelName.lastName}}</span>
-                            <span class="letering-name" *ngIf="selectedClaim.medicalPersonelName.firstName==undefined">{{selectedClaim.medicalPersonelName}}</span>
-                            Requested Claims</div>
+                            <span class="letering-name" *ngIf="selectedClaim.medicalPersonelName.firstName==undefined">{{selectedClaim.medicalPersonelName}}</span> Requested Claims</div>
                     </div>
                 </div>
                 <div class="doc-wrap">
@@ -228,7 +227,7 @@
                     <div class="letering">
                         <div class="letering-1">Reaction Sent {{item.response.createdAt|date:'medium'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name">LASHMA</span>
+                            <span class="letering-name">{{platformName}}</span>
                             <span class="red" *ngIf="item.response.isReject == true">Reject</span>
                             <span class="red" *ngIf="item.response.isQuery == true">Query</span>
                             <span class="red" *ngIf="item.response.isHold == true">Hold</span>

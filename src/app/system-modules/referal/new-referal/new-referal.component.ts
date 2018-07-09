@@ -1,25 +1,28 @@
-import { authModulesRoutes } from './../../../auth/auth.route';
-import { ReferralAuthorization } from './../../../models/referral/referral';
-import { ReferralService } from './../../../services/referral/referral.service';
-import { PreAuthorizationDocument, Document } from './../../../models/authorization/authorization';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {CoolLocalStorage} from 'angular2-cool-storage';
 import * as differenceInYears from 'date-fns/difference_in_years';
-import { Observable } from 'rxjs/Observable';
-import { REQUEST_STATUS, DURATIONS, CurrentPlaformShortName, FORM_VALIDATION_ERROR_MESSAGE } from './../../../services/globals/config';
-import { InvestigationService } from './../../../services/common/investigation.service';
-import { VisitTypeService } from './../../../services/common/visit-type.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { SystemModuleService, CheckInService, SymptomService, ProcedureService, DiagnosisService, DrugService, DiagnosisTypeService, FacilityService, UserService } from '../../../services/index';
-import { DrugPackSizeService } from '../../../services/common/drug-pack-size.service';
-import { PolicyService } from '../../../services/policy/policy.service';
-import { ToastsManager } from 'ng2-toastr';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { PreAuthorizationService } from '../../../services/pre-authorization/pre-authorization.service';
 import * as moment from 'moment';
+import {IMyDate, IMyDpOptions} from 'mydatepicker';
+import {ToastsManager} from 'ng2-toastr';
+import {Observable} from 'rxjs/Observable';
+
+import {environment} from '../../../../environments/environment';
+import {DrugPackSizeService} from '../../../services/common/drug-pack-size.service';
+import {CheckInService, DiagnosisService, DiagnosisTypeService, DrugService, FacilityService, ProcedureService, SymptomService, SystemModuleService, UserService} from '../../../services/index';
+import {PolicyService} from '../../../services/policy/policy.service';
+import {PreAuthorizationService} from '../../../services/pre-authorization/pre-authorization.service';
+
+import {authModulesRoutes} from './../../../auth/auth.route';
+import {Document, PreAuthorizationDocument} from './../../../models/authorization/authorization';
+import {ReferralAuthorization} from './../../../models/referral/referral';
+import {InvestigationService} from './../../../services/common/investigation.service';
+import {VisitTypeService} from './../../../services/common/visit-type.service';
+import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
+import {DURATIONS, FORM_VALIDATION_ERROR_MESSAGE, REQUEST_STATUS} from './../../../services/globals/config';
+import {ReferralService} from './../../../services/referral/referral.service';
 
 @Component({
   selector: 'app-new-referal',
@@ -87,34 +90,33 @@ export class NewReferalComponent implements OnInit {
   packSizes: any[] = [];
   requestStatus = REQUEST_STATUS;
   referral: any;
-  employees:any[] = [];
+  employees: any[] = [];
 
   public myDatePickerOptions: IMyDpOptions = {
     dateFormat: 'dd-mmm-yyyy',
   };
+  platformName: any;
 
   constructor(
-    private _fb: FormBuilder,
-    private _router: Router,
-    private _headerEventEmitter: HeaderEventEmitterService,
-    private _visitTypeService: VisitTypeService,
-    private _systemService: SystemModuleService,
-    private _checkInService: CheckInService,
-    private _route: ActivatedRoute,
-    private _symptomService: SymptomService,
-    private _procedureService: ProcedureService,
-    private _diagnosisService: DiagnosisService,
-    private _drugService: DrugService,
-    private _investigationService: InvestigationService,
-    private _diagnosisTypeService: DiagnosisTypeService,
-    private _drugPackSizeService: DrugPackSizeService,
-    private _policyService: PolicyService,
-    private _toastr: ToastsManager,
-    private _locker: CoolLocalStorage,
-    private _facilityService: FacilityService,
-    private _referralService: ReferralService,
-    private _userService:UserService
-  ) { }
+      private _fb: FormBuilder, private _router: Router,
+      private _headerEventEmitter: HeaderEventEmitterService,
+      private _visitTypeService: VisitTypeService,
+      private _systemService: SystemModuleService,
+      private _checkInService: CheckInService, private _route: ActivatedRoute,
+      private _symptomService: SymptomService,
+      private _procedureService: ProcedureService,
+      private _diagnosisService: DiagnosisService,
+      private _drugService: DrugService,
+      private _investigationService: InvestigationService,
+      private _diagnosisTypeService: DiagnosisTypeService,
+      private _drugPackSizeService: DrugPackSizeService,
+      private _policyService: PolicyService, private _toastr: ToastsManager,
+      private _locker: CoolLocalStorage,
+      private _facilityService: FacilityService,
+      private _referralService: ReferralService,
+      private _userService: UserService) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Referral');
@@ -134,7 +136,6 @@ export class NewReferalComponent implements OnInit {
     this._initializeFormGroup();
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
-        console.log(param.id)
         this._getCheckedIn(param.id);
       } else if (param.refid !== undefined) {
         this._getReferral(param.refid);
@@ -142,28 +143,35 @@ export class NewReferalComponent implements OnInit {
     })
   }
   private _getUserFacility() {
-    this._facilityService.get(this.user.facilityId._id, {}).then(payload => {
-      this.user.facilityId = payload;
-    }).catch(err => {
+    this._facilityService.get(this.user.facilityId._id, {})
+        .then(payload => {
+          this.user.facilityId = payload;
+        })
+        .catch(
+            err => {
 
-    })
+            })
   }
-  _getEmployees(){
-    if(this.user.userType.name==='Provider'){
+  _getEmployees() {
+    if (this.user.userType.name === 'Provider') {
       this._systemService.on();
-      this._userService.find({
-        query:{
-          'facilityId._id':this.user.facilityId._id,
-          $select:['firstName', 'lastName', 'profession','cader', 'unit', 'otherNames']
-        }
-      }).then((payload: any) => {
-        this.employees = payload.data;
-        console.log(this.employees)
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      })
+      this._userService
+          .find({
+            query: {
+              'facilityId._id': this.user.facilityId._id,
+              $select: [
+                'firstName', 'lastName', 'profession', 'cader', 'unit',
+                'otherNames'
+              ]
+            }
+          })
+          .then((payload: any) => {
+            this.employees = payload.data;
+            this._systemService.off();
+          })
+          .catch(err => {
+            this._systemService.off();
+          })
     }
   }
   private _getReferral(id) {
@@ -173,12 +181,10 @@ export class NewReferalComponent implements OnInit {
       console.log(this.selectedCheckIn);
       this.selectedPolicy = this.referral.policyId;
       this._initializeFormGroup();
-      this.referalFormGroup.controls.hiaResponsible.setValue(this.selectedPolicy.hiaId.name);
-      this.referalFormGroup.controls.visitClass.setValue(this.referral.visityClassId);
-
-
-
-
+      this.referalFormGroup.controls.hiaResponsible.setValue(
+          this.selectedPolicy.hiaId.name);
+      this.referalFormGroup.controls.visitClass.setValue(
+          this.referral.visityClassId);
 
 
 
@@ -190,115 +196,127 @@ export class NewReferalComponent implements OnInit {
       // let procedureObj = this.referral.documentation[0].document[5];
       // let reasonObj = this.referral.documentation[0].document[6];
       // let preAuthObj = this.referral.documentation[0].document[7];
-  
+
       // this.referalFormGroup = this._fb.group({
       //   destinationHospital: ['', [<any>Validators.required]],
       //   reason: ['', [<any>Validators.required]],
-      //   doctor: [this.referral !== undefined ? this.referral.medicalPersonelName : ''],
-      //   unit: [this.referral !== undefined ? this.referral.medicalPersonelUnit : ''],
-      //   clinicalNote: ['', [<any>Validators.required]]
+      //   doctor: [this.referral !== undefined ?
+      //   this.referral.medicalPersonelName : ''], unit: [this.referral !==
+      //   undefined ? this.referral.medicalPersonelUnit : ''], clinicalNote:
+      //   ['', [<any>Validators.required]]
       // });
-  
+
       // this.referalFormGroup.controls.doctor.disable();
       // this.referalFormGroup.controls.unit.disable();
-  
-      // this.referalFormGroup.controls.destinationHospital.valueChanges.subscribe(value => {
+
+      // this.referalFormGroup.controls.destinationHospital.valueChanges.subscribe(value
+      // => {
       //   if (value !== null && value._id === this.user.facilityId._id) {
       //     this.referalFormGroup.controls.destinationHospital.reset();
-      //     this.referalFormGroup.controls.destinationHospital.setErrors({ 'invalid': true });
+      //     this.referalFormGroup.controls.destinationHospital.setErrors({
+      //     'invalid': true });
       //   }
       // })
-  
+
       // this.symptomFormGroup = this._fb.group({
-      //   complaint: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      //   complaintDuration: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-      //   complaintUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   complaint: [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]], complaintDuration:
+      //   [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : 1,
+      //   [<any>Validators.required]], complaintUnit:
+      //   [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]],
       // });
       // this.complaintLists = symptomObj.clinicalDocumentation;
-  
+
       // this.diagnosisFormGroup = this._fb.group({
-      //   diagnosis: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      //   diagnosisType: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   diagnosis: [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]], diagnosisType:
+      //   [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]],
       // });
       // this.diagnosisLists = diagnosisObj.clinicalDocumentation;
-  
+
       // this.procedureFormGroup = this._fb.group({
-      //   procedure: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   procedure: [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]],
       // });
       // this.procedureList = procedureObj.clinicalDocumentation;
-  
+
       // this.investigationFormGroup = this._fb.group({
-      //   services: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   services: [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]],
       // });
       // this.investigationList = investigationObj.clinicalDocumentation;
-  
+
       // this.drugFormGroup = this._fb.group({
-      //   drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      //   drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-      //   drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      //   drug: [this.selectedPreAuthorization != null ?
+      //   this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]], drugQty: [this.selectedPreAuthorization
+      //   != null ? this.selectedPreAuthorization.encounterType : 1,
+      //   [<any>Validators.required]], drugUnit: [this.selectedPreAuthorization
+      //   != null ? this.selectedPreAuthorization.encounterType : '',
+      //   [<any>Validators.required]],
       // });
       // this.drugList = drugObj.clinicalDocumentation;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-
-
-
-
     })
   }
   private _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-      if (res.data.length > 0) {
-        this.currentPlatform = res.data[0];
-        this._getProviders();
-      }
-    }).catch(err => console.log(err));
+    this._facilityService
+        .findWithOutAuth({query: {shortName: this.platformName}})
+        .then(res => {
+          if (res.data.length > 0) {
+            this.currentPlatform = res.data[0];
+            this._getProviders();
+          }
+        })
+        .catch(err => console.log(err));
   }
   _getProviders() {
-    this._facilityService.find({
-      query: {
-        'facilityType.name': 'Provider',
-        'provider.facilityClass': 'secondary',
-        'platformOwnerId._id': this.currentPlatform._id
-      }
-    }).then((payload: any) => {
-      this.destinationFacilities = payload.data;
-    }).catch(err => {
+    this._facilityService
+        .find({
+          query: {
+            'facilityType.name': 'Provider',
+            'provider.facilityClass': 'secondary',
+            'platformOwnerId._id': this.currentPlatform._id
+          }
+        })
+        .then((payload: any) => {
+          this.destinationFacilities = payload.data;
+        })
+        .catch(
+            err => {
 
-    });
+            });
   }
 
   _getDiagnosisTypes() {
     this._systemService.on();
-    this._diagnosisTypeService.find({}).then((payload: any) => {
-      this.diagnosisTypes = payload.data;
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    })
+    this._diagnosisTypeService.find({})
+        .then((payload: any) => {
+          this.diagnosisTypes = payload.data;
+          this._systemService.off();
+        })
+        .catch(err => {
+          console.log(err);
+          this._systemService.off();
+        })
   }
   _initializeFormGroup() {
-    if (this.selectedPreAuthorization !== undefined && this.selectedPreAuthorization._id !== undefined) {
+    if (this.selectedPreAuthorization !== undefined &&
+        this.selectedPreAuthorization._id !== undefined) {
       this.today = {
-        year: new Date(this.selectedPreAuthorization.encounterDateTime).getFullYear(),
-        month: new Date(this.selectedPreAuthorization.encounterDateTime).getMonth() + 1,
+        year: new Date(this.selectedPreAuthorization.encounterDateTime)
+                  .getFullYear(),
+        month: new Date(this.selectedPreAuthorization.encounterDateTime)
+                   .getMonth() +
+            1,
         day: new Date(this.selectedPreAuthorization.encounterDateTime).getDate()
       }
     } else {
@@ -308,17 +326,42 @@ export class NewReferalComponent implements OnInit {
         day: new Date().getDate()
       }
     }
-    console.log(this.user)
-    // console.log(this.selectedCheckIn.beneficiaryObject.personId.lastName)
-    this.referalFormGroup = this._fb.group({
-      patientName: [this.selectedCheckIn != undefined ? this.selectedCheckIn.beneficiaryObject.personId.lastName : '', [<any>Validators.required]],
-      gender: [this.selectedCheckIn != null ? this.selectedCheckIn.beneficiaryObject.personId.gender.name : '', [<any>Validators.required]],
-      age: [this.selectedCheckIn != undefined ? this._getAge() : 0, [<any>Validators.required]],
-      referingHospital: [this.selectedCheckIn != null ? this.user.facilityId.name : '', [<any>Validators.required]],
-      destinationHospital: [this.referral != undefined ? this.referral.destinationProvider : '', [<any>Validators.required]],
+    console
+        .log(this.user)
+        // console.log(this.selectedCheckIn.beneficiaryObject.personId.lastName)
+        this.referalFormGroup = this._fb.group({
+      patientName: [
+        this.selectedCheckIn != undefined ?
+            this.selectedCheckIn.beneficiaryObject.personId.lastName :
+            '',
+        [<any>Validators.required]
+      ],
+      gender: [
+        this.selectedCheckIn != null ?
+            this.selectedCheckIn.beneficiaryObject.personId.gender.name :
+            '',
+        [<any>Validators.required]
+      ],
+      age: [
+        this.selectedCheckIn != undefined ? this._getAge() : 0,
+        [<any>Validators.required]
+      ],
+      referingHospital: [
+        this.selectedCheckIn != null ? this.user.facilityId.name : '',
+        [<any>Validators.required]
+      ],
+      destinationHospital: [
+        this.referral != undefined ? this.referral.destinationProvider : '',
+        [<any>Validators.required]
+      ],
       visitClass: ['', [<any>Validators.required]],
       hiaResponsible: ['', [<any>Validators.required]],
-      referingLashmaId: [this.selectedCheckIn != null ? this.user.facilityId.provider.providerId : '', [<any>Validators.required]],
+      referingLashmaId: [
+        this.selectedCheckIn != null ?
+            this.user.facilityId.provider.providerId :
+            '',
+        [<any>Validators.required]
+      ],
       admissionDate: ['', []],
       dischargeDate: ['', []],
       visitDate: ['', []],
@@ -328,280 +371,341 @@ export class NewReferalComponent implements OnInit {
       clinicalNote: ['', [<any>Validators.required]]
     });
 
-    this.referalFormGroup.controls.destinationHospital.valueChanges.subscribe(value => {
-      if (value !== null && value._id === this.user.facilityId._id) {
-        this.referalFormGroup.controls.destinationHospital.reset();
-        this.referalFormGroup.controls.destinationHospital.setErrors({ 'invalid': true });
-      }
-    })
+    this.referalFormGroup.controls.destinationHospital.valueChanges
+        .subscribe(value => {
+          if (value !== null && value._id === this.user.facilityId._id) {
+            this.referalFormGroup.controls.destinationHospital.reset();
+            this.referalFormGroup.controls.destinationHospital.setErrors(
+                {'invalid': true});
+          }
+        })
 
-    this.symptomFormGroup = this._fb.group({
-      complaint: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      complaintDuration: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-      complaintUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+            this.symptomFormGroup = this._fb.group({
+      complaint: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
+      complaintDuration: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            1,
+        [<any>Validators.required]
+      ],
+      complaintUnit: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
     });
 
     this.diagnosisFormGroup = this._fb.group({
-      diagnosis: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      diagnosisType: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      diagnosis: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
+      diagnosisType: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
     });
 
     this.procedureFormGroup = this._fb.group({
-      procedure: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      procedure: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
     });
 
     this.investigationFormGroup = this._fb.group({
-      services: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      services: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
     });
 
     this.drugFormGroup = this._fb.group({
-      drug: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
-      drugQty: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : 1, [<any>Validators.required]],
-      drugUnit: [this.selectedPreAuthorization != null ? this.selectedPreAuthorization.encounterType : '', [<any>Validators.required]],
+      drug: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
+      drugQty: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            1,
+        [<any>Validators.required]
+      ],
+      drugUnit: [
+        this.selectedPreAuthorization != null ?
+            this.selectedPreAuthorization.encounterType :
+            '',
+        [<any>Validators.required]
+      ],
     });
 
-    this.referalFormGroup.controls.doctor.valueChanges
-    .subscribe(value => {
-      this.referalFormGroup.controls.unit.setValue(value.unit);
-    }, error => {
-      this._systemService.off();
-      console.log(error)
-    });
+    this.referalFormGroup.controls.doctor.valueChanges.subscribe(
+        value => {
+          this.referalFormGroup.controls.unit.setValue(value.unit);
+        },
+        error => {
+          this._systemService.off();
+          console.log(error)
+        });
 
-    this.drugFormGroup.controls.drug.valueChanges
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(value => {
-        if (!(this.drugItems.filter(x => x.name === value).length > 0)) {
-          this.selectedDrug = undefined;
-          this._getDrugs(value);
-        }
-      }, error => {
-        this._systemService.off();
-        console.log(error)
-      });
+    this.drugFormGroup.controls.drug.valueChanges.debounceTime(250)
+        .distinctUntilChanged()
+        .subscribe(
+            value => {
+              if (!(this.drugItems.filter(x => x.name === value).length > 0)) {
+                this.selectedDrug = undefined;
+                this._getDrugs(value);
+              }
+            },
+            error => {
+              this._systemService.off();
+              console.log(error)
+            });
 
-    this.symptomFormGroup.controls.complaint.valueChanges
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(value => {
-        if (!(this.symptomItems.filter(x => x.name === value).length > 0)) {
-          this.selectedComplain = undefined;
-          this._getSymptoms(value);
-        }
+    this.symptomFormGroup.controls.complaint.valueChanges.debounceTime(250)
+        .distinctUntilChanged()
+        .subscribe(
+            value => {
+              if (!(this.symptomItems.filter(x => x.name === value).length >
+                    0)) {
+                this.selectedComplain = undefined;
+                this._getSymptoms(value);
+              }
+            },
+            error => {
+              this._systemService.off();
+              console.log(error)
+            });
 
-      }, error => {
-        this._systemService.off();
-        console.log(error)
-      });
+    this.diagnosisFormGroup.controls.diagnosis.valueChanges.debounceTime(250)
+        .distinctUntilChanged()
+        .subscribe(
+            value => {
+              if (!(this.diagnosisItems.filter(x => x.name === value).length >
+                    0)) {
+                this.selectedDiagnosis = undefined;
+                this._getDiagnosises(value);
+              }
+            },
+            error => {
+              this._systemService.off();
+              console.log(error)
+            });
 
-    this.diagnosisFormGroup.controls.diagnosis.valueChanges
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(value => {
-        if (!(this.diagnosisItems.filter(x => x.name === value).length > 0)) {
-          this.selectedDiagnosis = undefined;
-          this._getDiagnosises(value);
-        }
-      }, error => {
-        this._systemService.off();
-        console.log(error)
-      });
+    this.procedureFormGroup.controls.procedure.valueChanges.debounceTime(250)
+        .distinctUntilChanged()
+        .subscribe(
+            value => {
+              if (!(this.procedureItems.filter(x => x.name === value).length >
+                    0)) {
+                this.selectedProcedure = undefined;
+                this._getProcedures(value);
+              }
+            },
+            error => {
+              this._systemService.off();
+              console.log(error)
+            });
 
-    this.procedureFormGroup.controls.procedure.valueChanges
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(value => {
-        if (!(this.procedureItems.filter(x => x.name === value).length > 0)) {
-          this.selectedProcedure = undefined;
-          this._getProcedures(value);
-        }
-      }, error => {
-        this._systemService.off();
-        console.log(error)
-      });
-
-    this.investigationFormGroup.controls.services.valueChanges
-      .debounceTime(250)
-      .distinctUntilChanged()
-      .subscribe(value => {
-        if (!(this.investigationItems.filter(x => x.name === value).length > 0)) {
-          this.selectedInvestigation = undefined;
-          this._getInvestigations(value);
-        }
-      }, error => {
-        this._systemService.off();
-        console.log(error)
-      });
-
+    this.investigationFormGroup.controls.services.valueChanges.debounceTime(250)
+        .distinctUntilChanged()
+        .subscribe(
+            value => {
+              if (!(this.investigationItems.filter(x => x.name === value)
+                        .length > 0)) {
+                this.selectedInvestigation = undefined;
+                this._getInvestigations(value);
+              }
+            },
+            error => {
+              this._systemService.off();
+              console.log(error)
+            });
   }
 
 
   _getSymptoms(value) {
     if (value && value.length > 1) {
-      this._symptomService.find({
-        query: {
-          'name': { $regex: value, '$options': 'i' },
-        }
-      }).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.complaintSearchResult = true;
-          this.symptomItems = payload.data
-        }
-
-      })
+      this._symptomService
+          .find({
+            query: {
+              'name': {$regex: value, '$options': 'i'},
+            }
+          })
+          .then((payload: any) => {
+            if (payload.data.length > 0) {
+              this.complaintSearchResult = true;
+              this.symptomItems = payload.data
+            }
+          })
     }
-
   }
 
   _getProcedures(value) {
     if (value && value.length > 1) {
-      this._procedureService.find({
-        query: {
-          'name': { $regex: value, '$options': 'i' },
-        }
-      }).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.procedureSearchResult = true;
-          this.procedureItems = payload.data
-        }
-
-      })
+      this._procedureService
+          .find({
+            query: {
+              'name': {$regex: value, '$options': 'i'},
+            }
+          })
+          .then((payload: any) => {
+            if (payload.data.length > 0) {
+              this.procedureSearchResult = true;
+              this.procedureItems = payload.data
+            }
+          })
     }
   }
 
   _getDrugs(value) {
     if (value && value.length > 1) {
-      this._drugService.find({
-        query: {
-          'name': { $regex: value, '$options': 'i' },
-        }
-      }).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.drugSearchResult = true;
-          this.drugItems = payload.data;
-        }
-      })
+      this._drugService
+          .find({
+            query: {
+              'name': {$regex: value, '$options': 'i'},
+            }
+          })
+          .then((payload: any) => {
+            if (payload.data.length > 0) {
+              this.drugSearchResult = true;
+              this.drugItems = payload.data;
+            }
+          })
     }
   }
 
   _getDiagnosises(value) {
     if (value && value.length > 1) {
-      this._diagnosisService.find({
-        query: {
-          'name': { $regex: value, '$options': 'i' },
-        }
-      }).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.diagnosisSearchResult = true;
-          this.diagnosisItems = payload.data;
-        }
-      })
+      this._diagnosisService
+          .find({
+            query: {
+              'name': {$regex: value, '$options': 'i'},
+            }
+          })
+          .then((payload: any) => {
+            if (payload.data.length > 0) {
+              this.diagnosisSearchResult = true;
+              this.diagnosisItems = payload.data;
+            }
+          })
     }
   }
 
   _getInvestigations(value) {
     if (value && value.length > 1) {
-      this._investigationService.find({
-        query: {
-          'name': { $regex: value, '$options': 'i' },
-        }
-      }).then((payload: any) => {
-        if (payload.data.length > 0) {
-          this.investigationSearchResult = true;
-          this.investigationItems = payload.data;
-        }
-
-      })
+      this._investigationService
+          .find({
+            query: {
+              'name': {$regex: value, '$options': 'i'},
+            }
+          })
+          .then((payload: any) => {
+            if (payload.data.length > 0) {
+              this.investigationSearchResult = true;
+              this.investigationItems = payload.data;
+            }
+          })
     }
   }
   _getCheckedIn(id) {
     this._systemService.on();
-    console.log(id)
-    this._checkInService.get(id, {}).then((payload: any) => {
-      console.log(payload);
-      this.selectedCheckIn = payload;
-      console.log(this.selectedCheckIn)
-      this._initializeFormGroup();
-      this._getPolicy2();
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err)
-      this._systemService.off();
-    })
+    this._checkInService.get(id, {})
+        .then((payload: any) => {
+          this.selectedCheckIn = payload;
+          this._initializeFormGroup();
+          this._getPolicy2();
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        })
   }
 
   _getPolicy2() {
-    console.log('policy 2')
     this._systemService.on();
-    this._policyService.find(
-      {
-        query: {
-          $and: [
-            { isActive: true },
-            {
-              $or: [
-                { 'principalBeneficiary': this.selectedCheckIn.beneficiaryId },
-                { 'dependantBeneficiaries.beneficiary._id': this.selectedCheckIn.beneficiaryId }
-              ]
-            }
-          ]
-        }
-      }
-    ).then((results: any) => {
-      console.log(results);
-      // let policyResult = results[0];
-      // console.log(policyResult);
-      if (results.data.length > 0) {
-        this.selectedPolicy = results.data[0];
-        this.referalFormGroup.controls.hiaResponsible.setValue(this.selectedPolicy.hiaId.name);
-        console.log(this.selectedPolicy)
-      }
+    this._policyService
+        .find({
+          query: {
+            $and: [
+              {isActive: true}, {
+                $or: [
+                  {'principalBeneficiary': this.selectedCheckIn.beneficiaryId},
+                  {
+                    'dependantBeneficiaries.beneficiary._id':
+                        this.selectedCheckIn.beneficiaryId
+                  }
+                ]
+              }
+            ]
+          }
+        })
+        .then((results: any) => {
+          console.log(results);
+          // let policyResult = results[0];
+          // console.log(policyResult);
+          if (results.data.length > 0) {
+            this.selectedPolicy = results.data[0];
+            this.referalFormGroup.controls.hiaResponsible.setValue(
+                this.selectedPolicy.hiaId.name);
+            console.log(this.selectedPolicy)
+          }
 
-      this._systemService.off();
-    }, error => {
-      console.log(error)
-    })
+          this._systemService.off();
+        }, error => {console.log(error)})
   }
 
   _getPolicy() {
     this._systemService.on();
-    let policy$ = Observable.fromPromise(this._policyService.find(
-      {
-        query: {
-          $and: [
-            { isActive: true },
-            {
-              $or: [
-                { 'principalBeneficiary._id': this.selectedCheckIn.beneficiaryId },
-                { 'dependantBeneficiaries.beneficiary._id': this.selectedCheckIn.beneficiaryId }
-              ]
-            }
-          ]
-        }
+    let policy$ = Observable.fromPromise(this._policyService.find({
+      query: {
+        $and: [
+          {isActive: true}, {
+            $or: [
+              {'principalBeneficiary._id': this.selectedCheckIn.beneficiaryId},
+              {
+                'dependantBeneficiaries.beneficiary._id':
+                    this.selectedCheckIn.beneficiaryId
+              }
+            ]
+          }
+        ]
       }
-    ));
+    }));
 
 
     Observable.forkJoin([policy$]).subscribe((results: any) => {
       let policyResult = results[0];
       if (policyResult.data.length > 0) {
         this.selectedPolicy = policyResult.data[0];
-        this.referalFormGroup.controls.hiaResponsible.setValue(this.selectedPolicy.hiaId.name);
+        this.referalFormGroup.controls.hiaResponsible.setValue(
+            this.selectedPolicy.hiaId.name);
       }
 
       this._systemService.off();
-    }, error => {
-      console.log(error)
-    })
+    }, error => {console.log(error)})
   }
 
 
   getDateDiff(date1, date2) {
-    var b = moment(date1),
-      a = moment(date2),
-      intervals: any = ['years', 'months', 'weeks', 'days'],
-      out = [];
+    var b = moment(date1), a = moment(date2),
+        intervals: any = ['years', 'months', 'weeks', 'days'], out = [];
 
     for (var i = 0; i < intervals.length; i++) {
       var diff = a.diff(b, intervals[i]);
@@ -612,35 +716,45 @@ export class NewReferalComponent implements OnInit {
   };
 
   _getAge() {
-    return this.getDateDiff(this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth, new Date());
+    return this.getDateDiff(
+        this.selectedCheckIn.beneficiaryObject.personId.dateOfBirth,
+        new Date());
   }
   _getAddress() {
-    return this.selectedCheckIn.beneficiaryObject.personId.homeAddress.street + ', ' +
-      this.selectedCheckIn.beneficiaryObject.personId.homeAddress.neighbourhood + ', ' +
-      this.selectedCheckIn.beneficiaryObject.personId.homeAddress.lga.name + ', ' +
-      this.selectedCheckIn.beneficiaryObject.personId.homeAddress.state.name
+    return this.selectedCheckIn.beneficiaryObject.personId.homeAddress.street +
+        ', ' +
+        this.selectedCheckIn.beneficiaryObject.personId.homeAddress
+            .neighbourhood +
+        ', ' +
+        this.selectedCheckIn.beneficiaryObject.personId.homeAddress.lga.name +
+        ', ' +
+        this.selectedCheckIn.beneficiaryObject.personId.homeAddress.state.name
   }
 
   _getDrugPackSizes() {
     this._systemService.on();
-    this._drugPackSizeService.find({}).then((payload: any) => {
-      this.packSizes = payload.data;
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    })
+    this._drugPackSizeService.find({})
+        .then((payload: any) => {
+          this.packSizes = payload.data;
+          this._systemService.off();
+        })
+        .catch(err => {
+          console.log(err);
+          this._systemService.off();
+        })
   }
 
   _getVisitTypes() {
     this._systemService.on();
-    this._visitTypeService.find({}).then((payload: any) => {
-      this.visitTypes = payload.data;
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    })
+    this._visitTypeService.find({})
+        .then((payload: any) => {
+          this.visitTypes = payload.data;
+          this._systemService.off();
+        })
+        .catch(err => {
+          console.log(err);
+          this._systemService.off();
+        })
   }
 
 
@@ -690,82 +804,81 @@ export class NewReferalComponent implements OnInit {
     let name = this.drugFormGroup.controls.drug;
     let unit = this.drugFormGroup.controls.drugUnit;
     let quantity = this.drugFormGroup.controls.drugQty;
-    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedDrug);
-    if (name.valid && unit.valid && quantity.valid && typeof (this.selectedDrug) === 'object') {
+    let retObj = this.checkProviderAuthorization(
+        this.selectedCheckIn.providerFacilityId.provider.facilityClass[0],
+        this.selectedDrug);
+    if (name.valid && unit.valid && quantity.valid &&
+        typeof (this.selectedDrug) === 'object') {
       this.drugList.push({
-        "drug": retObj.investigation,
-        "unit": unit.value,
-        "quantity": quantity.value,
-        "checked": retObj.checked,
-        "approvedStatus": retObj.approvedStatus
+        'drug': retObj.investigation,
+        'unit': unit.value,
+        'quantity': quantity.value,
+        'checked': retObj.checked,
+        'approvedStatus': retObj.approvedStatus
       });
       this.drugFormGroup.controls.drug.reset();
       unit.reset();
       quantity.reset(1);
     } else {
-      name.markAsDirty({ onlySelf: true });
-      unit.markAsDirty({ onlySelf: true });
-      quantity.markAsDirty({ onlySelf: true });
+      name.markAsDirty({onlySelf: true});
+      unit.markAsDirty({onlySelf: true});
+      quantity.markAsDirty({onlySelf: true});
     }
   }
   checkProviderAuthorization(fc, resource) {
     console.log(fc);
     console.log(resource)
     if (fc === 'primary') {
-      if (resource.P.toLowerCase().trim() == "p") {
+      if (resource.P.toLowerCase().trim() == 'p') {
         console.log(1)
-        if (resource.PA.toLowerCase().trim() == "n") {
+        if (resource.PA.toLowerCase().trim() == 'n') {
           console.log(2)
           // its approved
           let copyInvestigation = resource;
           delete copyInvestigation.Amount;
           return {
             'investigation': copyInvestigation,
-            'approvedStatus': this.requestStatus[1],
-            'checked': false
+                'approvedStatus': this.requestStatus[1], 'checked': false
           }
-        } else {
+        }
+        else {
           if (resource.Prefered.toLowerCase().trim() == 'c') {
             console.log(3)
             // cover by capitation, dont put amount
-            //requires authorization
+            // requires authorization
             let copyInvestigation = resource;
             delete copyInvestigation.Amount;
             return {
               'investigation': copyInvestigation,
-              'approvedStatus': this.requestStatus[0],
-              'checked': true
+                  'approvedStatus': this.requestStatus[0], 'checked': true
             }
           } else {
             console.log(4)
-            //set to approve and look for amount
-            //requires authorization
+            // set to approve and look for amount
+            // requires authorization
             let copyInvestigation = resource;
             return {
               'investigation': copyInvestigation,
-              'approvedStatus': this.requestStatus[0],
-              'checked': true
+                  'approvedStatus': this.requestStatus[0], 'checked': true
             }
           }
-
         }
-      } else if (resource.P.toLowerCase().trim() == "e") {
+      } else if (resource.P.toLowerCase().trim() == 'e') {
         let copyInvestigation = resource;
         delete copyInvestigation.Amount;
         return {
           'investigation': copyInvestigation,
-          'approvedStatus': this.requestStatus[1],
-          'checked': false
+              'approvedStatus': this.requestStatus[1], 'checked': false
         }
       }
-    } else if (fc === 'secondary') {
+    }
+    else if (fc === 'secondary') {
       console.log(5)
       // get authorization, check amount
       let copyInvestigation = resource;
       return {
         'investigation': copyInvestigation,
-        'approvedStatus': this.requestStatus[0],
-        'checked': true
+            'approvedStatus': this.requestStatus[0], 'checked': true
       }
     }
   }
@@ -777,50 +890,54 @@ export class NewReferalComponent implements OnInit {
   }
   onAddInvestigation() {
     let name = this.investigationFormGroup.controls.services;
-    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedInvestigation);
+    let retObj = this.checkProviderAuthorization(
+        this.selectedCheckIn.providerFacilityId.provider.facilityClass[0],
+        this.selectedInvestigation);
     if (name.valid) {
       this.investigationList.push({
-        "investigation": retObj.investigation,
-        "checked": retObj.checked,
-        "approvedStatus": retObj.approvedStatus
+        'investigation': retObj.investigation,
+        'checked': retObj.checked,
+        'approvedStatus': retObj.approvedStatus
       });
       this.investigationFormGroup.controls.services.reset();
     } else {
-      name.markAsDirty({ onlySelf: true });
+      name.markAsDirty({onlySelf: true});
     }
   }
   onAddProcedure() {
     let name = this.procedureFormGroup.controls.procedure;
-    let retObj = this.checkProviderAuthorization(this.selectedCheckIn.providerFacilityId.provider.facilityClass[0], this.selectedProcedure);
+    let retObj = this.checkProviderAuthorization(
+        this.selectedCheckIn.providerFacilityId.provider.facilityClass[0],
+        this.selectedProcedure);
     if (name.valid) {
       this.procedureList.push({
-        "procedure": retObj.investigation,
-        "checked": retObj.checked,
-        "approvedStatus": this.requestStatus[0]
+        'procedure': retObj.investigation,
+        'checked': retObj.checked,
+        'approvedStatus': this.requestStatus[0]
       });
       this.procedureFormGroup.controls.procedure.reset();
     } else {
-      name.markAsDirty({ onlySelf: true });
+      name.markAsDirty({onlySelf: true});
     }
-
   }
   onAddDiagnosis() {
     let name = this.diagnosisFormGroup.controls.diagnosis;
     let diagnosisType = this.diagnosisFormGroup.controls.diagnosisType;
     if (name.valid && diagnosisType.valid) {
       this.diagnosisLists.push({
-        "diagnosis": typeof (this.selectedDiagnosis) === 'object' ? this.selectedDiagnosis : name.value,
-        "diagnosisType": diagnosisType.value,
-        "checked": false,
-        "approvedStatus": this.requestStatus[0]
+        'diagnosis': typeof (this.selectedDiagnosis) === 'object' ?
+            this.selectedDiagnosis :
+            name.value,
+        'diagnosisType': diagnosisType.value,
+        'checked': false,
+        'approvedStatus': this.requestStatus[0]
       });
       this.diagnosisFormGroup.controls.diagnosis.reset();
       diagnosisType.reset();
     } else {
-      name.markAsDirty({ onlySelf: true });
-      diagnosisType.markAsDirty({ onlySelf: true })
+      name.markAsDirty({onlySelf: true});
+      diagnosisType.markAsDirty({onlySelf: true})
     }
-
   }
   onAddComplaint() {
     let name = this.symptomFormGroup.controls.complaint;
@@ -828,22 +945,23 @@ export class NewReferalComponent implements OnInit {
     let unit = this.symptomFormGroup.controls.complaintUnit;
     if (name.valid && duration.valid && unit.valid) {
       this.complaintLists.push({
-        "symptom": typeof (this.selectedComplain) === 'object' ? this.selectedComplain : name.value,
-        "duration": duration.value,
-        "unit": unit.value,
-        "checked": false,
-        "approvedStatus": this.requestStatus[0]
+        'symptom': typeof (this.selectedComplain) === 'object' ?
+            this.selectedComplain :
+            name.value,
+        'duration': duration.value,
+        'unit': unit.value,
+        'checked': false,
+        'approvedStatus': this.requestStatus[0]
       });
       name.reset();
       duration.reset(1);
       unit.reset(this.durations[0]);
     } else {
       console.log('here')
-      name.markAsDirty({ onlySelf: true });
-      duration.markAsDirty({ onlySelf: true });
-      unit.markAsDirty({ onlySelf: true });
+      name.markAsDirty({onlySelf: true});
+      duration.markAsDirty({onlySelf: true});
+      unit.markAsDirty({onlySelf: true});
     }
-
   }
 
   needAuthorization(procedure) {
@@ -867,135 +985,134 @@ export class NewReferalComponent implements OnInit {
 
         let preAuthDoc: PreAuthorizationDocument = <PreAuthorizationDocument>{};
         preAuthDoc.approvedStatus = this.requestStatus[0];
-        preAuthDoc.destinationProvider = this.referalFormGroup.controls.destinationHospital.value;
+        preAuthDoc.destinationProvider =
+            this.referalFormGroup.controls.destinationHospital.value;
         preAuthDoc.document = [];
-        //note start here
-        preAuthDoc.document.push(
-          <Document>{
-            type: "Clinical Findings",
-            clinicalDocumentation: this.referalFormGroup.controls.clinicalNote.value,
-            approvedStatus: this.requestStatus[0],
-            order: 2
-          }
-        );
-        preAuthDoc.document.push(
-          <Document>{
-            type: "Reason for Request",
-            clinicalDocumentation: this.referalFormGroup.controls.reason.value,
-            approvedStatus: this.requestStatus[0],
-            order: 7
-          }
-        );
+        // note start here
+        preAuthDoc.document.push(<Document>{
+          type: 'Clinical Findings',
+          clinicalDocumentation:
+              this.referalFormGroup.controls.clinicalNote.value,
+          approvedStatus: this.requestStatus[0],
+          order: 2
+        });
+        preAuthDoc.document.push(<Document>{
+          type: 'Reason for Request',
+          clinicalDocumentation: this.referalFormGroup.controls.reason.value,
+          approvedStatus: this.requestStatus[0],
+          order: 7
+        });
 
         // preAuthDoc.document.push(
         //   <Document>{
         //     type: "Pre Authorization Note",
-        //     clinicalDocumentation: this.referalFormGroup.controls.preAuthorizationNote.value,
+        //     clinicalDocumentation:
+        //     this.referalFormGroup.controls.preAuthorizationNote.value,
         //     approvedStatus:this.requestStatus[0],
         //     order:8
         //   }
         // )
 
-        //note ends here
-        //others
+        // note ends here
+        // others
 
         if (this.complaintLists.length > 0) {
-          preAuthDoc.document.push(
-            <Document>{
-              type: "Symptoms",
-              clinicalDocumentation: this.complaintLists,
-              approvedStatus: this.requestStatus[0],
-              order: 1
-            }
-          );
+          preAuthDoc.document.push(<Document>{
+            type: 'Symptoms',
+            clinicalDocumentation: this.complaintLists,
+            approvedStatus: this.requestStatus[0],
+            order: 1
+          });
         }
 
         if (this.procedureList.length > 0) {
-          preAuthDoc.document.push(
-            <Document>{
-              type: "Procedures",
-              clinicalDocumentation: this.procedureList,
-              approvedStatus: this.requestStatus[0],
-              order: 6
-            }
-          );
+          preAuthDoc.document.push(<Document>{
+            type: 'Procedures',
+            clinicalDocumentation: this.procedureList,
+            approvedStatus: this.requestStatus[0],
+            order: 6
+          });
         }
 
         if (this.investigationList.length > 0) {
-          preAuthDoc.document.push(
-            <Document>{
-              type: "Investigations",
-              clinicalDocumentation: this.investigationList,
-              approvedStatus: this.requestStatus[0],
-              order: 4
-            }
-          );
+          preAuthDoc.document.push(<Document>{
+            type: 'Investigations',
+            clinicalDocumentation: this.investigationList,
+            approvedStatus: this.requestStatus[0],
+            order: 4
+          });
         }
 
         if (this.diagnosisLists.length > 0) {
-          preAuthDoc.document.push(
-            <Document>{
-              type: "Diagnosis",
-              clinicalDocumentation: this.diagnosisLists,
-              approvedStatus: this.requestStatus[0],
-              order: 3
-            }
-          );
+          preAuthDoc.document.push(<Document>{
+            type: 'Diagnosis',
+            clinicalDocumentation: this.diagnosisLists,
+            approvedStatus: this.requestStatus[0],
+            order: 3
+          });
         }
 
         if (this.drugList.length > 0) {
-          preAuthDoc.document.push(
-            <Document>{
-              type: "Drugs",
-              clinicalDocumentation: this.drugList,
-              approvedStatus: this.requestStatus[0],
-              order: 5
-            }
-          );
+          preAuthDoc.document.push(<Document>{
+            type: 'Drugs',
+            clinicalDocumentation: this.drugList,
+            approvedStatus: this.requestStatus[0],
+            order: 5
+          });
         }
 
 
 
         let authorizationObject = <ReferralAuthorization>{};
         authorizationObject.checkedInDetails = this.selectedCheckIn;
-        authorizationObject.dateOfRequest = this.referalFormGroup.controls.visitDate.value.jsdate;
+        authorizationObject.dateOfRequest =
+            this.referalFormGroup.controls.visitDate.value.jsdate;
         authorizationObject.documentation = [];
         authorizationObject.documentation.push(preAuthDoc);
         authorizationObject.policyId = this.selectedPolicy;
 
-        // authorizationObject.isEmergency = this.referalFormGroup.controls.emergency.value;
-        authorizationObject.medicalPersonelName = this.referalFormGroup.controls.doctor.value;
-        authorizationObject.medicalPersonelUnit = this.referalFormGroup.controls.unit.value;
+        // authorizationObject.isEmergency =
+        // this.referalFormGroup.controls.emergency.value;
+        authorizationObject.medicalPersonelName =
+            this.referalFormGroup.controls.doctor.value;
+        authorizationObject.medicalPersonelUnit =
+            this.referalFormGroup.controls.unit.value;
         authorizationObject.providerFacilityId = this.user.facilityId;
-        authorizationObject.visityClassId = this.referalFormGroup.controls.visitClass.value;
+        authorizationObject.visityClassId =
+            this.referalFormGroup.controls.visitClass.value;
         authorizationObject.approvedStatus = this.requestStatus[0];
         authorizationObject.referingProvider = this.user.facilityId;
-        authorizationObject.destinationProvider = this.referalFormGroup.controls.destinationHospital.value;
+        authorizationObject.destinationProvider =
+            this.referalFormGroup.controls.destinationHospital.value;
 
         console.log(authorizationObject);
-        this._referralService.create(authorizationObject).then(payload => {
-          console.log(payload);
-          this.selectedCheckIn.otp.isVerified = false;
-          this._checkInService.update(this.selectedCheckIn).then(payload2=>{
-            this._router.navigate(['/modules/referal/referals']);
-            this._systemService.off();
-          })
-        }).catch(err => {
-          this._systemService.off();
-          console.log(err);
-        })
+        this._referralService.create(authorizationObject)
+            .then(payload => {
+              console.log(payload);
+              this.selectedCheckIn.otp.isVerified = false;
+              this._checkInService.update(this.selectedCheckIn)
+                  .then(payload2 => {
+                    this._router.navigate(['/modules/referal/referals']);
+                    this._systemService.off();
+                  })
+            })
+            .catch(err => {
+              this._systemService.off();
+              console.log(err);
+            })
 
 
       } else {
         this._systemService.off();
         this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
-        Object.keys(this.referalFormGroup.controls).forEach((field, i) => { // {1}
-          const control = this.referalFormGroup.get(field);
-          if (!control.valid) {
-            control.markAsDirty({ onlySelf: true });
-            counter = counter + 1;
-          }
-        });
+        Object.keys(this.referalFormGroup.controls)
+            .forEach((field, i) => {  // {1}
+              const control = this.referalFormGroup.get(field);
+              if (!control.valid) {
+                control.markAsDirty({onlySelf: true});
+                counter = counter + 1;
+              }
+            });
       }
     } catch (error) {
       this._systemService.off();
@@ -1006,18 +1123,22 @@ export class NewReferalComponent implements OnInit {
   navigate(url: string, id: string) {
     if (!!id) {
       this._systemService.on();
-      this._router.navigate([url + id]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
+      this._router.navigate([url + id])
+          .then(res => {
+            this._systemService.off();
+          })
+          .catch(err => {
+            this._systemService.off();
+          });
     } else {
       this._systemService.on();
-      this._router.navigate([url]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
+      this._router.navigate([url])
+          .then(res => {
+            this._systemService.off();
+          })
+          .catch(err => {
+            this._systemService.off();
+          });
     }
   }
 
@@ -1039,7 +1160,7 @@ export class NewReferalComponent implements OnInit {
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       let that = this;
-      reader.onload = function (e: any) {
+      reader.onload = function(e: any) {
         // that.showPreview = true;
         // that.blah.nativeElement.src = e.target.result;
         console.log(e)
@@ -1131,5 +1252,4 @@ export class NewReferalComponent implements OnInit {
     this.tab_drug = false;
     this.tab_services = true;
   }
-
 }

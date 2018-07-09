@@ -1,14 +1,15 @@
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+
+import {environment} from '../../../../environments/environment';
+import {Facility} from '../../../models/index';
+import {HeaderEventEmitterService} from '../../../services/event-emitters/header-event-emitter.service';
 // import { IMyDpOptions, IMyDate } from 'mydatepicker';
 
-import { CapitationFeeService, FacilityService, SystemModuleService, UploadService } from '../../../services/index';
-import { Facility } from '../../../models/index';
-import { CurrentPlaformShortName, FORM_VALIDATION_ERROR_MESSAGE } from '../../../services/globals/config';
-import { HeaderEventEmitterService } from '../../../services/event-emitters/header-event-emitter.service';
+import {CapitationFeeService, FacilityService, SystemModuleService, UploadService} from '../../../services/index';
 
 @Component({
   selector: 'app-platform-details',
@@ -33,18 +34,21 @@ export class PlatformDetailsComponent implements OnInit {
   currentPlatform: Facility = <Facility>{};
   capitationFees: any = <any>[];
   capitationLoading = true;
+  platformName: any;
 
   constructor(
-    private _fb: FormBuilder,
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _facilityService: FacilityService,
-    private _toastr: ToastsManager,
-    private _uploadService: UploadService,
-    private _systemService: SystemModuleService,
-    private _capitationFeeService: CapitationFeeService,
-    private _headerEventEmitter: HeaderEventEmitterService,
-  ) { }
+      private _fb: FormBuilder,
+      private _router: Router,
+      private _route: ActivatedRoute,
+      private _facilityService: FacilityService,
+      private _toastr: ToastsManager,
+      private _uploadService: UploadService,
+      private _systemService: SystemModuleService,
+      private _capitationFeeService: CapitationFeeService,
+      private _headerEventEmitter: HeaderEventEmitterService,
+  ) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Platform Details');
@@ -84,23 +88,27 @@ export class PlatformDetailsComponent implements OnInit {
           platformOwnerId: this.currentPlatform
         };
 
-        this._capitationFeeService.create(capitation).then(res => {
-          console.log(res);
-          this.activateCapitationBtnText = true;
-          this.activateCapitationBtnProcessing = false;
-          this.disableActiveCapitation = false;
-          this.capitationFormGroup.reset();
-          this._getCapitationFees();
-          this._toastr.success('Capitation fee has been created successfully.', 'Success!');
-        }).catch(err => {
-          console.log(err);
-          this.activateCapitationBtnText = true;
-          this.activateCapitationBtnProcessing = false;
-          this.disableActiveCapitation = false;
-        });
+        this._capitationFeeService.create(capitation)
+            .then(res => {
+              console.log(res);
+              this.activateCapitationBtnText = true;
+              this.activateCapitationBtnProcessing = false;
+              this.disableActiveCapitation = false;
+              this.capitationFormGroup.reset();
+              this._getCapitationFees();
+              this._toastr.success(
+                  'Capitation fee has been created successfully.', 'Success!');
+            })
+            .catch(err => {
+              console.log(err);
+              this.activateCapitationBtnText = true;
+              this.activateCapitationBtnProcessing = false;
+              this.disableActiveCapitation = false;
+            });
       } else {
-        this._toastr.error('There was a problem trying to get some required resources. Please try again later!',
-        'Required Resource Error!');
+        this._toastr.error(
+            'There was a problem trying to get some required resources. Please try again later!',
+            'Required Resource Error!');
       }
     }
   }
@@ -114,66 +122,81 @@ export class PlatformDetailsComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-      if (res.data.length > 0) {
-        this.currentPlatform = res.data[0];
-      }
-    }).catch(err => {
-      console.log(err);
-    });
+    this._facilityService
+        .findWithOutAuth({query: {shortName: this.platformName}})
+        .then(res => {
+          if (res.data.length > 0) {
+            this.currentPlatform = res.data[0];
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
   }
 
   private _getCapitationFees() {
-    this._capitationFeeService.find({
-      query: { 'platformOwnerId.shortName': CurrentPlaformShortName,
-        $sort: { createdAt: -1 }
-      }
-    }).then((res: any) => {
-      this.capitationLoading = false;
-      if (res.data.length > 0) {
-        this.capitationFees = res.data;
-      }
-    }).catch(err => {
-      console.log(err);
-    });
+    this._capitationFeeService
+        .find({
+          query: {
+            'platformOwnerId.shortName': this.platformName,
+            $sort: {createdAt: -1}
+          }
+        })
+        .then((res: any) => {
+          this.capitationLoading = false;
+          if (res.data.length > 0) {
+            this.capitationFees = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
   }
 
   _getPlatformDetails(id) {
     this._systemService.on();
-    this._facilityService.get(id, {}).then((res: any) => {
-      console.log(res);
-      this.selectedFacility = res;
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
+    this._facilityService.get(id, {})
+        .then((res: any) => {
+          console.log(res);
+          this.selectedFacility = res;
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   navigateToPlatforms() {
-   this._systemService.on()
-    this._router.navigate(['/modules/platform/platforms']).then(res => {
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
+    this._systemService.on();
+    this._router.navigate(['/modules/platform/platforms'])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   navigate(route, id) {
     this._systemService.on();
     if (!!id) {
-      this._router.navigate([route + id]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      });
+      this._router.navigate([route + id])
+          .then(res => {
+            this._systemService.off();
+          })
+          .catch(err => {
+            console.log(err);
+            this._systemService.off();
+          });
     } else {
-      this._router.navigate([route]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      });
+      this._router.navigate([route])
+          .then(res => {
+            this._systemService.off();
+          })
+          .catch(err => {
+            console.log(err);
+            this._systemService.off();
+          });
     }
   }
 
@@ -229,5 +252,4 @@ export class PlatformDetailsComponent implements OnInit {
         break;
     }
   }
-
 }

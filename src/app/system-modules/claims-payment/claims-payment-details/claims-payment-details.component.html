@@ -236,7 +236,7 @@
                             <div class="letering">
                                 <div class="letering-1">Reaction Sent {{selectedClaim?.approvedDocumentation?.response?.createdAt|date:'medium'}}</div>
                                 <div class="letering-2">
-                                    <span class="letering-name">LASHMA</span>
+                                    <span class="letering-name">{{platformName}}</span>
                                     <span class="blue" *ngIf="selectedClaim.approvedDocumentation.response.isReject == true">Reject</span>
                                     <span class="blue" *ngIf="selectedClaim.approvedDocumentation.response.isQuery == true">Query</span>
                                     <span class="yellow" *ngIf="selectedClaim.approvedDocumentation.response.isHold == true">Hold</span>

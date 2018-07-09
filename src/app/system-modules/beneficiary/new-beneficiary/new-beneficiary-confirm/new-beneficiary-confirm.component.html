@@ -13,7 +13,7 @@
                     <div class="item-val">{{policyObject?.principalBeneficiary?.stateID}}</div>
                 </div>
                 <div class="group-item">
-                    <div class="item-label">LASHMA ID:</div>
+                    <div class="item-label">{{platformName}} ID:</div>
                     <div class="item-val">{{policyObject?.principalBeneficiary?.platformOwnerNumber}}</div>
                 </div>
                 <div class="group-item">
@@ -41,7 +41,7 @@
                     <div class="item-val">{{dependant.beneficiary.stateID}}</div>
                 </div>
                 <div class="group-item">
-                    <div class="item-label">LASHMA ID:</div>
+                    <div class="item-label">{{platformName}} ID:</div>
                     <div class="item-val">{{dependant.beneficiary.platformOwnerNumber}}</div>
                 </div>
             </div>
@@ -54,8 +54,7 @@
 
 
     <div class="group-item">
-        <div class="item-val">{{policyObject?.principalBeneficiary.personId.title.name}} {{policyObject?.principalBeneficiary.personId.lastName}}
-            {{policyObject?.principalBeneficiary.personId.firstName}} {{policyObject?.principalBeneficiary.personId.otherNames}}</div>
+        <div class="item-val">{{policyObject?.principalBeneficiary.personId.title.name}} {{policyObject?.principalBeneficiary.personId.lastName}} {{policyObject?.principalBeneficiary.personId.firstName}} {{policyObject?.principalBeneficiary.personId.otherNames}}</div>
     </div>
     <div class="group-item">
         <div class="item-val">{{policyObject?.principalBeneficiary.personId.phoneNumber}} </div>
