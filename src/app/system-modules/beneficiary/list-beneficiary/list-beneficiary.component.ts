@@ -101,27 +101,20 @@ export class ListBeneficiaryComponent implements OnInit {
           {query: {'personId.email': this.user.email}}));
       Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
         if (results[0].data.length > 0) {
-          this._policyService
-              .find({
-                query: {
-                  principalBeneficiary: results[0].data[0]._id,
-                }
-              })
-              .then((policies: any) => {
-                if (policies.data.length > 0) {
-                  this._router
-                      .navigate([
-                        '/modules/beneficiary/beneficiaries',
-                        policies.data[0]._id
-                      ])
-                      .then(
-                          payload => {
+          this._policyService.find({
+            query: {
+              principalBeneficiary: results[0].data[0]._id,
+            }
+          }).then((policies: any) => {
+            if (policies.data.length > 0) {
+              this._router.navigate([
+                '/modules/beneficiary/beneficiaries',
+                policies.data[0]._id
+              ]).then(payload => {
 
-                          })
-                      .catch(err => {});
-                }
-              })
-              .catch(errin => {})
+              }).catch(err => {});
+            }
+          }).catch(errin => {});
         }
       }, error => {});
     }
@@ -133,14 +126,9 @@ export class ListBeneficiaryComponent implements OnInit {
     this.showLoadMore = true;
   }
   private _getPlans() {
-    this._planService.find({})
-        .then((payload: any) => {
-          this.planTypes = payload.data;
-        })
-        .catch(
-            err => {
-
-            })
+    this._planService.find({}).then((payload: any) => {
+      this.planTypes = payload.data;
+    }).catch(err => {});
   }
   private _getCurrentPlatform() {
     console.log('get pla');
