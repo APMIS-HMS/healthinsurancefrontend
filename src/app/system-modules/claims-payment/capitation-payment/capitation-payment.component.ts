@@ -244,32 +244,26 @@ export class CapitationPaymentComponent implements OnInit {
             if (res.data.length > 0) {
               console.log(res);
               this.currentPlatform = res.data[0];
-              if (!!this.user.userType &&
-                  this.user.userType.name === 'Platform Owner') {
-                this._getPolicy(
-                    {
-                      query: {
-                        'platformOwnerId._id': this.currentPlatform._id,
-                        // 'providerId._id': providerId,
-                        isActive: true,
-                        isPaid: true,
-                      }
-                    },
-                    providerId);
-              } else if (
-                  !!this.user.userType &&
-                  this.user.userType.name === 'Health Insurance Agent') {
-                this._getPolicy(
-                    {
-                      query: {
-                        'platformOwnerId._id': this.currentPlatform._id,
-                        // 'providerId._id': providerId,
-                        'hiaId.hia.type._id': this.user.userType._id,
-                        isActive: true,
-                        isPaid: true,
-                      }
-                    },
-                    providerId);
+              if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+                this._getPolicy({
+                  query: {
+                    'platformOwnerId._id': this.currentPlatform._id,
+                    // 'providerId._id': providerId,
+                    isActive: true,
+                    isPaid: true,
+                  }
+                },
+                providerId);
+              } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+                this._getPolicy({
+                  query: {
+                    'platformOwnerId._id': this.currentPlatform._id,
+                    'hiaId._id': this.user.facilityId._id,
+                    isActive: true,
+                    isPaid: true,
+                  }
+                },
+                providerId);
               }
             }
           }

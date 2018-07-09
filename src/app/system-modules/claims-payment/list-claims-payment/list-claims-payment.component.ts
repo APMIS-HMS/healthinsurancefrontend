@@ -83,167 +83,150 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsPayments(query: any) {
     this._systemService.on();
-    this._claimService.find(query)
-        .then((res: any) => {
-          this.loading = false;
-          // Group claims based on provider
-          let i = res.data.length;
-          while (i--) {
-            let claim = res.data[i];
-            const providerId =
-                claim.checkedinDetail.checkedInDetails.providerFacilityId._id;
-            let hasItem = this.claims.filter(
-                e => providerId ===
-                    e.checkedinDetail.checkedInDetails.providerFacilityId._id);
+    this._claimService.find(query).then((res: any) => {
+      this.loading = false;
+      // Group claims based on provider
+      let i = res.data.length;
+      while (i--) {
+        let claim = res.data[i];
+        const providerId =
+            claim.checkedinDetail.checkedInDetails.providerFacilityId._id;
+        let hasItem = this.claims.filter(
+            e => providerId ===
+                e.checkedinDetail.checkedInDetails.providerFacilityId._id);
 
-            if (hasItem.length === 0) {
-              claim.noOfClaims = 1;
-              claim.totalCost = claim.costingApprovalDocumentation;
-              this.claims.push(claim);
-            } else {
-              hasItem[0].totalCost += claim.costingApprovalDocumentation;
-              hasItem[0].noOfClaims++;
-            }
-          }
-          // this.claims = res.data;
-          // this.claimsTotalEntries = res.total;
-          // if (this.claimsResetData !== true) {
-          //   this.claims.push(...res.data);
-          // } else {
-          //   this.claimsResetData = false;
-          //   this.claims = res.data;
-          // }
-          // if (this.claims.length >= this.claimsTotalEntries) {
-          //   this.showClaimsLoadMore = false;
-          // }
-          this._systemService.off();
-        })
-        .catch(error => {
-          this._systemService.off();
-        });
+        if (hasItem.length === 0) {
+          claim.noOfClaims = 1;
+          claim.totalCost = claim.costingApprovalDocumentation;
+          this.claims.push(claim);
+        } else {
+          hasItem[0].totalCost += claim.costingApprovalDocumentation;
+          hasItem[0].noOfClaims++;
+        }
+      }
+      // this.claims = res.data;
+      // this.claimsTotalEntries = res.total;
+      // if (this.claimsResetData !== true) {
+      //   this.claims.push(...res.data);
+      // } else {
+      //   this.claimsResetData = false;
+      //   this.claims = res.data;
+      // }
+      // if (this.claims.length >= this.claimsTotalEntries) {
+      //   this.showClaimsLoadMore = false;
+      // }
+      this._systemService.off();
+    }).catch(error => {
+      this._systemService.off();
+    });
   }
 
   private _getClaimsCapitationFromPolicy(query: any) {
     this._systemService.on();
+    console.log(query);
     this._policyService.find(query).then((res: any) => {
       console.log(res);
-          this.cloading = false;
-          let i = res.data.length;
+      this.cloading = false;
+      let i = res.data.length;
 
-          while (i--) {
-            let policy = res.data[i];
-            let hasItem = this.capitationClaims.filter(
-                e => e.providerId._id === policy.providerId._id);
+      while (i--) {
+        let policy = res.data[i];
+        let hasItem = this.capitationClaims.filter(e => e.providerId._id === policy.providerId._id);
 
-            if (hasItem.length === 0) {
-              policy.noOfBeneficiaries = 1;
-              this.capitationClaims.push(policy);
-            } else {
-              hasItem[0].noOfBeneficiaries++;
-            }
-          }
+        if (hasItem.length === 0) {
+          policy.noOfBeneficiaries = 1;
+          this.capitationClaims.push(policy);
+        } else {
+          hasItem[0].noOfBeneficiaries++;
+        }
+      }
 
-          // this.capitationClaimsTotalEntries = res.total;
-          // if (this.capitationClaimsResetData !== true) {
-          //   this.capitationClaims.push(...res.data);
-          // } else {
-          //   this.capitationClaimsResetData = false;
-          //   this.capitationClaims = res.data;
-          // }
-          // if (this.capitationClaims.length >=
-          // this.capitationClaimsTotalEntries) {
-          //   this.showClaimsLoadMore = false;
-          // }
-          this._systemService.off();
-        })
-        .catch(error => {
-          this._systemService.off();
-        });
+      // this.capitationClaimsTotalEntries = res.total;
+      // if (this.capitationClaimsResetData !== true) {
+      //   this.capitationClaims.push(...res.data);
+      // } else {
+      //   this.capitationClaimsResetData = false;
+      //   this.capitationClaims = res.data;
+      // }
+      // if (this.capitationClaims.length >=
+      // this.capitationClaimsTotalEntries) {
+      //   this.showClaimsLoadMore = false;
+      // }
+      this._systemService.off();
+    }).catch(error => {
+      this._systemService.off();
+    });
   }
 
   private _getClaimsCapitationPrice() {
     this._systemService.on();
-    this._capitationFeeService
-        .find({
+    this._capitationFeeService.find({
+      query: {
+        'platformOwnerId._id': this.currentPlatform._id,
+        isActive: true
+      }
+    }).then((res: any) => {
+      this.capitationPrice = res.data[0];
+      if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+        this._getClaimsCapitationFromPolicy({
           query: {
             'platformOwnerId._id': this.currentPlatform._id,
-            isActive: true
+            isActive: true,
+            isPaid: true
           }
-        })
-        .then((res: any) => {
-          this.capitationPrice = res.data[0];
-          if (!!this.user.userType &&
-              this.user.userType.name === 'Platform Owner') {
-            this._getClaimsCapitationFromPolicy({
-              query: {
-                'platformOwnerId._id': this.currentPlatform._id,
-                isActive: true,
-                isPaid: true
-              }
-            });
-          } else if (
-              !!this.user.userType &&
-              this.user.userType.name === 'Health Insurance Agent') {
-            this._getClaimsCapitationFromPolicy({
-              query: {
-                'platformOwnerId._id': this.currentPlatform._id,
-                'hiaId.hia.type._id': this.user.userType._id,
-                isActive: true,
-                isPaid: true
-              }
-            });
-          }
-          this._systemService.off();
-        })
-        .catch(error => {
-          this._systemService.off();
         });
+      } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+        this._getClaimsCapitationFromPolicy({
+          query: {
+            'platformOwnerId._id': this.currentPlatform._id,
+            'hiaId._id': this.user.facilityId._id,
+            isActive: true,
+            isPaid: true
+          }
+        });
+      }
+      this._systemService.off();
+    }).catch(error => {
+      this._systemService.off();
+    });
   }
 
   private _getCurrentPlatform() {
-    this._facilityService
-        .find({
-          query: {
-            shortName: this.platformName,
-            $select: ['name', 'shortName', 'address.state']
-          }
-        })
-        .then((res: any) => {
-          if (res.data.length > 0) {
-            this.currentPlatform = res.data[0];
-            if (!!this.user.userType &&
-                this.user.userType.name === 'Platform Owner') {
-              this._getClaimsPayments({
-                query: {
-                  'checkedinDetail.beneficiaryObject.platformOwnerId._id':
-                      this.currentPlatform._id,
-                  isPaid: false,
-                  'approvedDocumentation.response.isApprove': true,
-                  $limit: this.limit,
-                  $skip: this.limit * this.index
-                }
-              });
-            } else if (
-                !!this.user.userType &&
-                this.user.userType.name === 'Health Insurance Agent') {
-              this._getClaimsPayments({
-                query: {
-                  'checkedinDetail.beneficiaryObject.platformOwnerId._id':
-                      this.currentPlatform._id,
-                  'checkedinDetail.policyId.hiaId.hia.type._id':
-                      this.user.userType._id,
-                  isPaid: false,
-                  'approvedDocumentation.response.isApprove': true,
-                  $limit: this.limit,
-                  $skip: this.limit * this.index
-                }
-              });
+    this._facilityService.find({
+      query: {
+        shortName: this.platformName,
+        $select: ['name', 'shortName', 'address.state']
+      }
+    }).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+          this._getClaimsPayments({
+            query: {
+              'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+              isPaid: false,
+              'approvedDocumentation.response.isApprove': true,
+              $limit: this.limit,
+              $skip: this.limit * this.index
             }
+          });
+        } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          this._getClaimsPayments({
+            query: {
+              'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+              // 'checkedinDetail.policyId.hiaId.hia.type._id': this.user.userType._id,
+              'checkedinDetail.policyId.hiaId._id': this.user.facilityId._id,
+              isPaid: false,
+              'approvedDocumentation.response.isApprove': true,
+              $limit: this.limit,
+              $skip: this.limit * this.index
+            }
+          });
+        }
 
-            this._getClaimsCapitationPrice();
-          }
-        })
-        .catch(err => {});
+        this._getClaimsCapitationPrice();
+      }
+    }).catch(err => {});
   }
 
   onCheckFFSQueue(index, claim: Claim) {

@@ -50,10 +50,8 @@ export class ClaimsProviderDetailsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Unpaid Claims');
     this._headerEventEmitter.setMinorRouteUrl('Claims payment list');
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
 
     this._route.params.subscribe(param => {
-      console.log(param);
       if (!!param.id) {
         this.routeId = param.id;
       }
@@ -63,46 +61,34 @@ export class ClaimsProviderDetailsComponent implements OnInit {
   }
 
   onCheckSelectedItem(index: number, claim: Claim, isChecked: boolean) {
-    console.log(isChecked);
     if (isChecked) {
       this.totalCost += claim.costingApprovalDocumentation;
       this.selectedClaims.push(claim);
     } else {
       // Remove from the selected Claim
       this.totalCost -= claim.costingApprovalDocumentation;
-      this.selectedClaims =
-          this.selectedClaims.filter(x => x._id !== claim._id);
+      this.selectedClaims = this.selectedClaims.filter(x => x._id !== claim._id);
     }
   }
 
   private _getClaimsPayments(query: any) {
     this._systemService.on();
-    this._claimsService.find(query)
-        .then((res: any) => {
-          console.log(res);
-          this.loading = false;
-          if (res.data.length > 0) {
-            this.claims = res.data;
-            this.hiaDetails = res.data[0].checkedinDetail.policyId.hiaId;
-            const facilitiyName =
-                res.data[0]
-                    .checkedinDetail.checkedInDetails.providerFacilityId.name;
-            this._headerEventEmitter.setMinorRouteUrl(
-                'Unpaid claims for ' + facilitiyName);
-          }
-          this._systemService.off();
-        })
-        .catch(error => {
-          console.log(error);
-          this._systemService.off();
-        });
+    this._claimsService.find(query).then((res: any) => {
+      this.loading = false;
+      if (res.data.length > 0) {
+        this.claims = res.data;
+        this.hiaDetails = res.data[0].checkedinDetail.policyId.hiaId;
+        const facilitiyName = res.data[0].checkedinDetail.checkedInDetails.providerFacilityId.name;
+        this._headerEventEmitter.setMinorRouteUrl('Unpaid claims for ' + facilitiyName);
+      }
+      this._systemService.off();
+    }).catch(error => {
+      this._systemService.off();
+    });
   }
 
   onCheckAllSelectedItemsToPay(isChecked: boolean) {
-    console.log(isChecked);
-
     this.claims.forEach(claim => {
-      console.log(claim);
       if (isChecked) {
         claim.isChecked = true;
         this.totalCost += claim.costingApprovalDocumentation;
@@ -114,7 +100,6 @@ export class ClaimsProviderDetailsComponent implements OnInit {
             this.selectedClaims.filter(x => x._id !== claim._id);
       }
     });
-    console.log(this.totalCost);
   }
 
   // onClickPayClaim() {
@@ -223,45 +208,36 @@ export class ClaimsProviderDetailsComponent implements OnInit {
   }
 
   private _getCurrentPlatform(providerId) {
-    this._facilityService
-        .find({
-          query: {
-            shortName: this.platformName,
-            $select: ['name', 'shortName', 'address.state']
-          }
-        })
-        .then((res: any) => {
-          if (res.data.length > 0) {
-            this.currentPlatform = res.data[0];
-            if (!!this.user.userType &&
-                this.user.userType.name === 'Platform Owner') {
-              this._getClaimsPayments({
-                query: {
-                  'checkedinDetail.beneficiaryObject.platformOwnerId._id':
-                      this.currentPlatform._id,
-                  providerFacilityId: providerId,
-                  isPaid: false
-                }
-              });
-            } else if (
-                !!this.user.userType &&
-                this.user.userType.name === 'Health Insurance Agent') {
-              this._getClaimsPayments({
-                query: {
-                  'checkedinDetail.beneficiaryObject.platformOwnerId._id':
-                      this.currentPlatform._id,
-                  'checkedinDetail.policyId.hiaId.hia.type._id':
-                      this.user.userType._id,
-                  providerFacilityId: providerId,
-                  isPaid: false
-                }
-              });
+    this._facilityService.find({
+      query: {
+        shortName: this.platformName,
+        $select: ['name', 'shortName', 'address.state']
+      }
+    }).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+          this._getClaimsPayments({
+            query: {
+              'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+              providerFacilityId: providerId,
+              isPaid: false
             }
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+          });
+        } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          this._getClaimsPayments({
+            query: {
+              'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+              'checkedinDetail.policyId.hiaId._id': this.user.facilityId._id,
+              providerFacilityId: providerId,
+              isPaid: false
+            }
+          });
+        }
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   onClickShowPayClaim() {

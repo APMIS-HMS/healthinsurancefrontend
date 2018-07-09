@@ -84,6 +84,7 @@ export class NewUserComponent implements OnInit {
     this._initializedUser();
 
     this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
     // this._getGenders();
     this._getUserTypes();
     this._getProfessions();
@@ -291,7 +292,9 @@ export class NewUserComponent implements OnInit {
       if (valid) {
         this._systemService.on();
         if (this.user.userType === undefined) {
-          value.platformOwnerId = value.facilityId;
+          value.platformOwnerId = this.user.platformOwnerId;
+        } else if (this.user.platformOwnerId !== undefined) {
+          value.platformOwnerId = this.user.platformOwnerId;
         } else {
           value.platformOwnerId = this.user.facilityId;
         }
@@ -314,6 +317,7 @@ export class NewUserComponent implements OnInit {
           this.selectedUser.otherNames = value.otherNames;
           this.selectedUser.phoneNumber = value.phoneNumber;
           this.selectedUser.profession = value.profession;
+          // this.selectedUser.platformOwnerId = value.platformOwnerId;
           this.selectedUser.cader = value.cader;
           this.selectedUser.unit = value.unit;
           if (this.selectedUser.userType.name !== 'Provider') {
@@ -321,39 +325,29 @@ export class NewUserComponent implements OnInit {
             delete this.selectedUser.cader;
             delete this.selectedUser.unit;
           }
-          this._userService.patch(this.selectedUser._id, this.selectedUser, {})
-              .then(pay => {
-                this._toastr.success(
-                    'You have successfully updated a user!', 'Update');
-                this._router.navigate(['/modules/user/users'])
-                    .then(res => {
-                      this._systemService.off();
-                    })
-                    .catch(exp => {
-                      this._systemService.off();
-                    });
-              })
-              .catch(err => {
-                this._systemService.off();
-              });
+
+          this._userService.patch(this.selectedUser._id, this.selectedUser, {}).then(pay => {
+            this._toastr.success('You have successfully updated a user!', 'Update');
+            this._router.navigate(['/modules/user/users']).then(res => {
+              this._systemService.off();
+            }).catch(exp => {
+              this._systemService.off();
+            });
+          }).catch(err => {
+            this._systemService.off();
+          });
         } else {
-          this._userService.create(value)
-              .then(payload => {
-                this._systemService.off();
-                this._toastr.success(
-                    'You have successfully created a user!', 'Success!');
-                this._router.navigate(['/modules/user/users'])
-                    .then(res => {})
-                    .catch(exp => {
-                      this._systemService.off();
-                    });
-              })
-              .catch(err => {
-                this._toastr.error(
-                    'Email has already been taken. Please use another email address!',
-                    'Duplicate Email!');
-                this._systemService.off();
-              });
+
+          this._userService.create(value).then(payload => {
+            this._systemService.off();
+            this._toastr.success('You have successfully created a user!', 'Success!');
+            this._router.navigate(['/modules/user/users']).then(res => {}).catch(exp => {
+              this._systemService.off();
+            });
+          }).catch(err => {
+            this._toastr.error('Email has already been taken. Please use another email address!', 'Duplicate Email!');
+            this._systemService.off();
+          });
         }
       } else {
         this._toastr.error(
