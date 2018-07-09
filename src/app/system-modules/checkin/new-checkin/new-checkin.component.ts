@@ -25,13 +25,13 @@ import {
 import { PolicyService } from "./../../../services/policy/policy.service";
 
 @Component({
-  selector: "app-new-checkin",
-  templateUrl: "./new-checkin.component.html",
-  styleUrls: ["./new-checkin.component.scss"]
+  selector: 'app-new-checkin',
+  templateUrl: './new-checkin.component.html',
+  styleUrls: ['./new-checkin.component.scss']
 })
 export class NewCheckinComponent implements OnInit {
   currentPlatform: any;
-
+  user: any;
   listsearchControl = new FormControl();
   beneficiaries: any[] = [];
   platformName: any;
@@ -52,10 +52,10 @@ export class NewCheckinComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl("New Check In");
-    this._headerEventEmitter.setMinorRouteUrl(
-      "Create new check in beneficiary"
-    );
+    this._headerEventEmitter.setRouteUrl('New Check In');
+    this._headerEventEmitter.setMinorRouteUrl('Create new check in beneficiary');
+    this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
     this.listsearchControl.valueChanges
       .debounceTime(350)
       .distinctUntilChanged()
@@ -73,21 +73,18 @@ export class NewCheckinComponent implements OnInit {
   }
 
   _searchBeneficiary(value) {
-    this._beneficiaryService
-      .find({
+    this._beneficiaryService.find({
         query: {
           $or: [
-            { platformOwnerNumber: { $regex: value, $options: "i" } },
-            { "personId.lastName": { $regex: value, $options: "i" } },
-            { "personId.firstName": { $regex: value, $options: "i" } }
+            { platformOwnerNumber: { $regex: value, $options: 'i' } },
+            { 'personId.lastName': { $regex: value, $options: 'i' } },
+            { 'personId.firstName': { $regex: value, $options: 'i' } }
           ]
         }
-      })
-      .then((payload: any) => {
+      }).then((payload: any) => {
         this.beneficiaries = payload.data;
         this._systemService.off();
-      })
-      .catch(err => {
+      }).catch(err => {
         console.log(err);
         this._systemService.off();
       });
@@ -95,27 +92,23 @@ export class NewCheckinComponent implements OnInit {
 
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService
-      .find({ query: { shortName: this.platformName } })
-      .then((res: any) => {
-        if (res.data.length > 0) {
-          this.currentPlatform = res.data[0];
-        }
-        this._systemService.off();
-      })
-      .catch(err => {
-        this._systemService.off();
-      });
+    this._facilityService.find({ query: { shortName: this.platformName } }).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+      }
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   _getBeneficiariesFromPolicy(platformId, search) {
     if (search.length > 2) {
-      this._policyService
-        .searchPolicy(search)
-        .then((payload: any) => {
+      const query = { platformOwnerId: this.currentPlatform._id, search: search };
+      this._policyService.searchPolicy(query).then((payload: any) => {
           this.beneficiaries = [];
-          if (payload.body.data.length > 0) {
-            payload.body.data.forEach(policy => {
+          if (payload.data.length > 0) {
+            payload.data.forEach(policy => {
               let principal = policy.principalBeneficiary;
               principal.isPrincipal = true;
               principal.hia = policy.hiaId;
@@ -208,17 +201,17 @@ export class NewCheckinComponent implements OnInit {
   routeBeneficiaryDetails(beneficiary) {
     if (!beneficiary.policy.isPaid || !beneficiary.policy.isActive) {
       this._toast.info(
-        "Premium payment not yet paid or policy not actived, contact your Health Insurance Agent",
-        "Info"
+        'Premium payment not yet paid or policy not actived, contact your Health Insurance Agent',
+        'Info'
       );
     } else {
-      this._locker.setObject("policyID", beneficiary.policyId);
+      this._locker.setObject('policyID', beneficiary.policyId);
       this._systemService.on();
       this._router
         .navigate([
-          "/modules/beneficiary/beneficiaries/" +
+          '/modules/beneficiary/beneficiaries/' +
             beneficiary._id +
-            "/checkin-generate"
+            '/checkin-generate'
         ])
         .then(payload => {
           this._systemService.off();
