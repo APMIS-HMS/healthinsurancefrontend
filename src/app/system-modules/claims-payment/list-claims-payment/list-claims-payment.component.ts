@@ -83,6 +83,7 @@ export class ListClaimsPaymentComponent implements OnInit {
 
   private _getClaimsPayments(query: any) {
     this._systemService.on();
+    console.log(query);
     this._claimService.find(query).then((res: any) => {
         console.log(res);
         this.loading = false;
@@ -175,8 +176,7 @@ export class ListClaimsPaymentComponent implements OnInit {
             isActive: true,
             isPaid: true,
           }
-        }
-        );
+        });
       } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
         this._getClaimsCapitationFromPolicy({
           query: {
@@ -185,8 +185,15 @@ export class ListClaimsPaymentComponent implements OnInit {
             isActive: true,
             isPaid: true,
           }
-        }
-        );
+        });
+      } else if (!!this.user.platformOwnerId && this.user.platformOwnerId._id === this.currentPlatform._id) {
+        this._getClaimsCapitationFromPolicy({
+          query: {
+            'platformOwnerId._id': this.currentPlatform._id,
+            isActive: true,
+            isPaid: true,
+          }
+        });
       }
       this._systemService.off();
     }).catch(error => {
@@ -204,6 +211,7 @@ export class ListClaimsPaymentComponent implements OnInit {
     }).then((res: any) => {
       if (res.data.length > 0) {
         console.log(res);
+        console.log(this.user);
         this.currentPlatform = res.data[0];
         if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
           this._getClaimsPayments({
@@ -227,6 +235,17 @@ export class ListClaimsPaymentComponent implements OnInit {
                 $skip: this.limit * this.index
               }
             }
+          );
+        } else if (!!this.user.platformOwnerId && this.user.platformOwnerId._id === this.currentPlatform._id) {
+          this._getClaimsPayments({
+            query: {
+              'checkedinDetail.beneficiaryObject.platformOwnerId._id': this.currentPlatform._id,
+              isPaid: false,
+              'approvedDocumentation.response.isApprove': true,
+              $limit: this.limit,
+              $skip: this.limit * this.index
+            }
+          }
           );
         }
 

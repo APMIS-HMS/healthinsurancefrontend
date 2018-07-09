@@ -52,19 +52,20 @@ export class ListUserComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('User List');
     this._headerEventEmitter.setMinorRouteUrl('List of all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
+    console.log(this.auth);
     this._getCurrentPlatform();
   }
-	private _getCurrentPlatform() {
-		this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
-			if (res.data.length > 0) {
+
+  private _getCurrentPlatform() {
+    this._facilityService.findWithOutAuth({ query: { shortName: CurrentPlaformShortName } }).then(res => {
+      if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         this._getUsers();
-			}
-		}).catch(err => console.log(err));
+      }
+    }).catch(err => console.log(err));
   }
-  
-  _getUsers() {
 
+  _getUsers() {
     this._systemService.on();
     if (this.auth.userType === undefined) {
       this._userService.find({
@@ -73,15 +74,15 @@ export class ListUserComponent implements OnInit {
         console.log(payload);
         this.loading = false;
         this.totalEntries = payload.total;
-        //Array.prototype.push.apply(this.users,payload.data); 
-        if(this.resetData !== true)
-        { 
-          this.users.push(...payload.data); 
-        }else{ 
+        // Array.prototype.push.apply(this.users,payload.data);
+        if (this.resetData !== true) {
+          this.users.push(...payload.data);
+        } else {
           this.resetData = false;
           this.users = payload.data;
         }
-        if(this.totalEntries <= this.users.length){
+
+        if (this.totalEntries <= this.users.length){
           this.showLoadMore = false;
         }
         this._systemService.off();
@@ -93,23 +94,22 @@ export class ListUserComponent implements OnInit {
       this._userService.find({
         query: {
           'platformOwnerId._id': this.currentPlatform._id,
-          $limit:this.limit,
-          $skip: this.index*this.limit,
+          $limit: this.limit,
+          $skip: this.index * this.limit,
           $sort: { createdAt: -1 }
         }
       }).then((payload: any) => {
         console.log(payload);
         this.loading = false;
         this.totalEntries = payload.total;
-        //Array.prototype.push.apply(this.users,payload.data);
-        if(this.resetData !== true)
-        { 
-          this.users.push(...payload.data); 
-        }else{ 
+        // Array.prototype.push.apply(this.users,payload.data);
+        if (this.resetData !== true) {
+          this.users.push(...payload.data);
+        } else {
           this.resetData = false;
           this.users = payload.data;
         }
-        if(this.totalEntries <= this.users.length){
+        if (this.totalEntries <= this.users.length){
           this.showLoadMore = false;
         }
         this._systemService.off();
