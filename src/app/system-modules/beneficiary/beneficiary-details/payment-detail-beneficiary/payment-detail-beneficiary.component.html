@@ -113,7 +113,8 @@
                 <div class="payment-option">
                     <form [formGroup]="paymentOptionGroup">
                         <select formControlName="paymentOption">
-                            <option value="e-Payment" selected>e-Payment</option>
+                            <option value="Paystack" selected>Paystack</option>
+                            <option value="Flutterwave" selected>Flutterwave</option>
                             <option value="Cash">Cash</option>
                             <option value="Cheque">Cheque</option>
                         </select>
@@ -121,11 +122,11 @@
                 </div>
                 <!-- <a (click)="getpaidSetupdd();" class="btn btn-medium btn-blue cta" data-PBFPubKey="FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X" data-txref="rave-checkout-1511132266" data-amount="50000" data-customer_email="user@example.com" data-currency="NGN" data-pay_button_text="e-Payment"
                     data-country="NG" data-custom_title="Sabaoth" data-custom_description="" data-redirect_url="" data-custom_logo="" data-payment_method="both" data-exclude_banks=""></a> -->
-                <angular-4-flutterwave *ngIf="withPaystack" [amount]="policy?.premiumPackageId?.amount" [customer_email]="policy?.principalBeneficiary?.personId?.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'card'"
+                <angular-4-flutterwave *ngIf="withFlutterwave" [amount]="policy?.premiumPackageId?.amount" [customer_email]="policy?.principalBeneficiary?.personId?.email" [PBFPubKey]="flutterwaveClientKey" [txref]="refKey" [currency]="'NGN'" [country]="'NG'" [payment_method]="'card'"
                     [custom_title]="'e-Payment'" [btnColor]="'btn-yellow'" [custom_description]="" [exclude_banks]="" (close)="paymentCancel();" (callback)="paymentDone($event);"></angular-4-flutterwave>
+                <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.personId?.email" [amount]="policy?.premiumPackageId?.amountInKobo" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()"
+                    (callback)="paymentDone($event)">Paystack</angular4-paystack>
                 <!-- <button *ngIf="withPaystack" (click)="getpaidSetup();" class="btn btn-medium btn-blue cta">Flutterwave Setup</button> -->
-                <!-- <angular4-paystack *ngIf="withPaystack" [key]="paystackClientKey" [email]="policy?.principalBeneficiary?.personId?.email" [amount]="policy?.premiumPackageId?.amountInKobo" [ref]="refKey" [class]="'btn btn-primary btn-medium btn-blue'" (close)="paymentCancel()"
-                    (callback)="paymentDone($event)">e-Payment</angular4-paystack> -->
                 <!-- <button style="margin-right:10px; width:150px; height:30px" (click)="onClickPayWithPaystack();" class="btn-ePay"></button> -->
                 <button *ngIf="chequePayment || cashPayment" class="btn btn-medium btn-blue cta" (click)="onClickPayCash();" style="width:150px;padding:10px;margin-left:10px;"> PAY </button>
             </div>
@@ -143,7 +144,7 @@
                 <tr class="tr">
                     <th class="th">No</th>
                     <th class="th">Due Date</th>
-                    <th class="th">LASHMA ID</th>
+                    <th class="th">{{platformName}} ID</th>
                     <th class="th">Amount Paid</th>
                     <th class="th">Duration Policy</th>
                     <th class="th">Policy ID</th>
@@ -161,9 +162,9 @@
                         <i class="fa fa-spinner fa-spin"></i>
                     </td>
                 </tr>
-                <tr *ngFor="let policy of previousPolicies; let i = index;" class="tr">
+                <tr *ngFor="let prevPolicy of previousPolicies; let i = index;" class="tr">
                     <td class="td">{{i+1}}</td>
-                    <td class="td">{{ policy?.dueDate }}</td>
+                    <td class="td">{{ prevPolicy?.validTill | date }}</td>
                     <td class="td">{{ policy?.principalBeneficiary?.platformOwnerNumber }}</td>
                     <td class="td" style="color: green;">&#x20A6; {{ policy?.premiumPackageId?.amount }}</td>
                     <td class="td">{{ policy?.premiumPackageId?.duration }} {{ policy?.premiumPackageId?.unit?.name }}</td>

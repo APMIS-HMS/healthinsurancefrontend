@@ -1,16 +1,15 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { CurrentPlaformShortName, PAYSTACK_CLIENT_KEY, PAYMENTTYPES } from '../../../../../services/globals/config';
-import {
-  SystemModuleService, FacilityService, PolicyService, PremiumPaymentService
-} from '../../../../../services/index';
-import { Policy } from '../../../../../models/index';
-import { HeaderEventEmitterService } from '../../../../../services/event-emitters/header-event-emitter.service';
+import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {CoolLocalStorage} from 'angular2-cool-storage';
+import {IMyDate, IMyDpOptions} from 'mydatepicker';
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+
+import {environment} from '../../../../../../environments/environment';
+import {Policy} from '../../../../../models/index';
+import {HeaderEventEmitterService} from '../../../../../services/event-emitters/header-event-emitter.service';
+import {FacilityService, PolicyService, PremiumPaymentService, SystemModuleService} from '../../../../../services/index';
 
 @Component({
   selector: 'app-unbatched',
@@ -28,20 +27,19 @@ export class UnbatchedComponent implements OnInit {
   premiumPaymentData: any;
   currentPlatform: any;
   routeId: String;
-  
+  platformName: any;
+
 
   constructor(
-    private _fb: FormBuilder,
-    private _route: ActivatedRoute,
-    private _router: Router,
-    private _toastr: ToastsManager,
-    private _headerEventEmitter: HeaderEventEmitterService,
-    private _systemService: SystemModuleService,
-    private _facilityService: FacilityService,
-    private _locker: CoolLocalStorage,
-    private _policyService: PolicyService,
-    private _premiumPaymentService: PremiumPaymentService
-  ) { }
+      private _fb: FormBuilder, private _route: ActivatedRoute,
+      private _router: Router, private _toastr: ToastsManager,
+      private _headerEventEmitter: HeaderEventEmitterService,
+      private _systemService: SystemModuleService,
+      private _facilityService: FacilityService,
+      private _locker: CoolLocalStorage, private _policyService: PolicyService,
+      private _premiumPaymentService: PremiumPaymentService) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
@@ -64,40 +62,50 @@ export class UnbatchedComponent implements OnInit {
   private _getUnbatchedPolicies() {
     console.log(this.currentPlatform);
     this._systemService.on();
-    this._policyService.find({
-      query: {
-        'platformOwnerId._id': this.currentPlatform._id,
-        'sponsor._id': this.routeId,
-        isPaid: false,
-        $sort: { createdAt: -1 }
-      }
-    }).then((res: any) => {
-      console.log(res);
-      this.loading = false;
-      res.data.forEach(policy => {
-        policy.dueDate = this.addDays(new Date(), policy.premiumPackageId.durationInDay);
-        this.policies.push(policy);
-      });
-      this._systemService.off();
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    });
+    this._policyService
+        .find({
+          query: {
+            'platformOwnerId._id': this.currentPlatform._id,
+            'sponsor._id': this.routeId,
+            isPaid: false,
+            $sort: {createdAt: -1}
+          }
+        })
+        .then((res: any) => {
+          console.log(res);
+          this.loading = false;
+          res.data.forEach(policy => {
+            policy.dueDate =
+                this.addDays(new Date(), policy.premiumPackageId.durationInDay);
+            this.policies.push(policy);
+          });
+          this._systemService.off();
+        })
+        .catch(error => {
+          console.log(error);
+          this._systemService.off();
+        });
   }
 
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find(
-      { query: { shortName: CurrentPlaformShortName, $select: ['name', 'shortName', 'address.state'] }}
-    ).then((res: any) => {
-      if (res.data.length > 0) {
-        this.currentPlatform = res.data[0];
-        this._getUnbatchedPolicies();
-      }
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
+    this._facilityService
+        .find({
+          query: {
+            shortName: this.platformName,
+            $select: ['name', 'shortName', 'address.state']
+          }
+        })
+        .then((res: any) => {
+          if (res.data.length > 0) {
+            this.currentPlatform = res.data[0];
+            this._getUnbatchedPolicies();
+          }
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   onCheckAllToPay(isChecked) {
@@ -129,7 +137,8 @@ export class UnbatchedComponent implements OnInit {
     //   // Remove from the selected Claim
     //   console.log(index);
     //   policy.isChecked = false;
-    //   this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
+    //   this.selectedOrganizationPolicies =
+    //   this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
     // }
   }
 
@@ -151,7 +160,8 @@ export class UnbatchedComponent implements OnInit {
       }
     } else {
       policy.isChecked = false;
-      this.selectedPolicies = this.selectedPolicies.filter(x => x._id !== policy._id);
+      this.selectedPolicies =
+          this.selectedPolicies.filter(x => x._id !== policy._id);
       console.log(this.selectedPolicies);
     }
     this._premiumPaymentService.setPolicy(this.selectedPolicies);
@@ -163,7 +173,7 @@ export class UnbatchedComponent implements OnInit {
   addDays(date, days) {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
-    return result.toDateString(); // .toISOString();
+    return result.toDateString();  // .toISOString();
   }
 
   // public selectedPolicy(policy: any): void {
@@ -191,8 +201,8 @@ export class UnbatchedComponent implements OnInit {
   //     facilityId: this.user.facilityId,
   //     email: this.user.email,
   //     isActive: this.user.isActive,
-  //     platformOwnerId: (!!this.user.platformOwnerId) ? this.user.platformOwnerId : '',
-  //     phoneNumber: this.user.phoneNumber
+  //     platformOwnerId: (!!this.user.platformOwnerId) ?
+  //     this.user.platformOwnerId : '', phoneNumber: this.user.phoneNumber
   //   };
 
   //   let ref = {
@@ -228,7 +238,8 @@ export class UnbatchedComponent implements OnInit {
   //     };
   //     console.log('Call API');
   //     // Call paystack verification API
-  //     this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes: any) => {
+  //     this._premiumPaymentService.payWidthCashWithMiddleWare(payload).then((verifyRes:
+  //     any) => {
   //       console.log(verifyRes);
   //       if (!!verifyRes.body._id) {
   //         this._getUnbatchedPolicies();
@@ -237,7 +248,8 @@ export class UnbatchedComponent implements OnInit {
   //         this.premiumPaymentData = {};
   //         this.ngOnInit();
   //         // this._router.navigate(['/modules/premium-payment/previous']);
-  //         this._toastr.success('Policy has been activated successfully.', 'Payment Completed!');
+  //         this._toastr.success('Policy has been activated successfully.',
+  //         'Payment Completed!');
   //       }
   //     }).catch(err => {
   //       console.log(err);
@@ -257,5 +269,4 @@ export class UnbatchedComponent implements OnInit {
   // paymentCancel() {
   //   console.log('Payment Closed');
   // }
-
 }
