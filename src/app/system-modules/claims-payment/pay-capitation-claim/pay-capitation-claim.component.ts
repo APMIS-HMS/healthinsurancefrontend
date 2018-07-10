@@ -82,9 +82,10 @@ export class PayCapitationClaimComponent implements OnInit {
         // hiaId: this.hiaDetails._id,
         providerId: this.selectedFacility._id,
         accountNumber: this.selectedFacility.bankDetails.accountNumber,
-        bankCode: this.selectedFacility.bankDetails.bank.name
+        bankCode: this.selectedFacility.bankDetails.bank.code
       };
 
+      console.log(payload);
       this._providerRecipientService.verifyProviderAccount(payload).then(res => {
         console.log(res);
         if (res.status === 'success') {
