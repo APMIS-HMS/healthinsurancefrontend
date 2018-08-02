@@ -135,33 +135,21 @@ export class ListBeneficiaryComponent implements OnInit {
   }
   _getPerson() {
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
-      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find(
-          {query: {'personId.email': this.user.email}}));
+      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({query: {'personId.email': this.user.email}}));
       Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
         if (results[0].data.length > 0) {
-          this._policyService
-              .find({
-                query: {
-                  principalBeneficiary: results[0].data[0]._id,
-                }
-              })
-              .then((policies: any) => {
-                if (policies.data.length > 0) {
-                  this._router
-                      .navigate([
-                        '/modules/beneficiary/beneficiaries',
-                        policies.data[0]._id
-                      ])
-                      .then(
-                          payload => {
-
-                          })
-                      .catch(err => {});
-                }
-              })
-              .catch(errin => {})
+          this._policyService.find({
+            query: {
+              principalBeneficiary: results[0].data[0]._id,
+            }
+          }).then((policies: any) => {
+            if (policies.data.length > 0) {
+              this._router.navigate(['/modules/beneficiary/beneficiaries', policies.data[0]._id]).then(payload => {
+              }).catch(err => {});
+            }
+          }).catch(errin => {});
         }
-      }, error => {})
+      }, error => {});
     }
   }
   reset() {
@@ -171,124 +159,106 @@ export class ListBeneficiaryComponent implements OnInit {
     this.showLoadMore = true;
   }
   private _getPlans() {
-    this._planService.find({})
-        .then((payload: any) => {
-          this.planTypes = payload.data;
-        })
-        .catch(
-            err => {
-
-            })
+    this._planService.find({}).then((payload: any) => {
+      this.planTypes = payload.data;
+    }).catch(err => {
+    });
   }
   private _getCurrentPlatform() {
     this._systemService.on();
-    this._facilityService.find({query: {shortName: CurrentPlaformShortName}})
-        .then((res: any) => {
-          if (res.data.length > 0) {
-            this.currentPlatform = res.data[0];
-            // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
-            if (!!this.user.userType &&
-                this.user.userType.name === 'Provider') {
-              this._getAllPolicies(
-                  {
-                    query: {
-                      'providerId._id': this.user.facilityId._id,
-                      $limit: this.limitValue,
-                      $skip: this.skipValue * this.limitValue,
-                      $sort: {createdAt: -1},
-                      $select: {
-                        'hiaId.name': 1,
-                        'principalBeneficiary': 1,
-                        'dependantBeneficiaries': 1,
-                        'isActive': 1,
-                        'providerId': 1
-                      }
-                    }
-                  },
-                  this.user.facilityId._id, this.user.userType.name);
-            } else if (
-                !!this.user.userType &&
-                this.user.userType.name === 'Health Insurance Agent') {
-              this._getAllPolicies(
-                  {
-                    query: {
-                      'hiaId._id': this.user.facilityId._id,
-                      $limit: this.limitValue,
-                      $skip: this.skipValue * this.limitValue,
-                      $sort: {createdAt: -1},
-                      $select: {
-                        'hiaId.name': 1,
-                        'principalBeneficiary': 1,
-                        'dependantBeneficiaries': 1,
-                        'isActive': 1
-                      }
-                    }
-                  },
-                  this.user.facilityId._id, this.user.userType.name);
-            } else if (
-                !!this.user.userType &&
-                this.user.userType.name === 'Employer') {
-              this._getAllPolicies(
-                  {
-                    query: {
-                      'sponsor._id': this.user.facilityId._id,
-                      $limit: this.limitValue,
-                      $skip: this.skipValue * this.limitValue,
-                      $sort: {createdAt: -1},
-                      $select: {
-                        'hiaId.name': 1,
-                        'principalBeneficiary': 1,
-                        'dependantBeneficiaries': 1,
-                        'isActive': 1
-                      }
-                    }
-                  },
-                  this.user.facilityId._id, this.user.userType.name);
-            } else if (
-                !!this.user.userType &&
-                this.user.userType.name === 'Platform Owner') {
-              this._getAllPolicies(
-                  {
-                    query: {
-                      'platformOwnerId._id': this.user.facilityId._id,
-                      $limit: this.limitValue,
-                      $skip: this.skipValue * this.limitValue,
-                      $sort: {createdAt: -1},
-                      $select: {
-                        'hiaId.name': 1,
-                        'principalBeneficiary': 1,
-                        'dependantBeneficiaries': 1,
-                        'isActive': 1
-                      }
-                    }
-                  },
-                  this.user.facilityId._id, this.user.userType.name);
-            } else {
-              this._getAllPolicies(
-                  {
-                    query: {
-                      'platformOwnerId._id': this.currentPlatform._id,
-                      $limit: this.limitValue,
-                      $skip: this.skipValue * this.limitValue,
-                      $sort: {createdAt: -1},
-                      $select: {
-                        'platformOwnerId.$': 1,
-                        'hiaId.name': 1,
-                        'principalBeneficiary': 1,
-                        'dependantBeneficiaries': 1,
-                        'isActive': 1
-                      }
-                    }
-                  },
-                  this.user.facilityId._id, '');
+    this._facilityService.find({query: {shortName: CurrentPlaformShortName}}).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+        // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
+        if (!!this.user.userType && this.user.userType.name === 'Provider') {
+          this._getAllPolicies({
+            query: {
+              'providerId._id': this.user.facilityId._id,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
+              $sort: {createdAt: -1},
+              $select: {
+                'hiaId.name': 1,
+                'principalBeneficiary': 1,
+                'dependantBeneficiaries': 1,
+                'isActive': 1,
+                'providerId': 1
+              }
             }
-          }
-          this.loading = false;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+          },
+          this.user.facilityId._id, this.user.userType.name);
+        } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+          this._getAllPolicies({
+            query: {
+              'hiaId._id': this.user.facilityId._id,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
+              $sort: {createdAt: -1},
+              $select: {
+                'hiaId.name': 1,
+                'principalBeneficiary': 1,
+                'dependantBeneficiaries': 1,
+                'isActive': 1
+              }
+            }
+          },
+          this.user.facilityId._id, this.user.userType.name);
+        } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
+          this._getAllPolicies({
+            query: {
+              'sponsor._id': this.user.facilityId._id,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
+              $sort: {createdAt: -1},
+              $select: {
+                'hiaId.name': 1,
+                'principalBeneficiary': 1,
+                'dependantBeneficiaries': 1,
+                'isActive': 1
+              }
+            }
+          },
+          this.user.facilityId._id, this.user.userType.name);
+        } else if (!!this.user.userType &&  this.user.userType.name === 'Platform Owner') {
+          this._getAllPolicies({
+            query: {
+              'platformOwnerId._id': this.user.facilityId._id,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
+              $sort: {createdAt: -1},
+              $select: {
+                'hiaId.name': 1,
+                'principalBeneficiary': 1,
+                'dependantBeneficiaries': 1,
+                'isActive': 1
+              }
+            }
+          },
+          this.user.facilityId._id, this.user.userType.name);
+        } else {
+          this._getAllPolicies({
+            query: {
+              'platformOwnerId._id': this.currentPlatform._id,
+              $limit: this.limitValue,
+              $skip: this.skipValue * this.limitValue,
+              $sort: {createdAt: -1},
+              $select: {
+                'platformOwnerId.$': 1,
+                'hiaId.name': 1,
+                'principalBeneficiary': 1,
+                'dependantBeneficiaries': 1,
+                'isActive': 1
+              }
+            }
+          },
+          this.user.facilityId._id, '');
+        }
+      }
+      this.loading = false;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   private _getAllPolicies(query, id, userType) {
@@ -296,57 +266,55 @@ export class ListBeneficiaryComponent implements OnInit {
     // this.tempBeneficiaries = [];
     try {
       this._systemService.on();
-      this._policyService.find(query)
-          .then((res: any) => {
-            if (res.data.length > 0) {
-              res.data.forEach((policy, i) => {
-                const principal = policy.principalBeneficiary;
-                principal.isPrincipal = true;
-                principal.hia = policy.hiaId;
-                principal.policyId = policy._id;
-                principal.isActive = policy.isActive;
-                principal.dependantCount = policy.dependantBeneficiaries.length;
-                principal.planTypeId = policy.planTypeId;
-                this.beneficiaries.push(principal);
-                policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
-                  innerPolicy.beneficiary.person =
-                      innerPolicy.beneficiary.personId;
-                  innerPolicy.beneficiary.isPrincipal = false;
-                  innerPolicy.beneficiary.principalId = principal._id;
-                  innerPolicy.beneficiary.policyId = policy._id;
-                  innerPolicy.beneficiary.hia = policy.hiaId;
-                  innerPolicy.beneficiary.isActive = policy.isActive;
-                  innerPolicy.beneficiary.planTypeId = policy.planTypeId;
-                  this.beneficiaries.push(innerPolicy.beneficiary);
-                });
-              });
-            } else {
-              this.loading = false;
-            }
-            if (!!userType && userType !== '') {
-              this._beneficiaryService.countBenefeciaries(userType, id)
-                  .then(data => {
-                    this.totalData = data.body.count;
-                    if (this.beneficiaries.length >= this.totalData) {
-                      this.showLoadMore = false;
-                    }
-                  });
-              this.mainBeneficiaries = this.beneficiaries;
-            }
-            this._systemService.off();
-            this.loading = false;
-          })
-          .catch(err => {
-            this.loading = false;
-            this._systemService.off();
-            this._toastr.error(
-                'Error has occured please contact your administrator!',
-                'Error!');
+      this._policyService.find(query).then((res: any) => {
+        console.log(res);
+        if (res.data.length > 0) {
+          res.data.forEach((policy, i) => {
+            const principal = policy.principalBeneficiary;
+            principal.isPrincipal = true;
+            principal.hia = policy.hiaId;
+            principal.policyId = policy._id;
+            principal.isActive = policy.isActive;
+            principal.dependantCount = policy.dependantBeneficiaries.length;
+            principal.planTypeId = policy.planTypeId;
+            this.beneficiaries.push(principal);
+            this.cachedBeneficiaries.push(principal);
+            policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
+              innerPolicy.beneficiary.person =
+                  innerPolicy.beneficiary.personId;
+              innerPolicy.beneficiary.isPrincipal = false;
+              innerPolicy.beneficiary.principalId = principal._id;
+              innerPolicy.beneficiary.policyId = policy._id;
+              innerPolicy.beneficiary.hia = policy.hiaId;
+              innerPolicy.beneficiary.isActive = policy.isActive;
+              innerPolicy.beneficiary.planTypeId = policy.planTypeId;
+              this.beneficiaries.push(innerPolicy.beneficiary);
+              this.cachedBeneficiaries.push(innerPolicy.beneficiary);
+            });
           });
+        } else {
+          this.loading = false;
+        }
+        if (!!userType && userType !== '') {
+          this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
+            this.totalData = data.body.count;
+            if (this.beneficiaries.length >= this.totalData) {
+              this.showLoadMore = false;
+            }
+          });
+          this.mainBeneficiaries = this.beneficiaries;
+        }
+        this._systemService.off();
+        this.loading = false;
+      }).catch(err => {
+        this.loading = false;
+        this._systemService.off();
+        this._toastr.error('Error has occured please contact your administrator!', 'Error!');
+      });
     } catch (error) {
+      console.log(error);
       this.loading = false;
-      this._toastr.error(
-          'Error has occured please contact your administrator!', 'Error!');
+      this._toastr.error('Error has occured please contact your administrator!', 'Error!');
     }
     this.skipValue++;
   }
