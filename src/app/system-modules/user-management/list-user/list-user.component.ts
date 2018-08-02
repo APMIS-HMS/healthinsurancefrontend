@@ -23,9 +23,9 @@ export class ListUserComponent implements OnInit {
   createdByControl = new FormControl();
   utilizedByControl = new FormControl();
   statusControl = new FormControl();
-
   addRoleForm: FormGroup;
   users: any = <any>[];
+  cachedUsers: any = <any>[];
   roles: any = <any>[];
   loading: Boolean = true;
   closeResult: String;
@@ -50,8 +50,53 @@ export class ListUserComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('User List');
     this._headerEventEmitter.setMinorRouteUrl('List of all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
-    console.log(this.auth);
+    // console.log(this.auth);
     this._getCurrentPlatform();
+
+    this.listsearchControl.valueChanges.subscribe(search => {
+      this.loading = true;
+      if (search.length > 2) {
+        this.users = [];
+        if (this.auth.userType === undefined) {
+          const query = {
+            $or: [
+              { 'lastName': { $regex: search, '$options': 'i' } },
+              { 'firstName': { $regex: search, '$options': 'i' } },
+              { 'phoneNumber': { $regex: search, '$options': 'i' } },
+              { 'email': { $regex: search, '$options': 'i' } },
+            ]
+          };
+          this._userService.find(query).then((res: any) => {
+            this.loading = false;
+            this.users = res.data;
+            this._systemService.off();
+          }).catch(err => {
+            this._systemService.off();
+          });
+        } else if (this.auth.userType.name === 'Platform Owner') {
+          const query = {
+            'platformOwnerId._id': this.currentPlatform._id,
+            $or: [
+              { 'lastName': { $regex: search, '$options': 'i' } },
+              { 'firstName': { $regex: search, '$options': 'i' } },
+              { 'phoneNumber': { $regex: search, '$options': 'i' } },
+              { 'email': { $regex: search, '$options': 'i' } },
+            ]
+          }
+          this._userService.find(query).then((res: any) => {
+            this.loading = false;
+            this.users = res.data;
+            this._systemService.off();
+          }).catch(err => {
+            this._systemService.off();
+          });
+        }
+      } else {
+        // If There is no search, replace the beneficiaries with the cached data.
+        this.users = this.cachedUsers;
+        this._systemService.off();
+      }
+    });
   }
   private _getCurrentPlatform() {
     this._facilityService
@@ -59,7 +104,6 @@ export class ListUserComponent implements OnInit {
         .then(res => {
           if (res.data.length > 0) {
             this.currentPlatform = res.data[0];
-            console.log(this.currentPlatform);
             this._getUsers();
           } else if (this.auth.userType === undefined) {
             this._getUsers();
@@ -71,53 +115,52 @@ export class ListUserComponent implements OnInit {
   _getUsers() {
     this._systemService.on();
     if (this.auth.userType === undefined) {
-      this._userService.find({query: {$sort: {createdAt: -1}}})
-          .then((payload: any) => {
-            this.loading = false;
-            this.totalEntries = payload.total;
-            // Array.prototype.push.apply(this.users,payload.data);
-            if (this.resetData !== true) {
-              this.users.push(...payload.data);
-            } else {
-              this.resetData = false;
-              this.users = payload.data;
-            }
-            if (this.totalEntries <= this.users.length) {
-              this.showLoadMore = false;
-            }
-            this._systemService.off();
-          })
-          .catch(err => {
-            this._systemService.off();
-          });
+      this._userService.find({query: {$sort: {createdAt: -1}}}).then((payload: any) => {
+        this.loading = false;
+        this.totalEntries = payload.total;
+        // Array.prototype.push.apply(this.users,payload.data);
+        if (this.resetData !== true) {
+          this.users.push(...payload.data);
+          this.cachedUsers.push(...payload.data);
+        } else {
+          this.resetData = false;
+          this.users = payload.data;
+          this.cachedUsers = payload.data;
+        }
+        if (this.totalEntries <= this.users.length) {
+          this.showLoadMore = false;
+        }
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     } else if (this.auth.userType.name === 'Platform Owner') {
-      this._userService
-          .find({
-            query: {
-              'platformOwnerId._id': this.currentPlatform._id,
-              $limit: this.limit,
-              $skip: this.index * this.limit,
-              $sort: {createdAt: -1}
-            }
-          })
-          .then((payload: any) => {
-            this.loading = false;
-            this.totalEntries = payload.total;
-            // Array.prototype.push.apply(this.users,payload.data);
-            if (this.resetData !== true) {
-              this.users.push(...payload.data);
-            } else {
-              this.resetData = false;
-              this.users = payload.data;
-            }
-            if (this.totalEntries <= this.users.length) {
-              this.showLoadMore = false;
-            }
-            this._systemService.off();
-          })
-          .catch(err => {
-            this._systemService.off();
-          });
+      this._userService.find({
+        query: {
+          'platformOwnerId._id': this.currentPlatform._id,
+          $limit: this.limit,
+          $skip: this.index * this.limit,
+          $sort: {createdAt: -1}
+        }
+      }).then((payload: any) => {
+        this.loading = false;
+        this.totalEntries = payload.total;
+        // Array.prototype.push.apply(this.users,payload.data);
+        if (this.resetData !== true) {
+          this.users.push(...payload.data);
+          this.cachedUsers.push(...payload.data);
+        } else {
+          this.resetData = false;
+          this.users = payload.data;
+          this.cachedUsers = payload.data;
+        }
+        if (this.totalEntries <= this.users.length) {
+          this.showLoadMore = false;
+        }
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     }
 
     this.index++;
