@@ -69,6 +69,7 @@ export class ListBeneficiaryComponent implements OnInit {
     }
 
     this._getPlans();
+    this._getCurrentPlatform();
 
     // Search functionality for beneficiary
     this.listsearchControl.valueChanges.subscribe(search => {
@@ -167,6 +168,7 @@ export class ListBeneficiaryComponent implements OnInit {
   private _getCurrentPlatform() {
     this._systemService.on();
     this._facilityService.find({query: {shortName: CurrentPlaformShortName}}).then((res: any) => {
+      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         // { platformOwnerNumber: { $regex: value, '$options': 'i' } },

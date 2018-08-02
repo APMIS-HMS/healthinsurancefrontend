@@ -69,17 +69,10 @@ export class PolicyService {
   searchPolicy(search: any) {
     let host = this._restService.getHost();
     let path = host + '/api/search-policy';
-    // return request
-    //   .get(path)
-    //   .query({ search: search });
-
-
 
     return new Promise((resolve, reject) => {
       resolve(this._socketService.authenticateUser('policies').then((socket: any) => {
-        return request
-          .get(path)
-          .query({ search: search });
+        return request.get(path).query({ search: search });
       }));
     });
   }
