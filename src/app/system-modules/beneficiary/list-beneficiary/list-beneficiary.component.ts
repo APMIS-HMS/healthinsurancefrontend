@@ -27,6 +27,7 @@ export class ListBeneficiaryComponent implements OnInit {
   utilizedByControl = new FormControl();
   statusControl = new FormControl('All');
   beneficiaries: any[] = [];
+  cachedBeneficiaries: any[] = [];
   sizeOfBeneficiaries: any[] = [];
   inActiveBeneficiaries: any[] = [];
   mainBeneficiaries: any[] = [];
@@ -68,6 +69,48 @@ export class ListBeneficiaryComponent implements OnInit {
     }
 
     this._getPlans();
+
+    // Search functionality for beneficiary
+    this.listsearchControl.valueChanges.subscribe(search => {
+      this.loading = true;
+      if (search.length > 2) {
+        const query = { platformOwnerId: this.currentPlatform._id, search: search };
+        this._policyService.searchPolicy(query).then((payload: any) => {
+          this.loading = false;
+          this.beneficiaries = [];
+          if (payload.data.length > 0) {
+            payload.data.forEach(policy => {
+              let principal = policy.principalBeneficiary;
+              principal.isPrincipal = true;
+              principal.hia = policy.hiaId;
+              principal.policyId = policy._id;
+              principal.policy = policy;
+              principal.isActive = policy.isActive;
+              principal.dependantCount = policy.dependantBeneficiaries.length;
+              this.beneficiaries.push(principal);
+              policy.dependantBeneficiaries.forEach(innerPolicy => {
+                innerPolicy.beneficiary.person =
+                  innerPolicy.beneficiary.personId;
+                innerPolicy.beneficiary.policyId = policy._id;
+                innerPolicy.beneficiary.policy = policy;
+                innerPolicy.beneficiary.isPrincipal = false;
+                innerPolicy.beneficiary.hia = policy.hiaId;
+                innerPolicy.beneficiary.isActive = policy.isActive;
+                this.beneficiaries.push(innerPolicy.beneficiary);
+              });
+            });
+            this._systemService.off();
+          } else {
+            this._systemService.off();
+          }
+          this._systemService.off();
+        }).catch(err => { });
+      } else {
+        // If There is no search, replace the beneficiaries with the cached data.
+        this.beneficiaries = this.cachedBeneficiaries;
+        this._systemService.off();
+      }
+    });
 
     this.statusControl.valueChanges.subscribe((value) => {
       if (value === 'All') {

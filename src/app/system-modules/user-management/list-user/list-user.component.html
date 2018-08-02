@@ -1,9 +1,9 @@
 <div class="">
     <div class="list-search-wrap">
         <div class="search-wrap">
-            <label class="label-xx">Search:</label>
+            <!-- <label class="label-xx">Search:</label>
             <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="search for user">
-            <i class="fa fa-search" aria-hidden="true"></i>
+            <i class="fa fa-search" aria-hidden="true"></i> -->
         </div>
 
         <div (click)="navigate('/modules/user/new');" class="btn btn-medium btn-blue">
@@ -73,14 +73,14 @@
                     </td>
                 </tr>
                 <tr *ngFor="let user of users; let i=index" class="tr">
-                    <td class="td">{{i+1}}</td>
-                    <td class="td">{{user.platformOwnerId?.name}}</td>
-                    <td class="td">{{user.platformOwnerId?.shortName}}</td>
-                    <td class="td">{{user.lastName}} {{user.firstName}}</td>
-                    <td class="td">{{user.email}}</td>
-                    <td class="td">{{user.userType?.name}}</td>
-                    <td class="td">{{user.facilityId?.name}}</td>
-                    <td class="td">{{user.createdAt | date:'short'}}</td>
+                    <td class="td" (click)="showDetails(user)">{{i+1}}</td>
+                    <td class="td" (click)="showDetails(user)">{{user.platformOwnerId?.name}}</td>
+                    <td class="td" (click)="showDetails(user)">{{user.platformOwnerId?.shortName}}</td>
+                    <td class="td" (click)="showDetails(user)">{{user.lastName}} {{user.firstName}}</td>
+                    <td class="td" (click)="showDetails(user)">{{user.email}}</td>
+                    <td class="td" (click)="showDetails(user)">{{user.userType?.name}}</td>
+                    <td class="td" (click)="showDetails(user)">{{user.facilityId?.name}}</td>
+                    <td class="td" (click)="showDetails(user)">{{user.createdAt | date:'short'}}</td>
                     <td>
                         <span *ngIf="user.isActive" class="td tbl-status-active">Active</span>
                         <span *ngIf="!user.isActive" class="td tbl-status-inactive">InActive</span>

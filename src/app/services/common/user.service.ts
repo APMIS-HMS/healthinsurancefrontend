@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CoolLocalStorage} from 'angular2-cool-storage';
-
 import {RestService, SocketService} from './../../feathers/feathers.service';
+const request = require("superagent");
 
 @Injectable()
 export class UserService {
@@ -68,6 +68,18 @@ export class UserService {
           this._socketService.authenticateUser('users').then((socket: any) => {
             return socket.remove(id, query);
           }));
+    });
+  }
+
+  crudRole(role) {
+    const path = `${this._restService.getHost()}/api/crud-role`;
+
+    return request.post(path).send(role).then((res: Response | any) => {
+      return new Promise((resolve, reject) => {
+        resolve(res.body);
+      });
+    }).catch(err => {
+      console.log(err);
     });
   }
 }

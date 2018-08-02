@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, OnInit } from '@angular/core';
+import { Component, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ISubscription } from 'rxjs/Subscription';
 import swal from 'sweetalert2';
@@ -10,16 +10,22 @@ import { SystemModuleService } from "./services";
 	styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 	title = 'app works!';
-	constructor(private vcr: ViewContainerRef,
-		private toastr: ToastsManager) {
-		this.toastr.setRootViewContainerRef(vcr);
-	}
+  private sweetAlertSubscription: ISubscription;
 
-	ngOnInit() {
+  constructor(
+    private vcr: ViewContainerRef,
+    private toastr: ToastsManager,
+    private systemModuleService: SystemModuleService
+  ) {
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
-
+  ngOnInit() {
+    this.sweetAlertSubscription = this.systemModuleService.sweetAnnounced$.subscribe((value: any) => {
+      this._sweetNotification(value);
+    });
   }
 
   _sweetNotification(value) {
