@@ -288,6 +288,7 @@ export class ListBeneficiaryComponent implements OnInit {
       this._policyService.find(query).then((res: any) => {
         console.log(res);
         if (res.data.length > 0) {
+          this.loading = false;
           res.data.forEach((policy, i) => {
             const principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
