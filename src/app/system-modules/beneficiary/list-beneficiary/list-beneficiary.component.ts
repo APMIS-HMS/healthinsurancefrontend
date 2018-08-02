@@ -1,31 +1,41 @@
-import 'rxjs/add/operator/filter';
+import "rxjs/add/operator/filter";
 
-import {Component, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {NavigationEnd, Router} from '@angular/router';
-import {LoadingBarService} from '@ngx-loading-bar/core';
-import {CoolLocalStorage} from 'angular2-cool-storage';
-import {ToastsManager} from 'ng2-toastr/ng2-toastr';
-import {Observable} from 'rxjs/Rx';
+import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { NavigationEnd, Router } from "@angular/router";
+import { LoadingBarService } from "@ngx-loading-bar/core";
+import { CoolLocalStorage } from "angular2-cool-storage";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
+import { Observable } from "rxjs/Rx";
 
-import {Beneficiary} from './../../../models/setup/beneficiary';
-import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
-import {CurrentPlaformShortName, TABLE_LIMIT_PER_VIEW} from './../../../services/globals/config';
-import {BeneficiaryService, FacilityService, PlanTypeService, SystemModuleService, UploadService, UserTypeService} from './../../../services/index';
-import {PlanService} from './../../../services/plan/plan.service';
-import {PolicyService} from './../../../services/policy/policy.service';
+import { Beneficiary } from "./../../../models/setup/beneficiary";
+import { HeaderEventEmitterService } from "./../../../services/event-emitters/header-event-emitter.service";
+import {
+  CurrentPlaformShortName,
+  TABLE_LIMIT_PER_VIEW
+} from "./../../../services/globals/config";
+import {
+  BeneficiaryService,
+  FacilityService,
+  PlanTypeService,
+  SystemModuleService,
+  UploadService,
+  UserTypeService
+} from "./../../../services/index";
+import { PlanService } from "./../../../services/plan/plan.service";
+import { PolicyService } from "./../../../services/policy/policy.service";
 
 @Component({
-  selector: 'app-list-beneficiary',
-  templateUrl: './list-beneficiary.component.html',
-  styleUrls: ['./list-beneficiary.component.scss']
+  selector: "app-list-beneficiary",
+  templateUrl: "./list-beneficiary.component.html",
+  styleUrls: ["./list-beneficiary.component.scss"]
 })
 export class ListBeneficiaryComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterTypeControl = new FormControl('All');
+  filterTypeControl = new FormControl("All");
   createdByControl = new FormControl();
   utilizedByControl = new FormControl();
-  statusControl = new FormControl('All');
+  statusControl = new FormControl("All");
   beneficiaries: any[] = [];
   cachedBeneficiaries: any[] = [];
   sizeOfBeneficiaries: any[] = [];
@@ -42,29 +52,33 @@ export class ListBeneficiaryComponent implements OnInit {
   hasCreateBeneficiary: Boolean = false;
 
   constructor(
-      private _router: Router,
-      private _headerEventEmitter: HeaderEventEmitterService,
-      private _systemService: SystemModuleService,
-      private _facilityService: FacilityService,
-      private _userTypeService: UserTypeService,
-      private _beneficiaryService: BeneficiaryService,
-      private _policyService: PolicyService, private _planService: PlanService,
-      private _locker: CoolLocalStorage, private _toastr: ToastsManager) {
-    this._router.events.filter(event => event instanceof NavigationEnd)
-        .subscribe(e => {});
-    this.user = (<any>this._locker.getObject('auth')).user;
+    private _router: Router,
+    private _headerEventEmitter: HeaderEventEmitterService,
+    private _systemService: SystemModuleService,
+    private _facilityService: FacilityService,
+    private _userTypeService: UserTypeService,
+    private _beneficiaryService: BeneficiaryService,
+    private _policyService: PolicyService,
+    private _planService: PlanService,
+    private _locker: CoolLocalStorage,
+    private _toastr: ToastsManager
+  ) {
+    this._router.events
+      .filter(event => event instanceof NavigationEnd)
+      .subscribe(e => {});
+    this.user = (<any>this._locker.getObject("auth")).user;
 
-    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
+    if (!!this.user.userType && this.user.userType.name === "Beneficiary") {
       this._getPerson();
     }
   }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('Beneficiary List');
-    this._headerEventEmitter.setMinorRouteUrl('All Beneficiaries');
+    this._headerEventEmitter.setRouteUrl("Beneficiary List");
+    this._headerEventEmitter.setMinorRouteUrl("All Beneficiaries");
     if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
-    } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
+    } else if (!!this.user.userType && this.user.userType.name !== "Provider") {
       this.hasCreateBeneficiary = true;
     }
 
@@ -113,23 +127,25 @@ export class ListBeneficiaryComponent implements OnInit {
       }
     });
 
-    this.statusControl.valueChanges.subscribe((value) => {
-      if (value === 'All') {
+    this.statusControl.valueChanges.subscribe(value => {
+      if (value === "All") {
         this.beneficiaries = this.mainBeneficiaries;
       } else {
         const temp = this.beneficiaries.filter(
-            x => x.isActive === (value === 'true') ? true : false);
+          x => (x.isActive === (value === "true") ? true : false)
+        );
         this.beneficiaries = temp;
       }
     });
 
-    this.filterTypeControl.valueChanges.subscribe((value) => {
+    this.filterTypeControl.valueChanges.subscribe(value => {
       this.beneficiaries = this.mainBeneficiaries;
-      if (value === 'All') {
+      if (value === "All") {
         this.beneficiaries = this.mainBeneficiaries;
       } else {
-        let temp =
-            this.beneficiaries.filter(x => x.planTypeId._id === value._id);
+        let temp = this.beneficiaries.filter(
+          x => x.planTypeId._id === value._id
+        );
         this.beneficiaries = temp;
       }
     });
@@ -140,9 +156,7 @@ export class ListBeneficiaryComponent implements OnInit {
       Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
         if (results[0].data.length > 0) {
           this._policyService.find({
-            query: {
-              principalBeneficiary: results[0].data[0]._id,
-            }
+            query: { principalBeneficiary: results[0].data[0]._id }
           }).then((policies: any) => {
             if (policies.data.length > 0) {
               this._router.navigate(['/modules/beneficiary/beneficiaries', policies.data[0]._id]).then(payload => {
@@ -153,18 +167,21 @@ export class ListBeneficiaryComponent implements OnInit {
       }, error => {});
     }
   }
+
   reset() {
     this.skipValue = 0;
     this.beneficiaries = [];
     this._getCurrentPlatform();
     this.showLoadMore = true;
   }
+
   private _getPlans() {
     this._planService.find({}).then((payload: any) => {
       this.planTypes = payload.data;
     }).catch(err => {
     });
   }
+
   private _getCurrentPlatform() {
     this._systemService.on();
     this._facilityService.find({query: {shortName: CurrentPlaformShortName}}).then((res: any) => {
@@ -327,80 +344,88 @@ export class ListBeneficiaryComponent implements OnInit {
 
   private _getInActiveBeneficiaries(platformId) {
     this._systemService.on();
-    let policy$ = Observable.fromPromise(this._policyService.find(
-        {'platformOwnerId._id': platformId, isActive: true}));
+    let policy$ = Observable.fromPromise(
+      this._policyService.find({
+        "platformOwnerId._id": platformId,
+        isActive: true
+      })
+    );
     let benefic$ = Observable.fromPromise(
-        this._beneficiaryService.find({'platformOwnerId._id': platformId}));
+      this._beneficiaryService.find({ "platformOwnerId._id": platformId })
+    );
 
-    Observable.forkJoin([policy$, benefic$]).subscribe((results: any) => {
-      let beneficiaryList: any[] = results[1].data;
-      results[0].data.forEach(policy => {
-        let principal = policy.principalBeneficiary;
-        const index = beneficiaryList.findIndex(x => x._id === principal._id);
-        if (index > -1) {
-          beneficiaryList.splice(index);
-        }
-        policy.dependantBeneficiaries.forEach(innerPolicy => {
-          const index = beneficiaryList.findIndex(
-              x => x._id === innerPolicy.beneficiary._id);
+    Observable.forkJoin([policy$, benefic$]).subscribe(
+      (results: any) => {
+        let beneficiaryList: any[] = results[1].data;
+        results[0].data.forEach(policy => {
+          let principal = policy.principalBeneficiary;
+          const index = beneficiaryList.findIndex(x => x._id === principal._id);
           if (index > -1) {
             beneficiaryList.splice(index);
           }
+          policy.dependantBeneficiaries.forEach(innerPolicy => {
+            const index = beneficiaryList.findIndex(
+              x => x._id === innerPolicy.beneficiary._id
+            );
+            if (index > -1) {
+              beneficiaryList.splice(index);
+            }
+          });
         });
-      });
-      this.inActiveBeneficiaries = beneficiaryList;
-      this._systemService.off();
-    }, error => {});
+        this.inActiveBeneficiaries = beneficiaryList;
+        this._systemService.off();
+      },
+      error => {}
+    );
   }
 
   navigateNewBeneficiary() {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/new/principal'])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._router
+      .navigate(["/modules/beneficiary/new/principal"])
+      .then(res => {
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   navigateEditBeneficiary(beneficiary) {
     this._systemService.on();
     this._router
-        .navigate(['/modules/beneficiary/new/principal', beneficiary._id])
+      .navigate(["/modules/beneficiary/new/principal", beneficiary._id])
+      .then(res => {
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
+  }
+
+  navigateDetailBeneficiary(beneficiary) {
+    if (beneficiary.isPrincipal) {
+      this._locker.setObject("policyID", beneficiary.policyId);
+      this._systemService.on();
+      this._router
+        .navigate(["/modules/beneficiary/beneficiaries", beneficiary.policyId])
         .then(res => {
           this._systemService.off();
         })
         .catch(err => {
           this._systemService.off();
         });
-  }
-
-  navigateDetailBeneficiary(beneficiary) {
-    if (beneficiary.isPrincipal) {
-      this._locker.setObject('policyID', beneficiary.policyId);
-      this._systemService.on();
-      this._router
-          .navigate(
-              ['/modules/beneficiary/beneficiaries', beneficiary.policyId])
-          .then(res => {
-            this._systemService.off();
-          })
-          .catch(err => {
-            this._systemService.off();
-          });
     } else {
-      this._locker.setObject('policyID', beneficiary.policyId);
+      this._locker.setObject("policyID", beneficiary.policyId);
       this._systemService.on();
       this._router
-          .navigate(
-              ['/modules/beneficiary/beneficiaries', beneficiary.policyId])
-          .then(res => {
-            this._systemService.off();
-          })
-          .catch(err => {
-            this._systemService.off();
-          });
+        .navigate(["/modules/beneficiary/beneficiaries", beneficiary.policyId])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
     }
   }
 }
