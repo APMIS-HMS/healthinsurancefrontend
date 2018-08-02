@@ -66,14 +66,21 @@ export class PolicyService {
     });
   }
 
-  searchPolicy(search: any) {
-    let host = this._restService.getHost();
-    let path = host + '/api/search-policy';
+  searchPolicy(query: any) {
+    const host = `${this._restService.getHost()}/api/search-policy`;
 
-    return new Promise((resolve, reject) => {
-      resolve(this._socketService.authenticateUser('policies').then((socket: any) => {
-        return request.get(path).query({ search: search });
-      }));
+    // return new Promise((resolve, reject) => {
+    //   resolve(this._socketService.authenticateUser('policies').then((socket: any) => {
+    //     // return request.get(path).query({ search: search });
+    //     return request.post(path).query(query);
+    //   }));
+    // });
+    return request.post(host).send(query).then((res: Response | any) => {
+      return new Promise((resolve, reject) => {
+        resolve(res.body);
+      });
+    }).catch(err => {
+      console.log(err);
     });
   }
 }
