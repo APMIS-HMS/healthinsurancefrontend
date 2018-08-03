@@ -5,8 +5,8 @@
     "scripts": {
         "ng": "ng",
         "config": "ts-node ./src/set-env.ts",
-        "start": "npm run -- --environment=prod.lagos && ng serve --environment=prod.lagos",
-        "build": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --prod --build-optimizer --vendor-chunk --named-chunks --environment=prod.huwe",
+        "start": "npm run -- --environment=prod.lagos && ng serve --environment=prod.apmis",
+        "build": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --prod --build-optimizer --vendor-chunk --named-chunks --environment=prod.apmis",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
