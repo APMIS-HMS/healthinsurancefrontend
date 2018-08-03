@@ -30,12 +30,10 @@ export const PAYMENTTYPES = [
 ];
 
 export const CurrentPlaformShortName = 'LASHMA';
-export const FORM_VALIDATION_ERROR_MESSAGE =
-    'One or more required fields are missing!';
-export const PAYSTACK_CLIENT_KEY =
-    'pk_test_7683929cd561b84d03eab635843f6a21c17dca60';  // 'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85';
-export const FLUTTERWAVE_PUBLIC_KEY =
-    'FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X';  // Add public keys generated
+export const FORM_VALIDATION_ERROR_MESSAGE = 'One or more required fields are missing!';
+export const PAYSTACK_CLIENT_TEST_KEY = 'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85'; //'pk_test_7683929cd561b84d03eab635843f6a21c17dca60';
+export const PAYSTACK_CLIENT_KEY = 'pk_live_00bdd029d3651117d27f2b65024af6a9344160e9';
+export const FLUTTERWAVE_PUBLIC_KEY = 'FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X';  // Add public keys generated
                                                    // on your dashboard here
 export const MAXIMUM_NUMBER_OF_DEPENDANTS = 5;
 export const TABLE_LIMIT_PER_VIEW = 10;

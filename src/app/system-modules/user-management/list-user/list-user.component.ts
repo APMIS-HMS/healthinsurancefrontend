@@ -54,6 +54,7 @@ export class ListUserComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('User List');
     this._headerEventEmitter.setMinorRouteUrl('List of all users');
     this.auth = (<any>this._locker.getObject('auth')).user;
+    console.log(this.auth);
     this._getCurrentPlatform();
   }
   private _getCurrentPlatform() {

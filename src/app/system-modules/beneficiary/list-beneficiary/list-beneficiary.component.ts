@@ -56,6 +56,7 @@ export class ListBeneficiaryComponent implements OnInit {
         .subscribe(e => {});
     this.user = (<any>this._locker.getObject('auth')).user;
 
+    console.log(this.user);
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this._getPerson();
     }
@@ -100,29 +101,22 @@ export class ListBeneficiaryComponent implements OnInit {
           {query: {'personId.email': this.user.email}}));
       Observable.forkJoin([beneficiary$]).subscribe((results: any) => {
         if (results[0].data.length > 0) {
-          this._policyService
-              .find({
-                query: {
-                  principalBeneficiary: results[0].data[0]._id,
-                }
-              })
-              .then((policies: any) => {
-                if (policies.data.length > 0) {
-                  this._router
-                      .navigate([
-                        '/modules/beneficiary/beneficiaries',
-                        policies.data[0]._id
-                      ])
-                      .then(
-                          payload => {
+          this._policyService.find({
+            query: {
+              principalBeneficiary: results[0].data[0]._id,
+            }
+          }).then((policies: any) => {
+            if (policies.data.length > 0) {
+              this._router.navigate([
+                '/modules/beneficiary/beneficiaries',
+                policies.data[0]._id
+              ]).then(payload => {
 
-                          })
-                      .catch(err => {});
-                }
-              })
-              .catch(errin => {})
+              }).catch(err => {});
+            }
+          }).catch(errin => {});
         }
-      }, error => {})
+      }, error => {});
     }
   }
   reset() {
@@ -132,16 +126,12 @@ export class ListBeneficiaryComponent implements OnInit {
     this.showLoadMore = true;
   }
   private _getPlans() {
-    this._planService.find({})
-        .then((payload: any) => {
-          this.planTypes = payload.data;
-        })
-        .catch(
-            err => {
-
-            })
+    this._planService.find({}).then((payload: any) => {
+      this.planTypes = payload.data;
+    }).catch(err => {});
   }
   private _getCurrentPlatform() {
+    console.log('get pla');
     this._systemService.on();
     this._facilityService.find({query: {shortName: this.platformName}})
         .then((res: any) => {
@@ -255,60 +245,58 @@ export class ListBeneficiaryComponent implements OnInit {
   private _getAllPolicies(query, id, userType) {
     // this.beneficiaries = [];
     // this.tempBeneficiaries = [];
+    console.log(query);
     try {
       this._systemService.on();
-      this._policyService.find(query)
-          .then((res: any) => {
-            if (res.data.length > 0) {
-              res.data.forEach((policy, i) => {
-                const principal = policy.principalBeneficiary;
-                principal.isPrincipal = true;
-                principal.hia = policy.hiaId;
-                principal.policyId = policy._id;
-                principal.isActive = policy.isActive;
-                principal.dependantCount = policy.dependantBeneficiaries.length;
-                principal.planTypeId = policy.planTypeId;
-                this.beneficiaries.push(principal);
-                policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
-                  innerPolicy.beneficiary.person =
-                      innerPolicy.beneficiary.personId;
-                  innerPolicy.beneficiary.isPrincipal = false;
-                  innerPolicy.beneficiary.principalId = principal._id;
-                  innerPolicy.beneficiary.policyId = policy._id;
-                  innerPolicy.beneficiary.hia = policy.hiaId;
-                  innerPolicy.beneficiary.isActive = policy.isActive;
-                  innerPolicy.beneficiary.planTypeId = policy.planTypeId;
-                  this.beneficiaries.push(innerPolicy.beneficiary);
-                });
+      this._policyService.find(query).then((res: any) => {
+        if (res.data.length > 0) {
+          res.data.forEach((policy, i) => {
+            // I(Simdi) added this condition because principalBeneficiary can be null
+            if (!!policy.principalBeneficiary && policy.principalBeneficiary !== null) {
+              const principal = policy.principalBeneficiary;
+              principal.isPrincipal = true;
+              principal.hia = policy.hiaId;
+              principal.policyId = policy._id;
+              principal.isActive = policy.isActive;
+              principal.dependantCount = policy.dependantBeneficiaries.length;
+              principal.planTypeId = policy.planTypeId;
+              this.beneficiaries.push(principal);
+              policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
+                innerPolicy.beneficiary.person =
+                    innerPolicy.beneficiary.personId;
+                innerPolicy.beneficiary.isPrincipal = false;
+                innerPolicy.beneficiary.principalId = principal._id;
+                innerPolicy.beneficiary.policyId = policy._id;
+                innerPolicy.beneficiary.hia = policy.hiaId;
+                innerPolicy.beneficiary.isActive = policy.isActive;
+                innerPolicy.beneficiary.planTypeId = policy.planTypeId;
+                this.beneficiaries.push(innerPolicy.beneficiary);
               });
-            } else {
-              this.loading = false;
             }
-
-            if (!!userType && userType !== '') {
-              this._beneficiaryService.countBenefeciaries(userType, id)
-                  .then(data => {
-                    this.totalData = data.body.count;
-                    if (this.beneficiaries.length >= this.totalData) {
-                      this.showLoadMore = false;
-                    }
-                  });
-              this.mainBeneficiaries = this.beneficiaries;
-            }
-            this._systemService.off();
-            this.loading = false;
-          })
-          .catch(err => {
-            this.loading = false;
-            this._systemService.off();
-            this._toastr.error(
-                'Error has occured please contact your administrator!',
-                'Error!');
           });
+        } else {
+          this.loading = false;
+        }
+
+        if (!!userType && userType !== '') {
+          this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
+            this.totalData = data.body.count;
+            if (this.beneficiaries.length >= this.totalData) {
+              this.showLoadMore = false;
+            }
+          });
+          this.mainBeneficiaries = this.beneficiaries;
+        }
+        this._systemService.off();
+        this.loading = false;
+      }).catch(err => {
+        this.loading = false;
+        this._systemService.off();
+        this._toastr.error('Error has occured please contact your administrator!', 'Error!');
+      });
     } catch (error) {
       this.loading = false;
-      this._toastr.error(
-          'Error has occured please contact your administrator!', 'Error!');
+      this._toastr.error('Error has occured please contact your administrator!', 'Error!');
     }
     this.skipValue++;
   }
@@ -325,9 +313,9 @@ export class ListBeneficiaryComponent implements OnInit {
         this._beneficiaryService.find({'platformOwnerId._id': platformId}));
 
     Observable.forkJoin([policy$, benefic$]).subscribe((results: any) => {
-      let beneficiaryList: any[] = results[1].data;
+      const beneficiaryList: any[] = results[1].data;
       results[0].data.forEach(policy => {
-        let principal = policy.principalBeneficiary;
+        const principal = policy.principalBeneficiary;
         const index = beneficiaryList.findIndex(x => x._id === principal._id);
         if (index > -1) {
           beneficiaryList.splice(index);
