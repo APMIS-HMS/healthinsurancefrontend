@@ -39,6 +39,7 @@ export class NewCheckinComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('New Check In');
     this._headerEventEmitter.setMinorRouteUrl('Create new check in beneficiary');
+
     this.listsearchControl.valueChanges
       .debounceTime(350)
       .distinctUntilChanged()
@@ -84,14 +85,13 @@ export class NewCheckinComponent implements OnInit {
   }
 
   _getBeneficiariesFromPolicy(platformId, search) {
-
     if (search.length > 2) {
-      this._policyService.searchPolicy(search).then((payload: any) => {
+      const query = { platformOwnerId: this.currentPlatform._id, search: search };
+      this._policyService.searchPolicy(query).then((payload: any) => {
+        console.log(payload);
         this.beneficiaries = [];
         if (payload.body.data.length > 0) {
           payload.body.data.forEach(policy => {
-            console.log(policy._id);
-            console.log('1')
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;

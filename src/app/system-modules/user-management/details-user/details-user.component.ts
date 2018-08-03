@@ -63,6 +63,26 @@ export class DetailsUserComponent implements OnInit {
         });
   }
 
+  onClickDeleteRole(role) {
+    role.userId = this.selectedUser._id;
+    this._systemService.announceSweetProxy('Are you sure you want to delete this role?', 'question', this, null, null, role);
+  }
+
+  sweetAlertCallback(result, role) {
+    if (result.value) {
+      this._systemService.on();
+      this._userService.crudRole(role).then(res => {
+        this.selectedUser = res;
+        const msg = `${role.name} role has been deleted successfully.`;
+        this._systemService.announceSweetProxy(msg, 'success');
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+        console.log(err);
+      });
+    }
+  }
+
   routeAddRole() {}
 
   tabHia_click() {
