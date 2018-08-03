@@ -5,5 +5,5 @@ export const environment = {
   secondary_logo: "",
   title: "APMIS",
   title_tab_color: "title-tab-apmis",
-  background_color: "#auth-content-wrapper-apmis"
+  background_color: "auth-content-wrapper-apmis"
 };

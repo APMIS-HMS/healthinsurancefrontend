@@ -14,7 +14,8 @@ let isProd = false;
 if (
   environment === "prod.huwe" ||
   environment === "prod.lagos" ||
-  environment === "prod.nhis"
+  environment === "prod.nhis" ||
+  environment === "prod.apmis"
 ) {
   isProd = true;
 }
