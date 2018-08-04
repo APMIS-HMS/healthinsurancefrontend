@@ -19,7 +19,7 @@ import { HeaderEventEmitterService } from '../../../services/event-emitters/head
 })
 export class NewCheckinComponent implements OnInit {
   currentPlatform: any;
-
+  loading = false;
   listsearchControl = new FormControl();
   beneficiaries: any[] = [];
 
@@ -44,10 +44,11 @@ export class NewCheckinComponent implements OnInit {
       .debounceTime(350)
       .distinctUntilChanged()
       .subscribe(value => {
+        this.loading = true;
         this._getBeneficiariesFromPolicy(this.currentPlatform._id, value);
       }, error => {
         this._systemService.off();
-        console.log(error)
+        console.log(error);
       });
 
     this._getCurrentPlatform();
@@ -63,7 +64,6 @@ export class NewCheckinComponent implements OnInit {
         ]
       }
     }).then((payload: any) => {
-      console.log(payload)
       this.beneficiaries = payload.data;
       this._systemService.off();
     }).catch(err => {
@@ -88,10 +88,11 @@ export class NewCheckinComponent implements OnInit {
     if (search.length > 2) {
       const query = { platformOwnerId: this.currentPlatform._id, search: search };
       this._policyService.searchPolicy(query).then((payload: any) => {
+        this.loading = false;
         console.log(payload);
         this.beneficiaries = [];
-        if (payload.body.data.length > 0) {
-          payload.body.data.forEach(policy => {
+        if (payload.data.length > 0) {
+          payload.data.forEach(policy => {
             let principal = policy.principalBeneficiary;
             principal.isPrincipal = true;
             principal.hia = policy.hiaId;
@@ -108,8 +109,8 @@ export class NewCheckinComponent implements OnInit {
               innerPolicy.beneficiary.hia = policy.hiaId;
               innerPolicy.beneficiary.isActive = policy.isActive;
               this.beneficiaries.push(innerPolicy.beneficiary);
-            })
-          })
+            });
+          });
           console.log(this.beneficiaries);
           this._systemService.off();
         } else {
