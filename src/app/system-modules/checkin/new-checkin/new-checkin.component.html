@@ -25,9 +25,13 @@
                     <th class="th">Premium Paid</th>
                 </tr>
             </thead>
-
             <tbody class="tbody">
-                <tr class="tr" *ngIf="beneficiaries.length === 0">
+                <tr class="tr" *ngIf="beneficiaries.length === 0 && loading">
+                    <td class="text-center" colspan="7">
+                        <i class="text-center fa fa-spinner fa-spin"></i>
+                    </td>
+                </tr>
+                <tr class="tr" *ngIf="beneficiaries.length === 0 && !loading">
                     <td class="text-center" colspan="7">
                         <i class="text-center">No data available in table</i>
                     </td>
