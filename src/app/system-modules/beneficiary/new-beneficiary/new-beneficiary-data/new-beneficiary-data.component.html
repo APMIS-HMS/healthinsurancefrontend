@@ -39,7 +39,7 @@
     <div class="frm-item-wrap">
         <label class="label">First Name</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="text" formControlName="firstName" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="text" formControlName="firstName" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.firstName.valid || stepOneFormGroup.controls.firstName.pristine">
                 First name is required.
             </small>
@@ -57,13 +57,13 @@
     <div class="frm-item-wrap">
         <label class="label">Mother's Maiden Name</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="text" formControlName="mothermaidenname" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="text" formControlName="mothermaidenname" class="form-control">
         </div>
     </div>
     <div class="frm-item-wrap">
         <label class="label">Email</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="email" formControlName="email" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="email" formControlName="email" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.email.valid || stepOneFormGroup.controls.email.pristine">
                 Enter a valid email address.
             </small>
@@ -72,7 +72,7 @@
     <div class="frm-item-wrap">
         <label class="label">Phone number</label>
         <div class="inputWrap">
-            <input  [readonly]="!isCompleteRegistration" type="text" formControlName="phonenumber" class="form-control">
+            <input [readonly]="!isCompleteRegistration" type="text" formControlName="phonenumber" class="form-control">
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.phonenumber.valid || stepOneFormGroup.controls.phonenumber.pristine">
                 Enter a valid phone number.
             </small>
@@ -110,26 +110,26 @@
         </div>
     </div>
     <div class="frm-item-wrap">
-        <label class="label">State of Origin</label>
+        <label class="label">State</label>
         <div class="inputWrap">
             <select formControlName="stateOfOrigin" class="form-control" [compareWith]='compare'>
-                <option value="" selected>Select State of origin</option>
+                <option value="" selected>Select State</option>
                 <option *ngFor="let state of states" [ngValue]="state">{{state.name}}</option>
             </select>
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.stateOfOrigin.valid || stepOneFormGroup.controls.stateOfOrigin.pristine">
-                Choose a origin from the dropdown.
+                Choose a state from the dropdown.
             </small>
         </div>
     </div>
     <div class="frm-item-wrap">
-        <label class="label">L.G.A of Origin</label>
+        <label class="label">L.G.A of</label>
         <div class="inputWrap">
             <select formControlName="lgaOfOrigin" class="form-control" [compareWith]='compare'>
-                <option value="" selected>Select L.G.A of origin</option>
+                <option value="" selected>Select L.G.A</option>
                 <option *ngFor="let lga of lgs" [ngValue]="lga">{{lga.name}}</option>
             </select>
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.lgaOfOrigin.valid || stepOneFormGroup.controls.lgaOfOrigin.pristine">
-                Choose L.G.A of origin from the dropdown.
+                Choose L.G.A from the dropdown.
             </small>
         </div>
 

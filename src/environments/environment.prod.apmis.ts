@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  platform: "APMIS",
+  platform: "AHIA",
   logo: "./assets/img/logos/apmis_vector.svg",
   secondary_logo: "",
   title: "APMIS",
