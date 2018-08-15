@@ -1,0 +1,7 @@
+web:
+    build: .
+    ports:
+        - "4900:4900"
+    volumes:
+        - .:/usr/src/hifend
+    command: ng serve
