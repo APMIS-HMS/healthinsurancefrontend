@@ -1,0 +1,55 @@
+<form [formGroup]="medicalFormGroup" novalidate>
+  <div class="frm-item-wrap">
+        <label class="label">Blood Group</label>
+        <div class="inputWrap">
+            <select formControlName="bloodGroup" class="form-control" [compareWith]='compare'>
+                <option value="" selected>Blood Group</option>
+                <option *ngFor="let bloodGroup of bloodGroups" [ngValue]="bloodGroup.name">{{bloodGroup.name}}</option>
+            </select>
+
+            <small class="alert-label" [hidden]="medicalFormGroup.controls.bloodGroup.valid || medicalFormGroup.controls.bloodGroup.pristine">
+                Choose blood Group from dropdown.
+            </small>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Genotype</label>
+        <div class="inputWrap">
+            <select formControlName="genotype" class="form-control" [compareWith]='compare'>
+                <option value="" selected>Genotype</option>
+                <option *ngFor="let genotype of genotypes" [ngValue]="genotype.name">{{genotype.name}}</option>
+            </select>
+
+            <small class="alert-label" [hidden]="medicalFormGroup.controls.genotype.valid || medicalFormGroup.controls.genotype.pristine">
+                Choose genotype from dropdown.
+            </small>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Pre-Medical Condition</label>
+        <div class="inputWrap">
+            <label *ngFor="let preMedicalCondition of preMedicalConditions" class="container">
+                <input type="checkbox" [checked]="preMedicalCondition.isChecked" (change)="onClickCheckInput(preMedicalCondition, $event.target.checked);">
+                {{ preMedicalCondition?.name }}
+                <span class="checkmark"></span>
+            </label>
+        </div>
+    </div>
+    <div class="frm-item-wrap">
+        <label class="label">Other Pre-Medical Conditions</label>
+        <div class="inputWrap">
+            <input type="text" formControlName="otherPreMed" class="form-control">
+            <small class="alert-label" [hidden]="medicalFormGroup.controls.otherPreMed.valid || medicalFormGroup.controls.otherPreMed.pristine">
+                First name is required.
+            </small>
+        </div>
+    </div>
+    <div style="margin:10px auto;display:flex;justify-content:space-between;">
+        <button class="btn btn-medium btn-blue" (click)="moveBackToStepOne()">
+             <i class="fa fa-chevron-left"></i> &nbsp;PREVIOUS
+        </button>
+        <button class="btn btn-medium btn-blue" (click)="onClickStepThree(medicalFormGroup.valid, medicalFormGroup.value);">
+            NEXT &nbsp; <i class="fa fa-chevron-right"></i>
+        </button>
+    </div>
+</form>

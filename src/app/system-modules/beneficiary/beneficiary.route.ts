@@ -1,5 +1,6 @@
 import { CheckinDetailsGenerateComponent } from './beneficiary-details/checkin-details-generate/checkin-details-generate.component';
 import { NewBeneficiaryConfirmComponent } from './new-beneficiary/new-beneficiary-confirm/new-beneficiary-confirm.component';
+import { NewBeneficiaryMedicalComponent } from './new-beneficiary/new-beneficiary-medical/new-beneficiary-medical.component';
 import { NewBeneficiaryProgramComponent } from './new-beneficiary/new-beneficiary-program/new-beneficiary-program.component';
 import { NewBeneficiaryNokComponent } from './new-beneficiary/new-beneficiary-nok/new-beneficiary-nok.component';
 import { NewBeneficiaryDependantComponent } from './new-beneficiary/new-beneficiary-dependant/new-beneficiary-dependant.component';
@@ -53,6 +54,8 @@ const BENEFICIARY_ROUTES: Routes = [
                     { path: '', component: PersonalDetailsComponent },
                     { path: 'principal/:id', component: NewBeneficiaryDataComponent },
                     { path: 'principal', component: NewBeneficiaryDataComponent },
+                    { path: 'medical', component: NewBeneficiaryMedicalComponent },
+                    { path: 'medical/:id', component: NewBeneficiaryMedicalComponent },
                     { path: 'dependants/:id', component: NewBeneficiaryDependantComponent },
                     { path: 'next-of-kin/:id', component: NewBeneficiaryNokComponent },
                     { path: 'program/:id', component: NewBeneficiaryProgramComponent },

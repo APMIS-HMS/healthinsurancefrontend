@@ -88,4 +88,9 @@ export class BeneficiaryService {
       .get(path)
       .query({_id: _id, userType: userType});
   }
+
+  saveBeneficiaryMedical(person){
+    const host = `${this._restService.getHost()}/api/save-beneficiary-medical`;
+    return request.post(host).send(person);
+  }
 }
