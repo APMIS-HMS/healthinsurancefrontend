@@ -4,7 +4,6 @@
 
 
 <form [formGroup]="frmNok" novalidate>
-
     <div formArrayName="dependantArray" class="frmArrayWrap">
         <div class="frmArray" *ngFor="let dependant of frmNok['controls'].dependantArray['controls']; let i = index;">
             <div (click)="closeDependant(dependant, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
@@ -14,7 +13,7 @@
                     <div class="input-wrap">
                         <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
                                 <label for="bene-male">
-                                    <input style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender, dependant)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
+                                    <input style="width: 30px;display: block;margin: 0 auto;" [checked]="checkGender(gender)" (change)="changeGender($event, gender, dependant)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
                                 </label>
                         </span>
                     </div>
@@ -86,10 +85,10 @@
                 <div class="frm-item-wrap">
                     <label class="label">Nature of Relationship</label>
                     <div class="inputWrap">
-                        <select formControlName="relationship" class="form-control">
-                                <option  value="" disabled selected>Relationship</option>
-                                <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
-                            </select>
+                        <select formControlName="relationship" class="form-control" [compareWith]='compare'>
+                            <option  value="" disabled selected>Relationship</option>
+                            <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
+                        </select>
                     </div>
                 </div>
 

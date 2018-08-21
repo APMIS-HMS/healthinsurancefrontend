@@ -29,6 +29,27 @@ export const PAYMENTTYPES = [
   {'id': 3, 'name': 'e-Payment', default: true}
 ];
 
+export const PRE_MEDICAL_CONDITIONS = [
+  { 'id': 1, 'name': 'Diabetics' },
+  { 'id': 2, 'name': 'Hypertension' },
+  { 'id': 3, 'name': 'Sickle Cell' },
+  { 'id': 4, 'name': 'Cancer' },
+  { 'id': 5, 'name': 'Kidney Issue' },
+  { 'id': 6, 'name': 'Liver Issue' }
+];
+
+export const BLOOD_GROUPS = [
+  { 'id': 1, 'name': 'AA' },
+  { 'id': 2, 'name': 'AS' },
+  { 'id': 3, 'name': 'SS' }
+];
+
+export const GENOTYPES = [
+  { 'id': 1, 'name': 'O+' },
+  { 'id': 2, 'name': 'A' },
+  { 'id': 3, 'name': 'O-' }
+];
+
 export const CurrentPlaformShortName = 'ASHIA';
 export const FORM_VALIDATION_ERROR_MESSAGE =
     'One or more required fields are missing!';

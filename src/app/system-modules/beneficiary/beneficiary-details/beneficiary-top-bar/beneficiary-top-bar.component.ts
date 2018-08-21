@@ -12,6 +12,7 @@ export class BeneficiaryTopBarComponent implements OnInit {
   @Output() closeModal: EventEmitter<boolean> = new EventEmitter<boolean>();
   isCheckIn = false;
   canApprove = false;
+  user: any;
 
   constructor(
     private _router: Router,
@@ -19,7 +20,8 @@ export class BeneficiaryTopBarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner' || JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Health Insurance Agent') {
+    this.user = (<any>this.locker.getObject('auth')).user;
+    if (!!this.user.userType && (this.user.userType.name === 'Platform Owner' || this.user.userType.name === 'Health Insurance Agent')) {
       this.canApprove = true;
     }
     if (this._router.url.endsWith('checkin')) {
@@ -32,8 +34,7 @@ export class BeneficiaryTopBarComponent implements OnInit {
       this.isCheckIn = true;
     } else if (this._router.url.endsWith('referrals')) {
       this.isCheckIn = false;
-    }
-    else {
+    } else {
       this.isCheckIn = false;
     }
   }
