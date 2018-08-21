@@ -6,6 +6,7 @@ import {ToastsManager} from 'ng2-toastr/ng2-toastr';
 import {HeaderEventEmitterService} from '../../../services/event-emitters/header-event-emitter.service';
 
 import {SystemModuleService} from './../../../services/common/system-module.service';
+import { CoolLocalStorage } from 'angular2-cool-storage';
 
 @Component({
   selector: 'app-new-beneficiary',
@@ -19,13 +20,15 @@ export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
   tab_program = false;
   tab_confirm = false;
   tab_medical = false;
-
+  user: any;
   selectedBeneficiary: any;
   dependants: any[] = [];
   policy: any;
+  isBeneficiary = false;
 
   constructor(
       private _toastr: ToastsManager,
+      private _locker: CoolLocalStorage,
       private _headerEventEmitter: HeaderEventEmitterService,
       private _systemService: SystemModuleService, private _router: Router,
       private _route: ActivatedRoute
@@ -48,11 +51,15 @@ export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.user = (<any>this._locker.getObject('auth')).user;
+    console.log(this.user);
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
+      this.isBeneficiary = true;
+    }
     this._headerEventEmitter.setRouteUrl('New Beneficiary');
     this._headerEventEmitter.setMinorRouteUrl('Create new beneficiary');
 
     this._router.events.filter((event: any) => event instanceof NavigationEnd).subscribe(event => {
-      console.log(event);
       const currentRoute = this._route.root;  // route is an instance of ActiveRoute
       if (event.url.includes('principal')) {
         this.tabPersonalData_click();

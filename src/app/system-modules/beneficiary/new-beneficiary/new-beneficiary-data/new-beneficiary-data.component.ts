@@ -583,116 +583,108 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
           if (this.person.profileImageObject === undefined) {
             if (fileBrowser.files && fileBrowser.files[0]) {
               console.log('fileBrowser', fileBrowser);
-              // this.upload().then((result: any) => {
-              //   if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-              //     this.person.profileImageObject = result.body[0].file;
-              //     let person$ = Observable.fromPromise(this._personService.update(this.person));
+              this.upload().then((result: any) => {
+                if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+                  this.person.profileImageObject = result.body[0].file;
+                  let person$ = Observable.fromPromise(this._personService.update(this.person));
 
-              //     Observable.forkJoin([person$]).subscribe((results: any) => {
-              //       // this._getBeneficiary(this.selectedBeneficiary._id);
-              //       // this._systemService.off();
-              //       // this._router.navigate(['/modules/beneficiary/new/dependants',
-              //       // this.selectedBeneficiary._id]).then(payload => {
-              //       // }).catch(err => {
-              //       //   console.log(err)
-              //       // });
-              //       if (results[0] !== undefined) {
-              //         let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
-              //         beneficiary.numberOfUnderAge =  value.noOfChildrenU18;
-              //         beneficiary.platformOwnerId = this.currentPlatform;
-              //         beneficiary.stateID = value.stateID;
-              //         beneficiary.personId = results[0];
+                  Observable.forkJoin([person$]).subscribe((results: any) => {
+                    // this._getBeneficiary(this.selectedBeneficiary._id);
+                    // this._systemService.off();
+                    // this._router.navigate(['/modules/beneficiary/new/dependants',
+                    // this.selectedBeneficiary._id]).then(payload => {
+                    // }).catch(err => {
+                    //   console.log(err)
+                    // });
+                    if (results[0] !== undefined) {
+                      let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                      beneficiary.numberOfUnderAge =  value.noOfChildrenU18;
+                      beneficiary.platformOwnerId = this.currentPlatform;
+                      beneficiary.stateID = value.stateID;
+                      beneficiary.personId = results[0];
 
-              //         if (this.selectedBeneficiary._id !== undefined) {
-              //           this._beneficiaryService.update(beneficiary).then((paym: any) => {
-              //             this._systemService.off();
-              //             if (value.noOfChildrenU18 > 0) {
-              //               this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
-              //                 // Route to dependant
-              //               }).catch(err => {});
-              //             } else {
-              //               this._router.navigate(['/modules/beneficiary/new/next-of-kin', paym._id]).then(payload => {
-              //                     // Route to Next of Kin
-              //               }).catch(err => {});
-              //             }
-              //           }).catch(erm => {});
-              //         } else {
-              //           this._beneficiaryService.create(beneficiary).then((paym: any) => {
-              //             this._systemService.off();
-              //             this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
-              //               // Route to dependant
-              //             }).catch(err => {});
-              //           }).catch(erm => {});
-              //         }
-              //       } else {
-              //       }
-              //     }, error => {
-              //       this._systemService.off();
-              //     });
-              //   }
-              // }).catch(err => {
-              //   this._systemService.off();
-              // });
+                      if (this.selectedBeneficiary._id !== undefined) {
+                        this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                          this._systemService.off();
+                          // Navigate to the Beneficiary medical page.
+                          this._router.navigate(['/modules/beneficiary/new/medical', this.selectedBeneficiary._id]).then(res => {}).catch(err => {});
+                        }).catch(erm => {});
+                      } else {
+                        this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                          this._systemService.off();
+                          // Navigate to the Beneficiary medical page.
+                          this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(res => {}).catch(err => {});
+                        }).catch(erm => {});
+                      }
+                    } else {
+                    }
+                  }, error => {
+                    this._systemService.off();
+                  });
+                }
+              }).catch(err => {
+                this._systemService.off();
+              });
             } else {
               console.log('No file. person object', this.person);
               let person$ = Observable.fromPromise(this._personService.update(this.person));
-              // Observable.forkJoin([person$]).subscribe((results: any) => {
-              //   if (results[0] !== undefined) {
-              //     let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
-              //     beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-              //     beneficiary.platformOwnerId = this.currentPlatform;
-              //     beneficiary.stateID = value.stateID;
-              //     beneficiary.personId = results[0];
-
-              //     if (this.selectedBeneficiary._id !== undefined) {
-              //       this._beneficiaryService.update(beneficiary).then((paym: any) => {
-              //         this._systemService.off();
-              //         this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {}).catch(err => {});
-              //       }).catch(erm => {});
-              //     } else {
-              //       this._beneficiaryService.create(beneficiary).then((paym: any) => {
-              //         this._systemService.off();
-              //         this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {}).catch(err => {});
-              //       }).catch(erm => {});
-              //     }
-              //   } else {
-              //     console.log('Else for result');
-              //   }
-              // }, error => {
-              //   this._systemService.off();
-              // });
+              Observable.forkJoin([person$]).subscribe((results: any) => {
+                if (results[0] !== undefined) {
+                  let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                  beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                  beneficiary.platformOwnerId = this.currentPlatform;
+                  beneficiary.stateID = value.stateID;
+                  beneficiary.personId = results[0];
+                  
+                  if (this.selectedBeneficiary._id !== undefined) {
+                    this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                      this._systemService.off();
+                      this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(payload => {}).catch(err => {});
+                    }).catch(erm => {});
+                  } else {
+                    this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                      this._systemService.off();
+                      this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(payload => {}).catch(err => {});
+                    }).catch(erm => {});
+                  }
+                } else {
+                  console.log('Else for result');
+                }
+              }, error => {
+                this._systemService.off();
+              });
             }
           } else {
             console.log('Update person', this.person);
-            // this._personService.update(this.person).then((payload: any) => {
-            //   // this._getBeneficiary(this.selectedBeneficiary._id);
-            //   // this._systemService.off();
-            //   // this._systemService.announceBeneficiaryTabNotification({
-            //   // tab: 'Two', beneficiary: this.selectedBeneficiary });
-            //   if (payload !== undefined) {
-            //     let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
-            //     beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-            //     beneficiary.platformOwnerId = this.currentPlatform;
-            //     beneficiary.stateID = value.stateID;
-            //     beneficiary.personId = payload;
+            this._personService.update(this.person).then((payload: any) => {
+              // this._getBeneficiary(this.selectedBeneficiary._id);
+              // this._systemService.off();
+              // this._systemService.announceBeneficiaryTabNotification({
+              // tab: 'Two', beneficiary: this.selectedBeneficiary });
+              if (payload !== undefined) {
+                let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                beneficiary.platformOwnerId = this.currentPlatform;
+                beneficiary.stateID = value.stateID;
+                beneficiary.personId = payload;
 
-            //     if (this.selectedBeneficiary._id !== undefined) {
-            //       this._beneficiaryService.update(beneficiary).then((paym: any) => {
-            //         this._systemService.off();
-            //         this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {}).catch(err => {});
-            //       }).catch(erm => {});
-            //     } else {
-            //       this._beneficiaryService.create(beneficiary).then((paym: any) => {
-            //         this._systemService.off();
-            //         this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {}).catch(err => {});
-            //       }).catch(erm => {});
-            //     }
-            //   } else {
-            //     console.log('Else for person update');
-            //   }
-            // }).catch(err => {
-            //   this._systemService.off();
-            // });
+                if (this.selectedBeneficiary._id !== undefined) {
+                  this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                    this._systemService.off();
+                    this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(payload => {}).catch(err => {});
+                  }).catch(erm => {});
+                } else {
+                  this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                    this._systemService.off();
+                    this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(payload => {}).catch(err => {});
+                  }).catch(erm => {});
+                }
+              } else {
+                console.log('Else for person update');
+              }
+            }).catch(err => {
+              this._systemService.off();
+            });
           }
         } else {
           console.log('This person is not a beneficiary');
@@ -732,63 +724,53 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
             if (personId.profileImageObject === undefined) {
               if (fileBrowser.files && fileBrowser.files[0]) {
                 console.log('Filebrowser', fileBrowser);
-                // this.upload().then((result: any) => {
-                //   if (result !== undefined && result.body !== undefined && result.body.length > 0) {
-                //     personId.profileImageObject = result.body[0].file;
+                this.upload().then((result: any) => {
+                  if (result !== undefined && result.body !== undefined && result.body.length > 0) {
+                    personId.profileImageObject = result.body[0].file;
 
-                //     this._personService.update(personId).then((payload: any) => {
-                //       if (payload !== undefined) {
-                //         let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
-                //         beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-                //         beneficiary.platformOwnerId = this.currentPlatform;
-                //         beneficiary.stateID = value.stateID;
-                //         beneficiary.personId = payload;
+                    this._personService.update(personId).then((payload: any) => {
+                      if (payload !== undefined) {
+                        let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                        beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                        beneficiary.platformOwnerId = this.currentPlatform;
+                        beneficiary.stateID = value.stateID;
+                        beneficiary.personId = payload;
 
-                //         if (this.selectedBeneficiary._id !== undefined) {
-                //           this._beneficiaryService.update(beneficiary).then((paym: any) => {
-                //             this._systemService.off();
-                //             if (value.noOfChildrenU18 > 0) {
-                //               this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
-                //                 // Route to depandant
-                //               }).catch(err => {});
-                //             } else {
-                //               this._router.navigate(['/modules/beneficiary/new/next-of-kin', paym._id]).then(payload => {
-                //                 // Route to next-of-kin
-                //               }).catch(err => {});
-                //             }
-                //           }).catch(erm => {});
-                //         } else {
-                //           this._beneficiaryService.create(beneficiary).then((paym: any) => {
-                //             this._systemService.off();
-                //             this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {
-                //               // Route to dependant
-                //             }).catch(err => {});
-                //           }).catch(erm => {});
-                //         }
-                //       } else {
-                //       }
-                //       // this._getBeneficiary(this.selectedBeneficiary._id);
-                //       // this._systemService.off();
-                //       // this._router.navigate(['/modules/beneficiary/new/dependants',
-                //       // this.selectedBeneficiary._id]).then(payload =>
-                //       // {
-                //       //   //
-                //       //   this._systemService.announceBeneficiaryTabNotification({
-                //       //   tab: 'Two', beneficiary: paym });
-                //       // }).catch(err => {
-                //       //   console.log(err)
-                //       // });
-                //       // //
-                //       // this._systemService.announceBeneficiaryTabNotification({
-                //       // tab: 'Two', beneficiary:
-                //       // this.selectedBeneficiary });
-                //     }).catch(err => {
-                //       this._systemService.off();
-                //     });
-                //   }
-                // }).catch(err => {
-                //   this._systemService.off();
-                // });
+                        if (this.selectedBeneficiary._id !== undefined) {
+                          this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                            this._systemService.off();
+                              this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(route => {}).catch(err => {});
+                          }).catch(erm => {});
+                        } else {
+                          this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                            this._systemService.off();
+                            this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(route => {}).catch(err => {});
+                          }).catch(erm => {});
+                        }
+                      } else {
+                      }
+                      // this._getBeneficiary(this.selectedBeneficiary._id);
+                      // this._systemService.off();
+                      // this._router.navigate(['/modules/beneficiary/new/dependants',
+                      // this.selectedBeneficiary._id]).then(payload =>
+                      // {
+                      //   //
+                      //   this._systemService.announceBeneficiaryTabNotification({
+                      //   tab: 'Two', beneficiary: paym });
+                      // }).catch(err => {
+                      //   console.log(err)
+                      // });
+                      // //
+                      // this._systemService.announceBeneficiaryTabNotification({
+                      // tab: 'Two', beneficiary:
+                      // this.selectedBeneficiary });
+                    }).catch(err => {
+                      this._systemService.off();
+                    });
+                  }
+                }).catch(err => {
+                  this._systemService.off();
+                });
               } else {
                 this._personService.update(personId).then((payload: any) => {
                   if (payload !== undefined) {
@@ -833,46 +815,45 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
               }
             } else {
               console.log('Update person', personId);
-              // this._personService.update(personId).then((payload: any) => {
-              //   if (payload !== undefined) {
-              //     let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
-              //     beneficiary.numberOfUnderAge = value.noOfChildrenU18;
-              //     beneficiary.platformOwnerId = this.currentPlatform;
-              //     beneficiary.stateID = value.stateID;
-              //     beneficiary.personId = payload;
+              this._personService.update(personId).then((payload: any) => {
+                if (payload !== undefined) {
+                  let beneficiary: Beneficiary = this.selectedBeneficiary ? this.selectedBeneficiary : <Beneficiary>{};
+                  beneficiary.numberOfUnderAge = value.noOfChildrenU18;
+                  beneficiary.platformOwnerId = this.currentPlatform;
+                  beneficiary.stateID = value.stateID;
+                  beneficiary.personId = payload;
 
-              //     if (this.selectedBeneficiary._id !== undefined) {
-              //       this._beneficiaryService.update(beneficiary).then((paym: any) => {
-              //         this._systemService.off();
-              //         this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {}).catch(err => {});
-              //       }).catch(erm => {});
-              //     } else {
-              //       this._beneficiaryService.create(beneficiary).then((paym: any) => {
-              //         this._systemService.off();
-              //         this._router.navigate(['/modules/beneficiary/new/dependants', paym._id]).then(payload => {}).catch(err => {});
-              //       }).catch(erm => {});
-              //     }
-              //   } else {
-              //   }
-              //   // this._getBeneficiary(this.selectedBeneficiary._id);
-              //   // this._systemService.off();
-              //   // this._router.navigate(['/modules/beneficiary/new/dependants',
-              //   // this.selectedBeneficiary._id]).then(payload => {
-              //   //   //
-              //   //   this._systemService.announceBeneficiaryTabNotification({
-              //   //   tab: 'Two', beneficiary: paym });
-              //   // }).catch(err => {
-              //   //   console.log(err)
-              //   // });
-              //   // //
-              //   // this._systemService.announceBeneficiaryTabNotification({
-              //   // tab: 'Two', beneficiary: this.selectedBeneficiary });
-              // }).catch(err => {
-              //   this._systemService.off();
-              // });
+                  if (this.selectedBeneficiary._id !== undefined) {
+                    this._beneficiaryService.update(beneficiary).then((paym: any) => {
+                      this._systemService.off();
+                      this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(payload => {}).catch(err => {});
+                    }).catch(erm => {});
+                  } else {
+                    this._beneficiaryService.create(beneficiary).then((paym: any) => {
+                      this._systemService.off();
+                      this._router.navigate(['/modules/beneficiary/new/medical', paym._id]).then(payload => {}).catch(err => {});
+                    }).catch(erm => {});
+                  }
+                } else {
+                }
+                // this._getBeneficiary(this.selectedBeneficiary._id);
+                // this._systemService.off();
+                // this._router.navigate(['/modules/beneficiary/new/dependants',
+                // this.selectedBeneficiary._id]).then(payload => {
+                //   //
+                //   this._systemService.announceBeneficiaryTabNotification({
+                //   tab: 'Two', beneficiary: paym });
+                // }).catch(err => {
+                //   console.log(err)
+                // });
+                // //
+                // this._systemService.announceBeneficiaryTabNotification({
+                // tab: 'Two', beneficiary: this.selectedBeneficiary });
+              }).catch(err => {
+                this._systemService.off();
+              });
             }
           } else {
-            console.log('Does not have selected beneficiary');
             let personId: Person = <Person>{};
             let address: Address = <Address>{};
             delete value.lga.towns;
@@ -904,100 +885,65 @@ export class NewBeneficiaryDataComponent implements OnInit, AfterViewInit,
             beneficiary.numberOfUnderAge = value.noOfChildrenU18;
             beneficiary.stateID = value.stateID;
             beneficiary.platformOwnerId = this.currentPlatform;
-
             let policy: any = <any>{};
-
             let fileBrowser = this.fileInput.nativeElement;
             this._systemService.on();
             if (personId.profileImageObject === undefined) {
-              console.log('FileBrowser', fileBrowser);
               if (fileBrowser.files && fileBrowser.files[0]) {
-                console.log('Has filebrowser');
                 this.upload().then((result: any) => {
                   if (result !== undefined && result.body !== undefined && result.body.length > 0) {
                     personId.profileImageObject = result.body[0].file;
-                    console.log('Should create beneficary with Id ', personId);
-                    // this._beneficiaryService.createWithMiddleWare({
-                    //   person: personId,
-                    //   beneficiary: beneficiary,
-                    //   policy: policy,
-                    //   platform: this.currentPlatform
-                    // }).then(payload => {
-                    //   // should be sending selectedbeneficiary to
-                    //   // steptwo
-                    //   if (payload.statusCode === 200 && payload.error === false) {
-                    //     delete payload.body.beneficiary.personId;
-                    //     payload.body.beneficiary.personId = payload.body.person;
-                    //     this.selectedBeneficiary = payload.body.beneficiary;
-                    //     // this._systemService.announceBeneficiaryTabNotification('Two');
-                    //     this._systemService.off();
-
-                    //     if (value.noOfChildrenU18 > 0) {
-                    //       this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
-                    //           // this._systemService.announceBeneficiaryTabNotification({
-                    //           // tab: 'Two', beneficiary: paym
-                    //           // });
-                    //       }).catch(err => {});
-                    //     } else {
-                    //       this._router.navigate(['/modules/beneficiary/new/next-of-kin', this.selectedBeneficiary._id]).then(payload => {
-                    //         // Route to next of kin
-                    //       }).catch(err => {});
-                    //     }
-                    //     // this._systemService.announceBeneficiaryTabNotification({
-                    //     // tab: 'Two', beneficiary:
-                    //     // this.selectedBeneficiary });
-                    //   }
-                    // }).catch(err => {
-                    //   this._systemService.off();
-                    // });
+                    this._beneficiaryService.createWithMiddleWare({
+                      person: personId,
+                      beneficiary: beneficiary,
+                      policy: policy,
+                      platform: this.currentPlatform
+                    }).then(payload => {
+                      this._systemService.off();
+                      if (payload.statusCode === 200 && payload.error === false) {
+                        delete payload.body.beneficiary.personId;
+                        payload.body.beneficiary.personId = payload.body.person;
+                        this.selectedBeneficiary = payload.body.beneficiary;
+                        // Navigate to the Beneficiary medical page.
+                        this._router.navigate(['/modules/beneficiary/new/medical', this.selectedBeneficiary._id]).then(res => {
+                          // this._systemService.announceBeneficiaryTabNotification({
+                          // tab: 'Two', beneficiary: paym });
+                        }).catch(err => {
+                          // console.log(err);
+                        });
+                      } else {
+                        this._systemService.announceSweetProxy(payload.text, 'error');
+                      }
+                    }).catch(err => {
+                      this._systemService.off();
+                    });
                   }
                 }).catch(err => {
                   this._systemService.off();
                 });
               } else {
                 // Save beneficiary, if successful, route the person to the next tab.
-                console.log('Does not have filebrowser');
-                console.log('Data to save ', {
-                  person: personId,
-                  beneficiary: beneficiary,
-                  policy: policy,
-                  platform: this.currentPlatform
-                });
                 this._beneficiaryService.createWithMiddleWare({
                   person: personId,
                   beneficiary: beneficiary,
                   policy: policy,
                   platform: this.currentPlatform
                 }).then(payload => {
-                  console.log(payload);
+                  this._systemService.off();
                   if (payload.statusCode === 200 && payload.error === false) {
-                    console.log('Got here');
                     payload.body.beneficiary.personId = payload.body.personId;
                     this.selectedBeneficiary = payload.body.beneficiary;
                     this.selectedBeneficiary.personId = payload.body.personId;
-                    console.log(this.selectedBeneficiary);
                     // Navigate to the Beneficiary medical page.
                     this._router.navigate(['/modules/beneficiary/new/medical', this.selectedBeneficiary._id]).then(res => {
-                      console.log(res);
                         // this._systemService.announceBeneficiaryTabNotification({
                         // tab: 'Two', beneficiary: paym });
                     }).catch(err => {
-                      console.log(err);
+                      // console.log(err);
                     });
-                    // if (value.noOfChildrenU18 > 0) {
-                    //   this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
-                    //       // this._systemService.announceBeneficiaryTabNotification({
-                    //       // tab: 'Two', beneficiary: paym });
-                    //   }).catch(err => {});
-                    // } else {
-                    //   this._router.navigate(['/modules/beneficiary/new/next-of-kin', this.selectedBeneficiary._id]).then(payload => {
-                    //     // Route to next of kin
-                    //   }).catch(err => {});
-                    // }
                   } else {
                     this._systemService.announceSweetProxy(payload.text, 'error');
                   }
-                  this._systemService.off();
                 }).catch(err => {
                   this._systemService.off();
                 });

@@ -15,7 +15,7 @@
     <div class="frm-item-wrap">
         <label class="label">Genotype</label>
         <div class="inputWrap">
-            <select formControlName="genotype" class="form-control" [compareWith]='compare'>
+            <select formControlName="genotype" class="form-control" [compareWith]='compare2'>
                 <option value="" selected>Genotype</option>
                 <option *ngFor="let genotype of genotypes" [ngValue]="genotype.name">{{genotype.name}}</option>
             </select>
@@ -29,7 +29,7 @@
         <label class="label">Pre-Medical Condition</label>
         <div class="inputWrap">
             <label *ngFor="let preMedicalCondition of preMedicalConditions" class="container">
-                <input type="checkbox" [checked]="preMedicalCondition.isChecked" (change)="onClickCheckInput(preMedicalCondition, $event.target.checked);">
+                <input type="checkbox" [checked]="checkMedicalCondition(preMedicalCondition)" (change)="onClickCheckInput(preMedicalCondition, $event.target.checked);">
                 {{ preMedicalCondition?.name }}
                 <span class="checkmark"></span>
             </label>

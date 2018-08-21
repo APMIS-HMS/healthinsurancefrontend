@@ -84,68 +84,63 @@ export class NewBeneficiaryNokComponent implements OnInit {
       }
     });
   }
+
   _getBeneficiary(id) {
     this._systemService.on();
-    this._beneficiaryService.get(id, {})
-        .then((payload: any) => {
-          this.selectedBeneficiary = payload;
-          this._getPerson();
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        })
+    this._beneficiaryService.get(id, {}).then((payload: any) => {
+      this.selectedBeneficiary = payload;
+      this._getPerson();
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   _getPerson() {
-    if (this.user.userType.name === 'Beneficiary') {
-      let person$ = Observable.fromPromise(
-          this._personService.find({query: {email: this.user.email}}));
-      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find(
-          {query: {'personId.email': this.user.email}}));
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
+      let person$ = Observable.fromPromise(this._personService.find({query: {email: this.user.email}}));
+      let beneficiary$ = Observable.fromPromise(this._beneficiaryService.find({query: {'personId.email': this.user.email}}));
       Observable.forkJoin([person$, beneficiary$]).subscribe((results: any) => {
+        console.log(results);
         if (results[0].data.length > 0) {
           this.person = results[0].data[0];
+          console.log(this.person);
+          if (this.person.nextOfKin.length > 0) {
+            this.person.nextOfKin.forEach(element => {
+              this._populateNextOfKin(element);
+            });
+          }
         }
         if (results[1].data.length > 0) {
-          this._policyService
-              .find({query: {principalBeneficiary: results[1].data[0]._id}})
-              .then((policies: any) => {
-                if (policies.data.length > 0) {
-                  policies.data[0].dependantBeneficiaries.forEach(
-                      beneficiary => {
-                          // this.populateNewDependant(beneficiary.beneficiary,
-                          // beneficiary.beneficiary.personId,
-                          // beneficiary.relationshipId);
-                      })
-                }
-              })
-              .catch(errin => {})
+          this._policyService.find({query: {principalBeneficiary: results[1].data[0]._id}}).then((policies: any) => {
+            if (policies.data.length > 0) {
+              console.log(policies.data[0]);
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                  // this.populateNewDependant(beneficiary.beneficiary,
+                  // beneficiary.beneficiary.personId,
+                  // beneficiary.relationshipId);
+              });
+            }
+          }).catch(errin => {});
         }
       }, error => {})
     } else {
-      let person$ = Observable.fromPromise(this._personService.find(
-          {query: {_id: this.selectedBeneficiary.personId._id}}));
+      let person$ = Observable.fromPromise(this._personService.find({query: {_id: this.selectedBeneficiary.personId._id}}));
 
       Observable.forkJoin([person$]).subscribe((results: any) => {
         if (results[0].data.length > 0) {
           this.person = results[0].data[0];
         }
         if (this.selectedBeneficiary !== undefined) {
-          this._policyService
-              .find(
-                  {query: {principalBeneficiary: this.selectedBeneficiary._id}})
-              .then((policies: any) => {
-                if (policies.data.length > 0) {
-                  policies.data[0].dependantBeneficiaries.forEach(
-                      beneficiary => {
-                          // this.populateNewDependant(beneficiary.beneficiary,
-                          // beneficiary.beneficiary.personId,
-                          // beneficiary.relationshipId);
-                      })
-                }
-              })
-              .catch(errin => {})
+          this._policyService.find({query: {principalBeneficiary: this.selectedBeneficiary._id}}).then((policies: any) => {
+            if (policies.data.length > 0) {
+              policies.data[0].dependantBeneficiaries.forEach(beneficiary => {
+                  // this.populateNewDependant(beneficiary.beneficiary,
+                  // beneficiary.beneficiary.personId,
+                  // beneficiary.relationshipId);
+              });
+            }
+          }).catch(errin => {});
         }
       }, error => {})
     }
@@ -163,13 +158,9 @@ export class NewBeneficiaryNokComponent implements OnInit {
         title: ['', [<any>Validators.required]],
         middleName: [''],
         lastName: ['', [<any>Validators.required]],
-        phonenumber: [
-          '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
-        ],
+        phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
         secondaryPhone: ['', [<any>Validators.pattern(PHONE_REGEX)]],
-        email: [
-          '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
-        ],
+        email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
         dob: [this.today, [<any>Validators.required]],
         gender: ['', [<any>Validators.required]],
         relationship: ['', [<any>Validators.required]],
@@ -179,58 +170,76 @@ export class NewBeneficiaryNokComponent implements OnInit {
     });
   }
 
-  _getCurrentPlatform() {
-    this._facilityService.find({query: {shortName: CurrentPlaformShortName}})
-        .then((res: any) => {
-          if (res.data.length > 0) {
-            this.currentPlatform = res.data[0];
-          }
-        })
-        .catch(err => {});
+  _populateNextOfKin(nextOfKin) {
+    this.today = {
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      day: new Date().getDate()
+    };
+    this.frmNok = this._fb.group({
+      'dependantArray': this._fb.array([this._fb.group({
+        firstName: [nextOfKin.firstName, [<any>Validators.required]],
+        title: [nextOfKin.title, [<any>Validators.required]],
+        middleName: [nextOfKin.middleName],
+        lastName: [nextOfKin.lastName, [<any>Validators.required]],
+        phonenumber: [nextOfKin.phoneNumber, [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
+        secondaryPhone: [nextOfKin.secondaryPhone, [<any>Validators.pattern(PHONE_REGEX)]],
+        email: [nextOfKin.email, [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+        dob: [this.today, [<any>Validators.required]],
+        gender: [nextOfKin.gender, [<any>Validators.required]],
+        relationship: [nextOfKin.relationship, [<any>Validators.required]],
+        // lasrraId: ['', []],
+        readOnly: [true]
+      })])
+    });
   }
+
+  _getCurrentPlatform() {
+    this._facilityService.find({query: {shortName: CurrentPlaformShortName}}).then((res: any) => {
+      if (res.data.length > 0) {
+        this.currentPlatform = res.data[0];
+      }
+    }).catch(err => {});
+  }
+
   _getRelationships() {
     this._systemService.on();
-    this._relationshipService.find({})
-        .then((payload: any) => {
-          this.relationships = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        })
+    this._relationshipService.find({}).then((payload: any) => {
+      this.relationships = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
+
   _getMaritalStatus() {
     this._systemService.on();
-    this._maritalService.find({})
-        .then((payload: any) => {
-          this.maritalStatuses = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        })
+    this._maritalService.find({}).then((payload: any) => {
+      this.maritalStatuses = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
+
   _getTitles() {
     this._systemService.on();
-    this._titleService.find({})
-        .then((payload: any) => {
-          this.titles = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        })
+    this._titleService.find({}).then((payload: any) => {
+      this.titles = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
+
   _getGenders() {
     this._systemService.on();
-    this._genderService.find({})
-        .then((payload: any) => {
-          this.genders = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        })
+    this._genderService.find({}).then((payload: any) => {
+      this.genders = payload.data;
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   closeDependant(dependant, i) {
@@ -249,13 +258,9 @@ export class NewBeneficiaryNokComponent implements OnInit {
       title: ['', [<any>Validators.required]],
       middleName: [''],
       lastName: ['', [<any>Validators.required]],
-      phonenumber: [
-        '', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
-      ],
+      phonenumber: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       secondaryPhone: ['', <any>Validators.pattern(PHONE_REGEX)],
-      email: [
-        '', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
-      ],
+      email: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
       dob: ['', [<any>Validators.required]],
       gender: ['', [<any>Validators.required]],
       relationship: ['', [<any>Validators.required]],
@@ -272,25 +277,21 @@ export class NewBeneficiaryNokComponent implements OnInit {
   }
 
   moveBack() {
-    this._router
-        .navigate([
-          '/modules/beneficiary/new/dependants', this.selectedBeneficiary._id
-        ])
-        .then(
-            payload => {
+    this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
 
-            })
-        .catch(err => {});
+    }).catch(err => {});
   }
+
   canProceed() {
     return this.frmNok['controls']
                .dependantArray['controls']
                .filter(x => x.value.readOnly === true && x.valid)
                .length > 0;
   }
+
   onClickStepTwo(dependants) {
-    let savedFiltered = dependants.controls.dependantArray.controls.filter(
-        x => x.value.readOnly === true && x.valid);
+    console.log(this.person);
+    let savedFiltered = dependants.controls.dependantArray.controls.filter(x => x.value.readOnly === true && x.valid);
     let dependantList: any[] = [];
     savedFiltered.forEach(group => {
       let person: any = <any>{};
@@ -305,26 +306,25 @@ export class NewBeneficiaryNokComponent implements OnInit {
       person.relationship = group.controls.relationship.value;
       person.title = group.controls.title.value;
 
-
-
       this.person.nextOfKin.push(person);
     });
-    this._personService.update(this.person)
-        .then(payload => {
-          this._router
-              .navigate([
-                '/modules/beneficiary/new/program', this.selectedBeneficiary._id
-              ])
-              .then(
-                  payload => {
 
-                  })
-              .catch(err => {});
-        })
-        .catch(err => {})
+    this._personService.update(this.person).then(payload => {
+      this._router.navigate(['/modules/beneficiary/new/program', this.selectedBeneficiary._id]).then(res => {}).catch(err => {});
+    }).catch(err => {});
 
     // this._systemService.announceBeneficiaryTabNotification({ tab: 'Four',
     // beneficiary: this.selectedBeneficiary, dependants: dependantList })
+  }
+
+  checkGender(gender) {
+    if (!!this.person && !!this.person.gender) {
+      if (gender.name === this.person.gender.name) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   compare(l1: any, l2: any) {

@@ -35,11 +35,8 @@ export class NewBeneficiaryMedicalComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    this.medicalFormGroup = this._fb.group({
-      bloodGroup: ['', [<any>Validators.required]],
-      genotype: ['', [<any>Validators.required]],
-      otherPreMed: [''],
-    });
+
+    this.populateForm();
 
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
@@ -48,10 +45,28 @@ export class NewBeneficiaryMedicalComponent implements OnInit {
     });
   }
 
+  populateForm(selectedBeneficiary?) {
+    if (!!selectedBeneficiary) {
+      const bloodGroup = selectedBeneficiary.personId.medical ? selectedBeneficiary.personId.medical.bloodGroup : '';
+      const genotype = selectedBeneficiary.personId.medical ? selectedBeneficiary.personId.medical.genotype : '';
+      const otherPreMed = selectedBeneficiary.personId.medical ? selectedBeneficiary.personId.medical.otherPreMedicalCondition : '';
+      this.medicalFormGroup = this._fb.group({
+        bloodGroup: [bloodGroup, [<any>Validators.required]],
+        genotype: [genotype, [<any>Validators.required]],
+        otherPreMed: [otherPreMed],
+      });
+    } else {
+      this.medicalFormGroup = this._fb.group({
+        bloodGroup: [, [<any>Validators.required]],
+        genotype: ['', [<any>Validators.required]],
+        otherPreMed: [''],
+      });
+    }
+  }
+
   onClickStepThree(valid, value) {
     if (valid) {
       this._systemService.on();
-      console.log(this.selectedBeneficiary);
       const payload = {
         personId: this.selectedBeneficiary.personId._id,
         medical: {
@@ -61,14 +76,19 @@ export class NewBeneficiaryMedicalComponent implements OnInit {
           otherPreMedicalCondition: value.otherPreMed,
         }
       };
-      console.log(payload);
+
       this._beneficiaryService.saveBeneficiaryMedical(payload).then(res => {
-        console.log(res);
         this._systemService.off();
         if (res.statusCode === 200 && res.error === false) {
-          this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(route => {
-            // Route to dependant
-          }).catch(err => { });
+          if (this.selectedBeneficiary.noOfChildrenU18 > 0) {
+            this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
+              // Route to dependant
+            }).catch(err => {});
+          } else {
+            this._router.navigate(['/modules/beneficiary/new/next-of-kin', this.selectedBeneficiary._id]).then(payload => {
+              // Route to next of kin
+            }).catch(err => {});
+          }
         }
       }).catch(err => {
         this._systemService.off();
@@ -81,33 +101,20 @@ export class NewBeneficiaryMedicalComponent implements OnInit {
 
   moveBackToStepOne() {
     this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(res => {
-      console.log(res);
     }).catch(err => { console.log(err)});
   }
 
   _getBeneficiary(beneficiaryId) {
     this._systemService.on();
-    this._beneficiaryService.get(beneficiaryId, {}).then((payload: any) => {
-      this.selectedBeneficiary = payload;
-      // this._getPerson();
+    this._beneficiaryService.get(beneficiaryId, {}).then((res: any) => {
+      this.selectedBeneficiary = res;
+      this.populateForm(res);
+      this.selectedPreMedicalConditions = !!res.personId.medical ? res.personId.medical.preMedicalConditions : [];
       this._systemService.off();
     }).catch(err => {
       this._systemService.off();
     });
   }
-
-  // _getPerson() {
-  //   if (this.user.userType.name === 'Beneficiary') {
-  //       this._personService.find({ query: { email: this.user.email } }).then();
-
-  //   } else {
-  //     let person$ = Observable.fromPromise(
-  //       this._personService.find({
-  //         query: { _id: this.selectedBeneficiary.personId._id }
-  //       })
-  //     );
-  //   }
-  // }
 
   onClickCheckInput(value, isChecked) {
     if (isChecked) {
@@ -117,9 +124,25 @@ export class NewBeneficiaryMedicalComponent implements OnInit {
     }
   }
 
+  checkMedicalCondition(preMedicalCondition) {
+    const check = this.selectedPreMedicalConditions.filter(x => x === preMedicalCondition.name);
+    if (check.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   compare(l1: any, l2: any) {
     if (l1 !== null && l2 !== null) {
-      return l1._id === l2._id;
+      return l1 === l2;
+    }
+    return false;
+  }
+  
+  compare2(l1: any, l2: any) {
+    if (l1 !== null && l2 !== null) {
+      return l1 === l2;
     }
     return false;
   }

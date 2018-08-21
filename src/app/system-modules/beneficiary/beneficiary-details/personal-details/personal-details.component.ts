@@ -71,11 +71,11 @@ export class PersonalDetailsComponent implements OnInit {
     this._systemService.on();
 
     // let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
-    const policyId = this._locker.getObject('policyID').toString();
+    // const id = (this._locker.getObject('policyID') === null) ? '' : this._locker.getObject('policyID');
+    const policyId = routeId;
     let policy$ = Observable.fromPromise(this._policyService.get(policyId, {}));
 
     Observable.forkJoin([policy$]).subscribe((results: any) => {
-      console.log(results);
       this.beneficiary = results[0].principalBeneficiary;
       if (this.isCheckIn) {
         this.tabCheckin_click();
@@ -85,12 +85,10 @@ export class PersonalDetailsComponent implements OnInit {
         this._headerEventEmitter.setMinorRouteUrl('Household: ' + results[0].policyId);
         this.dependants = results[0].dependantBeneficiaries;
         this.policy = results[0];
-        console.log(this.policy);
       }
 
       this._systemService.off();
     }, error => {
-      console.log(error)
       this._systemService.off();
     });
   }
@@ -154,13 +152,11 @@ export class PersonalDetailsComponent implements OnInit {
     this._router.navigate(['/modules/beneficiary/new', beneficiary._id]).then(res => {
       this._systemService.off();
     }).catch(err => {
-      console.log(err)
       this._systemService.off();
     });
   }
 
   navigateFacility(sponsor) {
-    console.log(sponsor)
     if (sponsor.facilityType.name === 'Provider') {
       this._router.navigate(['/modules/provider/providers', sponsor._id]);
     } else if (sponsor.facilityType.name === 'Employer') {

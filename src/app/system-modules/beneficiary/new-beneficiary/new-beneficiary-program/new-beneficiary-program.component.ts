@@ -155,7 +155,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   }
 
   _getPerson() {
-    if (this.user.userType.name === "Beneficiary") {
+    if (this.user.userType.name === 'Beneficiary') {
       let person$ = Observable.fromPromise(this._personService.find({
         query: {
           email: this.user.email
@@ -180,19 +180,16 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
             } else {
               this.selectedBeneficiary = results[1].data[0];
-              if (!this.isEventBased) {
-                this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
+              // if (!this.isEventBased) {
+              //   this._router.navigate(['/modules/beneficiary/new/principal', this.selectedBeneficiary._id]).then(payload => {
 
-                }).catch(err => {
-                });
-              }
-
+              //   }).catch(err => {});
+              // }
             }
-          }).catch(errin => {
-          })
+          }).catch(errin => {});
         }
       }, error => {
-      })
+      });
     } else {
       let person$ = Observable.fromPromise(this._personService.find({
         query: {
@@ -279,7 +276,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     }).then((res: any) => {
       this._systemService.off();
       this.hias = res.data;
-      if (this.user.userType.name === 'Health Insurance Agent') {
+      if (!!this.user.userType &&  this.user.userType.name === 'Health Insurance Agent') {
         this.isHIA = true;
         let index = this.hias.findIndex(x => x._id === this.user.facilityId._id);
         if (index > -1) {
@@ -370,12 +367,14 @@ export class NewBeneficiaryProgramComponent implements OnInit {
 
         }).catch(err => {
         });
-        this._toastr.success('Your Policy item has been generated!', 'Success');
+        this._systemService.announceSweetProxy('Your Policy item has been generated!', 'success');
+        // this._toastr.success('Your Policy item has been generated!', 'Success');
       }).catch(err => {
       });
     } else {
       let counter = 0;
-      this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      // this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
+      this._systemService.announceSweetProxy(FORM_VALIDATION_ERROR_MESSAGE, 'error');
       Object.keys(this.frmProgram.controls).forEach((field, i) => { // {1}
         const control = this.frmProgram.get(field);
         if (!control.valid) {

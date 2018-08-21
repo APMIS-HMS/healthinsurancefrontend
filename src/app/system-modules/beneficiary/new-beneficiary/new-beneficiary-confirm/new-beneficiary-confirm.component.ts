@@ -33,14 +33,13 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
     this._getRoles();
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
-        this._policyService.get(param.id, {})
-            .then(payload => {
-              this.policyObject = payload;
-            })
-            .catch(err => {})
+        this._policyService.get(param.id, {}).then(payload => {
+          this.policyObject = payload;
+        }).catch(err => {});
       }
     });
-    if (this.user.userType.name === 'Beneficiary') {
+
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.isBeneficiary = true;
     }
   }
@@ -50,117 +49,75 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
     let user$ =
         Observable.fromPromise(this._userService.get(this.user._id, {}));
 
-    Observable.forkJoin([role$, user$])
-        .subscribe(
-            (results: any) => {
-              this.roles = results[0].data;
-              this.user = results[1];
-            },
-            error => {
+    Observable.forkJoin([role$, user$]).subscribe((results: any) => {
+      this.roles = results[0].data;
+      this.user = results[1];
+    },
+    error => {
 
-            })
+    });
   }
   private _checkRole() {
     try {
       const roles = this.user.roles;
       const roleIds: any[] = [];
-      roles
-          .forEach(x => {
-            roleIds.push(x._id);
-          })
+      roles.forEach(x => {roleIds.push(x._id);});
 
-              this._roleService.find({query: {_id: {$in: roleIds}}})
-          .then((pays: any) => {
-            pays.data.forEach(roleItem => {
-              if (!!roleItem.accessibilities) {
-                const accessibilities = roleItem.accessibilities;
-                this._locker.setObject('accessibilities', accessibilities);
-              }
-              this._toastr.success(
-                  'User acquired a new role successfully!', 'Success!');
-            });
-          })
-          .catch(
-              err => {
+      this._roleService.find({query: {_id: {$in: roleIds}}}).then((pays: any) => {
+        pays.data.forEach(roleItem => {
+          if (!!roleItem.accessibilities) {
+            const accessibilities = roleItem.accessibilities;
+            this._locker.setObject('accessibilities', accessibilities);
+          }
+          this._toastr.success('User acquired a new role successfully!', 'Success!');
+        });
+      }).catch(err => {
 
-              })
+      });
     } catch (error) {
     }
   }
   confirmList() {
     if (this.user.userType.name !== 'Beneficiary') {
-      this._router.navigate(['modules/beneficiary/beneficiaries'])
-          .then(
-              payload => {
+      this._router.navigate(['modules/beneficiary/beneficiaries']).then(payload => {
 
-              })
-          .catch(
-              err => {
-
-              });
+      }).catch(
+      err => {});
     } else {
       let roles: any[] = [];
       if (this.roles.length > 0) {
         roles.push(this.roles[0]);
-        this._userService
-            .patch(
-                this.user._id, {roles: roles, completeRegistration: true}, {})
-            .then(payload => {
-              this._router.navigate(['modules/beneficiary/beneficiaries']);
-            })
-            .catch(
-                err => {
-
-                })
+        this._userService.patch(this.user._id, {roles: roles, completeRegistration: true}, {}).then(payload => {
+          this._router.navigate(['modules/beneficiary/beneficiaries']);
+        }).catch(err => {});
       }
     }
   }
 
   confirmDetails() {
     if (this.user.userType.name !== 'Beneficiary') {
-      this._router.navigate(['modules/beneficiary/beneficiaries'])
-          .then(
-              payload => {
+      this._router.navigate(['modules/beneficiary/beneficiaries']).then(payload => {
 
-              })
-          .catch(
-              err => {
-
-              });
+      }).catch(
+      err => {});
     } else {
       let roles: any[] = [];
       if (this.roles.length > 0) {
         roles.push(this.roles[0]);
-        this._userService
-            .patch(
-                this.user._id, {roles: roles, completeRegistration: true}, {})
-            .then(payload => {
-              this.user = payload;
-              this._checkRole();
-              this._router
-                  .navigate([
-                    '/modules/beneficiary/beneficiaries', this.policyObject._id
-                  ])
-                  .then(
-                      payload => {
+        this._userService.patch(this.user._id, {roles: roles, completeRegistration: true}, {}).then(payload => {
+          this.user = payload;
+          this._checkRole();
+          this._router.navigate(['/modules/beneficiary/beneficiaries', this.policyObject._id]).then(payload => {
 
-                      })
-                  .catch(err2 => {});
-            })
-            .catch(
-                err => {
+          }).catch(err2 => {});
+        }).catch(err => {
 
-                })
+        });
       }
     }
   }
 
   confirmPayments() {
-    this._router
-        .navigate(
-            ['/modules/beneficiary/beneficiaries/' + this.policyObject._id +
-             '/payment'])
-        .then(payload => {})
-        .catch(err2 => {});
+    this._router.navigate([`/modules/beneficiary/beneficiaries/${this.policyObject._id}/payment`]).then(payload => {}).catch(err2 => {});
   }
 }

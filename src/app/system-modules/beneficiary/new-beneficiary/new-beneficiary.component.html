@@ -67,7 +67,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="!tab_confirm" class="btn btn-medium btn-grey-outline" routerLink="/modules/beneficiary/beneficiaries">
+                <div *ngIf="!isBeneficiary || !tab_confirm" class="btn btn-medium btn-grey-outline" routerLink="/modules/beneficiary/beneficiaries">
                     <i class="fa fa-times"></i> CANCEL
                 </div>
             </div>
