@@ -52,7 +52,6 @@ export class NewBeneficiaryComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.user);
     if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.isBeneficiary = true;
     }

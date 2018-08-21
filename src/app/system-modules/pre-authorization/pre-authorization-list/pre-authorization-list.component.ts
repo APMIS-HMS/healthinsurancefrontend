@@ -1,12 +1,13 @@
 import { CoolLocalStorage } from 'angular2-cool-storage';
 import { PreAuthorizationService } from './../../../services/pre-authorization/pre-authorization.service';
 import { SystemModuleService } from './../../../services/common/system-module.service';
-import { TABLE_LIMIT_PER_VIEW } from './../../../services/globals/config';
+import { TABLE_LIMIT_PER_VIEW, CurrentPlaformShortName } from './../../../services/globals/config';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+import { FacilityService } from '../../../services';
 
 @Component({
   selector: 'app-pre-authorization-list',
@@ -14,11 +15,11 @@ import { HeaderEventEmitterService } from './../../../services/event-emitters/he
   styleUrls: ['./pre-authorization-list.component.scss']
 })
 export class PreAuthorizationListComponent implements OnInit {
-
   listsearchControl = new FormControl();
   filterHiaControl = new FormControl('All');
   hospitalControl = new FormControl();
   planControl = new FormControl();
+  currentPlatform: any;
   loading: boolean = true;
   authorizations: any[] = [];
   user:any;
@@ -30,6 +31,7 @@ export class PreAuthorizationListComponent implements OnInit {
 
   constructor(
     private _router: Router,
+    private _facilityService: FacilityService,
     private _headerEventEmitter: HeaderEventEmitterService,
     private _systemService: SystemModuleService,
     private _preAuthorizationService: PreAuthorizationService,
@@ -40,19 +42,13 @@ export class PreAuthorizationListComponent implements OnInit {
     this.user = (<any>this._locker.getObject('auth')).user;
     this._headerEventEmitter.setRouteUrl('Pre-Authorization List');
     this._headerEventEmitter.setMinorRouteUrl('All pre-authorizations');
-    this._getPreAuthorizations();
+
+    this._getCurrentPlatform();
   }
 
-  _getPreAuthorizations() {
-    if (this.user.userType.name === 'Provider') {
-
-    }
+  _getPreAuthorizations(query) {
     this._systemService.on();
-    this._preAuthorizationService.find({query: {
-      $sort: { createdAt: -1 },
-      $limit: this.limit,
-      $skip: this.limit * this.index
-    }}).then((payload: any) => {
+    this._preAuthorizationService.find(query).then((payload: any) => {
       console.log(payload);
       this.loading = false;
       // this.authorizations = payload.data;
@@ -68,9 +64,60 @@ export class PreAuthorizationListComponent implements OnInit {
       }
       this._systemService.off();
     }).catch(err => {
-      console.log(err);
       this._systemService.off();
     });
+  }
+
+  private _getCurrentPlatform() {
+    console.log(this.user);
+    this._facilityService.find({
+        query: {
+          shortName: CurrentPlaformShortName,
+          $select: ['name', 'shortName', 'address.state']
+        }
+      }).then((res: any) => {
+        if (res.data.length > 0) {
+          this.currentPlatform = res.data[0];
+          if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+            this._getPreAuthorizations({
+              query: {
+                'policyId.platformOwnerId._id': this.currentPlatform._id,
+                $sort: { createdAt: -1 },
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            });
+          } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+            this._getPreAuthorizations({
+              query: {
+                'policyId.platformOwnerId._id': this.currentPlatform._id,
+                'policyId.hiaId._id': this.user.userType._id,
+                $sort: { createdAt: -1 },
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            });
+          } else if (!!this.user.userType && this.user.userType.name === 'Provider') {
+            this._getPreAuthorizations({
+              query: {
+                'policyId.platformOwnerId._id': this.currentPlatform._id,
+                'providerFacilityId': this.user.userType._id,
+                $sort: { createdAt: -1 },
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            });
+          } else {
+            this._getPreAuthorizations({
+              query: {
+                $sort: { createdAt: -1 },
+                $limit: this.limit,
+                $skip: this.limit * this.index
+              }
+            });
+          }
+        }
+      }).catch(err => { });
   }
 
   navigate(url: string, id: string) {
@@ -100,13 +147,13 @@ export class PreAuthorizationListComponent implements OnInit {
   }
 
   loadMore() {
-    this._getPreAuthorizations();
+    this._getCurrentPlatform();
   }
 
   reset() {
     this.index = 0;
     this.resetData = true;
-    this._getPreAuthorizations();
+    this._getCurrentPlatform();
     this.showLoadMore = true;
   }
 
