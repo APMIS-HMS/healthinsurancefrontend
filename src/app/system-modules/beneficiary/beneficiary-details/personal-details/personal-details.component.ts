@@ -21,7 +21,7 @@ import { CoolLocalStorage } from 'angular2-cool-storage/src/cool-local-storage';
 })
 export class PersonalDetailsComponent implements OnInit {
   @Input() beneficiary;
-
+  printBeneficiary;
   approvalFormGroup: FormGroup;
   policy: any;
   tab_details = false;
@@ -53,7 +53,6 @@ export class PersonalDetailsComponent implements OnInit {
     this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._route.params.subscribe(param => {
       if (!!param.id) {
-        console.log(param.id)
         this._getBeneficiaryDetails(param.id);
       }
     });
@@ -76,6 +75,7 @@ export class PersonalDetailsComponent implements OnInit {
     let policy$ = Observable.fromPromise(this._policyService.get(policyId, {}));
 
     Observable.forkJoin([policy$]).subscribe((results: any) => {
+      this.printBeneficiary = results[0];
       this.beneficiary = results[0].principalBeneficiary;
       if (this.isCheckIn) {
         this.tabCheckin_click();
@@ -102,6 +102,7 @@ export class PersonalDetailsComponent implements OnInit {
     this.tab_checkin = true;
     this.tab_checkinHistory = false;
   }
+
   openModal(e) {
     this.addApproval = true;
   }
@@ -129,6 +130,39 @@ export class PersonalDetailsComponent implements OnInit {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
+  }
+
+  onClickPrintDocument() {
+    let printContents = document.getElementById('print-section').innerHTML;
+    let popupWin = window.open('', '', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+            .details {
+              margin-top: 10px;
+            }
+            .header {
+              margin-bottom: 20px;
+            }
+            .img-header {
+              text-align: center;
+            }
+            .img-header img {
+              width: 100px;
+              height: 100px;
+            }
+            .text-header {
+              text-align: center
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
   }
 
   onClickDeactivate() {
