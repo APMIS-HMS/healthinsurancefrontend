@@ -1,7 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { SystemModuleService, ClaimService } from '../../../services/index';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+
+import {environment} from '../../../../environments/environment';
+import {ClaimService, SystemModuleService} from '../../../services/index';
+
+import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-claims-payment-details',
@@ -15,13 +18,15 @@ export class ClaimsPaymentDetailsComponent implements OnInit {
   tab_treatment = false;
   tab_complaints = false;
   tab_referals = false;
+  platformName: string;
 
   constructor(
-    private _claimService: ClaimService,
-    private _systemService: SystemModuleService,
-    private _route: ActivatedRoute,
-    private _headerEventEmitter: HeaderEventEmitterService,
+      private _claimService: ClaimService,
+      private _systemService: SystemModuleService,
+      private _route: ActivatedRoute,
+      private _headerEventEmitter: HeaderEventEmitterService,
   ) {
+    this.platformName = environment.platform;
     this._route.params.subscribe(param => {
       if (!!param.id) {
         this._getClaimsDetails(param.id);
@@ -36,15 +41,17 @@ export class ClaimsPaymentDetailsComponent implements OnInit {
 
   private _getClaimsDetails(id) {
     this._systemService.on();
-    this._claimService.get(id, {}).then(res => {
-      console.log(res);
-      this._systemService.off();
-      this.selectedClaim = res;
-      this.tab_details = true;
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    });
+    this._claimService.get(id, {})
+        .then(res => {
+          console.log(res);
+          this._systemService.off();
+          this.selectedClaim = res;
+          this.tab_details = true;
+        })
+        .catch(err => {
+          console.log(err);
+          this._systemService.off();
+        });
   }
 
   onClickQueueForPayment() {
@@ -86,5 +93,4 @@ export class ClaimsPaymentDetailsComponent implements OnInit {
     this.tab_complaints = false;
     this.tab_referals = true;
   }
-
 }

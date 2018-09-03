@@ -8,10 +8,9 @@
 
             <div class="platform-wrap">
                 <div class="platform-logo">
-                    <img src="../../../assets/img/logos/ashia.jpeg" class="shima-logo">
-                    <!-- <img src="../../../assets/img/logos/ashia.jpeg"> -->
+                    <img src="{{platformLogo}}">
                 </div>
-                <div class="platform-label">ANAMBRA STATE HEALTH INSURANCE AGENCY</div>
+                <div class="platform-label">{{title}}</div>
             </div>
         </div>
         <div class="sect-b">
@@ -24,7 +23,7 @@
     </div>
 </div>
 
-<div class="title-tab">
+<div class="title-tab {{titleTabColor}}">
     <div class="app-content-wrap">
         <div class="bar-wrap">
             <div (click)="notifier_hide()" class="bar-left">
@@ -61,8 +60,8 @@
 
                 <div class="icons-wrap">
                     <i (click)="notifier_toggle()" class="fa fa-bell-o" aria-hidden="true">
-                        <span class="notify-count" *ngIf="noUnReadAlert>0">{{noUnReadAlert}}</span>
-                    </i>
+            <span class="notify-count" *ngIf="noUnReadAlert>0">{{noUnReadAlert}}</span>
+          </i>
                 </div>
             </div>
 
@@ -76,6 +75,7 @@
         </div>
     </div>
 </div>
+
 
 <div *ngIf="changePass" class="modal-overlay">
     <div class="modal-wrap shadow-RB">

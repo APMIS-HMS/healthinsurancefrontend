@@ -19,7 +19,7 @@
                         <div class="item-val">{{ beneficiary?.policyId }}</div>
                     </div>
                     <div class="group-item">
-                        <div class="item-label">ASHIA ID:</div>
+                        <div class="item-label">{{platformName}} ID:</div>
                         <div class="item-val">{{ beneficiary?.platformOwnerNumber }}</div>
                     </div>
                     <!-- <div class="group-item">
@@ -96,7 +96,7 @@
                         <div class="item-val">{{ dependant?.policyId }}</div>
                     </div>
                     <div class="group-item">
-                        <div class="item-label">ASHIA ID:</div>
+                        <div class="item-label">{{platformName}} ID:</div>
                         <div class="item-val">{{ dependant.beneficiary?.platformOwnerNumber }}</div>
                     </div>
                     <!-- <div class="group-item">
@@ -168,7 +168,8 @@
                 <div class="group-wrap ">
                     <div class="item-label ">Employer:</div>
                     <div class="item-val ">{{policy?.sponsor?.name}}</div>
-                    <div class="item-val ">{{policy?.sponsor?.address?.street}}, {{policy?.sponsor?.address?.neighbourhood}}, </div>
+                    <div class="item-val ">{{policy?.sponsor?.address?.street}}, {{policy?.sponsor?.address?.neighbourhood}},
+                    </div>
                     <div class="item-val ">{{policy?.sponsor?.address?.city?.name}}</div>
                     <div class="item-val ">{{policy?.sponsor?.address?.state?.name}}.</div>
                     <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>

@@ -79,7 +79,7 @@
                 <td class="td" (click)="navigatePlanDetail(plan)">{{plan.name}}</td>
                 <td class="td" (click)="navigatePlanDetail(plan)">{{plan.planType.name}}</td>
                 <td class="td" (click)="navigatePlanDetail(plan)">0</td>
-                <td class="td" (click)="navigatePlanDetail(plan)">{{ plan.userType?.name === 'Platform Owner' ? 'ASHIA' : plan.userType?.name }}</td>
+                <td class="td" (click)="navigatePlanDetail(plan)">{{ plan.userType?.name === 'Platform Owner' ? platformName : plan.userType?.name }}</td>
                 <!-- <td class="td number">{{getPrice('Week', plan) | number:'1.2-2'}}</td>
                 <td class="td number">{{getPrice('Month', plan) | number:'1.2-2'}}</td>
                 <td class="td number">{{getPrice('Year', plan) | number:'1.2-2'}}</td> -->

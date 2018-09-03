@@ -1,3 +1,6 @@
+
+import { Title } from "@angular/platform-browser";
+import { environment } from "../environments/environment";
 import { Component, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { ISubscription } from 'rxjs/Subscription';
@@ -5,21 +8,31 @@ import swal from 'sweetalert2';
 import { SystemModuleService } from "./services";
 
 @Component({
-	selector: 'app-root',
-	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
+  
 
 export class AppComponent implements OnInit, OnDestroy {
-	title = 'app works!';
+  title = 'app works!';
+  platformName: string;
+  platformLogo: string;
+  secondaryLogo: string;
   private sweetAlertSubscription: ISubscription;
 
   constructor(
+    private systemModuleService: SystemModuleService,
     private vcr: ViewContainerRef,
     private toastr: ToastsManager,
-    private systemModuleService: SystemModuleService
+    private titleService: Title
   ) {
     this.toastr.setRootViewContainerRef(vcr);
+    this.title = environment.title;
+    this.titleService.setTitle(this.title);
+    this.platformName = environment.platform;
+    this.platformLogo = environment.logo;
+    this.secondaryLogo = environment.secondary_logo;
   }
 
   ngOnInit() {

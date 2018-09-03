@@ -4,7 +4,8 @@
             <div class="group-wrap">
                 <div class="group-item">
                     <div class="item-label">Date of Birth:</div>
-                    <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.dateOfBirth | date}}</div>
+                    <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject.personId.dateOfBirth | date}}
+                    </div>
                 </div>
                 <div *ngIf="selectedAuthorization !== undefined" class="group-item">
                     <div class="item-label">Age:</div>
@@ -49,7 +50,7 @@
                     <div class="item-val">{{selectedAuthorization?.policyId.planId.name}}</div>
                 </div>
                 <div class="group-item">
-                    <div class="item-label">Health Care Facility ASHIA ID:</div>
+                    <div class="item-label">Health Care Facility {{platformName}} ID:</div>
                     <div class="item-val">{{selectedAuthorization?.checkedInDetails.providerFacilityId.provider.providerId}}</div>
                 </div>
             </div>
@@ -80,7 +81,8 @@
                     <div class="letering">
                         <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name">{{selectedAuthorization.medicalPersonelName}}</span> Requested Referral Authorization</div>
+                            <span class="letering-name">{{selectedAuthorization.medicalPersonelName}}</span> Requested Referral Authorization
+                        </div>
                     </div>
                 </div>
                 <div class="doc-wrap">

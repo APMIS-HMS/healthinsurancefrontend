@@ -1,3 +1,4 @@
+import { environment } from "../../../../environments/environment";
 import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -40,6 +41,8 @@ export class ListHiaComponent implements OnInit {
   resetData: Boolean;
   index: number = 0;
   currentPlatform: any;
+  platformName: string;
+
   constructor(
     private _router: Router,
     private _headerEventEmitter: HeaderEventEmitterService,
@@ -49,14 +52,16 @@ export class ListHiaComponent implements OnInit {
     private _userTypeService: UserTypeService,
     private _hiaTypeService: HiaTypeService,
     private _locker: CoolLocalStorage
-  ) {}
+  ) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl("HIA List");
     this._headerEventEmitter.setMinorRouteUrl("All HIAs");
     this.user = (<any>this._locker.getObject("auth")).user;
 
-    this._checkUser();
+    this._getCurrentPlatform();
     // this._getUserTypes();
     this._getHiaTypes();
 
