@@ -32,6 +32,17 @@
     align-items: center;
 }
 
+#auth-content-wrapper-apmis {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: $brand-primary-apmis;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #auth-content-wrapper-lagos {
     width: 100vw;
     height: 100vh;

@@ -9,12 +9,12 @@ const authentication = require("feathers-authentication-client");
 import { CoolLocalStorage } from "angular2-cool-storage";
 import { Injectable } from "@angular/core";
 const rx = require("feathers-reactive");
-const RxJS = require('rxjs');
+const RxJS = require("rxjs");
 
 // const HOST = 'http://172.16.16.40:3031'; // Live
 // const HOST = 'http://192.168.1.4:3031'; // Live
-const HOST = 'https://insuranceapi.azurewebsites.net';
-// const HOST = 'http://localhost:3032'; // Your base server URL here
+const HOST = "https://insuranceapi.azurewebsites.net";
+// const HOST = 'http://localhost:3032';  // Your base server URL here
 
 @Injectable()
 export class SocketService {
@@ -30,30 +30,30 @@ export class SocketService {
 
     this._app = feathers()
       .configure(socketio(this.socket))
-      .configure(rx(RxJS, { listStrategy: 'always' }))
+      .configure(rx(RxJS, { listStrategy: "always" }))
       .configure(hooks())
       .configure(authentication({ storage: window.localStorage }));
 
-    this.socket.on('reconnect', value => {
+    this.socket.on("reconnect", value => {
       this.onlineStatus = true;
-      this._systemService.onlineStatusBroadCast({ status: 'On' });
+      this._systemService.onlineStatusBroadCast({ status: "On" });
     });
-    this.socket.on('disconnect', value => {
+    this.socket.on("disconnect", value => {
       this.onlineStatus = false;
-      this._systemService.onlineStatusBroadCast({ status: 'Off' });
+      this._systemService.onlineStatusBroadCast({ status: "Off" });
     });
-    this.socket.on('connect', () => {
+    this.socket.on("connect", () => {
       this.onlineStatus = true;
-      this._systemService.onlineStatusBroadCast({ status: 'On' });
+      this._systemService.onlineStatusBroadCast({ status: "On" });
     });
-    this.socket.on('connecting', value => {});
-    this.socket.on('reauthentication-error', value => {
+    this.socket.on("connecting", value => {});
+    this.socket.on("reauthentication-error", value => {
       this.onlineStatus = false;
-      this._systemService.onlineStatusBroadCast({ status: 'Off' });
+      this._systemService.onlineStatusBroadCast({ status: "Off" });
     });
-    this.socket.on('logout', value => {});
-    this.socket.on('reconnected', value => {});
-    this.socket.on('disconnected', value => {});
+    this.socket.on("logout", value => {});
+    this.socket.on("reconnected", value => {});
+    this.socket.on("disconnected", value => {});
   }
   logOut() {
     this.locker.clear();
@@ -61,20 +61,20 @@ export class SocketService {
   }
   loginIntoApp(query: any) {
     return this._app.authenticate({
-      strategy: 'local',
+      strategy: "local",
       email: query.email,
       password: query.password
     });
   }
   getService(value: any) {
     if (
-      this.locker.getItem('auth') !== undefined &&
-      this.locker.getItem('auth') != null
+      this.locker.getItem("auth") !== undefined &&
+      this.locker.getItem("auth") != null
     ) {
-      const token = this.locker.getItem('auth');
+      const token = this.locker.getItem("auth");
       const copyInvestigation = JSON.parse(token);
       this._app.authenticate({
-        strategy: 'jwt',
+        strategy: "jwt",
         accessToken: copyInvestigation.accessToken
       });
     }
@@ -82,16 +82,16 @@ export class SocketService {
   }
   authenticateUser(service) {
     if (
-      this.locker.getItem('auth') !== undefined &&
-      this.locker.getItem('auth') != null
+      this.locker.getItem("auth") !== undefined &&
+      this.locker.getItem("auth") != null
     ) {
       return new Promise((resolve, reject) => {
-        const token: any = this.locker.getItem('auth');
+        const token: any = this.locker.getItem("auth");
         const copyToken = JSON.parse(token);
         resolve(
           this._app
             .authenticate({
-              strategy: 'jwt',
+              strategy: "jwt",
               accessToken: copyToken.accessToken
             })
             .then(
@@ -108,7 +108,7 @@ export class SocketService {
   }
 }
 
-const superagent = require('superagent');
+const superagent = require("superagent");
 @Injectable()
 export class RestService {
   public _app: any;
@@ -117,19 +117,19 @@ export class RestService {
   }
   constructor(private locker: CoolLocalStorage) {
     if (
-      this.locker.getItem('auth') !== undefined &&
-      this.locker.getItem('auth') != null
+      this.locker.getItem("auth") !== undefined &&
+      this.locker.getItem("auth") != null
     ) {
-      const auth: any = this.locker.getObject('auth');
+      const auth: any = this.locker.getObject("auth");
       this._app = feathers()
         .configure(
           rest(HOST).superagent(superagent, {
             headers: {
-              authorization: 'Bearer ' + auth.accessToken
+              authorization: "Bearer " + auth.accessToken
             }
           })
         ) // Fire up rest
-        .configure(rx(RxJS, { listStrategy: 'always' }))
+        .configure(rx(RxJS, { listStrategy: "always" }))
         .configure(hooks())
         .configure(authentication());
     } else {
@@ -141,26 +141,26 @@ export class RestService {
   }
   loginIntoApp(query) {
     return this._app.authenticate({
-      strategy: 'local',
+      strategy: "local",
       email: query.email,
       password: query.password
     });
   }
   getService(value: any) {
     if (
-      this.locker.getItem('auth') !== undefined &&
-      this.locker.getItem('auth') != null
+      this.locker.getItem("auth") !== undefined &&
+      this.locker.getItem("auth") != null
     ) {
-      const auth: any = this.locker.getObject('auth');
+      const auth: any = this.locker.getObject("auth");
       this._app = feathers()
         .configure(
           rest(HOST).superagent(superagent, {
             headers: {
-              authorization: 'Bearer ' + auth.accessToken
+              authorization: "Bearer " + auth.accessToken
             }
           })
         ) // Fire up rest
-        .configure(rx(RxJS, { listStrategy: 'always' }))
+        .configure(rx(RxJS, { listStrategy: "always" }))
         .configure(hooks())
         .configure(authentication());
     }

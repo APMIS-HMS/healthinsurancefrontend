@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {Title} from '@angular/platform-browser';
-import {Router} from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { Title } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 
-import {environment} from '../../environments/environment';
+import { environment } from "../../environments/environment";
 
 @Component({
-  selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  selector: "app-auth",
+  templateUrl: "./auth.component.html",
+  styleUrls: ["./auth.component.scss"]
 })
 export class AuthComponent implements OnInit {
   tabActive: Boolean = false;
-  tabId: String = '';
+  tabId: String = "";
 
-  title = '';
+  title = "";
   platformName: string;
   platformLogo: string;
   secondaryLogo: string;
@@ -35,18 +35,18 @@ export class AuthComponent implements OnInit {
 
   onClickTab(tab) {
     this.tabActive = true;
-    if (tab === 'login') {
-      this.tabId = 'login';
-    } else if (tab === 'register') {
-      this.tabId = 'register';
+    if (tab === "login") {
+      this.tabId = "login";
+    } else if (tab === "register") {
+      this.tabId = "register";
     }
   }
   private checkPageUrl(param: string) {
     this.tabActive = true;
-    if (param.includes('login')) {
-      this.tabId = 'login';
+    if (param.includes("login")) {
+      this.tabId = "login";
     } else {
-      this.tabId = 'register';
+      this.tabId = "register";
     }
   }
 }

@@ -1,9 +1,9 @@
-import {writeFile} from 'fs';
-import {argv} from 'yargs';
+import { writeFile } from "fs";
+import { argv } from "yargs";
 
 // This is good for local dev environments, when it's better to
 // store a projects environment variables in a .gitignore'd file
-require('dotenv').config();
+require("dotenv").config();
 
 // Would be passed to script like this:
 // `ts-node set-env.ts --environment=dev`
@@ -11,8 +11,12 @@ require('dotenv').config();
 const environment = argv.environment;
 const targetPath = `./src/environments/environment.${environment}.ts`;
 let isProd = false;
-if (environment === 'prod.huwe' || environment === 'prod.lagos' ||
-    environment === 'prod.nhis') {
+if (
+  environment === "prod.huwe" ||
+  environment === "prod.lagos" ||
+  environment === "prod.nhis" ||
+  environment === "prod.apmis"
+) {
   isProd = true;
 }
 
@@ -27,7 +31,7 @@ export const environment = {
   background-color: "${process.env.LASHMA_BACKGROUND_COLOR}"
 };
 `;
-if (environment === 'prod.huwe') {
+if (environment === "prod.huwe") {
   envConfigFile = `
   export const environment = {
     production: ${isProd},
@@ -39,7 +43,7 @@ if (environment === 'prod.huwe') {
     background-color: "${process.env.HUWE_BACKGROUND_COLOR}"
   };
   `;
-} else if (environment === 'prod.lagos') {
+} else if (environment === "prod.lagos") {
   envConfigFile = `
   export const environment = {
     production: ${isProd},
@@ -50,7 +54,7 @@ if (environment === 'prod.huwe') {
     background-color: "${process.env.LASHMA_BACKGROUND_COLOR}"
   };
   `;
-} else if (environment === 'prod.nhis') {
+} else if (environment === "prod.nhis") {
   envConfigFile = `
   export const environment = {
     production: ${isProd},
@@ -59,6 +63,17 @@ if (environment === 'prod.huwe') {
     title: "${process.env.NHIS_TITLE}",
     primary-color: "${process.env.NHIS_TITLE_TAB_COLOR}",
     background-color: "${process.env.NHIS_BACKGROUND_COLOR}"
+  };
+  `;
+} else if (environment === "prod.apmis") {
+  envConfigFile = `
+  export const environment = {
+    production: ${isProd},
+    platform: "${process.env.APMIS_PLATFORM_NAME}",
+    logo: "${process.env.APMIS_LOGO}",
+    title: "${process.env.APMIS_TITLE}",
+    primary-color: "${process.env.APMIS_TITLE_TAB_COLOR}",
+    background-color: "${process.env.APMIS_BACKGROUND_COLOR}"
   };
   `;
 }

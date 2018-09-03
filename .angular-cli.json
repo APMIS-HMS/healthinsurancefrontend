@@ -34,7 +34,8 @@
             "dev": "environments/environment.ts",
             "prod.huwe": "environments/environment.prod.huwe.ts",
             "prod.nhis": "environments/environment.prod.nhis.ts",
-            "prod.lagos": "environments/environment.prod.lagos.ts"
+            "prod.lagos": "environments/environment.prod.lagos.ts",
+            "prod.apmis": "environments/environment.prod.apmis.ts"
         }
     }],
     "e2e": {
