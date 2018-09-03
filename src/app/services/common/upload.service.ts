@@ -14,17 +14,13 @@ export class UploadService {
   upload(formData, id) {
     const host = this._restService.getHost();
     const path = host + '/upload-file';
-    return request
-      .post(path)
-      .send(formData);
+    return request.post(path).send(formData);
   }//uploadexcel
 
   uploadExcelFile(formData) {
     const host = this._restService.getHost();
     const path = host + '/upload-excel';
-    return request
-      .post(path)
-      .send(formData);
+    return request.post(path).send(formData);
   }//uploadexcel
 
   transform(url) {

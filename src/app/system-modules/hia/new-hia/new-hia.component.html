@@ -71,11 +71,11 @@
                 </div>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">City</label>
+                <label class="label">City/Town</label>
                 <div class="inputWrap">
-                    <select formControlName="city" class="form-control" [compareWith]='compare'>
-                        <option value="" selected>Select City</option>
-                        <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
+                    <select formControlName="city" class="form-control" [compareWith]='compareCity'>
+                        <option value="" selected>Select City/Town</option>
+                        <option *ngFor="let town of towns" [ngValue]="town">{{ town.name }}</option>
                     </select>
                     <small class="alert-label" [hidden]="hiaFormGroup.controls.city.valid || hiaFormGroup.controls.city.pristine">
                         Choose city from the dropdown.

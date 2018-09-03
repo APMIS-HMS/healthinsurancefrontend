@@ -37,13 +37,32 @@ export const PAYMENTTYPES = [
   { id: 3, name: "e-Payment", default: true }
 ];
 
-export const CurrentPlaformShortName = "AHIA";
+export const PRE_MEDICAL_CONDITIONS = [
+  { id: 1, name: "Diabetics" },
+  { id: 2, name: "Hypertension" },
+  { id: 3, name: "Sickle Cell" },
+  { id: 4, name: "Cancer" },
+  { id: 5, name: "Kidney Issue" },
+  { id: 6, name: "Liver Issue" }
+];
+
+export const BLOOD_GROUPS = [
+  { id: 1, name: "AA" },
+  { id: 2, name: "AS" },
+  { id: 3, name: "SS" }
+];
+
+export const GENOTYPES = [
+  { id: 1, name: "O+" },
+  { id: 2, name: "A" },
+  { id: 3, name: "O-" }
+];
+
+export const CurrentPlaformShortName = "ASHIA";
 export const FORM_VALIDATION_ERROR_MESSAGE =
   "One or more required fields are missing!";
-export const PAYSTACK_CLIENT_TEST_KEY =
-  "pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85"; //'pk_test_7683929cd561b84d03eab635843f6a21c17dca60';
 export const PAYSTACK_CLIENT_KEY =
-  "pk_live_00bdd029d3651117d27f2b65024af6a9344160e9";
+  "pk_test_7683929cd561b84d03eab635843f6a21c17dca60"; // 'pk_test_3c53bcffeb3c889d04ea0f905c44d36fc342aa85';
 export const FLUTTERWAVE_PUBLIC_KEY =
   "FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X"; // Add public keys generated
 // on your dashboard here

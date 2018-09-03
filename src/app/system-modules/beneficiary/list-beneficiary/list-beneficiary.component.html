@@ -17,32 +17,32 @@
         <div class="input-wrap">
             <label>Type</label>
             <select [formControl]="filterTypeControl" class="form-control">
-                <option value="All" selected>All</option>
-                <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
-            </select>
+        <option value="All" selected>All</option>
+        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>Registered By</label>
             <select [formControl]="createdByControl">
-                <option>All</option>
-            </select>
+        <option>All</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>LGA By</label>
             <select [formControl]="utilizedByControl">
-                <option>All</option>
-            </select>
+        <option>All</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>Status</label>
             <select [formControl]="statusControl">
-                <option selected value="All">All</option>
-                <option value=true>Active</option>
-                <option value=false>Inactive</option>
-            </select>
+        <option selected value="All">All</option>
+        <option value=true>Active</option>
+        <option value=false>Inactive</option>
+      </select>
         </div>
 
         <div (click)="reset()" class="btn btn-medium btn-blue-outline">RESET</div>
@@ -91,8 +91,8 @@
                 <td class="td" (click)="navigateDetailBeneficiary(beneficiary)">{{beneficiary.hia?.name}}</td>
                 <td class="td" (click)="navigateDetailBeneficiary(beneficiary)">
                     <span class="{{ beneficiary.isActive ? 'tbl-status-active': 'tbl-status-inactive' }}">
-                        {{ beneficiary.isActive ? 'Active': 'Inactive' }}
-                    </span>
+            {{ beneficiary.isActive ? 'Active': 'Inactive' }}
+          </span>
                 </td>
                 <td class="td td-icos">
                     <i *ngIf="beneficiary.isPrincipal" class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
@@ -137,8 +137,8 @@
                 <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}">{{beneficiary.personId?.homeAddress?.lga?.name}}</td>
                 <td class="td" routerLink="/modules/beneficiary/beneficiaries/{{ beneficiary._id }}">
                     <span class="{{ beneficiary.isActive ? 'tbl-status-active': 'tbl-status-inactive' }}">
-                            {{ beneficiary.isActive ? 'Active': 'Inactive' }}
-                        </span>
+            {{ beneficiary.isActive ? 'Active': 'Inactive' }}
+          </span>
                 </td>
                 <td class="td td-icos">
                     <i class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>

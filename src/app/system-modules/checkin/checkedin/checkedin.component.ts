@@ -13,14 +13,13 @@ import { IMyDate, IMyDpOptions } from "mydatepicker";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
 import { Subscription } from "rxjs/Rx";
 
-import { environment } from "../../../../environments/environment";
-
 import { CheckIn } from "./../../../models/check-in/check-in";
 import { CheckInService } from "./../../../services/common/check-in.service";
 import { SystemModuleService } from "./../../../services/common/system-module.service";
 import { UploadService } from "./../../../services/common/upload.service";
 import { HeaderEventEmitterService } from "./../../../services/event-emitters/header-event-emitter.service";
 import { TABLE_LIMIT_PER_VIEW } from "./../../../services/globals/config";
+import { environment } from "../../../../environments/environment";
 
 @Component({
   selector: "app-checkedin",

@@ -79,7 +79,6 @@ export class BeneficiaryDetailsComponent implements OnInit {
   }
   private _checkRouterEvent(event: Event) {
     if (event instanceof NavigationEnd) {
-      console.log('fire')
       if (this._router.url.endsWith('checkin')) {
         this.tab_checkinGenerate = false;
         this.tab_checkinHistory = false;

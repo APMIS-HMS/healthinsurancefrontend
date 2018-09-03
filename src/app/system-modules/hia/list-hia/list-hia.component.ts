@@ -1,28 +1,34 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Router} from '@angular/router';
-import {LoadingBarService} from '@ngx-loading-bar/core';
-import {CoolLocalStorage} from 'angular2-cool-storage';
-import {Observable, Subscription} from 'rxjs/Rx';
+import { environment } from "../../../../environments/environment";
+import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
+import { LoadingBarService } from "@ngx-loading-bar/core";
+import { CoolLocalStorage } from "angular2-cool-storage";
+import { Observable, Subscription } from "rxjs/Rx";
 
-import {environment} from '../../../../environments/environment';
-import {FacilityService, HiaTypeService, SystemModuleService, UserTypeService} from '../../../services/index';
+import { CurrentPlaformShortName } from "../../../services/globals/config";
+import {
+  FacilityService,
+  HiaTypeService,
+  SystemModuleService,
+  UserTypeService
+} from "../../../services/index";
 
-import {AuthService} from './../../../auth/services/auth.service';
-import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
-import {TABLE_LIMIT_PER_VIEW} from './../../../services/globals/config';
+import { AuthService } from "./../../../auth/services/auth.service";
+import { HeaderEventEmitterService } from "./../../../services/event-emitters/header-event-emitter.service";
+import { TABLE_LIMIT_PER_VIEW } from "./../../../services/globals/config";
 
 @Component({
-  selector: 'app-list-hia',
-  templateUrl: './list-hia.component.html',
-  styleUrls: ['./list-hia.component.scss']
+  selector: "app-list-hia",
+  templateUrl: "./list-hia.component.html",
+  styleUrls: ["./list-hia.component.scss"]
 })
 export class ListHiaComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterTypeControl = new FormControl('All');
+  filterTypeControl = new FormControl("All");
   createdByControl = new FormControl();
   utilizedByControl = new FormControl();
-  statusControl = new FormControl('All');
+  statusControl = new FormControl("All");
 
   selectedUserType: any;
   hias: any[] = [];
@@ -38,21 +44,22 @@ export class ListHiaComponent implements OnInit {
   platformName: string;
 
   constructor(
-      private _router: Router,
-      private _headerEventEmitter: HeaderEventEmitterService,
-      private _authService: AuthService,
-      private _systemService: SystemModuleService,
-      private _facilityService: FacilityService,
-      private _userTypeService: UserTypeService,
-      private _hiaTypeService: HiaTypeService,
-      private _locker: CoolLocalStorage) {
+    private _router: Router,
+    private _headerEventEmitter: HeaderEventEmitterService,
+    private _authService: AuthService,
+    private _systemService: SystemModuleService,
+    private _facilityService: FacilityService,
+    private _userTypeService: UserTypeService,
+    private _hiaTypeService: HiaTypeService,
+    private _locker: CoolLocalStorage
+  ) {
     this.platformName = environment.platform;
   }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('HIA List');
-    this._headerEventEmitter.setMinorRouteUrl('All HIAs');
-    this.user = (<any>this._locker.getObject('auth')).user;
+    this._headerEventEmitter.setRouteUrl("HIA List");
+    this._headerEventEmitter.setMinorRouteUrl("All HIAs");
+    this.user = (<any>this._locker.getObject("auth")).user;
 
     this._getCurrentPlatform();
     // this._getUserTypes();
@@ -62,185 +69,208 @@ export class ListHiaComponent implements OnInit {
       this._systemService.on();
       if (payload !== undefined) {
         this._facilityService
+          .find({
+            query: {
+              "platformOwnerId._id": this.currentPlatform._id,
+              "facilityType._id": this.selectedUserType._id,
+              $limit: this.limit,
+              $skip: this.limit * this.index
+            }
+          })
+          .then((payload1: any) => {
+            this.hias = payload1.data.filter(function(item) {
+              return item.hia.type.name.toLowerCase() == payload.toLowerCase();
+            });
+          });
+
+        if (payload == "All") {
+          this.index = 0;
+          this._facilityService
             .find({
               query: {
-                'facilityType._id': this.selectedUserType._id,
+                "platformOwnerId._id": this.currentPlatform._id,
+                "facilityType._id": this.selectedUserType._id,
                 $limit: this.limit,
                 $skip: this.limit * this.index
               }
             })
-            .then((payload1: any) => {
-              this.hias = payload1.data.filter(function(item) {
-                return item.hia.type.name.toLowerCase() ==
-                    payload.toLowerCase();
-              });
+            .then((payload2: any) => {
+              this.hias = payload2.data;
             });
-
-        if (payload == 'All') {
-          this._facilityService
-              .find({
-                query: {
-                  'facilityType._id': this.selectedUserType._id,
-                  $limit: this.limit,
-                  $skip: this.limit * this.index
-                }
-              })
-              .then((payload2: any) => {
-                this.hias = payload2.data;
-              });
         }
       }
       this._systemService.off();
     });
 
-    this.listsearchControl.valueChanges.distinctUntilChanged()
-        .debounceTime(200)
-        .switchMap(term => Observable.fromPromise(this._facilityService.find({
-          query: {
-            'facilityType._id': this.selectedUserType._id,
-            $limit: this.limit,
-            $skip: this.limit * this.index
-          }
-        })))
-        .subscribe((payload: any) => {
-          var strVal = this.listsearchControl.value;
-          this.hias = payload.data.filter(function(item) {
-            return (
-                item.name.toLowerCase().includes(strVal.toLowerCase()) ||
-                item.hia.type.name.toLowerCase().includes(
-                    strVal.toLowerCase()) ||
-                item.itContact.lastName.toLowerCase().includes(
-                    strVal.toLowerCase()) ||
-                item.itContact.firstName.toLowerCase().includes(
-                    strVal.toLowerCase()) ||
-                item.itContact.phoneNumber.toLowerCase().includes(
-                    strVal.toLowerCase()) ||
-                item.hia.grade.name.toLowerCase().includes(
-                    strVal.toLowerCase()));
-          });
+    this.listsearchControl.valueChanges
+      .distinctUntilChanged()
+      .debounceTime(200)
+      .switchMap(term =>
+        Observable.fromPromise(
+          this._facilityService.find({
+            query: {
+              "facilityType._id": this.selectedUserType._id,
+              $limit: this.limit,
+              $skip: this.limit * this.index
+            }
+          })
+        )
+      )
+      .subscribe((payload: any) => {
+        var strVal = this.listsearchControl.value;
+        this.hias = payload.data.filter(function(item) {
+          return (
+            item.name.toLowerCase().includes(strVal.toLowerCase()) ||
+            item.hia.type.name.toLowerCase().includes(strVal.toLowerCase()) ||
+            item.itContact.lastName
+              .toLowerCase()
+              .includes(strVal.toLowerCase()) ||
+            item.itContact.firstName
+              .toLowerCase()
+              .includes(strVal.toLowerCase()) ||
+            item.itContact.phoneNumber
+              .toLowerCase()
+              .includes(strVal.toLowerCase()) ||
+            item.hia.grade.name.toLowerCase().includes(strVal.toLowerCase())
+          );
         });
+      });
   }
 
-  private _getCurrentPlatform() {
+  _getCurrentPlatform() {
+    this._systemService.on();
     this._facilityService
-        .findWithOutAuth({query: {shortName: this.platformName}})
-        .then(res => {
-          if (res.data.length > 0) {
-            this.currentPlatform = res.data[0];
-            this._checkUser();
-          }
-        })
-        .catch(err => {});
+      .find({
+        query: {
+          shortName: CurrentPlaformShortName,
+          $select: ["name", "shortName", "address.state"]
+        }
+      })
+      .then((res: any) => {
+        this._systemService.off();
+        if (res.data.length > 0) {
+          this.currentPlatform = res.data[0];
+          this._getHIAs(this.currentPlatform._id);
+        }
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   private _checkUser() {
-    if (this.user !== undefined &&
-        this.user.userType.name !== 'Platform Owner') {
-      if (this.user.userType.name === 'Health Insurance Agent') {
-        this._router.navigate(['/modules/hia/hias', this.user.facilityId._id])
-            .then(res => {
-              this._systemService.off();
-            })
-            .catch(err => {
-              this._systemService.off();
-            });
+    if (
+      this.user !== undefined &&
+      this.user.userType.name !== "Platform Owner"
+    ) {
+      if (this.user.userType.name === "Health Insurance Agent") {
+        this._router
+          .navigate(["/modules/hia/hias", this.user.facilityId._id])
+          .then(res => {
+            this._systemService.off();
+          })
+          .catch(err => {
+            this._systemService.off();
+          });
       }
     } else {
       this._getUserTypes();
     }
   }
 
-  _getHIAs() {
+  _getHIAs(platformOwnerId) {
     this._systemService.on();
     this._facilityService
-        .find({
-          query: {
-            'facilityType._id': this.selectedUserType._id,
-            'platformOwnerId._id': this.currentPlatform._id,
-            $limit: this.limit,
-            $skip: this.limit * this.index
-          }
-        })
-        .then((payload: any) => {
-          this.loading = false;
-          this.hias = payload.data;
-          this._systemService.off();
-        })
-        .catch(error => {
-          this._systemService.off();
-        });
+      .find({
+        query: {
+          "platformOwnerId._id": platformOwnerId,
+          "facilityType._id": this.selectedUserType._id,
+          $limit: this.limit,
+          $skip: this.limit * this.index
+        }
+      })
+      .then((payload: any) => {
+        this._systemService.off();
+        this.loading = false;
+        this.hias = payload.data;
+      })
+      .catch(error => {
+        this._systemService.off();
+      });
   }
 
   private _getUserTypes() {
     this._systemService.on();
     this._userTypeService.find({}).then(
-        (payload: any) => {
-          this._systemService.off();
-          if (payload.data.length > 0) {
-            const index = payload.data.findIndex(
-                x => x.name === 'Health Insurance Agent');
-            if (index > -1) {
-              this.selectedUserType = payload.data[index];
-              this._getHIAs();
-            } else {
-              this.selectedUserType = undefined;
-            }
+      (payload: any) => {
+        this._systemService.off();
+        if (payload.data.length > 0) {
+          const index = payload.data.findIndex(
+            x => x.name === "Health Insurance Agent"
+          );
+          if (index > -1) {
+            this.selectedUserType = payload.data[index];
+            this._getCurrentPlatform();
+          } else {
+            this.selectedUserType = undefined;
           }
-        },
-        error => {
-          this._systemService.off();
-        });
+        }
+      },
+      error => {
+        this._systemService.off();
+      }
+    );
   }
 
   _getHiaTypes() {
     this._systemService.on();
     this._hiaTypeService
-        .find({query: {$limit: this.limit, $skip: this.limit * this.index}})
-        .then((payload: any) => {
-          this._systemService.off();
-          // this.hiaTypes = payload.data;
-          this.totalEntries = payload.total;
-          if (this.resetData !== true) {
-            this.hiaTypes.push(...payload.data);
-          } else {
-            this.resetData = false;
-            this.hiaTypes = payload.data;
-          }
-          if (this.hiaTypes.length >= this.totalEntries) {
-            this.showLoadMore = false;
-          }
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+      .find({ query: { $limit: this.limit, $skip: this.limit * this.index } })
+      .then((payload: any) => {
+        this._systemService.off();
+        // this.hiaTypes = payload.data;
+        this.totalEntries = payload.total;
+        if (this.resetData !== true) {
+          this.hiaTypes.push(...payload.data);
+        } else {
+          this.resetData = false;
+          this.hiaTypes = payload.data;
+        }
+        if (this.hiaTypes.length >= this.totalEntries) {
+          this.showLoadMore = false;
+        }
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   onSelectedStatus(item: any) {
     this._systemService.on();
     this._facilityService
+      .find({
+        query: {
+          "facilityType._id": this.selectedUserType._id,
+          isTokenVerified: item,
+          $limit: this.limit,
+          $skip: this.limit * this.index
+        }
+      })
+      .then((payload: any) => {
+        this.hias = payload.data;
+      });
+    if (item == "All") {
+      this._facilityService
         .find({
           query: {
-            'facilityType._id': this.selectedUserType._id,
-            isTokenVerified: item,
+            "facilityType._id": this.selectedUserType._id,
             $limit: this.limit,
             $skip: this.limit * this.index
           }
         })
-        .then((payload: any) => {
-          this.hias = payload.data;
+        .then((payload2: any) => {
+          this.hias = payload2.data;
         });
-    if (item == 'All') {
-      this._facilityService
-          .find({
-            query: {
-              'facilityType._id': this.selectedUserType._id,
-              $limit: this.limit,
-              $skip: this.limit * this.index
-            }
-          })
-          .then((payload2: any) => {
-            this.hias = payload2.data;
-          });
     }
     this._systemService.off();
   }
@@ -248,64 +278,67 @@ export class ListHiaComponent implements OnInit {
   onSelectedGrade(item: any) {
     this._systemService.on();
     this._facilityService
+      .find({
+        query: {
+          "facilityType._id": this.selectedUserType._id,
+          "hia.grade.name": item,
+          $limit: this.limit,
+          $skip: this.limit * this.index
+        }
+      })
+      .then((payload: any) => {
+        this.hias = payload.data;
+      });
+    if (item == "All") {
+      this._facilityService
         .find({
           query: {
-            'facilityType._id': this.selectedUserType._id,
-            'hia.grade.name': item,
+            "facilityType._id": this.selectedUserType._id,
             $limit: this.limit,
             $skip: this.limit * this.index
           }
         })
-        .then((payload: any) => {
-          this.hias = payload.data;
+        .then((payload2: any) => {
+          this.hias = payload2.data;
         });
-    if (item == 'All') {
-      this._facilityService
-          .find({
-            query: {
-              'facilityType._id': this.selectedUserType._id,
-              $limit: this.limit,
-              $skip: this.limit * this.index
-            }
-          })
-          .then((payload2: any) => {
-            this.hias = payload2.data;
-          });
     }
     this._systemService.off();
   }
 
   navigateNewHIA() {
     this._systemService.on();
-    this._router.navigate(['/modules/hia/new'])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._router
+      .navigate(["/modules/hia/new"])
+      .then(res => {
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   navigateEditHIA(hia) {
     this._systemService.on();
-    this._router.navigate(['/modules/hia/new', hia._id])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._router
+      .navigate(["/modules/hia/new", hia._id])
+      .then(res => {
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   navigateViewHIADetail(hia) {
     this._systemService.on();
-    this._router.navigate(['/modules/hia/hias', hia._id])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._router
+      .navigate(["/modules/hia/hias", hia._id])
+      .then(res => {
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   loadMore() {

@@ -1,120 +1,119 @@
 <div class="pg-title">
     {{selectedBeneficiary?.personId?.lastName}} {{selectedBeneficiary?.personId?.firstName}}</div>
 <div class="pg-subtitle">{{selectedBeneficiary?.personId.email}}</div>
-    
-    
-    <form [formGroup]="frmNok" novalidate>
-    
-        <div formArrayName="dependantArray" class="frmArrayWrap">
-            <div class="frmArray" *ngFor="let dependant of frmNok['controls'].dependantArray['controls']; let i = index;">
-                <div  (click)="closeDependant(dependant, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
-                <div formGroupName="{{i}}">
-                    <div class="frm-item-wrap">
-                        <label class="label">Gender</label>
-                        <div class="input-wrap">
-                            <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
+
+
+<form [formGroup]="frmNok" novalidate>
+    <div formArrayName="dependantArray" class="frmArrayWrap">
+        <div class="frmArray" *ngFor="let dependant of frmNok['controls'].dependantArray['controls']; let i = index;">
+            <div (click)="closeDependant(dependant, i)" class="closeIcon"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
+            <div formGroupName="{{i}}">
+                <div class="frm-item-wrap">
+                    <label class="label">Gender</label>
+                    <div class="input-wrap">
+                        <span style="display:inline-block;margin:0 40px;" *ngFor="let gender of genders;  let i=index">
                                 <label for="bene-male">
-                                    <input style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender, dependant)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
+                                    <input style="width: 30px;display: block;margin: 0 auto;" [checked]="checkGender(gender)" (change)="changeGender($event, gender, dependant)"  type="radio" formControlName="gender" name="gender" id="bene-male" [value]="gender">{{gender.name}}
                                 </label>
                         </span>
-                        </div>
                     </div>
-                    <div class="frm-item-wrap">
-                        <label class="label">Title</label>
-                        <div class="inputWrap">
-                            <select formControlName="title" class="form-control" [compareWith]='compare'>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Title</label>
+                    <div class="inputWrap">
+                        <select formControlName="title" class="form-control" [compareWith]='compare'>
                                 <option  value="" selected>Title</option>
                                 <option *ngFor="let title of titles"  [ngValue]="title">{{title.name}}</option>
                             </select>
-                            <small class="alert-label" [hidden]="dependant.controls.title.valid || dependant.controls.title.pristine">
+                        <small class="alert-label" [hidden]="dependant.controls.title.valid || dependant.controls.title.pristine">
                                     Choose title from dropdown.
                                 </small>
-                        </div>
                     </div>
-                    <div class="frm-item-wrap">
-                        <label class="label">First name</label>
-                        <div class="inputWrap">
-                            <input type="text" formControlName="firstName">
-                            <small class="alert-label" [hidden]="dependant.controls.firstName.valid || dependant.controls.firstName.pristine">
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">First name</label>
+                    <div class="inputWrap">
+                        <input type="text" formControlName="firstName">
+                        <small class="alert-label" [hidden]="dependant.controls.firstName.valid || dependant.controls.firstName.pristine">
                                     This is a required field (minimum 3 and max of 50 characters).
                                 </small>
-                        </div>
                     </div>
-                    <div class="frm-item-wrap">
-                        <label class="label">Middle name <small>(Optional)</small></label>
-                        <div class="inputWrap">
-                            <input type="text" name="middleName" formControlName="middleName">
-                        </div>
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Middle name <small>(Optional)</small></label>
+                    <div class="inputWrap">
+                        <input type="text" name="middleName" formControlName="middleName">
                     </div>
-                    <div class="frm-item-wrap">
-                        <label class="label">Surname</label>
-                        <div class="inputWrap">
-                            <input type="text" name="lastName" formControlName="lastName">
-                            <small class="alert-label" [hidden]="dependant.controls.lastName.valid || dependant.controls.lastName.pristine">
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Surname</label>
+                    <div class="inputWrap">
+                        <input type="text" name="lastName" formControlName="lastName">
+                        <small class="alert-label" [hidden]="dependant.controls.lastName.valid || dependant.controls.lastName.pristine">
                                     This is a required field (minimum 3 and max of 50 characters).
                                 </small>
-                        </div>
                     </div>
-                    <div class="frm-item-wrap">
-                        <label class="label">Email</label>
-                        <div class="inputWrap">
-                            <input type="email" formControlName="email" class="form-control">
-                            <small class="alert-label" [hidden]="dependant.controls.email.valid || dependant.controls.email.pristine">
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Email</label>
+                    <div class="inputWrap">
+                        <input type="email" formControlName="email" class="form-control">
+                        <small class="alert-label" [hidden]="dependant.controls.email.valid || dependant.controls.email.pristine">
                                     Enter a valid email address.
                                 </small>
-                        </div>
                     </div>
-                    <div class="frm-item-wrap">
-                        <label class="label">Phone number</label>
-                        <div class="inputWrap">
-                            <input type="text" formControlName="phonenumber" class="form-control">
-                            <small class="alert-label" [hidden]="dependant.controls.phonenumber.valid || dependant.controls.phonenumber.pristine">
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Phone number</label>
+                    <div class="inputWrap">
+                        <input type="text" formControlName="phonenumber" class="form-control">
+                        <small class="alert-label" [hidden]="dependant.controls.phonenumber.valid || dependant.controls.phonenumber.pristine">
                                     Enter a valid phone number.
                                 </small>
-                        </div>
                     </div>
-                    <div class="frm-item-wrap">
-                        <label class="label">Secondary phone <small>(Optional)</small></label>
-                        <div class="inputWrap">
-                            <input type="text" formControlName="secondaryPhone" class="form-control">
-                            <small class="alert-label" [hidden]="dependant.controls.secondaryPhone.valid || dependant.controls.secondaryPhone.pristine">
+                </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Secondary phone <small>(Optional)</small></label>
+                    <div class="inputWrap">
+                        <input type="text" formControlName="secondaryPhone" class="form-control">
+                        <small class="alert-label" [hidden]="dependant.controls.secondaryPhone.valid || dependant.controls.secondaryPhone.pristine">
                                 Enter a valid  secondary phone number.
                             </small>
-                        </div>
                     </div>
+                </div>
 
-                    <div class="frm-item-wrap">
-                        <label class="label">Nature of Relationship</label>
-                        <div class="inputWrap">
-                            <select formControlName="relationship" class="form-control">
-                                <option  value="" disabled selected>Relationship</option>
-                                <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
-                            </select>
-                        </div>
+                <div class="frm-item-wrap">
+                    <label class="label">Nature of Relationship</label>
+                    <div class="inputWrap">
+                        <select formControlName="relationship" class="form-control" [compareWith]='compare'>
+                            <option  value="" disabled selected>Relationship</option>
+                            <option *ngFor="let relationship of relationships"  [ngValue]="relationship">{{relationship.name}}</option>
+                        </select>
                     </div>
-    
-                    <div class="frm-item-wrap">
-                        <label class="label"></label>
-                        <div class="inputWrap" style="display:flex;justify-content:space-between; width: 30%;">
-                            <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
+                </div>
+
+                <div class="frm-item-wrap">
+                    <label class="label"></label>
+                    <div class="inputWrap" style="display:flex;justify-content:space-between; width: 30%;">
+                        <button [disabled]="!dependant.valid" class="btn btn-medium btn-blue" (click)="push(dependant, dependant.valid);">
                                 Add &nbsp; <i class="fa fa-plus"></i>
                             </button>
-                        </div>
                     </div>
                 </div>
-    
-    
-                <div style="text-align:right;" *ngIf="dependant.controls.readOnly.value ===true && dependant.valid===true && (i+1)===frmNok.controls['dependantArray'].controls.length">
-                    <span (click)="pushNewDependant()" class="txt-link"><i class="fa fa-plus"></i> Another Dependant</span>
-                </div>
+            </div>
+
+
+            <div style="text-align:right;" *ngIf="dependant.controls.readOnly.value ===true && dependant.valid===true && (i+1)===frmNok.controls['dependantArray'].controls.length">
+                <span (click)="pushNewDependant()" class="txt-link"><i class="fa fa-plus"></i> Another Next Of Kin</span>
             </div>
         </div>
-        <div style="margin:10px auto;display:flex;justify-content:space-between;">
-            <button class="btn btn-medium btn-blue" (click)="moveBack()">
-                <i class="fa fa-chevron-left"></i> &nbsp; PREVIOUS  
+    </div>
+    <div style="margin:10px auto;display:flex;justify-content:space-between;">
+        <button class="btn btn-medium btn-blue" (click)="moveBack()">
+                <i class="fa fa-chevron-left"></i> &nbsp; PREVIOUS
             </button>
-            <button [disabled]="!canProceed()" class="btn btn-medium btn-blue" (click)="onClickStepTwo(frmNok);">
+        <button [disabled]="!canProceed()" class="btn btn-medium btn-blue" (click)="onClickStepTwo(frmNok);">
                 NEXT &nbsp; <i class="fa fa-chevron-right"></i>
             </button>
-        </div>
-    </form>
+    </div>
+</form>

@@ -1,9 +1,9 @@
 <div>
     <div class="list-search-wrap">
         <div class="search-wrap">
-            <label class="label-xx">Search:</label>
+            <!-- <label class="label-xx">Search:</label>
             <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="search">
-            <i class="fa fa-search" aria-hidden="true"></i>
+            <i class="fa fa-search" aria-hidden="true"></i> -->
         </div>
 
         <div (click)="navigate('/modules/checkin/new');" class="btn btn-medium btn-blue">
@@ -18,29 +18,29 @@
             <div class="input-wrap">
                 <label>Type</label>
                 <select [formControl]="filterTypeControl">
-            <option>All</option>
-            </select>
+          <option>All</option>
+        </select>
             </div>
 
             <div class="input-wrap">
                 <label>Created By</label>
                 <select [formControl]="createdByControl">
-            <option>All</option>
-            </select>
+          <option>All</option>
+        </select>
             </div>
 
             <div class="input-wrap">
                 <label>Utilized By</label>
                 <select [formControl]="utilizedByControl">
-            <option>All</option>
-            </select>
+          <option>All</option>
+        </select>
             </div>
 
             <div class="input-wrap">
                 <label>Status</label>
                 <select [formControl]="statusControl">
-            <option>All</option>
-            </select>
+          <option>All</option>
+        </select>
             </div>
 
             <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
@@ -76,7 +76,8 @@
                 <tr *ngFor="let check of checkedIns; let i = index;" class="tr hover">
                     <td class="td" (click)="routeBeneficiaryDetails(check)">{{ i+1 }}</td>
                     <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.createdAt | date}}</td>
-                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}</td>
+                    <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.beneficiaryObject?.personId?.lastName}} {{check.beneficiaryObject?.personId?.firstName}}
+                    </td>
                     <td class="td" (click)="routeBeneficiaryDetails(check)">{{check.beneficiaryObject?.platformOwnerNumber}}</td>
                     <td class="td" class="text-center" (click)="routeBeneficiaryDetails(check)">
                         <i *ngIf="check.policyObject?.isPaid" class="fa fa-check green" aria-hidden="true"></i>

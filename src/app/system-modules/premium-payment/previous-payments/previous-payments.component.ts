@@ -6,7 +6,6 @@ import { CoolLocalStorage } from "angular2-cool-storage";
 import { IMyDate, IMyDpOptions } from "mydatepicker";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
-import { environment } from "../../../../environments/environment";
 import {
   ClaimsPaymentService,
   FacilityService,
@@ -16,6 +15,8 @@ import {
 } from "../../../services/index";
 
 import { HeaderEventEmitterService } from "./../../../services/event-emitters/header-event-emitter.service";
+import { CurrentPlaformShortName } from "./../../../services/globals/config";
+import { environment } from "../../../../environments/environment";
 
 @Component({
   selector: "app-previous-payments",

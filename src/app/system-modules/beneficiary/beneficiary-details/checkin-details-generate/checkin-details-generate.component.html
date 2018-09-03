@@ -66,8 +66,8 @@
                     <div class="input-wrap">
                         <input type="text" formControlName="otp" class="form-control">
                         <small class="alert-label" [hidden]="otpFormGroup.controls.otp.valid || otpFormGroup.controls.otp.pristine">
-                            This is a required field.
-                        </small>
+              This is a required field.
+            </small>
                     </div>
                 </div>
                 <div class="frm-item-wrap btn-space">
@@ -86,12 +86,12 @@
                     <label class="label">Health Encounter Type </label>
                     <div class="input-wrap">
                         <select formControlName="encounterType" class="form-control" [compareWith]='compare'>
-                            <option value="" disabled selected>Select Encounter Type</option>
-                            <option *ngFor="let encounter of encounterTypes" [ngValue]="encounter">{{encounter.name}}</option>
-                        </select>
+              <option value="" disabled selected>Select Encounter Type</option>
+              <option *ngFor="let encounter of encounterTypes" [ngValue]="encounter">{{encounter.name}}</option>
+            </select>
                         <small class="alert-label" [hidden]="checkinFormGroup.controls.encounterType.valid || checkinFormGroup.controls.encounterType.pristine">
-                            This is a required field.
-                        </small>
+              This is a required field.
+            </small>
                     </div>
                 </div>
                 <div class="frm-item-wrap">
@@ -99,8 +99,8 @@
                     <div class="input-wrap">
                         <my-date-picker style="width:300px;" name="encounterDate" [options]="myDatePickerOptions" [selDate]="today" formControlName="encounterDate"></my-date-picker>
                         <small class="alert-label" [hidden]="checkinFormGroup.controls.encounterDate.valid || checkinFormGroup.controls.encounterDate.pristine">
-                            This is a required field.
-                        </small>
+              This is a required field.
+            </small>
                     </div>
                 </div>
 

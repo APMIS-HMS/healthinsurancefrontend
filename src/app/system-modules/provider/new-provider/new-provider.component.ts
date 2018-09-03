@@ -1,82 +1,123 @@
-import {Component, ElementRef, OnInit, ViewChild,} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {LoadingBarService} from '@ngx-loading-bar/core';
-import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from "@angular/forms";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { LoadingBarService } from "@ngx-loading-bar/core";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
-import {environment} from '../../../../environments/environment';
-import {HeaderEventEmitterService} from '../../../services/event-emitters/header-event-emitter.service';
-import {FORM_VALIDATION_ERROR_MESSAGE} from '../../../services/globals/config';
+import { HeaderEventEmitterService } from "../../../services/event-emitters/header-event-emitter.service";
+import {
+  HEFAMAA_STATUSES,
+  CurrentPlaformShortName,
+  GRADES
+} from "../../../services/globals/config";
+import { FORM_VALIDATION_ERROR_MESSAGE } from "../../../services/globals/config";
 
-import {Address, BankDetail, CareProvider, Contact, Facility, HIA, Provider} from './../../../models/index';
-import {SystemModuleService} from './../../../services/common/system-module.service';
-import {BankService, ContactPositionService, CountryService, FacilityCategoryService, FacilityOwnershipService, FacilityService, ProviderGradesService, ProviderStatusesService, UploadService, UserTypeService} from './../../../services/index';
+import {
+  Address,
+  BankDetail,
+  CareProvider,
+  Contact,
+  Facility,
+  HIA,
+  Provider
+} from "./../../../models/index";
+import { SystemModuleService } from "./../../../services/common/system-module.service";
+import {
+  BankService,
+  ContactPositionService,
+  CountryService,
+  FacilityCategoryService,
+  FacilityOwnershipService,
+  FacilityService,
+  ProviderGradesService,
+  ProviderStatusesService,
+  UploadService,
+  UserTypeService
+} from "./../../../services/index";
+import { environment } from "../../../../environments/environment";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
 // const PHONE_REGEX = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
-const PHONE_REGEX =
-    /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
+const PHONE_REGEX = /^\+?([0-9]+)\)?[-. ]?([0-9]+)\)?[-. ]?([0-9]+)[-. ]?([0-9]+)$/;
 const NUMERIC_REGEX = /^[0-9]+$/;
 
 @Component({
-  selector: 'app-new-provider',
-  templateUrl: './new-provider.component.html',
-  styleUrls: ['./new-provider.component.scss']
+  selector: "app-new-provider",
+  templateUrl: "./new-provider.component.html",
+  styleUrls: ["./new-provider.component.scss"]
 })
 export class NewProviderComponent implements OnInit {
-  @ViewChild('logoInput') logoInput: ElementRef;
-  @ViewChild('logoImage') logoImage: ElementRef;
-  @ViewChild('bInput') bInput: ElementRef;
-  @ViewChild('bImage') bImage: ElementRef;
-  @ViewChild('hmoInput') hmoInput: ElementRef;
-  @ViewChild('hmoImage') hmoImage: ElementRef;
-  @ViewChild('itInput') itInput: ElementRef;
-  @ViewChild('itImage') itImage: ElementRef;
+  @ViewChild("logoInput")
+  logoInput: ElementRef;
+  @ViewChild("logoImage")
+  logoImage: ElementRef;
+  @ViewChild("bInput")
+  bInput: ElementRef;
+  @ViewChild("bImage")
+  bImage: ElementRef;
+  @ViewChild("hmoInput")
+  hmoInput: ElementRef;
+  @ViewChild("hmoImage")
+  hmoImage: ElementRef;
+  @ViewChild("itInput")
+  itInput: ElementRef;
+  @ViewChild("itImage")
+  itImage: ElementRef;
   providerFormGroup: FormGroup;
   positions: any = [];
   lgas: any = [];
-  countryId: string = '';
-  stateId: string = '';
+  countryId: string = "";
+  stateId: string = "";
   facilityCategories: any = [];
   grades: any = <any>[];
   ownerships: any = [];
   countries: any[] = [];
   states: any[] = [];
   lgs: any[] = [];
+  towns: any[] = [];
   cities: any[] = [];
   banks: any[] = [];
   userTypes: any[] = [];
   contactPositions: any[] = [];
-  HEFAMAA_STATUSES: any = <any>[];
+  ASHIA_STATUSES: any = <any>[];
   selectedUserType: any;
   selectedCountry: any;
   facility: any;
-  selectedFacilityId: string = '';
+  selectedFacilityId: string = "";
   selectedState: any;
   currentPlatform: any;
   btnText: boolean = true;
   btnProcessing: boolean = false;
   disableBtn: boolean = false;
   platformName: any;
+  HEFAMAA_STATUSES: any;
 
   constructor(
-      private _fb: FormBuilder, private _toastr: ToastsManager,
-      private _countryService: CountryService,
-      // private _facilityTypeService: FacilityTypeService,
-      private _headerEventEmitter: HeaderEventEmitterService,
-      private _userTypeService: UserTypeService,
-      private _contactPositionService: ContactPositionService,
-      private _facilityService: FacilityService,
-      private _bankService: BankService,
-      private _countriesService: CountryService,
-      private _facilityCategoryService: FacilityCategoryService,
-      private _facilityOwnershipService: FacilityOwnershipService,
-      private _systemService: SystemModuleService,
-      private _uploadService: UploadService, private _router: Router,
-      private _route: ActivatedRoute,
-      private _providerGradesService: ProviderGradesService,
-      private _providerStatusesService: ProviderStatusesService) {
+    private _fb: FormBuilder,
+    private _toastr: ToastsManager,
+    private _countryService: CountryService,
+    // private _facilityTypeService: FacilityTypeService,
+    private _headerEventEmitter: HeaderEventEmitterService,
+    private _userTypeService: UserTypeService,
+    private _contactPositionService: ContactPositionService,
+    private _facilityService: FacilityService,
+    private _bankService: BankService,
+    private _countriesService: CountryService,
+    private _facilityCategoryService: FacilityCategoryService,
+    private _facilityOwnershipService: FacilityOwnershipService,
+    private _systemService: SystemModuleService,
+    private _uploadService: UploadService,
+    private _router: Router,
+    private _route: ActivatedRoute,
+    private _providerGradesService: ProviderGradesService,
+    private _providerStatusesService: ProviderStatusesService
+  ) {
     this.platformName = environment.platform;
   }
 
@@ -92,8 +133,8 @@ export class NewProviderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl('New Provider');
-    this._headerEventEmitter.setMinorRouteUrl('Create new provider');
+    this._headerEventEmitter.setRouteUrl("New Provider");
+    this._headerEventEmitter.setMinorRouteUrl("Create new provider");
     this._initialiseFormGroup();
     this._getContactPositions();
     this._getCountries();
@@ -109,138 +150,138 @@ export class NewProviderComponent implements OnInit {
   _initialiseFormGroup() {
     this.providerFormGroup = this._fb.group({
       providerName: [
-        this.facility != null ? this.facility.name : '',
+        this.facility != null ? this.facility.name : "",
         [<any>Validators.required]
       ],
       email: [
-        this.facility != null ? this.facility.email : '',
+        this.facility != null ? this.facility.email : "",
         [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
       ],
       address: [
-        this.facility != null ? this.facility.address.street : '',
+        this.facility != null ? this.facility.address.street : "",
         [<any>Validators.required]
       ],
       state: [
-        this.facility != null ? this.facility.address.state : '',
+        this.facility != null ? this.facility.address.state : "",
         [<any>Validators.required]
       ],
       lga: [
-        this.facility != null ? this.facility.address.lga : '',
+        this.facility != null ? this.facility.address.lga : "",
         [<any>Validators.required]
       ],
       city: [
-        this.facility != null ? this.facility.address.city : '',
+        this.facility != null ? this.facility.address.city : "",
         [<any>Validators.required]
       ],
       neighbourhood: [
-        this.facility != null ? this.facility.address.neighbourhood : '',
+        this.facility != null ? this.facility.address.neighbourhood : "",
         [<any>Validators.required]
       ],
       phone: [
-        this.facility != null ? this.facility.phoneNumber : '',
+        this.facility != null ? this.facility.phoneNumber : "",
         [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
       ],
       bc_lname: [
-        this.facility != null ? this.facility.businessContact.lastName : '',
+        this.facility != null ? this.facility.businessContact.lastName : "",
         [<any>Validators.required]
       ],
       bc_fname: [
-        this.facility != null ? this.facility.businessContact.firstName : '',
+        this.facility != null ? this.facility.businessContact.firstName : "",
         [<any>Validators.required]
       ],
       bc_phone: [
-        this.facility != null ? this.facility.businessContact.phoneNumber : '',
+        this.facility != null ? this.facility.businessContact.phoneNumber : "",
         [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
       ],
       // bc_position: [this.facility != null ?
       // this.facility.businessContact.position : '',
       // [<any>Validators.required]],
       bc_email: [
-        this.facility != null ? this.facility.businessContact.email : '',
+        this.facility != null ? this.facility.businessContact.email : "",
         [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
       ],
       hmo_lname: [
-        this.facility != null ? this.facility.hmoContact.lastName : '',
+        this.facility != null ? this.facility.hmoContact.lastName : "",
         [<any>Validators.required]
       ],
       hmo_fname: [
-        this.facility != null ? this.facility.hmoContact.firstName : '',
+        this.facility != null ? this.facility.hmoContact.firstName : "",
         [<any>Validators.required]
       ],
       hmo_phone: [
-        this.facility != null ? this.facility.hmoContact.phoneNumber : '',
+        this.facility != null ? this.facility.hmoContact.phoneNumber : "",
         [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
       ],
       // hmo_position: [this.facility != null ?
       // this.facility.hmoContact.position : '', [<any>Validators.required]],
       hmo_email: [
-        this.facility != null ? this.facility.hmoContact.email : '',
+        this.facility != null ? this.facility.hmoContact.email : "",
         [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
       ],
       it_lname: [
-        this.facility != null ? this.facility.itContact.lastName : '',
+        this.facility != null ? this.facility.itContact.lastName : "",
         [<any>Validators.required]
       ],
       it_fname: [
-        this.facility != null ? this.facility.itContact.firstName : '',
+        this.facility != null ? this.facility.itContact.firstName : "",
         [<any>Validators.required]
       ],
       it_phone: [
-        this.facility != null ? this.facility.itContact.phoneNumber : '',
+        this.facility != null ? this.facility.itContact.phoneNumber : "",
         [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
       ],
       it_position: [
-        this.facility != null ? this.facility.itContact.position : '',
+        this.facility != null ? this.facility.itContact.position : "",
         [<any>Validators.required]
       ],
       it_email: [
-        this.facility != null ? this.facility.itContact.email : '',
+        this.facility != null ? this.facility.itContact.email : "",
         [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
       ],
       type: [
-        this.facility != null ? this.facility.provider.facilityType : '',
+        this.facility != null ? this.facility.provider.facilityType : "",
         [<any>Validators.required]
       ],
       // providerId: [this.facility != null ? this.facility.provider.providerId
       // : '', [<any>Validators.required]],
       hefeemaNumber: [
-        this.facility != null ? this.facility.provider.hefeemaNumber : '',
+        this.facility != null ? this.facility.provider.hefeemaNumber : "",
         [<any>Validators.required]
       ],
       hefeemaStatus: [
-        this.facility != null ? this.facility.provider.hefeemaStatus : '',
+        this.facility != null ? this.facility.provider.hefeemaStatus : "",
         [<any>Validators.required]
       ],
       bank: [
-        this.facility != null ? this.facility.bankDetails.bank : '',
+        this.facility != null ? this.facility.bankDetails.bank : "",
         [<any>Validators.required]
       ],
       bankAccName: [
-        this.facility != null ? this.facility.bankDetails.name : '',
+        this.facility != null ? this.facility.bankDetails.name : "",
         [<any>Validators.required]
       ],
       bankAccNumber: [
-        this.facility != null ? this.facility.bankDetails.accountNumber : '',
+        this.facility != null ? this.facility.bankDetails.accountNumber : "",
         [<any>Validators.required, <any>Validators.pattern(NUMERIC_REGEX)]
       ],
       // cacNumber: [this.facility != null ? this.facility.employer.cacNumber :
       // '', [<any>Validators.required]],
       classification: [
-        this.facility != null ? this.facility.facilityClass : '',
+        this.facility != null ? this.facility.facilityClass : "",
         [<any>Validators.required]
       ],
       grade: [
-        this.facility != null ? this.facility.provider.facilityGrade : '',
+        this.facility != null ? this.facility.provider.facilityGrade : "",
         [<any>Validators.required]
       ],
       ownership: [
-        this.facility != null ? this.facility.provider.facilityOwnership : '',
+        this.facility != null ? this.facility.provider.facilityOwnership : "",
         [<any>Validators.required]
       ],
       comment: [
-        this.facility != null ? this.facility.provider.comment : '',
+        this.facility != null ? this.facility.provider.comment : "",
         [<any>Validators.required]
-      ],
+      ]
 
       // lcda:[<any>Validators.required],
       // ownerName:[<any>Validators.required],
@@ -264,47 +305,55 @@ export class NewProviderComponent implements OnInit {
       // servicesRendered:[<any>Validators.required]
     });
 
-    this.providerFormGroup.controls['state'].valueChanges.subscribe(value => {
+    this.providerFormGroup.controls["state"].valueChanges.subscribe(value => {
       this.selectedState = value;
       if (value !== null && this.selectedCountry !== undefined) {
         this._getLgaAndCities(this.selectedCountry._id, value);
       }
     });
 
+    this.providerFormGroup.controls["lga"].valueChanges.subscribe(value => {
+      if (value !== null) {
+        this.towns = value.towns;
+      }
+    });
+
     if (this.facility !== undefined) {
       this.selectedState = this.facility.address.state;
-      this.providerFormGroup.controls['classification'].setValue(
-          this.facility.provider.facilityClass[0]);
+      this.providerFormGroup.controls["classification"].setValue(
+        this.facility.provider.facilityClass[0]
+      );
     }
   }
 
   _getCurrentPlatform() {
     this._systemService.on();
     this._facilityService
-        .findWithOutAuth({query: {shortName: this.platformName}})
-        .then(res => {
-          if (res.data.length > 0) {
-            this.currentPlatform = res.data[0];
-            this._systemService.off();
-          }
-        })
-        .catch(err => {
+      .findWithOutAuth({ query: { shortName: this.platformName } })
+      .then(res => {
+        if (res.data.length > 0) {
+          this.currentPlatform = res.data[0];
           this._systemService.off();
-        });
+        }
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   _getProviderDetails(routeId) {
     this._systemService.on();
-    this._facilityService.get(routeId, {})
-        .then((res: Facility) => {
-          this._systemService.off();
-          this.facility = res;
-          this._initialiseFormGroup();
-          this._initImages(res);
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._facilityService
+      .get(routeId, {})
+      .then((res: Facility) => {
+        this._systemService.off();
+        this.facility = res;
+        this._initialiseFormGroup();
+        this._initImages(res);
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   compareState(s1: any, s2: any) {
@@ -339,143 +388,156 @@ export class NewProviderComponent implements OnInit {
 
   _getContactPositions() {
     this._systemService.on();
-    this._contactPositionService.find({})
-        .then((payload: any) => {
-          this.contactPositions = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._contactPositionService
+      .find({})
+      .then((payload: any) => {
+        this.contactPositions = payload.data;
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   private _getGrades() {
     this._systemService.on();
-    this._providerGradesService.find({})
-        .then((payload: any) => {
-          this.grades = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._providerGradesService
+      .find({})
+      .then((payload: any) => {
+        this.grades = payload.data;
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   private _getStatuses() {
     this._systemService.on();
-    this._providerStatusesService.find({})
-        .then((payload: any) => {
-          this.HEFAMAA_STATUSES = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._providerStatusesService
+      .find({})
+      .then((payload: any) => {
+        this.HEFAMAA_STATUSES = payload.data;
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   private _getUserTypes() {
     this._systemService.on();
     this._userTypeService.findAll().then(
-        (payload: any) => {
-          this._systemService.off();
-          if (payload.data.length > 0) {
-            this.userTypes = payload.data;
-            const index = payload.data.findIndex(x => x.name === 'Provider');
-            if (index > -1) {
-              this.selectedUserType = payload.data[index];
-              this.providerFormGroup.controls['type'].setValue(
-                  this.selectedUserType);
-            } else {
-              this.selectedUserType = undefined;
-              this.providerFormGroup.controls['type'].reset();
-            }
+      (payload: any) => {
+        this._systemService.off();
+        if (payload.data.length > 0) {
+          this.userTypes = payload.data;
+          const index = payload.data.findIndex(x => x.name === "Provider");
+          if (index > -1) {
+            this.selectedUserType = payload.data[index];
+            this.providerFormGroup.controls["type"].setValue(
+              this.selectedUserType
+            );
+          } else {
+            this.selectedUserType = undefined;
+            this.providerFormGroup.controls["type"].reset();
           }
-        },
-        error => {
-          this._systemService.off();
-        });
+        }
+      },
+      error => {
+        this._systemService.off();
+      }
+    );
   }
   private _getCountries() {
     this._systemService.on();
-    this._countriesService.find({query: {$limit: 200, $select: {'states': 0}}})
-        .then((payload: any) => {
-          this._systemService.off();
-          this.countries = payload.data;
-          const index = this.countries.findIndex(x => x.name === 'Nigeria');
-          if (index > -1) {
-            this.selectedCountry = this.countries[index];
-            this._getStates(this.selectedCountry._id);
-          }
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._countriesService
+      .find({ query: { $limit: 200, $select: { states: 0 } } })
+      .then((payload: any) => {
+        this._systemService.off();
+        this.countries = payload.data;
+        const index = this.countries.findIndex(x => x.name === "Nigeria");
+        if (index > -1) {
+          this.selectedCountry = this.countries[index];
+          this._getStates(this.selectedCountry._id);
+        }
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
   private _getStates(_id) {
     this._systemService.on();
     this._countriesService
-        .find({
-          query: {
-            _id: _id,
-            $limit: 200,
-            $select: {'states.cities': 0, 'states.lgs': 0}
-          }
-        })
-        .then((payload: any) => {
-          this._systemService.off();
-          if (payload.data.length > 0) {
-            this.states = payload.data[0].states;
-          }
-        })
-        .catch(error => {
-          this._systemService.off();
-        });
+      .find({
+        query: {
+          _id: _id,
+          $limit: 200,
+          $select: { "states.cities": 0, "states.lgs": 0 }
+        }
+      })
+      .then((payload: any) => {
+        this._systemService.off();
+        if (payload.data.length > 0) {
+          this.states = payload.data[0].states;
+        }
+      })
+      .catch(error => {
+        this._systemService.off();
+      });
   }
 
   _getLgaAndCities(_id, state) {
     this._systemService.on();
     this._countriesService
-        .find({
-          query:
-              {_id: _id, 'states.name': state.name, $select: {'states.$': 1}}
-        })
-        .then((payload: any) => {
-          this._systemService.off();
-          if (payload.data.length > 0) {
-            const states = payload.data[0].states;
-            if (states.length > 0) {
-              this.cities = states[0].cities;
-              this.lgs = states[0].lgs;
-            }
+      .find({
+        query: {
+          _id: _id,
+          "states.name": state.name,
+          $select: { "states.$": 1 }
+        }
+      })
+      .then((payload: any) => {
+        this._systemService.off();
+        if (payload.data.length > 0) {
+          const states = payload.data[0].states;
+          if (states.length > 0) {
+            this.cities = states[0].cities;
+            this.lgs = states[0].lgs;
           }
-        })
-        .catch(error => {
-          this._systemService.off();
-        });
+        }
+      })
+      .catch(error => {
+        this._systemService.off();
+      });
   }
   _getBanks() {
     this._systemService.on();
-    this._bankService.find({query: {$limit: 200}})
-        .then((payload: any) => {
-          this._systemService.off();
-          this.banks = payload.data;
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._bankService
+      .find({ query: { $limit: 200 } })
+      .then((payload: any) => {
+        this._systemService.off();
+        this.banks = payload.data;
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   _extractBusinessContact(businessContact?: Contact) {
     if (businessContact === undefined) {
       businessContact = <Contact>{};
     }
-    businessContact.lastName =
-        this.providerFormGroup.controls['bc_lname'].value;
-    businessContact.firstName =
-        this.providerFormGroup.controls['bc_fname'].value;
-    businessContact.email = this.providerFormGroup.controls['bc_email'].value;
-    businessContact.phoneNumber =
-        this.providerFormGroup.controls['bc_phone'].value;
+    businessContact.lastName = this.providerFormGroup.controls[
+      "bc_lname"
+    ].value;
+    businessContact.firstName = this.providerFormGroup.controls[
+      "bc_fname"
+    ].value;
+    businessContact.email = this.providerFormGroup.controls["bc_email"].value;
+    businessContact.phoneNumber = this.providerFormGroup.controls[
+      "bc_phone"
+    ].value;
     // businessContact.position =
     // this.providerFormGroup.controls['bc_position'].value;
     return businessContact;
@@ -485,10 +547,10 @@ export class NewProviderComponent implements OnInit {
     if (hmoContact === undefined) {
       hmoContact = <Contact>{};
     }
-    hmoContact.lastName = this.providerFormGroup.controls['hmo_lname'].value;
-    hmoContact.firstName = this.providerFormGroup.controls['hmo_fname'].value;
-    hmoContact.email = this.providerFormGroup.controls['hmo_email'].value;
-    hmoContact.phoneNumber = this.providerFormGroup.controls['hmo_phone'].value;
+    hmoContact.lastName = this.providerFormGroup.controls["hmo_lname"].value;
+    hmoContact.firstName = this.providerFormGroup.controls["hmo_fname"].value;
+    hmoContact.email = this.providerFormGroup.controls["hmo_email"].value;
+    hmoContact.phoneNumber = this.providerFormGroup.controls["hmo_phone"].value;
     // hmoContact.position =
     // this.providerFormGroup.controls['hmo_position'].value;
     return hmoContact;
@@ -497,21 +559,22 @@ export class NewProviderComponent implements OnInit {
     if (itContact === undefined) {
       itContact = <Contact>{};
     }
-    itContact.lastName = this.providerFormGroup.controls['it_lname'].value;
-    itContact.firstName = this.providerFormGroup.controls['it_fname'].value;
-    itContact.email = this.providerFormGroup.controls['it_email'].value;
-    itContact.phoneNumber = this.providerFormGroup.controls['it_phone'].value;
-    itContact.position = this.providerFormGroup.controls['it_position'].value;
+    itContact.lastName = this.providerFormGroup.controls["it_lname"].value;
+    itContact.firstName = this.providerFormGroup.controls["it_fname"].value;
+    itContact.email = this.providerFormGroup.controls["it_email"].value;
+    itContact.phoneNumber = this.providerFormGroup.controls["it_phone"].value;
+    itContact.position = this.providerFormGroup.controls["it_position"].value;
     return itContact;
   }
   _extractBankDetail(bankDetail?: BankDetail) {
     if (bankDetail === undefined) {
       bankDetail = <BankDetail>{};
     }
-    bankDetail.accountNumber =
-        this.providerFormGroup.controls['bankAccNumber'].value;
-    bankDetail.bank = this.providerFormGroup.controls['bank'].value;
-    bankDetail.name = this.providerFormGroup.controls['bankAccName'].value;
+    bankDetail.accountNumber = this.providerFormGroup.controls[
+      "bankAccNumber"
+    ].value;
+    bankDetail.bank = this.providerFormGroup.controls["bank"].value;
+    bankDetail.name = this.providerFormGroup.controls["bankAccName"].value;
     return bankDetail;
   }
 
@@ -519,12 +582,14 @@ export class NewProviderComponent implements OnInit {
     if (address === undefined) {
       address = <Address>{};
     }
-    address.city = this.providerFormGroup.controls['city'].value;
-    address.lga = this.providerFormGroup.controls['lga'].value;
-    address.neighbourhood =
-        this.providerFormGroup.controls['neighbourhood'].value;
-    address.state = this.providerFormGroup.controls['state'].value;
-    address.street = this.providerFormGroup.controls['address'].value;
+    delete this.providerFormGroup.controls["lga"].value.towns;
+    address.city = this.providerFormGroup.controls["city"].value;
+    address.lga = this.providerFormGroup.controls["lga"].value;
+    address.neighbourhood = this.providerFormGroup.controls[
+      "neighbourhood"
+    ].value;
+    address.state = this.providerFormGroup.controls["state"].value;
+    address.street = this.providerFormGroup.controls["address"].value;
     return address;
   }
   _extractProvider(provider?: Provider) {
@@ -532,18 +597,22 @@ export class NewProviderComponent implements OnInit {
       provider = <Provider>{};
     }
 
-    provider.facilityOwnership =
-        this.providerFormGroup.controls['ownership'].value;
-    provider.facilityType = this.providerFormGroup.controls['type'].value;
-    provider.facilityClass =
-        this.providerFormGroup.controls['classification'].value;
-    provider.facilityGrade = this.providerFormGroup.controls['grade'].value;
-    provider.hefeemaNumber =
-        this.providerFormGroup.controls['hefeemaNumber'].value;
-    provider.hefeemaStatus =
-        this.providerFormGroup.controls['hefeemaStatus'].value;
+    provider.facilityOwnership = this.providerFormGroup.controls[
+      "ownership"
+    ].value;
+    provider.facilityType = this.providerFormGroup.controls["type"].value;
+    provider.facilityClass = this.providerFormGroup.controls[
+      "classification"
+    ].value;
+    provider.facilityGrade = this.providerFormGroup.controls["grade"].value;
+    provider.hefeemaNumber = this.providerFormGroup.controls[
+      "hefeemaNumber"
+    ].value;
+    provider.hefeemaStatus = this.providerFormGroup.controls[
+      "hefeemaStatus"
+    ].value;
     // provider.lasrraId = this.providerFormGroup.controls['lasrraId'].value;
-    provider.comment = this.providerFormGroup.controls['comment'].value;
+    provider.comment = this.providerFormGroup.controls["comment"].value;
     return provider;
   }
 
@@ -564,9 +633,9 @@ export class NewProviderComponent implements OnInit {
     facility.businessContact = businessContact;
     facility.itContact = itContact;
     facility.provider = provider;
-    facility.email = this.providerFormGroup.controls['email'].value;
-    facility.name = this.providerFormGroup.controls['providerName'].value;
-    facility.phoneNumber = this.providerFormGroup.controls['phone'].value;
+    facility.email = this.providerFormGroup.controls["email"].value;
+    facility.name = this.providerFormGroup.controls["providerName"].value;
+    facility.phoneNumber = this.providerFormGroup.controls["phone"].value;
     facility.facilityType = this.selectedUserType;
 
     return facility;
@@ -574,26 +643,28 @@ export class NewProviderComponent implements OnInit {
 
   _getFacilityCategories() {
     this._systemService.on();
-    this._facilityCategoryService.find({})
-        .then((payload: any) => {
-          this.facilityCategories = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+    this._facilityCategoryService
+      .find({})
+      .then((payload: any) => {
+        this.facilityCategories = payload.data;
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   _getFacilityOwnerships() {
     this._systemService.on();
-    this._facilityOwnershipService.find({})
-        .then((payload: any) => {
-          this.ownerships = payload.data;
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        })
+    this._facilityOwnershipService
+      .find({})
+      .then((payload: any) => {
+        this.ownerships = payload.data;
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   onClickSaveProvider(value: any, valid: boolean) {
@@ -606,132 +677,158 @@ export class NewProviderComponent implements OnInit {
       let facility = this._extractFacility();
       if (!!this.facility) {
         // Edit Provider.
-        Promise
-            .all([
-              this.uploadLogo(), this.uploadBContact(), this.uploadHmoContact(),
-              this.uploadItContact()
-            ])
-            .then((allResult: any) => {
-              if (allResult[0] !== undefined &&
-                  allResult[0].body[0] !== undefined &&
-                  allResult[0].body.length > 0) {
-                facility.logo = allResult[0].body[0].file;
-              }
-              // Business Contact Image
-              if (allResult[1] !== undefined &&
-                  allResult[1].body[0] !== undefined &&
-                  allResult[1].body.length > 0) {
-                facility.businessContact.image = allResult[1].body[0].file;
-              }
-              // HMO Contact Image.
-              if (allResult[2] !== undefined &&
-                  allResult[2].body[0] !== undefined &&
-                  allResult[2].body.length > 0) {
-                facility.hmoContact.image = allResult[2].body[0].file;
-              }
-              // IT Contact Image.
-              if (allResult[3] !== undefined &&
-                  allResult[3].body[0] !== undefined &&
-                  allResult[3].body.length > 0) {
-                facility.itContact.image = allResult[3].body[0].file;
-              }
+        Promise.all([
+          this.uploadLogo(),
+          this.uploadBContact(),
+          this.uploadHmoContact(),
+          this.uploadItContact()
+        ]).then((allResult: any) => {
+          if (
+            allResult[0] !== undefined &&
+            allResult[0].body[0] !== undefined &&
+            allResult[0].body.length > 0
+          ) {
+            facility.logo = allResult[0].body[0].file;
+          }
+          // Business Contact Image
+          if (
+            allResult[1] !== undefined &&
+            allResult[1].body[0] !== undefined &&
+            allResult[1].body.length > 0
+          ) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // HMO Contact Image.
+          if (
+            allResult[2] !== undefined &&
+            allResult[2].body[0] !== undefined &&
+            allResult[2].body.length > 0
+          ) {
+            facility.hmoContact.image = allResult[2].body[0].file;
+          }
+          // IT Contact Image.
+          if (
+            allResult[3] !== undefined &&
+            allResult[3].body[0] !== undefined &&
+            allResult[3].body.length > 0
+          ) {
+            facility.itContact.image = allResult[3].body[0].file;
+          }
 
-              facility._id = this.selectedFacilityId;
-              facility.platformOwnerId = this.currentPlatform;
-              facility.provider.providerId = this.facility.provider.providerId;
-              this._facilityService.update(facility)
-                  .then((payload: any) => {
-                    this._systemService.off();
-                    this._toastr.info(
-                        'Navigating to provider details page...', 'Navigate!');
-                    this.navigateProviders(
-                        '/modules/provider/providers/', +payload._id);
-                    this.btnText = true;
-                    this.btnProcessing = false;
-                    this.disableBtn = false;
-                    this._toastr.success(
-                        'Care Provider has been updated successfully!',
-                        'Success!');
-                    this.providerFormGroup.controls['classification'].setValue(
-                        'primary');
-                  })
-                  .catch(err => {
-                    this._systemService.off();
-                    this.btnText = true;
-                    this.btnProcessing = false;
-                    this.disableBtn = false;
-                    if (err == 'Error: This email already exist') {
-                      this._toastr.error(
-                          'This email alreay exist!', 'Email exists!');
-                    } else {
-                      this._toastr.error(
-                          'We could not save your data. Something went wrong!',
-                          'Error!');
-                    }
-                  });
+          facility._id = this.selectedFacilityId;
+          facility.platformOwnerId = this.currentPlatform;
+          facility.provider.providerId = this.facility.provider.providerId;
+          this._facilityService
+            .update(facility)
+            .then((payload: any) => {
+              this._systemService.off();
+              this._toastr.info(
+                "Navigating to provider details page...",
+                "Navigate!"
+              );
+              this.navigateProviders(
+                "/modules/provider/providers/",
+                +payload._id
+              );
+              this.btnText = true;
+              this.btnProcessing = false;
+              this.disableBtn = false;
+              this._toastr.success(
+                "Care Provider has been updated successfully!",
+                "Success!"
+              );
+              this.providerFormGroup.controls["classification"].setValue(
+                "primary"
+              );
+            })
+            .catch(err => {
+              this._systemService.off();
+              this.btnText = true;
+              this.btnProcessing = false;
+              this.disableBtn = false;
+              if (err == "Error: This email already exist") {
+                this._toastr.error("This email alreay exist!", "Email exists!");
+              } else {
+                this._toastr.error(
+                  "We could not save your data. Something went wrong!",
+                  "Error!"
+                );
+              }
             });
+        });
       } else {
         // Create Provider
-        Promise
-            .all([
-              this.uploadLogo(), this.uploadBContact(), this.uploadHmoContact(),
-              this.uploadItContact()
-            ])
-            .then((allResult: any) => {
-              if (allResult[0] !== undefined &&
-                  allResult[0].body[0] !== undefined &&
-                  allResult[0].body.length > 0) {
-                facility.logo = allResult[0].body[0].file;
-              }
-              // Business Contact Image
-              if (allResult[1] !== undefined &&
-                  allResult[1].body[0] !== undefined &&
-                  allResult[1].body.length > 0) {
-                facility.businessContact.image = allResult[1].body[0].file;
-              }
-              // HMO Contact Image.
-              if (allResult[2] !== undefined &&
-                  allResult[2].body[0] !== undefined &&
-                  allResult[2].body.length > 0) {
-                facility.hmoContact.image = allResult[2].body[0].file;
-              }
-              // IT Contact Image.
-              if (allResult[3] !== undefined &&
-                  allResult[3].body[0] !== undefined &&
-                  allResult[3].body.length > 0) {
-                facility.itContact.image = allResult[3].body[0].file;
-              }
+        Promise.all([
+          this.uploadLogo(),
+          this.uploadBContact(),
+          this.uploadHmoContact(),
+          this.uploadItContact()
+        ]).then((allResult: any) => {
+          if (
+            allResult[0] !== undefined &&
+            allResult[0].body[0] !== undefined &&
+            allResult[0].body.length > 0
+          ) {
+            facility.logo = allResult[0].body[0].file;
+          }
+          // Business Contact Image
+          if (
+            allResult[1] !== undefined &&
+            allResult[1].body[0] !== undefined &&
+            allResult[1].body.length > 0
+          ) {
+            facility.businessContact.image = allResult[1].body[0].file;
+          }
+          // HMO Contact Image.
+          if (
+            allResult[2] !== undefined &&
+            allResult[2].body[0] !== undefined &&
+            allResult[2].body.length > 0
+          ) {
+            facility.hmoContact.image = allResult[2].body[0].file;
+          }
+          // IT Contact Image.
+          if (
+            allResult[3] !== undefined &&
+            allResult[3].body[0] !== undefined &&
+            allResult[3].body.length > 0
+          ) {
+            facility.itContact.image = allResult[3].body[0].file;
+          }
 
-              facility.platformOwnerId = this.currentPlatform;
-              this._facilityService.create(facility)
-                  .then(payload => {
-                    this._systemService.off();
-                    this.btnText = true;
-                    this.btnProcessing = false;
-                    this.disableBtn = false;
-                    this._toastr.success(
-                        'Care Provider has been created successfully!',
-                        'Success!');
-                    // this.providerFormGroup.reset();
-                    this.providerFormGroup.controls['classification'].setValue(
-                        'primary');
-                    this._router.navigate(['/modules/provider/providers']);
-                  })
-                  .catch(err => {
-                    this._systemService.off();
-                    this.btnText = true;
-                    this.btnProcessing = false;
-                    this.disableBtn = false;
-                    if (err == 'Error: This email already exist') {
-                      this._toastr.error(
-                          'This email alreay exist!', 'Email exists!');
-                    } else {
-                      this._toastr.error(
-                          'We could not save your data. Something went wrong!',
-                          'Error!');
-                    }
-                  });
+          facility.platformOwnerId = this.currentPlatform;
+          this._facilityService
+            .create(facility)
+            .then(payload => {
+              this._systemService.off();
+              this.btnText = true;
+              this.btnProcessing = false;
+              this.disableBtn = false;
+              this._toastr.success(
+                "Care Provider has been created successfully!",
+                "Success!"
+              );
+              // this.providerFormGroup.reset();
+              this.providerFormGroup.controls["classification"].setValue(
+                "primary"
+              );
+              this._router.navigate(["/modules/provider/providers"]);
+            })
+            .catch(err => {
+              this._systemService.off();
+              this.btnText = true;
+              this.btnProcessing = false;
+              this.disableBtn = false;
+              if (err == "Error: This email already exist") {
+                this._toastr.error("This email alreay exist!", "Email exists!");
+              } else {
+                this._toastr.error(
+                  "We could not save your data. Something went wrong!",
+                  "Error!"
+                );
+              }
             });
+        });
       }
     } else {
       this._systemService.off();
@@ -740,7 +837,7 @@ export class NewProviderComponent implements OnInit {
       Object.keys(this.providerFormGroup.controls).forEach((field, i) => {
         const control = this.providerFormGroup.get(field);
         if (!control.valid) {
-          control.markAsDirty({onlySelf: true});
+          control.markAsDirty({ onlySelf: true });
           counter = counter + 1;
         }
       });
@@ -749,16 +846,16 @@ export class NewProviderComponent implements OnInit {
 
   showImageBrowseDlg(context) {
     switch (context) {
-      case 'b-contact':
+      case "b-contact":
         this.bInput.nativeElement.click();
         break;
-      case 'it-contact':
+      case "it-contact":
         this.itInput.nativeElement.click();
         break;
-      case 'hmo-contact':
+      case "hmo-contact":
         this.hmoInput.nativeElement.click();
         break;
-      case 'logo':
+      case "logo":
         this.logoInput.nativeElement.click();
         break;
     }
@@ -767,7 +864,7 @@ export class NewProviderComponent implements OnInit {
   readURL(input) {
     this._systemService.on();
     switch (input) {
-      case 'b-contact':
+      case "b-contact":
         input = this.bInput.nativeElement;
         if (input.files && input.files[0]) {
           var reader = new FileReader();
@@ -780,7 +877,7 @@ export class NewProviderComponent implements OnInit {
           reader.readAsDataURL(input.files[0]);
         }
         break;
-      case 'it-contact':
+      case "it-contact":
         input = this.itInput.nativeElement;
         if (input.files && input.files[0]) {
           var reader = new FileReader();
@@ -793,7 +890,7 @@ export class NewProviderComponent implements OnInit {
           reader.readAsDataURL(input.files[0]);
         }
         break;
-      case 'hmo-contact':
+      case "hmo-contact":
         input = this.hmoInput.nativeElement;
         if (input.files && input.files[0]) {
           var reader = new FileReader();
@@ -806,7 +903,7 @@ export class NewProviderComponent implements OnInit {
           reader.readAsDataURL(input.files[0]);
         }
         break;
-      case 'logo':
+      case "logo":
         input = this.logoInput.nativeElement;
         if (input.files && input.files[0]) {
           var reader = new FileReader();
@@ -826,10 +923,11 @@ export class NewProviderComponent implements OnInit {
     let logoBrowser = this.logoInput.nativeElement;
     if (logoBrowser.files && logoBrowser.files[0]) {
       const formData = new FormData();
-      formData.append('platform', logoBrowser.files[0]);
+      formData.append("platform", logoBrowser.files[0]);
       return new Promise((resolve, reject) => {
         resolve(
-            this._uploadService.upload(formData, this.selectedUserType._id));
+          this._uploadService.upload(formData, this.selectedUserType._id)
+        );
       });
     }
   }
@@ -838,10 +936,11 @@ export class NewProviderComponent implements OnInit {
     let itBrowser = this.itInput.nativeElement;
     if (itBrowser.files && itBrowser.files[0]) {
       const formData = new FormData();
-      formData.append('platform', itBrowser.files[0]);
+      formData.append("platform", itBrowser.files[0]);
       return new Promise((resolve, reject) => {
         resolve(
-            this._uploadService.upload(formData, this.selectedUserType._id));
+          this._uploadService.upload(formData, this.selectedUserType._id)
+        );
       });
     }
   }
@@ -850,10 +949,11 @@ export class NewProviderComponent implements OnInit {
     let itBrowser = this.itInput.nativeElement;
     if (itBrowser.files && itBrowser.files[0]) {
       const formData = new FormData();
-      formData.append('platform', itBrowser.files[0]);
+      formData.append("platform", itBrowser.files[0]);
       return new Promise((resolve, reject) => {
         resolve(
-            this._uploadService.upload(formData, this.selectedUserType._id));
+          this._uploadService.upload(formData, this.selectedUserType._id)
+        );
       });
     }
   }
@@ -862,10 +962,11 @@ export class NewProviderComponent implements OnInit {
     let bBrowser = this.bInput.nativeElement;
     if (bBrowser.files && bBrowser.files[0]) {
       const formData = new FormData();
-      formData.append('platform', bBrowser.files[0]);
+      formData.append("platform", bBrowser.files[0]);
       return new Promise((resolve, reject) => {
         resolve(
-            this._uploadService.upload(formData, this.selectedUserType._id));
+          this._uploadService.upload(formData, this.selectedUserType._id)
+        );
       });
     }
   }
@@ -889,22 +990,24 @@ export class NewProviderComponent implements OnInit {
   navigateProviders(path, routeId?) {
     if (!!routeId) {
       this._systemService.on();
-      this._router.navigate([path + routeId])
-          .then(res => {
-            this._systemService.off();
-          })
-          .catch(err => {
-            this._systemService.off();
-          });
+      this._router
+        .navigate([path + routeId])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
     } else {
       this._systemService.on();
-      this._router.navigate([path])
-          .then(res => {
-            this._systemService.off();
-          })
-          .catch(err => {
-            this._systemService.off();
-          });
+      this._router
+        .navigate([path])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
     }
   }
 }

@@ -48,16 +48,19 @@
                                     </tr>
                                 </thead>
                                 <tbody class="tbody">
+                                    <tr *ngIf="selectedUser?.roles.length === 0" class="tr">
+                                        <td class="td" colspan="2" style="text-align: center;">Table data is empty</td>
+                                    </tr>
                                     <tr *ngFor="let role of selectedUser?.roles" class="tr">
                                         <td class="td">{{role.name}}</td>
-                                        <td class="td td-trash-circle"><i class="fa fa-trash"></i></td>
+                                        <td class="td td-trash-circle" (click)="onClickDeleteRole(role);"><i class="fa fa-trash"></i></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="list-buttom">
-                            <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
-                            <div class="btn btn-medium btn-yellow">Load More</div>
+                            <!-- <div class="list-summary">Showing 1 to 24 of 25 entries (filtered from 1235 total entries)</div>
+                            <div class="btn btn-medium btn-yellow">Load More</div> -->
                         </div>
                     </section>
                 </section>

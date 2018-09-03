@@ -46,8 +46,8 @@
             </td> -->
             <td class="td" (click)="navigateDetailBeneficiary(policy)">
                 <span class="{{ policy.isActive ? 'tbl-status-active': 'tbl-status-inactive' }}">
-                    {{ policy.isActive ? 'Active': 'Inactive' }}
-                </span>
+          {{ policy.isActive ? 'Active': 'Inactive' }}
+        </span>
             </td>
             <td class="td td-icos">
                 <i *ngIf="policy.isPrincipal" class="fa fa-edit" (click)="navigateEditBeneficiary(policy)"></i>

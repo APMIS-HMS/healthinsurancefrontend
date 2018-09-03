@@ -26,15 +26,16 @@
         <tr class="tr" *ngFor="let item of listOfClaims; let i=index;">
             <td class="td">{{ i+1 }}</td>
             <td class="td">{{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
-            <td class="td">{{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.firstName}} {{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.lastName}}</td>
+            <td class="td">{{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.firstName}} {{item.checkedinDetail?.checkedInDetails?.beneficiaryObject?.personId?.lastName}}
+            </td>
             <td class="td">{{item.dateClaimCreated|date}}</td>
             <td class="td">
                 <span *ngIf="item.checkedinDetail.checkedInDetails.policyObject != undefined">
-                    {{item?.checkedinDetail?.checkedInDetails?.policyObject?.hiaId?.name}}
-                </span>
+          {{item?.checkedinDetail?.checkedInDetails?.policyObject?.hiaId?.name}}
+        </span>
                 <span *ngIf="item.checkedinDetail.checkedInDetails.policyId != undefined">
-                    {{item?.checkedinDetail?.policyId?.hiaId?.name}}
-                </span>
+          {{item?.checkedinDetail?.policyId?.hiaId?.name}}
+        </span>
             </td>
             <td class="td">{{item?.checkedinDetail?.plan}}</td>
             <td class="td">{{item?.checkedinDetail?.providerFacility?.providerId?.name}}</td>

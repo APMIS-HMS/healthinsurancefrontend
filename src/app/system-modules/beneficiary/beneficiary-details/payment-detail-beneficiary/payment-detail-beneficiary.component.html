@@ -113,11 +113,11 @@
                 <div class="payment-option">
                     <form [formGroup]="paymentOptionGroup">
                         <select formControlName="paymentOption">
-                            <option value="Paystack" selected>Paystack</option>
-                            <option value="Flutterwave" selected>Flutterwave</option>
-                            <option value="Cash">Cash</option>
-                            <option value="Cheque">Cheque</option>
-                        </select>
+              <option value="Paystack" selected>Paystack</option>
+              <option value="Flutterwave" selected>Flutterwave</option>
+              <option value="Cash">Cash</option>
+              <option value="Cheque">Cheque</option>
+            </select>
                     </form>
                 </div>
                 <!-- <a (click)="getpaidSetupdd();" class="btn btn-medium btn-blue cta" data-PBFPubKey="FLWPUBK-8da67f59fe34994e78c5f77022ba8178-X" data-txref="rave-checkout-1511132266" data-amount="50000" data-customer_email="user@example.com" data-currency="NGN" data-pay_button_text="e-Payment"
@@ -201,9 +201,9 @@
             </div>
             <div style="text-align: center">
                 <button class="btn btn-medium btn-green cta" (click)="onClickCreateAndPaybatch(cashPaymentGroup.valid, cashPaymentGroup.value);" style="width:150px;padding:10px;margin-left:122px;">
-                    <span *ngIf="!cashPaymentProcessing">Pay</span>
-                    <span *ngIf="cashPaymentProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
-                </button>
+          <span *ngIf="!cashPaymentProcessing">Pay</span>
+          <span *ngIf="cashPaymentProcessing">Paying... <i class="fa fa-spin fa-spinner"></i></span>
+        </button>
             </div>
         </div>
     </div>

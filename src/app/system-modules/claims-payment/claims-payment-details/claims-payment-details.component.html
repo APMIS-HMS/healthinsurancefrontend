@@ -29,12 +29,12 @@
                                 <div class="item-label">Gender:</div>
                                 <div class="item-val">{{selectedClaim?.checkedinDetail?.personObject?.gender?.name}}</div>
                             </div>
-                            <div class="group-item">
+                            <!-- <div class="group-item">
                                 <div class="item-label">LASRRA ID:</div>
                                 <div class="item-val">{{selectedClaim?.checkedinDetail?.policyObject?.providerId?.provider?.lasrraId}}</div>
-                            </div>
+                            </div> -->
                             <div class="group-item">
-                                <div class="item-label">LAASHMA ID:</div>
+                                <div class="item-label">ASHIA ID:</div>
                                 <div class="item-val">{{selectedClaim?.checkedinDetail?.beneficiaryObject?.platformOwnerNumber}}</div>
                             </div>
                         </div>
@@ -234,7 +234,8 @@
                         <div class="headArea-2">
                             <div class="count">{{1}}</div>
                             <div class="letering">
-                                <div class="letering-1">Reaction Sent {{selectedClaim?.approvedDocumentation?.response?.createdAt|date:'medium'}}</div>
+                                <div class="letering-1">Reaction Sent {{selectedClaim?.approvedDocumentation?.response?.createdAt|date:'medium'}}
+                                </div>
                                 <div class="letering-2">
                                     <span class="letering-name">{{platformName}}</span>
                                     <span class="blue" *ngIf="selectedClaim.approvedDocumentation.response.isReject == true">Reject</span>

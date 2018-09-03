@@ -1,9 +1,7 @@
 <div style="padding-top:2px;">
         <section class="app-content-wrap content shadow-RB">
-    
-            <div class="nut-tab-topSect-wrap"> 
+            <div class="nut-tab-topSect-wrap">
                 <div class="nutTabs-wrap">
-        
                     <div (click)="tabPersonalData_click()" [class.active-nut]="tab_personalData" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
@@ -14,7 +12,16 @@
                         </div>
                         <div class="nut-label">Principal</div>
                     </div>
-        
+                    <div (click)="tabMedicalData_click()" [class.active-nut]="tab_medical" class="nutTab-wrap">
+                        <div class="nut-outer">
+                            <div class="nut-inner"></div>
+                            <!-- <div class="nut-stroke">
+                                <div class="stroke-1" style="background:transparent;"></div>
+                                <div class="stroke-2"></div>
+                            </div> -->
+                        </div>
+                        <div class="nut-label">Medical</div>
+                    </div>
                     <div (click)="tabDependants_click()"  [class.active-nut]="tab_dependants" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
@@ -25,7 +32,7 @@
                         </div>
                         <div class="nut-label">Dependants</div>
                     </div>
-    
+
                     <div (click)="tabNOK_click()"  [class.active-nut]="tab_nok" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
@@ -36,7 +43,7 @@
                         </div>
                         <div class="nut-label">Next OF Kin</div>
                     </div>
-        
+
                     <div (click)="tabProgram_click()" [class.active-nut]="tab_program" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
@@ -47,7 +54,7 @@
                         </div>
                         <div class="nut-label">Program</div>
                     </div>
-        
+
                     <div (click)="tabConfirm_click()" [class.active-nut]="tab_confirm" class="nutTab-wrap">
                         <div class="nut-outer">
                             <div class="nut-inner"></div>
@@ -59,29 +66,29 @@
                         <div class="nut-label">Complete</div>
                     </div>
                 </div>
-            
-                <div *ngIf="!tab_confirm" class="btn btn-medium btn-grey-outline" routerLink="/modules/beneficiary/beneficiaries">
+
+                <div *ngIf="!isBeneficiary || !tab_confirm" class="btn btn-medium btn-grey-outline" routerLink="/modules/beneficiary/beneficiaries">
                     <i class="fa fa-times"></i> CANCEL
                 </div>
             </div>
             <router-outlet></router-outlet>
-    
+
             <!-- <div *ngIf="tab_personalData">
                 <app-new-beneficiary-data></app-new-beneficiary-data>
             </div>
-    
+
             <div *ngIf="tab_dependants && selectedBeneficiary !== undefined">
                 <app-new-beneficiary-dependant [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-dependant>
             </div>
-    
+
             <div *ngIf="tab_program">
                 <app-new-beneficiary-program [selectedBeneficiary]="selectedBeneficiary" [dependants]="dependants"></app-new-beneficiary-program>
             </div>
-    
+
             <div *ngIf="tab_nok">
                 <app-new-beneficiary-nok [selectedBeneficiary]="selectedBeneficiary"></app-new-beneficiary-nok>
             </div>
-    
+
             <div *ngIf="tab_confirm">
                 <app-new-beneficiary-confirm [policy]="policy"></app-new-beneficiary-confirm>
             </div> -->

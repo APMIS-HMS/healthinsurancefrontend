@@ -14,12 +14,12 @@
                     <div class="item-label">Gender:</div>
                     <div class="item-val">{{selectedAuthorization?.personId.gender.name}}</div>
                 </div>
-                <div class="group-item">
+                <!-- <div class="group-item">
                     <div class="item-label">LASRRA ID:</div>
                     <div class="item-val">{{selectedAuthorization?.checkedInDetails.beneficiaryObject?.stateID}}</div>
-                </div>
+                </div> -->
                 <div class="group-item">
-                    <div class="item-label">LAASHMA ID:</div>
+                    <div class="item-label">ASHIA ID:</div>
                     <div class="item-val">{{selectedAuthorization?.beneficiaryObject.platformOwnerNumber}}</div>
                 </div>
                 <div class="group-item">
@@ -97,7 +97,8 @@
                     <div class="letering">
                         <div class="letering-1">Request Sent {{transaction.createdAt | date:'short'}}</div>
                         <div class="letering-2">
-                            <span class="letering-name">{{selectedAuthorization?.medicalPersonelName.lastName}} {{selectedAuthorization?.medicalPersonelName.firstName}}</span> Requested Pre-Authorization</div>
+                            <span class="letering-name">{{selectedAuthorization?.medicalPersonelName.lastName}}
+                {{selectedAuthorization?.medicalPersonelName.firstName}}</span> Requested Pre-Authorization</div>
                     </div>
                 </div>
                 <div class="doc-wrap">
