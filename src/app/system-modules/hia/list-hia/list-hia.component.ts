@@ -142,7 +142,7 @@ export class ListHiaComponent implements OnInit {
     this._facilityService
       .find({
         query: {
-          shortName: CurrentPlaformShortName,
+          shortName: this.platformName,
           $select: ["name", "shortName", "address.state"]
         }
       })
