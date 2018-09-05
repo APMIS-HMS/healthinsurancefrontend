@@ -92,4 +92,51 @@
     <button *ngIf="!isBeneficiary" (click)="confirmList()" class="btn btn-medium btn-blue">
         PROCEED TO POLICY LIST
     </button>
+    <button (click)="onClickPrintDocument();" class="btn btn-medium btn-blue">
+        PRINT
+    </button>
+</div>
+
+<div id="print-section" style="display:none">
+  <header class="header">
+    <div class="img-header">
+      <img src="../../../../../assets/img/logos/ashia.jpeg" alt="">
+    </div>
+    <div class="text-header">
+      <h2>{{ policyObject?.principalBeneficiary?.platformOwnerId?.name }}</h2>
+    </div>
+  </header>
+  <section>
+    <div>
+      <b>Policy Details</b>
+      <div>Household ID: {{ policyObject?.policyId }} </div>
+      <div>ASHIA ID: {{ policyObject?.platformOwnerNumber }} </div>
+      <div>Sponsor: {{ policyObject?.sponsorshipId?.name }} </div>
+    </div>
+    <div class="details">
+        <b>Beneficiary Details</b>
+        <div>Fullname: {{ policyObject?.principalBeneficiary?.personId?.title?.name }} {{ policyObject?.principalBeneficiary?.personId?.firstName }} {{ policyObject?.principalBeneficiary?.personId?.otherNames }} {{ policyObject?.principalBeneficiary?.personId?.lastName }}</div>
+        <div>Gender: {{ policyObject?.principalBeneficiary?.personId?.gender?.name }}</div>
+        <div>Date of birth: {{ policyObject?.principalBeneficiary?.personId?.dateOfBirth | date }}</div>
+        <div>Principal Policy ID: {{ policyObject?.principalPolicyId }}</div>
+        <div>Email: {{ policyObject?.principalBeneficiary?.personId?.email }}</div>
+        <div>State: {{ policyObject?.principalBeneficiary?.personId?.homeAddress?.state?.name }}</div>
+    </div>
+    <div class="details">
+        <b>Plan Details</b>
+        <div>Plan name: {{ policyObject?.planId?.name }}</div>
+        <div>Plan name: {{ policyObject?.planId?.planType?.name }}</div>
+        <div>Premium: &#x20a6;{{ policyObject?.planId?.premiums[policyObject?.planId?.premiums?.length - 1].amount }} for {{ policyObject?.planId?.premiums[policyObject?.planId?.premiums?.length - 1].durationInDay }}</div>
+    </div>
+    <div class="details">
+        <b>HMO Details</b>
+        <div>HMO name: {{ policyObject?.hiaId?.name }}</div>
+    </div>
+    <div class="details">
+        <b>Provider Healthcare Provider</b>
+        <div>Provider name: {{ policyObject?.providerId?.name }}</div>
+        <div>Provider address: {{ policyObject?.providerId?.street }}, {{ policyObject?.providerId?.city?.name }} {{ policyObject?.providerId?.lga?.name }}</div>
+        <div>Provider Contact: {{ policyObject?.providerId?.phoneNumber }}</div>
+    </div>
+  </section>
 </div>

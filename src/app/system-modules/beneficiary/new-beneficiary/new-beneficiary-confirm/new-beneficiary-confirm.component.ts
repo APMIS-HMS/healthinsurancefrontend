@@ -117,6 +117,39 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
     }
   }
 
+  onClickPrintDocument() {
+    let printContents = document.getElementById('print-section').innerHTML;
+    let popupWin = window.open('', '', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+            .details {
+              margin-top: 10px;
+            }
+            .header {
+              margin-bottom: 20px;
+            }
+            .img-header {
+              text-align: center;
+            }
+            .img-header img {
+              width: 100px;
+              height: 100px;
+            }
+            .text-header {
+              text-align: center
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
+
   confirmPayments() {
     this._router.navigate([`/modules/beneficiary/beneficiaries/${this.policyObject._id}/payment`]).then(payload => {}).catch(err2 => {});
   }
