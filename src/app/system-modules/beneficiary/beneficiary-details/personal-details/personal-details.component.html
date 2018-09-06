@@ -22,10 +22,6 @@
                         <div class="item-label">{{platformName}} ID:</div>
                         <div class="item-val">{{ beneficiary?.platformOwnerNumber }}</div>
                     </div>
-                    <!-- <div class="group-item">
-                        <div class="item-label">ASHIA ID:</div>
-                        <div class="item-val">{{ '' }}</div>
-                    </div> -->
                     <div class="group-item">
                         <div class="item-label">Email:</div>
                         <div class="item-val">{{ beneficiary?.personId?.email }}</div>
@@ -274,7 +270,7 @@
     <div>
       <b>Policy Details</b>
       <div>Household ID: {{ printBeneficiary?.policyId }} </div>
-      <div>ASHIA ID: {{ printBeneficiary?.platformOwnerNumber }} </div>
+      <div>{{ platformName }} ID: {{ printBeneficiary?.platformOwnerNumber }} </div>
       <div>Sponsor: {{ printBeneficiary?.sponsorshipId?.name }} </div>
     </div>
     <div class="details">
