@@ -229,7 +229,7 @@ export class SignupComponent implements OnInit {
 
   private _getCurrentPlatform() {
     this._facilityService
-      .findWithOutAuth({ query: { shortName: CurrentPlaformShortName } })
+      .findWithOutAuth({ query: { shortName: this.platformName } })
       .then(res => {
         if (res.data.length > 0) {
           this.currentPlatform = res.data[0];
