@@ -416,7 +416,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   }
 
   onClickStepFour(value, valid) {
-    console.log('Selected Beneficairy', this.selectedBeneficiary);
     if (valid) {
       let policy: any = <any>{};
       this.selectedBeneficiary.isComplete = true;
@@ -448,7 +447,6 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         platform: this.selectedBeneficiary.platformOwnerId
       };
       this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
-        console.log('Updated Res', payload);
         this._router.navigate(['/modules/beneficiary/new/complete', payload.body.policyObject._id]).then(payload => {}).catch(err => {});
         this._systemService.announceSweetProxy('Your Policy item has been generated!', 'success');
       }).catch(err => {});

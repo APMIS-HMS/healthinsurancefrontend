@@ -78,6 +78,28 @@ export class ListBeneficiaryDraftComponent implements OnInit {
       this.hasCreateBeneficiary = true;
     }
     this._getCurrentPlatform();
+
+    // this.listsearchControl.valueChanges.subscribe(search => {
+    //   this.loading = true;
+    //   if (search.length > 2) {
+    //     const query = {
+    //       platformOwnerId: this.currentPlatform._id,
+    //       isComplete: false,
+    //       search: search
+    //     };
+    //     this._policyService.searchPolicy(query).then((res: any) => {
+    //         this.loading = false;
+    //         this._systemService.off();
+    //         if (res.data.length > 0) {
+    //           this.beneficiaries = res.data;
+    //         }
+    //       }).catch(err => { });
+    //   } else {
+    //     // If There is no search, replace the beneficiaries with the cached data.
+    //     this.beneficiaries = this.cachedBeneficiaries;
+    //     this._systemService.off();
+    //   }
+    // });
   }
 
   reset() {
@@ -88,12 +110,10 @@ export class ListBeneficiaryDraftComponent implements OnInit {
   }
 
   private _getCurrentPlatform() {
-    console.log(this.platformName);
     this._systemService.on();
     this._facilityService
       .find({ query: { shortName: this.platformName } })
       .then((res: any) => {
-        console.log(res);
         if (res.data.length > 0) {
           this.currentPlatform = res.data[0];
           // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
@@ -106,13 +126,6 @@ export class ListBeneficiaryDraftComponent implements OnInit {
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
                   isComplete: false
-                  // $select: {
-                  //   'hiaId.name': 1,
-                  //   principalBeneficiary: 1,
-                  //   dependantBeneficiaries: 1,
-                  //   isActive: 1,
-                  //   providerId: 1
-                  // }
                 }
               },
               this.user.facilityId._id,
@@ -130,12 +143,6 @@ export class ListBeneficiaryDraftComponent implements OnInit {
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
                   isComplete: false
-                  // $select: {
-                  //   'hiaId.name': 1,
-                  //   principalBeneficiary: 1,
-                  //   dependantBeneficiaries: 1,
-                  //   isActive: 1
-                  // }
                 }
               },
               this.user.facilityId._id,
@@ -153,12 +160,6 @@ export class ListBeneficiaryDraftComponent implements OnInit {
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
                   isComplete: false
-                  // $select: {
-                  //   'hiaId.name': 1,
-                  //   principalBeneficiary: 1,
-                  //   dependantBeneficiaries: 1,
-                  //   isActive: 1
-                  // }
                 }
               },
               this.user.facilityId._id,
@@ -176,12 +177,6 @@ export class ListBeneficiaryDraftComponent implements OnInit {
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
                   isComplete: false
-                  // $select: {
-                  //   'hiaId.name': 1,
-                  //   principalBeneficiary: 1,
-                  //   dependantBeneficiaries: 1,
-                  //   isActive: 1
-                  // }
                 }
               },
               this.user.facilityId._id,
@@ -196,13 +191,6 @@ export class ListBeneficiaryDraftComponent implements OnInit {
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
                   isComplete: false
-                  // $select: {
-                  //   'platformOwnerId.$': 1,
-                  //   'hiaId.name': 1,
-                  //   principalBeneficiary: 1,
-                  //   dependantBeneficiaries: 1,
-                  //   isActive: 1
-                  // }
                 }
               },
               this.user.facilityId._id,
@@ -222,54 +210,25 @@ export class ListBeneficiaryDraftComponent implements OnInit {
   }
 
   private _getAllBeneficiaries(query, id, userType) {
-    // this.beneficiaries = [];
-    // this.tempBeneficiaries = [];
-    console.log(query);
     try {
       this._systemService.on();
       this._beneficiaryService.find(query).then((res: any) => {
-        console.log('Beneficiary ', res);
-        // if (res.data.length > 0) {
-        //   this.loading = false;
-        //   res.data.forEach((policy, i) => {
-        //     if (!!policy.principalBeneficiary) {
-        //       const principal = policy.principalBeneficiary;
-        //       principal.isPrincipal = true;
-        //       principal.hia = policy.hiaId;
-        //       principal.policyId = policy._id;
-        //       principal.isActive = policy.isActive;
-        //       principal.dependantCount = policy.dependantBeneficiaries.length;
-        //       principal.planTypeId = policy.planTypeId;
-        //       this.beneficiaries.push(principal);
-        //       this.cachedBeneficiaries.push(principal);
-        //       policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
-        //         innerPolicy.beneficiary.person =
-        //           innerPolicy.beneficiary.personId;
-        //         innerPolicy.beneficiary.isPrincipal = false;
-        //         innerPolicy.beneficiary.principalId = principal._id;
-        //         innerPolicy.beneficiary.policyId = policy._id;
-        //         innerPolicy.beneficiary.hia = policy.hiaId;
-        //         innerPolicy.beneficiary.isActive = policy.isActive;
-        //         innerPolicy.beneficiary.planTypeId = policy.planTypeId;
-        //         this.beneficiaries.push(innerPolicy.beneficiary);
-        //         this.cachedBeneficiaries.push(innerPolicy.beneficiary);
-        //       });
-        //     }
-        //   });
-        // } else {
-        //   this.loading = false;
-        // }
-        // if (!!userType && userType !== '') {
-        //   this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
-        //       this.totalData = data.body.count;
-        //       if (this.beneficiaries.length >= this.totalData) {
-        //         this.showLoadMore = false;
-        //       }
-        //     });
-        //   this.mainBeneficiaries = this.beneficiaries;
-        // }
         this._systemService.off();
         this.loading = false;
+        if (res.data.length > 0) {
+          this.beneficiaries = res.data;
+          this.cachedBeneficiaries = res.data;
+        }
+
+        if (!!userType && userType !== '') {
+          this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
+              this.totalData = data.body.count;
+              if (this.beneficiaries.length >= this.totalData) {
+                this.showLoadMore = false;
+              }
+            });
+          this.mainBeneficiaries = this.beneficiaries;
+        }
       }).catch(err => {
         this.loading = false;
         this._systemService.off();
@@ -308,25 +267,5 @@ export class ListBeneficiaryDraftComponent implements OnInit {
     }).catch(err => {
       this._systemService.off();
     });
-  }
-
-  navigateDetailBeneficiary(beneficiary) {
-    if (beneficiary.isPrincipal) {
-      this._locker.setObject('policyID', beneficiary.policyId);
-      this._systemService.on();
-      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
-    } else {
-      this._locker.setObject('policyID', beneficiary.policyId);
-      this._systemService.on();
-      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        this._systemService.off();
-      });
-    }
   }
 }
