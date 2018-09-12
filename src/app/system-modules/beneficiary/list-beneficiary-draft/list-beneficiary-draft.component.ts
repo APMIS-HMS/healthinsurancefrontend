@@ -1,42 +1,37 @@
-import "rxjs/add/operator/filter";
+import 'rxjs/add/operator/filter';
 
-import { Component, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { NavigationEnd, Router } from "@angular/router";
-import { LoadingBarService } from "@ngx-loading-bar/core";
-import { CoolLocalStorage } from "angular2-cool-storage";
-import { ToastsManager } from "ng2-toastr/ng2-toastr";
-import { Observable } from "rxjs/Rx";
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { NavigationEnd, Router } from '@angular/router';
+import { CoolLocalStorage } from 'angular2-cool-storage';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
-import { Beneficiary } from "./../../../models/setup/beneficiary";
-import { HeaderEventEmitterService } from "./../../../services/event-emitters/header-event-emitter.service";
+import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
 import {
   CurrentPlaformShortName,
   TABLE_LIMIT_PER_VIEW
-} from "./../../../services/globals/config";
+} from './../../../services/globals/config';
 import {
   BeneficiaryService,
   FacilityService,
-  PlanTypeService,
   SystemModuleService,
-  UploadService,
   UserTypeService
-} from "./../../../services/index";
-import { PlanService } from "./../../../services/plan/plan.service";
-import { PolicyService } from "./../../../services/policy/policy.service";
-import { environment } from "../../../../environments/environment";
+} from './../../../services/index';
+import { PlanService } from './../../../services/plan/plan.service';
+import { PolicyService } from './../../../services/policy/policy.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: "app-list-beneficiary",
-  templateUrl: "./list-beneficiary.component.html",
-  styleUrls: ["./list-beneficiary.component.scss"]
+  selector: 'app-list-beneficiary-draft',
+  templateUrl: './list-beneficiary-draft.component.html',
+  styleUrls: ['./list-beneficiary-draft.component.scss']
 })
-export class ListBeneficiaryComponent implements OnInit {
+export class ListBeneficiaryDraftComponent implements OnInit {
   listsearchControl = new FormControl();
-  filterTypeControl = new FormControl("All");
+  filterTypeControl = new FormControl('All');
   createdByControl = new FormControl();
   utilizedByControl = new FormControl();
-  statusControl = new FormControl("All");
+  statusControl = new FormControl('All');
   beneficiaries: any[] = [];
   cachedBeneficiaries: any[] = [];
   sizeOfBeneficiaries: any[] = [];
@@ -68,127 +63,21 @@ export class ListBeneficiaryComponent implements OnInit {
     this.platformName = environment.platform;
     this._router.events
       .filter(event => event instanceof NavigationEnd)
-      .subscribe(e => {});
-    this.user = (<any>this._locker.getObject("auth")).user;
+      .subscribe(e => { });
+    this.user = (<any>this._locker.getObject('auth')).user;
 
-    if (!!this.user.userType && this.user.userType.name === "Beneficiary") {
-      this._getPerson();
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
+      // this._getPerson();
     }
   }
 
   ngOnInit() {
-    this._headerEventEmitter.setRouteUrl("Beneficiary List");
-    this._headerEventEmitter.setMinorRouteUrl("All Beneficiaries");
+    this._headerEventEmitter.setRouteUrl('Beneficiary Draft List');
+    this._headerEventEmitter.setMinorRouteUrl('All Beneficiary drafts');
     if (!!this.user.userType && this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
-    } else if (!!this.user.userType && this.user.userType.name !== "Provider") {
+    } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
       this.hasCreateBeneficiary = true;
-    }
-
-    this._getPlans();
-    this._getCurrentPlatform();
-
-    // Search functionality for beneficiary
-    this.listsearchControl.valueChanges.subscribe(search => {
-      this.loading = true;
-      if (search.length > 2) {
-        const query = {
-          platformOwnerId: this.currentPlatform._id,
-          search: search
-        };
-        this._policyService
-          .searchPolicy(query)
-          .then((payload: any) => {
-            this.loading = false;
-            this.beneficiaries = [];
-            if (payload.data.length > 0) {
-              payload.data.forEach(policy => {
-                let principal = policy.principalBeneficiary;
-                principal.isPrincipal = true;
-                principal.hia = policy.hiaId;
-                principal.policyId = policy._id;
-                principal.policy = policy;
-                principal.isActive = policy.isActive;
-                principal.dependantCount = policy.dependantBeneficiaries.length;
-                this.beneficiaries.push(principal);
-                policy.dependantBeneficiaries.forEach(innerPolicy => {
-                  innerPolicy.beneficiary.person =
-                    innerPolicy.beneficiary.personId;
-                  innerPolicy.beneficiary.policyId = policy._id;
-                  innerPolicy.beneficiary.policy = policy;
-                  innerPolicy.beneficiary.isPrincipal = false;
-                  innerPolicy.beneficiary.hia = policy.hiaId;
-                  innerPolicy.beneficiary.isActive = policy.isActive;
-                  this.beneficiaries.push(innerPolicy.beneficiary);
-                });
-              });
-              this._systemService.off();
-            } else {
-              this._systemService.off();
-            }
-            this._systemService.off();
-          })
-          .catch(err => {});
-      } else {
-        // If There is no search, replace the beneficiaries with the cached data.
-        this.beneficiaries = this.cachedBeneficiaries;
-        this._systemService.off();
-      }
-    });
-
-    this.statusControl.valueChanges.subscribe(value => {
-      if (value === 'All') {
-        this.beneficiaries = this.mainBeneficiaries;
-      } else {
-        const temp = this.beneficiaries.filter(
-          x => (x.isActive === (value === 'true') ? true : false)
-        );
-        this.beneficiaries = temp;
-      }
-    });
-
-    this.filterTypeControl.valueChanges.subscribe(value => {
-      this.beneficiaries = this.mainBeneficiaries;
-      if (value === 'All') {
-        this.beneficiaries = this.mainBeneficiaries;
-      } else {
-        let temp = this.beneficiaries.filter(
-          x => x.planTypeId._id === value._id
-        );
-        this.beneficiaries = temp;
-      }
-    });
-  }
-  _getPerson() {
-    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
-      let beneficiary$ = Observable.fromPromise(
-        this._beneficiaryService.find({
-          query: { 'personId.email': this.user.email }
-        })
-      );
-      Observable.forkJoin([beneficiary$]).subscribe(
-        (results: any) => {
-          if (results[0].data.length > 0) {
-            this._policyService
-              .find({
-                query: { principalBeneficiary: results[0].data[0]._id }
-              })
-              .then((policies: any) => {
-                if (policies.data.length > 0) {
-                  this._router
-                    .navigate([
-                      '/modules/beneficiary/beneficiaries',
-                      policies.data[0]._id
-                    ])
-                    .then(payload => {})
-                    .catch(err => {});
-                }
-              })
-              .catch(errin => {});
-          }
-        },
-        error => {}
-      );
     }
   }
 
@@ -197,15 +86,6 @@ export class ListBeneficiaryComponent implements OnInit {
     this.beneficiaries = [];
     this._getCurrentPlatform();
     this.showLoadMore = true;
-  }
-
-  private _getPlans() {
-    this._planService
-      .find({})
-      .then((payload: any) => {
-        this.planTypes = payload.data;
-      })
-      .catch(err => {});
   }
 
   private _getCurrentPlatform() {
@@ -333,6 +213,10 @@ export class ListBeneficiaryComponent implements OnInit {
       });
   }
 
+  loadMoreBeneficiaries() {
+    this._getCurrentPlatform();
+  }
+
   private _getAllPolicies(query, id, userType) {
     // this.beneficiaries = [];
     // this.tempBeneficiaries = [];
@@ -394,51 +278,11 @@ export class ListBeneficiaryComponent implements OnInit {
     this.skipValue++;
   }
 
-  loadMoreBeneficiaries() {
-    this._getCurrentPlatform();
-  }
-
-  private _getInActiveBeneficiaries(platformId) {
-    this._systemService.on();
-    let policy$ = Observable.fromPromise(
-      this._policyService.find({
-        'platformOwnerId._id': platformId,
-        isActive: true
-      })
-    );
-    let benefic$ = Observable.fromPromise(
-      this._beneficiaryService.find({ 'platformOwnerId._id': platformId })
-    );
-
-    Observable.forkJoin([policy$, benefic$]).subscribe(
-      (results: any) => {
-        let beneficiaryList: any[] = results[1].data;
-        results[0].data.forEach(policy => {
-          let principal = policy.principalBeneficiary;
-          const index = beneficiaryList.findIndex(x => x._id === principal._id);
-          if (index > -1) {
-            beneficiaryList.splice(index);
-          }
-          policy.dependantBeneficiaries.forEach(innerPolicy => {
-            const index = beneficiaryList.findIndex(
-              x => x._id === innerPolicy.beneficiary._id
-            );
-            if (index > -1) {
-              beneficiaryList.splice(index);
-            }
-          });
-        });
-        this.inActiveBeneficiaries = beneficiaryList;
-        this._systemService.off();
-      },
-      error => {}
-    );
-  }
 
   navigateDraftList() {
     this._systemService.on();
     this._router
-      .navigate(['/modules/beneficiary/beneficiary-drafts'])
+      .navigate(['/modules/beneficiary/beneficiaries'])
       .then(res => {
         this._systemService.off();
       })

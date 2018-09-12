@@ -932,12 +932,10 @@ export class NewBeneficiaryDataComponent
               });
           }
         } else {
-          console.log("This person is not a beneficiary");
           if (
             this.selectedBeneficiary !== undefined &&
             this.selectedBeneficiary._id !== undefined
           ) {
-            console.log("Selected Beneficiary");
             let personId: Person = this.selectedBeneficiary.personId;
             let address: Address = this.selectedBeneficiary.personId
               .homeAddress;

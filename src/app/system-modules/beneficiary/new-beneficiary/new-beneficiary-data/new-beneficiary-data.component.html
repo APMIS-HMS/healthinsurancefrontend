@@ -8,10 +8,10 @@
             style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender)" type="radio"
             formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
         </label>
-      </span>
+        </span>
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.gender.valid || stepOneFormGroup.controls.gender.pristine">
-        Gender is required.
-      </small>
+              Gender is required.
+            </small>
         </div>
     </div>
     <div class="frm-item-wrap">
