@@ -61,24 +61,23 @@ export class ListBeneficiaryDraftComponent implements OnInit {
     private _toastr: ToastsManager
   ) {
     this.platformName = environment.platform;
-    this._router.events
-      .filter(event => event instanceof NavigationEnd)
-      .subscribe(e => { });
+    this._router.events.filter(event => event instanceof NavigationEnd).subscribe(e => { });
     this.user = (<any>this._locker.getObject('auth')).user;
 
-    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
-      // this._getPerson();
-    }
+    // if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
+    //   // this._getPerson();
+    // }
   }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Beneficiary Draft List');
     this._headerEventEmitter.setMinorRouteUrl('All Beneficiary drafts');
-    if (!!this.user.userType && this.user.userType === undefined) {
+    if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== 'Provider') {
       this.hasCreateBeneficiary = true;
     }
+    this._getCurrentPlatform();
   }
 
   reset() {
@@ -99,20 +98,21 @@ export class ListBeneficiaryDraftComponent implements OnInit {
           this.currentPlatform = res.data[0];
           // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
           if (!!this.user.userType && this.user.userType.name === 'Provider') {
-            this._getAllPolicies(
+            this._getAllBeneficiaries(
               {
                 query: {
                   'providerId._id': this.user.facilityId._id,
                   $limit: this.limitValue,
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
-                  $select: {
-                    'hiaId.name': 1,
-                    principalBeneficiary: 1,
-                    dependantBeneficiaries: 1,
-                    isActive: 1,
-                    providerId: 1
-                  }
+                  isComplete: false
+                  // $select: {
+                  //   'hiaId.name': 1,
+                  //   principalBeneficiary: 1,
+                  //   dependantBeneficiaries: 1,
+                  //   isActive: 1,
+                  //   providerId: 1
+                  // }
                 }
               },
               this.user.facilityId._id,
@@ -122,19 +122,20 @@ export class ListBeneficiaryDraftComponent implements OnInit {
             !!this.user.userType &&
             this.user.userType.name === 'Health Insurance Agent'
           ) {
-            this._getAllPolicies(
+            this._getAllBeneficiaries(
               {
                 query: {
                   'hiaId._id': this.user.facilityId._id,
                   $limit: this.limitValue,
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
-                  $select: {
-                    'hiaId.name': 1,
-                    principalBeneficiary: 1,
-                    dependantBeneficiaries: 1,
-                    isActive: 1
-                  }
+                  isComplete: false
+                  // $select: {
+                  //   'hiaId.name': 1,
+                  //   principalBeneficiary: 1,
+                  //   dependantBeneficiaries: 1,
+                  //   isActive: 1
+                  // }
                 }
               },
               this.user.facilityId._id,
@@ -144,19 +145,20 @@ export class ListBeneficiaryDraftComponent implements OnInit {
             !!this.user.userType &&
             this.user.userType.name === 'Employer'
           ) {
-            this._getAllPolicies(
+            this._getAllBeneficiaries(
               {
                 query: {
                   'sponsor._id': this.user.facilityId._id,
                   $limit: this.limitValue,
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
-                  $select: {
-                    'hiaId.name': 1,
-                    principalBeneficiary: 1,
-                    dependantBeneficiaries: 1,
-                    isActive: 1
-                  }
+                  isComplete: false
+                  // $select: {
+                  //   'hiaId.name': 1,
+                  //   principalBeneficiary: 1,
+                  //   dependantBeneficiaries: 1,
+                  //   isActive: 1
+                  // }
                 }
               },
               this.user.facilityId._id,
@@ -166,39 +168,41 @@ export class ListBeneficiaryDraftComponent implements OnInit {
             !!this.user.userType &&
             this.user.userType.name === 'Platform Owner'
           ) {
-            this._getAllPolicies(
+            this._getAllBeneficiaries(
               {
                 query: {
                   'platformOwnerId._id': this.user.facilityId._id,
                   $limit: this.limitValue,
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
-                  $select: {
-                    'hiaId.name': 1,
-                    principalBeneficiary: 1,
-                    dependantBeneficiaries: 1,
-                    isActive: 1
-                  }
+                  isComplete: false
+                  // $select: {
+                  //   'hiaId.name': 1,
+                  //   principalBeneficiary: 1,
+                  //   dependantBeneficiaries: 1,
+                  //   isActive: 1
+                  // }
                 }
               },
               this.user.facilityId._id,
               this.user.userType.name
             );
           } else {
-            this._getAllPolicies(
+            this._getAllBeneficiaries(
               {
                 query: {
                   'platformOwnerId._id': this.currentPlatform._id,
                   $limit: this.limitValue,
                   $skip: this.skipValue * this.limitValue,
                   $sort: { createdAt: -1 },
-                  $select: {
-                    'platformOwnerId.$': 1,
-                    'hiaId.name': 1,
-                    principalBeneficiary: 1,
-                    dependantBeneficiaries: 1,
-                    isActive: 1
-                  }
+                  isComplete: false
+                  // $select: {
+                  //   'platformOwnerId.$': 1,
+                  //   'hiaId.name': 1,
+                  //   principalBeneficiary: 1,
+                  //   dependantBeneficiaries: 1,
+                  //   isActive: 1
+                  // }
                 }
               },
               this.user.facilityId._id,
@@ -217,60 +221,60 @@ export class ListBeneficiaryDraftComponent implements OnInit {
     this._getCurrentPlatform();
   }
 
-  private _getAllPolicies(query, id, userType) {
+  private _getAllBeneficiaries(query, id, userType) {
     // this.beneficiaries = [];
     // this.tempBeneficiaries = [];
     console.log(query);
     try {
       this._systemService.on();
-      this._policyService.find(query).then((res: any) => {
-        console.log('Policy ', res);
-          if (res.data.length > 0) {
-            this.loading = false;
-            res.data.forEach((policy, i) => {
-              if (!!policy.principalBeneficiary) {
-                const principal = policy.principalBeneficiary;
-                principal.isPrincipal = true;
-                principal.hia = policy.hiaId;
-                principal.policyId = policy._id;
-                principal.isActive = policy.isActive;
-                principal.dependantCount = policy.dependantBeneficiaries.length;
-                principal.planTypeId = policy.planTypeId;
-                this.beneficiaries.push(principal);
-                this.cachedBeneficiaries.push(principal);
-                policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
-                  innerPolicy.beneficiary.person =
-                    innerPolicy.beneficiary.personId;
-                  innerPolicy.beneficiary.isPrincipal = false;
-                  innerPolicy.beneficiary.principalId = principal._id;
-                  innerPolicy.beneficiary.policyId = policy._id;
-                  innerPolicy.beneficiary.hia = policy.hiaId;
-                  innerPolicy.beneficiary.isActive = policy.isActive;
-                  innerPolicy.beneficiary.planTypeId = policy.planTypeId;
-                  this.beneficiaries.push(innerPolicy.beneficiary);
-                  this.cachedBeneficiaries.push(innerPolicy.beneficiary);
-                });
-              }
-            });
-          } else {
-            this.loading = false;
-          }
-          if (!!userType && userType !== '') {
-            this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
-                this.totalData = data.body.count;
-                if (this.beneficiaries.length >= this.totalData) {
-                  this.showLoadMore = false;
-                }
-              });
-            this.mainBeneficiaries = this.beneficiaries;
-          }
-          this._systemService.off();
-          this.loading = false;
-        }).catch(err => {
-          this.loading = false;
-          this._systemService.off();
-          this._toastr.error('Error has occured please contact your administrator!', 'Error!');
-        });
+      this._beneficiaryService.find(query).then((res: any) => {
+        console.log('Beneficiary ', res);
+        // if (res.data.length > 0) {
+        //   this.loading = false;
+        //   res.data.forEach((policy, i) => {
+        //     if (!!policy.principalBeneficiary) {
+        //       const principal = policy.principalBeneficiary;
+        //       principal.isPrincipal = true;
+        //       principal.hia = policy.hiaId;
+        //       principal.policyId = policy._id;
+        //       principal.isActive = policy.isActive;
+        //       principal.dependantCount = policy.dependantBeneficiaries.length;
+        //       principal.planTypeId = policy.planTypeId;
+        //       this.beneficiaries.push(principal);
+        //       this.cachedBeneficiaries.push(principal);
+        //       policy.dependantBeneficiaries.forEach((innerPolicy, j) => {
+        //         innerPolicy.beneficiary.person =
+        //           innerPolicy.beneficiary.personId;
+        //         innerPolicy.beneficiary.isPrincipal = false;
+        //         innerPolicy.beneficiary.principalId = principal._id;
+        //         innerPolicy.beneficiary.policyId = policy._id;
+        //         innerPolicy.beneficiary.hia = policy.hiaId;
+        //         innerPolicy.beneficiary.isActive = policy.isActive;
+        //         innerPolicy.beneficiary.planTypeId = policy.planTypeId;
+        //         this.beneficiaries.push(innerPolicy.beneficiary);
+        //         this.cachedBeneficiaries.push(innerPolicy.beneficiary);
+        //       });
+        //     }
+        //   });
+        // } else {
+        //   this.loading = false;
+        // }
+        // if (!!userType && userType !== '') {
+        //   this._beneficiaryService.countBenefeciaries(userType, id).then(data => {
+        //       this.totalData = data.body.count;
+        //       if (this.beneficiaries.length >= this.totalData) {
+        //         this.showLoadMore = false;
+        //       }
+        //     });
+        //   this.mainBeneficiaries = this.beneficiaries;
+        // }
+        this._systemService.off();
+        this.loading = false;
+      }).catch(err => {
+        this.loading = false;
+        this._systemService.off();
+        this._toastr.error('Error has occured please contact your administrator!', 'Error!');
+      });
     } catch (error) {
       this.loading = false;
       this._toastr.error('Error has occured please contact your administrator!', 'Error!');
@@ -281,63 +285,48 @@ export class ListBeneficiaryDraftComponent implements OnInit {
 
   navigateDraftList() {
     this._systemService.on();
-    this._router
-      .navigate(['/modules/beneficiary/beneficiaries'])
-      .then(res => {
-        this._systemService.off();
-      })
-      .catch(err => {
-        this._systemService.off();
-      });
+    this._router.navigate(['/modules/beneficiary/beneficiaries']).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   navigateNewBeneficiary() {
     this._systemService.on();
-    this._router
-      .navigate(['/modules/beneficiary/new/principal'])
-      .then(res => {
-        this._systemService.off();
-      })
-      .catch(err => {
-        this._systemService.off();
-      });
+    this._router.navigate(['/modules/beneficiary/new/principal']).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   navigateEditBeneficiary(beneficiary) {
     this._systemService.on();
-    this._router
-      .navigate(['/modules/beneficiary/new/principal', beneficiary._id])
-      .then(res => {
-        this._systemService.off();
-      })
-      .catch(err => {
-        this._systemService.off();
-      });
+    this._router.navigate(['/modules/beneficiary/new/principal', beneficiary._id]).then(res => {
+      this._systemService.off();
+    }).catch(err => {
+      this._systemService.off();
+    });
   }
 
   navigateDetailBeneficiary(beneficiary) {
     if (beneficiary.isPrincipal) {
       this._locker.setObject('policyID', beneficiary.policyId);
       this._systemService.on();
-      this._router
-        .navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     } else {
       this._locker.setObject('policyID', beneficiary.policyId);
       this._systemService.on();
-      this._router
-        .navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId])
-        .then(res => {
-          this._systemService.off();
-        })
-        .catch(err => {
-          this._systemService.off();
-        });
+      this._router.navigate(['/modules/beneficiary/beneficiaries', beneficiary.policyId]).then(res => {
+        this._systemService.off();
+      }).catch(err => {
+        this._systemService.off();
+      });
     }
   }
 }

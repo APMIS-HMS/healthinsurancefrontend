@@ -122,14 +122,14 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       programName: ["", [<any>Validators.required]],
       providerName: ["", [<any>Validators.required]],
       premiumPackage: ["", [<any>Validators.required]],
-      sponsorship: ["", [<any>Validators.required]],
-      organization: ["", []],
-      sponsorshipType: ["", []]
+      sponsorship: ['', [<any>Validators.required]],
+      organization: ['', []],
+      sponsorshipType: ['', []]
     });
-    this.user = (<any>this._locker.getObject("auth")).user;
+    this.user = (<any>this._locker.getObject('auth')).user;
     if (
       !!this.user.userType &&
-      this.user.userType.name === "Health Insurance Agent"
+      this.user.userType.name === 'Health Insurance Agent'
     ) {
       this.isHIA = true;
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1]);
@@ -141,23 +141,23 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       }
     } else if (
       !!this.user.userType &&
-      this.user.userType.name === "Beneficiary"
+      this.user.userType.name === 'Beneficiary'
     ) {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[0]);
-    } else if (!!this.user.userType && this.user.userType.name === "Employer") {
+    } else if (!!this.user.userType && this.user.userType.name === 'Employer') {
       this.frmProgram.controls.sponsorship.setValue(this.sponsorships[1]);
     }
 
-    this.frmProgram.controls["programType"].valueChanges.subscribe(value => {
+    this.frmProgram.controls['programType'].valueChanges.subscribe(value => {
       this._getPlanByType(value._id);
     });
 
-    this.frmProgram.controls["programName"].valueChanges.subscribe(value => {
+    this.frmProgram.controls['programName'].valueChanges.subscribe(value => {
       this.premiumPackages = value.premiums;
       this.filteredPremiumPackages = value.premiums;
     });
 
-    this.frmProgram.controls["premiumCategory"].valueChanges.subscribe(
+    this.frmProgram.controls['premiumCategory'].valueChanges.subscribe(
       value => {
         if (this.filteredPremiumPackages.length > 0) {
           this.premiumPackages = this.filteredPremiumPackages.filter(
@@ -167,8 +167,8 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       }
     );
 
-    this.frmProgram.controls["sponsorship"].valueChanges.subscribe(value => {
-      if (value.name === "Self") {
+    this.frmProgram.controls['sponsorship'].valueChanges.subscribe(value => {
+      if (value.name === 'Self') {
         this.isHIA = false;
       } else {
         this.isHIA = true;
@@ -192,7 +192,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   }
 
   _getPerson() {
-    if (this.user.userType.name === "Beneficiary") {
+    if (this.user.userType.name === 'Beneficiary') {
       let person$ = Observable.fromPromise(
         this._personService.find({
           query: {
@@ -203,7 +203,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       let beneficiary$ = Observable.fromPromise(
         this._beneficiaryService.find({
           query: {
-            "personId.email": this.user.email
+            'personId.email': this.user.email
           }
         })
       );
@@ -283,7 +283,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   _getPlanByType(id) {
     this._systemService.on();
     this._planService
-      .find({ query: { "planType._id": id } })
+      .find({ query: { 'planType._id': id } })
       .then((res: any) => {
         this._systemService.off();
         this.plans = res.data;
@@ -312,7 +312,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       .find({
         query: {
           shortName: this.platformName,
-          $select: ["name", "shortName", "address.state"]
+          $select: ['name', 'shortName', 'address.state']
         }
       })
       .then((res: any) => {
@@ -334,9 +334,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this._facilityService
       .find({
         query: {
-          "facilityType.name": "Health Insurance Agent",
-          "platformOwnerId._id": platformOwnerId,
-          $select: ["name", "hia"]
+          'facilityType.name': 'Health Insurance Agent',
+          'platformOwnerId._id': platformOwnerId,
+          $select: ['name', 'hia']
         }
       })
       .then((res: any) => {
@@ -344,7 +344,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         this.hias = res.data;
         if (
           !!this.user.userType &&
-          this.user.userType.name === "Health Insurance Agent"
+          this.user.userType.name === 'Health Insurance Agent'
         ) {
           this.isHIA = true;
           let index = this.hias.findIndex(
@@ -367,10 +367,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this._facilityService
       .find({
         query: {
-          "facilityType.name": "Provider",
-          "provider.facilityClass": "primary",
-          "platformOwnerId._id": platformOwnerId,
-          $select: ["name", "provider"]
+          'facilityType.name': 'Provider',
+          'provider.facilityClass': 'primary',
+          'platformOwnerId._id': platformOwnerId,
+          $select: ['name', 'provider']
         }
       })
       .then((res: any) => {
@@ -400,9 +400,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
     this._facilityService
       .find({
         query: {
-          "facilityType.name": "Employer",
-          "platformOwnerId._id": platformOwnerId,
-          "employer.hias._id": hiaId
+          'facilityType.name': 'Employer',
+          'platformOwnerId._id': platformOwnerId,
+          'employer.hias._id': hiaId
           // $select: ['name', 'Employer.providerId']
         }
       })
@@ -416,8 +416,10 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   }
 
   onClickStepFour(value, valid) {
+    console.log('Selected Beneficairy', this.selectedBeneficiary);
     if (valid) {
       let policy: any = <any>{};
+      this.selectedBeneficiary.isComplete = true;
       policy.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
       policy.principalBeneficiary = this.selectedBeneficiary._id;
       policy.hiaId = value.hiaName;
@@ -428,9 +430,9 @@ export class NewBeneficiaryProgramComponent implements OnInit {
       policy.premiumPackageId = value.premiumPackage;
       policy.sponsorshipId = value.sponsorship;
       if (policy.sponsorshipId.id === 2) {
-        if (this.user.userType.name === "Employer") {
+        if (this.user.userType.name === 'Employer') {
           policy.sponsor = this.user.facilityId;
-        } else if (this.user.userType.name === "Health Insurance Agent") {
+        } else if (this.user.userType.name === 'Health Insurance Agent') {
           policy.sponsor = value.organization;
           policy.sponsorshipType = value.sponsorshipType;
           // sponsorship: ['', [<any>Validators.required]],
@@ -445,32 +447,15 @@ export class NewBeneficiaryProgramComponent implements OnInit {
         policy: policy,
         platform: this.selectedBeneficiary.platformOwnerId
       };
-      this._beneficiaryService
-        .updateWithMiddleWare(body)
-        .then(payload => {
-          this._router
-            .navigate([
-              "/modules/beneficiary/new/complete",
-              payload.body.policyObject._id
-            ])
-            .then(payload => {})
-            .catch(err => {});
-          this._systemService.announceSweetProxy(
-            "Your Policy item has been generated!",
-            "success"
-          );
-          // this._toastr.success('Your Policy item has been generated!', 'Success');
-        })
-        .catch(err => {});
+      this._beneficiaryService.updateWithMiddleWare(body).then(payload => {
+        console.log('Updated Res', payload);
+        this._router.navigate(['/modules/beneficiary/new/complete', payload.body.policyObject._id]).then(payload => {}).catch(err => {});
+        this._systemService.announceSweetProxy('Your Policy item has been generated!', 'success');
+      }).catch(err => {});
     } else {
       let counter = 0;
-      // this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
-      this._systemService.announceSweetProxy(
-        FORM_VALIDATION_ERROR_MESSAGE,
-        "error"
-      );
+      this._systemService.announceSweetProxy(FORM_VALIDATION_ERROR_MESSAGE, 'error');
       Object.keys(this.frmProgram.controls).forEach((field, i) => {
-        // {1}
         const control = this.frmProgram.get(field);
         if (!control.valid) {
           control.markAsDirty({ onlySelf: true });

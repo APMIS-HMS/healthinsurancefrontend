@@ -79,7 +79,7 @@ export class ListBeneficiaryComponent implements OnInit {
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl("Beneficiary List");
     this._headerEventEmitter.setMinorRouteUrl("All Beneficiaries");
-    if (!!this.user.userType && this.user.userType === undefined) {
+    if (this.user.userType === undefined) {
       this.hasCreateBeneficiary = true;
     } else if (!!this.user.userType && this.user.userType.name !== "Provider") {
       this.hasCreateBeneficiary = true;
