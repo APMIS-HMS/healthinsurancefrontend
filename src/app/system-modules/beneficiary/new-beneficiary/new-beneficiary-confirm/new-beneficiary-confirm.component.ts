@@ -9,12 +9,12 @@ import { environment } from "../../../../../environments/environment";
 import { RoleService } from "./../../../../services/auth/role/role.service";
 import { JsonDataService } from "./../../../../services/common/json-data.service";
 import { UserService } from "./../../../../services/common/user.service";
-import { PolicyService } from "./../../../../services/policy/policy.service";
+import { PolicyService } from './../../../../services/policy/policy.service';
 
 @Component({
-  selector: "app-new-beneficiary-confirm",
-  templateUrl: "./new-beneficiary-confirm.component.html",
-  styleUrls: ["./new-beneficiary-confirm.component.scss"]
+  selector: 'app-new-beneficiary-confirm',
+  templateUrl: './new-beneficiary-confirm.component.html',
+  styleUrls: ['./new-beneficiary-confirm.component.scss']
 })
 export class NewBeneficiaryConfirmComponent implements OnInit {
   @Input()
@@ -39,126 +39,116 @@ export class NewBeneficiaryConfirmComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = (<any>this._locker.getObject("auth")).user;
+    this.user = (<any>this._locker.getObject('auth')).user;
     this._getRoles();
     this._route.params.subscribe(param => {
       if (param.id !== undefined) {
-        this._policyService
-          .get(param.id, {})
-          .then(payload => {
-            this.policyObject = payload;
-          })
-          .catch(err => {});
+        this._policyService.get(param.id, {}).then(payload => {
+          this.policyObject = payload;
+        }).catch(err => {});
       }
     });
 
-    if (!!this.user.userType && this.user.userType.name === "Beneficiary") {
+    if (!!this.user.userType && this.user.userType.name === 'Beneficiary') {
       this.isBeneficiary = true;
     }
   }
   _getRoles() {
     let role$ = Observable.fromPromise(
-      this._roleService.find({ query: { name: "Beneficiary" } })
+      this._roleService.find({ query: { name: 'Beneficiary' } })
     );
+
     let user$ = Observable.fromPromise(
       this._userService.get(this.user._id, {})
     );
 
-    Observable.forkJoin([role$, user$]).subscribe(
-      (results: any) => {
-        this.roles = results[0].data;
-        this.user = results[1];
-      },
-      error => {}
+    Observable.forkJoin([role$, user$]).subscribe((results: any) => {
+      this.roles = results[0].data;
+      this.user = results[1];
+    }, error => {}
     );
   }
   private _checkRole() {
     try {
       const roles = this.user.roles;
       const roleIds: any[] = [];
-      roles.forEach(x => {
-        roleIds.push(x._id);
-      });
+      roles.forEach(x => { roleIds.push(x._id);});
 
-      this._roleService
-        .find({ query: { _id: { $in: roleIds } } })
-        .then((pays: any) => {
-          pays.data.forEach(roleItem => {
-            if (!!roleItem.accessibilities) {
-              const accessibilities = roleItem.accessibilities;
-              this._locker.setObject("accessibilities", accessibilities);
-            }
-            this._toastr.success(
-              "User acquired a new role successfully!",
-              "Success!"
-            );
-          });
-        })
-        .catch(err => {});
+      this._roleService.find({ query: { _id: { $in: roleIds } } }).then((pays: any) => {
+        pays.data.forEach(roleItem => {
+          if (!!roleItem.accessibilities) {
+            const accessibilities = roleItem.accessibilities;
+            this._locker.setObject('accessibilities', accessibilities);
+          }
+          this._toastr.success('User acquired a new role successfully!', 'Success!');
+        });
+      }).catch(err => {});
     } catch (error) {}
   }
   confirmList() {
-    if (this.user.userType.name !== "Beneficiary") {
-      this._router
-        .navigate(["modules/beneficiary/beneficiaries"])
-        .then(payload => {})
-        .catch(err => {});
+    if (this.user.userType.name !== 'Beneficiary') {
+      this._router.navigate(['modules/beneficiary/beneficiaries']).then(payload => {}).catch(err => {});
     } else {
       let roles: any[] = [];
       if (this.roles.length > 0) {
         roles.push(this.roles[0]);
-        this._userService
-          .patch(
-            this.user._id,
-            { roles: roles, completeRegistration: true },
-            {}
-          )
-          .then(payload => {
-            this._router.navigate(["modules/beneficiary/beneficiaries"]);
-          })
-          .catch(err => {});
+        this._userService.patch(this.user._id, { roles: roles, completeRegistration: true }, {}).then(payload => {
+          this._router.navigate(['modules/beneficiary/beneficiaries']);
+        }).catch(err => {});
       }
     }
   }
 
   confirmDetails() {
-    if (this.user.userType.name !== "Beneficiary") {
-      this._router
-        .navigate(["modules/beneficiary/beneficiaries"])
-        .then(payload => {})
-        .catch(err => {});
+    if (this.user.userType.name !== 'Beneficiary') {
+      this._router.navigate(['modules/beneficiary/beneficiaries']).then(res => {}).catch(err => {});
     } else {
       let roles: any[] = [];
       if (this.roles.length > 0) {
         roles.push(this.roles[0]);
-        this._userService
-          .patch(
-            this.user._id,
-            { roles: roles, completeRegistration: true },
-            {}
-          )
-          .then(payload => {
-            this.user = payload;
-            this._checkRole();
-            this._router
-              .navigate([
-                "/modules/beneficiary/beneficiaries",
-                this.policyObject._id
-              ])
-              .then(payload => {})
-              .catch(err2 => {});
-          })
-          .catch(err => {});
+        this._userService.patch(this.user._id, { roles: roles, completeRegistration: true }, {}).then(res => {
+          this.user = res;
+          this._checkRole();
+          this._router.navigate(['/modules/beneficiary/beneficiaries', this.policyObject._id]).then(r => {}).catch(err => {});
+        }).catch(err => {});
       }
     }
   }
 
+  onClickPrintDocument() {
+    let printContents = document.getElementById('print-section').innerHTML;
+    let popupWin = window.open('', '', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+            .details {
+              margin-top: 10px;
+            }
+            .header {
+              margin-bottom: 20px;
+            }
+            .img-header {
+              text-align: center;
+            }
+            .img-header img {
+              width: 100px;
+              height: 100px;
+            }
+            .text-header {
+              text-align: center
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
+
   confirmPayments() {
-    this._router
-      .navigate([
-        `/modules/beneficiary/beneficiaries/${this.policyObject._id}/payment`
-      ])
-      .then(payload => {})
-      .catch(err2 => {});
+    this._router.navigate([`/modules/beneficiary/beneficiaries/${this.policyObject._id}/payment`]).then(payload => {}).catch(err2 => {});
   }
 }

@@ -25,12 +25,11 @@ import { PolicyService } from "./../../../../services/policy/policy.service";
 @Component({
   selector: "app-personal-details",
   templateUrl: "./personal-details.component.html",
-  styleUrls: ["./personal-details.component.scss"]
+  styleUrls: ['./personal-details.component.scss']
 })
 export class PersonalDetailsComponent implements OnInit {
-  @Input()
-  beneficiary;
-
+  @Input() beneficiary;
+  printBeneficiary;
   approvalFormGroup: FormGroup;
   policy: any;
   tab_details = false;
@@ -61,7 +60,7 @@ export class PersonalDetailsComponent implements OnInit {
     private _locker: CoolLocalStorage
   ) {
     this.platformName = environment.platform;
-    this._headerEventEmitter.setRouteUrl("Beneficiary Details");
+    this._headerEventEmitter.setRouteUrl('Beneficiary Details');
     this._route.params.subscribe(param => {
       if (!!param.id) {
         this._getBeneficiaryDetails(param.id);
@@ -72,7 +71,7 @@ export class PersonalDetailsComponent implements OnInit {
   ngOnInit() {
     this.approvalFormGroup = this._fb.group({
       duration: [1, [<any>Validators.required]],
-      unit: ["", [<any>Validators.required]],
+      unit: ['', [<any>Validators.required]],
       startDate: [new Date(), [<any>Validators.required]]
     });
   }
@@ -86,15 +85,14 @@ export class PersonalDetailsComponent implements OnInit {
 
     Observable.forkJoin([policy$]).subscribe(
       (results: any) => {
+        this.printBeneficiary = results[0];
         this.beneficiary = results[0].principalBeneficiary;
         if (this.isCheckIn) {
           this.tabCheckin_click();
         }
         this.tabCheckin_click();
         if (!!results) {
-          this._headerEventEmitter.setMinorRouteUrl(
-            "Household: " + results[0].policyId
-          );
+          this._headerEventEmitter.setMinorRouteUrl('Household: ' + results[0].policyId);
           this.dependants = results[0].dependantBeneficiaries;
           this.policy = results[0];
         }
@@ -116,6 +114,7 @@ export class PersonalDetailsComponent implements OnInit {
     this.tab_checkin = true;
     this.tab_checkinHistory = false;
   }
+
   openModal(e) {
     this.addApproval = true;
   }
@@ -123,27 +122,19 @@ export class PersonalDetailsComponent implements OnInit {
   onClickApprove() {
     if (this.policy.isPaid) {
       this.policy.isActive = !this.policy.isActive;
-      this._policyService
-        .update(this.policy)
-        .then((res: any) => {
-          this.policy = res;
-          const status = this.policy.isActive
-            ? "activated successfully"
-            : "deactivated successfully";
-          const text = "Policy has been " + status;
-          this._toastr.success(text, "Confirmation!");
-          setTimeout(e => {
-            this.addApprovalClick();
-          }, 1000);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this._policyService.update(this.policy).then((res: any) => {
+        this.policy = res;
+        const status = this.policy.isActive ? 'activated successfully' : 'deactivated successfully';
+        const text = 'Policy has been ' + status;
+        this._toastr.success(text, 'Confirmation!');
+        setTimeout(e => {
+          this.addApprovalClick();
+        }, 1000);
+      }).catch(err => {
+        console.log(err);
+      });
     } else {
-      this._toastr.error(
-        "Policy has not been paid for. Please pay for policy before you can active!",
-        "Payment Error!"
-      );
+      this._toastr.error('Policy has not been paid for. Please pay for policy before you can active!', 'Payment Error!');
     }
   }
 
@@ -153,15 +144,48 @@ export class PersonalDetailsComponent implements OnInit {
     return result;
   }
 
+  onClickPrintDocument() {
+    let printContents = document.getElementById('print-section').innerHTML;
+    let popupWin = window.open('', '', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+            .details {
+              margin-top: 10px;
+            }
+            .header {
+              margin-bottom: 20px;
+            }
+            .img-header {
+              text-align: center;
+            }
+            .img-header img {
+              width: 100px;
+              height: 100px;
+            }
+            .text-header {
+              text-align: center
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
+
   onClickDeactivate() {
     this.policy.isActive = false;
     this._policyService.update(this.policy).then((res: Facility) => {
       this.beneficiary = res;
       const status = this.policy.isActive
-        ? "activated successfully"
-        : "deactivated successfully";
-      const text = "Policy has been " + status;
-      this._toastr.success(text, "Confirmation!");
+        ? 'activated successfully'
+        : 'deactivated successfully';
+      const text = 'Policy has been ' + status;
+      this._toastr.success(text, 'Confirmation!');
       setTimeout(e => {
         this.addApprovalClick();
       }, 1000);
@@ -174,7 +198,7 @@ export class PersonalDetailsComponent implements OnInit {
   navigateEditBeneficiary(beneficiary) {
     this._systemService.on();
     this._router
-      .navigate(["/modules/beneficiary/new", beneficiary._id])
+      .navigate(['/modules/beneficiary/new', beneficiary._id])
       .then(res => {
         this._systemService.off();
       })
@@ -184,14 +208,14 @@ export class PersonalDetailsComponent implements OnInit {
   }
 
   navigateFacility(sponsor) {
-    if (sponsor.facilityType.name === "Provider") {
-      this._router.navigate(["/modules/provider/providers", sponsor._id]);
-    } else if (sponsor.facilityType.name === "Employer") {
-      this._router.navigate(["/modules/employer/employers", sponsor._id]);
-    } else if (sponsor.facilityType.name === "Health Insurance Agent") {
-      this._router.navigate(["/modules/hia/hias", sponsor._id]);
-    } else if (sponsor.facilityType.name === "Platform Owner") {
-      this._router.navigate(["/modules/provider/new", sponsor._id]);
+    if (sponsor.facilityType.name === 'Provider') {
+      this._router.navigate(['/modules/provider/providers', sponsor._id]);
+    } else if (sponsor.facilityType.name === 'Employer') {
+      this._router.navigate(['/modules/employer/employers', sponsor._id]);
+    } else if (sponsor.facilityType.name === 'Health Insurance Agent') {
+      this._router.navigate(['/modules/hia/hias', sponsor._id]);
+    } else if (sponsor.facilityType.name === 'Platform Owner') {
+      this._router.navigate(['/modules/provider/new', sponsor._id]);
     }
   }
 

@@ -3,7 +3,6 @@
 <div class="details-wrap">
     <div class="left-wrap">
         <div class="detail-item">
-
             <div class="detail-content">
                 <div class="hia-user">
                     <img *ngIf="beneficiary?.personId?.profileImageObject === undefined" src="../../../../assets/img/users/default.png">
@@ -23,10 +22,6 @@
                         <div class="item-label">{{platformName}} ID:</div>
                         <div class="item-val">{{ beneficiary?.platformOwnerNumber }}</div>
                     </div>
-                    <!-- <div class="group-item">
-                        <div class="item-label">ASHIA ID:</div>
-                        <div class="item-val">{{ '' }}</div>
-                    </div> -->
                     <div class="group-item">
                         <div class="item-label">Email:</div>
                         <div class="item-val">{{ beneficiary?.personId?.email }}</div>
@@ -78,6 +73,7 @@
 
                 <i (click)="navigateEditBeneficiary(beneficiary)" class="ico-cirle fa fa-pencil"></i>
             </div>
+            <div (click)="onClickPrintDocument()" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">Print Details</div>
         </div>
 
         <div *ngFor="let dependant of dependants" class="detail-item">
@@ -145,9 +141,7 @@
         </div>
     </div>
     <div class="right-wrap ">
-
         <div class="detail-item ">
-
             <div class="detail-content ">
                 <div class="hia-user">
                     <img *ngIf="policy?.providerId?.logo === undefined" src="../../../../assets/img/logos/logo-placeholder.png ">
@@ -155,39 +149,30 @@
                 </div>
                 <div class="group-wrap ">
                     <div class="item-label ">Primary Healthcare Provider:</div>
-
                     <div class="item-val ">{{policy?.providerId?.name}}</div>
                     <div class="item-val ">{{policy?.providerId?.address?.street}}</div>
                     <div class="item-val ">{{policy?.providerId?.address?.neigbhourhood}}</div>
                     <div class="item-val ">{{policy?.providerId?.address?.city?.name}}-{{policy?.providerId?.address?.state?.name}}.</div>
                     <div class="item-val ">{{policy?.providerId?.phoneNumber}}</div>
-
-                    <div (click)="navigateFacility(policy?.providerId)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details
-                    </div>
+                    <div (click)="navigateFacility(policy?.providerId)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
                 </div>
                 <i class="ico-cirle fa fa-trash "></i>
             </div>
         </div>
-
         <div class="detail-item ">
-
             <div *ngIf="policy?.sponsor !== undefined && policy?.sponsor !== ''" class="detail-content ">
                 <div class="group-wrap ">
                     <div class="item-label ">Employer:</div>
-
                     <div class="item-val ">{{policy?.sponsor?.name}}</div>
                     <div class="item-val ">{{policy?.sponsor?.address?.street}}, {{policy?.sponsor?.address?.neighbourhood}},
                     </div>
                     <div class="item-val ">{{policy?.sponsor?.address?.city?.name}}</div>
                     <div class="item-val ">{{policy?.sponsor?.address?.state?.name}}.</div>
-
-                    <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details
-                    </div>
+                    <div (click)="navigateFacility(policy?.sponsor)" style="width: 102px;margin-top: 10px; " class="btn btn-medium btn-blue-outline ">To Details</div>
                 </div>
                 <i class="ico-cirle fa fa-trash "></i>
             </div>
         </div>
-
     </div>
 </div>
 <div *ngIf="addApproval" class="modal-overlay">
@@ -270,4 +255,48 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="print-section" style="display:none">
+  <header class="header">
+    <div class="img-header">
+      <img src="../../../../../assets/img/logos/ashia.jpeg" alt="">
+    </div>
+    <div class="text-header">
+      <h2>{{ printBeneficiary?.principalBeneficiary?.platformOwnerId?.name }}</h2>
+    </div>
+  </header>
+  <section>
+    <div>
+      <b>Policy Details</b>
+      <div>Household ID: {{ printBeneficiary?.policyId }} </div>
+      <div>{{ platformName }} ID: {{ printBeneficiary?.platformOwnerNumber }} </div>
+      <div>Sponsor: {{ printBeneficiary?.sponsorshipId?.name }} </div>
+    </div>
+    <div class="details">
+        <b>Beneficiary Details</b>
+        <div>Fullname: {{ printBeneficiary?.principalBeneficiary?.personId?.title?.name }} {{ printBeneficiary?.principalBeneficiary?.personId?.firstName }} {{ printBeneficiary?.principalBeneficiary?.personId?.otherNames }} {{ printBeneficiary?.principalBeneficiary?.personId?.lastName }}</div>
+        <div>Gender: {{ printBeneficiary?.principalBeneficiary?.personId?.gender?.name }}</div>
+        <div>Date of birth: {{ printBeneficiary?.principalBeneficiary?.personId?.dateOfBirth | date }}</div>
+        <div>Principal Policy ID: {{ printBeneficiary?.principalPolicyId }}</div>
+        <div>Email: {{ printBeneficiary?.principalBeneficiary?.personId?.email }}</div>
+        <div>State: {{ printBeneficiary?.principalBeneficiary?.personId?.homeAddress?.state?.name }}</div>
+    </div>
+    <div class="details">
+        <b>Plan Details</b>
+        <div>Plan name: {{ printBeneficiary?.planId?.name }}</div>
+        <div>Plan name: {{ printBeneficiary?.planId?.planType?.name }}</div>
+        <div>Premium: &#x20a6;{{ printBeneficiary?.planId?.premiums[printBeneficiary?.planId?.premiums?.length - 1].amount }} for {{ printBeneficiary?.planId?.premiums[printBeneficiary?.planId?.premiums?.length - 1].durationInDay }}</div>
+    </div>
+    <div class="details">
+        <b>HMO Details</b>
+        <div>HMO name: {{ printBeneficiary?.hiaId?.name }}</div>
+    </div>
+    <div class="details">
+        <b>Provider Healthcare Provider</b>
+        <div>Provider name: {{ printBeneficiary?.providerId?.name }}</div>
+        <div>Provider address: {{ printBeneficiary?.providerId?.street }}, {{ printBeneficiary?.providerId?.city?.name }} {{ printBeneficiary?.providerId?.lga?.name }}</div>
+        <div>Provider Contact: {{ printBeneficiary?.providerId?.phoneNumber }}</div>
+    </div>
+  </section>
 </div>

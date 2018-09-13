@@ -35,6 +35,7 @@ export class ProviderDetailsComponent implements OnInit {
   facility: any = <any>{};
   approvalBtn: string = 'APPROVE &nbsp; <i class="fa fa-check-circle"></i>';
   canApprove = false;
+  user: any;
 
 	constructor(
     private _fb: FormBuilder,
@@ -50,7 +51,8 @@ export class ProviderDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (JSON.parse(this.locker.getItem('auth')).user.userType.name === 'Platform Owner') {
+    this.user = (<any>this.locker.getObject('auth')).user;
+    if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
       this.canApprove = true;
     }
 

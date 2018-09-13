@@ -8,10 +8,10 @@
             style="width: 30px;display: block;margin: 0 auto;" (change)="changeGender($event, gender)" type="radio"
             formControlName="gender" name="gender" id="bene-male" [value]="gender" checked>{{gender.name}}
         </label>
-      </span>
+        </span>
             <small class="alert-label" [hidden]="stepOneFormGroup.controls.gender.valid || stepOneFormGroup.controls.gender.pristine">
-        Gender is required.
-      </small>
+              Gender is required.
+            </small>
         </div>
     </div>
     <div class="frm-item-wrap">
@@ -266,7 +266,7 @@
             <div>
                 I <b>{{stepOneFormGroup.controls?.firstName?.value }} {{stepOneFormGroup.controls?.lastName?.value }}</b> the assured, do hereby declare that all the foregoing answers are true, that I have not concealed nor withheld anything with which
                 the assurer should be acquainted with in order to assess my eligibility for health insurance.
-                <!-- Are there any additional facts affecting the risk of assurance of your health of which the AGENCY (ASHIA) should be made aware?-->
+                <!-- Are there any additional facts affecting the risk of assurance of your health of which the AGENCY should be made aware?-->
                 I agree that these and all statements I have made or shall make to the assurer or to its medical examiner(s) in connection with this or previous proposal(s) shall be the basis of this contract.<br>
             </div>
         </div>
