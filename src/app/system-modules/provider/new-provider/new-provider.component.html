@@ -299,7 +299,7 @@
                 </div>
             </div> -->
             <div class="frm-item-wrap">
-                <label class="label">ASHIA Number</label>
+                <label class="label">{{ platformName }} Number</label>
                 <div class="inputWrap">
                     <input type="text" formControlName="hefeemaNumber" class="form-control">
                     <small class="alert-label" [hidden]="providerFormGroup.controls.hefeemaNumber.valid || providerFormGroup.controls.hefeemaNumber.pristine">
@@ -308,7 +308,7 @@
                 </div>
             </div>
             <div class="frm-item-wrap">
-                <label class="label">ASHIA Status</label>
+                <label class="label">{{ platformName }} Status</label>
                 <div class="inputWrap">
                     <select formControlName="hefeemaStatus" class="form-control" [compareWith]="compareStatus">
                       <option value="" selected>Select Status</option>

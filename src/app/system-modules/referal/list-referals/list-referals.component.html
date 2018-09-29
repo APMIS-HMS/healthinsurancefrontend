@@ -14,22 +14,22 @@
         <div class="input-wrap">
             <label>Responsible HIA</label>
             <select [formControl]="filterHiaControl" class="form-control">
-                <option value="All" selected>All</option>
-            </select>
+        <option value="All" selected>All</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>Hospital Name</label>
             <select [formControl]="hospitalControl">
-                <option>All</option>
-            </select>
+        <option>All</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>Health Care Plan</label>
             <select [formControl]="planControl">
-                <option>All</option>
-            </select>
+        <option>All</option>
+      </select>
         </div>
 
         <div class="btn btn-medium btn-blue-outline" (click)="reset()">RESET</div>
@@ -39,7 +39,7 @@
         <thead class="thead">
             <tr class="tr">
                 <th class="th">S/No</th>
-                <th class="th">ASHIA ID</th>
+                <th class="th">{{platformName}} ID</th>
                 <th class="th">Patient Name</th>
                 <th class="th">Date</th>
                 <th class="th">Referal Code</th>
@@ -65,7 +65,8 @@
             <tr *ngFor="let referral of authorizations; let i =index" class="tr">
                 <td class="td">{{i+1}}</td>
                 <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.platformOwnerNumber}}</td>
-                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.personId?.lastName}} {{referral.checkedInDetails?.beneficiaryObject?.personId?.firstName}}</td>
+                <td class="td">{{referral.checkedInDetails?.beneficiaryObject?.personId?.lastName}} {{referral.checkedInDetails?.beneficiaryObject?.personId?.firstName}}
+                </td>
                 <td class="td">{{referral.timeOfRequest|date:'short'}}</td>
                 <td class="td">{{referral.authorizationCode}}</td>
                 <td class="td">{{referral.referingProvider?.name}}</td>

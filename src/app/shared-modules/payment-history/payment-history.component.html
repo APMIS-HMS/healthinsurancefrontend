@@ -5,32 +5,32 @@
         <div class="input-wrap">
             <label>Type</label>
             <select [formControl]="filterTypeControl" class="form-control">
-                <option value="All" selected>All</option>
-                <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
-            </select>
+        <option value="All" selected>All</option>
+        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>Registered By</label>
             <select [formControl]="createdByControl">
-                <option>All</option>
-            </select>
+        <option>All</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>LGA By</label>
             <select [formControl]="utilizedByControl">
-                <option>All</option>
-            </select>
+        <option>All</option>
+      </select>
         </div>
 
         <div class="input-wrap">
             <label>Status</label>
             <select [formControl]="statusControl">
-                <option selected value="All">All</option>
-                <option value=true>Active</option>
-                <option value=false>Inactive</option>
-            </select>
+        <option selected value="All">All</option>
+        <option value=true>Active</option>
+        <option value=false>Inactive</option>
+      </select>
         </div>
 
         <div (click)="reset()" class="btn btn-medium btn-blue-outline">RESET</div>
@@ -41,7 +41,7 @@
             <tr class="tr">
                 <th class="th">No</th>
                 <th class="th">Due Date</th>
-                <th class="th">ASHIA ID</th>
+                <th class="th">{{platformName}} ID</th>
                 <th class="th">Amount Paid</th>
                 <th class="th">Duration Policy</th>
                 <th class="th">Policy ID</th>
