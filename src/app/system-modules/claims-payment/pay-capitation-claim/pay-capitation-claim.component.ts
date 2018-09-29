@@ -1,16 +1,15 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName, FLUTTERWAVE_PUBLIC_KEY } from './../../../services/globals/config';
-import {
-  SystemModuleService, UserTypeService, FacilityService, ClaimsPaymentService, ClaimService,
-  BankService, ProviderRecipientService, CapitationFeeService
-} from '../../../services/index';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {CoolLocalStorage} from 'angular2-cool-storage';
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+import {Observable, Subscription} from 'rxjs/Rx';
+
+import {environment} from '../../../../environments/environment';
+import {BankService, CapitationFeeService, ClaimService, ClaimsPaymentService, FacilityService, ProviderRecipientService, SystemModuleService, UserTypeService} from '../../../services/index';
+
+import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-pay-capitation-claim',
@@ -41,21 +40,19 @@ export class PayCapitationClaimComponent implements OnInit {
   totalAmount: number = 0;
   user: any;
   capitationPrice: any;
+  platformName: string;
 
   constructor(
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _toastr: ToastsManager,
-    private _bankService: BankService,
-    private _locker: CoolLocalStorage,
-    private _systemService: SystemModuleService,
-    private _facilityService: FacilityService,
-    private _claimService: ClaimService,
-    private _providerRecipientService: ProviderRecipientService,
-    private _capitationFeeService: CapitationFeeService
-  ) {
+      private _router: Router, private _route: ActivatedRoute,
+      private _toastr: ToastsManager, private _bankService: BankService,
+      private _locker: CoolLocalStorage,
+      private _systemService: SystemModuleService,
+      private _facilityService: FacilityService,
+      private _claimService: ClaimService,
+      private _providerRecipientService: ProviderRecipientService,
+      private _capitationFeeService: CapitationFeeService) {
+    this.platformName = environment.platform;
     this._route.params.subscribe(param => {
-      console.log(param);
       if (!!param.id) {
         this.routeId = param.id;
       }
@@ -64,15 +61,12 @@ export class PayCapitationClaimComponent implements OnInit {
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
-    console.log(this.capitations);
-    console.log(this.selectedFacility);
-    // console.log(this.hiaDetails);
-    console.log(this.user);
 
     if (this.capitations.length > 0) {
-      // this.totalAmount = this.capitations.reduce((acc, obj) => acc + obj.costingApprovalDocumentation, 0);
+      // this.totalAmount = this.capitations.reduce((acc, obj) => acc +
+      // obj.costingApprovalDocumentation, 0);
     }
-    // console.log(this.totalAmount);
+
     this._getFacility();
     this._getCurrentPlatform();
   }
@@ -88,9 +82,10 @@ export class PayCapitationClaimComponent implements OnInit {
         // hiaId: this.hiaDetails._id,
         providerId: this.selectedFacility._id,
         accountNumber: this.selectedFacility.bankDetails.accountNumber,
-        bankCode: this.selectedFacility.bankDetails.bank.name
+        bankCode: this.selectedFacility.bankDetails.bank.code
       };
 
+      console.log(payload);
       this._providerRecipientService.verifyProviderAccount(payload).then(res => {
         console.log(res);
         if (res.status === 'success') {
@@ -108,12 +103,13 @@ export class PayCapitationClaimComponent implements OnInit {
         console.log(err);
       });
     } else {
-
     }
   }
 
   private onClickPayRecipient() {
-    if (!!this.user.userType && (this.user.userType.name === 'Platform Owner' || this.user.userType.name === 'Health Insurance Agent')) {
+    if (!!this.user.userType &&
+        (this.user.userType.name === 'Platform Owner' ||
+         this.user.userType.name === 'Health Insurance Agent')) {
       if (!!this.selectedFacility._id && !!this.currentPlatform._id) {
         this.disablePayRecipient = true;
         this.payRecipient = false;
@@ -123,13 +119,11 @@ export class PayCapitationClaimComponent implements OnInit {
         const provider = {
           _id: this.selectedFacility._id,
           name: this.selectedFacility.name,
-          provider: {
-            providerId: this.selectedFacility.provider.providerId
-          }
+          provider: {providerId: this.selectedFacility.provider.providerId}
         };
         delete this.user.roles;
 
-        const payload = <any> {
+        const payload = <any>{
           platformOwnerId: this.currentPlatform,
           providerId: provider,
           policies: policies,
@@ -151,7 +145,9 @@ export class PayCapitationClaimComponent implements OnInit {
             this.payingRecipient = false;
             this.confirmedPayment = true;
             const amount = this.capitationPrice.amount;
-            const text = `You successfully paid ${this.selectedFacility.name} the sum of ${amount} for ${policies.length} claims.`;
+            const text = `You successfully paid ${
+                this.selectedFacility.name} the sum of ${amount} for ${
+                policies.length} claims.`;
             this._toastr.success(text, 'Success!');
             this._toastr.info('Redirecting...', 'Redirecting!');
             setTimeout(() => {
@@ -174,12 +170,7 @@ export class PayCapitationClaimComponent implements OnInit {
 
   private _getClaimsCapitationPrice(id: string) {
     this._systemService.on();
-    this._capitationFeeService.find({
-      query: {
-        'platformOwnerId._id': id,
-        isActive: true
-      }
-    }).then((res: any) => {
+    this._capitationFeeService.find({query: {'platformOwnerId._id': id, isActive: true}}).then((res: any) => {
       console.log(res);
       this.capitationPrice = res.data[0];
       this._getProviderRecipient();
@@ -193,7 +184,7 @@ export class PayCapitationClaimComponent implements OnInit {
   private _getCurrentPlatform() {
     this._facilityService.find({
       query: {
-        shortName: CurrentPlaformShortName,
+        shortName: this.platformName,
         $select: ['name', 'shortName', 'address.state']
       }
     }).then((res: any) => {
@@ -209,7 +200,7 @@ export class PayCapitationClaimComponent implements OnInit {
   private _getHia() {
     this._facilityService.find({
       query: {
-        shortName: CurrentPlaformShortName,
+        shortName: this.platformName,
         $select: ['name', 'shortName', 'address.state']
       }
     }).then((res: any) => {
@@ -244,7 +235,6 @@ export class PayCapitationClaimComponent implements OnInit {
   private _getFacility() {
     this._systemService.on();
     this._facilityService.get(this.routeId, {}).then((res: any) => {
-      console.log(res);
       if (!!res._id) {
         this.selectedFacility = res;
       }

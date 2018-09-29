@@ -1,25 +1,28 @@
-import { PolicyService } from './../../../../services/policy/policy.service';
-import { BeneficiaryService } from './../../../../services/beneficiary/beneficiary.service';
-import { Observable } from 'rxjs/Observable';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { UploadService } from './../../../../services/common/upload.service';
-import { CheckIn } from './../../../../models/check-in/check-in';
-import { CheckInService } from './../../../../services/common/check-in.service';
-import { EncounterStatusService } from './../../../../services/common/encounter-status.service';
-import { EncounterTypeService } from './../../../../services/common/encounter-type.service';
-import { ClaimStatusService } from './../../../../services/common/claim-status.service';
-import { PreAuthorizationService } from './../../../../services/pre-authorization/pre-authorization.service';
-import { ClaimTypeService } from './../../../../services/common/claim-type.service';
-import { SystemModuleService } from './../../../../services/common/system-module.service';
-import { HeaderEventEmitterService } from './../../../../services/event-emitters/header-event-emitter.service';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { IMyDpOptions, IMyDate } from 'mydatepicker';
-import { Router, ActivatedRoute } from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CoolLocalStorage} from 'angular2-cool-storage';
 import * as differenceInYears from 'date-fns/difference_in_years';
-import { FacilityService } from '../../../../services/index';
-import { error } from 'util';
+import {IMyDate, IMyDpOptions} from 'mydatepicker';
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+import {Observable} from 'rxjs/Observable';
+import {error} from 'util';
+
+import {environment} from '../../../../../environments/environment';
+import {FacilityService} from '../../../../services/index';
+
+import {CheckIn} from './../../../../models/check-in/check-in';
+import {BeneficiaryService} from './../../../../services/beneficiary/beneficiary.service';
+import {CheckInService} from './../../../../services/common/check-in.service';
+import {ClaimStatusService} from './../../../../services/common/claim-status.service';
+import {ClaimTypeService} from './../../../../services/common/claim-type.service';
+import {EncounterStatusService} from './../../../../services/common/encounter-status.service';
+import {EncounterTypeService} from './../../../../services/common/encounter-type.service';
+import {SystemModuleService} from './../../../../services/common/system-module.service';
+import {UploadService} from './../../../../services/common/upload.service';
+import {HeaderEventEmitterService} from './../../../../services/event-emitters/header-event-emitter.service';
+import {PolicyService} from './../../../../services/policy/policy.service';
+import {PreAuthorizationService} from './../../../../services/pre-authorization/pre-authorization.service';
 
 @Component({
   selector: 'app-checkin-details',
@@ -38,9 +41,7 @@ export class CheckinDetailsComponent implements OnInit {
   checkinSect = false;
   checkedinSect = false;
 
-  public myDatePickerOptions: IMyDpOptions = {
-    dateFormat: 'dd-mmm-yyyy',
-  };
+  public myDatePickerOptions: IMyDpOptions = {dateFormat: 'dd-mmm-yyyy'};
 
   public today: IMyDate;
 
@@ -58,25 +59,25 @@ export class CheckinDetailsComponent implements OnInit {
   policy: any;
   hasCheckInToday = false;
   paramcId: any;
+  platformName: any;
 
-  constructor(private _fb: FormBuilder,
-    private _toastr: ToastsManager,
-    private _headerEventEmitter: HeaderEventEmitterService,
-    private _systemService: SystemModuleService,
-    private _claimTypeService: ClaimTypeService,
-    private _claimStatusService: ClaimStatusService,
-    private _encounterTypeService: EncounterTypeService,
-    private _encounterStatusService: EncounterStatusService,
-    private _checkInService: CheckInService,
-    private _uploadService: UploadService,
-    private _locker: CoolLocalStorage,
-    private _route: ActivatedRoute,
-    private _beneficiaryService: BeneficiaryService,
-    private _policyService: PolicyService,
-    private _router: Router,
-    private _preAuthorizationService: PreAuthorizationService,
-    private _facilityService: FacilityService
-  ) { }
+  constructor(
+      private _fb: FormBuilder, private _toastr: ToastsManager,
+      private _headerEventEmitter: HeaderEventEmitterService,
+      private _systemService: SystemModuleService,
+      private _claimTypeService: ClaimTypeService,
+      private _claimStatusService: ClaimStatusService,
+      private _encounterTypeService: EncounterTypeService,
+      private _encounterStatusService: EncounterStatusService,
+      private _checkInService: CheckInService,
+      private _uploadService: UploadService, private _locker: CoolLocalStorage,
+      private _route: ActivatedRoute,
+      private _beneficiaryService: BeneficiaryService,
+      private _policyService: PolicyService, private _router: Router,
+      private _preAuthorizationService: PreAuthorizationService,
+      private _facilityService: FacilityService) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this._route.parent.params.subscribe(params => {
@@ -88,7 +89,7 @@ export class CheckinDetailsComponent implements OnInit {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
       day: new Date().getDate()
-    }
+    };
     this.hasCheckInToday = false;
     this.user = (<any>this._locker.getObject('auth')).user;
     this.otpFormGroup = this._fb.group({
@@ -102,133 +103,154 @@ export class CheckinDetailsComponent implements OnInit {
     this._getEncounterStatuses();
     this._getEncounterTypes();
     this._getUserFacility();
-
   }
 
   private _getUserFacility() {
-    this._facilityService.get(this.user.facilityId._id, {}).then(payload => {
-      this.user.facilityId = payload;
-    }).catch(err => {
-
-    })
+    this._facilityService.get(this.user.facilityId._id, {})
+        .then(payload => {
+          this.user.facilityId = payload;
+        })
+        .catch(err => {});
   }
   private _getBeneficiaryDetails(routeId) {
     this._systemService.on();
 
-    let beneficiary$ = Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
+    let beneficiary$ =
+        Observable.fromPromise(this._beneficiaryService.get(routeId, {}));
     let policy$ = Observable.fromPromise(this._policyService.find({
-      query:
-        {
-          $or: [
-            { principalBeneficiary: routeId },
-            { 'dependantBeneficiaries.beneficiary._id': routeId },
-          ]
-        }
+      query: {
+        $or: [
+          {principalBeneficiary: routeId},
+          {'dependantBeneficiaries.beneficiary._id': routeId}
+        ]
+      }
     }));
 
-    Observable.forkJoin([beneficiary$, policy$]).subscribe((results: any) => {
-      this._headerEventEmitter.setMinorRouteUrl(results[0].name);
-      this.beneficiary = results[0];
-      console.log('has today')
-      if (this.paramcId === undefined) {
-        this._hasCheckInToday();
-      } else {
-        this._getCheckedIn();
-      }
+    Observable.forkJoin([beneficiary$, policy$])
+        .subscribe(
+            (results: any) => {
+              this._headerEventEmitter.setMinorRouteUrl(results[0].name);
+              this.beneficiary = results[0];
+              console.log('has today');
+              if (this.paramcId === undefined) {
+                this._hasCheckInToday();
+              } else {
+                this._getCheckedIn();
+              }
 
-      if (results[1].data.length > 0) {
-        // this.dependants = results[1].data[0].dependantBeneficiaries;
-        this.policy = results[1].data[0];
-        // console.log(this.dependants)
-        // console.log(this.policy)
-      }
+              if (results[1].data.length > 0) {
+                // this.dependants = results[1].data[0].dependantBeneficiaries;
+                this.policy = results[1].data[0];
+                // console.log(this.dependants)
+                // console.log(this.policy)
+              }
 
-      this._systemService.off();
-    }, error => {
-      this._systemService.off();
-    });
+              this._systemService.off();
+            },
+            error => {
+              this._systemService.off();
+            });
   }
   _getCheckedIn() {
-    this._checkInService.get(this.paramcId, {}).then((payload: CheckIn) => {
-      this.selectedCheckIn = payload;
-      console.log(payload);
+    this._checkInService.get(this.paramcId, {})
+        .then((payload: CheckIn) => {
+          this.selectedCheckIn = payload;
+          console.log(payload);
 
-
-
-      this.hasCheckInToday = true;
-      if (this.selectedCheckIn.confirmation !== undefined) {
-        console.log(1);
-        this._initializedForm();
-        this.checkinSect = false;
-        this.checkedinSect = true;
-      } else if (this.selectedCheckIn.otp.isVerified) {
-        console.log(2);
-        this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
-          this._systemService.off();
-        }).catch(err => {
-          console.log(err)
-          this._systemService.off();
-        });
-      }
-
-
-    }).catch(eror => {
-      console.log(eror)
-    })
-  }
+          this.hasCheckInToday = true;
+          if (this.selectedCheckIn.confirmation !== undefined) {
+            console.log(1);
+            this._initializedForm();
+            this.checkinSect = false;
+            this.checkedinSect = true;
+          } else if (this.selectedCheckIn.otp.isVerified) {
+            console.log(2);
+            this._router
+                .navigate(
+                    ['/modules/beneficiary/beneficiaries/' +
+                     this.beneficiary._id + '/checkin-generate'])
+                .then(res => {
+                  this._systemService.off();
+                })
+                .catch(err => {
+                  this._systemService.off();
+                });
+          }
+        })
+        .catch(eror => {});
+  };
   _initializedForm() {
-    if (this.selectedCheckIn !== undefined && this.selectedCheckIn._id !== undefined) {
+    if (this.selectedCheckIn !== undefined &&
+        this.selectedCheckIn._id !== undefined) {
       this.today = {
         year: new Date(this.selectedCheckIn.encounterDateTime).getFullYear(),
         month: new Date(this.selectedCheckIn.encounterDateTime).getMonth() + 1,
         day: new Date(this.selectedCheckIn.encounterDateTime).getDate()
-      }
+      };
     } else {
       this.today = {
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1,
         day: new Date().getDate()
-      }
+      };
     }
     this.checkinFormGroup = this._fb.group({
-      encounterType: [this.selectedCheckIn != null ? this.selectedCheckIn.encounterType : '', [<any>Validators.required]],
-      encounterDate: [this.selectedCheckIn != null ? this.selectedCheckIn.encounterDateTime : this.today, [<any>Validators.required]]
+      encounterType: [
+        this.selectedCheckIn != null ? this.selectedCheckIn.encounterType : '',
+        [<any>Validators.required]
+      ],
+      encounterDate: [
+        this.selectedCheckIn != null ? this.selectedCheckIn.encounterDateTime :
+                                       this.today,
+        [<any>Validators.required]
+      ]
     });
     this.checkedinFormGroup = this._fb.group({
-      encounterType: [this.selectedCheckIn != null ? this.selectedCheckIn.encounterType : '', [<any>Validators.required]],
-      encounterDate: [this.selectedCheckIn != null ? this.selectedCheckIn.encounterDateTime : this.today, [<any>Validators.required]],
-      encounterStatus: [this.selectedCheckIn != null ? this.selectedCheckIn.encounterStatus : '', [<any>Validators.required]]
+      encounterType: [
+        this.selectedCheckIn != null ? this.selectedCheckIn.encounterType : '',
+        [<any>Validators.required]
+      ],
+      encounterDate: [
+        this.selectedCheckIn != null ? this.selectedCheckIn.encounterDateTime :
+                                       this.today,
+        [<any>Validators.required]
+      ],
+      encounterStatus: [
+        this.selectedCheckIn != null ? this.selectedCheckIn.encounterStatus :
+                                       '',
+        [<any>Validators.required]
+      ]
     });
   }
 
   otp_verify() {
     console.log(this.beneficiary._id);
     this._systemService.on();
-    this._checkInService.find({
-      query: {
-        beneficiaryId: this.beneficiary._id,
-        'otp.number': this.otpFormGroup.controls['otp'].value,
-        'otp.isVerified': false,
-        $client: {
-          verify: true
-        }
-      }
-    }).then((payload: any) => {
-      console.log(payload)
-      if (payload.data !== undefined) {
-        this.otp_show = false;
-        this.checkin_show = true;
-        this._initializedForm();
-        // this.checkedinFormGroup.controls.encounterStatus.setValue(this.encounterStatuses[0]);
-
-      } else {
-        this._toastr.warning('Invalid or expired OTP supplied, check and try again', 'OTP');
-      }
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err)
-      this._systemService.off();
-    })
+    this._checkInService
+        .find({
+          query: {
+            beneficiaryId: this.beneficiary._id,
+            'otp.number': this.otpFormGroup.controls['otp'].value,
+            'otp.isVerified': false,
+            $client: {verify: true}
+          }
+        })
+        .then((payload: any) => {
+          console.log(payload);
+          if (payload.data !== undefined) {
+            this.otp_show = false;
+            this.checkin_show = true;
+            this._initializedForm();
+            // this.checkedinFormGroup.controls.encounterStatus.setValue(this.encounterStatuses[0]);
+          } else {
+            this._toastr.warning(
+                'Invalid or expired OTP supplied, check and try again', 'OTP');
+          }
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
   ok_click() {
     this.otp_generated = false;
@@ -250,47 +272,49 @@ export class CheckinDetailsComponent implements OnInit {
       model.otp.phoneNumbers = [this.beneficiary.personId.phoneNumber];
     }
 
-    this._checkInService.create(model).then((payload: any) => {
-      this._systemService.off();
-      this.selectedCheckIn = payload;
-      console.log(payload);
-      this.otp_generated = true;
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-      this._toastr.error('Error(s) occured while generting token, please try again!!!', 'Token Error');
-    });
+    this._checkInService.create(model)
+        .then((payload: any) => {
+          this._systemService.off();
+          this.selectedCheckIn = payload;
+          this.otp_generated = true;
+        })
+        .catch(err => {
+          console.log(err);
+          this._systemService.off();
+          this._toastr.error(
+              'Error(s) occured while generting token, please try again!!!',
+              'Token Error');
+        });
   }
   checkin_click() {
     this._systemService.on();
-    this.selectedCheckIn.encounterType = this.checkinFormGroup.controls['encounterType'].value;
-    this.selectedCheckIn.encounterDateTime = this.checkinFormGroup.controls['encounterDate'].value.jsdate;
+    this.selectedCheckIn.encounterType =
+        this.checkinFormGroup.controls['encounterType'].value;
+    this.selectedCheckIn.encounterDateTime =
+        this.checkinFormGroup.controls['encounterDate'].value.jsdate;
     let policyId = this._locker.getObject('policyID');
     this.selectedCheckIn.policyId = policyId;
-    this._checkInService.patch(this.selectedCheckIn._id, this.selectedCheckIn, {
-      $client: {
-        confirmation: true
-      }
-    })
-      .then((payload: any) => {
-        console.log(payload);
-        if (payload !== undefined) {
-          this.checkinSect = false;
-          this.checkedinSect = true;
-          this.selectedCheckIn = payload;
-          this._initializedForm();
-        }
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      })
+    this._checkInService
+        .patch(
+            this.selectedCheckIn._id, this.selectedCheckIn,
+            {$client: {confirmation: true}})
+        .then((payload: any) => {
+          console.log(payload);
+          if (payload !== undefined) {
+            this.checkinSect = false;
+            this.checkedinSect = true;
+            this.selectedCheckIn = payload;
+            this._initializedForm();
+          }
+          this._systemService.off();
+        })
+        .catch(err => {
+          console.log(err);
+          this._systemService.off();
+        });
   }
   getAge() {
-    return differenceInYears(
-      new Date(),
-      this.beneficiary.personId.dateOfBirth
-    )
+    return differenceInYears(new Date(), this.beneficiary.personId.dateOfBirth);
   }
   compare(l1: any, l2: any) {
     if (l1 !== null && l2 !== null) {
@@ -301,156 +325,171 @@ export class CheckinDetailsComponent implements OnInit {
 
   _hasCheckInToday() {
     this._systemService.on();
-    this._checkInService.find({
-      query: {
-        beneficiaryId: this.beneficiary._id,
-        'providerFacilityId._id': this.user.facilityId._id,
-        $client: {
-          hasCheckInToday: false
-        }
-      }
-    }).then((payload: any) => {
-      if (payload.data.length > 0) {
-        console.log(payload);
-        this.hasCheckInToday = true;
-        this.selectedCheckIn = payload.data[0];
-        if (this.selectedCheckIn.confirmation !== undefined) {
-          console.log(1);
-          this._initializedForm();
-          this.checkinSect = false;
-          this.checkedinSect = true;
-        } else if (this.selectedCheckIn.otp.isVerified) {
-          // this._initializedForm();
-          // this.otp_show = false;
-          // this.checkin_show = true;
-          //route to generate
-          console.log(2);
-          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
-            this._systemService.off();
-          }).catch(err => {
-            console.log(err)
-            this._systemService.off();
-          });
-        } else {
-          this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
-            this._systemService.off();
-          }).catch(err => {
-            console.log(err)
-            this._systemService.off();
-          });
-        }
-
-      } else {
-        this._router.navigate(['/modules/beneficiary/beneficiaries/' + this.beneficiary._id + '/checkin-generate']).then(res => {
+    this._checkInService
+        .find({
+          query: {
+            beneficiaryId: this.beneficiary._id,
+            'providerFacilityId._id': this.user.facilityId._id,
+            $client: {hasCheckInToday: false}
+          }
+        })
+        .then((payload: any) => {
+          if (payload.data.length > 0) {
+            this.hasCheckInToday = true;
+            this.selectedCheckIn = payload.data[0];
+            if (this.selectedCheckIn.confirmation !== undefined) {
+              this._initializedForm();
+              this.checkinSect = false;
+              this.checkedinSect = true;
+            } else if (this.selectedCheckIn.otp.isVerified) {
+              // this._initializedForm();
+              // this.otp_show = false;
+              // this.checkin_show = true;
+              // route to generate
+              console.log(2);
+              this._router
+                  .navigate(
+                      ['/modules/beneficiary/beneficiaries/' +
+                       this.beneficiary._id + '/checkin-generate'])
+                  .then(res => {
+                    this._systemService.off();
+                  })
+                  .catch(err => {
+                    this._systemService.off();
+                  });
+            } else {
+              this._router
+                  .navigate(
+                      ['/modules/beneficiary/beneficiaries/' +
+                       this.beneficiary._id + '/checkin-generate'])
+                  .then(res => {
+                    this._systemService.off();
+                  })
+                  .catch(err => {
+                    this._systemService.off();
+                  });
+            }
+          } else {
+            this._router
+                .navigate(
+                    ['/modules/beneficiary/beneficiaries/' +
+                     this.beneficiary._id + '/checkin-generate'])
+                .then(res => {
+                  this._systemService.off();
+                })
+                .catch(err => {
+                  this._systemService.off();
+                });
+          }
           this._systemService.off();
-        }).catch(err => {
-          console.log(err)
+        })
+        .catch(err => {
           this._systemService.off();
         });
-      }
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    })
   }
-
 
   _getClaimTypes() {
     this._systemService.on();
-    this._claimTypeService.find({}).then((payload: any) => {
-      this.claimTypes = payload.data;
-      this.selectedClaimType = this.claimTypes[0];
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    })
+    this._claimTypeService.find({})
+        .then((payload: any) => {
+          this.claimTypes = payload.data;
+          this.selectedClaimType = this.claimTypes[0];
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   _getClaimStatuses() {
     this._systemService.on();
-    this._claimStatusService.find({}).then((payload: any) => {
-      this.claimStatuses = payload.data;
-      this.selectedClaimStatus = this.claimStatuses[1];
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    })
+    this._claimStatusService.find({})
+        .then((payload: any) => {
+          this.claimStatuses = payload.data;
+          this.selectedClaimStatus = this.claimStatuses[1];
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   _getEncounterTypes() {
     this._systemService.on();
-    this._encounterTypeService.find({}).then((payload: any) => {
-      this.encounterTypes = payload.data;
-      this.selectedEncounterType = this.encounterTypes[1];
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    })
+    this._encounterTypeService.find({})
+        .then((payload: any) => {
+          this.encounterTypes = payload.data;
+          this.selectedEncounterType = this.encounterTypes[1];
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   _getEncounterStatuses() {
     this._systemService.on();
-    this._encounterStatusService.find({}).then((payload: any) => {
-      this.encounterStatuses = payload.data;
-      this.selectedEncounterStatus = this.encounterStatuses[1];
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err);
-      this._systemService.off();
-    })
+    this._encounterStatusService.find({})
+        .then((payload: any) => {
+          this.encounterStatuses = payload.data;
+          this.selectedEncounterStatus = this.encounterStatuses[1];
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
 
   otp_regenerate() {
     this.selectedCheckIn = undefined;
   }
   checkOut() {
-    let checkOut = {
-      checkOutBy: this.user._id,
-    };
+    let checkOut = {checkOutBy: this.user._id};
     this.selectedCheckIn.checkOut = checkOut;
     this.selectedCheckIn.isCheckedOut = true;
-    this._checkInService.update(this.selectedCheckIn).then(payload => {
-      console.log(payload);
-      this._toastr.success('You have successfully checked out this patient', "Checked Out");
-      this._router.navigate(['/modules/checkin/checkedin']).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err)
-        this._systemService.off();
-      });
-    }).catch(err => {
-      console.log(err);
-    })
+    this._checkInService.update(this.selectedCheckIn)
+        .then(payload => {
+          this._toastr.success(
+              'You have successfully checked out this patient', 'Checked Out');
+          this._router.navigate(['/modules/checkin/checkedin'])
+              .then(res => {
+                this._systemService.off();
+              })
+              .catch(err => {
+                this._systemService.off();
+              });
+        })
+        .catch(err => {});
   }
 
   navigateToNewClaim() {
     this._systemService.on();
-    this._router.navigate(['/modules/claim/new', this.selectedCheckIn._id]).then(res => {
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err)
-      this._systemService.off();
-    });
+    this._router.navigate(['/modules/claim/new', this.selectedCheckIn._id])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
   navigateToNewAuthorization() {
     this._systemService.on();
-    this._router.navigate(['/modules/pre-auth/new', this.selectedCheckIn._id]).then(res => {
-      this._systemService.off();
-    }).catch(err => {
-      console.log(err)
-      this._systemService.off();
-    })
+    this._router.navigate(['/modules/pre-auth/new', this.selectedCheckIn._id])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
   navigateToNewReferal() {
     this._systemService.on();
-    this._router.navigate(['/modules/referal/new', this.selectedCheckIn._id]).then(res => {
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    })
+    this._router.navigate(['/modules/referal/new', this.selectedCheckIn._id])
+        .then(res => {
+          this._systemService.off();
+        })
+        .catch(err => {
+          this._systemService.off();
+        });
   }
-
 }

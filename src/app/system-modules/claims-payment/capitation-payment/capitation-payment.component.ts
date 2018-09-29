@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { CurrentPlaformShortName, FLUTTERWAVE_PUBLIC_KEY } from '../../../services/globals/config';
-import { SystemModuleService, FacilityService, CapitationFeeService, PolicyService } from '../../../services/index';
-import { HeaderEventEmitterService } from './../../../services/event-emitters/header-event-emitter.service';
+import {Component, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {CoolLocalStorage} from 'angular2-cool-storage';
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+import {Observable, Subscription} from 'rxjs/Rx';
+
+import {environment} from '../../../../environments/environment';
+import {CapitationFeeService, FacilityService, PolicyService, SystemModuleService} from '../../../services/index';
+
+import {HeaderEventEmitterService} from './../../../services/event-emitters/header-event-emitter.service';
 
 @Component({
   selector: 'app-capitation-payment',
@@ -32,18 +34,19 @@ export class CapitationPaymentComponent implements OnInit {
   payClaim: boolean = false;
   hiaDetails: any = <any>{};
   selectedClaims: any = [];
+  platformName: string;
 
   constructor(
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _toastr: ToastsManager,
-    private _headerEventEmitter: HeaderEventEmitterService,
-    private _systemService: SystemModuleService,
-    private _facilityService: FacilityService,
-    private _locker: CoolLocalStorage,
-    private _capitationFeeService: CapitationFeeService,
-    private _policyService: PolicyService
-  ) {}
+      private _router: Router, private _route: ActivatedRoute,
+      private _toastr: ToastsManager,
+      private _headerEventEmitter: HeaderEventEmitterService,
+      private _systemService: SystemModuleService,
+      private _facilityService: FacilityService,
+      private _locker: CoolLocalStorage,
+      private _capitationFeeService: CapitationFeeService,
+      private _policyService: PolicyService) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this._headerEventEmitter.setRouteUrl('Capitation Payment');
@@ -67,7 +70,8 @@ export class CapitationPaymentComponent implements OnInit {
       this.selectedClaims.push(capitation);
     } else {
       // Remove from the selected Claim
-      this.selectedClaims = this.selectedClaims.filter(x => x._id !== capitation._id);
+      this.selectedClaims =
+          this.selectedClaims.filter(x => x._id !== capitation._id);
     }
     console.log(this.selectedClaims);
   }
@@ -79,7 +83,8 @@ export class CapitationPaymentComponent implements OnInit {
         this.selectedClaims.push(capitation);
       } else {
         capitation.isChecked = false;
-        this.selectedClaims = this.selectedClaims.filter(x => x._id !== capitation._id);
+        this.selectedClaims =
+            this.selectedClaims.filter(x => x._id !== capitation._id);
       }
     });
   }
@@ -109,7 +114,8 @@ export class CapitationPaymentComponent implements OnInit {
   //   //   // Remove from the selected Claim
   //   //   console.log(index);
   //   //   policy.isChecked = false;
-  //   //   this.selectedOrganizationPolicies = this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
+  //   //   this.selectedOrganizationPolicies =
+  //   this.selectedOrganizationPolicies.filter(x => x._id !== policy._id);
   //   // }
   // }
 
@@ -123,7 +129,8 @@ export class CapitationPaymentComponent implements OnInit {
 
   //     let found: boolean = false;
   //     policy.isChecked = true;
-  //     this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
+  //     this.selectedCapitations = this.selectedCapitations.filter(x => x._id
+  //     !== policy._id);
   //     // let cLength = this.selectedCapitations.length;
 
   //     // if (cLength > 0) {
@@ -146,7 +153,8 @@ export class CapitationPaymentComponent implements OnInit {
   //     // }
   //   } else {
   //     policy.isChecked = false;
-  //     this.selectedCapitations = this.selectedCapitations.filter(x => x._id !== policy._id);
+  //     this.selectedCapitations = this.selectedCapitations.filter(x => x._id
+  //     !== policy._id);
   //   }
   //   console.log(this.selectedCapitations);
   // }
@@ -196,67 +204,73 @@ export class CapitationPaymentComponent implements OnInit {
   }
 
   private _getPolicy(query: any, id: string) {
-    this._policyService.find(query).then((res: any) => {
-      console.log(res);
-      this.loading = false;
-      this._systemService.off();
-      if (res.data.length > 0) {
-        // Remove this later
-        if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
-          res.data.forEach(policy => {
-            if (policy.providerId._id === id) {
-              this.capitations.push(policy);
+    this._policyService.find(query)
+        .then((res: any) => {
+          console.log(res);
+          this.loading = false;
+          this._systemService.off();
+          if (res.data.length > 0) {
+            // Remove this later
+            if (!!this.user.userType &&
+                this.user.userType.name === 'Health Insurance Agent') {
+              res.data.forEach(policy => {
+                if (policy.providerId._id === id) {
+                  this.capitations.push(policy);
+                }
+              });
+            } else {
+              this.capitations = res.data;
             }
-          });
-        } else {
-          this.capitations = res.data;
-        }
-        this._headerEventEmitter.setMinorRouteUrl(res.data[0].providerId.name);
-      }
-    }).catch(error => {
-      console.log(error);
-      this._systemService.off();
-    });
+            this._headerEventEmitter.setMinorRouteUrl(
+                res.data[0].providerId.name);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this._systemService.off();
+        });
   }
 
   private _getCurrentPlatform(providerId) {
-    this._facilityService.find({
-      query: {
-        shortName: CurrentPlaformShortName,
-        $select: ['name', 'shortName', 'address.state']
-      }
-    }).then((res: any) => {
-      if (res.data.length > 0) {
-        if (res.data.length > 0) {
-          console.log(res);
-          this.currentPlatform = res.data[0];
-          if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
-            this._getPolicy({
-              query: {
-                'platformOwnerId._id': this.currentPlatform._id,
-                // 'providerId._id': providerId,
-                isActive: true,
-                isPaid: true,
-              }
-            }, providerId
-            );
-          } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
-            this._getPolicy({
-              query: {
-                'platformOwnerId._id': this.currentPlatform._id,
-                // 'providerId._id': providerId,
-                'hiaId.hia.type._id': this.user.userType._id,
-                isActive: true,
-                isPaid: true,
-              }
-            }, providerId
-            );
+    this._facilityService
+        .find({
+          query: {
+            shortName: this.platformName,
+            $select: ['name', 'shortName', 'address.state']
           }
-        }
-      }
-    }).catch(err => {
-      console.log(err);
-    });
+        })
+        .then((res: any) => {
+          if (res.data.length > 0) {
+            if (res.data.length > 0) {
+              console.log(res);
+              this.currentPlatform = res.data[0];
+              if (!!this.user.userType && this.user.userType.name === 'Platform Owner') {
+                this._getPolicy({
+                  query: {
+                    'platformOwnerId._id': this.currentPlatform._id,
+                    // 'providerId._id': providerId,
+                    isActive: true,
+                    isPaid: true,
+                  }
+                },
+                providerId);
+              } else if (!!this.user.userType && this.user.userType.name === 'Health Insurance Agent') {
+                this._getPolicy({
+                  query: {
+                    'platformOwnerId._id': this.currentPlatform._id,
+                    'hiaId._id': this.user.facilityId._id,
+                    isActive: true,
+                    isPaid: true,
+                  }
+                },
+                providerId);
+              }
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
   }
 
   modal_close() {
@@ -266,20 +280,24 @@ export class CapitationPaymentComponent implements OnInit {
   navigate(url: string, id?: string) {
     if (!!id) {
       this._systemService.on();
-      this._router.navigate([url + id]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      });
+      this._router.navigate([url + id])
+          .then(res => {
+            this._systemService.off();
+          })
+          .catch(err => {
+            console.log(err);
+            this._systemService.off();
+          });
     } else {
       this._systemService.on();
-      this._router.navigate([url]).then(res => {
-        this._systemService.off();
-      }).catch(err => {
-        console.log(err);
-        this._systemService.off();
-      });
+      this._router.navigate([url])
+          .then(res => {
+            this._systemService.off();
+          })
+          .catch(err => {
+            console.log(err);
+            this._systemService.off();
+          });
     }
   }
 }

@@ -70,9 +70,7 @@ export class PremiumPaymentService {
 
   verifyPaymentWithMiddleWare(body: any) {
     const path = this._restService.getHost() + '/payment-verification';
-    return request
-      .post(path)
-      .send(body);
+    return request.post(path).send(body);
   }
 
   payWidthCashWithMiddleWare(body: any) {

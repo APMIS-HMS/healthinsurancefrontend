@@ -10,6 +10,50 @@
     align-items: center;
 }
 
+#auth-content-wrapper-huwe {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: $brand-primary-huwe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#auth-content-wrapper-nhis {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: $brand-primary-nhis;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#auth-content-wrapper-apmis {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: $brand-primary-apmis;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#auth-content-wrapper-lagos {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: $brand-primary-lagos;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .platform-wrap {
     margin: 0 auto;
 }

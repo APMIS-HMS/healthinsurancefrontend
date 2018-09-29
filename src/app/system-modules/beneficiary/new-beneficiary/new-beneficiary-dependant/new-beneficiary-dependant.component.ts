@@ -42,6 +42,7 @@ import {
 } from "./../../../../services/globals/config";
 import { PersonService } from "./../../../../services/person/person.service";
 import { PolicyService } from "./../../../../services/policy/policy.service";
+import { environment } from "../../../../../environments/environment";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const WEBSITE_REGEX = /^(ftp|http|https):\/\/[^ "]*(\.\w{2,3})+$/;
@@ -53,7 +54,8 @@ const NUMERIC_REGEX = /^[0-9]+$/;
   styleUrls: ["./new-beneficiary-dependant.component.scss"]
 })
 export class NewBeneficiaryDependantComponent implements OnInit {
-  @Input() selectedBeneficiary: any;
+  @Input()
+  selectedBeneficiary: any;
   frmDependants: FormGroup;
   lgs: any[] = [];
   residenceLgs: any[] = [];
@@ -73,6 +75,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   };
 
   public today: IMyDate;
+  platformName: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -94,7 +97,9 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     private _personService: PersonService,
     private _policyService: PolicyService,
     private _beneficiaryService: BeneficiaryService
-  ) {}
+  ) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject("auth")).user;
@@ -234,12 +239,12 @@ export class NewBeneficiaryDependantComponent implements OnInit {
           ],
           secondaryPhone: ["", <any>Validators.pattern(PHONE_REGEX)],
           email: [
-            '',
+            "",
             [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
           ],
           dob: [this.today, [<any>Validators.required]],
-          gender: ['', [<any>Validators.required]],
-          relationship: ['', [<any>Validators.required]],
+          gender: ["", [<any>Validators.required]],
+          relationship: ["", [<any>Validators.required]],
           // lasrraId: ['', []],
           readOnly: [false]
         })
@@ -250,8 +255,8 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     this._facilityService
       .find({
         query: {
-          shortName: CurrentPlaformShortName,
-          $select: ['name', 'shortName', 'address.state']
+          shortName: this.platformName,
+          $select: ["name", "shortName", "address.state"]
         }
       })
       .then((res: any) => {
@@ -312,11 +317,11 @@ export class NewBeneficiaryDependantComponent implements OnInit {
 
   closeDependant(dependant, i) {
     if (
-      (<FormArray>this.frmDependants.controls['dependantArray']).controls
+      (<FormArray>this.frmDependants.controls["dependantArray"]).controls
         .length > 1
     ) {
       (<FormArray>(
-        this.frmDependants.controls['dependantArray']
+        this.frmDependants.controls["dependantArray"]
       )).controls.splice(i);
     }
   }
@@ -325,64 +330,64 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     if (
       dependant !== undefined &&
       dependant.valid &&
-      (<FormArray>this.frmDependants.controls['dependantArray']).controls
+      (<FormArray>this.frmDependants.controls["dependantArray"]).controls
         .length < this.selectedBeneficiary.numberOfUnderAge
     ) {
       dependant.value.readOnly = true;
-      (<FormArray>this.frmDependants.controls['dependantArray']).push(
+      (<FormArray>this.frmDependants.controls["dependantArray"]).push(
         this._fb.group({
-          firstName: ['', [<any>Validators.required]],
-          title: ['', [<any>Validators.required]],
-          middleName: [''],
-          lastName: ['', [<any>Validators.required]],
+          firstName: ["", [<any>Validators.required]],
+          title: ["", [<any>Validators.required]],
+          middleName: [""],
+          lastName: ["", [<any>Validators.required]],
           phonenumber: [
-            '',
+            "",
             [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
           ],
-          secondaryPhone: [''],
+          secondaryPhone: [""],
           email: [
-            '',
+            "",
             [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
           ],
           dob: [this.today, [<any>Validators.required]],
-          gender: ['', [<any>Validators.required]],
-          relationship: ['', [<any>Validators.required]],
+          gender: ["", [<any>Validators.required]],
+          relationship: ["", [<any>Validators.required]],
           // lasrraId: ['', []],
           readOnly: [false]
         })
       );
     } else {
       this._toastr.warning(
-        'A Household cannot have more than 5 (Five) dependants!!!',
-        'Warning'
+        "A Household cannot have more than 5 (Five) dependants!!!",
+        "Warning"
       );
     }
   }
   populateNewDependant(dependant, person, relationshipId) {
-    this.frmDependants.controls['dependantArray'] = new FormArray([]);
+    this.frmDependants.controls["dependantArray"] = new FormArray([]);
 
-    (<FormArray>this.frmDependants.controls['dependantArray']).push(
+    (<FormArray>this.frmDependants.controls["dependantArray"]).push(
       this._fb.group({
         firstName: [
-          person !== undefined ? person.firstName : '',
+          person !== undefined ? person.firstName : "",
           [<any>Validators.required]
         ],
         title: [
-          person !== undefined ? person.title : '',
+          person !== undefined ? person.title : "",
           [<any>Validators.required]
         ],
-        middleName: [person !== undefined ? person.otherNames : ''],
+        middleName: [person !== undefined ? person.otherNames : ""],
         lastName: [
-          person !== undefined ? person.lastName : '',
+          person !== undefined ? person.lastName : "",
           [<any>Validators.required]
         ],
         phonenumber: [
           person !== undefined ? person.phoneNumber : 0,
           [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]
         ],
-        secondaryPhone: ['', <any>Validators.pattern(PHONE_REGEX)],
+        secondaryPhone: ["", <any>Validators.pattern(PHONE_REGEX)],
         email: [
-          person !== undefined ? person.email : '',
+          person !== undefined ? person.email : "",
           [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]
         ],
         dob: [
@@ -390,11 +395,11 @@ export class NewBeneficiaryDependantComponent implements OnInit {
           [<any>Validators.required]
         ],
         gender: [
-          person !== undefined ? person.gender : '',
+          person !== undefined ? person.gender : "",
           [<any>Validators.required]
         ],
         relationship: [
-          relationshipId !== undefined ? relationshipId : '',
+          relationshipId !== undefined ? relationshipId : "",
           [<any>Validators.required]
         ],
         // lasrraId: [dependant !== undefined ? dependant.stateID : '', []],
@@ -408,7 +413,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
       if (res.body.response >= 18 && !this.hasDependantAbove18) {
         this.hasDependantAbove18 = true;
         if (valid) {
-          dependant.controls['readOnly'].setValue(true);
+          dependant.controls["readOnly"].setValue(true);
         } else {
           let counter = 0;
           this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
@@ -423,7 +428,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         }
       } else if (res.body.response < 18) {
         if (valid) {
-          dependant.controls['readOnly'].setValue(true);
+          dependant.controls["readOnly"].setValue(true);
         } else {
           let counter = 0;
           this._toastr.error(FORM_VALIDATION_ERROR_MESSAGE);
@@ -438,8 +443,8 @@ export class NewBeneficiaryDependantComponent implements OnInit {
         }
       } else {
         this._toastr.warning(
-          'A principal can only have one dependant that is above 18 years of age',
-          'Warning'
+          "A principal can only have one dependant that is above 18 years of age",
+          "Warning"
         );
         return;
       }
@@ -448,16 +453,22 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
 
   changeGender($event, gender, dependant) {
-    dependant.controls['gender'].setValue(gender);
+    dependant.controls["gender"].setValue(gender);
   }
 
   moveBack() {
     this._systemService.on();
-    this._router.navigate(['/modules/beneficiary/new/medical', this.selectedBeneficiary._id]).then(res => {
-      this._systemService.off();
-    }).catch(err => {
-      this._systemService.off();
-    });
+    this._router
+      .navigate([
+        "/modules/beneficiary/new/medical",
+        this.selectedBeneficiary._id
+      ])
+      .then(res => {
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
   }
 
   skip() {
@@ -465,7 +476,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     // beneficiary: this.selectedBeneficiary })
     this._router
       .navigate([
-        '/modules/beneficiary/new/next-of-kin',
+        "/modules/beneficiary/new/next-of-kin",
         this.selectedBeneficiary._id
       ])
       .then(payload => {})
@@ -509,12 +520,12 @@ export class NewBeneficiaryDependantComponent implements OnInit {
     // beneficiary: this.selectedBeneficiary, dependants: dependantList })
     this._router
       .navigate([
-        '/modules/beneficiary/new/program',
+        "/modules/beneficiary/new/program",
         this.selectedBeneficiary._id
       ])
       .then(payload => {
         this._systemService.announceBeneficiaryTabNotification({
-          tab: 'Four',
+          tab: "Four",
           beneficiary: this.selectedBeneficiary,
           dependants: dependantList
         });
@@ -523,7 +534,7 @@ export class NewBeneficiaryDependantComponent implements OnInit {
   }
   canProceed() {
     return (
-      this.frmDependants['controls'].dependantArray['controls'].filter(
+      this.frmDependants["controls"].dependantArray["controls"].filter(
         x => x.value.readOnly === true && x.valid
       ).length > 0
     );

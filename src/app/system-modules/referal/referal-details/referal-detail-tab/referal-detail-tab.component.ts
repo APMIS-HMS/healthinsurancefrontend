@@ -1,11 +1,14 @@
-import { REQUEST_STATUS } from './../../../../services/globals/config';
-import { ReferralAuthorization } from './../../../../models/referral/referral';
-import { CoolLocalStorage } from 'angular2-cool-storage';
-import { PreAuthorizationDocument } from './../../../../models/authorization/authorization';
+import {Component, Input, OnInit} from '@angular/core';
+import {CoolLocalStorage} from 'angular2-cool-storage';
 import * as differenceInYears from 'date-fns/difference_in_years';
-import { SystemModuleService } from './../../../../services/common/system-module.service';
-import { ReferralService } from './../../../../services/referral/referral.service';
-import { Component, OnInit, Input } from '@angular/core';
+
+import {environment} from '../../../../../environments/environment';
+
+import {PreAuthorizationDocument} from './../../../../models/authorization/authorization';
+import {ReferralAuthorization} from './../../../../models/referral/referral';
+import {SystemModuleService} from './../../../../services/common/system-module.service';
+import {REQUEST_STATUS} from './../../../../services/globals/config';
+import {ReferralService} from './../../../../services/referral/referral.service';
 
 @Component({
   selector: 'app-referal-detail-tab',
@@ -30,31 +33,35 @@ export class ReferalDetailTabComponent implements OnInit {
   user: any;
   selectedTransaction: PreAuthorizationDocument;
   requestStatus = REQUEST_STATUS;
+  platformName: any;
 
   constructor(
-    private _referralService: ReferralService,
-    private _systemService: SystemModuleService,
-    private _locker: CoolLocalStorage
-  ) { }
+      private _referralService: ReferralService,
+      private _systemService: SystemModuleService,
+      private _locker: CoolLocalStorage) {
+    this.platformName = environment.platform;
+  }
 
   ngOnInit() {
     this.user = (<any>this._locker.getObject('auth')).user;
   }
   _getAuthorizationDetails(id) {
     this._systemService.on();
-    this._referralService.get(id, {}).then((payload: any) => {
-      this._systemService.off();
-      this.selectedAuthorization = payload;
-      console.log(payload)
-    }).catch(err => {
-      this._systemService.off();
-    })
+    this._referralService.get(id, {})
+        .then((payload: any) => {
+          this._systemService.off();
+          this.selectedAuthorization = payload;
+          console.log(payload)
+        })
+        .catch(err => {
+          this._systemService.off();
+        })
   }
   getAge() {
     return differenceInYears(
-      new Date(),
-      this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId.dateOfBirth
-    );
+        new Date(),
+        this.selectedAuthorization.checkedInDetails.beneficiaryObject.personId
+            .dateOfBirth);
   }
   approveReferal(transaction) {
     this.modalApprove = true;
@@ -68,10 +75,13 @@ export class ReferalDetailTabComponent implements OnInit {
     if (this.selectedAuthorization !== undefined) {
       if (this.selectedAuthorization.documentation.length > 0) {
         let documentations = this.selectedAuthorization.documentation;
-        // const index = documentations.findIndex(x =>x.destinationProvider._id === this.user.facilityId._id);
-        // (this.selectedAuthorization.documentation.filter(x => x.destinationProvider._id === this.user.facilityId._id))
-        let doc = this.selectedAuthorization.documentation[documentations.length - 1];
-        if(doc !== undefined){
+        // const index = documentations.findIndex(x =>x.destinationProvider._id
+        // === this.user.facilityId._id);
+        // (this.selectedAuthorization.documentation.filter(x =>
+        // x.destinationProvider._id === this.user.facilityId._id))
+        let doc =
+            this.selectedAuthorization.documentation[documentations.length - 1];
+        if (doc !== undefined) {
           return doc.approvedStatus.past;
         }
       } else {
@@ -80,10 +90,10 @@ export class ReferalDetailTabComponent implements OnInit {
     } else {
       return 'Pending';
     }
-
   }
   // isAmongDestinationProviders(transaction) {
-  //   return (this.selectedAuthorization.documentation.filter(x => x.destinationProvider._id === this.user.facilityId._id)).length > 0
+  //   return (this.selectedAuthorization.documentation.filter(x =>
+  //   x.destinationProvider._id === this.user.facilityId._id)).length > 0
   // }
   modal_close() {
     this.modalApprove = false;
@@ -95,17 +105,24 @@ export class ReferalDetailTabComponent implements OnInit {
     this.disableApprove = true;
   }
   checkVisibility(transaction) {
-    if (this.user.userType.name === 'Health Insurance Agent' && this.selectedAuthorization !== undefined && this.selectedAuthorization.hiaApproved !== undefined) {
+    if (this.user.userType.name === 'Health Insurance Agent' &&
+        this.selectedAuthorization !== undefined &&
+        this.selectedAuthorization.hiaApproved !== undefined) {
       if (this.selectedAuthorization.hiaApproved.approvedStatus.id === 2) {
         return false;
       } else {
         return true;
       }
 
-    } else if (this.user.userType.name === 'Provider' && this.selectedAuthorization !== undefined) {
-      if (this.user.facilityId._id === this.selectedAuthorization.referingProvider._id) {
+    } else if (
+        this.user.userType.name === 'Provider' &&
+        this.selectedAuthorization !== undefined) {
+      if (this.user.facilityId._id ===
+          this.selectedAuthorization.referingProvider._id) {
         return false;
-      } else if (this.user.facilityId._id === this.selectedAuthorization.destinationProvider._id) {
+      } else if (
+          this.user.facilityId._id ===
+          this.selectedAuthorization.destinationProvider._id) {
         if (transaction.response !== undefined) {
           return false;
         } else {
@@ -127,19 +144,30 @@ export class ReferalDetailTabComponent implements OnInit {
     }
   }
   isAmongDestinationProviders(transaction) {
-    return (this.selectedAuthorization.documentation.filter(x => x.destinationProvider._id === this.user.facilityId._id)).length > 0
+    return (this.selectedAuthorization.documentation.filter(
+                x => x.destinationProvider._id === this.user.facilityId._id))
+               .length > 0
   }
   canReply(transaction) {
-    let hiaStatus = (this.selectedAuthorization.hiaApproved !== undefined && this.selectedAuthorization.hiaApproved.approvedStatus.id === 3) ? false : true
-    let providerStatus = transaction.response.approvedStatus.id === 3 ? false : true;
-    if ((!hiaStatus || !providerStatus) && this.user.facilityId._id === this.selectedAuthorization.referingProvider._id && !this.reply) {
+    let hiaStatus =
+        (this.selectedAuthorization.hiaApproved !== undefined &&
+         this.selectedAuthorization.hiaApproved.approvedStatus.id === 3) ?
+        false :
+        true
+    let providerStatus =
+        transaction.response.approvedStatus.id === 3 ? false : true;
+    if ((!hiaStatus || !providerStatus) &&
+        this.user.facilityId._id ===
+            this.selectedAuthorization.referingProvider._id &&
+        !this.reply) {
       return true;
     }
     return false;
   }
   validateResponse(doc, cliDoc, transaction: PreAuthorizationDocument) {
     this.disableAll();
-    let validDocs = transaction.document.filter(x => x.order === 4 || x.order === 5 || x.order === 6);
+    let validDocs = transaction.document.filter(
+        x => x.order === 4 || x.order === 5 || x.order === 6);
     let pendingDocs: any[] = [];
     let approvedDocs: any[] = [];
     let rejectedDocs: any[] = [];
@@ -172,8 +200,8 @@ export class ReferalDetailTabComponent implements OnInit {
       hasDecided = true;
     }
     if (hasDecided === false) {
-
-      // if (rejectedDocs.length > 0 || queriedDocs.length > 0 || approvedDocs.length > 0 || heldDocs.length > 0) {
+      // if (rejectedDocs.length > 0 || queriedDocs.length > 0 ||
+      // approvedDocs.length > 0 || heldDocs.length > 0) {
       //   this.disableQuery = false;
       // }
     }
@@ -199,7 +227,7 @@ export class ReferalDetailTabComponent implements OnInit {
     this._getAuthorizationDetails(this.selectedAuthorization._id);
   }
   orderDocuments(documents) {
-    return documents.sort(function (a, b) {
+    return documents.sort(function(a, b) {
       return parseFloat(a.order) - parseFloat(b.order);
     });
   }
@@ -216,19 +244,14 @@ export class ReferalDetailTabComponent implements OnInit {
     this.modalReject = true;
   }
 
-  save_authorization() {
+  save_authorization() {}
 
-  }
-
-  holdClaim() {
-
-  }
+  holdClaim() {}
 
   isOdd(num) {
     return num % 2;
   }
   getCount(i: number, isSecond = false) {
-
     if (i === 0) {
       if (isSecond === false) {
         this.lastI = i + 1;
@@ -248,7 +271,5 @@ export class ReferalDetailTabComponent implements OnInit {
         return this.lastJ;
       }
     }
-
   }
-
 }
