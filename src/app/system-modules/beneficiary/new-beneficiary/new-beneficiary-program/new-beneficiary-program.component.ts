@@ -333,6 +333,7 @@ export class NewBeneficiaryProgramComponent implements OnInit {
   onClickStepFour(value, valid) {
     if (valid) {
       let policy: any = <any>{};
+      this.selectedBeneficiary.isComplete = true;
       policy.platformOwnerId = this.selectedBeneficiary.platformOwnerId;
       policy.principalBeneficiary = this.selectedBeneficiary._id;
       policy.hiaId = value.hiaName;

@@ -17,12 +17,14 @@ import { BeneficiaryComponent } from './beneficiary.component';
 import { NewBeneficiaryComponent } from './new-beneficiary/new-beneficiary.component';
 import { ListBeneficiaryComponent } from './list-beneficiary/list-beneficiary.component';
 import { BeneficiaryDetailsComponent } from './beneficiary-details/beneficiary-details.component';
+import { ListBeneficiaryDraftComponent } from './list-beneficiary-draft/list-beneficiary-draft.component';
 
 const BENEFICIARY_ROUTES: Routes = [
     {
         path: '', component: BeneficiaryComponent, children: [
             { path: '', redirectTo: 'beneficiaries', pathMatch: 'full' },
             { path: 'beneficiaries', component: ListBeneficiaryComponent },
+            { path: 'beneficiary-drafts', component: ListBeneficiaryDraftComponent },
             {
                 path: 'beneficiaries/:id', component: BeneficiaryDetailsComponent,
                 children: [

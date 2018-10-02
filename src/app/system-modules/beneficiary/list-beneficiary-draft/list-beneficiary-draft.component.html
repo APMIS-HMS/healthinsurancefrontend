@@ -1,0 +1,118 @@
+<div class="list-search-wrap">
+    <div class="search-wrap">
+        <label class="label-xx">Search:</label>
+        <input class="top-tab-search" [formControl]="listsearchControl" type="search" placeholder="Beneficiary">
+        <i class="fa fa-search" aria-hidden="true"></i>
+    </div>
+
+    <div class="btn btn-medium btn-blue" *ngIf="hasCreateBeneficiary" (click)="navigateDraftList()">
+        <i class="fa fa-list-ol" aria-hidden="true"></i> BENEFICIARY LISTS
+    </div>
+    <div class="btn btn-medium btn-blue" *ngIf="hasCreateBeneficiary" (click)="navigateNewBeneficiary()">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> ADD BENEFICIARY
+    </div>
+</div>
+
+<div class="shadow-RB">
+    <div class="list-filter-wrap">
+        <div class="label-xx">Filters:</div>
+
+        <div class="input-wrap">
+            <label>Type</label>
+            <select [formControl]="filterTypeControl" class="form-control">
+        <option value="All" selected>All</option>
+        <option [ngValue]="type" *ngFor="let type of planTypes">{{ type.name }}</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Registered By</label>
+            <select [formControl]="createdByControl">
+        <option>All</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>LGA By</label>
+            <select [formControl]="utilizedByControl">
+        <option>All</option>
+      </select>
+        </div>
+
+        <div class="input-wrap">
+            <label>Status</label>
+            <select [formControl]="statusControl">
+        <option selected value="All">All</option>
+        <option value=true>Active</option>
+        <option value=false>Inactive</option>
+      </select>
+        </div>
+
+        <div (click)="reset()" class="btn btn-medium btn-blue-outline">RESET</div>
+    </div>
+
+    <table class="table" cellpadding="0" cellspacing="0" border="0.5">
+        <thead class="thead">
+            <tr class="tr">
+                <th class="th">No</th>
+                <th class="th">Name</th>
+                <th class="th">Gender</th>
+                <th class="th">Type</th>
+                <th class="th">{{platformName}} ID</th>
+                <th class="th">DOB</th>
+                <th class="th">L.G.A</th>
+                <th class="th">HIA</th>
+                <th class="th">Status</th>
+                <td class="th">Action</td>
+                <th class="th"></th>
+            </tr>
+        </thead>
+
+        <tbody *ngIf="!(inActiveBeneficiaries.length > 0)" class="tbody">
+            <tr class="tr" *ngIf="beneficiaries.length === 0 && !loading">
+                <td class="text-center" colspan="11">No data available in table</td>
+            </tr>
+            <tr class="tr" *ngIf="beneficiaries.length === 0 && loading">
+                <td class="text-center" colspan="11">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </td>
+            </tr>
+            <tr *ngFor="let beneficiary of beneficiaries; let i = index;" class="tr hover">
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">{{ i+1 }}</td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">{{beneficiary.personId?.lastName}} {{beneficiary.personId?.firstName}} {{beneficiary.personId?.otherNames}}</td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">{{beneficiary.personId?.gender?.name}}</td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">
+                    <span *ngIf="beneficiary?.isPrincipal" class="baller">P</span>
+                    <span *ngIf="beneficiary?.isPrincipal" class="dep-count">+{{beneficiary.dependantCount}}</span>
+                    <span *ngIf="!beneficiary?.isPrincipal" class="baller">D</span>
+                    <span *ngIf="!beneficiary?.isPrincipal" class="dep-count"></span>
+                </td>
+
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">{{beneficiary.platformOwnerNumber}}</td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">{{beneficiary.personId?.dateOfBirth | date}}</td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">{{beneficiary.personId?.homeAddress?.lga?.name}}</td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">{{beneficiary.hia?.name}}</td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">
+                    <span class="{{ beneficiary.isActive ? 'tbl-status-active': 'tbl-status-inactive' }}">
+                      {{ beneficiary.isActive ? 'Active': 'Inactive' }}
+                    </span>
+                </td>
+                <td class="td td-icos">
+                    <i *ngIf="beneficiary.isPrincipal" class="fa fa-edit" (click)="navigateEditBeneficiary(beneficiary);"></i>
+                </td>
+                <td class="td" (click)="navigateEditBeneficiary(beneficiary)">
+                    <i class="fa fa-chevron-right"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="list-buttom">
+        <div *ngIf="beneficiaries.length > 0">
+            <div class="list-summary">Showing {{ beneficiaries.length }} of {{totalData}}
+                <!--  of {{ totalData }} entries (filtered from {{ totalData }} total entries) -->
+            </div>
+            <div class="btn btn-medium btn-yellow" (click)="loadMoreBeneficiaries()" *ngIf="showLoadMore">Load More</div>
+        </div>
+    </div>
+</div>

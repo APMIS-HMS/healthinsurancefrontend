@@ -380,6 +380,18 @@ export class ListBeneficiaryComponent implements OnInit {
     );
   }
 
+  navigateDraftList() {
+    this._systemService.on();
+    this._router
+      .navigate(['/modules/beneficiary/beneficiary-drafts'])
+      .then(res => {
+        this._systemService.off();
+      })
+      .catch(err => {
+        this._systemService.off();
+      });
+  }
+
   navigateNewBeneficiary() {
     this._systemService.on();
     this._router
