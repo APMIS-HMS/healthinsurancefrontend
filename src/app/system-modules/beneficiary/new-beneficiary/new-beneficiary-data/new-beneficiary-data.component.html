@@ -197,7 +197,7 @@
     <div class="frm-item-wrap">
         <label class="label">L.G.A of Residence</label>
         <div class="inputWrap">
-            <select formControlName="lga" class="form-control" [compareWith]='compare'>
+            <select formControlName="lga" class="form-control" [compareWith]='compareResLocal'>
                 <option value="" selected>Local Government Area</option>
                 <option *ngFor="let lga of residenceLgs" [ngValue]="lga">{{lga.name}}</option>
             </select>
@@ -209,7 +209,7 @@
     <div class="frm-item-wrap">
         <label class="label">Town/City of Residence</label>
         <div class="inputWrap">
-            <select formControlName="town" class="form-control" [compareWith]='compareTown'>
+            <select formControlName="town" class="form-control" [compareWith]='compareResTown'>
                 <option value="" selected>Select Town/City</option>
                 <option *ngFor="let town of residenceTowns" [ngValue]="town">{{town.name}}</option>
             </select>

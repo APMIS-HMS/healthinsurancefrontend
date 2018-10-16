@@ -80,7 +80,7 @@ export class NewBeneficiaryMedicalComponent implements OnInit {
       this._beneficiaryService.saveBeneficiaryMedical(payload).then(res => {
         this._systemService.off();
         if (res.statusCode === 200 && res.error === false) {
-          if (this.selectedBeneficiary.noOfChildrenU18 > 0) {
+          if (this.selectedBeneficiary.numberOfUnderAge > 0) {
             this._router.navigate(['/modules/beneficiary/new/dependants', this.selectedBeneficiary._id]).then(payload => {
               // Route to dependant
             }).catch(err => {});
@@ -139,7 +139,7 @@ export class NewBeneficiaryMedicalComponent implements OnInit {
     }
     return false;
   }
-  
+
   compare2(l1: any, l2: any) {
     if (l1 !== null && l2 !== null) {
       return l1 === l2;

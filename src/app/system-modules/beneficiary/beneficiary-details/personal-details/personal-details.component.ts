@@ -157,11 +157,33 @@ export class PersonalDetailsComponent implements OnInit {
             .text-header {
               text-align: center
             }
+            .details-header {
+              margin: 20px auto;
+              text-align: center;
+            }
+            .main-title,
+            .sect-title {
+              font-size: 1.4rem;
+              color: #777;
+            }
+            .sect-content-x3 {
+              margin: 20px 20px 40px 20px;
+              width: 100%;
+              font-size: 1.2rem;
+            }
+            .content-items {
+              display: flex;
+              // justify-content: space-evenly;
+              margin-top: 20px;
+              color: #333;
+            }
+            .content-item {
+              width: 33%;
+            }
           </style>
         </head>
         <body onload="window.print();window.close()">${printContents}</body>
-      </html>`
-    );
+      </html>`);
     popupWin.document.close();
   }
 

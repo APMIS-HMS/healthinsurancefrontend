@@ -185,7 +185,6 @@ export class ListBeneficiaryComponent implements OnInit {
   private _getCurrentPlatform() {
     this._systemService.on();
     this._facilityService.find({query: {shortName: CurrentPlaformShortName}}).then((res: any) => {
-      console.log(res);
       if (res.data.length > 0) {
         this.currentPlatform = res.data[0];
         // { platformOwnerNumber: { $regex: value, '$options': 'i' } },
@@ -286,7 +285,6 @@ export class ListBeneficiaryComponent implements OnInit {
     try {
       this._systemService.on();
       this._policyService.find(query).then((res: any) => {
-        console.log(res);
         if (res.data.length > 0) {
           this.loading = false;
           res.data.forEach((policy, i) => {
@@ -332,7 +330,6 @@ export class ListBeneficiaryComponent implements OnInit {
         this._toastr.error('Error has occured please contact your administrator!', 'Error!');
       });
     } catch (error) {
-      console.log(error);
       this.loading = false;
       this._toastr.error('Error has occured please contact your administrator!', 'Error!');
     }

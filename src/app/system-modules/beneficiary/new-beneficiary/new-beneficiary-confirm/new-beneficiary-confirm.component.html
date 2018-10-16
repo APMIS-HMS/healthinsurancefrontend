@@ -99,14 +99,96 @@
 
 <div id="print-section" style="display:none">
   <header class="header">
-    <div class="img-header">
-      <img src="../../../../../assets/img/logos/ashia.jpeg" alt="">
-    </div>
     <div class="text-header">
       <h2>{{ policyObject?.principalBeneficiary?.platformOwnerId?.name }}</h2>
     </div>
+    <div class="img-header">
+      <img src="../../../../../assets/img/logos/ashia.jpeg" alt="">
+    </div>
   </header>
-  <section>
+<section>
+  <div class="details-header">
+    <div class="main-title">Beneficiary Details</div>
+    <div class="title-label">Principal Policy ID: {{ policyObject?.policyId }}</div>
+  </div>
+
+  <div class="sect-content-x3">
+    <div class="sect-title">Bio Data (Principal)</div>
+    <div class="content-items">
+      <div class="content-item">Fullname: {{ policyObject?.principalBeneficiary?.personId?.title?.name }} {{
+        policyObject?.principalBeneficiary?.personId?.firstName }} {{
+        policyObject?.principalBeneficiary?.personId?.otherNames }} {{
+        policyObject?.principalBeneficiary?.personId?.lastName }}</div>
+      <div class="content-item">State: {{ policyObject?.principalBeneficiary?.personId?.homeAddress?.state?.name }}
+        State</div>
+      <div class="content-item">Gender: {{ policyObject?.principalBeneficiary?.personId?.gender?.name }}</div>
+    </div>
+    <div class="content-items">
+      <div class="content-item">Date of birth: {{ policyObject?.principalBeneficiary?.personId?.dateOfBirth | date
+        }}</div>
+      <div class="content-item">Email: {{ policyObject?.principalBeneficiary?.personId?.email }}</div>
+    </div>
+  </div>
+  <div class="sect-content-x3" *ngIf="policyObject?.principalBeneficiary?.personId?.nextOfKin.length > 0">
+    <div class="content-items">
+      <div class="content-item" *ngFor="let nextOfKin of policyObject?.principalBeneficiary?.personId?.nextOfKin; let i = index;">
+        <div class="sect-title">Next of Kin {{ i+1 }}</div>
+        <div>Title: {{ nextOfKin.title?.name }}</div>
+        <div>First name: {{ nextOfKin.firstName }}</div>
+        <div>Other name: {{ nextOfKin.otherNames }}</div>
+        <div>Last name: {{ nextOfKin.lastName }}</div>
+        <div>Gender: {{ nextOfKin?.gender?.name }}</div>
+        <div>Phonenumber: {{ nextOfKin?.phoneNumber }}</div>
+        <div>Relationship: {{ nextOfKin?.relationship?.name }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="sect-content-x3" *ngIf="policyObject?.dependantBeneficiaries.length > 0">
+    <div class="content-items">
+      <div class="content-item" *ngFor="let dependant of policyObject?.dependantBeneficiaries; let i = index;">
+        <div class="sect-title">Dependant {{ i+1 }}</div>
+        <div>Title: {{ dependant.beneficiary?.personId?.title?.name }}</div>
+        <div>First name: {{ dependant.beneficiary?.personId?.firstName }}</div>
+        <div>Other name: {{ dependant.beneficiary?.personId?.otherNames }}</div>
+        <div>Last name: {{ dependant.beneficiary?.personId?.lastName }}</div>
+        <div>State: {{ dependant?.beneficiary?.personId?.homeAddress?.state?.name }}</div>
+        <div>Gender: {{ dependant?.beneficiary?.personId?.gender?.name }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="sect-content-x3">
+    <div class="content-items">
+      <div class="content-item">
+        <div class="sect-title">Current plan</div>
+        <div>Plan type: {{ policyObject?.planId?.planType?.name }}</div>
+        <div>Plan name: {{ policyObject?.planId?.name }}</div>
+        <div>Premium: &#x20a6;{{ policyObject?.planId?.premiums[policyObject?.planId?.premiums?.length -
+          1].amount }} for {{ policyObject?.planId?.premiums[policyObject?.planId?.premiums?.length -
+          1].durationInDay }}</div>
+      </div>
+      <div class="content-item">
+        <div class="sect-title">Policy Details</div>
+        <div>ASHIA ID: {{ policyObject?.platformOwnerNumber }}</div>
+        <div>Household ID: {{ policyObject?.policyId }}</div>
+        <div>Sponsor: {{ policyObject?.sponsorshipId?.name }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="sect-content-x3">
+    <div class="sect-title">HMO Details</div>
+    <div class="content-items">
+      <div class="content-item">HMO name: {{ policyObject?.hiaId?.name }}</div>
+      <div class="content-item">Provider name: {{ policyObject?.providerId?.name }}</div>
+      <div class="content-item">Provider contact: {{ policyObject?.providerId?.phoneNumber }}</div>
+    </div>
+    <div class="content-items">
+      <div class="content-item">Provider address: {{ policyObject?.providerId?.street }}, {{
+        policyObject?.providerId?.city?.name }} {{ policyObject?.providerId?.lga?.name }}</div>
+    </div>
+  </div>
+</section>
+
+  <!-- <section>
     <div>
       <b>Policy Details</b>
       <div>Household ID: {{ policyObject?.policyId }} </div>
@@ -138,5 +220,5 @@
         <div>Provider address: {{ policyObject?.providerId?.street }}, {{ policyObject?.providerId?.city?.name }} {{ policyObject?.providerId?.lga?.name }}</div>
         <div>Provider Contact: {{ policyObject?.providerId?.phoneNumber }}</div>
     </div>
-  </section>
+  </section> -->
 </div>
