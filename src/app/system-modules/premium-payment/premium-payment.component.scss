@@ -1,0 +1,129 @@
+.list-filter-wrap {
+  flex-direction: column;
+  padding: 10px 10px 0;
+
+  .filter-box {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    float: left;
+  }
+
+  .payment-box {
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+
+    .tab {
+      display: flex;
+
+      .tab-c,
+      .tab-ffs {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #474747;
+        margin-right: 10px;
+        margin-left: -10px;
+        padding: 10px;
+      }
+
+      .tab-ffs {
+        &.claim-tab-active {
+          background-color: #474747;
+          color: #fff;
+        }
+      }
+
+      .tab-c {
+        &.claim-tab-active {
+          background-color: #474747;
+          color: #fff;
+        }
+      }
+    }
+
+    .queue-btn-box {
+      .btn {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+.modal-wrap {
+  width: 250px;
+  height: 200px;
+  min-width: 250px;
+  min-height: 200px;
+}
+@media only screen and (max-width: 780px) {
+  .shadow-RB {
+    overflow-y: auto;
+  }
+
+  .list-filter-wrap {
+    background: transparent;
+    padding: 15px;
+    display: list-item;
+
+    .filter-box {
+      display: inline-block;
+      justify-content: space-evenly;
+    }
+
+    .input-wrap {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      position: relative;
+      margin: 10px 0;
+    }
+  }
+  .payment-box {
+    width: 105%;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: -15px;
+    margin-left: -5px;
+
+    .tab {
+      display: flex;
+
+      .tab-c,
+      .tab-ffs {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #474747;
+        margin-right: 10px;
+        margin-left: -10px;
+        padding: 10px;
+      }
+
+      .tab-ffs {
+        &.claim-tab-active {
+          background-color: #474747;
+          color: #fff;
+        }
+      }
+
+      .tab-c {
+        &.claim-tab-active {
+          background-color: #474747;
+          color: #fff;
+        }
+      }
+    }
+
+    .queue-btn-box {
+      .btn {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
