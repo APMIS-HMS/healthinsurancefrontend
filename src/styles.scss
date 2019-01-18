@@ -987,13 +987,24 @@ input[type="checkbox"].switch_1:checked:after {
     }
     .list-filter-wrap {
         background: transparent;
-        padding: 0;
+        padding: 15px;
+        display: list-item;
+        .input-wrap {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: relative;
+            margin: 10px 0;
+        }
     }
     .nut-tab-topSect-wrap {
         display: flex;
         flex-wrap: wrap;
         flex-direction: column-reverse;
         align-items: flex-start;
+        .nutTabs-wrap{
+            display: none;
+        }
         .btn-grey-outline {
             width: 90%;
             margin-bottom: 20px;
@@ -1003,7 +1014,18 @@ input[type="checkbox"].switch_1:checked:after {
         }
     }
     .content {
-        padding: 10px;
+        padding: 30px;
+    }
+
+    .frm-item-wrap {
+        position: relative;
+        display: grid;
+        align-items: center;
+        margin-bottom: 10px;
+        .inputWrap select, input {
+            width: 260px !important;
+            margin: 2px 0px 5px 0px;
+        }
     }
 }
 
