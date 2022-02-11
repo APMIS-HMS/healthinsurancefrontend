@@ -47,7 +47,7 @@
         "mydatepicker": "^2.0.32",
         "ng-pick-datetime": "^5.0.0-beta.12",
         "ng2-toastr": "^4.0.1",
-        "node-sass": "^4.5.3",
+        "node-sass": "^7.0.0",
         "paystack": "^1.4.1",
         "rxjs": "^5.4.1",
         "sass-loader": "^6.0.5",
