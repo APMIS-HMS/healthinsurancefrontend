@@ -50,7 +50,7 @@
         "node-sass": "^4.5.3",
         "paystack": "^1.4.1",
         "rxjs": "^5.4.1",
-        "sass-loader": "^6.0.5",
+        "sass-loader": "^13.2.0",
         "socket.io-client": "^2.0.1",
         "superagent": "^3.5.2",
         "susy": "^2.2.12",
@@ -59,7 +59,7 @@
         "zone.js": "^0.8.14"
     },
     "devDependencies": {
-        "@angular/cli": "^1.4.9",
+        "@angular/cli": "^15.0.4",
         "@angular/compiler-cli": "^4.0.0",
         "@angular/language-service": "^4.0.0",
         "@types/core-js": "^0.9.46",
